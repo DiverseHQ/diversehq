@@ -1,8 +1,11 @@
-
-export default function Home() {
+import Nav from "../components/Home/Nav";
+const Home = () => {
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">Diversehq</h1>
+      <div className="p-2">
+      <Nav />
+      </div>
     </div>
   )
 }
+export default Home
