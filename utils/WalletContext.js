@@ -3,12 +3,16 @@ import Web3 from "web3";
 import Web3Token from "web3-token";
 export const WalletContext = createContext([]);
 
+let once = true;
+
 export const WalletProvider = ({children}) => {
     const [wallet, setWallet] = useState(null);
     const [token, setToken] = useState(null);
     const [web3,setWeb3] = useState(null);
+    const [connecting,setConnecting] = useState(false);
     useEffect(() => {
-      if(wallet){
+      if(wallet && once){
+        once=false;
         refetchToken();
       }
     },[wallet])
@@ -19,6 +23,7 @@ export const WalletProvider = ({children}) => {
         existingToken = localStorage.getItem("token");
         console.log(existingToken);
         if(existingToken){
+          setToken(existingToken);
           const { address, body } = await Web3Token.verify(existingToken);
           console.log(address, body);
           verified = true;
@@ -30,12 +35,28 @@ export const WalletProvider = ({children}) => {
         if(!web3){
           await connectWallet();
         }
-        const token = await Web3Token.sign(msg => web3.eth.personal.sign(msg, wallet), '5d');
-        console.log(token);
-        localStorage.setItem("token", token);
+        const signedToken = await Web3Token.sign(msg => web3.eth.personal.sign(msg, wallet), '5d');
+        console.log(signedToken);
+        setToken(token);
+        try{
+          await fetch(" https://diversehq.herokuapp.com/apiv1/user",{
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": signedToken
+            }
+          }).then(r => r.json()).then(res => {
+            console.log(res);
+          })
+        }catch(error){
+          console.log(error);
+        }
+        localStorage.setItem("token", signedToken);
       }
+      setConnecting(false);
     }
     const connectWallet = async () => {
+      setConnecting(true);
         try {
           const { ethereum } = window;
       
@@ -52,25 +73,30 @@ export const WalletProvider = ({children}) => {
 
           window.ethereum.on("accountsChanged", function (accounts) {
             if(accounts.length > 0){
+              once=true;
               localStorage.removeItem("token");
-            setWallet(accounts[0]);
+              setWallet(accounts[0]);
             }else{
+              once=true;
               setWallet(null);
             }
           });
 
           // generating a token with 1 day of expiration time
+          once=true;
           setWallet(address);
         } catch (error) {
           console.log(error);
+          setConnecting(false);
         }
       }
 
       const disconnectWallet = () => {
+        once=true;
         setWallet(null);
       }
     return(
-        <WalletContext.Provider value={{wallet, connectWallet, disconnectWallet,token}}>
+        <WalletContext.Provider value={{wallet, connectWallet, disconnectWallet,token,connecting}}>
             {children}
         </WalletContext.Provider>
     )
