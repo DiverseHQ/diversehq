@@ -2,21 +2,30 @@ import React, { useState } from "react";
 import {Web3Storage} from "web3.storage"
 
 
-
 const CreatePostPopup = () => {
   const [showModal, setShowModal] = useState(false);
-  const [file, setFile] = useState([]);
+  const [files, setFiles] = useState();
   const [description, setDescription] = useState('')
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    console.log(file);
+    console.log(files);
+    //change space to _ for all file in files
+    if(files.length != 1){
+      alert("Select only one file");
+      return;
+    }
+    // files[0].name = files[0].name.replace(/\s/g, "_");
+    const newFiles = [
+      new File([files[0]],files[0].name.replace(/\s/g, "_"),{type: files[0].type})
+    ]
+    // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
+    console.log(newFiles);
       const token = process.env.NEXT_PUBLIC_WEB_STORAGE
       const storage = new Web3Storage({ token })
-      const cid = await storage.put(file)
-
+      const cid = await storage.put(newFiles)
       console.log(cid);
-      console.log(`https://dweb.link/ipfs/${cid}/${file[0].name}`)
+      console.log(`https://dweb.link/ipfs/${cid}/${newFiles[0].name}`)
       setShowModal(false);
     }
   return (
@@ -48,7 +57,7 @@ const CreatePostPopup = () => {
                     <label className="block text-black text-sm font-bold mb-1">
                       Share Creative Post
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setFile(e.target.files)}} />
+                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setFiles(e.target.files)}} />
                     <label className="block text-black text-sm font-bold mb-1">
                       Description
                     </label>

@@ -1,32 +1,15 @@
 import {useState, useContext, useEffect} from "react"
 import {WalletContext} from "../../utils/WalletContext";
 import DiveToken from "../../utils/DiveTokens.json"
-import {ethers} from "ethers"
+import {ethers} from "ethers";
 import CreatePostPopup from "./CreatePostPopup"
 const Nav = () => {
-    const [wallet, setWallet] = useContext(WalletContext);
+    const {wallet,connectWallet,disconnectWallet} = useContext(WalletContext);
     const [tokens, setTokens] = useState('0');
 
     const CONTRACT_ADDRESS = "0x804Be198792A232E9f4b2a9A891CE1B453343854"
 
-    const connectWallet = async () => {
-        try {
-          const { ethereum } = window;
-      
-          if (!ethereum) {
-            alert("Get MetaMask!");
-            return;
-          }
-    
-          const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-    
-          console.log("Connected", accounts[0]);
-          setWallet(accounts[0]);
-        } catch (error) {
-          console.log(error)
-        }
-      }
-      const getDiveTokens = async () => {
+    const getDiveTokens = async () => {
         if(!wallet){
             console.log("Connect to MetaMask first!");
             return;
@@ -40,7 +23,9 @@ const Nav = () => {
       }
 
       useEffect(() =>{
-        getDiveTokens();
+        if(wallet){
+          getDiveTokens();
+        }
       },[wallet])
   return (
     <div className="flex flex-row justify-between">
@@ -57,7 +42,11 @@ const Nav = () => {
           <button className="" onClick={connectWallet}>
             Connect Wallet
           </button>
-        ):(<h3>{wallet}</h3>)   
+        ):(
+          <button className="" onClick={disconnectWallet}>
+            {wallet.slice(0,6)}...
+            </button>
+        )   
         }
         </div>
         <div>

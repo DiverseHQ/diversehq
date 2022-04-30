@@ -7,7 +7,6 @@ function MyApp({ Component, pageProps }) {
     <WalletProvider>
        <Component {...pageProps} />
     </WalletProvider>
-       
   )
 }
 
