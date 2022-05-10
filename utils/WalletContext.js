@@ -96,7 +96,7 @@ export const WalletProvider = ({children}) => {
         setWallet(null);
       }
     return(
-        <WalletContext.Provider value={{wallet, connectWallet, disconnectWallet,token,connecting}}>
+        <WalletContext.Provider value={{wallet, connectWallet, disconnectWallet,token, connecting}}>
             {children}
         </WalletContext.Provider>
     )
