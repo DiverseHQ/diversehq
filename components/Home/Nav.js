@@ -3,6 +3,7 @@ import {WalletContext} from "../../utils/WalletContext";
 import DiveToken from "../../utils/DiveTokens.json"
 import {ethers} from "ethers";
 import CreatePostPopup from "./CreatePostPopup"
+import CreateCommunity from "./CreateCommunity"
 const Nav = () => {
     const {wallet,connectWallet,disconnectWallet} = useContext(WalletContext);
     const [tokens, setTokens] = useState('0');
@@ -35,6 +36,9 @@ const Nav = () => {
       <div className="flex flex-row">
         <div className="pr-4">
         <CreatePostPopup/>
+        </div> 
+        <div className="pr-4">
+        <CreateCommunity/>
         </div>      
         <div className="flex flex-col">
         <div>

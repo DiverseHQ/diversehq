@@ -37,7 +37,7 @@ export const WalletProvider = ({children}) => {
         }
         const signedToken = await Web3Token.sign(msg => web3.eth.personal.sign(msg, wallet), '5d');
         console.log(signedToken);
-        setToken(token);
+        setToken(signedToken);
         try{
           await fetch(" https://diversehq.herokuapp.com/apiv1/user",{
             method: "POST",
@@ -96,7 +96,7 @@ export const WalletProvider = ({children}) => {
         setWallet(null);
       }
     return(
-        <WalletContext.Provider value={{wallet, connectWallet, disconnectWallet,token,connecting}}>
+        <WalletContext.Provider value={{wallet, connectWallet, disconnectWallet,token, connecting}}>
             {children}
         </WalletContext.Provider>
     )
