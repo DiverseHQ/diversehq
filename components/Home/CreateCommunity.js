@@ -9,8 +9,6 @@ const CreateCommunity = () => {
   const [communityPfp,setCommunityPfp] = useState();
   const [communityBanner,setCommunityBanner] = useState();
   const [communityDescription,setCommunityDescription] = useState('');
-  const [pfpURL,setPfpURL] = useState('');
-  const [bannerURL,setBannerURL] = useState('');
   const {wallet, token} = useContext(WalletContext);
 
 
@@ -35,16 +33,14 @@ const CreateCommunity = () => {
       console.log(cid);
       let PFP =`https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
       console.log(PFP)
-      setPfpURL(PFP);
       let Banner =`https://dweb.link/ipfs/${cid}/${newFiles[1].name}`
       console.log(Banner)
-      setBannerURL(Banner);
-      await handleCreateCommunity()
+      await handleCreateCommunity(PFP,Banner)
       setShowModal(false);
     }
 
 
-    const handleCreateCommunity = async () => {
+    const handleCreateCommunity = async (pfpURL,bannerURL) => {
         const postData = {
           name: communityName,
           description: communityDescription,
@@ -57,7 +53,7 @@ const CreateCommunity = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": token,
+              "Authorization":  token,
             },
             body: JSON.stringify(postData)
           }).then(res => res.json()).then(res => {
