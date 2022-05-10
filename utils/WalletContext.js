@@ -10,12 +10,23 @@ export const WalletProvider = ({children}) => {
     const [token, setToken] = useState(null);
     const [web3,setWeb3] = useState(null);
     const [connecting,setConnecting] = useState(false);
+    const [user,setUser] = useState(null);
     useEffect(() => {
       if(wallet && once){
         once=false;
         refetchToken();
       }
     },[wallet])
+    const getUserInfo= async () => {
+      try{
+        const userInfo = await fetch(`https://diversehq.herokuapp.com/apiv1/user/${wallet}`)
+          .then(res => res.json());
+        console.log(userInfo);
+        setUser(userInfo);
+      }catch(error){
+        console.log(error);
+      }
+    }
     const refetchToken = async () => {
       let existingToken = null;
       let verified = false;
@@ -53,8 +64,11 @@ export const WalletProvider = ({children}) => {
         }
         localStorage.setItem("token", signedToken);
       }
+      await getUserInfo();
       setConnecting(false);
     }
+
+
     const connectWallet = async () => {
       setConnecting(true);
         try {
@@ -94,9 +108,10 @@ export const WalletProvider = ({children}) => {
       const disconnectWallet = () => {
         once=true;
         setWallet(null);
+        setUser(null);
       }
     return(
-        <WalletContext.Provider value={{wallet, connectWallet, disconnectWallet,token, connecting}}>
+        <WalletContext.Provider value={{connectWallet, disconnectWallet,token, connecting,user}}>
             {children}
         </WalletContext.Provider>
     )

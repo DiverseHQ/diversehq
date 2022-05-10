@@ -5,29 +5,28 @@ import {ethers} from "ethers";
 import CreatePostPopup from "./CreatePostPopup"
 import CreateCommunity from "./CreateCommunity"
 const Nav = () => {
-    const {wallet,connectWallet,disconnectWallet} = useContext(WalletContext);
+    const {connectWallet,disconnectWallet,user} = useContext(WalletContext);
     const [tokens, setTokens] = useState('0');
 
     const CONTRACT_ADDRESS = "0x804Be198792A232E9f4b2a9A891CE1B453343854"
 
     const getDiveTokens = async () => {
-        if(!wallet){
+        if(user){
             console.log("Connect to MetaMask first!");
             return;
         }
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const contract = new ethers.Contract(CONTRACT_ADDRESS, DiveToken.abi, provider);
-        const tokens = (await contract.getBalance(wallet)).toString();
+        const tokens = (await contract.getBalance(user.walletAddress)).toString();
         console.log(tokens);
         setTokens(tokens);
-
-      }
+    }
 
       useEffect(() =>{
-        if(wallet){
+        if(user){
           getDiveTokens();
         }
-      },[wallet])
+      },[])
   return (
     <div className="flex flex-row justify-between">
       <div>
@@ -42,13 +41,13 @@ const Nav = () => {
         </div>      
         <div className="flex flex-col">
         <div>
-        {!wallet ? (
+        {!user ? (
           <button className="" onClick={connectWallet}>
             Connect Wallet
           </button>
         ):(
           <button className="" onClick={disconnectWallet}>
-            {wallet.slice(0,6)}...
+            {user.walletAddress.slice(0,6)}...
             </button>
         )   
         }
