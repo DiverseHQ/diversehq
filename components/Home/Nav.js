@@ -4,6 +4,7 @@ import DiveToken from "../../utils/DiveTokens.json"
 import {ethers} from "ethers";
 import CreatePostPopup from "./CreatePostPopup"
 import CreateCommunity from "./CreateCommunity"
+
 const Nav = () => {
     const {connectWallet,disconnectWallet,user} = useContext(WalletContext);
     const [tokens, setTokens] = useState('0');
@@ -28,7 +29,7 @@ const Nav = () => {
         }
       },[])
   return (
-    <div className="flex flex-row justify-between">
+    <div className="flex flex-row justify-between bg-[#1A1A1B] text-white p-2 items-center">
       <div>
         <h3 className="text-2xl ">Diversehq</h3>
       </div>
@@ -38,25 +39,30 @@ const Nav = () => {
         </div> 
         <div className="pr-4">
         <CreateCommunity/>
-        </div>      
-        <div className="flex flex-col">
-        <div>
-        {!user ? (
-          <button className="" onClick={connectWallet}>
-            Connect Wallet
-          </button>
-        ):(
-          <button className="" onClick={disconnectWallet}>
-            {user.walletAddress.slice(0,6)}...
-            </button>
-        )   
-        }
+        </div> 
+        <div className="flex flex-row" > 
+          <img src={(user && user.profileImageUrl) ? user.profileImageUrl : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"} alt="profile" className="rounded-full h-12 w-12 mr-2" />
+          <div className="flex flex-col">
+            {!user ? (
+              <button className="" onClick={connectWallet}>
+                Connect Wallet
+              </button>
+            ):(
+              <button className="" onClick={disconnectWallet}>
+                {user.walletAddress.slice(0,6)}...
+                </button>
+            )   
+            }
+
+            <h3><span className="text-purple-800">$DIVE:</span> {tokens}</h3>
+          </div>
+
+          <div className="flex flex-col" onClick={() => {
+            
+          }}>
+            <img src="downArrow.png" className="w-[30px]"/>
+            </div>
         </div>
-        <div>
-        <h3><span className="text-purple-800">$DIVE:</span> {tokens}</h3>
-        </div>
-        </div>
-  
       </div>
       
     </div>
