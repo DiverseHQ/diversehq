@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {Web3Storage} from "web3.storage"
-
+import {WalletContext} from "../../utils/WalletContext";
+import Select from 'react-select'
 
 const CreatePostPopup = () => {
   const [showModal, setShowModal] = useState(false);
   const [files, setFiles] = useState();
-  const [description, setDescription] = useState('')
-
+  const [title, setTitle] = useState('')
+  const [communityId, setCommunityId] = useState([]);
+  const{user, token} = useContext(WalletContext);
   const handleSubmit = async(event) => {
     event.preventDefault();
     console.log(files);
@@ -25,9 +27,43 @@ const CreatePostPopup = () => {
       const storage = new Web3Storage({ token })
       const cid = await storage.put(newFiles)
       console.log(cid);
-      console.log(`https://dweb.link/ipfs/${cid}/${newFiles[0].name}`)
+      const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+      handleCreatePost(Post)
       setShowModal(false);
     }
+    const handleCreatePost = async (Post) => {
+      const postData = {
+        communityId: communityId,
+        author: user.walletAddress,
+        title: title,
+        postImageUrl: Post,
+      }
+      if(communityId && user.walletAddress && title && Post ) {
+        try{
+          await fetch("https://diversehq.herokuapp.com/apiv1/post",{
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization":  token,
+            },
+            body: JSON.stringify(postData)
+          }).then(res => res.json()).then(res => {
+            console.log(res);
+          })
+        }catch(error){
+          console.log(error);
+        }
+        console.log("NADA")
+      }
+      
+  }
+
+  const selectCommunity = (event) =>{  
+   setCommunityId(event.target.value);
+    console.log(event.target.value);
+  }
+
+    
   return (
     <>
       <div className="pr-4">
@@ -54,14 +90,29 @@ const CreatePostPopup = () => {
                 </div>
                 <div className="relative p-6 flex-auto">
                   <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
+                <div className="flex flex-col text-black">
+                {communityId}
+                 {user ? (
+                   <label htmlFor="chooseCommunity">
+                     Choose Community
+                   <select name="community" id="chooseCommunity" onChange={(e) =>selectCommunity(e)}>  
+                   <option>----Select community----</option> 
+                   {user.communities.map((community,i) => ( 
+                    <option value={community} key={i}>{community}</option>
+                   ))}
+                    </select>
+                    {communityId}
+                   </label>
+                 ):(<p>Connect Wallet</p>)}                              
+                  </div>
                     <label className="block text-black text-sm font-bold mb-1">
                       Share Creative Post
                     </label>
                     <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setFiles(e.target.files)}} />
                     <label className="block text-black text-sm font-bold mb-1">
-                      Description
+                      Title
                     </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setDescription(e.target.value)} />
+                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setTitle(e.target.value)} />
       
                   </form>
                 </div>
