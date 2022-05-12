@@ -1,6 +1,7 @@
 import {WalletContext} from "../../utils/WalletContext";
 import {useState, useContext} from "react";
 import {Web3Storage} from "web3.storage"
+import apiEndpoint from "./ApiEndpoint";
 const ChangeMonkey = () => {
   const [showModal, setShowModal] = useState(false);
   const [pfp, setPfp] = useState();
@@ -39,7 +40,7 @@ const ChangeMonkey = () => {
         bio: bio 
       }
       try{
-        await fetch("https://diversehq.herokuapp.com/apiv1/user",{
+        await fetch(`${apiEndpoint}/user`,{
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

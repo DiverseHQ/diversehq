@@ -1,6 +1,7 @@
 import {useState, createContext, useEffect} from "react";
 import Web3 from "web3";
 import Web3Token from "web3-token";
+import apiEndpoint from "../components/Home/ApiEndpoint";
 export const WalletContext = createContext([]);
 
 let once = true;
@@ -27,7 +28,7 @@ export const WalletProvider = ({children}) => {
 
     const getUserInfo= async () => {
       try{
-        const userInfo = await fetch(`https://diversehq.herokuapp.com/apiv1/user/${wallet}`)
+        const userInfo = await fetch(`${apiEndpoint}/user/${wallet}`)
           .then(res => res.json());
         console.log(userInfo);
         setUser(userInfo);
@@ -58,7 +59,7 @@ export const WalletProvider = ({children}) => {
         console.log(signedToken);
         setToken(signedToken);
         try{
-          await fetch(" https://diversehq.herokuapp.com/apiv1/user",{
+          await fetch(`${apiEndpoint}/user`,{
             method: "POST",
             headers: {
               "Content-Type": "application/json",

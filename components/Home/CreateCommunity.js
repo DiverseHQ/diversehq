@@ -1,6 +1,7 @@
 import {useState, useContext} from "react";
 import {Web3Storage} from "web3.storage"
 import {WalletContext} from "../../utils/WalletContext";
+import apiEndpoint from "./ApiEndpoint";
 
 
 const CreateCommunity = () => {
@@ -49,7 +50,7 @@ const CreateCommunity = () => {
           creator: wallet
         }
         try{
-          await fetch("https://diversehq.herokuapp.com/apiv1/community",{
+          await fetch(`${apiEndpoint}/community`,{
             method: "POST",
             headers: {
               "Content-Type": "application/json",

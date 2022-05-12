@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import {Web3Storage} from "web3.storage"
 import {WalletContext} from "../../utils/WalletContext";
+import apiEndpoint from "./ApiEndpoint";
 
 const CreatePostPopup = () => {
   const [showModal, setShowModal] = useState(false);
@@ -39,7 +40,7 @@ const CreatePostPopup = () => {
       }
       if(communityId && user.walletAddress && title && Post ) {
         try{
-          await fetch("https://diversehq.herokuapp.com/apiv1/post",{
+          await fetch(`${apiEndpoint}/post`,{
             method: "POST",
             headers: {
               "Content-Type": "application/json",
