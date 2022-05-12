@@ -45,7 +45,7 @@ const ChangeMonkey = () => {
             "Content-Type": "application/json",
             "Authorization":  token,
           },
-          body: JSON.stringify(handleProfile)
+          body: JSON.stringify(profileData)
         }).then(res => res.json()).then(res => {
           console.log(res);
         })
