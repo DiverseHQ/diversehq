@@ -1,73 +1,64 @@
-import React, { useState, useContext } from "react";
-import {Web3Storage} from "web3.storage"
 import {WalletContext} from "../../utils/WalletContext";
-
-const CreatePostPopup = () => {
+import {useState, useContext} from "react";
+import {Web3Storage} from "web3.storage"
+const ChangeMonkey = () => {
   const [showModal, setShowModal] = useState(false);
-  const [files, setFiles] = useState();
-  const [title, setTitle] = useState('')
-  const [communityId, setCommunityId] = useState([]);
-  const{user, token} = useContext(WalletContext);
+  const [pfp, setPfp] = useState();
+  const [name, setName] = useState(null);
+  const [bio, setBio] = useState(null);
+  const {wallet, token} = useContext(WalletContext);
+
   const handleSubmit = async(event) => {
     event.preventDefault();
-    console.log(files);
+    console.log(name,pfp,bio);
     //change space to _ for all file in files
-    if(files.length != 1){
+    if(pfp.length != 1  ){
       alert("Select only one file");
       return;
     }
     // files[0].name = files[0].name.replace(/\s/g, "_");
     const newFiles = [
-      new File([files[0]],files[0].name.replace(/\s/g, "_"),{type: files[0].type})
+      new File([pfp[0]],pfp[0].name.replace(/\s/g, "_"),{type: pfp[0].type})
     ]
     // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
-    console.log(newFiles);
+    // console.log(communityPfp, communityBanner);
       const token = process.env.NEXT_PUBLIC_WEB_STORAGE
       const storage = new Web3Storage({ token })
       const cid = await storage.put(newFiles)
       console.log(cid);
-      const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
-      handleCreatePost(Post)
+      const PFP =`https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+      console.log(PFP)
+      await handleProfile(PFP)
       setShowModal(false);
     }
-    const handleCreatePost = async (Post) => {
-      const postData = {
-        communityId: communityId,
-        author: user.walletAddress,
-        title: title,
-        postImageUrl: Post,
+
+    const handleProfile = async (pfpURL) => {
+      const profileData = {
+        name: name,
+        profileImageUrl: pfpURL,
+        bio: bio 
       }
-      if(communityId && user.walletAddress && title && Post ) {
-        try{
-          await fetch("https://diversehq.herokuapp.com/apiv1/post",{
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization":  token,
-            },
-            body: JSON.stringify(postData)
-          }).then(res => res.json()).then(res => {
-            console.log(res);
-          })
-        }catch(error){
-          console.log(error);
-        }
-        console.log("NADA")
+      try{
+        await fetch("https://diversehq.herokuapp.com/apiv1/user",{
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":  token,
+          },
+          body: JSON.stringify(handleProfile)
+        }).then(res => res.json()).then(res => {
+          console.log(res);
+        })
+      }catch(error){
+        console.log(error);
       }
-      
   }
 
-  const selectCommunity = (event) =>{  
-   setCommunityId(event.target.value);
-    console.log(event.target.value);
-  }
-
-    
   return (
-    <>
-      <div className="pr-4">
+    <div>
+        <div className="pr-4">
         <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200"onClick={() => setShowModal(true)} type="button">
-        Share Creativity
+        Change Monkey
         </button>
         </div>
 
@@ -76,8 +67,8 @@ const CreatePostPopup = () => {
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
-                  <h3 className="text-3xl font=semibold">What's up Creative human?</h3>
+                <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
+                  <h3 className="text-3xl font=semibold">Change Monkey</h3>
                   <button
                     className="bg-transparent border-0 text-black float-right"
                     onClick={() => setShowModal(false)}
@@ -89,30 +80,18 @@ const CreatePostPopup = () => {
                 </div>
                 <div className="relative p-6 flex-auto">
                   <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
-                <div className="flex flex-col text-black">
-                {communityId}
-                 {user ? (
-                   <label htmlFor="chooseCommunity">
-                     Choose Community
-                   <select name="community" id="chooseCommunity" onChange={(e) =>selectCommunity(e)}>  
-                   <option>----Select community----</option> 
-                   {user.communities.map((community,i) => ( 
-                    <option value={community} key={i}>{community}</option>
-                   ))}
-                    </select>
-                    {communityId}
-                   </label>
-                 ):(<p>Connect Wallet</p>)}                              
-                  </div>
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Share Creative Post
+                  <label className="block text-black text-sm font-bold mb-1">
+                      Name
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setFiles(e.target.files)}} />
+                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setName(e.target.value)} required />
                     <label className="block text-black text-sm font-bold mb-1">
-                      Title
+                      Bio
                     </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setTitle(e.target.value)} />
-      
+                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setBio(e.target.value)} required />
+                    <label className="block text-black text-sm font-bold mb-1">
+                       PFP
+                    </label>
+                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setPfp(e.target.files)}} required />
                   </form>
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -136,8 +115,8 @@ const CreatePostPopup = () => {
           </div>
         </>
       ) : null}
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default CreatePostPopup;
+export default ChangeMonkey

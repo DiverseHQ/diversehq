@@ -4,6 +4,7 @@ import DiveToken from "../../utils/DiveTokens.json"
 import {ethers} from "ethers";
 import CreatePostPopup from "./CreatePostPopup"
 import CreateCommunity from "./CreateCommunity"
+import ChangeMonkey from "./ChangeMonkey.js"
 
 const Nav = () => {
     const {connectWallet,disconnectWallet,user} = useContext(WalletContext);
@@ -40,6 +41,7 @@ const Nav = () => {
         <div className="pr-4">
         <CreateCommunity/>
         </div> 
+        <div><ChangeMonkey /></div>
         <div className="flex flex-row" > 
           <img src={(user && user.profileImageUrl) ? user.profileImageUrl : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"} alt="profile" className="rounded-full h-12 w-12 mr-2" />
           <div className="flex flex-col">
@@ -53,15 +55,8 @@ const Nav = () => {
                 </button>
             )   
             }
-
-            <h3><span className="text-purple-800">$DIVE:</span> {tokens}</h3>
-          </div>
-
-          <div className="flex flex-col" onClick={() => {
-            
-          }}>
-            <img src="downArrow.png" className="w-[30px]"/>
-            </div>
+            <h3><span className="text-purple-800">$DIVE:</span> {tokens} </h3>
+          </div>  
         </div>
       </div>
       
