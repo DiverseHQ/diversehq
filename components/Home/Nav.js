@@ -9,6 +9,7 @@ import ChangeMonkey from "./ChangeMonkey.js"
 const Nav = () => {
     const {connectWallet,disconnectWallet,user} = useContext(WalletContext);
     const [tokens, setTokens] = useState('0');
+    const [showOptions, setShowOptions] = useState(false);
 
     const CONTRACT_ADDRESS = "0x804Be198792A232E9f4b2a9A891CE1B453343854"
 
@@ -30,7 +31,8 @@ const Nav = () => {
         }
       },[])
   return (
-    <div className="flex flex-row justify-between bg-[#1A1A1B] text-white p-2 items-center">
+    <>
+    <div className="fixed top-0 left-0 right-0 flex flex-row justify-between bg-[#1A1A1B] text-white p-2 items-center">
       <div>
         <h3 className="text-2xl ">Diversehq</h3>
       </div>
@@ -38,10 +40,6 @@ const Nav = () => {
         <div className="pr-4">
         <CreatePostPopup/>
         </div> 
-        <div className="pr-4">
-        <CreateCommunity/>
-        </div> 
-        <div><ChangeMonkey /></div>
         <div className="flex flex-row" > 
           <img src={(user && user.profileImageUrl) ? user.profileImageUrl : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"} alt="profile" className="rounded-full h-12 w-12 mr-2" />
           <div className="flex flex-col">
@@ -50,17 +48,34 @@ const Nav = () => {
                 Connect Wallet
               </button>
             ):(
-              <button className="" onClick={disconnectWallet}>
+              <button className="">
                 {user.walletAddress.slice(0,6)}...
                 </button>
             )   
             }
             <h3><span className="text-purple-800">$DIVE:</span> {tokens} </h3>
-          </div>  
+          </div>
+          {user &&   
+          <button className="flex flex-col" onClick={() => {
+            setShowOptions(!showOptions);
+          }}>
+            <img src="downArrow.png" className="w-[30px]"/>
+            </button>
+              }
         </div>
       </div>
       
     </div>
+    {(showOptions && user) && <div className="fixed top-[66px] right-[5px] flex flex-col">
+      <ChangeMonkey />
+      <CreateCommunity />
+      <div className="pr-4 ">
+        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={disconnectWallet} >
+        Disconnect
+        </button>
+      </div>
+      </div>}
+    </>
   )
 }
 

@@ -17,6 +17,14 @@ export const WalletProvider = ({children}) => {
         refetchToken();
       }
     },[wallet])
+
+    useEffect(() => {
+      ;(async() => {
+        await connectWallet()
+      })();
+    },[])
+
+
     const getUserInfo= async () => {
       try{
         const userInfo = await fetch(`https://diversehq.herokuapp.com/apiv1/user/${wallet}`)
