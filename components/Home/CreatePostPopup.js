@@ -8,7 +8,8 @@ const CreatePostPopup = () => {
   const [files, setFiles] = useState();
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState([]);
-  const{user, token, loading, setLoading } = useContext(WalletContext);
+  const{user, token} = useContext(WalletContext);
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async(event) => {
     event.preventDefault();
     setLoading(true);

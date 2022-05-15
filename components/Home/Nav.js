@@ -7,7 +7,7 @@ import CreateCommunity from "./CreateCommunity"
 import ChangeMonkey from "./ChangeMonkey.js"
 
 const Nav = () => {
-    const {connectWallet,disconnectWallet,user} = useContext(WalletContext);
+    const {connectWallet,disconnectWallet,user, loading, setLoading} = useContext(WalletContext);
     const [tokens, setTokens] = useState('0');
     const [showOptions, setShowOptions] = useState(false);
 
@@ -45,7 +45,7 @@ const Nav = () => {
           <div className="flex flex-col">
             {!user ? (
               <button className="" onClick={connectWallet}>
-                Connect Wallet
+                {loading ? 'Connecting...' : 'Connect Wallet'}
               </button>
             ):(
               <button className="">
@@ -70,8 +70,8 @@ const Nav = () => {
       <ChangeMonkey />
       <CreateCommunity />
       <div className="pr-4 ">
-        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={disconnectWallet} >
-        Disconnect
+        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={disconnectWallet} disabled={loading} >
+        {loading ? 'Disconnecting...':'Disconnecting'}
         </button>
       </div>
       </div>}

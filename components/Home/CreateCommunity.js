@@ -10,7 +10,8 @@ const CreateCommunity = () => {
   const [communityPfp,setCommunityPfp] = useState();
   const [communityBanner,setCommunityBanner] = useState();
   const [communityDescription,setCommunityDescription] = useState('');
-  const {wallet, token, loading, setLoading} = useContext(WalletContext);
+  const [loading, setLoading] = useState(false);
+  const {wallet, token} = useContext(WalletContext);
 
 
   const handleSubmit = async(event) => {
