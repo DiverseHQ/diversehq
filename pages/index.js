@@ -1,9 +1,9 @@
-import Nav from "../components/Home/Nav";
+import React from 'react'
+import Link from "next/link";
 const Home = () => {
   return (
-    <div>
-      home
-    </div>
+    <div>Home </div>
   )
 }
+
 export default Home

@@ -10,7 +10,7 @@ export const WalletProvider = ({children}) => {
     const [wallet, setWallet] = useState(null);
     const [token, setToken] = useState(null);
     const [web3,setWeb3] = useState(null);
-    const [loading,setLoading] = useState(false);
+    const [connecting,setConnecting] = useState(false);
     const [user,setUser] = useState(null);
     useEffect(() => {
       if(wallet && once){
@@ -79,7 +79,8 @@ export const WalletProvider = ({children}) => {
 
 
     const connectWallet = async () => {
-      setLoading(true);
+      console.log("connecting wallet");
+      setConnecting(true);
         try {
           const { ethereum } = window;
       
@@ -120,7 +121,7 @@ export const WalletProvider = ({children}) => {
         setUser(null);
       }
     return(
-        <WalletContext.Provider value={{connectWallet, disconnectWallet,token, loading, setLoading,user}}>
+        <WalletContext.Provider value={{connectWallet, disconnectWallet,getUserInfo,token, connecting,user}}>
             {children}
         </WalletContext.Provider>
     )

@@ -5,6 +5,7 @@ import {ethers} from "ethers";
 import CreatePostPopup from "./CreatePostPopup"
 import CreateCommunity from "./CreateCommunity"
 import ChangeMonkey from "./ChangeMonkey.js"
+import Router from "next/router";
 
 const Nav = () => {
     const {connectWallet,disconnectWallet,user, loading, setLoading} = useContext(WalletContext);
@@ -32,9 +33,11 @@ const Nav = () => {
       },[])
   return (
     <>
-    <div className="fixed top-0 left-0 right-0 flex flex-row justify-between bg-[#1A1A1B] text-white p-2 items-center">
+    <div className="fixed w-full h-14 flex flex-row justify-between bg-[#1A1A1B] text-white p-2 items-center">
       <div>
-        <h3 className="text-2xl ">Diversehq</h3>
+        <h3 className="text-2xl " onClick={() => {
+          Router.push('/')
+        }}>Diversehq</h3>
       </div>
       <div className="flex flex-row">
         <div className="pr-4">
@@ -59,7 +62,7 @@ const Nav = () => {
           <button className="flex flex-col" onClick={() => {
             setShowOptions(!showOptions);
           }}>
-            <img src="downArrow.png" className="w-[30px]"/>
+            <img src="/downArrow.png" className="w-[30px]"/>
             </button>
               }
         </div>
