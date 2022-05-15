@@ -74,7 +74,7 @@ export const WalletProvider = ({children}) => {
         localStorage.setItem("token", signedToken);
       }
       await getUserInfo();
-      setLoading(false);
+      setConnecting(false);
     }
 
 
@@ -111,7 +111,7 @@ export const WalletProvider = ({children}) => {
           setWallet(address);
         } catch (error) {
           console.log(error);
-          setLoading(false);
+          setConnecting(false);
         }
       }
 
