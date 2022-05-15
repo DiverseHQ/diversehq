@@ -10,13 +10,13 @@ const PostCard = ({post}) => {
         </div>
         <div className="flex flex-row justify-between items-center">
             <div>{post.likes.length} {post.title}</div>
-            <div></div>
         </div>
-        <img src={post.postImageUrl} width="400px" alt="post" className="rounded-[16px]"/>
-        <div className="flex flex-row justify-between items-center m-2  ">
+       {post.postImageUrl? (<img src={post.postImageUrl} className="h-44 w-44" ></img>):(<video src={post.postVideoUrl} autoPlay loop controls></video>)}
+
+        <div className="flex flex-row justify-between items-center m-2">
             <div className="flex flex-row"><img src="/comment.png" className="w-5 mr-1" /> {post.comments.length}</div>
             <div className="flex flex-row">
-                <button><img src="/applause.png" className="w-5 mr-1" /></button> 
+                <button><img src="/applause.png" className="w-5 mr-1"/></button>
                 <button ><img src="/share.png" className="w-5"/></button>
             </div>
         </div>
