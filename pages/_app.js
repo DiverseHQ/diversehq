@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }) {
   return(
     <WalletProvider>
             <Nav />
-            <div className="h-screen overflow-y-auto bg-primary-bg text-white">
+            <div className="h-screen pt-16 overflow-y-auto bg-primary-bg text-white">
         <Component {...pageProps} />
        </div>
     </WalletProvider>
