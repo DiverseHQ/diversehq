@@ -4,7 +4,7 @@ const PostCard = ({post}) => {
     console.log("post",post);
   return (
     <div className="w-[450px] bg-secondary-bg rounded-[20px] p-3.5">
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between items-center mb-2">
             <div>{post.communityId} by {post.author.slice(0,5)}...</div>
             <div>{post.createdAt}</div>
         </div>

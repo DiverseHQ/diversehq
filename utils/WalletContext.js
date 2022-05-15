@@ -28,8 +28,10 @@ export const WalletProvider = ({children}) => {
 
     const getUserInfo= async () => {
       try{
-        const userInfo = await fetch(`${apiEndpoint}/user/${wallet}`)
-          .then(res => res.json());
+        const userInfoRes = await fetch(`${apiEndpoint}/user/${wallet}`)
+          .then(res => res);
+          if(!userInfoRes.ok) return;
+          const userInfo = await userInfoRes.json();
         console.log(userInfo);
         setUser(userInfo);
       }catch(error){
@@ -51,6 +53,8 @@ export const WalletProvider = ({children}) => {
       }catch(error){
         console.log(error);
       }
+      console.log("existingToken",existingToken);
+      console.log("verified",verified);
       if(!existingToken || !verified){
         if(!web3){
           await connectWallet();
@@ -79,7 +83,6 @@ export const WalletProvider = ({children}) => {
 
 
     const connectWallet = async () => {
-      console.log("connecting wallet");
       setConnecting(true);
         try {
           const { ethereum } = window;
