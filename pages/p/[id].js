@@ -3,7 +3,7 @@ import React from 'react'
 import apiEndpoint from '../../components/Home/ApiEndpoint';
 import PostCard from '../../components/Post/PostCard';
 
-const postPage = () => {
+const PostPage = () => {
     const {id} = useRouter().query;
     const [postInfo,setPostInfo] = React.useState(null);
 
@@ -28,4 +28,4 @@ const postPage = () => {
   )
 }
 
-export default postPage
+export default PostPage
