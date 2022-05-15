@@ -79,6 +79,7 @@ export const WalletProvider = ({children}) => {
 
 
     const connectWallet = async () => {
+      console.log("connecting wallet");
       setConnecting(true);
         try {
           const { ethereum } = window;
@@ -120,7 +121,7 @@ export const WalletProvider = ({children}) => {
         setUser(null);
       }
     return(
-        <WalletContext.Provider value={{connectWallet, disconnectWallet,token, connecting,user}}>
+        <WalletContext.Provider value={{connectWallet, disconnectWallet,getUserInfo,token, connecting,user}}>
             {children}
         </WalletContext.Provider>
     )

@@ -32,7 +32,7 @@ const Nav = () => {
       },[])
   return (
     <>
-    <div className="fixed top-0 left-0 right-0 flex flex-row justify-between bg-[#1A1A1B] text-white p-2 items-center">
+    <div className="w-full h-14 flex flex-row justify-between bg-[#1A1A1B] text-white p-2 items-center">
       <div>
         <h3 className="text-2xl ">Diversehq</h3>
       </div>
@@ -59,7 +59,7 @@ const Nav = () => {
           <button className="flex flex-col" onClick={() => {
             setShowOptions(!showOptions);
           }}>
-            <img src="downArrow.png" className="w-[30px]"/>
+            <img src="/downArrow.png" className="w-[30px]"/>
             </button>
               }
         </div>
