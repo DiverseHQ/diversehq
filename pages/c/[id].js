@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import apiEndpoint from '../../components/Home/ApiEndpoint';
 import Image from 'next/image';
 import { WalletContext } from '../../utils/WalletContext';
-const communityPage = () => {
+const CommunityPage = () => {
     const {id} = useRouter().query;
     const [community,setCommunity] = useState(null);
     const [loading,setLoading] = useState(true);
@@ -74,4 +74,4 @@ const communityPage = () => {
   )
 }
 
-export default communityPage
+export default CommunityPage
