@@ -10,11 +10,12 @@ const CreateCommunity = () => {
   const [communityPfp,setCommunityPfp] = useState();
   const [communityBanner,setCommunityBanner] = useState();
   const [communityDescription,setCommunityDescription] = useState('');
-  const {wallet, token} = useContext(WalletContext);
+  const {wallet, token, loading, setLoading} = useContext(WalletContext);
 
 
   const handleSubmit = async(event) => {
     event.preventDefault();
+    setLoading(true);
     console.log(communityName,communityPfp,communityBanner,communityDescription);
     //change space to _ for all file in files
     if(communityPfp.length != 1 && communityBanner != 1 ){
@@ -37,6 +38,7 @@ const CreateCommunity = () => {
       let Banner =`https://dweb.link/ipfs/${cid}/${newFiles[1].name}`
       console.log(Banner)
       await handleCreateCommunity(PFP,Banner)
+    setLoading(false);
       setShowModal(false);
     }
 
@@ -122,8 +124,9 @@ const CreateCommunity = () => {
                     className="text-white bg-yellow-500 active:bg-yellow-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
                     type="button"
                     onClick={handleSubmit}
+                    disabled={loading}
                   >
-                    Submit
+                    {loading? 'Hold MotheFuckka...': 'Submit'}
                   </button>
                 </div>
               </div>

@@ -8,9 +8,10 @@ const CreatePostPopup = () => {
   const [files, setFiles] = useState();
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState([]);
-  const{user, token} = useContext(WalletContext);
+  const{user, token, loading, setLoading } = useContext(WalletContext);
   const handleSubmit = async(event) => {
     event.preventDefault();
+    setLoading(true);
     console.log(files);
     //change space to _ for all file in files
     if(files.length != 1){
@@ -21,17 +22,30 @@ const CreatePostPopup = () => {
     const newFiles = [
       new File([files[0]],files[0].name.replace(/\s/g, "_"),{type: files[0].type})
     ]
+    
     // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
     console.log(newFiles);
+    console.log(files[0]['type'].split('/')[0] === 'image');
+    console.log(files[0]['type'].split('/')[0] === 'video');
       const token = process.env.NEXT_PUBLIC_WEB_STORAGE
       const storage = new Web3Storage({ token })
+     if(files[0]['type'].split('/')[0] === 'image') {
       const cid = await storage.put(newFiles)
       console.log(cid);
       const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
       handleCreatePost(Post)
+     }
+     if(files[0]['type'].split('/')[0] === 'video'){
+      const cid = await storage.put(newFiles)
+      console.log(cid);
+      const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+      handleVideoPost(Post)
+     }
+    setLoading(false);
       setShowModal(false);
     }
     const handleCreatePost = async (Post) => {
+      console.log("Hey , I'm here in Image ")
       const postData = {
         communityId: communityId,
         author: user.walletAddress,
@@ -53,10 +67,36 @@ const CreatePostPopup = () => {
         }catch(error){
           console.log(error);
         }
-        console.log("NADA")
       }
       
   }
+
+  const handleVideoPost = async (Post) => {
+    console.log("Hey I'm in Video ")
+    const postData = {
+      communityId: communityId,
+      author: user.walletAddress,
+      title: title,
+      postVideoUrl: Post,
+    }
+    if(communityId && user.walletAddress && title && Post ) {
+      try{
+        await fetch(`${apiEndpoint}/post`,{
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":  token,
+          },
+          body: JSON.stringify(postData)
+        }).then(res => res.json()).then(res => {
+          console.log(res);
+        })
+      }catch(error){
+        console.log(error);
+      }
+    }
+    
+}
 
   const selectCommunity = (event) =>{  
    setCommunityId(event.target.value);
@@ -108,7 +148,7 @@ const CreatePostPopup = () => {
                     <label className="block text-black text-sm font-bold mb-1">
                       Share Creative Post
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setFiles(e.target.files)}} />
+                    <input type="file" accept="image/*,video/*" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setFiles(e.target.files)}} />
                     <label className="block text-black text-sm font-bold mb-1">
                       Title
                     </label>
@@ -128,8 +168,9 @@ const CreatePostPopup = () => {
                     className="text-white bg-yellow-500 active:bg-yellow-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
                     type="button"
                     onClick={handleSubmit}
+                    disabled={loading}
                   >
-                    Submit
+                    {loading ? "Teri Mummy ..." : "Submit"}
                   </button>
                 </div>
               </div>
