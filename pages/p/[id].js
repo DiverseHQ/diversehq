@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import apiEndpoint from '../../components/Home/ApiEndpoint';
+import CommentsSection from '../../components/Post/CommentsSection';
+import CreateComment from '../../components/Post/CreateComment';
 import PostCard from '../../components/Post/PostCard';
 
 const PostPage = () => {
@@ -22,8 +24,15 @@ const PostPage = () => {
     }
   return (
       <>
-      {postInfo && <PostCard post={postInfo} />}
       {!postInfo && <div>Loading...</div>}
+      {postInfo && 
+      <>
+      <PostCard post={postInfo} />
+      <CommentsSection commentsId={postInfo.comments} />
+      <CreateComment postId={postInfo._id} />
+      </>
+      }
+
     </>
   )
 }

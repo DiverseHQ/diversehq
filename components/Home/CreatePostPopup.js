@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import {Web3Storage} from "web3.storage"
-import {WalletContext} from "../../utils/WalletContext";
+import {useProfile} from "../../utils/WalletContext";
 import apiEndpoint from "./ApiEndpoint";
 
 const CreatePostPopup = () => {
@@ -8,7 +8,7 @@ const CreatePostPopup = () => {
   const [files, setFiles] = useState();
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState([]);
-  const{user, token} = useContext(WalletContext);
+  const{user, token} = useProfile();
   const [loading, setLoading] = useState(false);
   const handleSubmit = async(event) => {
     event.preventDefault();

@@ -1,4 +1,4 @@
-import {WalletContext} from "../../utils/WalletContext";
+import {useProfile} from "../../utils/WalletContext";
 import {useState, useContext} from "react";
 import {Web3Storage} from "web3.storage"
 import apiEndpoint from "./ApiEndpoint";
@@ -7,7 +7,7 @@ const ChangeMonkey = () => {
   const [pfp, setPfp] = useState();
   const [name, setName] = useState(null);
   const [bio, setBio] = useState(null);
-  const {wallet, token} = useContext(WalletContext);
+  const {wallet, token} = useProfile();
 
   const handleSubmit = async(event) => {
     event.preventDefault();

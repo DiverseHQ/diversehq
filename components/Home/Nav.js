@@ -1,5 +1,5 @@
 import {useState, useContext, useEffect} from "react"
-import {WalletContext} from "../../utils/WalletContext";
+import {useProfile} from "../../utils/WalletContext";
 import DiveToken from "../../utils/DiveTokens.json"
 import {ethers} from "ethers";
 import CreatePostPopup from "./CreatePostPopup"
@@ -8,7 +8,7 @@ import ChangeMonkey from "./ChangeMonkey.js"
 import Router from "next/router";
 
 const Nav = () => {
-    const {connectWallet,disconnectWallet,user, loading, setLoading} = useContext(WalletContext);
+    const {connectWallet,disconnectWallet,user, connecting} = useProfile();
     const [tokens, setTokens] = useState('0');
     const [showOptions, setShowOptions] = useState(false);
 
@@ -48,7 +48,7 @@ const Nav = () => {
           <div className="flex flex-col">
             {!user ? (
               <button className="" onClick={connectWallet}>
-                {loading ? 'Connecting...' : 'Connect Wallet'}
+                {connecting ? 'Connecting...' : 'Connect Wallet'}
               </button>
             ):(
               <button className="">
@@ -74,7 +74,7 @@ const Nav = () => {
       <CreateCommunity />
       <div className="pr-4 ">
         <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={disconnectWallet} disabled={loading} >
-        {loading ? 'Disconnecting...':'Disconnecting'}
+        {loading ? 'Disconnecting...':'Disconnect'}
         </button>
       </div>
       </div>}

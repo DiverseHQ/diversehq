@@ -2,13 +2,15 @@ import React from 'react'
 
 const PostCard = ({post}) => {
     console.log("post",post);
+    const createdAt = new Date(post.createdAt);
   return (
     <div className="w-[450px] bg-secondary-bg rounded-[20px] p-3.5">
         <div className="flex flex-row justify-between items-center mb-2">
             <div>{post.communityId} by {post.author.slice(0,5)}...</div>
-            <div>{post.createdAt}</div>
+            <div>{createdAt.toLocaleDateString()}</div>
         </div>
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-start items-center">
+            <button><img src="/love.png" className='w-4 mr-2'/></button>
             <div>{post.likes.length} {post.title}</div>
         </div>
        {post.postImageUrl? (<img src={post.postImageUrl} className="h-44 w-44" ></img>):(<video src={post.postVideoUrl} autoPlay loop controls></video>)}

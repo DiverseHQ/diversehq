@@ -1,4 +1,4 @@
-import {useState, createContext, useEffect} from "react";
+import {useState, createContext, useEffect, useContext} from "react";
 import Web3 from "web3";
 import Web3Token from "web3-token";
 import apiEndpoint from "../components/Home/ApiEndpoint";
@@ -129,3 +129,5 @@ export const WalletProvider = ({children}) => {
         </WalletContext.Provider>
     )
 }
+
+export const useProfile = () => useContext(WalletContext);
