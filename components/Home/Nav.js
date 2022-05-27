@@ -6,6 +6,7 @@ import CreatePostPopup from "./CreatePostPopup"
 import CreateCommunity from "./CreateCommunity"
 import ChangeMonkey from "./ChangeMonkey.js"
 import Router from "next/router";
+import AddToken from "./AddToken"
 
 const Nav = () => {
     const {connectWallet,disconnectWallet,user, loading, setLoading} = useContext(WalletContext);
@@ -72,6 +73,7 @@ const Nav = () => {
     {(showOptions && user) && <div className="fixed top-[66px] right-[5px] flex flex-col">
       <ChangeMonkey />
       <CreateCommunity />
+      <AddToken />
       <div className="pr-4 ">
         <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={disconnectWallet} disabled={loading} >
         {loading ? 'Disconnecting...':'Disconnecting'}
