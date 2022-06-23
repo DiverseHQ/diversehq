@@ -73,8 +73,8 @@ const Nav = () => {
       <ChangeMonkey />
       <CreateCommunity />
       <div className="pr-4 ">
-        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={disconnectWallet} disabled={loading} >
-        {loading ? 'Disconnecting...':'Disconnect'}
+        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={disconnectWallet}  >
+        Disconnect
         </button>
       </div>
       </div>}
