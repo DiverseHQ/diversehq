@@ -7,10 +7,13 @@ import CreateCommunity from "./CreateCommunity"
 import ChangeMonkey from "./ChangeMonkey.js"
 import Router from "next/router";
 
+import { useTheme } from 'next-themes';
+
 const Nav = () => {
     const {connectWallet,disconnectWallet,user, connecting} = useProfile();
     const [tokens, setTokens] = useState('0');
     const [showOptions, setShowOptions] = useState(false);
+    const {theme, setTheme} = useTheme();
 
     const CONTRACT_ADDRESS = "0x804Be198792A232E9f4b2a9A891CE1B453343854"
 
@@ -42,7 +45,9 @@ const Nav = () => {
       <div className="flex flex-row">
         <div className="pr-4">
         <CreatePostPopup/>
-        </div> 
+        </div>
+        <button onClick={() => {setTheme(theme==="dark"? "light" : "dark")}}>Change Theme</button>
+        <div> Current Theme : {theme} </div>
         <div className="flex flex-row" > 
           <img src={(user && user.profileImageUrl) ? user.profileImageUrl : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"} alt="profile" className="rounded-full h-12 w-12 mr-2" />
           <div className="flex flex-col">
