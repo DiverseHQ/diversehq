@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
     <WalletProvider>
       <ThemeProvider defaultTheme = 'system'> 
             <Nav />
-            <div className="h-screen pt-16 overflow-y-auto bg-primary-bg text-white">
+            <div className="h-screen pt-16 bg-primary-bg text-white">
         <Component {...pageProps} />
        </div>
        </ThemeProvider>

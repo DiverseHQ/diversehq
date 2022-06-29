@@ -13,6 +13,9 @@ const CreateCommunity = () => {
   const [loading, setLoading] = useState(false);
   const {wallet, token} = useProfile();
 
+  function hasWhiteSpace(s) {
+    return /\s/g.test(s);
+  }
 
   const handleSubmit = async(event) => {
     event.preventDefault();
@@ -39,7 +42,7 @@ const CreateCommunity = () => {
       let Banner =`https://dweb.link/ipfs/${cid}/${newFiles[1].name}`
       console.log(Banner)
       await handleCreateCommunity(PFP,Banner)
-    setLoading(false);
+      setLoading(false);
       setShowModal(false);
     }
 
