@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import apiEndpoint from '../../components/Home/ApiEndpoint'
 import Image from 'next/image'
 import { WalletContext } from '../../utils/WalletContext'
 import PostsColumn from '../../components/Post/PostsColumn'
+import { NotfiyContext } from '../../utils/NotifyContext'
 const CommunityPage = () => {
   const { name } = useRouter().query
   const { user, token, getUserInfo } = React.useContext(WalletContext)
+  const { notifyInfo } = useContext(NotfiyContext)
   const [community, setCommunity] = useState(null)
   const [posts, setPosts] = useState([])
   const [page, setPage] = useState(0)
@@ -18,10 +20,10 @@ const CommunityPage = () => {
 
   useEffect(() => {
     if (community) fetchPostsOfCommunity()
-  }, [community, page])
+  }, [community])
 
   const fetchPostsOfCommunity = async () => {
-    console.log("triggered fetchPostOfCommunity")
+    console.log('triggered fetchPostOfCommunity')
     try {
       if (page !== 0 && page > totalPages) {
         return
@@ -34,6 +36,7 @@ const CommunityPage = () => {
         const jsonResp = await res.json()
         setPosts([...posts, ...jsonResp.posts])
         setTotalPages(jsonResp.pages)
+        setPage(page + 1)
       }
       if (res.status === 400) {
         console.log(res.msg)
@@ -66,6 +69,7 @@ const CommunityPage = () => {
         }
       }).then(r => r.json())
       console.log(resp)
+      notifyInfo('Joined 😍')
       await getUserInfo()
       await fetchCommunitInformation()
     } catch (error) {
@@ -83,6 +87,8 @@ const CommunityPage = () => {
         }
       }).then(r => r.json())
       console.log(resp)
+      notifyInfo('Left 😢')
+
       await getUserInfo()
       await fetchCommunitInformation()
     } catch (error) {
