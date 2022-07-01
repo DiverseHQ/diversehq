@@ -1,58 +1,58 @@
-import {useProfile} from "../../utils/WalletContext";
-import {useState, useContext} from "react";
-import {Web3Storage} from "web3.storage"
-import apiEndpoint from "./ApiEndpoint";
+import { useProfile } from '../../utils/WalletContext'
+import { useState, useContext } from 'react'
+import { Web3Storage } from 'web3.storage'
+import apiEndpoint from './ApiEndpoint'
 const ChangeMonkey = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [pfp, setPfp] = useState();
-  const [name, setName] = useState(null);
-  const [bio, setBio] = useState(null);
-  const {wallet, token} = useProfile();
+  const [showModal, setShowModal] = useState(false)
+  const [pfp, setPfp] = useState()
+  const [name, setName] = useState(null)
+  const [bio, setBio] = useState(null)
+  const { wallet, token } = useProfile()
 
-  const handleSubmit = async(event) => {
-    event.preventDefault();
-    console.log(name,pfp,bio);
-    //change space to _ for all file in files
-    if(pfp.length != 1  ){
-      alert("Select only one file");
-      return;
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    console.log(name, pfp, bio)
+    // change space to _ for all file in files
+    if (pfp.length != 1) {
+      alert('Select only one file')
+      return
     }
     // files[0].name = files[0].name.replace(/\s/g, "_");
     const newFiles = [
-      new File([pfp[0]],pfp[0].name.replace(/\s/g, "_"),{type: pfp[0].type})
+      new File([pfp[0]], pfp[0].name.replace(/\s/g, '_'), { type: pfp[0].type })
     ]
     // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
     // console.log(communityPfp, communityBanner);
-      const token = process.env.NEXT_PUBLIC_WEB_STORAGE
-      const storage = new Web3Storage({ token })
-      const cid = await storage.put(newFiles)
-      console.log(cid);
-      const PFP =`https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
-      console.log(PFP)
-      await handleProfile(PFP)
-      setShowModal(false);
-    }
+    const token = process.env.NEXT_PUBLIC_WEB_STORAGE
+    const storage = new Web3Storage({ token })
+    const cid = await storage.put(newFiles)
+    console.log(cid)
+    const PFP = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+    console.log(PFP)
+    await handleProfile(PFP)
+    setShowModal(false)
+  }
 
-    const handleProfile = async (pfpURL) => {
-      const profileData = {
-        name: name,
-        profileImageUrl: pfpURL,
-        bio: bio 
-      }
-      try{
-        await fetch(`${apiEndpoint}/user`,{
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization":  token,
-          },
-          body: JSON.stringify(profileData)
-        }).then(res => res.json()).then(res => {
-          console.log(res);
-        })
-      }catch(error){
-        console.log(error);
-      }
+  const handleProfile = async (pfpURL) => {
+    const profileData = {
+      name,
+      profileImageUrl: pfpURL,
+      bio
+    }
+    try {
+      await fetch(`${apiEndpoint}/user`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token
+        },
+        body: JSON.stringify(profileData)
+      }).then(res => res.json()).then(res => {
+        console.log(res)
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -63,7 +63,8 @@ const ChangeMonkey = () => {
         </button>
         </div>
 
-      {showModal ? (
+      {showModal
+        ? (
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
@@ -92,7 +93,7 @@ const ChangeMonkey = () => {
                     <label className="block text-black text-sm font-bold mb-1">
                        PFP
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setPfp(e.target.files)}} required />
+                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setPfp(e.target.files) }} required />
                   </form>
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -115,7 +116,8 @@ const ChangeMonkey = () => {
             </div>
           </div>
         </>
-      ) : null}
+          )
+        : null}
     </div>
   )
 }
