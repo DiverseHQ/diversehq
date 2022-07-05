@@ -1,9 +1,15 @@
-import React from 'react'
-import Link from "next/link";
-
+import React, { useState } from 'react';
 const Home = () => {
+  const [posts,setPosts] = useState([]);
+  
   return (
-    <div className='text-p-text'>Home </div>
+    <div className='text-p-text'>
+      <div className='flex flex-row'>
+        <button>New</button> <button>Top</button>
+        
+      </div>
+
+    </div>
   )
 }
 
