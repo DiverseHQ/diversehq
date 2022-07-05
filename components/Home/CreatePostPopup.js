@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../../utils/WalletContext'
-import apiEndpoint from './ApiEndpoint'
+import apiEndpoint from '../../api/ApiEndpoint'
 
 const CreatePostPopup = () => {
   const [showModal, setShowModal] = useState(false)

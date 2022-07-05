@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import apiEndpoint from '../../components/Home/ApiEndpoint'
+import apiEndpoint from '../../api/ApiEndpoint'
 import Image from 'next/image'
 import { WalletContext } from '../../utils/WalletContext'
 import PostsColumn from '../../components/Post/PostsColumn'

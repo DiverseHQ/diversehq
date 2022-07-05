@@ -1,31 +1,31 @@
 import { useRouter } from 'next/router'
 import React from 'react'
-import apiEndpoint from '../../components/Home/ApiEndpoint';
-import CommentsSection from '../../components/Post/CommentsSection';
-import CreateComment from '../../components/Post/CreateComment';
-import PostCard from '../../components/Post/PostCard';
+import apiEndpoint from '../../api/ApiEndpoint'
+import CommentsSection from '../../components/Post/CommentsSection'
+import CreateComment from '../../components/Post/CreateComment'
+import PostCard from '../../components/Post/PostCard'
 
 const PostPage = () => {
-    const {id} = useRouter().query;
-    const [postInfo,setPostInfo] = React.useState(null);
+  const { id } = useRouter().query
+  const [postInfo, setPostInfo] = React.useState(null)
 
-    React.useEffect(() => {
-        if(id) fetchPostInformation();
-    },[id])
+  React.useEffect(() => {
+    if (id) fetchPostInformation()
+  }, [id])
 
-    const fetchPostInformation = async() => {
-        try{
-            const post = await fetch(`${apiEndpoint}/post/${id}`).then(res => res.json());
-            console.log(post);
-            setPostInfo(post);
-        }catch(error){
-            console.log(error);
-        }
+  const fetchPostInformation = async () => {
+    try {
+      const post = await fetch(`${apiEndpoint}/post/singlePostInfo/${id}`).then(res => res.json())
+      console.log(post)
+      setPostInfo(post)
+    } catch (error) {
+      console.log(error)
     }
+  }
   return (
       <>
       {!postInfo && <div>Loading...</div>}
-      {postInfo && 
+      {postInfo &&
       <>
       <PostCard post={postInfo} />
       <CommentsSection commentsId={postInfo.comments} />

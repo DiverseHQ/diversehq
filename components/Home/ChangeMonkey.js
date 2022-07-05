@@ -1,7 +1,7 @@
 import { useProfile } from '../../utils/WalletContext'
 import { useState, useContext } from 'react'
 import { Web3Storage } from 'web3.storage'
-import apiEndpoint from './ApiEndpoint'
+import apiEndpoint from '../../api/ApiEndpoint'
 const ChangeMonkey = () => {
   const [showModal, setShowModal] = useState(false)
   const [pfp, setPfp] = useState()

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import CommunitiesColumn from '../components/Explore/CommunitiesColumn'
-import apiEndpoint from '../components/Home/ApiEndpoint'
+import apiEndpoint from '../api/ApiEndpoint'
 
 const explore = () => {
   const [communities, setCommunities] = useState([])
