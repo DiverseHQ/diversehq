@@ -12,6 +12,7 @@ module.exports = {
         's-bg': 'var(--background-secondary)',
         'p-btn': 'var(--accent-primary)',
         'p-btn-hover': 'var(--accent-hover)',
+        's-btn': 'var(--accent-secondary)',
         'p-text': 'var(--text-primary)',
         's-text': 'var(--text-secondary)'
       }
