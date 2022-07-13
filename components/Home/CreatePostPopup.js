@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../../utils/WalletContext'
-import apiEndpoint from './ApiEndpoint'
-import AsyncSelect from 'react-select/async';
+import apiEndpoint from '../../api/ApiEndpoint';
 
 const CreatePostPopup = () => {
   const [showModal, setShowModal] = useState(false)
@@ -186,14 +185,7 @@ const CreatePostPopup = () => {
                       </option> 
                    ))}
                     </select>
-                    <AsyncSelect
-                    cacheOptions
-                    defaultOptions
-                    value={communityId}
-                    loadOptions={getJoinedCommunities}
-                    onInputChange={handleInputChange}
-                    onChange={selectCommunity}
-                    />
+                    
                     {communityId}
                    </label>
                      )
