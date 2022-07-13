@@ -6,15 +6,14 @@ import useDevice from '../utils/useDevice'
 
 function MyApp ({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
-  const { isDesktop } = useDevice();
+  const { isDesktop } = useDevice()
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
   return (
     <MasterWrapper>
       {isDesktop && <Nav />}
-      
         <Component {...pageProps} />
-       </MasterWrapper>
+    </MasterWrapper>
   )
 }
 
