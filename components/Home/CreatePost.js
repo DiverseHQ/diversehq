@@ -1,62 +1,61 @@
-import {useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import {Web3Storage} from "web3.storage"
-import {useProfile} from "../../utils/WalletContext";
+import {WalletContext} from "../../utils/WalletContext";
 import apiEndpoint from "../../api/ApiEndpoint";
 
-
-const CreateCommunity = () => {
+const CreatePost = () => {
   const [showModal, setShowModal] = useState(false);
-  const [communityName, setCommunityName] = useState('')
-  const [communityPfp,setCommunityPfp] = useState();
-  const [communityBanner,setCommunityBanner] = useState();
-  const [communityDescription,setCommunityDescription] = useState('');
+  const [files, setFiles] = useState();
+  const [title, setTitle] = useState('')
+  const [communityId, setCommunityId] = useState([]);
+  const{user, token} = useContext(WalletContext);
   const [loading, setLoading] = useState(false);
-  const {wallet, token} = useProfile();
-
-  function hasWhiteSpace(s) {
-    return /\s/g.test(s);
-  }
-
   const handleSubmit = async(event) => {
     event.preventDefault();
     setLoading(true);
-    console.log(communityName,communityPfp,communityBanner,communityDescription);
+    console.log(files);
     //change space to _ for all file in files
-    if(communityPfp.length != 1 && communityBanner != 1 ){
+    if(files.length != 1){
       alert("Select only one file");
       return;
     }
     // files[0].name = files[0].name.replace(/\s/g, "_");
     const newFiles = [
-      new File([communityPfp[0]],communityPfp[0].name.replace(/\s/g, "_"),{type: communityPfp[0].type}),
-      new File([communityBanner[0]],communityBanner[0].name.replace(/\s/g, "_"),{type: communityBanner[0].type}),  
+      new File([files[0]],files[0].name.replace(/\s/g, "_"),{type: files[0].type})
     ]
+    
     // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
-    // console.log(communityPfp, communityBanner);
+    console.log(newFiles);
+    console.log(files[0]['type'].split('/')[0] === 'image');
+    console.log(files[0]['type'].split('/')[0] === 'video');
       const token = process.env.NEXT_PUBLIC_WEB_STORAGE
       const storage = new Web3Storage({ token })
+     if(files[0]['type'].split('/')[0] === 'image') {
       const cid = await storage.put(newFiles)
       console.log(cid);
-      let PFP =`https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
-      console.log(PFP)
-      let Banner =`https://dweb.link/ipfs/${cid}/${newFiles[1].name}`
-      console.log(Banner)
-      await handleCreateCommunity(PFP,Banner)
-      setLoading(false);
+      const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+      handleCreatePost(Post)
+     }
+     if(files[0]['type'].split('/')[0] === 'video'){
+      const cid = await storage.put(newFiles)
+      console.log(cid);
+      const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+      handleVideoPost(Post)
+     }
+    setLoading(false);
       setShowModal(false);
     }
-
-
-    const handleCreateCommunity = async (pfpURL,bannerURL) => {
-        const postData = {
-          name: communityName,
-          description: communityDescription,
-          bannerImageUrl: bannerURL,
-          logoImageUrl: pfpURL,
-          creator: wallet
-        }
+    const handleCreatePost = async (Post) => {
+      console.log("Hey , I'm here in Image ")
+      const postData = {
+        communityId: communityId,
+        author: user.walletAddress,
+        title: title,
+        postImageUrl: Post,
+      }
+      if(communityId && user.walletAddress && title && Post ) {
         try{
-          await fetch(`${apiEndpoint}/community`,{
+          await fetch(`${apiEndpoint}/post`,{
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -69,13 +68,48 @@ const CreateCommunity = () => {
         }catch(error){
           console.log(error);
         }
-    }
+      }
+      
+  }
 
+  const handleVideoPost = async (Post) => {
+    console.log("Hey I'm in Video ")
+    const postData = {
+      communityId: communityId,
+      author: user.walletAddress,
+      title: title,
+      postVideoUrl: Post,
+    }
+    if(communityId && user.walletAddress && title && Post ) {
+      try{
+        await fetch(`${apiEndpoint}/post`,{
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":  token,
+          },
+          body: JSON.stringify(postData)
+        }).then(res => res.json()).then(res => {
+          console.log(res);
+        })
+      }catch(error){
+        console.log(error);
+      }
+    }
+    
+}
+
+  const selectCommunity = (event) =>{  
+   setCommunityId(event.target.value);
+    console.log(event.target.value);
+  }
+
+    
   return (
     <>
       <div className="pr-4">
         <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200"onClick={() => setShowModal(true)} type="button">
-        Create Community
+        Share Creativity
         </button>
         </div>
 
@@ -97,22 +131,29 @@ const CreateCommunity = () => {
                 </div>
                 <div className="relative p-6 flex-auto">
                   <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
-                  <label className="block text-black text-sm font-bold mb-1">
-                      Community Name
-                    </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setCommunityName(e.target.value)} required />
+                <div className="flex flex-col text-black">
+                {communityId}
+                 {user ? (
+                   <label htmlFor="chooseCommunity">
+                     Choose Community
+                   <select name="community" id="chooseCommunity" onChange={(e) =>selectCommunity(e)}>  
+                   <option>----Select community----</option> 
+                   {user.communities.map((community,i) => ( 
+                    <option value={community} key={i}>{community}</option>
+                   ))}
+                    </select>
+                    {communityId}
+                   </label>
+                 ):(<p>Connect Wallet</p>)}                              
+                  </div>
                     <label className="block text-black text-sm font-bold mb-1">
-                      Community Banner
+                      Share Creative Post
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setCommunityBanner(e.target.files)}} />
+                    <input type="file" accept="image/*,video/*" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setFiles(e.target.files)}} />
                     <label className="block text-black text-sm font-bold mb-1">
-                      Community PFP
+                      Title
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setCommunityPfp(e.target.files)}} required />
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Description
-                    </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setCommunityDescription(e.target.value)} required />
+                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setTitle(e.target.value)} />
       
                   </form>
                 </div>
@@ -130,7 +171,7 @@ const CreateCommunity = () => {
                     onClick={handleSubmit}
                     disabled={loading}
                   >
-                    {loading? 'Hold MotheFuckka...': 'Submit'}
+                    {loading ? "Teri Mummy ..." : "Submit"}
                   </button>
                 </div>
               </div>
@@ -140,6 +181,6 @@ const CreateCommunity = () => {
       ) : null}
     </>
   );
-}
+};
 
-export default CreateCommunity
+export default CreatePost;

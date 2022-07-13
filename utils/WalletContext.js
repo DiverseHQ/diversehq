@@ -1,7 +1,7 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
 import Web3 from 'web3'
 import Web3Token from 'web3-token'
-import apiEndpoint from '../components/Home/ApiEndpoint'
+import apiEndpoint from '../api/ApiEndpoint'
 export const WalletContext = createContext([])
 
 let once = true
