@@ -1,9 +1,9 @@
 import apiEndpoint from './ApiEndpoint'
 
-export const getAllPosts = async (PerPage, page, sortBy) => {
+export const getAllPosts = async (limit, skips, sortBy) => {
   return await fetch(`${apiEndpoint}/post/getAllPosts?` + new URLSearchParams({
-    PerPage,
-    page,
+    limit,
+    skips,
     sortBy
   })).then(r => r.json())
 }

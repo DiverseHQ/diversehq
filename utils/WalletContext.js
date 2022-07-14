@@ -19,11 +19,11 @@ export const WalletProvider = ({ children }) => {
     }
   }, [wallet])
 
-  useEffect(() => {
-    ;(async () => {
-      await connectWallet()
-    })()
-  }, [])
+  // useEffect(() => {
+  //   ;(async () => {
+  //     await connectWallet()
+  //   })()
+  // }, [])
 
   const getUserInfo = async () => {
     try {
