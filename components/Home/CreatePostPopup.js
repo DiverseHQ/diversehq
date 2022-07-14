@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../../utils/WalletContext'
-import apiEndpoint from './ApiEndpoint'
+import apiEndpoint from '../../api/ApiEndpoint';
 
 const CreatePostPopup = () => {
   const [showModal, setShowModal] = useState(false)
@@ -10,6 +10,8 @@ const CreatePostPopup = () => {
   const [communityId, setCommunityId] = useState([])
   const { user, token } = useProfile()
   const [loading, setLoading] = useState(false)
+  const [joinedCommunities, setJoinedCommunities] = useState(null);
+  const [value, setValue] = useState(null)
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
@@ -96,11 +98,49 @@ const CreatePostPopup = () => {
       }
     }
   }
+  const handleInputChange = value => {
+    setValue(value);
+  };
 
-  const selectCommunity = (event) => {
-    setCommunityId(event.target.value)
-    console.log(event.target.value)
+  const selectCommunity = (value) => {
+    setCommunityId(value)
+    console.log(value)
   }
+// an option tag with image and text from an api response
+  const CustomOption = (props) => (
+    <div className="custom-option">
+      <img src={props.data.image} alt=""/>
+      <span className="custom-option-text">{props.data.name}</span>
+    </div>
+  )
+
+ 
+
+
+  const getJoinedCommunities = async () => {
+    console.log("pancho")
+    if(user.walletAddress){
+      try{
+       const response = await fetch(`${apiEndpoint}/community/getJoinedCommunitiesOfUser?walletAddress=${user.walletAddress}`,{
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }).then(res => res.json());
+        console.log(response)
+        setJoinedCommunities(response)
+        
+      }catch(error){
+        console.log(error);
+      }
+    }
+  }
+
+  useEffect(() =>{
+    if(user){
+      getJoinedCommunities();
+    }
+  },[user])
 
   return (
     <>
@@ -109,7 +149,6 @@ const CreatePostPopup = () => {
         Share Creativity
         </button>
         </div>
-
       {showModal
         ? (
         <>
@@ -137,10 +176,16 @@ const CreatePostPopup = () => {
                      Choose Community
                    <select name="community" id="chooseCommunity" onChange={(e) => selectCommunity(e)}>
                    <option>----Select community----</option>
-                   {user.communities.map((community, i) => (
-                    <option value={community} key={i}>{community}</option>
+                   {joinedCommunities && joinedCommunities.map((community, i) => (
+                    <option value={community._id} key={i} {...community} className="flex flex-col">
+                       <div className="custom-option">
+                          <img src={community.logoImageUrl} alt="logo"/>
+                           <span className="custom-option-text">{community.name}</span>
+                        </div>
+                      </option> 
                    ))}
                     </select>
+                    
                     {communityId}
                    </label>
                      )

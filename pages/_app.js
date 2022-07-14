@@ -1,25 +1,19 @@
-import { ThemeProvider } from 'next-themes'
 import React, { useEffect, useState } from 'react'
 import Nav from '../components/Home/Nav'
 import '../styles/globals.css'
-import { NotifyProvider } from '../utils/NotifyContext'
-import { WalletProvider } from '../utils/WalletContext'
+import MasterWrapper from '../utils/MasterWrapper'
+import useDevice from '../utils/useDevice'
 
 function MyApp ({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
+  const { isDesktop } = useDevice()
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
   return (
-    <WalletProvider>
-      <NotifyProvider>
-      <ThemeProvider defaultTheme = 'system'>
-            <Nav />
-            <div className="h-screen pt-16 bg-primary-bg text-white">
+    <MasterWrapper>
+      {isDesktop && <Nav />}
         <Component {...pageProps} />
-       </div>
-       </ThemeProvider>
-       </NotifyProvider>
-    </WalletProvider>
+    </MasterWrapper>
   )
 }
 

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useProfile } from '../../utils/WalletContext';
-import apiEndpoint from '../Home/ApiEndpoint';
+import apiEndpoint from '../../api/ApiEndpoint';
 
 const CreateComment = ({postId}) => {
     const {user,connecting,token} = useProfile();

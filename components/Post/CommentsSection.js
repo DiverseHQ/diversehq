@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import apiEndpoint from '../Home/ApiEndpoint';
+import apiEndpoint from '../../api/ApiEndpoint';
 import SingleComment from './SingleComment';
 
 const CommentsSection = ({commentsId}) => {

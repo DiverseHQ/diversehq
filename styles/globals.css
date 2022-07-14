@@ -5,9 +5,9 @@
 :root {
     --background: theme('colors.white');
     --background-secondary: theme('colors.gray.50');
-    --accent-primary: theme("colors.blue.500");
-    --accent-secondary: theme("colors.blue.600");
-    --accent-hover: theme("colors.blue.700");
+    --accent-primary: theme("colors.purple.700");
+    --accent-secondary: theme("colors.purple.600");
+    --accent-hover: theme("colors.purple.500");
 
     --text-primary: theme("colors.gray.800");
     --text-secondary: theme("colors.gray.700");
@@ -16,9 +16,9 @@
   [data-theme='dark'] {
     --background: theme('colors.black');
     --background-secondary: theme('colors.gray.800');
-    --accent-primary: theme("colors.blue.500");
-    --accent-secondary: theme("colors.blue.600");
-    --accent-hover: theme("colors.blue.700");
+    --accent-primary: theme("colors.purple.700");
+    --accent-secondary: theme("colors.purple.600");
+    --accent-hover: theme("colors.purple.500");
 
     --text-primary: theme("colors.gray.100");
     --text-secondary: theme("colors.gray.200");
