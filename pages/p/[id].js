@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import apiEndpoint from '../../api/ApiEndpoint'
+import { getSinglePostInfo } from '../../api/post'
 import CommentsSection from '../../components/Post/CommentsSection'
 import CreateComment from '../../components/Post/CreateComment'
 import PostCard from '../../components/Post/PostCard'
@@ -15,7 +16,7 @@ const PostPage = () => {
 
   const fetchPostInformation = async () => {
     try {
-      const post = await fetch(`${apiEndpoint}/post/singlePostInfo/${id}`).then(res => res.json())
+      const post = await getSinglePostInfo(id)
       console.log(post)
       setPostInfo(post)
     } catch (error) {

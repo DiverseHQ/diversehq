@@ -7,3 +7,7 @@ export const getAllPosts = async (limit, skips, sortBy) => {
     sortBy
   })).then(r => r.json())
 }
+
+export const getSinglePostInfo = async (id) => {
+  return await fetch(`${apiEndpoint}/post/singlePostInfo/${id}`).then(r => r.json())
+}
