@@ -1,7 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../../utils/WalletContext'
-import apiEndpoint from '../../api/ApiEndpoint'
+import apiEndpoint from '../../api/ApiEndpoint';
+import Select, {components} from 'react-select'
 
 const CreatePostPopup = () => {
   const [showModal, setShowModal] = useState(false)
@@ -10,8 +11,11 @@ const CreatePostPopup = () => {
   const [communityId, setCommunityId] = useState([])
   const { user, token } = useProfile()
   const [loading, setLoading] = useState(false)
-  const [joinedCommunities, setJoinedCommunities] = useState(null)
-  const [value, setValue] = useState(null)
+  const [joinedCommunities, setJoinedCommunities] = useState([]);
+  const [option, setOption] = useState(null)
+  const [isDropDown, setIsDropDown] = useState(false)
+
+  const optionRef = useRef(null)
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
@@ -107,7 +111,7 @@ const CreatePostPopup = () => {
     console.log(value)
   }
   // an option tag with image and text from an api response
-  const CustomOption = (props) => (
+  const customOption = (props) => (
     <div className="custom-option">
       <img src={props.data.image} alt=""/>
       <span className="custom-option-text">{props.data.name}</span>
@@ -131,10 +135,27 @@ const CreatePostPopup = () => {
       }
     }
   }
-
-  useEffect(() => {
-    if (user) {
-      getJoinedCommunities()
+  const customOptions = () =>{
+    return(
+      <>
+      {
+        joinedCommunities.map(community => {
+          return(
+            <div key={community._id} onClick={(e) => setOption(e.target.value)} className="flex flex-row justify-center space-between" value={community._id}>
+              <img src={community.logoImageUrl} ></img>
+              <span>{community.name}</span>
+            </div>
+          )
+        })
+      }
+      </>
+    )
+     
+  }
+  
+  useEffect(() =>{
+    if(user){
+      getJoinedCommunities();
     }
   }, [user])
 
@@ -148,55 +169,40 @@ const CreatePostPopup = () => {
       {showModal
         ? (
         <>
-          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
-                  <h3 className="text-3xl font=semibold">What's up Creative human?</h3>
-                  <button
-                    className="bg-transparent border-0 text-black float-right"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="text-black opacity-7 h-6 w-6 text-xl block bg-gray-400 py-0 rounded-full">
-                      x
-                    </span>
-                  </button>
-                </div>
-                <div className="relative p-6 flex-auto">
-                  <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
-                <div className="flex flex-col text-black">
-                {communityId}
-                 {user
-                   ? (
-                   <label htmlFor="chooseCommunity">
-                     Choose Community
-                   <select name="community" id="chooseCommunity" onChange={(e) => selectCommunity(e)}>
-                   <option>----Select community----</option>
-                   {joinedCommunities && joinedCommunities.map((community, i) => (
-                    <option value={community._id} key={i} {...community} className="flex flex-col">
-                       <div className="custom-option">
-                          <img src={community.logoImageUrl} alt="logo"/>
-                           <span className="custom-option-text">{community.name}</span>
-                        </div>
-                      </option>
-                   ))}
-                    </select>
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-p-bg outline-none focus:outline-none">
+              <div className="flex flex-row items-center justify-around mt-3">
 
-                    {communityId}
-                   </label>
+              <div className="flex flex-row text-black">
+                 {user && joinedCommunities
+                   ? (
+                    <Select placeholder="Select Community" components={{Option:customOptions}} options={joinedCommunities} onChange={(e) => selectCommunity(e)} className="w-fit h-7 rounded-full bg-black" />
                      )
                    : (<p>Connect Wallet</p>)}
                   </div>
+
+                  <button
+                    className="text-p-text bg-blue-500 font-bold uppercase text-sm rounded-full shadow hover:shadow-lg outline-none focus:outline-none p-1.5"
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={loading}
+                  >
+                    {loading ? 'Teri Mummy ...' : 'Post'}
+                  </button>
+              </div>
+                <div className="relative p-6 flex-auto">
+                <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="What's up!?" onChange={(e) => setTitle(e.target.value)} />
+
+                  <div className="bg-s-bg shadow-md rounded px-8 pt-6 pb-8 w-full">
+                
                     <label className="block text-black text-sm font-bold mb-1">
                       Share Creative Post
                     </label>
                     <input type="file" accept="image/*,video/*" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setFiles(e.target.files) }} />
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Title
-                    </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setTitle(e.target.value)} />
+                    
 
-                  </form>
+                  </div>
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <button
@@ -206,14 +212,7 @@ const CreatePostPopup = () => {
                   >
                     Close
                   </button>
-                  <button
-                    className="text-white bg-yellow-500 active:bg-yellow-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                  >
-                    {loading ? 'Teri Mummy ...' : 'Submit'}
-                  </button>
+                  
                 </div>
               </div>
             </div>
