@@ -1,5 +1,5 @@
 
-import React, { createContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -39,3 +39,5 @@ export const NotifyProvider = ({ children }) => {
         </NotfiyContext.Provider>
   )
 }
+
+export const useNotify = () => useContext(NotfiyContext);

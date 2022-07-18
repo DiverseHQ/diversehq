@@ -4,11 +4,11 @@ import apiEndpoint from '../../api/ApiEndpoint'
 import Image from 'next/image'
 import { WalletContext } from '../../utils/WalletContext'
 import PostsColumn from '../../components/Post/PostsColumn'
-import { NotfiyContext } from '../../utils/NotifyContext'
+import { useNotify } from '../../utils/NotifyContext'
 const CommunityPage = () => {
   const { name } = useRouter().query
   const { user, token, getUserInfo } = React.useContext(WalletContext)
-  const { notifyInfo } = useContext(NotfiyContext)
+  const { notifyInfo } = useNotify()
   const [community, setCommunity] = useState(null)
   const [posts, setPosts] = useState([])
   const [page, setPage] = useState(0)

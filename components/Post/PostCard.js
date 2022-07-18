@@ -1,24 +1,87 @@
 import { Router, useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { useProfile } from '../../utils/WalletContext'
+import { useNotify } from '../../utils/NotifyContext'
+import { putLikeOnPost } from '../../api/post'
 
 const PostCard = ({ post }) => {
+  const router = useRouter()
   const createdAt = new Date(post.createdAt)
   const [loaded, setLoaded] = useState(false)
-  const router = useRouter()
-  console.log('post', post)
+  const { user, token } = useProfile()
+  const [liked, setLiked] = useState(false)
+  const [likes, setLikes] = useState(post.likes.length)
+  const { notifyInfo, notifyError } = useNotify()
+
+  useEffect(() => {
+    if (!user) return
+    setLiked(post.likes.includes(user.walletAddress))
+  }, [user])
+  const handleLike = async () => {
+    try {
+      if (!user || !token) {
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
+      setLiked(true)
+      setLikes(likes + 1)
+      await putLikeOnPost(post._id, token)
+    } catch (error) {
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
+  const handleUnLike = async () => {
+    try {
+      if (!user || !token) {
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
+      setLiked(false)
+      setLikes(likes - 1)
+    } catch (error) {
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
+
+  const handleShare = async () => {
+    try{
+      const url = `${window.origin}/p/${post._id}`;
+      const text = `${post.title} ${url}`;
+      const title = "Share this post";
+      navigator.share({
+        title,
+        text,
+        url
+      })
+    }catch(error){
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
+
+  const handleCommunityClicked = () => {
+    router.push(`/c/${post.communityName}`)
+  }
+
+  const handleAuthorClicked = () => {
+    router.push(`/u/${post.author}`)
+  }
+
   //   const likeThe
   return (
     <div className="w-full border-s-bg py-3 sm:my-11 border-y">
       <div className='px-3'>
         <div className="flex flex-row justify-between items-center mb-1.5">
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center" onClick={handleCommunityClicked}>
               {post.communityLogo && <Image src={post.communityLogo} width={26} height={26} className="rounded-full" />}
-              <div className='pl-1.5 font-bold text-xs'>{post.communityName}</div>
+              <div className='pl-1.5 font-bold text-xs hover:cursor-pointer hover:underline'>{post.communityName}</div>
             </div>
-            <div className='flex flex-row items-center'>
+            <div className='flex flex-row items-center' onClick={handleAuthorClicked}>
               {post.authorAvatar && <Image src={post.authorAvatar} className="rounded-full" width={26} height={26} />}
-              <div className='pl-1.5 font-bold text-xs'>{post.authorName ? post.authorName : post.author.slice(0, 6) + '...'}</div>
+              <div className='pl-1.5 font-bold text-xs hover:cursor-pointer hover:underline'>{post.authorName ? post.authorName : post.author.slice(0, 6) + '...'}</div>
             </div>
         </div>
         <div className="mb-2 font-normal text-xs">
@@ -32,13 +95,13 @@ const PostCard = ({ post }) => {
         <div className="flex flex-row justify-between items-center px-3 pt-2 ">
             <div className="flex flex-row">
 
-            <div className='mr-3'><Image src="/love.png" width={16} height={16}/></div>
+            <button className='mr-3' onClick={liked ? handleUnLike: handleLike}><Image src={liked ? '/loveFill.svg' : '/love.png'} width={16} height={16}/></button>
             <div className='mr-3'><Image src="/comment.png" width={16} height={16}/></div>
-            <div className='mr-3'><Image src="/share.png" width={16} height={16} /></div>
+            <button onClick={handleShare} className='mr-3'><Image src="/share.png" width={16} height={16} /></button>
             </div>
             <div className="flex flex-row items-center text-xs">
-            <div className='pr-2'>{post.likes.length} likes</div>
-            <div> {post.comments.length} comments</div>
+            <div className='pr-2 hover:cursor-pointer hover:underline'>{likes} likes</div>
+            <div className='hover:cursor-pointer hover:underline'> {post.comments.length} comments</div>
             </div>
         </div>
         </div>
