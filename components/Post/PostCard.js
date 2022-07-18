@@ -47,16 +47,16 @@ const PostCard = ({ post }) => {
   }
 
   const handleShare = async () => {
-    try{
-      const url = `${window.origin}/p/${post._id}`;
-      const text = `${post.title} ${url}`;
-      const title = "Share this post";
+    try {
+      const url = `${window.origin}/p/${post._id}`
+      const text = `${post.title} ${url}`
+      const title = 'Share this post'
       navigator.share({
         title,
         text,
         url
       })
-    }catch(error){
+    } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
     }
@@ -72,7 +72,7 @@ const PostCard = ({ post }) => {
 
   //   const likeThe
   return (
-    <div className="w-full border-s-bg py-3 sm:my-11 border-y">
+    <div className="w-full border-s-bg bg-p-bg py-3 sm:my-11 border-y">
       <div className='px-3'>
         <div className="flex flex-row justify-between items-center mb-1.5">
             <div className="flex flex-row items-center" onClick={handleCommunityClicked}>
@@ -95,7 +95,7 @@ const PostCard = ({ post }) => {
         <div className="flex flex-row justify-between items-center px-3 pt-2 ">
             <div className="flex flex-row">
 
-            <button className='mr-3' onClick={liked ? handleUnLike: handleLike}><Image src={liked ? '/loveFill.svg' : '/love.png'} width={16} height={16}/></button>
+            <button className='mr-3' onClick={liked ? handleUnLike : handleLike}><Image src={liked ? '/loveFill.svg' : '/love.png'} width={16} height={16}/></button>
             <div className='mr-3'><Image src="/comment.png" width={16} height={16}/></div>
             <button onClick={handleShare} className='mr-3'><Image src="/share.png" width={16} height={16} /></button>
             </div>
