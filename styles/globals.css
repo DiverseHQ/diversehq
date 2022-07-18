@@ -15,7 +15,7 @@
   
   [data-theme='dark'] {
     --background: theme('colors.black');
-    --background-secondary: theme('colors.gray.800');
+    --background-secondary: #16181C;
     --accent-primary: theme("colors.purple.700");
     --accent-secondary: theme("colors.purple.600");
     --accent-hover: theme("colors.purple.500");

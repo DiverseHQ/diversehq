@@ -13,7 +13,9 @@ const PostsColumn = ({ posts , getMorePost, hasMore}) => {
      endMessage={<h4>Nothing more to show</h4>}
     >
         {posts.map((post) => {
-          return <div className='my-3' key={post._id}><PostCard key={post._id} post={post} /></div>
+          return <div key={post._id}>
+            <PostCard key={post._id} post={post} />
+            </div>
         })}
 </InfiniteScroll>
     </>

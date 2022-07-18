@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../../utils/WalletContext'
-import apiEndpoint from '../../api/ApiEndpoint';
+import apiEndpoint from '../../api/ApiEndpoint'
 
 const CreatePostPopup = () => {
   const [showModal, setShowModal] = useState(false)
@@ -10,7 +10,7 @@ const CreatePostPopup = () => {
   const [communityId, setCommunityId] = useState([])
   const { user, token } = useProfile()
   const [loading, setLoading] = useState(false)
-  const [joinedCommunities, setJoinedCommunities] = useState(null);
+  const [joinedCommunities, setJoinedCommunities] = useState(null)
   const [value, setValue] = useState(null)
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -99,14 +99,14 @@ const CreatePostPopup = () => {
     }
   }
   const handleInputChange = value => {
-    setValue(value);
-  };
+    setValue(value)
+  }
 
   const selectCommunity = (value) => {
     setCommunityId(value)
     console.log(value)
   }
-// an option tag with image and text from an api response
+  // an option tag with image and text from an api response
   const CustomOption = (props) => (
     <div className="custom-option">
       <img src={props.data.image} alt=""/>
@@ -114,33 +114,29 @@ const CreatePostPopup = () => {
     </div>
   )
 
- 
-
-
   const getJoinedCommunities = async () => {
-    console.log("pancho")
-    if(user.walletAddress){
-      try{
-       const response = await fetch(`${apiEndpoint}/community/getJoinedCommunitiesOfUser?walletAddress=${user.walletAddress}`,{
-          method: "GET",
+    console.log('pancho')
+    if (user.walletAddress) {
+      try {
+        const response = await fetch(`${apiEndpoint}/community/getJoinedCommunitiesOfUser?walletAddress=${user.walletAddress}`, {
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json'
           }
-        }).then(res => res.json());
+        }).then(res => res.json())
         console.log(response)
         setJoinedCommunities(response)
-        
-      }catch(error){
-        console.log(error);
+      } catch (error) {
+        console.log(error)
       }
     }
   }
 
-  useEffect(() =>{
-    if(user){
-      getJoinedCommunities();
+  useEffect(() => {
+    if (user) {
+      getJoinedCommunities()
     }
-  },[user])
+  }, [user])
 
   return (
     <>
@@ -182,10 +178,10 @@ const CreatePostPopup = () => {
                           <img src={community.logoImageUrl} alt="logo"/>
                            <span className="custom-option-text">{community.name}</span>
                         </div>
-                      </option> 
+                      </option>
                    ))}
                     </select>
-                    
+
                     {communityId}
                    </label>
                      )

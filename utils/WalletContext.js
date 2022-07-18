@@ -21,7 +21,9 @@ export const WalletProvider = ({ children }) => {
 
   useEffect(() => {
     ;(async () => {
-      await connectWallet()
+      if(window.ethereum.selectedAddress && !wallet){
+        await connectWallet()
+      }
     })()
   }, [])
 
