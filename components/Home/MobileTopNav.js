@@ -31,7 +31,7 @@ const MobileTopNav = () => {
     <>
     <div id='mobile-top-navbar' className='mobile-top-nav bg-p-bg border-b border-s-bg flex flex-row items-center py-2.5 px-4 z-10'>
        {user && user.profileImageUrl && <Image src={user.profileImageUrl} width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
-       {!user && <div className="animate-pulse w-[30px] h-[30px] rounded-full bg-s-text" />}
+       {(!user || !user.profileImageUrl) && <Image src="/person.png" width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
        <div className='pl-5 text-base font-bold tracking-wider' onClick={routeToHome}>Home</div>
     </div>
     {showOptions && <MobileClickOptions />}
