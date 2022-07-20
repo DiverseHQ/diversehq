@@ -1,4 +1,4 @@
-const mode = 'development'
+const mode = 'production'
 let apiEndpoint = ''
 switch (mode) {
   case 'development':

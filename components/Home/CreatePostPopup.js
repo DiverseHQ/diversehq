@@ -21,7 +21,8 @@ const CreatePostPopup = () => {
     setLoading(true)
     console.log(files)
     // change space to _ for all file in files
-    if (files.length != 1) {
+    if (files.length != 1) {  
+      setLoading(false)
       alert('Select only one file')
       return
     }
@@ -106,17 +107,11 @@ const CreatePostPopup = () => {
     setValue(value)
   }
 
-  const selectCommunity = (value) => {
-    setCommunityId(value)
-    console.log(value)
+  const handleDropDown = (e) => {
+    setOption(e.target.value);
+    setIsDropDown(!isDropDown);
   }
-  // an option tag with image and text from an api response
-  const customOption = (props) => (
-    <div className="custom-option">
-      <img src={props.data.image} alt=""/>
-      <span className="custom-option-text">{props.data.name}</span>
-    </div>
-  )
+ 
 
   const getJoinedCommunities = async () => {
     console.log('pancho')
@@ -137,20 +132,66 @@ const CreatePostPopup = () => {
   }
   const customOptions = () =>{
     return(
-      <>
+      <div className="flex flex-col bg-s-bg absolute w-52 rounded mt-1 p-2 mx-3">  
+
       {
         joinedCommunities.map(community => {
           return(
-            <div key={community._id} onClick={(e) => setOption(e.target.value)} className="flex flex-row justify-center space-between" value={community._id}>
-              <img src={community.logoImageUrl} ></img>
-              <span>{community.name}</span>
+            <div key={community._id} onClick={handleDropDown } className="flex flex-row items-center hover:bg-violet-600" value={community._id}>
+              <img src={community.logoImageUrl}className="border border-p-bg rounded-full w-12 h-12" ></img>
+              <h3 className="text-p-text mx-1 text-base">{community.name}</h3>
             </div>
           )
         })
       }
-      </>
+      </div>
     )
      
+  }
+
+  const PopUpModal = () =>{
+    return(
+      //simple modal
+      <div className=" flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div className="relative p-4 w-full max-w-xl h-full md:h-auto">
+       
+        <div className="relative bg-p-bg rounded-lg shadow dark:bg-gray-700">
+            <div className="flex flex-row justify-between p-4 items-start rounded-t">
+                <button type="button" className="text-gray-400 bg-transparent hover:text-s-text rounded-lg text-sm p-1.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={(e) => setShowModal(false)}>
+                    <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>   
+                </button>
+                <button className="text-p-text bg-blue-500 hover:bg-blue-700 font-bold uppercase rounded-full shadow hover:shadow-lg outline-none focus:outline-none text-base px-3.5 py-1.5" type="button" onClick={handleSubmit} disabled={loading} >
+                 {loading ? 'Loading ...' : 'Post'}
+                </button>
+            </div>
+            <div className="border rounded-full text-p-text w-fit mx-3 p-0.5">
+              {user && joinedCommunities
+                ? (
+                    <button className="text-blue-500 p-1" onClick={(e) => setIsDropDown(!isDropDown)} >Choose Communinity</button>
+                  )
+        : (<p>Connect Wallet</p>)}</div>
+              {
+                      isDropDown && customOptions()
+                    }
+            {/* <!-- Modal body --> */}
+            <div className="p-6 space-y-6">
+            <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="What's up!?" onChange={(e) => setTitle(e.target.value)} />
+                <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                <div className="p-5 justify-center items-center border rounded-t" onDragOver={dragOver}
+            onDragEnter={dragEnter}
+            onDragLeave={dragLeave}
+            onDrop={fileDrop} >
+                <input type="file" id="upload-file" accept="image/*,video/*" hidden onChange={(e) => { setFiles(e.target.files) }} />
+                  Drag and Drop image/videos or 
+                <button className="bg-blue-500 hover:bg-blue-700 text-p-text font-bold py-1.5 px-3.5 rounded-full ml-1"><label htmlFor="upload-file">Upload Image</label></button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    )
+    
   }
   
   useEffect(() =>{
@@ -168,56 +209,7 @@ const CreatePostPopup = () => {
         </div>
       {showModal
         ? (
-        <>
-          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-p-bg outline-none focus:outline-none">
-              <div className="flex flex-row items-center justify-around mt-3">
-
-              <div className="flex flex-row text-black">
-                 {user && joinedCommunities
-                   ? (
-                    <Select placeholder="Select Community" components={{Option:customOptions}} options={joinedCommunities} onChange={(e) => selectCommunity(e)} className="w-fit h-7 rounded-full bg-black" />
-                     )
-                   : (<p>Connect Wallet</p>)}
-                  </div>
-
-                  <button
-                    className="text-p-text bg-blue-500 font-bold uppercase text-sm rounded-full shadow hover:shadow-lg outline-none focus:outline-none p-1.5"
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                  >
-                    {loading ? 'Teri Mummy ...' : 'Post'}
-                  </button>
-              </div>
-                <div className="relative p-6 flex-auto">
-                <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="What's up!?" onChange={(e) => setTitle(e.target.value)} />
-
-                  <div className="bg-s-bg shadow-md rounded px-8 pt-6 pb-8 w-full">
-                
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Share Creative Post
-                    </label>
-                    <input type="file" accept="image/*,video/*" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setFiles(e.target.files) }} />
-                    
-
-                  </div>
-                </div>
-                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
+          PopUpModal()
           )
         : null}
     </>
