@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer uitilities {
+  .mobile-top-nav {
+    position: fixed; /* Make it stick/fixed */
+    top: 0; /* Stay on top */
+    width: 100%; /* Full width */
+    transition: top 0.5s; /* Transition effect when sliding down (and up) */
+  }
+
+  .button-dropshadow {
+    filter: drop-shadow(4px 8px 8px rgba(0, 0, 0, 0.4));
+  }
+}
+
 :root {
     --background: theme('colors.white');
     --background-secondary: theme('colors.gray.50');
