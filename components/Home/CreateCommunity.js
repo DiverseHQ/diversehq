@@ -2,6 +2,9 @@ import {useState, useContext} from "react";
 import {Web3Storage} from "web3.storage"
 import {useProfile} from "../../utils/WalletContext";
 import apiEndpoint from "../../api/ApiEndpoint";
+import {AiOutlineCamera} from "react-icons/ai";
+import { useNotify } from '../../utils/NotifyContext';
+
 
 
 const CreateCommunity = () => {
@@ -12,6 +15,10 @@ const CreateCommunity = () => {
   const [communityDescription,setCommunityDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const {wallet, token} = useProfile();
+  const [headerValue, setHeaderValue] = useState(null);
+  const [pfpValue, setPfpValue] = useState(null);
+  const { notifyInfo, notifyError, notifySuccess } = useNotify()
+
 
   function hasWhiteSpace(s) {
     return /\s/g.test(s);
@@ -21,15 +28,17 @@ const CreateCommunity = () => {
     event.preventDefault();
     setLoading(true);
     console.log(communityName,communityPfp,communityBanner,communityDescription);
-    //change space to _ for all file in files
-    if(communityPfp.length != 1 && communityBanner != 1 ){
-      alert("Select only one file");
+    if(!communityName || !communityPfp || !communityBanner || !communityDescription){
+      notifyError('Please fill in all fields');
+      setLoading(false);
       return;
     }
+    //change space to _ for all file in files
+    console.log(communityPfp,communityBanner);
     // files[0].name = files[0].name.replace(/\s/g, "_");
     const newFiles = [
-      new File([communityPfp[0]],communityPfp[0].name.replace(/\s/g, "_"),{type: communityPfp[0].type}),
-      new File([communityBanner[0]],communityBanner[0].name.replace(/\s/g, "_"),{type: communityBanner[0].type}),  
+      new File([communityPfp],communityPfp.name.replace(/\s/g, "_"),{type: communityPfp.type}),
+      new File([communityBanner],communityBanner.name.replace(/\s/g, "_"),{type: communityBanner.type}),  
     ]
     // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
     // console.log(communityPfp, communityBanner);
@@ -64,11 +73,24 @@ const CreateCommunity = () => {
             },
             body: JSON.stringify(postData)
           }).then(res => res.json()).then(res => {
-            console.log(res);
+            console.log(res)
+            notifySuccess('Community created successfully')
           })
         }catch(error){
           console.log(error);
         }
+    }
+
+    const handleHeaderChange = (event) => {
+      const filePicked = event.target.files[0];
+      setCommunityBanner(filePicked);
+      setHeaderValue(URL.createObjectURL(filePicked));
+    }
+
+    const handlePfpChange = (event) => {
+      const filePicked = event.target.files[0];
+      setCommunityPfp(filePicked);
+      setPfpValue(URL.createObjectURL(filePicked));
     }
 
   return (
@@ -95,20 +117,27 @@ const CreateCommunity = () => {
             </div>
             
             {/* <!-- Modal body --> */}
-            <div className="p-6 space-y-6">
+            <div >
+              <div className="flex h-44 border border-bg-p items-center justify-center">
+                {
+                  headerValue && (
+                    <img className="inset-0 object-cover h-full w-full " src={headerValue}  alt="Header"/> 
+                  )
+                }
+                <button className="absolute p-1 "><label htmlFor="communityHeader"><AiOutlineCamera className="h-8 w-8"  /></label></button>
+              </div>
+              <div className="flex relative border h-24 w-24 border-bg-p rounded-full bottom-10 ml-3 items-center justify-center">
+                {
+                  communityPfp && (
+                    <img className="inset-0 h-full w-full rounded-full" src={pfpValue}  alt="PFP"/>
+                  )
+                }
+                <button className="absolute p-1"><label htmlFor="communityPfp"><AiOutlineCamera className="h-4 w-4"  /></label></button>
+              </div>
             <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Name" onChange={(e) => setCommunityName(e.target.value)} required />
             <textarea type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Description" onChange={(e) => setCommunityDescription(e.target.value)}  />
-            <input type="file" id="communi"  placeholder="Commmunity Name" onChange={(e) =>{setCommunityPfp(e.target.files)}} hidden required />
-            <input type="file"  placeholder="Commmunity Name" onChange={(e) =>{setCommunityBanner(e.target.files)}} hidden />
-
-
-                <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                <input type="file" id="upload-file" accept="image/*,video/*" hidden onChange={(e) => { setFiles(e.target.files) }} />
-                <div className="p-5 justify-center items-center border rounded-t">
-                  Drag and Drop image/videos or 
-                <button className="bg-blue-500 hover:bg-blue-700 text-p-text font-bold py-1.5 px-3.5 rounded-full ml-1"><label htmlFor="upload-file">Upload Image</label></button>
-                </div>
-                </div>
+            <input type="file" id="communityPfp"  placeholder="Commmunity Name" onChange={handlePfpChange} required hidden/>
+            <input type="file" id="communityHeader" onChange={handleHeaderChange} hidden />
             </div>
         </div>
     </div>
