@@ -12,14 +12,16 @@ function MyApp ({ Component, pageProps }) {
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
   return (
+    <div className="text-p-text">
     <MasterWrapper>
       {isDesktop && <Nav />}
       {!isDesktop && <MobileTopNav />}
-      <div className='pt-11'>
+      <div className={'pt-11 pb-16'}>
         <Component {...pageProps} />
       </div>
         {!isDesktop && <MobileBottomNav />}
     </MasterWrapper>
+    </div>
   )
 }
 

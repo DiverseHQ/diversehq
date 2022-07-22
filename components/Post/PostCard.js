@@ -72,7 +72,7 @@ const PostCard = ({ post }) => {
 
   //   const likeThe
   return (
-    <div className="w-full border-s-bg bg-p-bg py-3 sm:my-11 border-y">
+    <div className="w-full border-p-border bg-p-bg py-3 sm:my-11 border-y">
       <div className='px-3'>
         <div className="flex flex-row justify-between items-center mb-1.5">
             <div className="flex flex-row items-center" onClick={handleCommunityClicked}>
