@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import MobileClickOptions from './MobileClickOptions'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const MobileTopNav = () => {
   const [showOptions, setShowOptions] = useState(false)
@@ -36,6 +37,7 @@ const MobileTopNav = () => {
        {user && user.profileImageUrl && <Image src={user.profileImageUrl} width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
        {(!user || !user.profileImageUrl) && <Image src="/person.png" width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
        <div className='pl-5 text-base font-bold tracking-wider' onClick={routeToHome}>Home</div>
+       <ConnectButton />
     </div>
     {showOptions && <MobileClickOptions />}
     </>

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect, useContext } from 'react'
 import apiEndpoint from '../../api/ApiEndpoint'
+import { getUserInfo, getUserPosts } from '../../api/user'
 import PostCard from '../../components/Post/PostCard'
 const Profile = () => {
   const { useraddress } = useRouter().query
@@ -10,15 +11,14 @@ const Profile = () => {
   const [playing, setPlaying] = useState(false)
   useEffect(() => {
     if (useraddress) {
-      getUserInfo()
-      getUserPost()
+      showUserInfo()
+      showUserPost()
     }
   }, [useraddress])
 
-  const getUserInfo = async () => {
+  const showUserInfo = async () => {
     try {
-      const userInfo = await fetch(`${apiEndpoint}/user/${useraddress}`)
-        .then(res => res.json())
+      const userInfo = await getUserInfo()
       console.log(userInfo)
       setUser(userInfo)
     } catch (error) {
@@ -26,10 +26,9 @@ const Profile = () => {
     }
   }
 
-  const getUserPost = async () => {
+  const showUserPost = async () => {
     try {
-      const userPost = await fetch(`https://diversehq.herokuapp.com/apiv1/post/getPostsOfUser/${useraddress}`)
-        .then(res => res.json())
+      const userPost = await getUserPosts()
       console.log(userPost)
       setPostInfo(userPost)
     } catch (error) {
