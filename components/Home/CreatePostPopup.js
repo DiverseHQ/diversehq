@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Web3Storage } from 'web3.storage'
-import { useProfile } from '../../utils/WalletContext'
+import { useProfile } from '../Common/WalletContext'
 import apiEndpoint from '../../api/ApiEndpoint'
 
 const CreatePostPopup = () => {

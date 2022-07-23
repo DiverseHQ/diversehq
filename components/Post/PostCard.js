@@ -1,8 +1,8 @@
 import { Router, useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useProfile } from '../../utils/WalletContext'
-import { useNotify } from '../../utils/NotifyContext'
+import { useProfile } from '../Common/WalletContext'
+import { useNotify } from '../Common/NotifyContext'
 import { putLikeOnPost } from '../../api/post'
 
 const PostCard = ({ post }) => {

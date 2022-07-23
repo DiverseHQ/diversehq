@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { useProfile } from '../../utils/WalletContext'
+import { useProfile } from '../Common/WalletContext'
 import DiveToken from '../../utils/DiveTokens.json'
 import { ethers } from 'ethers'
 import CreatePostPopup from './CreatePostPopup'

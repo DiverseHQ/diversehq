@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React from 'react'
-import { useProfile } from '../../utils/WalletContext'
+import { useProfile } from '../Common/WalletContext'
 import { useTheme } from 'next-themes'
 const MobileClickOptions = () => {
   const router = useRouter()

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { useProfile } from '../../utils/WalletContext'
+import { useProfile } from '../Common/WalletContext'
 import MobileClickOptions from './MobileClickOptions'
 
 const MobileTopNav = () => {
