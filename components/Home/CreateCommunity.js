@@ -1,75 +1,73 @@
-import {useState, useContext} from "react";
-import {Web3Storage} from "web3.storage"
-import { useProfile } from "../Common/WalletContext";
-import apiEndpoint from "../../api/ApiEndpoint";
-
+import { useState} from 'react'
+import { Web3Storage } from 'web3.storage'
+import { useProfile } from '../Common/WalletContext'
+import apiEndpoint from '../../api/ApiEndpoint'
 
 const CreateCommunity = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false)
   const [communityName, setCommunityName] = useState('')
-  const [communityPfp,setCommunityPfp] = useState();
-  const [communityBanner,setCommunityBanner] = useState();
-  const [communityDescription,setCommunityDescription] = useState('');
-  const [loading, setLoading] = useState(false);
-  const {wallet, token} = useProfile();
+  const [communityPfp, setCommunityPfp] = useState()
+  const [communityBanner, setCommunityBanner] = useState()
+  const [communityDescription, setCommunityDescription] = useState('')
+  const [loading, setLoading] = useState(false)
+  const {address, token} = useProfile()
 
-  function hasWhiteSpace(s) {
-    return /\s/g.test(s);
+  function hasWhiteSpace (s) {
+    return /\s/g.test(s)
   }
 
-  const handleSubmit = async(event) => {
-    event.preventDefault();
-    setLoading(true);
-    console.log(communityName,communityPfp,communityBanner,communityDescription);
-    //change space to _ for all file in files
-    if(communityPfp.length != 1 && communityBanner != 1 ){
-      alert("Select only one file");
-      return;
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setLoading(true)
+    console.log(communityName, communityPfp, communityBanner, communityDescription)
+    // change space to _ for all file in files
+    if (communityPfp.length != 1 && communityBanner != 1) {
+      alert('Select only one file')
+      return
     }
     // files[0].name = files[0].name.replace(/\s/g, "_");
     const newFiles = [
-      new File([communityPfp[0]],communityPfp[0].name.replace(/\s/g, "_"),{type: communityPfp[0].type}),
-      new File([communityBanner[0]],communityBanner[0].name.replace(/\s/g, "_"),{type: communityBanner[0].type}),  
+      new File([communityPfp[0]], communityPfp[0].name.replace(/\s/g, '_'), { type: communityPfp[0].type }),
+      new File([communityBanner[0]], communityBanner[0].name.replace(/\s/g, '_'), { type: communityBanner[0].type })
     ]
     // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
     // console.log(communityPfp, communityBanner);
-      const token = process.env.NEXT_PUBLIC_WEB_STORAGE
-      const storage = new Web3Storage({ token })
-      const cid = await storage.put(newFiles)
-      console.log(cid);
-      let PFP =`https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
-      console.log(PFP)
-      let Banner =`https://dweb.link/ipfs/${cid}/${newFiles[1].name}`
-      console.log(Banner)
-      await handleCreateCommunity(PFP,Banner)
-      setLoading(false);
-      setShowModal(false);
-    }
+    const token = process.env.NEXT_PUBLIC_WEB_STORAGE
+    const storage = new Web3Storage({ token })
+    const cid = await storage.put(newFiles)
+    console.log(cid)
+    const PFP = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+    console.log(PFP)
+    const Banner = `https://dweb.link/ipfs/${cid}/${newFiles[1].name}`
+    console.log(Banner)
+    await handleCreateCommunity(PFP, Banner)
+    setLoading(false)
+    setShowModal(false)
+  }
 
-
-    const handleCreateCommunity = async (pfpURL,bannerURL) => {
-        const postData = {
-          name: communityName,
-          description: communityDescription,
-          bannerImageUrl: bannerURL,
-          logoImageUrl: pfpURL,
-          creator: wallet
-        }
-        try{
-          await fetch(`${apiEndpoint}/community`,{
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization":  token,
-            },
-            body: JSON.stringify(postData)
-          }).then(res => res.json()).then(res => {
-            console.log(res);
-          })
-        }catch(error){
-          console.log(error);
-        }
+  const handleCreateCommunity = async (pfpURL, bannerURL) => {
+    const postData = {
+      name: communityName,
+      description: communityDescription,
+      bannerImageUrl: bannerURL,
+      logoImageUrl: pfpURL,
+      creator: address
     }
+    try {
+      await fetch(`${apiEndpoint}/community`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token
+        },
+        body: JSON.stringify(postData)
+      }).then(res => res.json()).then(res => {
+        console.log(res)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -79,7 +77,8 @@ const CreateCommunity = () => {
         </button>
         </div>
 
-      {showModal ? (
+      {showModal
+        ? (
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
@@ -104,16 +103,16 @@ const CreateCommunity = () => {
                     <label className="block text-black text-sm font-bold mb-1">
                       Community Banner
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setCommunityBanner(e.target.files)}} />
+                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setCommunityBanner(e.target.files) }} />
                     <label className="block text-black text-sm font-bold mb-1">
                       Community PFP
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) =>{setCommunityPfp(e.target.files)}} required />
+                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setCommunityPfp(e.target.files) }} required />
                     <label className="block text-black text-sm font-bold mb-1">
                       Description
                     </label>
                     <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setCommunityDescription(e.target.value)} required />
-      
+
                   </form>
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -130,16 +129,17 @@ const CreateCommunity = () => {
                     onClick={handleSubmit}
                     disabled={loading}
                   >
-                    {loading? 'Hold MotheFuckka...': 'Submit'}
+                    {loading ? 'Hold MotheFuckka...' : 'Submit'}
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </>
-      ) : null}
+          )
+        : null}
     </>
-  );
+  )
 }
 
 export default CreateCommunity

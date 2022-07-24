@@ -13,8 +13,6 @@ const once = true
 export const WalletProvider = ({ children }) => {
   // const [wallet, setWallet] = useState(null)
   const [token, setToken] = useState(null)
-  const [web3, setWeb3] = useState(null)
-  const [connecting, setConnecting] = useState(false)
   const [user, setUser] = useState(null)
   const provider = useProvider()
   const { data: signer, isError, isLoading } = useSigner()
@@ -68,7 +66,7 @@ export const WalletProvider = ({ children }) => {
       if (existingToken) {
         setToken(existingToken)
         const web3Token = await Web3Token.verify(existingToken)
-        console.log("web3Token", web3Token)
+        console.log('web3Token', web3Token)
         console.log(web3Token.address, web3Token.body)
         if (!web3Token || !web3Token.address || !web3Token.body || web3Token.address.toLowerCase() !== address.toLowerCase()) {
           verified = false
@@ -106,7 +104,6 @@ export const WalletProvider = ({ children }) => {
       // localStorage.setItem('token', signedToken)
     }
     await refreshUserInfo()
-    setConnecting(false)
   }
 
   // const connectWallet = async () => {
@@ -152,7 +149,7 @@ export const WalletProvider = ({ children }) => {
   //   setUser(null)
   // }
   return (
-        <WalletContext.Provider value={{ refreshUserInfo, token, user }}>
+        <WalletContext.Provider value={{ address, refreshUserInfo, token, user }}>
             {children}
         </WalletContext.Provider>
   )

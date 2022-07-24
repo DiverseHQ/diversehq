@@ -2,13 +2,13 @@ import { useProfile } from '../Common/WalletContext'
 import { useState, useContext } from 'react'
 import { Web3Storage } from 'web3.storage'
 import apiEndpoint from '../../api/ApiEndpoint'
+import { useAccount } from 'wagmi'
 const ChangeMonkey = () => {
   const [showModal, setShowModal] = useState(false)
   const [pfp, setPfp] = useState()
   const [name, setName] = useState(null)
   const [bio, setBio] = useState(null)
-  const { wallet, token } = useProfile()
-
+  const {  token } = useProfile()
   const handleSubmit = async (event) => {
     event.preventDefault()
     console.log(name, pfp, bio)
