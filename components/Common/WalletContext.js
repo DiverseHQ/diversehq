@@ -1,17 +1,11 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
 import { useAccount, useProvider, useSigner } from 'wagmi'
-import Web3 from 'web3'
 import Web3Token from 'web3-token'
-import { ethers } from 'ethers'
-import apiEndpoint from '../../api/ApiEndpoint'
 import { getLocalToken, setLocalToken } from '../../utils/token'
 import { getUserInfo, postUser } from '../../api/user'
 export const WalletContext = createContext([])
 
-const once = true
-
 export const WalletProvider = ({ children }) => {
-  // const [wallet, setWallet] = useState(null)
   const [token, setToken] = useState(null)
   const [user, setUser] = useState(null)
   const provider = useProvider()
@@ -19,9 +13,6 @@ export const WalletProvider = ({ children }) => {
   const { address, isConnecting, isDisconnected } = useAccount({
     onConnect ({ address, connector, isReconnected }) {
       console.log('onConnect', address, connector, isReconnected)
-      // if (address) {
-      //   refetchToken()
-      // }
     }
   })
 
@@ -31,20 +22,6 @@ export const WalletProvider = ({ children }) => {
       refetchToken()
     }
   }, [signer, address])
-  // useEffect(() => {
-  //   if (wallet && once) {
-  //     once = false
-  //     refetchToken()
-  //   }
-  // }, [wallet])
-
-  // useEffect(() => {
-  //   ;(async () => {
-  //     if (window.ethereum.selectedAddress && !wallet) {
-  //       await connectWallet()
-  //     }
-  //   })()
-  // }, [])
 
   const refreshUserInfo = async () => {
     try {

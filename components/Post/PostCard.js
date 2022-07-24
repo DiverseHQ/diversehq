@@ -4,6 +4,9 @@ import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { putLikeOnPost } from '../../api/post'
+import { BsShare, BsShareFill } from 'react-icons/bs'
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { BiCommentDetail } from 'react-icons/bi'
 
 const PostCard = ({ post }) => {
   const router = useRouter()
@@ -70,6 +73,10 @@ const PostCard = ({ post }) => {
     router.push(`/u/${post.author}`)
   }
 
+  const routeToPostPage = () => {
+    router.push(`/p/${post._id}`)
+  }
+
   //   const likeThe
   return (
     <div className="w-full border-p-border bg-p-bg py-3 sm:my-11 border-y">
@@ -88,16 +95,16 @@ const PostCard = ({ post }) => {
           {post.title}
         </div>
         </div>
-       <div onClick={() => {
-         router.push(`/p/${post._id}`)
-       }}>{post.postImageUrl ? (<img src={post.postImageUrl} className="w-full" onLoad={() => { setLoaded(true) }} />) : (<video src={post.postVideoUrl} onLoad={() => { setLoaded(true) }} autoPlay loop controls />)} </div>
+       <div onClick={routeToPostPage}>
+        {post.postImageUrl ? (<img src={post.postImageUrl} className="w-full" onLoad={() => { setLoaded(true) }} />) : (<video src={post.postVideoUrl} onLoad={() => { setLoaded(true) }} autoPlay loop controls />)} 
+       </div>
 
-        <div className="flex flex-row justify-between items-center px-3 pt-2 ">
-            <div className="flex flex-row">
-
-            <button className='mr-3' onClick={liked ? handleUnLike : handleLike}><Image src={liked ? '/loveFill.svg' : '/love.png'} width={16} height={16}/></button>
-            <div className='mr-3'><Image src="/comment.png" width={16} height={16}/></div>
-            <button onClick={handleShare} className='mr-3'><Image src="/share.png" width={16} height={16} /></button>
+        <div className="flex flex-row justify-between items-center px-3 pt-2.5 ">
+            <div className="flex flex-row items-center">
+{!liked && <AiOutlineHeart className='mr-3 w-5 h-5  text-p-btn' onClick={handleLike} />}
+           {liked && <AiFillHeart className='mr-3 w-5 h-5 text-p-btn' onClick={handleUnLike} />}
+            <BiCommentDetail className='mr-3 w-5 h-5' onClick={routeToPostPage} />
+            <BsShareFill onClick={handleShare} className='mr-3 w-4' />
             </div>
             <div className="flex flex-row items-center text-xs">
             <div className='pr-2 hover:cursor-pointer hover:underline'>{likes} likes</div>

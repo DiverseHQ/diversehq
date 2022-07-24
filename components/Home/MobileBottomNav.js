@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
-
+import { AiFillPlusCircle, AiOutlineBell, AiOutlineHome } from 'react-icons/ai'
+import { MdOutlineExplore } from 'react-icons/md'
+import { BsSearch } from 'react-icons/bs'
 const MobileBottomNav = () => {
   const router = useRouter()
   const routeToHome = () => {
@@ -20,12 +22,12 @@ const MobileBottomNav = () => {
     router.push('/search')
   }
   return (
-    <div className="fixed bottom-0 w-full py-2.5 flex flex-row justify-evenly bg-p-bg">
-        <Image src='/home.svg' width={25} height={25} onClick={routeToHome}/>
-        <Image src='/explore.svg' width={25} height={25} onClick={routeToExplore}/>
-        <Image src='/add.svg' width={35} height={35} onClick={routeToNewPost}/>
-        <Image src='/search.svg' width={25} height={25} onClick={routeToSearch}/>
-        <Image src='/bell.svg' width={25} height={25} onClick={routeToNotifications}/>
+    <div className="fixed bottom-0 w-full py-1.5 flex flex-row justify-evenly items-center bg-p-bg shadow-top">
+        <AiOutlineHome className="w-7 h-7 " onClick={routeToHome} />
+        <MdOutlineExplore className="w-7 h-7 " onClick={routeToExplore} />
+        <AiFillPlusCircle className="w-10 h-10 text-p-btn" onClick={routeToNewPost} />
+        <BsSearch className="w-6 h-6 " onClick={routeToSearch} />
+        <AiOutlineBell className="w-7 h-7 " onClick={routeToNotifications} />
     </div>
   )
 }
