@@ -14,8 +14,8 @@ function MyApp ({ Component, pageProps }) {
   return (
     <MasterWrapper>
       <div className="text-p-text">
-      {isDesktop && <Nav />}
       {!isDesktop && <MobileTopNav />}
+      {isDesktop && <Nav />}
       <div className={'pt-11 pb-16'}>
         <Component {...pageProps} />
       </div>
