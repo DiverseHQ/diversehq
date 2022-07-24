@@ -3,7 +3,7 @@ import {Web3Storage} from "web3.storage"
 import { useProfile } from "../Common/WalletContext";
 import apiEndpoint from "../../api/ApiEndpoint";
 import {AiOutlineCamera} from "react-icons/ai";
-import { useNotify } from '../../utils/NotifyContext';
+import { useNotify } from "../Common/NotifyContext";
 
 
 
