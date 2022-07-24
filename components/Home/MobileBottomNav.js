@@ -14,7 +14,7 @@ const MobileBottomNav = () => {
     router.push('/notifications')
   }
   const routeToNewPost = () => {
-    router.push('/new-post')
+    router.push('/submit')
   }
   const routeToSearch = () => {
     router.push('/search')

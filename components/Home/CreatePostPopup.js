@@ -3,20 +3,23 @@ import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../../utils/WalletContext'
 import apiEndpoint from '../../api/ApiEndpoint';
 import { useNotify } from '../../utils/NotifyContext';
+import { useRouter } from 'next/router';
 
-const CreatePostPopup = () => {
+const CreatePostPopup = ({props}) => {
   const [showModal, setShowModal] = useState(false)
   const [files, setFiles] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState([])
-  const { user, token } = useProfile()
+  const { user, token,connectWallet, disconnectWallet, connecting } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([]);
   const [option, setOption] = useState(null)
   const [isDropDown, setIsDropDown] = useState(false)
   const [imageValue, setImageValue] = useState(null);
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
+  const router = useRouter()
 
+  
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
@@ -41,8 +44,8 @@ const CreatePostPopup = () => {
       
       // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
       console.log(newFiles)
-      console.log(files[0].type.split('/')[0] === 'image')
-      console.log(files[0].type.split('/')[0] === 'video')
+      // console.log(files[0].type.split('/')[0] === 'image')
+      // console.log(files[0].type.split('/')[0] === 'video')
       const token = process.env.NEXT_PUBLIC_WEB_STORAGE
       const storage = new Web3Storage({ token })
       if (files.type.split('/')[0] === 'image') {
@@ -60,7 +63,7 @@ const CreatePostPopup = () => {
     }
    
     setLoading(false)
-    setShowModal(false)
+    router.push('/')
   }
   const handleCreatePost = async (Post) => {
     console.log("Hey , I'm here in Image ")
@@ -120,7 +123,9 @@ const CreatePostPopup = () => {
   }
 
   const handleDropDown = (e) => {
-    setOption(e.target.value);
+    console.log(e.target)
+    console.log(e.target.id, 'yeh value hain pancho')
+    setCommunityId(e.target.id);
     setIsDropDown(!isDropDown);
   }
  
@@ -149,9 +154,9 @@ const CreatePostPopup = () => {
       {
         joinedCommunities.map(community => {
           return(
-            <div key={community._id} onClick={handleDropDown } className="flex flex-row items-center hover:bg-violet-600" value={community._id}>
+            <div key={community._id} onClick={handleDropDown} className="flex flex-row items-center hover:bg-violet-600" id={community._id}>
               <img src={community.logoImageUrl}className="border border-p-bg rounded-full w-12 h-12" ></img>
-              <h3 className="text-p-text mx-1 text-base">{community.name}</h3>
+              <h3 className="text-p-text mx-1 text-base "id={community._id}>{community.name}</h3>
             </div>
           )
         })
@@ -169,6 +174,10 @@ const CreatePostPopup = () => {
     setFiles(null);
     setImageValue(null);
   }
+  const closeModal = () => {
+    setShowModal(false)
+    router.push('/')
+  }
 
   const showAddedFile = () =>{
     //check if the file is image or video and show it
@@ -176,7 +185,7 @@ const CreatePostPopup = () => {
       if(files.type.split('/')[0] === 'image'){
         return(
           <div className="flex flex-col items-center justify-center">
-            <img src={imageValue} className="w-full h-full" alt=""></img>
+            <img src={imageValue} className="h-64 w-96" alt="Your amazing post"></img>
             <button onClick={removeImage} className="bg-p-bg rounded-full px-2 py-1 text-white">Remove</button>
           </div>
         )
@@ -195,12 +204,12 @@ const CreatePostPopup = () => {
   const PopUpModal = () =>{
     return(
       //simple modal
-      <div className=" flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+      
+      <div className=" flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full sm:h-screen">
     <div className="relative p-4 w-full max-w-xl h-full md:h-auto">
-       
         <div className="relative bg-p-bg rounded-lg shadow dark:bg-gray-700">
             <div className="flex flex-row justify-between p-4 items-start rounded-t">
-                <button type="button" className="text-gray-400 bg-transparent hover:text-s-text rounded-lg text-sm p-1.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={(e) => setShowModal(false)}>
+                <button type="button" className="text-gray-400 bg-transparent hover:text-s-text rounded-lg text-sm p-1.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={closeModal}>
                     <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>   
                 </button>
                 <button className="text-p-text bg-blue-500 hover:bg-blue-700 font-bold uppercase rounded-full shadow hover:shadow-lg outline-none focus:outline-none text-base px-3.5 py-1.5" type="button" onClick={handleSubmit} disabled={loading} >
@@ -212,7 +221,9 @@ const CreatePostPopup = () => {
                 ? (
                     <button className="text-blue-500 p-1" onClick={(e) => setIsDropDown(!isDropDown)} >Choose Communinity</button>
                   )
-        : (<p>Connect Wallet</p>)}</div>
+        : (<button className="p-1" onClick={connectWallet}>
+        {connecting ? 'Connecting...' : 'Connect Wallet'}
+      </button>)}</div>
               {
                       isDropDown && customOptions()
                     }
@@ -244,18 +255,9 @@ const CreatePostPopup = () => {
   }, [user])
 
   return (
-    <>
-      <div className="pr-4">
-        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200"onClick={() => setShowModal(true)} type="button">
-        Share Creativity
-        </button>
-        </div>
-      {showModal
-        ? (
-          PopUpModal()
-          )
-        : null}
-    </>
+    <div className="">
+          {PopUpModal()}
+    </div>
   )
 }
 

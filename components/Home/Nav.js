@@ -8,6 +8,7 @@ import ChangeMonkey from './ChangeMonkey.js'
 import Router from 'next/router'
 import AddToken from "./AddToken"
 import { useTheme } from 'next-themes'
+import CreatePostButton from './CreatePostButton'
 
 const Nav = () => {
   const { connectWallet, disconnectWallet, user, connecting } = useProfile()
@@ -44,7 +45,8 @@ const Nav = () => {
       </div>
       <div className="flex flex-row">
         <div className="pr-4">
-        <CreatePostPopup/>
+        {/* <CreatePostPopup/> */}
+        <CreatePostButton />
         </div>
         <button onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark') }}>Change Theme</button>
         <div> Current Theme : {theme} </div>
