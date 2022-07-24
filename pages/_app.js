@@ -3,8 +3,8 @@ import MobileBottomNav from '../components/Home/MobileBottomNav'
 import MobileTopNav from '../components/Home/MobileTopNav'
 import Nav from '../components/Home/Nav'
 import '../styles/globals.css'
-import MasterWrapper from '../utils/MasterWrapper'
-import useDevice from '../utils/useDevice'
+import MasterWrapper from '../components/Common/MasterWrapper'
+import useDevice from '../components/Common/useDevice'
 
 function MyApp ({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
@@ -13,12 +13,14 @@ function MyApp ({ Component, pageProps }) {
   if (!mounted) return null
   return (
     <MasterWrapper>
+      <div className="text-p-text">
       {isDesktop && <Nav />}
       {!isDesktop && <MobileTopNav />}
-      <div className='pt-11'>
+      <div className={'pt-11 pb-16'}>
         <Component {...pageProps} />
       </div>
         {!isDesktop && <MobileBottomNav />}
+    </div>
     </MasterWrapper>
   )
 }

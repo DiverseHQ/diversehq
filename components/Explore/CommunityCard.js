@@ -4,7 +4,7 @@ import React from 'react'
 const CommunityCard = ({ community }) => {
   const router = useRouter()
   return (
-    <div className='flex flex-col max-w-[450px] text-p-text bg-s-bg'>
+    <div className='flex flex-col max-w-[450px] bg-p-bg'>
         <div onClick={() => {
           router.push(`/c/${community.name}`)
         }}>{community.name}</div>

@@ -1,4 +1,4 @@
-import { useProfile } from '../../utils/WalletContext'
+import { useProfile } from '../Common/WalletContext'
 import { useState, useContext } from 'react'
 import { Web3Storage } from 'web3.storage'
 import apiEndpoint from '../../api/ApiEndpoint'

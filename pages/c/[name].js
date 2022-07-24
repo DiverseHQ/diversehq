@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import apiEndpoint from '../../api/ApiEndpoint'
 import Image from 'next/image'
-import { WalletContext } from '../../utils/WalletContext'
 import PostsColumn from '../../components/Post/PostsColumn'
-import { useNotify } from '../../utils/NotifyContext'
+import { useNotify } from '../../components/Common/NotifyContext'
+import { useProfile } from '../../components/Common/WalletContext'
 const CommunityPage = () => {
   const { name } = useRouter().query
-  const { user, token, getUserInfo } = React.useContext(WalletContext)
+  const { user, token, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   const [community, setCommunity] = useState(null)
   const [posts, setPosts] = useState([])
@@ -70,7 +70,7 @@ const CommunityPage = () => {
       }).then(r => r.json())
       console.log(resp)
       notifyInfo('Joined 😍')
-      await getUserInfo()
+      await refreshUserInfo()
       await fetchCommunitInformation()
     } catch (error) {
       console.log(error)
@@ -89,7 +89,7 @@ const CommunityPage = () => {
       console.log(resp)
       notifyInfo('Left 😢')
 
-      await getUserInfo()
+      await refreshUserInfo()
       await fetchCommunitInformation()
     } catch (error) {
       console.log(error)

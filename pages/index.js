@@ -29,7 +29,7 @@ const Home = () => {
     })()
   }, [])
   return (
-    <div className='text-p-text'>
+    <div>
         <PostsColumn posts={posts} getMorePost={() => {
           showPosts('new')
         }} hasMore={hasMore} />

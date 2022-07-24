@@ -14,7 +14,8 @@ module.exports = {
         'p-btn-hover': 'var(--accent-hover)',
         's-btn': 'var(--accent-secondary)',
         'p-text': 'var(--text-primary)',
-        's-text': 'var(--text-secondary)'
+        's-text': 'var(--text-secondary)',
+        'p-border': 'var(--border-primary)'
       }
     }
   }

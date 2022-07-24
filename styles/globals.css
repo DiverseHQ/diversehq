@@ -16,24 +16,28 @@
 }
 
 :root {
-    --background: theme('colors.white');
-    --background-secondary: theme('colors.gray.50');
-    --accent-primary: theme("colors.purple.700");
-    --accent-secondary: theme("colors.purple.600");
-    --accent-hover: theme("colors.purple.500");
+  --background: #ffffff;
+  --background-secondary: #ffffff;
+  --accent-primary: #1d9bf0;
+  --accent-secondary: theme("colors.purple.600");
+  --accent-hover: theme("colors.purple.500");
 
-    --text-primary: theme("colors.gray.800");
-    --text-secondary: theme("colors.gray.700");
+  --text-primary: #000000;
+  --text-secondary: #9197ae;
+
+  --border-primary: #c4c4c4;
   }
   
   [data-theme='dark'] {
-    --background: theme('colors.black');
+    --background: #000000;
     --background-secondary: #16181C;
-    --accent-primary: theme("colors.purple.700");
+    --accent-primary: #1d9bf0;
     --accent-secondary: theme("colors.purple.600");
     --accent-hover: theme("colors.purple.500");
 
-    --text-primary: theme("colors.gray.100");
-    --text-secondary: theme("colors.gray.200");
+    --text-primary: #ffffff;
+    --text-secondary: #9197ae;
+
+    --border-primary: #464646;
   }
   
