@@ -205,7 +205,7 @@ const CreatePostPopup = ({props}) => {
     return(
       //simple modal
       
-      <div className=" flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full sm:h-screen">
+      <div className="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 w-full md:inset-0 h-modal md:h-full sm:h-screen">
     <div className="relative p-4 w-full max-w-xl h-full md:h-auto">
         <div className="relative bg-p-bg rounded-lg shadow dark:bg-gray-700">
             <div className="flex flex-row justify-between p-4 items-start rounded-t">

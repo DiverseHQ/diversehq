@@ -5,88 +5,52 @@ import { ethers } from 'ethers'
 import CreatePostPopup from './CreatePostPopup'
 import CreateCommunity from './CreateCommunity'
 import ChangeMonkey from './ChangeMonkey.js'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import AddToken from "./AddToken"
 import { useTheme } from 'next-themes'
 import CreatePostButton from './CreatePostButton'
+import Image from 'next/image'
+import { MdOutlineExplore } from 'react-icons/md'
 
 const Nav = () => {
-  const { connectWallet, disconnectWallet, user, connecting } = useProfile()
-  const [tokens, setTokens] = useState('0')
+  const { user } = useProfile()
   const [showOptions, setShowOptions] = useState(false)
   const { theme, setTheme } = useTheme()
-
-  const CONTRACT_ADDRESS = '0x804Be198792A232E9f4b2a9A891CE1B453343854'
-
-  const getDiveTokens = async () => {
-    if (user) {
-      console.log('Connect to MetaMask first!')
-      return
-    }
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, DiveToken.abi, provider)
-    const tokens = (await contract.getBalance(user.walletAddress)).toString()
-    console.log(tokens)
-    setTokens(tokens)
+  const router = useRouter()
+  
+  const routeToExplore = () => {
+    router.push('/explore')
   }
 
-  useEffect(() => {
-    if (user) {
-      getDiveTokens()
-    }
-  }, [])
+  const routeToHome = () => {
+    router.push('/')
+  }
+
+  const showMoreOptions = () => {
+    setShowOptions(!showOptions)
+  }
+
   return (
     <>
-    <div className="fixed w-full h-14 flex flex-row justify-between bg-[#1A1A1B] text-white p-2 items-center">
-      <div>
-        <h3 className="text-2xl " onClick={() => {
-          Router.push('/')
-        }}>Diversehq</h3>
-      </div>
-      <div className="flex flex-row">
-        <div className="pr-4">
-        {/* <CreatePostPopup/> */}
-        <CreatePostButton />
-        </div>
-        <button onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark') }}>Change Theme</button>
-        <div> Current Theme : {theme} </div>
-        <div className="flex flex-row" >
-          <img src={(user && user.profileImageUrl) ? user.profileImageUrl : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200'} alt="profile" className="rounded-full h-12 w-12 mr-2" />
-          <div className="flex flex-col">
-            {!user
-              ? (
-              <button className="" onClick={connectWallet}>
-                {connecting ? 'Connecting...' : 'Connect Wallet'}
-              </button>
-                )
-              : (
-              <button className="">
-                {user.walletAddress.slice(0, 6)}...
-                </button>
-                )
-            }
-            <h3><span className="text-purple-800">$DIVE:</span> {tokens} </h3>
+    <div className="fixed top-0 left-24 pt-6 pb-14 flex flex-col justify-between items-center h-full">
+        <div className="flex flex-col items-center">
+          <div className='mb-7 hover:cursor-pointer' onClick={routeToHome}>
+          <Image src="/logo.png" width="45" height="45" className='bg-s-text rounded-full'/>
           </div>
-          {user &&
-          <button className="flex flex-col" onClick={() => {
-            setShowOptions(!showOptions)
-          }}>
-            <img src="/downArrow.png" className="w-[30px]"/>
-            </button>
-              }
-        </div>
-      </div>
+        <MdOutlineExplore className="w-12 h-12 mb-7 hover:cursor-pointer" onClick={routeToExplore}/>
+        <CreatePostButton />
+        
 
+        </div>
+        <div className='flex-end hover:cursor-pointer' onClick={showMoreOptions}>
+          {user?.profileImageUrl && <Image src={user.profileImageUrl} width="48" height="48" className='rounded-full' />}
+        </div>
     </div>
-    {(showOptions && user) && <div className="fixed top-[66px] right-[5px] flex flex-col">
+
+    {(showOptions && user) && <div className="fixed top-[0px] right-[5px] flex flex-col z-10">
       <ChangeMonkey />
       <CreateCommunity />
       <AddToken />
-      <div className="pr-4 ">
-        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={disconnectWallet} >
-        Disconnect
-        </button>
-      </div>
       </div>}
     </>
   )

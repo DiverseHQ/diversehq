@@ -33,11 +33,13 @@ const MobileTopNav = () => {
   }
   return (
     <>
-    <div id='mobile-top-navbar' className='mobile-top-nav bg-p-bg border-b border-p-border flex flex-row items-center py-2.5 px-4 z-10'>
+    <div id='mobile-top-navbar' className='mobile-top-nav bg-p-bg border-b border-p-border flex flex-row items-center justify-between py-2.5 px-4 z-10'>
+      <div className='flex flex-row items-center'>
        {user && user.profileImageUrl && <Image src={user.profileImageUrl} width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
        {(!user || !user.profileImageUrl) && <Image src="/person.png" width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
        <div className='pl-5 text-base font-bold tracking-wider' onClick={routeToHome}>Home</div>
-       <ConnectButton />
+       </div>
+       <ConnectButton accountStatus="avatar" />
     </div>
     {showOptions && <MobileClickOptions />}
     </>

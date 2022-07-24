@@ -5,6 +5,7 @@ import Nav from '../components/Home/Nav'
 import '../styles/globals.css'
 import MasterWrapper from '../components/Common/MasterWrapper'
 import useDevice from '../components/Common/useDevice'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function MyApp ({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
@@ -14,12 +15,24 @@ function MyApp ({ Component, pageProps }) {
   return (
     <MasterWrapper>
       <div className="text-p-text">
-      {!isDesktop && <MobileTopNav />}
-      {isDesktop && <Nav />}
-      <div className={'pt-11 pb-16'}>
+      {isDesktop && <div className='bg-p-bg'>
+        <Nav />
+        <div className='max-w-[600px] ml-64 overflow-y-auto no-scrollbar h-full'>
         <Component {...pageProps} />
-      </div>
-        {!isDesktop && <MobileBottomNav />}
+        </div>
+        <div className='fixed top-0 right-10 pt-6 h-full overflow-y-auto no-scrollbar'>
+          <ConnectButton chainStatus="icon" />
+          </div>
+        </div>}
+
+      {!isDesktop &&
+      <>
+        <MobileTopNav />
+        <div className={'pt-11 pb-16'}>
+          <Component {...pageProps} />
+        </div>
+        <MobileBottomNav />
+       </>}
     </div>
     </MasterWrapper>
   )

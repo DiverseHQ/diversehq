@@ -7,6 +7,7 @@ import { putLikeOnPost } from '../../api/post'
 import { BsShare, BsShareFill } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
+import useDevice from '../Common/useDevice'
 
 const PostCard = ({ post }) => {
   const router = useRouter()
@@ -16,6 +17,7 @@ const PostCard = ({ post }) => {
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(post.likes.length)
   const { notifyInfo, notifyError } = useNotify()
+  const { isDesktop } = useDevice()
 
   useEffect(() => {
     if (!user) return
@@ -79,19 +81,19 @@ const PostCard = ({ post }) => {
 
   //   const likeThe
   return (
-    <div className="w-full border-p-border bg-p-bg py-3 sm:my-11 border-y">
-      <div className='px-3'>
+    <div className="w-full border-p-border bg-p-bg sm:bg-s-bg pt-3 sm:my-6 border-y sm:border-none sm:rounded-3xl">
+      <div className='px-3 sm:px-5'>
         <div className="flex flex-row justify-between items-center mb-1.5">
             <div className="flex flex-row items-center" onClick={handleCommunityClicked}>
-              {post.communityLogo && <Image src={post.communityLogo} width={26} height={26} className="rounded-full" />}
-              <div className='pl-1.5 font-bold text-xs hover:cursor-pointer hover:underline'>{post.communityName}</div>
+              {post.communityLogo && <Image src={post.communityLogo} width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} className="rounded-full" />}
+              <div className='pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline'>{post.communityName}</div>
             </div>
             <div className='flex flex-row items-center' onClick={handleAuthorClicked}>
-              {post.authorAvatar && <Image src={post.authorAvatar} className="rounded-full" width={26} height={26} />}
-              <div className='pl-1.5 font-bold text-xs hover:cursor-pointer hover:underline'>{post.authorName ? post.authorName : post.author.slice(0, 6) + '...'}</div>
+              {post.authorAvatar && <Image src={post.authorAvatar} className="rounded-full" width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} />}
+              <div className='pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline'>{post.authorName ? post.authorName : post.author.slice(0, 6) + '...'}</div>
             </div>
         </div>
-        <div className="mb-2 font-normal text-xs">
+        <div className="mb-2 font-normal text-xs sm:text-base">
           {post.title}
         </div>
         </div>
@@ -99,14 +101,14 @@ const PostCard = ({ post }) => {
         {post.postImageUrl ? (<img src={post.postImageUrl} className="w-full" onLoad={() => { setLoaded(true) }} />) : (<video src={post.postVideoUrl} onLoad={() => { setLoaded(true) }} autoPlay loop controls />)} 
        </div>
 
-        <div className="flex flex-row justify-between items-center px-3 pt-2.5 ">
+        <div className="flex flex-row justify-between items-center px-3 sm:px-5 py-2.5 sm:py-4">
             <div className="flex flex-row items-center">
-{!liked && <AiOutlineHeart className='mr-3 w-5 h-5  text-p-btn' onClick={handleLike} />}
-           {liked && <AiFillHeart className='mr-3 w-5 h-5 text-p-btn' onClick={handleUnLike} />}
-            <BiCommentDetail className='mr-3 w-5 h-5' onClick={routeToPostPage} />
-            <BsShareFill onClick={handleShare} className='mr-3 w-4' />
+            {!liked && <AiOutlineHeart className='hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7 text-p-btn' onClick={handleLike} />}
+           {liked && <AiFillHeart className='hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7 text-p-btn' onClick={handleUnLike} />}
+            <BiCommentDetail className='hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7' onClick={routeToPostPage} />
+            <BsShareFill onClick={handleShare} className='hover:cursor-pointer mr-3 w-4 sm:w-6 sm:h-6' />
             </div>
-            <div className="flex flex-row items-center text-xs">
+            <div className="flex flex-row items-center text-xs sm:text-xl">
             <div className='pr-2 hover:cursor-pointer hover:underline'>{likes} likes</div>
             <div className='hover:cursor-pointer hover:underline'> {post.comments.length} comments</div>
             </div>
