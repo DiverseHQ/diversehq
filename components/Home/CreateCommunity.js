@@ -1,7 +1,9 @@
-import { useState} from 'react'
+import { useState } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../Common/WalletContext'
 import apiEndpoint from '../../api/ApiEndpoint'
+import { AiOutlineCamera } from 'react-icons/ai'
+import { useNotify } from '../Common/NotifyContext'
 
 const CreateCommunity = () => {
   const [showModal, setShowModal] = useState(false)
@@ -10,7 +12,10 @@ const CreateCommunity = () => {
   const [communityBanner, setCommunityBanner] = useState()
   const [communityDescription, setCommunityDescription] = useState('')
   const [loading, setLoading] = useState(false)
-  const {address, token} = useProfile()
+  const { wallet, token } = useProfile()
+  const [headerValue, setHeaderValue] = useState(null)
+  const [pfpValue, setPfpValue] = useState(null)
+  const { notifyInfo, notifyError, notifySuccess } = useNotify()
 
   function hasWhiteSpace (s) {
     return /\s/g.test(s)
@@ -20,15 +25,17 @@ const CreateCommunity = () => {
     event.preventDefault()
     setLoading(true)
     console.log(communityName, communityPfp, communityBanner, communityDescription)
-    // change space to _ for all file in files
-    if (communityPfp.length != 1 && communityBanner != 1) {
-      alert('Select only one file')
+    if (!communityName || !communityPfp || !communityBanner || !communityDescription) {
+      notifyError('Please fill in all fields')
+      setLoading(false)
       return
     }
+    // change space to _ for all file in files
+    console.log(communityPfp, communityBanner)
     // files[0].name = files[0].name.replace(/\s/g, "_");
     const newFiles = [
-      new File([communityPfp[0]], communityPfp[0].name.replace(/\s/g, '_'), { type: communityPfp[0].type }),
-      new File([communityBanner[0]], communityBanner[0].name.replace(/\s/g, '_'), { type: communityBanner[0].type })
+      new File([communityPfp], communityPfp.name.replace(/\s/g, '_'), { type: communityPfp.type }),
+      new File([communityBanner], communityBanner.name.replace(/\s/g, '_'), { type: communityBanner.type })
     ]
     // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
     // console.log(communityPfp, communityBanner);
@@ -51,7 +58,7 @@ const CreateCommunity = () => {
       description: communityDescription,
       bannerImageUrl: bannerURL,
       logoImageUrl: pfpURL,
-      creator: address
+      creator: wallet
     }
     try {
       await fetch(`${apiEndpoint}/community`, {
@@ -63,10 +70,23 @@ const CreateCommunity = () => {
         body: JSON.stringify(postData)
       }).then(res => res.json()).then(res => {
         console.log(res)
+        notifySuccess('Community created successfully')
       })
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleHeaderChange = (event) => {
+    const filePicked = event.target.files[0]
+    setCommunityBanner(filePicked)
+    setHeaderValue(URL.createObjectURL(filePicked))
+  }
+
+  const handlePfpChange = (event) => {
+    const filePicked = event.target.files[0]
+    setCommunityPfp(filePicked)
+    setPfpValue(URL.createObjectURL(filePicked))
   }
 
   return (
@@ -77,67 +97,49 @@ const CreateCommunity = () => {
         </button>
         </div>
 
-      {showModal
-        ? (
-        <>
-          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
-                  <h3 className="text-3xl font=semibold">What's up Creative human?</h3>
-                  <button
-                    className="bg-transparent border-0 text-black float-right"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="text-black opacity-7 h-6 w-6 text-xl block bg-gray-400 py-0 rounded-full">
-                      x
-                    </span>
-                  </button>
-                </div>
-                <div className="relative p-6 flex-auto">
-                  <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
-                  <label className="block text-black text-sm font-bold mb-1">
-                      Community Name
-                    </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setCommunityName(e.target.value)} required />
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Community Banner
-                    </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setCommunityBanner(e.target.files) }} />
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Community PFP
-                    </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setCommunityPfp(e.target.files) }} required />
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Description
-                    </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setCommunityDescription(e.target.value)} required />
+      {showModal ? (
+            <>
+            <div className=" flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div className="relative p-4 w-full max-w-xl h-full md:h-auto">
 
-                  </form>
-                </div>
-                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="text-white bg-yellow-500 active:bg-yellow-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                  >
-                    {loading ? 'Hold MotheFuckka...' : 'Submit'}
-                  </button>
-                </div>
-              </div>
+        <div className="relative bg-p-bg rounded-lg shadow dark:bg-gray-700">
+            <div className="flex flex-row justify-between p-4 items-start rounded-t">
+                <button type="button" className="text-gray-400 bg-transparent hover:text-s-text rounded-lg text-sm p-1.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={(e) => setShowModal(false)}>
+                    <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                </button>
+                <button className="text-p-text bg-blue-500 hover:bg-blue-700 font-bold uppercase rounded-full shadow hover:shadow-lg outline-none focus:outline-none text-base px-3.5 py-1.5" type="button" onClick={handleSubmit} disabled={loading} >
+                 {loading ? 'Loading ...' : 'Post'}
+                </button>
             </div>
-          </div>
-        </>
-          )
-        : null}
+
+            {/* <!-- Modal body --> */}
+            <div >
+              <div className="flex h-44 border border-bg-p items-center justify-center">
+                {
+                  headerValue && (
+                    <img className="inset-0 object-cover h-full w-full " src={headerValue} alt="Header"/>
+                  )
+                }
+                <button className="absolute p-1 "><label htmlFor="communityHeader"><AiOutlineCamera className="h-8 w-8" /></label></button>
+              </div>
+              <div className="flex relative border h-24 w-24 border-bg-p rounded-full bottom-10 ml-3 items-center justify-center">
+                {
+                  communityPfp && (
+                    <img className="inset-0 h-full w-full rounded-full" src={pfpValue} alt="PFP"/>
+                  )
+                }
+                <button className="absolute p-1"><label htmlFor="communityPfp"><AiOutlineCamera className="h-4 w-4" /></label></button>
+              </div>
+            <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Name" onChange={(e) => setCommunityName(e.target.value)} required />
+            <textarea type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Description" onChange={(e) => setCommunityDescription(e.target.value)} />
+            <input type="file" id="communityPfp" placeholder="Commmunity Name" onChange={handlePfpChange} required hidden/>
+            <input type="file" id="communityHeader" onChange={handleHeaderChange} hidden />
+            </div>
+        </div>
+    </div>
+</div>
+            </>
+      ) : null}
     </>
   )
 }

@@ -1,51 +1,69 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../Common/WalletContext'
 import apiEndpoint from '../../api/ApiEndpoint'
+import { useNotify } from "../Common/NotifyContext";
+import { useRouter } from 'next/router';
 
-const CreatePostPopup = () => {
+const CreatePostPopup = ({props}) => {
   const [showModal, setShowModal] = useState(false)
-  const [files, setFiles] = useState()
+  const [files, setFiles] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState([])
-  const { user, token } = useProfile()
+  const { user, token,connectWallet, disconnectWallet, connecting } = useProfile()
   const [loading, setLoading] = useState(false)
-  const [joinedCommunities, setJoinedCommunities] = useState(null)
-  const [value, setValue] = useState(null)
+  const [joinedCommunities, setJoinedCommunities] = useState([]);
+  const [option, setOption] = useState(null)
+  const [isDropDown, setIsDropDown] = useState(false)
+  const [imageValue, setImageValue] = useState(null);
+  const { notifyInfo, notifyError, notifySuccess } = useNotify()
+  const router = useRouter()
+
+  
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
     console.log(files)
     // change space to _ for all file in files
-    if (files.length != 1) {
-      alert('Select only one file')
+    if(!files){
+      notifyError('Please select a file')
+      setLoading(false)
       return
     }
+    else if(files.length > 1){
+      notifyError('Please select only one file')
+      setLoading(false)
+      return
+    }
+    console.log(files)
     // files[0].name = files[0].name.replace(/\s/g, "_");
-    const newFiles = [
-      new File([files[0]], files[0].name.replace(/\s/g, '_'), { type: files[0].type })
-    ]
-
-    // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
-    console.log(newFiles)
-    console.log(files[0].type.split('/')[0] === 'image')
-    console.log(files[0].type.split('/')[0] === 'video')
-    const token = process.env.NEXT_PUBLIC_WEB_STORAGE
-    const storage = new Web3Storage({ token })
-    if (files[0].type.split('/')[0] === 'image') {
-      const cid = await storage.put(newFiles)
-      console.log(cid)
-      const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
-      handleCreatePost(Post)
+    if(files){
+      const newFiles = [
+        new File([files],files.name.replace(/\s/g, "_"),{type: files.type}),
+      ]
+      
+      // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
+      console.log(newFiles)
+      // console.log(files[0].type.split('/')[0] === 'image')
+      // console.log(files[0].type.split('/')[0] === 'video')
+      const token = process.env.NEXT_PUBLIC_WEB_STORAGE
+      const storage = new Web3Storage({ token })
+      if (files.type.split('/')[0] === 'image') {
+        const cid = await storage.put(newFiles)
+        console.log(cid)
+        const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+        handleCreatePost(Post)
+      }
+      if (files.type.split('/')[0] === 'video') {
+        const cid = await storage.put(newFiles)
+        console.log(cid)
+        const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+        handleVideoPost(Post)
+      }
     }
-    if (files[0].type.split('/')[0] === 'video') {
-      const cid = await storage.put(newFiles)
-      console.log(cid)
-      const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
-      handleVideoPost(Post)
-    }
+   
     setLoading(false)
-    setShowModal(false)
+    router.push('/')
   }
   const handleCreatePost = async (Post) => {
     console.log("Hey , I'm here in Image ")
@@ -65,6 +83,7 @@ const CreatePostPopup = () => {
           },
           body: JSON.stringify(postData)
         }).then(res => res.json()).then(res => {
+          notifySuccess('Post created successfully')
           console.log(res)
         })
       } catch (error) {
@@ -91,6 +110,7 @@ const CreatePostPopup = () => {
           },
           body: JSON.stringify(postData)
         }).then(res => res.json()).then(res => {
+          notifySuccess('Post created successfully')
           console.log(res)
         })
       } catch (error) {
@@ -102,17 +122,13 @@ const CreatePostPopup = () => {
     setValue(value)
   }
 
-  const selectCommunity = (value) => {
-    setCommunityId(value)
-    console.log(value)
+  const handleDropDown = (e) => {
+    console.log(e.target)
+    console.log(e.target.id, 'yeh value hain pancho')
+    setCommunityId(e.target.id);
+    setIsDropDown(!isDropDown);
   }
-  // an option tag with image and text from an api response
-  const CustomOption = (props) => (
-    <div className="custom-option">
-      <img src={props.data.image} alt=""/>
-      <span className="custom-option-text">{props.data.name}</span>
-    </div>
-  )
+ 
 
   const getJoinedCommunities = async () => {
     console.log('pancho')
@@ -131,97 +147,117 @@ const CreatePostPopup = () => {
       }
     }
   }
+  const customOptions = () =>{
+    return(
+      <div className="flex flex-col bg-s-bg absolute w-52 rounded mt-1 p-2 mx-3">  
 
-  useEffect(() => {
-    if (user) {
-      getJoinedCommunities()
+      {
+        joinedCommunities.map(community => {
+          return(
+            <div key={community._id} onClick={handleDropDown} className="flex flex-row items-center hover:bg-violet-600" id={community._id}>
+              <img src={community.logoImageUrl}className="border border-p-bg rounded-full w-12 h-12" ></img>
+              <h3 className="text-p-text mx-1 text-base "id={community._id}>{community.name}</h3>
+            </div>
+          )
+        })
+      }
+      </div>
+    )
+     
+  }
+  const onImageChange = (event) =>{ 
+    const filePicked = event.target.files[0];
+        setFiles(filePicked);
+        setImageValue(URL.createObjectURL(filePicked));
+  }
+  const removeImage = () =>{
+    setFiles(null);
+    setImageValue(null);
+  }
+  const closeModal = () => {
+    setShowModal(false)
+    router.push('/')
+  }
+
+  const showAddedFile = () =>{
+    //check if the file is image or video and show it
+    if(files){
+      if(files.type.split('/')[0] === 'image'){
+        return(
+          <div className="flex flex-col items-center justify-center">
+            <img src={imageValue} className="h-64 w-96" alt="Your amazing post"></img>
+            <button onClick={removeImage} className="bg-p-bg rounded-full px-2 py-1 text-white">Remove</button>
+          </div>
+        )
+      }
+      if(files.type.split('/')[0] === 'video'){
+        return(
+          <div className="flex flex-col items-center justify-center">
+            <video src={imageValue} className="w-full h-full" controls></video>
+            <button onClick={removeImage} className="bg-p-bg rounded-full px-2 py-1 text-white">Remove</button>
+          </div>
+        )
+      }
+    }
+  }
+
+  const PopUpModal = () =>{
+    return(
+      //simple modal
+      
+      <div className=" flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full sm:h-screen">
+    <div className="relative p-4 w-full max-w-xl h-full md:h-auto">
+        <div className="relative bg-p-bg rounded-lg shadow dark:bg-gray-700">
+            <div className="flex flex-row justify-between p-4 items-start rounded-t">
+                <button type="button" className="text-gray-400 bg-transparent hover:text-s-text rounded-lg text-sm p-1.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={closeModal}>
+                    <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>   
+                </button>
+                <button className="text-p-text bg-blue-500 hover:bg-blue-700 font-bold uppercase rounded-full shadow hover:shadow-lg outline-none focus:outline-none text-base px-3.5 py-1.5" type="button" onClick={handleSubmit} disabled={loading} >
+                 {loading ? 'Loading ...' : 'Post'}
+                </button>
+            </div>
+            <div className="border rounded-full text-p-text w-fit mx-3 p-0.5">
+              {user && joinedCommunities
+                ? (
+                    <button className="text-blue-500 p-1" onClick={(e) => setIsDropDown(!isDropDown)} >Choose Communinity</button>
+                  )
+        : (<button className="p-1" onClick={connectWallet}>
+        {connecting ? 'Connecting...' : 'Connect Wallet'}
+      </button>)}</div>
+              {
+                      isDropDown && customOptions()
+                    }
+            {/* <!-- Modal body --> */}
+            <div className="p-6 space-y-6">
+            <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="What's up!?" onChange={(e) => setTitle(e.target.value)} />
+                <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                  { files ? showAddedFile() :(
+                <div className="p-5 justify-center items-center border rounded-t" >
+                <input type="file" id="upload-file" accept="image/*,video/*" hidden onChange={onImageChange} />
+                  Drag and Drop image/videos or 
+                <button className="bg-blue-500 hover:bg-blue-700 text-p-text font-bold py-1.5 px-3.5 rounded-full ml-1"><label htmlFor="upload-file">Upload Image</label></button>
+                </div>
+                  )
+                  }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    )
+    
+  }
+  
+  useEffect(() =>{
+    if(user){
+      getJoinedCommunities();
     }
   }, [user])
 
   return (
-    <>
-      <div className="pr-4">
-        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200"onClick={() => setShowModal(true)} type="button">
-        Share Creativity
-        </button>
-        </div>
-      {showModal
-        ? (
-        <>
-          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
-                  <h3 className="text-3xl font=semibold">What's up Creative human?</h3>
-                  <button
-                    className="bg-transparent border-0 text-black float-right"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="text-black opacity-7 h-6 w-6 text-xl block bg-gray-400 py-0 rounded-full">
-                      x
-                    </span>
-                  </button>
-                </div>
-                <div className="relative p-6 flex-auto">
-                  <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
-                <div className="flex flex-col text-black">
-                {communityId}
-                 {user
-                   ? (
-                   <label htmlFor="chooseCommunity">
-                     Choose Community
-                   <select name="community" id="chooseCommunity" onChange={(e) => selectCommunity(e)}>
-                   <option>----Select community----</option>
-                   {joinedCommunities && joinedCommunities.map((community, i) => (
-                    <option value={community._id} key={i} {...community} className="flex flex-col">
-                       <div className="custom-option">
-                          <img src={community.logoImageUrl} alt="logo"/>
-                           <span className="custom-option-text">{community.name}</span>
-                        </div>
-                      </option>
-                   ))}
-                    </select>
-
-                    {communityId}
-                   </label>
-                     )
-                   : (<p>Connect Wallet</p>)}
-                  </div>
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Share Creative Post
-                    </label>
-                    <input type="file" accept="image/*,video/*" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setFiles(e.target.files) }} />
-                    <label className="block text-black text-sm font-bold mb-1">
-                      Title
-                    </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setTitle(e.target.value)} />
-
-                  </form>
-                </div>
-                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="text-white bg-yellow-500 active:bg-yellow-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                  >
-                    {loading ? 'Teri Mummy ...' : 'Submit'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-          )
-        : null}
-    </>
+    <div className="">
+          {PopUpModal()}
+    </div>
   )
 }
 
