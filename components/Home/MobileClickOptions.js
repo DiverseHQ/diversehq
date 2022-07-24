@@ -11,7 +11,6 @@ const MobileClickOptions = () => {
   const { user } = useProfile()
   const { theme, setTheme } = useTheme()
   const { address } = useAccount()
-  const { openConnectModal } = useConnectModal();
   const routeToUserProfile = () => {
     if (user) {
       router.push(`/u/${user.walletAddress}`)
@@ -27,7 +26,6 @@ const MobileClickOptions = () => {
         <div className='px-3 py-2 bg-p-bg rounded-full my-2 button-dropshadow' onClick={toggleTheme}>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</div>
         <div className='px-3 py-2 bg-p-bg rounded-full my-2 button-dropshadow'>Edit Profile</div>
         <div className='px-3 py-2 bg-p-bg rounded-full my-2 button-dropshadow'>Create Community</div>
-        {openConnectModal && <div className='px-3 py-2 bg-p-bg rounded-full my-2 button-dropshadow' onClick={openConnectModal}>{address ? 'Disconnect' : 'Connect'}</div>}
     </div>
   )
 }
