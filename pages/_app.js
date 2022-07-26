@@ -14,8 +14,8 @@ function MyApp ({ Component, pageProps }) {
   if (!mounted) return null
   return (
     <MasterWrapper>
-      <div className="text-p-text">
-      {isDesktop && <div className='bg-p-bg'>
+      <div className="text-p-text bg-p-bg">
+      {isDesktop && <div className=''>
         <Nav />
         <div className='max-w-[600px] ml-64 overflow-y-auto no-scrollbar h-full'>
         <Component {...pageProps} />

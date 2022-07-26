@@ -22,7 +22,7 @@ const MobileBottomNav = () => {
     router.push('/search')
   }
   return (
-    <div className="fixed bottom-0 w-full py-1.5 flex flex-row justify-evenly items-center bg-p-bg shadow-top">
+    <div className="fixed bottom-0 w-full py-2.5 flex flex-row justify-evenly items-center bg-p-bg shadow-top">
         <AiOutlineHome className="w-7 h-7 " onClick={routeToHome} />
         <MdOutlineExplore className="w-7 h-7 " onClick={routeToExplore} />
         <AiFillPlusCircle className="w-10 h-10 text-p-btn" onClick={routeToNewPost} />
