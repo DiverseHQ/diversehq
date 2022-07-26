@@ -3,17 +3,20 @@ import { ThemeProvider } from 'next-themes'
 import { NotifyProvider } from './NotifyContext'
 import { WalletProvider } from './WalletContext'
 import RainbowKitWrapper from './RainbowKitWrapper'
+import CustomPopUpModalProvider from './CustomPopUpProvider'
 
 const MasterWrapper = ({ children }) => {
   return (
     <RainbowKitWrapper>
-    <WalletProvider>
-        <NotifyProvider>
-            <ThemeProvider defaultTheme = 'system'>
-            {children}
-            </ThemeProvider>
-        </NotifyProvider>
-    </WalletProvider>
+      <WalletProvider>
+          <NotifyProvider>
+              <ThemeProvider defaultTheme = 'system'>
+                <CustomPopUpModalProvider>
+                  {children}
+                </CustomPopUpModalProvider>
+              </ThemeProvider>
+          </NotifyProvider>
+      </WalletProvider>
     </RainbowKitWrapper>
   )
 }

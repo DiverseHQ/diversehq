@@ -3,6 +3,31 @@
 @tailwind utilities;
 
 @layer uitilities {
+  @keyframes enteranimation {
+      0% {
+          transform: translateY(-80%);
+          opacity: 0;
+
+      }
+
+      100% {
+          transform: translateY(0);
+          opacity: 1;
+      }
+  }
+  
+  @keyframes exitanimation {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-80%);
+        opacity: 0;
+
+    }
+  }
   .mobile-top-nav {
     position: fixed; /* Make it stick/fixed */
     top: 0; /* Stay on top */
@@ -26,6 +51,20 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+  .enter-animation {
+    animation: enteranimation 0.3s linear;
+    -webkit-animation: enteranimation 0.3s linear;
+    -moz-animation: enteranimation 0.3s linear;
+    -o-animation: enteranimation 0.3s linear;
+  }
+  .exit-animation {
+    animation: exitanimation 0.3s linear;
+    -webkit-animation: exitanimation 0.3s linear;
+    -moz-animation: exitanimation 0.3s linear;
+    -o-animation: exitanimation 0.3s linear;
+    transform: translateY(-80%);
+    opacity: 0;
+  }
 }
 
 :root {
@@ -39,6 +78,8 @@
   --text-secondary: #9197ae;
 
   --border-primary: #c4c4c4;
+
+  --background-pop: #ffffff0a;
   }
   
   [data-theme='dark'] {
@@ -52,5 +93,7 @@
     --text-secondary: #9197ae;
 
     --border-primary: #464646;
+    
+    --background-pop: #ffffff0a;
   }
   

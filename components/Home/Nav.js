@@ -11,12 +11,15 @@ import { useTheme } from 'next-themes'
 import CreatePostButton from './CreatePostButton'
 import Image from 'next/image'
 import { MdOutlineExplore } from 'react-icons/md'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import ClickOption from './ClickOption'
 
 const Nav = () => {
   const { user } = useProfile()
   const [showOptions, setShowOptions] = useState(false)
   const { theme, setTheme } = useTheme()
   const router = useRouter()
+  const { showModal, hideModal } = usePopUpModal();
   
   const routeToExplore = () => {
     router.push('/explore')
@@ -27,7 +30,15 @@ const Nav = () => {
   }
 
   const showMoreOptions = () => {
-    setShowOptions(!showOptions)
+    // setShowOptions(!showOptions)
+    showModal( 
+      {
+        component: <ClickOption />,
+        type: modalType.normal,
+        onAction: () => {},
+        extraaInfo: {}
+      }
+    )
   }
 
   return (
