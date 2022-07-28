@@ -29,14 +29,17 @@ const Nav = () => {
     router.push('/')
   }
 
-  const showMoreOptions = () => {
+  const showMoreOptions = (e) => {
     // setShowOptions(!showOptions)
     showModal( 
       {
         component: <ClickOption />,
-        type: modalType.normal,
+        type: modalType.customposition,
         onAction: () => {},
-        extraaInfo: {}
+        extraaInfo: {
+          bottom: window.innerHeight - e.currentTarget.getBoundingClientRect().top + 'px',
+          left: e.currentTarget.getBoundingClientRect().right + 'px'
+        }
       }
     )
   }

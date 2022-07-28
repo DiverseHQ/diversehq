@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import React from 'react'
 import { createContext } from 'react'
-import useWindowSize from './useWindowSize'
 export const CustomPopUpModalContext = createContext([])
 export const modalType = {
   normal: 'NORMAL',
@@ -9,7 +8,11 @@ export const modalType = {
   medium: 'MEDIUM',
   customposition: 'CUSTOM_POSITION'
 }
-const Modal = ({ type, show, onBackBtnClick, component, top, left }) => {
+const Modal = ({ type, show, onBackBtnClick, component, top, left, right, bottom }) => {
+  console.log("top", top)
+  console.log("left", left)
+  console.log("right", right)
+  console.log("bottom", bottom)
   const [visiblity, setVisiblity] = useState(show)
   let TimeOut
   useEffect(() => {
@@ -24,7 +27,6 @@ const Modal = ({ type, show, onBackBtnClick, component, top, left }) => {
       setVisiblity(true)
     }
   }, [show])
-  const [windowHeight, windowWidth] = useWindowSize()
 
   if (visiblity)
     return (
@@ -47,8 +49,8 @@ const Modal = ({ type, show, onBackBtnClick, component, top, left }) => {
           )}
           {type == modalType.customposition && (
             <div
-              className={`flex h-fit ${show ? 'enter-fade-animation' : 'exit-fade-animation '}`}
-              style={{ zIndex: 1, position: 'absolute', top, left }}
+              className={`flex h-fit absolute z-10 ${show ? 'enter-fade-animation' : 'exit-fade-animation '}`}
+              style={{left, bottom,top, right  }}
             >
               {component}
             </div>
@@ -85,8 +87,10 @@ const CustomPopUpModalProvider = ({ children }) => {
           type={modal.type}
           component={modal.component}
           onBackBtnClick={providerVal.hideModal}
-          top={modal.extraaInfo.top ? modal.extraaInfo.top : 0}
-          left={modal.extraaInfo.left ? modal.extraaInfo.left : 0}
+          top={modal.extraaInfo.top ? modal.extraaInfo.top : "auto"}
+          left={modal.extraaInfo.left ? modal.extraaInfo.left : "auto"}
+          bottom={modal.extraaInfo.bottom ? modal.extraaInfo.bottom : "auto"}
+          right={modal.extraaInfo.right ? modal.extraaInfo.right : "auto"}
         />
         {children}
       </>
