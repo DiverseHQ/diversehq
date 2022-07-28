@@ -58,6 +58,7 @@ const Nav = () => {
         </div>
         <div className='flex-end hover:cursor-pointer' onClick={showMoreOptions}>
           {user?.profileImageUrl && <Image src={user.profileImageUrl} width="48" height="48" className='rounded-full' />}
+          {!user?.profileImageUrl && <Image src="/defaultProfileImage.jpg" width="48" height="48" className='rounded-full' />}
         </div>
     </div>
 
