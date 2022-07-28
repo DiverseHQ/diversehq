@@ -17,7 +17,11 @@ export const postUser = async (signedToken) => {
   })
 }
 
-export const getUserPosts = async (walletAddress) => {
-  return await fetch(`${apiEndpoint}/post/getPostsOfUser/${walletAddress}`)
+export const getUserPosts = async (walletAddress,limit,skips,sortBy) => {
+  return await fetch(`${apiEndpoint}/post/getPostsOfUser/${walletAddress}?` + new URLSearchParams({
+    limit,
+    skips,
+    sortBy
+  }))
     .then(res => res.json())
 }

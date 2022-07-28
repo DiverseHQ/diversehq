@@ -53,11 +53,11 @@ const Nav = () => {
           </div>
         <MdOutlineExplore className="w-12 h-12 mb-7 hover:cursor-pointer" onClick={routeToExplore}/>
         <CreatePostButton />
-            
+
         </div>
         <div className='flex-end hover:cursor-pointer' onClick={showMoreOptions}>
           {user?.profileImageUrl && <Image src={user.profileImageUrl} width="48" height="48" className='rounded-full' />}
-          {!user?.profileImageUrl && <Image src="/defaultProfileImage.jpg" width="48" height="48" className='rounded-full' />}
+          {!user?.profileImageUrl && <Image src="/gradient.jpg" width="48" height="48" className='rounded-full' />}
         </div>
     </div>
 

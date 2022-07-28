@@ -24,7 +24,7 @@ const PostPage = () => {
     }
   }
   return (
-      <>
+      <div>
       {!postInfo && <div>Loading...</div>}
       {postInfo &&
       <>
@@ -34,7 +34,7 @@ const PostPage = () => {
       </>
       }
 
-    </>
+    </div>
   )
 }
 
