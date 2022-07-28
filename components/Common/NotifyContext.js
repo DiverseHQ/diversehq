@@ -10,7 +10,7 @@ export const NotifyProvider = ({ children }) => {
     console.log('notifyInfo', message)
     toast.info(message, {
       position: 'top-right',
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       progress: undefined
@@ -28,7 +28,7 @@ export const NotifyProvider = ({ children }) => {
         <NotfiyContext.Provider value={{ notifyInfo, notifyError, notifySuccess }}>
             <ToastContainer
                 position="top-right"
-                autoClose={5000}
+                autoClose={2000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

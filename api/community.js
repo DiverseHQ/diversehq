@@ -1,0 +1,35 @@
+import apiEndpoint from "./ApiEndpoint"
+
+export const getPostOfCommunity = async (communityId,limit,skips,sortBy) => {
+    return await fetch(`${apiEndpoint}/post/getPostsOfCommunity/${communityId}?` + new URLSearchParams({
+        limit,
+        skips,
+        sortBy
+    }))
+    .then(res => res.json())
+}
+
+export const getCommunityInfo = async (name) => {
+    return await fetch(`${apiEndpoint}/community/communityInfoUsingName/${name}`)
+    .then(res => res.json())
+}
+
+export const putJoinCommunity = async (communityId, token) => {
+    return await fetch(`${apiEndpoint}/community/join/${communityId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+        }
+    }).then(res => res.json())
+}
+
+export const putLeaveCommunity = async (communityId, token) => {
+    return await fetch(`${apiEndpoint}/community/leave/${communityId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+        }
+    }).then(res => res.json())
+}
