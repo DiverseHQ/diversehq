@@ -36,7 +36,7 @@
   }
 
   .button-dropshadow {
-    filter: drop-shadow(4px 8px 8px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.2));
   }
 
   .box-shadow-top {
@@ -68,7 +68,7 @@
 }
 
 :root {
-  --background: #ffffff;
+  --background: #ececec;
   --background-secondary: #ffffff;
   --accent-primary: #1d9bf0;
   --accent-secondary: theme("colors.purple.600");

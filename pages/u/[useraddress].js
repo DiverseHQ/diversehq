@@ -41,7 +41,7 @@ const Profile = () => {
     <img src={user.profileImageUrl} alt="PFP" className="h-44 w-44 rounded-full"></img>
     <h3 className="">{user.name}</h3>
     <h3>{user.walletAddress}</h3>
-    <h3>Communities: {user.communities.length}</h3>
+    {user?.communities?.length && <h3>Communities: {user.communities.length}</h3>}
     <div>
       {postInfo && postInfo.map(post => <div className="p-2" key={post.id}><PostCard post={post}/> </div>)}
       {!postInfo && <div>Loading...</div>}

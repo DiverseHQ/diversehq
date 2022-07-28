@@ -37,8 +37,8 @@ const Nav = () => {
         type: modalType.customposition,
         onAction: () => {},
         extraaInfo: {
-          bottom: window.innerHeight - e.currentTarget.getBoundingClientRect().top + 'px',
-          left: e.currentTarget.getBoundingClientRect().right + 'px'
+          bottom: window.innerHeight - e.currentTarget.getBoundingClientRect().top+ 10 + 'px',
+          left: e.currentTarget.getBoundingClientRect().left + 'px'
         }
       }
     )
