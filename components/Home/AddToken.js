@@ -8,7 +8,7 @@ const AddToken = () => {
               params: {
                 type: 'ERC20', 
                 options: {
-                  address: '0x5F232e9A0E12D117180b27a165082Ea8ac086a69', 
+                  address: '0x9aa49AF0D7Af1c1dd847C5c715931b3546Bfa1F8', 
                   symbol: 'DIVE', 
                   decimals: 18, 
                   image: 'https://bafybeigy2nfjeuzzwrieti5m4uhslzenezzxp5eueepj7mqs2rqx24by7a.ipfs.dweb.link/name.png', 

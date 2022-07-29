@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@biconomy/mexa": "^3.0.1",
     "@rainbow-me/rainbowkit": "^0.4.4",
     "dotenv": "^16.0.0",
     "ethers": "^5.6.9",
