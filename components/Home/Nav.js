@@ -16,7 +16,6 @@ import ClickOption from './ClickOption'
 
 const Nav = () => {
   const { user } = useProfile()
-  const [showOptions, setShowOptions] = useState(false)
   const { theme, setTheme } = useTheme()
   const router = useRouter()
   const { showModal, hideModal } = usePopUpModal();
@@ -44,6 +43,7 @@ const Nav = () => {
     )
   }
 
+
   return (
     <>
     <div className="fixed top-0 left-24 pt-6 pb-14 flex flex-col justify-between items-center h-full">
@@ -57,15 +57,11 @@ const Nav = () => {
         </div>
         <div className='flex-end hover:cursor-pointer' onClick={showMoreOptions}>
           {user?.profileImageUrl && <Image src={user.profileImageUrl} width="48" height="48" className='rounded-full' />}
-          {!user?.profileImageUrl && <Image src="/gradient.jpg" width="48" height="48" className='rounded-full' />}
+          {user && !user.profileImageUrl && <Image src="/gradient.jpg" width="48" height="48" className='rounded-full' />}
+          
+        
         </div>
     </div>
-
-    {(showOptions && user) && <div className="fixed top-[0px] right-[5px] flex flex-col z-10">
-      <ChangeMonkey />
-      <CreateCommunity />
-      <AddToken />
-      </div>}
     </>
   )
 }
