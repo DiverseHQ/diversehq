@@ -44,7 +44,7 @@ const Profile = () => {
     }
   }
   return (
-   <div>
+   <div className='pt-6'>
     {user && 
                 <div className='relative'>
                 <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={user.bannerImageUrl ? user.bannerImageUrl : "/gradient.jpg"} />

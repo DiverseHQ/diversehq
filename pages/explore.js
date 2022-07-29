@@ -1,54 +1,40 @@
 import React, { useEffect, useState } from 'react'
-import CommunitiesColumn from '../components/Explore/CommunitiesColumn'
 import apiEndpoint from '../api/ApiEndpoint'
+import { getAllCommunities } from '../api/community'
+import { COMMUNITY_LIMIT } from '../utils/commonUtils'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import CommunityInfoCard from '../components/Community/CommunityInfoCard'
 
 const explore = () => {
   const [communities, setCommunities] = useState([])
+  const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(0)
-  const [totalPages, setTotalPages] = useState(0)
-  const [selectedSortBy, setSelectedSortBy] = useState('new')
 
-  const resetVariables = () => {
-    setCommunities([])
-    setLoading(true)
-    setPage(0)
-    setTotalPages(0)
-  }
-
-  const fetchCommunities = async (sortBy) => {
-    if(sortBy !== selectedSortBy) {
-        resetVariables();
-        setSelectedSortBy(sortBy);
+  const getMoreCommunities = async () => {
+    if(!hasMore) return
+    const fetchedCommunities = await getAllCommunities(COMMUNITY_LIMIT, communities.length, "top");
+    console.log('fetchedCommunities', fetchedCommunities)
+    if(fetchedCommunities.communities.length < COMMUNITY_LIMIT){
+      setHasMore(false)
     }
-    try {
-      if (page > totalPages) return
-      const params = {
-        page: page,
-        sortBy: sortBy,
-        PerPage: 10
-      }
-      const res = await fetch(`${apiEndpoint}/community/getAllCommunities?` + new URLSearchParams(params))
-      console.log(res);
-      if (res.status === 200) {
-        const jsonResp = await res.json()
-        console.log(jsonResp);
-        setCommunities([...communities, ...jsonResp.communities])
-        setTotalPages(jsonResp.pages)
-        setPage(page + 1)
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    setCommunities([...communities, ...fetchedCommunities.communities])
   }
   useEffect(() => {
-    // resetVariables()
-    fetchCommunities(selectedSortBy)
-  }, [selectedSortBy])
+    getMoreCommunities()
+  }, [])
   return (
-    <div>
-        <button onClick={() => { fetchCommunities('new') }}>New</button> <button onClick={() => { fetchCommunities('top') }}>Top</button>
-        <CommunitiesColumn communities={communities} loading={loading} />
+    <div className='pt-6'>
+        <InfiniteScroll
+          dataLength={communities.length}
+          next={getMoreCommunities}
+          hasMore={hasMore}
+          loader={<h3> Loading...</h3>}
+          endMessage={<h4>Nothing more to show</h4>}
+        >
+          {communities.map((community) => {
+            return <CommunityInfoCard key={community._id} communityInfo={community} />
+          })}
+        </InfiniteScroll>
     </div>
   )
 }

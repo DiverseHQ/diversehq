@@ -1,7 +1,7 @@
 import apiEndpoint from "./ApiEndpoint"
 
-export const getPostOfCommunity = async (communityId,limit,skips,sortBy) => {
-    return await fetch(`${apiEndpoint}/post/getPostsOfCommunity/${communityId}?` + new URLSearchParams({
+export const getPostOfCommunity = async (communityName,limit,skips,sortBy) => {
+    return await fetch(`${apiEndpoint}/post/getPostsOfCommunity/${communityName}?` + new URLSearchParams({
         limit,
         skips,
         sortBy
@@ -32,4 +32,12 @@ export const putLeaveCommunity = async (communityId, token) => {
             Authorization: token
         }
     }).then(res => res.json())
+}
+
+export const getAllCommunities = async (limit, skips, sortBy) => {
+    return await fetch(`${apiEndpoint}/community/getAllCommunities?` + new URLSearchParams({
+        limit,
+        skips,
+        sortBy
+        })).then(res => res.json())
 }
