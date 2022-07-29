@@ -5,51 +5,50 @@ import Image from 'next/image'
 import PostsColumn from '../../components/Post/PostsColumn'
 import { useNotify } from '../../components/Common/NotifyContext'
 import { useProfile } from '../../components/Common/WalletContext'
+import { getCommunityInfo, getPostOfCommunity, putJoinCommunity, putLeaveCommunity } from '../../api/community'
+import { POST_LIMIT } from '../../utils/commonUtils'
+
 const CommunityPage = () => {
   const { name } = useRouter().query
   const { user, token, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   const [community, setCommunity] = useState(null)
-  const [posts, setPosts] = useState([])
-  const [page, setPage] = useState(0)
-  const [totalPages, setTotalPages] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [isJoined, setIsJoined] = useState(false)
+
+  const [posts, setPosts] = useState([])
+  const [hasMore, setHasMore] = useState(true)
+
+  const showPosts = async (sortBy) => {
+    try{
+      if(!hasMore) return
+      const fetchedPosts = await getPostOfCommunity(community._id, POST_LIMIT, posts.length, "new")
+       console.log('fetchedPosts', fetchedPosts)
+      if(fetchedPosts.posts.length < POST_LIMIT){
+        setHasMore(false)
+      }
+      setPosts([...posts, ...fetchedPosts.posts])
+    }catch(error){
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     if (name) fetchCommunitInformation()
   }, [name])
 
   useEffect(() => {
-    if (community) fetchPostsOfCommunity()
+    if (community) showPosts()
   }, [community])
 
-  const fetchPostsOfCommunity = async () => {
-    console.log('triggered fetchPostOfCommunity')
-    try {
-      if (page !== 0 && page > totalPages) {
-        return
-      }
-      const res = await fetch(`${apiEndpoint}/post/getPostsOfCommunity/${community._id}?` + new URLSearchParams({
-        page,
-        sortBy: 'date'
-      }))
-      if (res.ok) {
-        const jsonResp = await res.json()
-        setPosts([...posts, ...jsonResp.posts])
-        setTotalPages(jsonResp.pages)
-        setPage(page + 1)
-      }
-      if (res.status === 400) {
-        console.log(res.msg)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  useEffect(() => {
+    if(!user || !community) return
+     setIsJoined(!!user?.communities?.includes(community._id))
+  },[user,community])
+
   const fetchCommunitInformation = async () => {
     try {
-      const response = await fetch(`${apiEndpoint}/community/communityInfoUsingName/${name}`)
-      if (!response.ok) return
-      const community = await response.json()
+      const community = await getCommunityInfo(name)
       console.log(community)
       setCommunity(community)
     } catch (error) {
@@ -61,14 +60,7 @@ const CommunityPage = () => {
 
   const joinCommunity = async () => {
     try {
-      const resp = await fetch(`${apiEndpoint}/community/join/${community._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token
-        }
-      }).then(r => r.json())
-      console.log(resp)
+      await putJoinCommunity(community._id, token)
       notifyInfo('Joined 😍')
       await refreshUserInfo()
       await fetchCommunitInformation()
@@ -79,16 +71,8 @@ const CommunityPage = () => {
 
   const leaveCommunity = async () => {
     try {
-      const resp = await fetch(`${apiEndpoint}/community/leave/${community._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token
-        }
-      }).then(r => r.json())
-      console.log(resp)
+      await putLeaveCommunity(community._id, token)
       notifyInfo('Left 😢')
-
       await refreshUserInfo()
       await fetchCommunitInformation()
     } catch (error) {
@@ -96,27 +80,21 @@ const CommunityPage = () => {
     }
   }
 
-  const handleScroll = (e) => {
-    const { offsetHeight, scrollTop, scrollHeight } = e.target
 
-    if (offsetHeight + scrollTop >= scrollHeight) {
-      if (page < totalPages) {
-        setPage(page + 1)
-      }
-    }
-  }
   return (
       <>
         {(!community || !user || loading) && <div>Loading...</div>}
         {!loading && community && user &&
-            <div onScroll={handleScroll}>
-                <Image width="1363px" height="320px" className="rounded-xl object-contain" src={community.bannerImageUrl} />
-                <Image width="250px" height="250px" className="rounded-full" src={community.logoImageUrl} />
-                <h1>{community.name}</h1>
-                <p>{community.description}</p>
-                {user.communities.includes(community._id) ? <button onClick={leaveCommunity}>Leave</button> : <button onClick={joinCommunity}>JOIN</button>}
-                <div>{community.members.length} members</div>
-                {posts && <PostsColumn handleScroll={handleScroll} posts={posts} />}
+            <div className='relative'>
+                <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={community.bannerImageUrl} />
+                <div className='absolute top-20 left-3 sm:left-5 border-p-bg border-4 rounded-full'><Image width="70px" height="70px" className="rounded-full bg-p-bg" src={community.logoImageUrl} /> </div>
+                <div className='flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl'>
+                <button className='bg-p-btn rounded-full text-base sm:text-xl py-1 px-2 self-end my-3' onClick={isJoined ? leaveCommunity: joinCommunity }>{isJoined ? "Leave" : "Join"}</button>
+                <div className='font-bold text-xl sm:text-2xl tracking-wider'>{community.name}</div>
+                <div>{community.description}</div>
+                <div><span className='font-bold'>{community.members.length}</span> <span className='text-s-text'> members</span></div>
+                </div>
+                {posts && <PostsColumn getMorePost={showPosts} hasMore={hasMore}  posts={posts} />}
             </div>
         }
 
