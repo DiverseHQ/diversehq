@@ -17,7 +17,7 @@ function MyApp ({ Component, pageProps }) {
       <div className="text-p-text bg-p-bg">
       {isDesktop && <div className=''>
         <Nav />
-        <div className='max-w-[600px] pt-6 ml-64 overflow-y-auto no-scrollbar h-full'>
+        <div className='max-w-[600px] ml-64 overflow-y-auto no-scrollbar h-full'>
         <Component {...pageProps} />
         </div>
         <div className='fixed top-0 right-10 pt-6 h-full overflow-y-auto no-scrollbar'>
