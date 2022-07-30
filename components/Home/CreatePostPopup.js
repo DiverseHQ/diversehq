@@ -124,11 +124,9 @@ const CreatePostPopup = ({props}) => {
     setValue(value)
   }
 
-  const handleDropDown = (e) => {
-    console.log(e.target)
-    console.log(e.target.id, 'yeh value hain pancho')
-    setCommunityId(e.target.id);
-    setShowCommunity({name: e.target.innerText, image: e.target.logoImageUrl})
+  const handleDropDown = (id,name,logoImageUrl) => {
+    setCommunityId(id);
+    setShowCommunity({name: name, image: logoImageUrl})
     setIsDropDown(!isDropDown);
   }
  
@@ -157,9 +155,11 @@ const CreatePostPopup = ({props}) => {
       {
         joinedCommunities.map(community => {
           return(
-            <div key={community._id} onClick={handleDropDown} className="flex flex-row items-center hover:bg-violet-600" id={community._id} logoImageUrl={community.logoImageUrl}>
-              <img src={community.logoImageUrl}className="border border-p-bg rounded-full w-12 h-12" ></img>
-              <h3 className="text-p-text mx-1 text-base "id={community._id}>{community.name}</h3>
+            <div key={community._id} onClick={() => {
+              handleDropDown(community._id,community.name,community.logoImageUrl)
+            }} className="flex flex-row items-center cursor-pointer" id={community._id} logoImageUrl={community.logoImageUrl}>
+              <img src={community.logoImageUrl }className="border border-p-bg rounded-full w-12 h-12" ></img>
+              <h3 className="text-p-text mx-1 text-base " id={community._id} logoImageUrl={community.logoImageUrl}>{community.name}</h3>
             </div>
           )
         })
@@ -223,10 +223,10 @@ const CreatePostPopup = ({props}) => {
               {user && joinedCommunities
                 ? (
                     <button className="text-blue-500 p-1" onClick={(e) => setIsDropDown(!isDropDown)} >{
-                    showCommunity?(<div className="flex justify-center items-center p-0.5"> 
+                    showCommunity.name ? (<div className="flex justify-center items-center p-0.5"> 
                     <img src={showCommunity.image} className="border border-p-bg rounded-full w-8 h-8"></img>
                     <h1>{showCommunity.name}</h1>
-                    </div>):(<>Select Community</>) }</button>
+                    </div>) : (<div>Select Community</div>) }</button>
                   )
         : (<button className="p-1" onClick={connectWallet}>
         {connecting ? 'Connecting...' : 'Connect Wallet'}
