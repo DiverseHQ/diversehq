@@ -85,11 +85,12 @@ const PostCard = ({ post }) => {
       <div className='px-3 sm:px-5'>
         <div className="flex flex-row justify-between items-center mb-1.5">
             <div className="flex flex-row items-center" onClick={handleCommunityClicked}>
-              {post.communityLogo && <Image src={post.communityLogo} width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} className="rounded-full" />}
+              <Image src={post.communityLogo ? post.communityLogo : "/gradient.jpg"} width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} className="rounded-full" />
+              
               <div className='pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline'>{post.communityName}</div>
             </div>
             <div className='flex flex-row items-center' onClick={handleAuthorClicked}>
-              {post.authorAvatar && <Image src={post.authorAvatar} className="rounded-full" width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} />}
+              <Image src={post.authorAvatar ? post.authorAvatar : "/gradient.jpg"} className="rounded-full" width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} />
               <div className='pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline'>{post.authorName ? post.authorName : post.author.slice(0, 6) + '...'}</div>
             </div>
         </div>

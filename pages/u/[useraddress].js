@@ -48,11 +48,11 @@ const Profile = () => {
     {user && 
                 <div className='relative'>
                 <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={user.bannerImageUrl ? user.bannerImageUrl : "/gradient.jpg"} />
-                <div className='absolute top-20 left-3 sm:left-5 border-p-bg border-4 rounded-full'>
-                  <Image width="70px" height="70px" className="rounded-full bg-p-bg" src={user?.profileImageUrl ? user?.profileImageUrl : "/gradient.jpg"} /> 
+                <div className='absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full'>
+                  <Image width="70px" height="70px" className="rounded-full bg-s-bg" src={user?.profileImageUrl ? user?.profileImageUrl : "/gradient.jpg"} /> 
                 </div>
                 <div className='flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl'>
-                  <div className='text-base sm:text-xl py-1 px-2 self-end my-3'>{user?.walletAddress?.substring(0,6) + "..."}</div>
+                  <div className='text-base sm:text-xl py-1 px-2 self-end my-3'>{user?.walletAddress}</div>
                   <div className='font-bold text-xl sm:text-2xl tracking-wider'>{user.name}</div>
                   <div>{user.bio}</div>
                   <div>
