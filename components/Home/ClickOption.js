@@ -4,8 +4,10 @@ import { useProfile } from '../Common/WalletContext'
 import { useTheme } from 'next-themes'
 import { useAccount } from 'wagmi'
 import DiveToken from '../../utils/DiveToken.json'
-import { useContractWrite, usePrepareContractWrite } from 'wagmi'
+import { useContractWrite } from 'wagmi'
+import { DIVE_CONTRACT_ADDRESS_RINKEBY } from '../../utils/commonUtils'
 // import { sendTransaction } from '../Common/Biconomy'
+import  ABI  from '../../utils/DiveToken.json'
 
 
 const ClickOption = () => {
@@ -23,29 +25,22 @@ const ClickOption = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
+  const diveContract = useContractWrite({
+    addressOrName: DIVE_CONTRACT_ADDRESS_RINKEBY,
+    contractInterface: ABI,
+    functionName: 'claimtokens',
+    args: [DIVE_CONTRACT_ADDRESS_RINKEBY, 200000000000000],
+  })
 
-
-  // const { config } = usePrepareContractWrite({
-  //   addressOrName: '0x9aa49AF0D7Af1c1dd847C5c715931b3546Bfa1F8',
-  //   contractInterface: DiveToken.abi,
-  //   functionName: 'claimtokens',
-  //   functionArguments: ['0x9aa49AF0D7Af1c1dd847C5c715931b3546Bfa1F8', 10 * 10 ** 18],
-  //   onSuccess: () => {
-  //     console.log('success')
-  //   },
-  //   onError: () => {
-  //     console.log('error')
-  //   }
-
-  // })
-  // const { data, isLoading, isSuccess, write } = useContractWrite(config)
-
+  const claimTokens = async () => {
+     await diveContract.write();
+  }
 
   return (
     <div className='cursor-pointer'>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={toggleTheme}>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={routeToUserProfile}>Visit Profile</div>
-      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '  >Claim Tokens</div>
+      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={claimTokens} >Claim Tokens</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '>Edit Profile</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '>Create Community</div>
     </div>
