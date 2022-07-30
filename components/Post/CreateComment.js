@@ -76,12 +76,12 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
                 </div>
                 <div className='flex flex-row items-center justify-center'>
                   <FaHandSparkles className='w-5 h-5 sm:w-7 sm:h-7' />
-                  <input type="number" ref={appreciateAmountRef} className="outline-none pl-3 w-8 sm:w-12 mr-2 text-xs sm:text-xl font-bold" placeholder="1" />
+                  <input type="number" ref={appreciateAmountRef} className="outline-none pl-3 w-8 sm:w-12 mr-2 text-xs sm:text-xl font-bold bg-s-bg" placeholder="1" />
                   <FiSend onClick={createComment} className="w-4 h-4 sm:w-7 sm:h-7 text-p-text"/>
                 </div>
               </div>
               <div>
-                <input type="text" ref={commentRef} className="border-none outline-none w-full mt-3 text-xs sm:text-base" placeholder="Write a comment..." />
+                <input type="text" ref={commentRef} className="border-none outline-none w-full mt-3 text-xs sm:text-base bg-s-bg" placeholder="Write a comment..." />
               </div>
 
             </div>

@@ -31,8 +31,8 @@ const ClickOption = () => {
   const diveContract = useContractWrite({
     addressOrName: DIVE_CONTRACT_ADDRESS_RINKEBY,
     contractInterface: ABI,
-    functionName: 'claimTokens',
-    args: [DIVE_CONTRACT_ADDRESS_RINKEBY, 100],
+    functionName: 'claimtokens',
+    args: [DIVE_CONTRACT_ADDRESS_RINKEBY, "10000000000000000000"],
   })
 
   const claimTokens = async () => {
