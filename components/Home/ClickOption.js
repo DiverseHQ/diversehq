@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes'
 import { useAccount } from 'wagmi'
 import DiveToken from '../../utils/DiveToken.json'
 import { useContractWrite, usePrepareContractWrite } from 'wagmi'
-import { sendTransaction } from '../Common/Biconomy'
+// import { sendTransaction } from '../Common/Biconomy'
 
 
 const ClickOption = () => {
@@ -45,7 +45,7 @@ const ClickOption = () => {
     <div className='cursor-pointer'>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={toggleTheme}>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={routeToUserProfile}>Visit Profile</div>
-      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '  onClick={sendTransaction} >Claim Tokens</div>
+      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '  >Claim Tokens</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '>Edit Profile</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '>Create Community</div>
     </div>
