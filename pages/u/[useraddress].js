@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState, useEffect, useContext } from 'react'
+import { FaRegCopy } from 'react-icons/fa'
 import apiEndpoint from '../../api/ApiEndpoint'
 import { getUserInfo, getUserPosts } from '../../api/user'
+import { useNotify } from '../../components/Common/NotifyContext'
 import PostCard from '../../components/Post/PostCard'
 import PostsColumn from '../../components/Post/PostsColumn'
 import { POST_LIMIT } from '../../utils/commonUtils'
@@ -13,6 +15,7 @@ const Profile = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [playing, setPlaying] = useState(false)
+  const { notifyInfo } = useNotify()
   useEffect(() => {
     if (useraddress) {
       showUserInfo()
@@ -43,6 +46,10 @@ const Profile = () => {
       console.log(error)
     }
   }
+  const handleWalletAddressCopy = () => {
+    navigator.clipboard.writeText(useraddress)
+    notifyInfo('Copied to clipboard')
+  }
   return (
    <div className='pt-6'>
     {user && 
@@ -52,7 +59,10 @@ const Profile = () => {
                   <Image width="70px" height="70px" className="rounded-full bg-s-bg" src={user?.profileImageUrl ? user?.profileImageUrl : "/gradient.jpg"} /> 
                 </div>
                 <div className='flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl'>
-                  <div className='text-base sm:text-xl py-1 px-2 self-end my-3'>{user?.walletAddress}</div>
+                  <div className='self-end flex flex-row items-center my-3 px-2 py-1  cursor-pointer'  onClick={handleWalletAddressCopy}>
+                    <div className='text-base sm:text-xl'>{user?.walletAddress?.substring(0,6) + "..."}</div>
+                   <FaRegCopy className='w-8 h-8 px-2' />
+                  </div>
                   <div className='font-bold text-xl sm:text-2xl tracking-wider'>{user.name}</div>
                   <div>{user.bio}</div>
                   <div>
