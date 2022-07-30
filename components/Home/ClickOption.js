@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
 import { useTheme } from 'next-themes'
-import { useAccount, useContractWrite } from 'wagmi'
+import { useAccount, useContractWrite, useSigner } from 'wagmi'
 import DiveToken from '../../utils/DiveToken.json'
 import { DIVE_CONTRACT_ADDRESS_RINKEBY, addToken } from '../../utils/commonUtils'
 // import { sendTransaction } from '../Common/Biconomy'
 import  ABI  from '../../utils/DiveToken.json'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CreateCommunity from './CreateCommunity'
+import { ethers } from 'ethers'
 
 const ClickOption = () => {
   const router = useRouter()
@@ -16,6 +17,15 @@ const ClickOption = () => {
   const { theme, setTheme } = useTheme()
   const { address } = useAccount()
   const { showModal, hideModal } = usePopUpModal();
+  const [diveContract,setDiveContract] = useState(null)
+  const { data: signer } = useSigner();
+
+  useEffect(() => {
+    if(signer){
+      const contract = new ethers.Contract(DIVE_CONTRACT_ADDRESS_RINKEBY, ABI, signer)
+      setDiveContract(contract)
+    }
+  },[signer])
 
   const routeToUserProfile = () => {
     if (user) {
@@ -27,15 +37,10 @@ const ClickOption = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
-  const diveContract = useContractWrite({
-    addressOrName: DIVE_CONTRACT_ADDRESS_RINKEBY,
-    contractInterface: ABI,
-    functionName: 'claimtokens',
-    args: [DIVE_CONTRACT_ADDRESS_RINKEBY, "10000000000000000000"],
-  })
 
   const claimTokens = async () => {
-     await diveContract.write();
+     await diveContract.claimtokens(DIVE_CONTRACT_ADDRESS_RINKEBY,"10000000000000000000",
+     {gasLimit: 3000000, gasPrice: 30000000000});
   }
 
   const createCommunity = () => {
