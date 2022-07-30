@@ -36,7 +36,7 @@ const MobileTopNav = () => {
     <div id='mobile-top-navbar' className='mobile-top-nav bg-p-bg border-b border-p-border flex flex-row items-center justify-between py-2.5 px-4 z-10'>
       <div className='flex flex-row items-center'>
        {user && user.profileImageUrl && <Image src={user.profileImageUrl} width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
-       {(!user || !user.profileImageUrl) && <Image src="/person.png" width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
+       {(!user || !user.profileImageUrl) && <Image src="/gradient.jpg" width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
        <div className='pl-5 text-base font-bold tracking-wider' onClick={routeToHome}>Home</div>
        </div>
        <ConnectButton accountStatus="avatar" />
