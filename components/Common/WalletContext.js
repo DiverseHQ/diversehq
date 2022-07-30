@@ -90,48 +90,6 @@ export const WalletProvider = ({ children }) => {
     await refreshUserInfo()
   }
 
-  // const connectWallet = async () => {
-  //   setConnecting(true)
-  //   try {
-  //     const { ethereum } = window
-
-  //     if (!ethereum) {
-  //       alert('Get MetaMask!')
-  //       return
-  //     }
-  //     const newWeb3 = new Web3(ethereum)
-  //     setWeb3(newWeb3)
-  //     await ethereum.request({ method: 'eth_requestAccounts' })
-
-  //     // getting address from which we will sign message
-  //     const address = (await newWeb3.eth.getAccounts())[0]
-
-  //     window.ethereum.on('accountsChanged', function (accounts) {
-  //       if (accounts.length > 0) {
-  //         once = true
-  //         // localStorage.removeItem('token')
-  //         setLocalToken(null)
-  //         setWallet(accounts[0])
-  //       } else {
-  //         once = true
-  //         setWallet(null)
-  //       }
-  //     })
-
-  //     // generating a token with 1 day of expiration time
-  //     once = true
-  //     setWallet(address)
-  //   } catch (error) {
-  //     console.log(error)
-  //     setConnecting(false)
-  //   }
-  // }
-
-  // const disconnectWallet = () => {
-  //   once = true
-  //   setWallet(null)
-  //   setUser(null)
-  // }
   return (
         <WalletContext.Provider value={{ address, refreshUserInfo, token, user }}>
             {children}

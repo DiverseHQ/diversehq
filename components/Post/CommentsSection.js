@@ -26,7 +26,7 @@ const CommentsSection = ({commentsId}) => {
                 console.log(error);
             }
         })();
-    },[])
+    },[commentsId])
   
     return (
       <>

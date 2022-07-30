@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import apiEndpoint from '../../api/ApiEndpoint'
 import { getSinglePostInfo } from '../../api/post'
 import CommentsSection from '../../components/Post/CommentsSection'
@@ -9,10 +9,17 @@ import PostCard from '../../components/Post/PostCard'
 const PostPage = () => {
   const { id } = useRouter().query
   const [postInfo, setPostInfo] = React.useState(null)
+  const [comments, setComments] = React.useState([])
 
   React.useEffect(() => {
     if (id) fetchPostInformation()
   }, [id])
+
+  useEffect(() => {
+    if (postInfo) {
+      setComments(postInfo.comments)
+    }
+  },[postInfo])
 
   const fetchPostInformation = async () => {
     try {
@@ -23,18 +30,26 @@ const PostPage = () => {
       console.log(error)
     }
   }
+
+  const addCommentIdToComments = (commentId) => {
+    setComments([commentId,...comments])
+  }
   return (
-      <div>
+      <>
       {!postInfo && <div>Loading...</div>}
       {postInfo &&
-      <>
+      <div>
       <PostCard post={postInfo} />
-      <CommentsSection commentsId={postInfo.comments} />
-      <CreateComment postId={postInfo._id} />
-      </>
+      <div>
+      <CreateComment postId={postInfo._id} authorAddress={postInfo.author} addCommentIdToComments={addCommentIdToComments}/>
+      <CommentsSection commentsId={comments} />
+      {/* <div className='fixed bottom-16'> */}
+      {/* </div> */}
+      </div>
+   </div>
       }
 
-    </div>
+    </>
   )
 }
 
