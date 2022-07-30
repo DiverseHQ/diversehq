@@ -50,7 +50,6 @@ const CreateCommunity = () => {
     console.log(Banner)
     await handleCreateCommunity(PFP, Banner)
     setLoading(false)
-    setShowModal(false)
   }
 
   const handleCreateCommunity = async (pfpURL, bannerURL) => {

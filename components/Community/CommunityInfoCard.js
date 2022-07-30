@@ -21,7 +21,6 @@ const CommunityInfoCard = ({communityInfo, communityName}) => {
 
     useEffect(() => {
         if(!user || !community) return
-        console.log("community", community)
          setIsJoined(!!user?.communities?.includes(community._id))
       },[user,community])
 
