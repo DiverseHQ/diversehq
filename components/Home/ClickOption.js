@@ -4,12 +4,11 @@ import { useProfile } from '../Common/WalletContext'
 import { useTheme } from 'next-themes'
 import { useAccount, useContractWrite } from 'wagmi'
 import DiveToken from '../../utils/DiveToken.json'
-import { DIVE_CONTRACT_ADDRESS_RINKEBY } from '../../utils/commonUtils'
+import { DIVE_CONTRACT_ADDRESS_RINKEBY, addToken } from '../../utils/commonUtils'
 // import { sendTransaction } from '../Common/Biconomy'
 import  ABI  from '../../utils/DiveToken.json'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CreateCommunity from './CreateCommunity'
-
 
 const ClickOption = () => {
   const router = useRouter()
@@ -59,6 +58,7 @@ const ClickOption = () => {
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={toggleTheme}>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={routeToUserProfile}>Visit Profile</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={claimTokens} >Claim Tokens</div>
+      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={addToken} >Add Dive</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '>Edit Profile</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={createCommunity}>Create Community</div>
     </div>
