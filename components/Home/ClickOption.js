@@ -2,12 +2,13 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
 import { useTheme } from 'next-themes'
-import { useAccount } from 'wagmi'
+import { useAccount, useContractWrite } from 'wagmi'
 import DiveToken from '../../utils/DiveToken.json'
-import { useContractWrite } from 'wagmi'
 import { DIVE_CONTRACT_ADDRESS_RINKEBY } from '../../utils/commonUtils'
 // import { sendTransaction } from '../Common/Biconomy'
 import  ABI  from '../../utils/DiveToken.json'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import CreateCommunity from './CreateCommunity'
 
 
 const ClickOption = () => {
@@ -15,6 +16,8 @@ const ClickOption = () => {
   const { user } = useProfile()
   const { theme, setTheme } = useTheme()
   const { address } = useAccount()
+  const { showModal, hideModal } = usePopUpModal();
+
   const routeToUserProfile = () => {
     if (user) {
       router.push(`/u/${user.walletAddress}`)
@@ -28,13 +31,28 @@ const ClickOption = () => {
   const diveContract = useContractWrite({
     addressOrName: DIVE_CONTRACT_ADDRESS_RINKEBY,
     contractInterface: ABI,
-    functionName: 'claimtokens',
-    args: [DIVE_CONTRACT_ADDRESS_RINKEBY, 200000000000000],
+    functionName: 'claimTokens',
+    args: [DIVE_CONTRACT_ADDRESS_RINKEBY, 100],
   })
 
   const claimTokens = async () => {
      await diveContract.write();
   }
+
+  const createCommunity = () => {
+    // setShowOptions(!showOptions)
+    showModal( 
+      {
+        component: <CreateCommunity />,
+        type: modalType.normal,
+        onAction: () => {},
+        extraaInfo: {
+          
+        }
+      }
+    )
+  }
+
 
   return (
     <div className='cursor-pointer'>
@@ -42,7 +60,7 @@ const ClickOption = () => {
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={routeToUserProfile}>Visit Profile</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={claimTokens} >Claim Tokens</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '>Edit Profile</div>
-      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '>Create Community</div>
+      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={createCommunity}>Create Community</div>
     </div>
   )
 }

@@ -4,9 +4,9 @@ import { useProfile } from '../Common/WalletContext'
 import apiEndpoint from '../../api/ApiEndpoint'
 import { useNotify } from "../Common/NotifyContext";
 import { useRouter } from 'next/router';
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 
 const CreatePostPopup = ({props}) => {
-  const [showModal, setShowModal] = useState(false)
   const [files, setFiles] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState([])
@@ -18,6 +18,8 @@ const CreatePostPopup = ({props}) => {
   const [imageValue, setImageValue] = useState(null);
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
   const router = useRouter()
+  const { showModal, hideModal } = usePopUpModal();
+  const [showCommunity, setShowCommunity] = useState({name: '', image: ''})
 
   
   const handleSubmit = async (event) => {
@@ -126,6 +128,7 @@ const CreatePostPopup = ({props}) => {
     console.log(e.target)
     console.log(e.target.id, 'yeh value hain pancho')
     setCommunityId(e.target.id);
+    setShowCommunity({name: e.target.innerText, image: e.target.logoImageUrl})
     setIsDropDown(!isDropDown);
   }
  
@@ -154,7 +157,7 @@ const CreatePostPopup = ({props}) => {
       {
         joinedCommunities.map(community => {
           return(
-            <div key={community._id} onClick={handleDropDown} className="flex flex-row items-center hover:bg-violet-600" id={community._id}>
+            <div key={community._id} onClick={handleDropDown} className="flex flex-row items-center hover:bg-violet-600" id={community._id} logoImageUrl={community.logoImageUrl}>
               <img src={community.logoImageUrl}className="border border-p-bg rounded-full w-12 h-12" ></img>
               <h3 className="text-p-text mx-1 text-base "id={community._id}>{community.name}</h3>
             </div>
@@ -175,8 +178,8 @@ const CreatePostPopup = ({props}) => {
     setImageValue(null);
   }
   const closeModal = () => {
-    setShowModal(false)
-    router.push('/')
+    setShowCommunity({name: '', image: ''})
+    hideModal()
   }
 
   const showAddedFile = () =>{
@@ -205,7 +208,7 @@ const CreatePostPopup = ({props}) => {
     return(
       //simple modal
       
-      <div className="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 w-full md:inset-0 h-modal md:h-full sm:h-screen">
+      <div className="flex justify-center items-center overflow-y-auto overflow-x-hidden  top-0 right-0 left-0 w-full md:inset-0 h-modal md:h-full sm:h-screen">
     <div className="relative p-4 w-full max-w-xl h-full md:h-auto">
         <div className="relative bg-p-bg rounded-lg shadow dark:bg-gray-700">
             <div className="flex flex-row justify-between p-4 items-start rounded-t">
@@ -219,7 +222,11 @@ const CreatePostPopup = ({props}) => {
             <div className="border rounded-full text-p-text w-fit mx-3 p-0.5">
               {user && joinedCommunities
                 ? (
-                    <button className="text-blue-500 p-1" onClick={(e) => setIsDropDown(!isDropDown)} >Choose Communinity</button>
+                    <button className="text-blue-500 p-1" onClick={(e) => setIsDropDown(!isDropDown)} >{
+                    showCommunity?(<div className="flex justify-center items-center p-0.5"> 
+                    <img src={showCommunity.image} className="border border-p-bg rounded-full w-8 h-8"></img>
+                    <h1>{showCommunity.name}</h1>
+                    </div>):(<>Select Community</>) }</button>
                   )
         : (<button className="p-1" onClick={connectWallet}>
         {connecting ? 'Connecting...' : 'Connect Wallet'}
