@@ -22,6 +22,10 @@ npm run dev
 ```
 Then visit localhost:3000
 
+
+## API Repo
+[https://github.com/VillageHall/diverse_hq_api](https://github.com/VillageHall/diverse_hq_api)
+
 ### Community
 Join us on our [Discord Server](https://discord.com/invite/TPmVgperuP) or [follow us on Twitter](https://twitter.com/usediversehq).
 
