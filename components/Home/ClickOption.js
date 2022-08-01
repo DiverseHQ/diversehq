@@ -10,6 +10,9 @@ import  ABI  from '../../utils/DiveToken.json'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CreateCommunity from './CreateCommunity'
 import { ethers } from 'ethers'
+import { useNotify } from '../Common/NotifyContext'
+
+const claimAmount = 50;
 
 const ClickOption = () => {
   const router = useRouter()
@@ -19,6 +22,8 @@ const ClickOption = () => {
   const { showModal, hideModal } = usePopUpModal();
   const [diveContract,setDiveContract] = useState(null)
   const { data: signer } = useSigner();
+  const { notifyError, notifySuccess } = useNotify()
+
 
   useEffect(() => {
     if(signer){
@@ -39,8 +44,18 @@ const ClickOption = () => {
 
 
   const claimTokens = async () => {
-     await diveContract.claimtokens(DIVE_CONTRACT_ADDRESS_RINKEBY,"10000000000000000000",
-     {gasLimit: 3000000, gasPrice: 30000000000});
+     let res = await diveContract.claimTokens(DIVE_CONTRACT_ADDRESS_RINKEBY,ethers.utils.parseEther(claimAmount.toString()),
+     {gasLimit: 3000000, gasPrice: 30000000000 });
+     const receipt = await res.wait();
+     if (receipt.status === 1) {
+       console.log("Tokens claimed: https://rinkeby.etherscan.io/tx/"+res.hash);
+       notifySuccess('Tokens Claimed Successfully')
+     }
+     else {
+        console.log("Tokens claim failed");
+        notifyError('Tokens Claim Failed')
+     }
+
   }
 
   const createCommunity = () => {
@@ -51,7 +66,6 @@ const ClickOption = () => {
         type: modalType.normal,
         onAction: () => {},
         extraaInfo: {
-          
         }
       }
     )
