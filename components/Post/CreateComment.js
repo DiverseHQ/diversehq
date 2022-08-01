@@ -6,10 +6,12 @@ import Image from 'next/image'
 import useDevice from '../Common/useDevice'
 import { FiSend } from 'react-icons/fi'
 import {FaHandSparkles} from 'react-icons/fa'
-import { useContractWrite, useSigner  } from 'wagmi'
+import { useSigner  } from 'wagmi'
 import { DIVE_CONTRACT_ADDRESS_RINKEBY } from '../../utils/commonUtils'
 import ABI from '../../utils/DiveToken.json'
 import { ethers, utils } from 'ethers'
+import { useNotify } from '../Common/NotifyContext'
+
 
 const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
   const { user, token, address } = useProfile()
@@ -18,6 +20,8 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
   const { isDesktop } = useDevice()
   const { data: signer } = useSigner();
   const [diveContract,setDiveContract] = useState(null)
+  const { notifyError, notifySuccess } = useNotify()
+
 
   useEffect(() => {
     if(signer){
@@ -34,10 +38,18 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
       console.log("appreciateAddress",appreciateAmount)
       const args = [authorAddress,authorAddress]
       if(!diveContract) return;
-
-      await diveContract.transfer(authorAddress,appreciateAmount, 
+      let res = await diveContract.transfer(authorAddress,appreciateAmount, 
         {gasLimit: 3000000, gasPrice: 30000000000}
       )
+      const receipt = await res.wait();
+      if (receipt.status === 1) {
+        console.log("Tokens transferred: https://rinkeby.etherscan.io/tx/"+res.hash);
+        notifySuccess('Tokens Transferred Successfully')
+      }
+      else {
+          console.log("Tokens transfer failed");
+          notifyError('Tokens Transfer Failed')
+        }
 
     } catch(error){
       console.log(error);
@@ -57,7 +69,7 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
       console.log(comment)
       addCommentIdToComments(comment._id)
       if(appreciateAmount > 0){
-        let wei = utils.parseEther(appreciateAmount).toString()
+        let wei = utils.parseEther(appreciateAmount.toString())
         console.log("wei",wei)
         transferGiveAppreciateAmount(wei)
       }
