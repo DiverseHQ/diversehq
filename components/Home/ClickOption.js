@@ -44,7 +44,7 @@ const ClickOption = () => {
 
 
   const claimTokens = async () => {
-     let res = await diveContract.claimTokens(DIVE_CONTRACT_ADDRESS_RINKEBY,ethers.utils.parseEther(claimAmount.toString()),
+     let res = await diveContract.claimtokens(DIVE_CONTRACT_ADDRESS_RINKEBY,ethers.utils.parseEther(claimAmount.toString()),
      {gasLimit: 3000000, gasPrice: 30000000000 });
      const receipt = await res.wait();
      if (receipt.status === 1) {
