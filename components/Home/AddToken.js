@@ -1,5 +1,5 @@
 import React from 'react'
-import {DIVE_CONTRACT_ADDRESS_RINKEBY} from '../../utils/commonUtils'
+import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config';
 
 const AddToken = () => {
     const addToken = async() =>{
@@ -9,7 +9,7 @@ const AddToken = () => {
               params: {
                 type: 'ERC20', 
                 options: {
-                  address: DIVE_CONTRACT_ADDRESS_RINKEBY, 
+                  address: DIVE_CONTRACT_ADDRESS_MUMBAI 
                   symbol: 'DIVE', 
                   decimals: 18, 
                   image: 'https://bafybeigy2nfjeuzzwrieti5m4uhslzenezzxp5eueepj7mqs2rqx24by7a.ipfs.dweb.link/name.png', 

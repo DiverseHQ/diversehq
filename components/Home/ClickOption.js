@@ -3,14 +3,12 @@ import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
 import { useTheme } from 'next-themes'
 import { useAccount, useContractWrite, useSigner } from 'wagmi'
-import DiveToken from '../../utils/DiveToken.json'
-import { DIVE_CONTRACT_ADDRESS_RINKEBY, addToken } from '../../utils/commonUtils'
-// import { sendTransaction } from '../Common/Biconomy'
 import  ABI  from '../../utils/DiveToken.json'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CreateCommunity from './CreateCommunity'
 import { ethers } from 'ethers'
 import { useNotify } from '../Common/NotifyContext'
+import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config'
 
 const claimAmount = 50;
 
@@ -19,7 +17,7 @@ const ClickOption = () => {
   const { user } = useProfile()
   const { theme, setTheme } = useTheme()
   const { address } = useAccount()
-  const { showModal, hideModal } = usePopUpModal();
+  const { showModal } = usePopUpModal();
   const [diveContract,setDiveContract] = useState(null)
   const { data: signer } = useSigner();
   const { notifyError, notifySuccess } = useNotify()
@@ -27,7 +25,7 @@ const ClickOption = () => {
 
   useEffect(() => {
     if(signer){
-      const contract = new ethers.Contract(DIVE_CONTRACT_ADDRESS_RINKEBY, ABI, signer)
+      const contract = new ethers.Contract(DIVE_CONTRACT_ADDRESS_MUMBAI, ABI, signer)
       setDiveContract(contract)
     }
   },[signer])

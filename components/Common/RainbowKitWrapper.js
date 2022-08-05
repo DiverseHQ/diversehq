@@ -7,7 +7,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, provider } = configureChains(
-  [chain.rinkeby],
+  [chain.polygonMumbai],
   [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
 )
 

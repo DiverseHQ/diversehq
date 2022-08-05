@@ -7,10 +7,10 @@ import { getUserInfo, getUserPosts } from '../../api/user'
 import { useNotify } from '../../components/Common/NotifyContext'
 import PostCard from '../../components/Post/PostCard'
 import PostsColumn from '../../components/Post/PostsColumn'
-import { DIVE_CONTRACT_ADDRESS_RINKEBY, POST_LIMIT } from '../../utils/commonUtils'
 import { useSigner  } from 'wagmi'
 import {ethers} from "ethers"
 import ABI from '../../utils/DiveToken.json'
+import { DIVE_CONTRACT_ADDRESS_MUMBAI, POST_LIMIT } from '../../utils/config'
 
 const Profile = () => {
   const { useraddress } = useRouter().query
@@ -31,7 +31,7 @@ const Profile = () => {
 
   useEffect(() =>{
     if(signer){
-      const contract = new ethers.Contract(DIVE_CONTRACT_ADDRESS_RINKEBY, ABI, signer)
+      const contract = new ethers.Contract(DIVE_CONTRACT_ADDRESS_MUMBAI, ABI, signer)
       showUserDive(contract)
     }
   },[signer])

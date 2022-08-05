@@ -6,8 +6,8 @@ import PostsColumn from '../../components/Post/PostsColumn'
 import { useNotify } from '../../components/Common/NotifyContext'
 import { useProfile } from '../../components/Common/WalletContext'
 import { getCommunityInfo, getPostOfCommunity, putJoinCommunity, putLeaveCommunity } from '../../api/community'
-import { POST_LIMIT } from '../../utils/commonUtils'
 import CommunityInfoCard from '../../components/Community/CommunityInfoCard'
+import { POST_LIMIT } from '../../utils/config'
 
 const CommunityPage = () => {
   const { name } = useRouter().query
