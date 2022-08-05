@@ -1,12 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { useProfile } from '../Common/WalletContext'
-import DiveToken from '../../utils/DiveToken.json'
-import { ethers } from 'ethers'
-import CreatePostPopup from './CreatePostPopup'
-import CreateCommunity from './CreateCommunity'
-import ChangeMonkey from './ChangeMonkey.js'
 import Router, { useRouter } from 'next/router'
-import AddToken from "./AddToken"
 import { useTheme } from 'next-themes'
 import CreatePostButton from './CreatePostButton'
 import Image from 'next/image'

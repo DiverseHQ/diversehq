@@ -37,6 +37,7 @@ const ClickOption = () => {
       router.push(`/u/${user.walletAddress}`)
     }
   }
+
   console.log("address",address);
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -44,7 +45,7 @@ const ClickOption = () => {
 
 
   const claimTokens = async () => {
-     let res = await diveContract.claimtokens(DIVE_CONTRACT_ADDRESS_RINKEBY,ethers.utils.parseEther(claimAmount.toString()),
+     const res = await diveContract.claimtokens(DIVE_CONTRACT_ADDRESS_RINKEBY,ethers.utils.parseEther(claimAmount.toString()),
      {gasLimit: 3000000, gasPrice: 30000000000 });
      const receipt = await res.wait();
      if (receipt.status === 1) {
@@ -52,7 +53,6 @@ const ClickOption = () => {
        notifySuccess('Tokens Claimed Successfully')
      }
      else {
-        console.log("Tokens claim failed");
         notifyError('Tokens Claim Failed')
      }
 
@@ -63,10 +63,9 @@ const ClickOption = () => {
     showModal( 
       {
         component: <CreateCommunity />,
-        type: modalType.normal,
+        type: modalType.fullscreen,
         onAction: () => {},
-        extraaInfo: {
-        }
+        extraaInfo: {}
       }
     )
   }
@@ -75,10 +74,7 @@ const ClickOption = () => {
   return (
     <div className='cursor-pointer'>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={toggleTheme}>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</div>
-      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={routeToUserProfile}>Visit Profile</div>
-      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={claimTokens} >Claim Tokens</div>
-      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={addToken} >Add Dive</div>
-      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow '>Edit Profile</div>
+      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={routeToUserProfile}>View Profile</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={createCommunity}>Create Community</div>
     </div>
   )

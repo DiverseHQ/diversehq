@@ -8,27 +8,27 @@ import { AiOutlineHeart } from 'react-icons/ai'
 import { FaHandSparkles } from 'react-icons/fa'
 TimeAgo.addDefaultLocale(en)
 
-const SingleComment = ({comment}) => {
-    const { isDesktop } = useDevice()
+const SingleComment = ({ comment }) => {
+  const { isDesktop } = useDevice()
   return (
     <>
-    {comment && 
+    {comment &&
     <div className='px-3 sm:px-5 w-full bg-s-bg my-6 sm:rounded-3xl py-3'>
         <div className='flex flex-row items-center justify-between'>
             <div className='flex flex-row items-center'>
-                <Image src={comment.authorDetails.profileImageUrl ? comment.authorDetails.profileImageUrl : "/gradient.jpg"} width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} className='rounded-full mr-2' />
-                <div className='ml-2 font-bold text-xs sm:text-xl'>{comment.authorDetails.name ? comment.authorDetails.name : comment.author.substring(0,6) + "..."}</div>
+                <Image src={comment.authorDetails.profileImageUrl ? comment.authorDetails.profileImageUrl : '/gradient.jpg'} width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} className='rounded-full mr-2' />
+                <div className='ml-2 font-bold text-xs sm:text-xl'>{comment.authorDetails.name ? comment.authorDetails.name : comment.author.substring(0, 6) + '...'}</div>
             </div>
             <div className='flex flex-row'>
-            <AiOutlineHeart className='hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn'  />
+            <AiOutlineHeart className='hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn' />
             <div className='mr-3'>{comment.likes.length}</div>
             <FaHandSparkles className='w-5 h-5 sm:w-7 sm:h-7 mr-1.5' />
             <div className='mr-3'>{comment.appreciateAmount}</div>
-            <div className='text-xs sm:text-base'><ReactTimeAgo  date={new Date(comment.createdAt)} locale="en-US"/></div>
+            <div className='text-xs sm:text-base'><ReactTimeAgo date={new Date(comment.createdAt)} locale="en-US"/></div>
             </div>
         </div>
-      
-            <div className='mt-3'>
+
+           <div className='mt-3'>
                 {comment.content}
                 </div>
     </div>}

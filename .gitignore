@@ -33,3 +33,5 @@ package-lock.json
 .vercel
 
 .env
+.env.local
+.env.development

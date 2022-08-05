@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../Common/WalletContext'
 import apiEndpoint from '../../api/ApiEndpoint'
-import { AiOutlineCamera } from 'react-icons/ai'
+import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import { postCreateCommunity } from '../../api/community'
+import PopUpWrapper from '../Common/PopUpWrapper'
 
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState('')
@@ -16,7 +18,7 @@ const CreateCommunity = () => {
   const [headerValue, setHeaderValue] = useState(null)
   const [pfpValue, setPfpValue] = useState(null)
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
-  const { showModal, hideModal } = usePopUpModal();
+  const { showModal, hideModal } = usePopUpModal()
 
   function hasWhiteSpace (s) {
     return /\s/g.test(s)
@@ -53,7 +55,7 @@ const CreateCommunity = () => {
   }
 
   const handleCreateCommunity = async (pfpURL, bannerURL) => {
-    const postData = {
+    const communityData = {
       name: communityName,
       description: communityDescription,
       bannerImageUrl: bannerURL,
@@ -61,14 +63,7 @@ const CreateCommunity = () => {
       creator: wallet
     }
     try {
-      await fetch(`${apiEndpoint}/community`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token
-        },
-        body: JSON.stringify(postData)
-      }).then(res => res.json()).then(res => {
+      await postCreateCommunity(token, communityData).then(res => {
         console.log(res)
         notifySuccess('Community created successfully')
       })
@@ -79,7 +74,10 @@ const CreateCommunity = () => {
 
   const handleHeaderChange = (event) => {
     const filePicked = event.target.files[0]
+    console.log("filePicked",filePicked)
+    if(!filePicked) return
     setCommunityBanner(filePicked)
+    console.log("filePicked",filePicked);
     setHeaderValue(URL.createObjectURL(filePicked))
   }
 
@@ -89,75 +87,45 @@ const CreateCommunity = () => {
     setPfpValue(URL.createObjectURL(filePicked))
   }
 
+  const removeHeader =(e) => {
+    e.preventDefault()
+    setHeaderValue(null)
+    setCommunityBanner(null)
+  }
+
   return (
     <>
-            <div className="flex justify-center items-center overflow-y-auto overflow-x-hidden  top-0 right-0 left-0 w-full md:inset-0 h-modal md:h-full sm:h-screen">
-    <div className="relative p-4 w-full max-w-xl h-full md:h-auto">
-        <div className="relative bg-p-bg rounded-lg shadow dark:bg-gray-700">
-        <div className="flex flex-row justify-between p-4 items-start rounded-t">
+    <PopUpWrapper title="Create Community" onClick={handleSubmit} label="CREATE" loading={loading} >
+      <div>
+        <label htmlFor='communityHeader'><div className="flex h-44 border-y border-s-text items-center justify-center">
+          {headerValue && <img className="inset-0 object-cover h-full w-full " src={headerValue} alt="Header"/> }
+          <div className='absolute flex flex-row'>
+            <label htmlFor="communityHeader"><AiOutlineCamera className="h-8 w-8" /></label>
+            {headerValue && <AiOutlineClose className="h-8 w-8 ml-4" onClick={removeHeader}/>}
+          </div>
+        </div></label>
 
-                <button type="button" className="text-gray-400 bg-transparent hover:text-s-text rounded-lg text-sm p-1.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={(e) => hideModal()}>
+<div className="flex relative border h-24 w-24 border-bg-p rounded-full bottom-10 ml-3 items-center justify-center">
 
-                    <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+ {
 
-                </button>
+ communityPfp && (
 
-                <button className="text-p-text bg-blue-500 hover:bg-blue-700 font-bold uppercase rounded-full shadow hover:shadow-lg outline-none focus:outline-none text-base px-3.5 py-1.5" type="button" onClick={handleSubmit} disabled={loading} >
-                 {loading ? 'Loading ...' : 'Post'}
-                </button>
+ <img className="inset-0 h-full w-full rounded-full" src={pfpValue} alt="PFP"/>
 
-            </div>
+)
 
-  
+}
 
-            {/* <!-- Modal body --> */}
+<button className="absolute p-1"><label htmlFor="communityPfp"><AiOutlineCamera className="h-4 w-4" /></label></button>
 
-            <div >
-
-              <div className="flex h-44 border border-bg-p items-center justify-center">
-
-                {
-
-                  headerValue && (
-
-                    <img className="inset-0 object-cover h-full w-full " src={headerValue} alt="Header"/>
-
-                  )
-
-                }
-
-                <button className="absolute p-1 "><label htmlFor="communityHeader"><AiOutlineCamera className="h-8 w-8" /></label></button>
-
-              </div>
-
-              <div className="flex relative border h-24 w-24 border-bg-p rounded-full bottom-10 ml-3 items-center justify-center">
-
-                {
-
-                  communityPfp && (
-
-                    <img className="inset-0 h-full w-full rounded-full" src={pfpValue} alt="PFP"/>
-
-                  )
-
-                }
-
-                <button className="absolute p-1"><label htmlFor="communityPfp"><AiOutlineCamera className="h-4 w-4" /></label></button>
-
-              </div>
-
-            <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Name" onChange={(e) => setCommunityName(e.target.value)} required />
-
-            <textarea type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Description" onChange={(e) => setCommunityDescription(e.target.value)} />
-
-            <input type="file" id="communityPfp" placeholder="Commmunity Name" onChange={handlePfpChange} required hidden/>
-
-            <input type="file" id="communityHeader" onChange={handleHeaderChange} hidden />
-            </div>
-            </div>
-            </div>
-            </div>
-  
+</div>
+ <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Name" onChange={(e) => setCommunityName(e.target.value)} required />
+ <textarea type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Description" onChange={(e) => setCommunityDescription(e.target.value)} />
+<input type="file" id="communityPfp" placeholder="Commmunity Name" onChange={handlePfpChange} required hidden/>
+<input type="file" id="communityHeader" onChange={handleHeaderChange} hidden />
+</div>
+            </PopUpWrapper>
     </>
   )
 }

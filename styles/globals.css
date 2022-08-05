@@ -79,7 +79,7 @@
 
   --border-primary: #c4c4c4;
 
-  --background-pop: #ffffff0a;
+  --background-pop: #00000038;
   }
   
   [data-theme='dark'] {
@@ -94,6 +94,6 @@
 
     --border-primary: #464646;
     
-    --background-pop: #ffffff0a;
+    --background-pop: #ffffff38;
   }
   

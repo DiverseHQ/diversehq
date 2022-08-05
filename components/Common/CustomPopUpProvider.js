@@ -1,18 +1,15 @@
-import { useContext, useEffect, useState } from 'react'
-import React from 'react'
-import { createContext } from 'react'
+import React, { useContext, useEffect, useState , createContext } from 'react'
+
+
 export const CustomPopUpModalContext = createContext([])
 export const modalType = {
   normal: 'NORMAL',
   large: 'LARGE',
   medium: 'MEDIUM',
-  customposition: 'CUSTOM_POSITION'
+  customposition: 'CUSTOM_POSITION',
+  fullscreen: 'FULLSCREEN'
 }
 const Modal = ({ type, show, onBackBtnClick, component, top, left, right, bottom }) => {
-  console.log("top", top)
-  console.log("left", left)
-  console.log("right", right)
-  console.log("bottom", bottom)
   const [visiblity, setVisiblity] = useState(show)
   let TimeOut
   useEffect(() => {
@@ -28,10 +25,10 @@ const Modal = ({ type, show, onBackBtnClick, component, top, left, right, bottom
     }
   }, [show])
 
-  if (visiblity)
+  if (visiblity )
     return (
       <div className='flex flex-row justify-center items-center fixed z-50 no-scrollbar w-full h-full'>
-        <div className='flex justify-center items-center relative w-full h-full p-6'>
+        <div className='flex justify-center items-center relative w-full h-full'>
           <div
             className={`w-full h-full absolute ${type != modalType.customposition && 'bg-t-bg'} z-0`}
             onClick={onBackBtnClick}
@@ -39,14 +36,13 @@ const Modal = ({ type, show, onBackBtnClick, component, top, left, right, bottom
           {type != modalType.customposition && (
             <div
               key={show ? 'enter-animation' : ' exit-animation '}
-              className={`flex h-fit max-h-full  max-w-[90%]  overflow-y-scroll no-scrollbar ${
-                type == modalType.large ? 'w-[85vw]' : type == modalType.medium ? 'w-[60vw]' : ''
-              } ${show ? 'enter-animation' : 'exit-animation'} relative`}
+              className={`flex overflow-y-scroll no-scrollbar ${type === modalType.fullscreen && ''} ${show ? 'enter-animation' : 'exit-animation'} relative`}
               style={{ zIndex: 1 }}
             >
               {component}
             </div>
           )}
+          
           {type == modalType.customposition && (
             <div
               className={`flex h-fit absolute z-10 ${show ? 'enter-fade-animation' : 'exit-fade-animation '}`}
