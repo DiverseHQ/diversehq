@@ -10,7 +10,7 @@ import { ethers } from 'ethers'
 import { useNotify } from '../Common/NotifyContext'
 import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config'
 
-const claimAmount = 50;
+const claimAmount = 10;
 
 const ClickOption = () => {
   const router = useRouter()
@@ -43,7 +43,7 @@ const ClickOption = () => {
 
 
   const claimTokens = async () => {
-     const res = await diveContract.claimtokens(DIVE_CONTRACT_ADDRESS_RINKEBY,ethers.utils.parseEther(claimAmount.toString()),
+     const res = await diveContract.claimTokens(DIVE_CONTRACT_ADDRESS_MUMBAI,ethers.utils.parseEther(claimAmount.toString()),
      {gasLimit: 3000000, gasPrice: 30000000000 });
      const receipt = await res.wait();
      if (receipt.status === 1) {
@@ -74,6 +74,7 @@ const ClickOption = () => {
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={toggleTheme}>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={routeToUserProfile}>View Profile</div>
       <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={createCommunity}>Create Community</div>
+      <div className='px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow ' onClick={claimTokens}>Claim {claimAmount} Tokens</div>
     </div>
   )
 }
