@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React from 'react'
 import { useProfile } from '../Common/WalletContext'
 // import MobileClickOptions from './MobileClickOptions'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -11,7 +11,7 @@ const MobileTopNav = () => {
   // const [showOptions, setShowOptions] = useState(false)
   const router = useRouter()
   const { user } = useProfile()
-  const { showModal, hideModal } = usePopUpModal();
+  const { showModal } = usePopUpModal();
   let prevScrollpos = window.pageYOffset
 
   if (window) {

@@ -10,6 +10,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 function MyApp ({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
   const { isDesktop } = useDevice()
+  console.log("isDesktop", isDesktop)
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
   return (

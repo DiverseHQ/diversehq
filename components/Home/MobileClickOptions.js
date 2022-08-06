@@ -3,9 +3,6 @@ import React from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useTheme } from 'next-themes'
 import { useAccount } from 'wagmi'
-import {
-  useConnectModal
-} from '@rainbow-me/rainbowkit';
 const MobileClickOptions = () => {
   const router = useRouter()
   const { user } = useProfile()

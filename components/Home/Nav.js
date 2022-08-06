@@ -1,7 +1,6 @@
-import { useState, useContext, useEffect } from 'react'
+
 import { useProfile } from '../Common/WalletContext'
-import Router, { useRouter } from 'next/router'
-import { useTheme } from 'next-themes'
+import  { useRouter } from 'next/router'
 import CreatePostButton from './CreatePostButton'
 import Image from 'next/image'
 import { MdOutlineExplore } from 'react-icons/md'
@@ -10,9 +9,8 @@ import ClickOption from './ClickOption'
 
 const Nav = () => {
   const { user } = useProfile()
-  const { theme, setTheme } = useTheme()
   const router = useRouter()
-  const { showModal, hideModal } = usePopUpModal();
+  const { showModal} = usePopUpModal();
   
   const routeToExplore = () => {
     router.push('/explore')

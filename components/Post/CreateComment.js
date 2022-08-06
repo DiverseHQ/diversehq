@@ -13,7 +13,7 @@ import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config'
 
 
 const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
-  const { user, token, address } = useProfile()
+  const { user, token  } = useProfile()
   const commentRef = useRef()
   const appreciateAmountRef = useRef()
   const { isDesktop } = useDevice()
@@ -35,7 +35,6 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
     try{
       console.log("authroAddress",authorAddress)
       console.log("appreciateAddress",appreciateAmount)
-      const args = [authorAddress,authorAddress]
       if(!diveContract) return;
       const res = await diveContract.transfer(authorAddress,appreciateAmount, 
         {gasLimit: 3000000, gasPrice: 30000000000}

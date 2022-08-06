@@ -1,17 +1,18 @@
-import { Router, useRouter } from 'next/router'
+import {  useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { putLikeOnPost } from '../../api/post'
-import { BsShare, BsShareFill } from 'react-icons/bs'
+import { BsShareFill } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
 import useDevice from '../Common/useDevice'
 
 const PostCard = ({ post }) => {
   const router = useRouter()
-  const createdAt = new Date(post.createdAt)
+  // const createdAt = new Date(post.createdAt)
+  // eslint-disable-next-line
   const [loaded, setLoaded] = useState(false)
   const { user, token } = useProfile()
   const [liked, setLiked] = useState(false)
@@ -99,6 +100,7 @@ const PostCard = ({ post }) => {
         </div>
         </div>
        <div onClick={routeToPostPage}>
+        {/* eslint-disable-next-line */}
         {post.postImageUrl ? (<img src={post.postImageUrl} className="w-full" onLoad={() => { setLoaded(true) }} />) : (<video src={post.postVideoUrl} onLoad={() => { setLoaded(true) }} autoPlay loop controls />)} 
        </div>
 
