@@ -1,14 +1,10 @@
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { AiFillPlusCircle } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
-import { useRouter } from 'next/router'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 
 const CreatePostButton = () => {
-  const router = useRouter()
-  const { query } = router  
-  const { showModal, hideModal } = usePopUpModal();
+  const { showModal } = usePopUpModal();
 
   const creatPost = () => {
         // setShowOptions(!showOptions)

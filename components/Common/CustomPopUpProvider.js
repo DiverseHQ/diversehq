@@ -30,10 +30,10 @@ const Modal = ({ type, show, onBackBtnClick, component, top, left, right, bottom
       <div className='flex flex-row justify-center items-center fixed z-50 no-scrollbar w-full h-full'>
         <div className='flex justify-center items-center relative w-full h-full'>
           <div
-            className={`w-full h-full absolute ${type != modalType.customposition && 'bg-t-bg'} z-0`}
+            className={`w-full h-full absolute ${type !== modalType.customposition && 'bg-t-bg'} z-0`}
             onClick={onBackBtnClick}
           ></div>
-          {type != modalType.customposition && (
+          {type !== modalType.customposition && (
             <div
               key={show ? 'enter-animation' : ' exit-animation '}
               className={`flex overflow-y-scroll no-scrollbar ${type === modalType.fullscreen && ''} ${show ? 'enter-animation' : 'exit-animation'} relative`}
@@ -43,7 +43,7 @@ const Modal = ({ type, show, onBackBtnClick, component, top, left, right, bottom
             </div>
           )}
           
-          {type == modalType.customposition && (
+          {type === modalType.customposition && (
             <div
               className={`flex h-fit absolute z-10 ${show ? 'enter-fade-animation' : 'exit-fade-animation '}`}
               style={{left, bottom,top, right  }}

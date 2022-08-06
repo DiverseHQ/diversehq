@@ -10,7 +10,7 @@ export const WalletProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const provider = useProvider()
   const { data: signer, isError, isLoading } = useSigner()
-  const { address, isConnecting, isDisconnected } = useAccount({
+  const { address,isDisconnected } = useAccount({
     onConnect ({ address, connector, isReconnected }) {
       console.log('onConnect', address, connector, isReconnected)
     }

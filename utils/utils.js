@@ -2,7 +2,7 @@ import { DIVE_CONTRACT_ADDRESS_MUMBAI } from "./config";
 
 export const addToken = async() =>{
     try {
-       const wasAdded = await ethereum.request({
+       const wasAdded = await window.ethereum.request({
           method: 'wallet_watchAsset',
           params: {
             type: 'ERC20', 

@@ -1,11 +1,9 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { FaRegCopy } from 'react-icons/fa'
-import apiEndpoint from '../../api/ApiEndpoint'
 import { getUserInfo, getUserPosts } from '../../api/user'
 import { useNotify } from '../../components/Common/NotifyContext'
-import PostCard from '../../components/Post/PostCard'
 import PostsColumn from '../../components/Post/PostsColumn'
 import { useSigner  } from 'wagmi'
 import {ethers} from "ethers"
@@ -17,8 +15,6 @@ const Profile = () => {
   const [user, setUser] = useState(null)
   const [hasMore, setHasMore] = useState(true)
   const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [playing, setPlaying] = useState(false)
   const { notifyInfo } = useNotify()
   const { data: signer } = useSigner();
   const [dive,setDive] = useState('')
@@ -80,6 +76,7 @@ const Profile = () => {
    <div className='pt-6'>
     {user && 
                 <div className='relative'>
+                  {/* eslint-disable-next-line */}
                 <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={user.bannerImageUrl ? user.bannerImageUrl : "/gradient.jpg"} />
                 <div className='absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full'>
                   <Image width="70px" height="70px" className="rounded-full bg-s-bg" src={user?.profileImageUrl ? user?.profileImageUrl : "/gradient.jpg"} /> 

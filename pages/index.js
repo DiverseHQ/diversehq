@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { getAllPosts } from '../api/post'
 import PostsColumn from '../components/Post/PostsColumn'
 
-import DiveToken from "../utils/DiveToken.json";
-
 
 const limit = 3
 const Home = () => {

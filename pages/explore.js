@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import apiEndpoint from '../api/ApiEndpoint'
 import { getAllCommunities } from '../api/community'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import CommunityInfoCard from '../components/Community/CommunityInfoCard'
@@ -8,7 +7,6 @@ import { COMMUNITY_LIMIT } from '../utils/config'
 const explore = () => {
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
-  const [loading, setLoading] = useState(true)
 
   const getMoreCommunities = async () => {
     if(!hasMore) return

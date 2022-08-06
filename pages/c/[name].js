@@ -1,11 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import apiEndpoint from '../../api/ApiEndpoint'
-import Image from 'next/image'
 import PostsColumn from '../../components/Post/PostsColumn'
-import { useNotify } from '../../components/Common/NotifyContext'
 import { useProfile } from '../../components/Common/WalletContext'
-import { getCommunityInfo, getPostOfCommunity, putJoinCommunity, putLeaveCommunity } from '../../api/community'
+import { getPostOfCommunity} from '../../api/community'
 import CommunityInfoCard from '../../components/Community/CommunityInfoCard'
 import { POST_LIMIT } from '../../utils/config'
 

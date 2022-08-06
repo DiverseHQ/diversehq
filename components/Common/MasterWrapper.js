@@ -4,20 +4,17 @@ import { NotifyProvider } from './NotifyContext'
 import { WalletProvider } from './WalletContext'
 import RainbowKitWrapper from './RainbowKitWrapper'
 import CustomPopUpModalProvider from './CustomPopUpProvider'
-// import { BiconomyProvider } from './BiconomyProvider'
 
 const MasterWrapper = ({ children }) => {
   return (
     <RainbowKitWrapper>
       <WalletProvider>
           <NotifyProvider>
-            {/* <BiconomyProvider> */}
               <ThemeProvider defaultTheme = 'system'>
                 <CustomPopUpModalProvider>
                   {children}
                 </CustomPopUpModalProvider>
               </ThemeProvider>
-              {/* </BiconomyProvider> */}
           </NotifyProvider>
       </WalletProvider>
     </RainbowKitWrapper>

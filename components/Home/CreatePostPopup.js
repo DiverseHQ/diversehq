@@ -1,24 +1,24 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
+import React, { useState,  useEffect } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../Common/WalletContext'
 import apiEndpoint from '../../api/ApiEndpoint'
 import { useNotify } from "../Common/NotifyContext";
 import { useRouter } from 'next/router';
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import { usePopUpModal } from '../Common/CustomPopUpProvider'
+import Image from 'next/image'
 
 const CreatePostPopup = ({props}) => {
   const [files, setFiles] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState([])
-  const { user, token,connectWallet, disconnectWallet, connecting } = useProfile()
+  const { user, token,connectWallet, connecting } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([]);
-  const [option, setOption] = useState(null)
   const [isDropDown, setIsDropDown] = useState(false)
   const [imageValue, setImageValue] = useState(null);
-  const { notifyInfo, notifyError, notifySuccess } = useNotify()
+  const { notifyError, notifySuccess } = useNotify()
   const router = useRouter()
-  const { showModal, hideModal } = usePopUpModal();
+  const { hideModal } = usePopUpModal();
   const [showCommunity, setShowCommunity] = useState({name: '', image: ''})
 
   
@@ -120,13 +120,11 @@ const CreatePostPopup = ({props}) => {
       }
     }
   }
-  const handleInputChange = value => {
-    setValue(value)
-  }
+
 
   const handleDropDown = (id,name,logoImageUrl) => {
     setCommunityId(id);
-    setShowCommunity({name: name, image: logoImageUrl})
+    setShowCommunity({name, image: logoImageUrl})
     setIsDropDown(!isDropDown);
   }
  
@@ -158,7 +156,9 @@ const CreatePostPopup = ({props}) => {
             <div key={community._id} onClick={() => {
               handleDropDown(community._id,community.name,community.logoImageUrl)
             }} className="flex flex-row items-center cursor-pointer" id={community._id} logoImageUrl={community.logoImageUrl}>
-              <img src={community.logoImageUrl }className="border border-p-bg rounded-full w-12 h-12" ></img>
+              <div>
+                <Image src={community.logoImageUrl} className="rounded-full border border-p-bg" width={50} height={50} />
+              </div>
               <h3 className="text-p-text mx-1 text-base " id={community._id} logoImageUrl={community.logoImageUrl}>{community.name}</h3>
             </div>
           )
@@ -183,12 +183,12 @@ const CreatePostPopup = ({props}) => {
   }
 
   const showAddedFile = () =>{
-    //check if the file is image or video and show it
+    // check if the file is image or video and show it
     if(files){
       if(files.type.split('/')[0] === 'image'){
         return(
           <div className="flex flex-col items-center justify-center">
-            <img src={imageValue} className="h-64 w-96" alt="Your amazing post"></img>
+            <Image src={imageValue} width={384} height={256}  alt="Your amazing post"/>
             <button onClick={removeImage} className="bg-p-bg rounded-full px-2 py-1 text-white">Remove</button>
           </div>
         )
@@ -206,7 +206,7 @@ const CreatePostPopup = ({props}) => {
 
   const PopUpModal = () =>{
     return(
-      //simple modal
+      // simple modal
       
       <div className="flex justify-center items-center overflow-y-auto overflow-x-hidden  top-0 right-0 left-0 w-full md:inset-0 h-modal md:h-full sm:h-screen">
     <div className="relative p-4 w-full max-w-xl h-full md:h-auto">
@@ -224,7 +224,7 @@ const CreatePostPopup = ({props}) => {
                 ? (
                     <button className="text-blue-500 p-1" onClick={(e) => setIsDropDown(!isDropDown)} >{
                     showCommunity.name ? (<div className="flex justify-center items-center p-0.5"> 
-                    <img src={showCommunity.image} className="border border-p-bg rounded-full w-8 h-8"></img>
+                    <Image src={showCommunity.image} className="border border-p-bg rounded-full" width={32} height={32} />
                     <h1>{showCommunity.name}</h1>
                     </div>) : (<div>Select Community</div>) }</button>
                   )

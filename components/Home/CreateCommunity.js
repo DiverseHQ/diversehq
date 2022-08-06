@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../Common/WalletContext'
-import apiEndpoint from '../../api/ApiEndpoint'
 import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
 import { useNotify } from '../Common/NotifyContext'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { postCreateCommunity } from '../../api/community'
 import PopUpWrapper from '../Common/PopUpWrapper'
+import Image from 'next/image'
 
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState('')
@@ -17,12 +16,11 @@ const CreateCommunity = () => {
   const { wallet, token } = useProfile()
   const [headerValue, setHeaderValue] = useState(null)
   const [pfpValue, setPfpValue] = useState(null)
-  const { notifyInfo, notifyError, notifySuccess } = useNotify()
-  const { showModal, hideModal } = usePopUpModal()
+  const { notifyError, notifySuccess } = useNotify()
 
-  function hasWhiteSpace (s) {
-    return /\s/g.test(s)
-  }
+  // function hasWhiteSpace (s) {
+  //   return /\s/g.test(s)
+  // }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -83,6 +81,7 @@ const CreateCommunity = () => {
 
   const handlePfpChange = (event) => {
     const filePicked = event.target.files[0]
+    if(!filePicked) return
     setCommunityPfp(filePicked)
     setPfpValue(URL.createObjectURL(filePicked))
   }
@@ -98,26 +97,19 @@ const CreateCommunity = () => {
     <PopUpWrapper title="Create Community" onClick={handleSubmit} label="CREATE" loading={loading} >
       <div>
         <label htmlFor='communityHeader'><div className="flex h-44 border-y border-s-text items-center justify-center">
+         {/* eslint-disable-next-line */}
           {headerValue && <img className="inset-0 object-cover h-full w-full " src={headerValue} alt="Header"/> }
           <div className='absolute flex flex-row'>
-            <label htmlFor="communityHeader"><AiOutlineCamera className="h-8 w-8" /></label>
-            {headerValue && <AiOutlineClose className="h-8 w-8 ml-4" onClick={removeHeader}/>}
+            <div className='bg-p-bg rounded-full p-2'><AiOutlineCamera className="h-8 w-8" /></div>
+            {headerValue && <div className='bg-p-bg rounded-full p-2  ml-4'><AiOutlineClose className="h-8 w-8" onClick={removeHeader}/></div>}
           </div>
         </div></label>
 
-<div className="flex relative border h-24 w-24 border-bg-p rounded-full bottom-10 ml-3 items-center justify-center">
+<div className="flex relative border h-24 w-24 border-s-text rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10">
 
- {
+ {communityPfp &&  <Image className="rounded-full" width={100} height={100} src={pfpValue} alt="PFP"/>}
 
- communityPfp && (
-
- <img className="inset-0 h-full w-full rounded-full" src={pfpValue} alt="PFP"/>
-
-)
-
-}
-
-<button className="absolute p-1"><label htmlFor="communityPfp"><AiOutlineCamera className="h-4 w-4" /></label></button>
+<button className="absolute p-1"><label htmlFor="communityPfp"><div className='bg-p-bg rounded-full p-2'><AiOutlineCamera className="h-8 w-8 " /></div></label></button>
 
 </div>
  <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Name" onChange={(e) => setCommunityName(e.target.value)} required />

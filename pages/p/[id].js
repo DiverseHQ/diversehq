@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import apiEndpoint from '../../api/ApiEndpoint'
 import { getSinglePostInfo } from '../../api/post'
 import CommentsSection from '../../components/Post/CommentsSection'
 import CreateComment from '../../components/Post/CreateComment'

@@ -64,6 +64,7 @@ const CommunityInfoCard = ({communityInfo, communityName}) => {
     <>
     {community && 
     <div className='relative'>
+      {/* eslint-disable-next-line */}
         <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={community.bannerImageUrl} />
         <div className='absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full'><Image width="70px" height="70px" className="rounded-full bg-s-bg" src={community.logoImageUrl} /> </div>
             <div className='flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl'>
