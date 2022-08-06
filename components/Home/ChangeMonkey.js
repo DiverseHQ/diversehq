@@ -1,8 +1,7 @@
 import { useProfile } from '../Common/WalletContext'
-import { useState, useContext } from 'react'
+import { useState} from 'react'
 import { Web3Storage } from 'web3.storage'
 import apiEndpoint from '../../api/ApiEndpoint'
-import { useAccount } from 'wagmi'
 const ChangeMonkey = () => {
   const [showModal, setShowModal] = useState(false)
   const [pfp, setPfp] = useState()
@@ -13,7 +12,7 @@ const ChangeMonkey = () => {
     event.preventDefault()
     console.log(name, pfp, bio)
     // change space to _ for all file in files
-    if (pfp.length != 1) {
+    if (pfp.length !== 1) {
       alert('Select only one file')
       return
     }
