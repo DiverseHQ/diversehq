@@ -21,3 +21,14 @@ export const putLikeOnPost = async (id, token) => {
     }
   })
 }
+
+export const postCreatePost = async (token, postData) => {
+  return await fetch(`${apiEndpoint}/post`,{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    body: JSON.stringify(postData)
+  }).then(r => r)
+}

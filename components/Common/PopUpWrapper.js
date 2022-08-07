@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { IoIosArrowRoundBack } from 'react-icons/io'
@@ -10,7 +11,7 @@ const PopUpWrapper = ({ title, onClick, label, loading, children }) => {
   console.log("label",label);
   return (
     <div className="bg-p-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full overflow-y-auto overflow-x-hidden ">
-        <div className="flex flex-row justify-between items-center pb-8 px-4">
+        <div className="flex flex-row justify-between items-center pb-4 px-4">
           <div className='flex flex-row justify-center items-center'>
               {isDesktop && <AiOutlineClose className='text-s-text w-5 h-5  hover:text-p-text  items-center cursor-pointer' onClick={() => hideModal()}/>}
               {!isDesktop && <IoIosArrowRoundBack className='text-s-text w-7 h-7  hover:text-p-text  items-center cursor-pointer' onClick={() => hideModal()}/>}
@@ -19,9 +20,9 @@ const PopUpWrapper = ({ title, onClick, label, loading, children }) => {
                 {title}
             </div>
             </div>
-            <button className="text-p-text bg-p-btn px-3 py-1 font-bold uppercase rounded-full text-base" type="button" onClick={onClick} disabled={loading} >
-              {loading ? <div className='animate-spin'/> : label}
-            </button>
+            {!loading ? <button className="text-p-text bg-p-btn px-3 py-1 font-bold uppercase rounded-full text-base" type="button" onClick={onClick} disabled={loading} >
+              {label}
+            </button> : <Image src="/loading.svg" alt="loading" width={30} height={30} />}
         </div>
           {children}
       </div>

@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { postComment } from '../../api/comment'
-import Image from 'next/image'
-import useDevice from '../Common/useDevice'
 import { FiSend } from 'react-icons/fi'
 import {FaHandSparkles} from 'react-icons/fa'
 import { useSigner  } from 'wagmi'
@@ -16,7 +14,6 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
   const { user, token  } = useProfile()
   const commentRef = useRef()
   const appreciateAmountRef = useRef()
-  const { isDesktop } = useDevice()
   const { data: signer } = useSigner();
   const [diveContract,setDiveContract] = useState(null)
   const { notifyError, notifySuccess } = useNotify()
@@ -81,7 +78,7 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
             <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-3 sm:rounded-3xl ">
               <div className="flex flex-row justify-between items-center w-full">
                 <div className="flex flex-row items-center">
-                <Image src={user.profileImageUrl ? user.profileImageUrl : '/gradient.jpg'} width={isDesktop ? 30 : 25} height={isDesktop ? 30 : 25} className="rounded-full" />
+                <img src={user.profileImageUrl ? user.profileImageUrl : '/gradient.jpg'} className="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
                 <div className='ml-2 font-bold text-xs sm:text-xl'>{user.name ? user.name : user.walletAddress.substring(0, 6) + '...'}</div>
                 </div>
                 <div className='flex flex-row items-center justify-center'>

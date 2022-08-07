@@ -41,14 +41,14 @@ const Nav = () => {
     <div className="fixed top-0 left-24 pt-6 pb-14 flex flex-col justify-between items-center h-full">
         <div className="flex flex-col items-center">
           <div className='mb-7 hover:cursor-pointer' onClick={routeToHome}>
-          <Image src="/logo.png" width="45" height="45" className='bg-s-text rounded-full'/>
+          <Image src="/logo.png" width="45" height="45" className='rounded-full'/>
           </div>
         <MdOutlineExplore className="w-12 h-12 mb-7 hover:cursor-pointer" onClick={routeToExplore}/>
         <CreatePostButton />
 
         </div>
         <div className='flex-end hover:cursor-pointer' onClick={showMoreOptions}>
-          {user?.profileImageUrl && <Image src={user.profileImageUrl} width="48" height="48" className='rounded-full' />}
+          {user?.profileImageUrl && <img src={user.profileImageUrl} className='w-12 h-12 rounded-full' />}
           {user && !user.profileImageUrl && <Image src="/gradient.jpg" width="48" height="48" className='rounded-full' />}
           
         

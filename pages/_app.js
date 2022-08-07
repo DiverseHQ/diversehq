@@ -10,12 +10,11 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 function MyApp ({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
   const { isDesktop } = useDevice()
-  console.log("isDesktop", isDesktop)
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
   return (
     <MasterWrapper>
-      <div className="text-p-text bg-p-bg">
+      <div className="text-p-text bg-p-bg min-h-screen">
       {isDesktop && <div className=''>
         <Nav />
         <div className='max-w-[600px] ml-64 overflow-y-auto no-scrollbar h-full'>

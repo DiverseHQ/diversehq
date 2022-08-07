@@ -2,7 +2,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useProfile } from '../Common/WalletContext'
-// import MobileClickOptions from './MobileClickOptions'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider';
 import ClickOption from './ClickOption';
@@ -48,13 +47,12 @@ const MobileTopNav = () => {
     <>
     <div id='mobile-top-navbar' className='mobile-top-nav bg-p-bg border-b border-p-border flex flex-row items-center justify-between py-2.5 px-4 z-10'>
       <div className='flex flex-row items-center'>
-       {user && user.profileImageUrl && <Image src={user.profileImageUrl} width={30} height={30} className="rounded-full" onClick={handleOptionsClick} />}
+       {user && user.profileImageUrl && <img src={user.profileImageUrl} className="w-8 h-8 rounded-full" onClick={handleOptionsClick} />}
        {(!user || !user.profileImageUrl) && <Image src="/gradient.jpg" width={30} height={30} className="rounded-full"  />}
        <div className='pl-5 text-base font-bold tracking-wider' onClick={routeToHome}>Home</div>
        </div>
        <ConnectButton accountStatus="avatar" />
     </div>
-    {/* {showOptions && <MobileClickOptions />} */}
     </>
   )
 }

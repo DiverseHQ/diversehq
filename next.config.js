@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["dweb.link"],
+    domains: ["dweb.link","*.jpeg"],
   },
   webpack: (config) => {
     // this will override the experiments

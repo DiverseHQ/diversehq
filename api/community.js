@@ -50,5 +50,5 @@ export const postCreateCommunity = async (token, communityData) => {
       Authorization: token
     },
     body: JSON.stringify(communityData)
-  }).then(res => res.json())
+  }).then(res => res)
 }

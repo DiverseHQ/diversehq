@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../Common/WalletContext'
 import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
@@ -6,6 +6,10 @@ import { useNotify } from '../Common/NotifyContext'
 import { postCreateCommunity } from '../../api/community'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import Image from 'next/image'
+import FormTextInput from '../Common/UI/FormTextInput'
+import FormTextArea from '../Common/UI/FormTextArea'
+import { usePopUpModal } from '../Common/CustomPopUpProvider'
+import { useRouter } from 'next/router'
 
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState('')
@@ -17,6 +21,8 @@ const CreateCommunity = () => {
   const [headerValue, setHeaderValue] = useState(null)
   const [pfpValue, setPfpValue] = useState(null)
   const { notifyError, notifySuccess } = useNotify()
+  const { hideModal } = usePopUpModal();
+  const router = useRouter();
 
   // function hasWhiteSpace (s) {
   //   return /\s/g.test(s)
@@ -49,7 +55,6 @@ const CreateCommunity = () => {
     const Banner = `https://dweb.link/ipfs/${cid}/${newFiles[1].name}`
     console.log(Banner)
     await handleCreateCommunity(PFP, Banner)
-    setLoading(false)
   }
 
   const handleCreateCommunity = async (pfpURL, bannerURL) => {
@@ -61,13 +66,24 @@ const CreateCommunity = () => {
       creator: wallet
     }
     try {
-      await postCreateCommunity(token, communityData).then(res => {
+      await postCreateCommunity(token, communityData).then(async(res) => {
         console.log(res)
+        const resData = await res.json()
+        console.log(resData)
+        if(res.status !== 200){
+          const msg = resData.msg;
+          notifyError(msg)
+          setLoading(false)
+          return
+        }
         notifySuccess('Community created successfully')
+        router.push(`/c/${resData.name}`)
+        hideModal()
       })
     } catch (error) {
       console.log(error)
     }
+    setLoading(false)
   }
 
   const handleHeaderChange = (event) => {
@@ -92,31 +108,38 @@ const CreateCommunity = () => {
     setCommunityBanner(null)
   }
 
+  const onChangeCommunityName = useCallback((e) => {
+    setCommunityName(e.target.value)
+  },[])
+
+  const onChangeCommunityDescription = useCallback((e) => {
+    setCommunityDescription(e.target.value)
+  },[])
+
   return (
     <>
     <PopUpWrapper title="Create Community" onClick={handleSubmit} label="CREATE" loading={loading} >
       <div>
         <label htmlFor='communityHeader'><div className="flex h-44 border-y border-s-text items-center justify-center">
-         {/* eslint-disable-next-line */}
-          {headerValue && <img className="inset-0 object-cover h-full w-full " src={headerValue} alt="Header"/> }
-          <div className='absolute flex flex-row'>
-            <div className='bg-p-bg rounded-full p-2'><AiOutlineCamera className="h-8 w-8" /></div>
-            {headerValue && <div className='bg-p-bg rounded-full p-2  ml-4'><AiOutlineClose className="h-8 w-8" onClick={removeHeader}/></div>}
+          {/* eslint-disable-next-line */}
+            {headerValue && <img className="inset-0 object-cover h-full w-full " src={headerValue} alt="Header"/> }
+            <div className='absolute flex flex-row'>
+              <div className='bg-p-bg rounded-full p-2'><AiOutlineCamera className="h-8 w-8" /></div>
+              {headerValue && <div className='bg-p-bg rounded-full p-2  ml-4'><AiOutlineClose className="h-8 w-8" onClick={removeHeader}/></div>}
+            </div>
           </div>
-        </div></label>
+        </label>
 
-<div className="flex relative border h-24 w-24 border-s-text rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10">
+        <div className={`flex relative ${communityPfp ? "" : "border"} h-24 w-24 border-s-text rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}>
+          {communityPfp && <label htmlFor="communityPfp"> <Image className="rounded-full" width={100} height={100} src={pfpValue} alt="PFP"/></label>}
+          <div className="absolute"><label htmlFor='communityPfp'><div className='bg-p-bg rounded-full p-2'><AiOutlineCamera className="h-8 w-8 " /></div></label></div>
+        </div>
 
- {communityPfp &&  <Image className="rounded-full" width={100} height={100} src={pfpValue} alt="PFP"/>}
-
-<button className="absolute p-1"><label htmlFor="communityPfp"><div className='bg-p-bg rounded-full p-2'><AiOutlineCamera className="h-8 w-8 " /></div></label></button>
-
-</div>
- <input type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Name" onChange={(e) => setCommunityName(e.target.value)} required />
- <textarea type="text" className="w-full py-2 px-1 text-p-text mb-2 bg-p-bg border-none" placeholder="Commmunity Description" onChange={(e) => setCommunityDescription(e.target.value)} />
-<input type="file" id="communityPfp" placeholder="Commmunity Name" onChange={handlePfpChange} required hidden/>
-<input type="file" id="communityHeader" onChange={handleHeaderChange} hidden />
-</div>
+        <FormTextInput label="Name" placeholder="Community Name" value={communityName} onChange={onChangeCommunityName} required/>
+        <FormTextArea label="Description" placeholder="Community Description" value={communityDescription} onChange={onChangeCommunityDescription} required/>
+        <input type="file" id="communityPfp" placeholder="Commmunity Name" onChange={handlePfpChange} required hidden/>
+        <input type="file" id="communityHeader" onChange={handleHeaderChange} hidden />
+      </div>
             </PopUpWrapper>
     </>
   )

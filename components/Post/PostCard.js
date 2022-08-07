@@ -91,7 +91,7 @@ const PostCard = ({ post }) => {
               <div className='pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline'>{post.communityName}</div>
             </div>
             <div className='flex flex-row items-center' onClick={handleAuthorClicked}>
-              <Image src={post.authorAvatar ? post.authorAvatar : "/gradient.jpg"} className="rounded-full" width={isDesktop ? 30 : 26} height={isDesktop ? 30 : 26} />
+              <img src={post.authorAvatar ? post.authorAvatar : "/gradient.jpg"} className="rounded-full w-6 h-6 sm:w-8 sm:h-8"/>
               <div className='pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline'>{post.authorName ? post.authorName : post.author.slice(0, 6) + '...'}</div>
             </div>
         </div>

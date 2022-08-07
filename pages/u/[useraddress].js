@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { FaRegCopy } from 'react-icons/fa'
@@ -78,9 +77,8 @@ const Profile = () => {
                 <div className='relative'>
                   {/* eslint-disable-next-line */}
                 <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={user.bannerImageUrl ? user.bannerImageUrl : "/gradient.jpg"} />
-                <div className='absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full'>
-                  <Image width="70px" height="70px" className="rounded-full bg-s-bg" src={user?.profileImageUrl ? user?.profileImageUrl : "/gradient.jpg"} /> 
-                </div>
+                <img className="absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20" src={user?.profileImageUrl ? user?.profileImageUrl : "/gradient.jpg"} /> 
+                
                 <div className='flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl'>
                   <div className='flex flex-row items-center self-end'>
                   <div className="mr-1">
