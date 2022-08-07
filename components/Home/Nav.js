@@ -1,17 +1,19 @@
 
 import { useProfile } from '../Common/WalletContext'
 import  { useRouter } from 'next/router'
-import CreatePostButton from './CreatePostButton'
 import Image from 'next/image'
 import { MdOutlineExplore } from 'react-icons/md'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import ClickOption from './ClickOption'
+import { AiFillPlusCircle } from 'react-icons/ai'
+import CreatePostPopup from './CreatePostPopup'
+import { useNotify } from '../Common/NotifyContext'
 
 const Nav = () => {
   const { user } = useProfile()
   const router = useRouter()
   const { showModal} = usePopUpModal();
-  
+  const {notifyInfo} = useNotify()
   const routeToExplore = () => {
     router.push('/explore')
   }
@@ -35,6 +37,25 @@ const Nav = () => {
     )
   }
 
+  const creatPost = () => {
+    // setShowOptions(!showOptions)
+    if(!user){
+      notifyInfo('You might want to connect your wallet first')
+      return
+    }
+    showModal( 
+      {
+        component: <CreatePostPopup />,
+        type: modalType.normal,
+        onAction: () => {},
+        extraaInfo: {
+          
+        }
+      }
+    )
+  }
+
+
 
   return (
     <>
@@ -44,7 +65,7 @@ const Nav = () => {
           <Image src="/logo.png" width="45" height="45" className='rounded-full'/>
           </div>
         <MdOutlineExplore className="w-12 h-12 mb-7 hover:cursor-pointer" onClick={routeToExplore}/>
-        <CreatePostButton />
+        < AiFillPlusCircle className="w-12 h-12 mb-7 text-p-btn cursor-pointer" onClick={creatPost} />
 
         </div>
         <div className='flex-end hover:cursor-pointer' onClick={showMoreOptions}>

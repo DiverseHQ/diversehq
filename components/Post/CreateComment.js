@@ -93,8 +93,6 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
 
             </div>
         )}
-        {!user && !token && (
-            <div className="flex flex-row">Connect Wallet</div>)}
         </>
   )
 }

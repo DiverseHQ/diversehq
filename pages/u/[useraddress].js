@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { FaRegCopy } from 'react-icons/fa'
 import { getUserInfo, getUserPosts } from '../../api/user'
 import { useNotify } from '../../components/Common/NotifyContext'
@@ -64,8 +64,7 @@ const Profile = () => {
   const showPosts = async () => {
     try{
       if(!hasMore) return
-      console.log("post.length",posts.length)
-      const fetchedPosts = await getUserPosts(useraddress.toLowerCase(),POST_LIMIT, posts.length,"top")
+      const fetchedPosts = await getUserPosts(useraddress.toLowerCase(),POST_LIMIT, posts.length,"new")
       console.log('fetchedPosts', fetchedPosts)
       if(fetchedPosts.posts.length < POST_LIMIT){
         setHasMore(false)
@@ -118,7 +117,9 @@ const Profile = () => {
                   </div>
                   
                 </div>
-      {posts && <PostsColumn getMorePost={showPosts} hasMore={hasMore}  posts={posts} />}
+      {posts && <PostsColumn getMorePost={() => {
+        showPosts()
+      }} hasMore={hasMore}  posts={posts} />}
     
    </div>
   }

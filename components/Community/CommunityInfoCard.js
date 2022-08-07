@@ -34,6 +34,10 @@ const CommunityInfoCard = ({communityInfo, communityName}) => {
     }
   }
     const joinCommunity = async () => {
+      if(!user){
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
         try {
             await putJoinCommunity(community._id, token)
             notifyInfo('Joined 😍')
@@ -45,6 +49,10 @@ const CommunityInfoCard = ({communityInfo, communityName}) => {
     }
     
       const leaveCommunity = async () => {
+        if(!user){
+          notifyInfo('You might want to connect your wallet first')
+          return
+        }
         try {
           await putLeaveCommunity(community._id, token)
           notifyInfo('Left 😢')
