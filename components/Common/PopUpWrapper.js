@@ -5,10 +5,9 @@ import { IoIosArrowRoundBack } from 'react-icons/io'
 import { usePopUpModal } from './CustomPopUpProvider'
 import useDevice from './useDevice'
 
-const PopUpWrapper = ({ title, onClick, label, loading, children }) => {
+const PopUpWrapper = ({ title, onClick, label, loading, children, isDisabled }) => {
   const { hideModal } = usePopUpModal()
   const {isDesktop} = useDevice()
-  console.log("label",label);
   return (
     <div className="bg-p-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full overflow-y-auto overflow-x-hidden ">
         <div className="flex flex-row justify-between items-center pb-4 px-4">
@@ -20,7 +19,7 @@ const PopUpWrapper = ({ title, onClick, label, loading, children }) => {
                 {title}
             </div>
             </div>
-            {!loading ? <button className="text-p-text bg-p-btn px-3 py-1 font-bold uppercase rounded-full text-base" type="button" onClick={onClick} disabled={loading} >
+            {!loading ? <button className="text-p-text bg-p-btn px-3 py-1 font-bold uppercase rounded-full text-base" type="button" onClick={onClick} disabled={loading || isDisabled} >
               {label}
             </button> : <Image src="/loading.svg" alt="loading" width={30} height={30} />}
         </div>

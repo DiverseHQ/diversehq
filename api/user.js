@@ -25,3 +25,14 @@ export const getUserPosts = async (walletAddress,limit,skips,sortBy) => {
   }))
     .then(res => res.json())
 }
+
+export const putUpdateUser = async (token, profileData) => {
+  return await fetch(`${apiEndpoint}/user`,{
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    body: JSON.stringify(profileData)
+  }).then(r => r)
+}

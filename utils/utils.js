@@ -1,3 +1,4 @@
+import { Web3Storage } from "web3.storage";
 import { DIVE_CONTRACT_ADDRESS_MUMBAI } from "./config";
 
 export const addToken = async() =>{
@@ -23,4 +24,11 @@ export const addToken = async() =>{
       } catch (error) {
         console.log(error);
       }
+}
+
+export const uploadFileToIpfs = async (file) => {
+  const newFile = new File([file],file.name.replace(/\s/g, "_"),{type: file.type});
+  const storage = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB_STORAGE });
+  const cid = await storage.put([newFile]);
+  return `https://dweb.link/ipfs/${cid}/${newFile.name}`;
 }

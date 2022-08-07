@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react'
-import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../Common/WalletContext'
 import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
 import { useNotify } from '../Common/NotifyContext'
@@ -10,6 +9,7 @@ import FormTextInput from '../Common/UI/FormTextInput'
 import FormTextArea from '../Common/UI/FormTextArea'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useRouter } from 'next/router'
+import { uploadFileToIpfs } from '../../utils/utils'
 
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState('')
@@ -38,21 +38,8 @@ const CreateCommunity = () => {
       return
     }
     // change space to _ for all file in files
-    console.log(communityPfp, communityBanner)
-    // files[0].name = files[0].name.replace(/\s/g, "_");
-    const newFiles = [
-      new File([communityPfp], communityPfp.name.replace(/\s/g, '_'), { type: communityPfp.type }),
-      new File([communityBanner], communityBanner.name.replace(/\s/g, '_'), { type: communityBanner.type })
-    ]
-    // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
-    // console.log(communityPfp, communityBanner);
-    const token = process.env.NEXT_PUBLIC_WEB_STORAGE
-    const storage = new Web3Storage({ token })
-    const cid = await storage.put(newFiles)
-    console.log(cid)
-    const PFP = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
-    console.log(PFP)
-    const Banner = `https://dweb.link/ipfs/${cid}/${newFiles[1].name}`
+    const PFP = await uploadFileToIpfs(communityPfp);
+    const Banner = await uploadFileToIpfs(communityBanner);
     console.log(Banner)
     await handleCreateCommunity(PFP, Banner)
   }
