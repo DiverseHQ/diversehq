@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { FaRegCopy } from 'react-icons/fa'
 import { getUserInfo, getUserPosts } from '../../api/user'
 import { useNotify } from '../../components/Common/NotifyContext'
