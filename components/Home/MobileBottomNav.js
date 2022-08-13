@@ -15,7 +15,7 @@ const MobileBottomNav = () => {
     router.push('/explore')
   }
   const routeToNotifications = () => {
-    router.push('/notifications')
+    router.push('/notification')
   }
   const showCreatePostModal = () => {
     showModal(
