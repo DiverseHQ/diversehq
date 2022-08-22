@@ -8,12 +8,14 @@ import ClickOption from './ClickOption'
 import { AiFillPlusCircle } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
 import { useNotify } from '../Common/NotifyContext'
+import { useTheme } from 'next-themes'
 
 const Nav = () => {
   const { user } = useProfile()
   const router = useRouter()
   const { showModal} = usePopUpModal();
   const {notifyInfo} = useNotify()
+  const { theme, setTheme } = useTheme();
   const routeToExplore = () => {
     router.push('/explore')
   }
@@ -62,7 +64,7 @@ const Nav = () => {
     <div className="fixed top-0 left-24 pt-6 pb-14 flex flex-col justify-between items-center h-full">
         <div className="flex flex-col items-center">
           <div className='mb-7 hover:cursor-pointer' onClick={routeToHome}>
-          <Image src="/logo.png" width="45" height="45" className='rounded-full'/>
+          <Image src="/DiverseLogo.svg" width="45" height="45" className=''/>
           </div>
         <MdOutlineExplore className="w-12 h-12 mb-7 hover:cursor-pointer" onClick={routeToExplore}/>
         < AiFillPlusCircle className="w-12 h-12 mb-7 text-p-btn cursor-pointer" onClick={creatPost} />
