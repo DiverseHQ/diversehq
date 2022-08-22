@@ -27,7 +27,6 @@ export const addToken = async() =>{
 }
 
 export const uploadFileToIpfs = async (file) => {
-  console.log("process.env.NEXT_PUBLIC_WEB_STORAGE", process.env.NEXT_PUBLIC_WEB_STORAGE);
   const token = process.env.NEXT_PUBLIC_WEB_STORAGE;
   const newFile = new File([file],file.name.replace(/\s/g, "_"),{type: file.type});
   const storage = new Web3Storage({ token });
