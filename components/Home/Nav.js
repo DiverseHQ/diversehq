@@ -8,14 +8,12 @@ import ClickOption from './ClickOption'
 import { AiFillPlusCircle } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
 import { useNotify } from '../Common/NotifyContext'
-import { useTheme } from 'next-themes'
 
 const Nav = () => {
   const { user } = useProfile()
   const router = useRouter()
   const { showModal} = usePopUpModal();
   const {notifyInfo} = useNotify()
-  const { theme, setTheme } = useTheme();
   const routeToExplore = () => {
     router.push('/explore')
   }
