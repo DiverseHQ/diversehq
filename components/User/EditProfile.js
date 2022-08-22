@@ -60,6 +60,7 @@ const EditProfile = ({user, showUserInfo}) => {
 
         } catch(error){
             setLoading(false)
+            console.log(error)
             notifyError(error.message)
             
         }

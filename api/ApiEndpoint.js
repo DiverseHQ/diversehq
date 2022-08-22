@@ -1,4 +1,5 @@
 const mode = process.env.NODE_ENV
+// const mode = 'production'
 let apiEndpoint = ''
 switch (mode) {
   case 'development':
