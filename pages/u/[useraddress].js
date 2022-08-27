@@ -97,7 +97,7 @@ const Profile = () => {
                 <div className='flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl'>
                   <div className='flex flex-row items-center self-end'>
                     {user && user.walletAddress.toLowerCase() === useraddress.toLowerCase() && <div className='text-base text-p-text bg-p-btn px-2 mx-2 rounded-full cursor-pointer' onClick={handleEditProfile}>
-                      Edit Profile
+                      Edit
                       </div>}
                   <div className="mx-1">
                   <span className='text-s-text'>$DIVE: </span> 
