@@ -2,6 +2,7 @@ import { useProfile } from '../Common/WalletContext'
 import { useState} from 'react'
 import { Web3Storage } from 'web3.storage'
 import apiEndpoint from '../../api/ApiEndpoint'
+import { uploadFileToIpfs } from '../../utils/utils'
 const ChangeMonkey = () => {
   const [showModal, setShowModal] = useState(false)
   const [pfp, setPfp] = useState()
@@ -20,14 +21,7 @@ const ChangeMonkey = () => {
     const newFiles = [
       new File([pfp[0]], pfp[0].name.replace(/\s/g, '_'), { type: pfp[0].type })
     ]
-    // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
-    // console.log(communityPfp, communityBanner);
-    const token = process.env.NEXT_PUBLIC_WEB_STORAGE
-    const storage = new Web3Storage({ token })
-    const cid = await storage.put(newFiles)
-    console.log(cid)
-    const PFP = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
-    console.log(PFP)
+    const PFP = await uploadFileToIpfs(newFiles)
     await handleProfile(PFP)
     setShowModal(false)
   }
@@ -57,7 +51,7 @@ const ChangeMonkey = () => {
   return (
     <div>
         <div className="pr-4">
-        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200"onClick={() => setShowModal(true)} type="button">
+        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={() => setShowModal(true)} type="button">
         Change Monkey
         </button>
         </div>

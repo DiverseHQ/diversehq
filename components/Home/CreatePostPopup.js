@@ -10,6 +10,7 @@ import { postCreatePost } from '../../api/post';
 import PopUpWrapper from '../Common/PopUpWrapper';
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import FormTextInput from '../Common/UI/FormTextInput';
+import { uploadFileToIpfs } from '../../utils/utils';
 
 const CreatePostPopup = ({props}) => {
   const [files, setFiles] = useState(null)
@@ -62,21 +63,12 @@ const CreatePostPopup = ({props}) => {
         new File([files],files.name.replace(/\s/g, "_"),{type: files.type}),
       ]
       
-      // const newfiles = files.map(file => file.name.replace(/\s/g, "_"));
-      // console.log(files[0].type.split('/')[0] === 'image')
-      // console.log(files[0].type.split('/')[0] === 'video')
-      const token = process.env.NEXT_PUBLIC_WEB_STORAGE
-      const storage = new Web3Storage({ token })
       if (files.type.split('/')[0] === 'image') {
-        const cid = await storage.put(newFiles)
-        console.log(cid)
-        const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+        const Post = await uploadFileToIpfs(newFiles)
         handleCreatePost('image',Post)
       }
       if (files.type.split('/')[0] === 'video') {
-        const cid = await storage.put(newFiles)
-        console.log(cid)
-        const Post = `https://dweb.link/ipfs/${cid}/${newFiles[0].name}`
+        const Post = await uploadFileToIpfs(newFiles)
         handleCreatePost('video',Post)
       }
     }
