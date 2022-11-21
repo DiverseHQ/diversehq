@@ -10,8 +10,12 @@ export const getPostOfCommunity = async (communityName, limit, skips, sortBy) =>
 }
 
 export const getCommunityInfo = async (name) => {
-  return await fetch(`${apiEndpoint}/community/communityInfoUsingName/${name}`)
-    .then(res => res.json())
+  try{
+    return await fetch(`${apiEndpoint}/community/communityInfoUsingName/${name}`)
+      .then(res => res.json())
+  }catch(error){
+    console.log(error)
+  }
 }
 
 export const putJoinCommunity = async (communityId, token) => {
@@ -35,11 +39,17 @@ export const putLeaveCommunity = async (communityId, token) => {
 }
 
 export const getAllCommunities = async (limit, skips, sortBy) => {
-  return await fetch(`${apiEndpoint}/community/getAllCommunities?` + new URLSearchParams({
-    limit,
-    skips,
-    sortBy
-  })).then(res => res.json())
+  try{
+
+    return await fetch(`${apiEndpoint}/community/getAllCommunities?` + new URLSearchParams({
+      limit,
+      skips,
+      sortBy
+    })).then(res => res.json())
+  }catch(error){
+    console.log(error)
+  }
+  
 }
 
 export const postCreateCommunity = async (token, communityData) => {

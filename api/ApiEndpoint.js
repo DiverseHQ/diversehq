@@ -1,4 +1,4 @@
-const mode = process.env.NODE_ENV
+const mode = process.env.NEXT_PUBLIC_NODE_MODE;
 // const mode = 'production'
 let apiEndpoint = ''
 switch (mode) {
