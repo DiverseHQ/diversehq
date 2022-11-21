@@ -1,6 +1,7 @@
 import apiEndpoint from "./ApiEndpoint"
+import { CommentType } from "../utils/types"
 
-export const postComment = async (token,content, postId, appreciateAmount) => {
+export const postComment = async (token: string,content: string, postId: string, appreciateAmount: number):Promise<CommentType> => {
     return await fetch(`${apiEndpoint}/comment`,{
         method: 'POST',
         headers: {

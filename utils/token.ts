@@ -1,9 +1,9 @@
 
-export const getLocalToken = ():string => {
+export const getLocalToken = ():string | null => {
   return localStorage.getItem('token')
 }
 
-export const setLocalToken = (token: string):string => {
+export const setLocalToken = (token: string): string | null => {
   localStorage.setItem('token', token)
   return localStorage.getItem('token')
 }

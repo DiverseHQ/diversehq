@@ -1,19 +1,27 @@
 import apiEndpoint from './ApiEndpoint'
 
-export const getPostOfCommunity = async (communityName, limit, skips, sortBy) => {
-  return await fetch(`${apiEndpoint}/post/getPostsOfCommunity/${communityName}?` + new URLSearchParams({
-    limit,
-    skips,
-    sortBy
-  }))
-    .then(res => res.json())
+export const getPostOfCommunity = async (
+  communityName,
+  limit,
+  skips,
+  sortBy
+) => {
+  return await fetch(
+    `${apiEndpoint}/post/getPostsOfCommunity/${communityName}?` +
+      new URLSearchParams({
+        limit,
+        skips,
+        sortBy
+      })
+  ).then((res) => res.json())
 }
 
 export const getCommunityInfo = async (name) => {
-  try{
-    return await fetch(`${apiEndpoint}/community/communityInfoUsingName/${name}`)
-      .then(res => res.json())
-  }catch(error){
+  try {
+    return await fetch(
+      `${apiEndpoint}/community/communityInfoUsingName/${name}`
+    ).then((res) => res.json())
+  } catch (error) {
     console.log(error)
   }
 }
@@ -25,7 +33,7 @@ export const putJoinCommunity = async (communityId, token) => {
       'Content-Type': 'application/json',
       Authorization: token
     }
-  }).then(res => res.json())
+  }).then((res) => res.json())
 }
 
 export const putLeaveCommunity = async (communityId, token) => {
@@ -35,21 +43,22 @@ export const putLeaveCommunity = async (communityId, token) => {
       'Content-Type': 'application/json',
       Authorization: token
     }
-  }).then(res => res.json())
+  }).then((res) => res.json())
 }
 
 export const getAllCommunities = async (limit, skips, sortBy) => {
-  try{
-
-    return await fetch(`${apiEndpoint}/community/getAllCommunities?` + new URLSearchParams({
-      limit,
-      skips,
-      sortBy
-    })).then(res => res.json())
-  }catch(error){
+  try {
+    return await fetch(
+      `${apiEndpoint}/community/getAllCommunities?` +
+        new URLSearchParams({
+          limit,
+          skips,
+          sortBy
+        })
+    ).then((res) => res.json())
+  } catch (error) {
     console.log(error)
   }
-  
 }
 
 export const postCreateCommunity = async (token, communityData) => {
@@ -60,5 +69,5 @@ export const postCreateCommunity = async (token, communityData) => {
       Authorization: token
     },
     body: JSON.stringify(communityData)
-  }).then(res => res)
+  }).then((res) => res)
 }

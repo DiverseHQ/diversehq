@@ -1,6 +1,5 @@
 import { useProfile } from '../Common/WalletContext'
-import { useState} from 'react'
-import { Web3Storage } from 'web3.storage'
+import { useState } from 'react'
 import apiEndpoint from '../../api/ApiEndpoint'
 import { uploadFileToIpfs } from '../../utils/utils'
 const ChangeMonkey = () => {
@@ -8,7 +7,7 @@ const ChangeMonkey = () => {
   const [pfp, setPfp] = useState()
   const [name, setName] = useState(null)
   const [bio, setBio] = useState(null)
-  const {  token } = useProfile()
+  const { token } = useProfile()
   const handleSubmit = async (event) => {
     event.preventDefault()
     console.log(name, pfp, bio)
@@ -40,9 +39,11 @@ const ChangeMonkey = () => {
           Authorization: token
         },
         body: JSON.stringify(profileData)
-      }).then(res => res.json()).then(res => {
-        console.log(res)
       })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res)
+        })
     } catch (error) {
       console.log(error)
     }
@@ -50,14 +51,17 @@ const ChangeMonkey = () => {
 
   return (
     <div>
-        <div className="pr-4">
-        <button className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200" onClick={() => setShowModal(true)} type="button">
-        Change Monkey
+      <div className="pr-4">
+        <button
+          className="border border-black bg-purple-800 rounded-full p-3 text-white shadow-md shadow-purple-200"
+          onClick={() => setShowModal(true)}
+          type="button"
+        >
+          Change Monkey
         </button>
-        </div>
+      </div>
 
-      {showModal
-        ? (
+      {showModal ? (
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
@@ -75,18 +79,35 @@ const ChangeMonkey = () => {
                 </div>
                 <div className="relative p-6 flex-auto">
                   <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
-                  <label className="block text-black text-sm font-bold mb-1">
+                    <label className="block text-black text-sm font-bold mb-1">
                       Name
                     </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setName(e.target.value)} required />
+                    <input
+                      type="text"
+                      className="shadow appearance-none border rounded w-full py-2 px-1 text-black"
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
                     <label className="block text-black text-sm font-bold mb-1">
                       Bio
                     </label>
-                    <input type="text" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => setBio(e.target.value)} required />
+                    <input
+                      type="text"
+                      className="shadow appearance-none border rounded w-full py-2 px-1 text-black"
+                      onChange={(e) => setBio(e.target.value)}
+                      required
+                    />
                     <label className="block text-black text-sm font-bold mb-1">
-                       PFP
+                      PFP
                     </label>
-                    <input type="file" className="shadow appearance-none border rounded w-full py-2 px-1 text-black" onChange={(e) => { setPfp(e.target.files) }} required />
+                    <input
+                      type="file"
+                      className="shadow appearance-none border rounded w-full py-2 px-1 text-black"
+                      onChange={(e) => {
+                        setPfp(e.target.files)
+                      }}
+                      required
+                    />
                   </form>
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -109,8 +130,7 @@ const ChangeMonkey = () => {
             </div>
           </div>
         </>
-          )
-        : null}
+      ) : null}
     </div>
   )
 }

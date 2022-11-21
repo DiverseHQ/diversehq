@@ -19,7 +19,7 @@ module.exports = {
         'p-border': 'var(--border-primary)'
       },
       boxShadow: {
-        'top': '0px -2px 20px 1px rgba(0, 0, 0, 0.2)'
+        top: '0px -2px 20px 1px rgba(0, 0, 0, 0.2)'
       }
     }
   }

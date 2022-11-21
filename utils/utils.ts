@@ -1,7 +1,13 @@
 import { Web3Storage } from "web3.storage";
-import { DIVE_CONTRACT_ADDRESS_MUMBAI } from "./config.ts";
+import { DIVE_CONTRACT_ADDRESS_MUMBAI } from "./config";
 
-export const addToken = async() =>{
+declare global {
+  interface Window {
+    ethereum: any;
+  }
+}
+
+export const addToken = async():Promise<void> =>{
     try {
        const wasAdded = await window.ethereum.request({
           method: 'wallet_watchAsset',
@@ -26,9 +32,9 @@ export const addToken = async() =>{
       }
 }
 
-export const uploadFileToIpfs = async (file) => {
-  const token = process.env.NEXT_PUBLIC_WEB_STORAGE;
-  const newFile = new File([file],file.name.replace(/\s/g, "_"),{type: file.type});
+export const uploadFileToIpfs = async (file:File): Promise<string> => {
+  const token:string = String(process.env.NEXT_PUBLIC_WEB_STORAGE);
+  const newFile:File = new File([file],file.name.replace(/\s/g, "_"),{type: file.type});
   const storage = new Web3Storage({ token });
   const cid = await storage.put([newFile]);
   return `https://dweb.link/ipfs/${cid}/${newFile.name}`;
