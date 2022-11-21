@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import PostsColumn from '../../components/Post/PostsColumn'
 import { getPostOfCommunity} from '../../api/community'
 import CommunityInfoCard from '../../components/Community/CommunityInfoCard'
-import { POST_LIMIT } from '../../utils/config'
+import { POST_LIMIT } from '../../utils/config.ts'
 
 const CommunityPage = () => {
   const { name } = useRouter().query

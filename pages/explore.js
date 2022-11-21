@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getAllCommunities } from '../api/community'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import CommunityInfoCard from '../components/Community/CommunityInfoCard'
-import { COMMUNITY_LIMIT } from '../utils/config'
+import { COMMUNITY_LIMIT } from '../utils/config.ts'
 
 const explore = () => {
   const [communities, setCommunities] = useState([])

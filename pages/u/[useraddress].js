@@ -7,7 +7,7 @@ import PostsColumn from '../../components/Post/PostsColumn'
 import { useSigner  } from 'wagmi'
 import {ethers} from "ethers"
 import ABI from '../../utils/DiveToken.json'
-import { DIVE_CONTRACT_ADDRESS_MUMBAI, POST_LIMIT } from '../../utils/config'
+import { DIVE_CONTRACT_ADDRESS_MUMBAI, POST_LIMIT } from '../../utils/config.ts'
 import { useProfile } from '../../components/Common/WalletContext'
 import { modalType, usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 import EditProfile from '../../components/User/EditProfile'

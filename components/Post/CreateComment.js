@@ -7,7 +7,7 @@ import { useSigner  } from 'wagmi'
 import ABI from '../../utils/DiveToken.json'
 import { ethers, utils } from 'ethers'
 import { useNotify } from '../Common/NotifyContext'
-import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config'
+import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config.ts'
 
 
 const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {

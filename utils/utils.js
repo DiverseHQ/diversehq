@@ -1,5 +1,5 @@
 import { Web3Storage } from "web3.storage";
-import { DIVE_CONTRACT_ADDRESS_MUMBAI } from "./config";
+import { DIVE_CONTRACT_ADDRESS_MUMBAI } from "./config.ts";
 
 export const addToken = async() =>{
     try {
