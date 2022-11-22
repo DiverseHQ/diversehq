@@ -1,22 +1,23 @@
 import apiEndpoint from './ApiEndpoint'
+import { CommunityType } from '../utils/types'
 
 export const getPostOfCommunity = async (
-  communityName,
-  limit,
-  skips,
-  sortBy
+  communityName: string,
+  limit: number,
+  skips: number,
+  sortBy: string
 ) => {
   return await fetch(
     `${apiEndpoint}/post/getPostsOfCommunity/${communityName}?` +
       new URLSearchParams({
-        limit,
-        skips,
+        limit: limit.toString(),
+        skips: skips.toString(),
         sortBy
       })
   ).then((res) => res.json())
 }
 
-export const getCommunityInfo = async (name) => {
+export const getCommunityInfo = async (name: string) => {
   try {
     return await fetch(
       `${apiEndpoint}/community/communityInfoUsingName/${name}`
@@ -26,7 +27,7 @@ export const getCommunityInfo = async (name) => {
   }
 }
 
-export const putJoinCommunity = async (communityId, token) => {
+export const putJoinCommunity = async (communityId: string, token: string) => {
   return await fetch(`${apiEndpoint}/community/join/${communityId}`, {
     method: 'PUT',
     headers: {
@@ -36,7 +37,7 @@ export const putJoinCommunity = async (communityId, token) => {
   }).then((res) => res.json())
 }
 
-export const putLeaveCommunity = async (communityId, token) => {
+export const putLeaveCommunity = async (communityId: string, token: string) => {
   return await fetch(`${apiEndpoint}/community/leave/${communityId}`, {
     method: 'PUT',
     headers: {
@@ -46,13 +47,13 @@ export const putLeaveCommunity = async (communityId, token) => {
   }).then((res) => res.json())
 }
 
-export const getAllCommunities = async (limit, skips, sortBy) => {
+export const getAllCommunities = async (limit: number, skips: number, sortBy: string) => {
   try {
     return await fetch(
       `${apiEndpoint}/community/getAllCommunities?` +
         new URLSearchParams({
-          limit,
-          skips,
+          limit: limit.toString(),
+          skips: skips.toString(),
           sortBy
         })
     ).then((res) => res.json())
@@ -61,7 +62,7 @@ export const getAllCommunities = async (limit, skips, sortBy) => {
   }
 }
 
-export const postCreateCommunity = async (token, communityData) => {
+export const postCreateCommunity = async (token: string, communityData: CommunityType) => {
   return await fetch(`${apiEndpoint}/community`, {
     method: 'POST',
     headers: {
@@ -70,4 +71,15 @@ export const postCreateCommunity = async (token, communityData) => {
     },
     body: JSON.stringify(communityData)
   }).then((res) => res)
+}
+
+export const searchCommunityFromName = async (name: string): Promise<CommunityType[]> => {
+  try{
+    return await fetch(`${apiEndpoint}/community/search?` + new URLSearchParams({
+      name
+    })).then((res) => res.json())
+  } catch(error){
+    console.log(error)
+    return [] 
+  }
 }
