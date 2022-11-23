@@ -9,13 +9,11 @@ const MasterWrapper = ({ children }) => {
   return (
     <RainbowKitWrapper>
       <WalletProvider>
-          <NotifyProvider>
-              <ThemeProvider defaultTheme = 'system'>
-                <CustomPopUpModalProvider>
-                  {children}
-                </CustomPopUpModalProvider>
-              </ThemeProvider>
-          </NotifyProvider>
+        <NotifyProvider>
+          <ThemeProvider defaultTheme="light">
+            <CustomPopUpModalProvider>{children}</CustomPopUpModalProvider>
+          </ThemeProvider>
+        </NotifyProvider>
       </WalletProvider>
     </RainbowKitWrapper>
   )

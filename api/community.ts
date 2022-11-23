@@ -83,3 +83,13 @@ export const searchCommunityFromName = async (name: string): Promise<CommunityTy
     return [] 
   }
 }
+
+export const getJoinedCommunitiesApi = async (walletAddress: string): Promise<CommunityType[]> => {
+  try{
+    return await fetch(`${apiEndpoint}/community/getJoinedCommunitiesOfUser?walletAddress=${walletAddress}`)
+    .then((res) => res.json())
+  }catch(error){
+    console.log(error)
+    return []
+  }
+}

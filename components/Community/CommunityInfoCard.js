@@ -10,18 +10,21 @@ import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 
 const CommunityInfoCard = ({ communityInfo, communityName }) => {
+  console.log('communityInfo', communityInfo)
+  console.log('communityName', communityName)
   const { user, token, refreshUserInfo } = useProfile()
   const [community, setCommunity] = useState(communityInfo)
   const { notifyInfo } = useNotify()
   const [isJoined, setIsJoined] = useState(false)
   const router = useRouter()
 
-  const name = communityInfo ? communityInfo.name : communityName
+  const name = community?.name || communityName
+
   useEffect(() => {
     if (!community && name) {
       fetchCommunityInformation()
     }
-  }, [])
+  }, [name])
 
   useEffect(() => {
     if (!user || !community) return
@@ -31,7 +34,7 @@ const CommunityInfoCard = ({ communityInfo, communityName }) => {
   const fetchCommunityInformation = async () => {
     try {
       const community = await getCommunityInfo(name)
-      console.log(community)
+      console.log('fetchCommunityInformation', community)
       setCommunity(community)
     } catch (error) {
       console.log(error)
@@ -68,14 +71,13 @@ const CommunityInfoCard = ({ communityInfo, communityName }) => {
   }
 
   const redirectToCommunityPage = () => {
-    if (!name) return
-    router.push(`/c/${name}`)
+    if (name) router.push(`/c/${name}`)
   }
 
   return (
     <>
       {community && (
-        <div className="relative">
+        <div className="relative rounded-3xl shadow-lg">
           {/* eslint-disable-next-line */}
         <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={community.bannerImageUrl} />
           <div className="absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full">

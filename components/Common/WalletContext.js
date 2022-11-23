@@ -10,18 +10,18 @@ export const WalletProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const provider = useProvider()
   const { data: signer, isError, isLoading } = useSigner()
-  const { address,isDisconnected } = useAccount({
-    onConnect ({ address, connector, isReconnected }) {
+  const { address, isDisconnected } = useAccount({
+    onConnect({ address, connector, isReconnected }) {
       console.log('onConnect', address, connector, isReconnected)
     }
   })
 
   useEffect(() => {
-    if(isDisconnected){
+    if (isDisconnected) {
       setToken(null)
       setUser(null)
     }
-  },[isDisconnected])
+  }, [isDisconnected])
 
   useEffect(() => {
     console.log('signer isError isLoading', signer, isError, isLoading)
@@ -52,7 +52,12 @@ export const WalletProvider = ({ children }) => {
         const web3Token = await Web3Token.verify(existingToken)
         console.log('web3Token', web3Token)
         console.log(web3Token.address, web3Token.body)
-        if (!web3Token || !web3Token.address || !web3Token.body || web3Token.address.toLowerCase() !== address.toLowerCase()) {
+        if (
+          !web3Token ||
+          !web3Token.address ||
+          !web3Token.body ||
+          web3Token.address.toLowerCase() !== address.toLowerCase()
+        ) {
           verified = false
         } else {
           verified = true
@@ -76,7 +81,10 @@ export const WalletProvider = ({ children }) => {
       // return;
       // const ethProvider = new ethers.providers.Web3Provider(provider)
       // const signer = ethProvider.getSigner()
-      const signedToken = await Web3Token.sign(async msg => await signer.signMessage(msg), '1d')
+      const signedToken = await Web3Token.sign(
+        async (msg) => await signer.signMessage(msg),
+        '1d'
+      )
       console.log(signedToken)
       setToken(signedToken)
       try {
@@ -91,9 +99,9 @@ export const WalletProvider = ({ children }) => {
   }
 
   return (
-        <WalletContext.Provider value={{ address, refreshUserInfo, token, user }}>
-            {children}
-        </WalletContext.Provider>
+    <WalletContext.Provider value={{ address, refreshUserInfo, token, user }}>
+      {children}
+    </WalletContext.Provider>
   )
 }
 

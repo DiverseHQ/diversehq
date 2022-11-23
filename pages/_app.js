@@ -5,8 +5,7 @@ import Nav from '../components/Home/Nav'
 import '../styles/globals.css'
 import MasterWrapper from '../components/Common/MasterWrapper'
 import useDevice from '../components/Common/useDevice'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import Search from '../components/Search/Search'
+import RightPart from '../components/Common/RightPart'
 
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
@@ -17,17 +16,12 @@ function MyApp({ Component, pageProps }) {
     <MasterWrapper>
       <div className="text-p-text bg-p-bg min-h-screen">
         {isDesktop && (
-          <div className="">
+          <div>
             <Nav />
             <div className="max-w-[600px] ml-[400px] overflow-y-auto no-scrollbar h-full">
               <Component {...pageProps} />
             </div>
-            <div className="fixed top-0 right-10 pt-6 h-full overflow-y-auto no-scrollbar">
-              <ConnectButton chainStatus="icon" />
-            </div>
-            <div className="fixed top-20 right-10">
-              <Search />
-            </div>
+            <RightPart />
           </div>
         )}
 

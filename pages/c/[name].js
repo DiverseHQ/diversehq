@@ -36,7 +36,7 @@ const CommunityPage = () => {
   return (
     <div className="pt-6">
       <div className="relative">
-        <CommunityInfoCard communityName={name} />
+        {name && <CommunityInfoCard communityName={name} />}
         {posts && (
           <PostsColumn
             getMorePost={showPosts}

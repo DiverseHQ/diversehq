@@ -15,7 +15,7 @@
           opacity: 1;
       }
   }
-  
+
   @keyframes exitanimation {
     0% {
         transform: translateY(0);
@@ -25,7 +25,6 @@
     100% {
         transform: translateY(-80%);
         opacity: 0;
-
     }
   }
   .mobile-top-nav {
@@ -33,6 +32,10 @@
     top: 0; /* Stay on top */
     width: 100%; /* Full width */
     transition: top 0.5s; /* Transition effect when sliding down (and up) */
+  }
+
+  .primary-gradient {
+    background: linear-gradient(93.08deg, #33EDF9 3.54%, #167BD8 103.54%);
   }
 
   .button-dropshadow {
@@ -68,7 +71,7 @@
 }
 
 :root {
-  --background: #ececec;
+  --background: #EEF1FF;
   --background-secondary: #ffffff;
   --accent-primary: #1d9bf0;
   --accent-secondary: theme("colors.purple.600");
@@ -80,8 +83,11 @@
   --border-primary: #c4c4c4;
 
   --background-pop: #00000038;
+
+  --background-secondary-highlight: #ececec;
+  --background-primary-highlight: #D2DAFF;
   }
-  
+
   [data-theme='dark'] {
     --background: #000000;
     --background-secondary: #16181C;
@@ -93,7 +99,6 @@
     --text-secondary: #9197ae;
 
     --border-primary: #464646;
-    
+
     --background-pop: #ffffff38;
   }
-  

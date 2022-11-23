@@ -9,10 +9,14 @@ const explore = () => {
   const [hasMore, setHasMore] = useState(true)
 
   const getMoreCommunities = async () => {
-    if(!hasMore) return
-    const fetchedCommunities = await getAllCommunities(COMMUNITY_LIMIT, communities.length, "top");
+    if (!hasMore) return
+    const fetchedCommunities = await getAllCommunities(
+      COMMUNITY_LIMIT,
+      communities.length,
+      'top'
+    )
     console.log('fetchedCommunities', fetchedCommunities)
-    if(fetchedCommunities.communities.length < COMMUNITY_LIMIT){
+    if (fetchedCommunities.communities.length < COMMUNITY_LIMIT) {
       setHasMore(false)
     }
     setCommunities([...communities, ...fetchedCommunities.communities])
@@ -21,18 +25,20 @@ const explore = () => {
     getMoreCommunities()
   }, [])
   return (
-    <div className='pt-6'>
-        <InfiniteScroll
-          dataLength={communities.length}
-          next={getMoreCommunities}
-          hasMore={hasMore}
-          loader={<h3> Loading...</h3>}
-          endMessage={<h4>Nothing more to show</h4>}
-        >
-          {communities.map((community) => {
-            return <CommunityInfoCard key={community._id} communityInfo={community} />
-          })}
-        </InfiniteScroll>
+    <div className="pt-6">
+      <InfiniteScroll
+        dataLength={communities.length}
+        next={getMoreCommunities}
+        hasMore={hasMore}
+        loader={<h3> Loading...</h3>}
+        endMessage={<h4>Nothing more to show</h4>}
+      >
+        {communities.map((community) => {
+          return (
+            <CommunityInfoCard key={community._id} communityInfo={community} />
+          )
+        })}
+      </InfiniteScroll>
     </div>
   )
 }
