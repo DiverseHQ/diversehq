@@ -3,6 +3,7 @@ import { useAccount, useProvider, useSigner } from 'wagmi'
 import Web3Token from 'web3-token'
 import { getLocalToken, setLocalToken } from '../../utils/token'
 import { getUserInfo, postUser } from '../../api/user'
+import { client, getDefaultProfile, refreshAuthToken } from '../../utils/lensAuth'
 export const WalletContext = createContext([])
 
 export const WalletProvider = ({ children }) => {
@@ -15,6 +16,8 @@ export const WalletProvider = ({ children }) => {
       console.log('onConnect', address, connector, isReconnected)
     }
   })
+  const [lensToken, setLensToken] = useState(null)
+  const [lensProfile, setLensProfile] = useState(null);
 
   useEffect(() => {
     if(isDisconnected){
@@ -90,8 +93,31 @@ export const WalletProvider = ({ children }) => {
     await refreshUserInfo()
   }
 
+  // Lens Auth
+  useEffect(() => {
+    refreshAuthToken();
+    async function checkProfile() {
+      if (address && localStorage.getItem('STORAGE_KEY')) {
+        const token = JSON.parse(localStorage.getItem('STORAGE_KEY'));
+        console.log('Success Token From STORAGE_KEY', token)
+        setLensToken(token.accessToken)
+        // const response = await client.query({
+        //   query: getDefaultProfile,
+        //   variables: { address: address }
+        // })
+        // console.log('Lens Profile', response);
+      } else {
+        console.log('Not Logged In')
+      }
+    }
+    checkProfile();
+  }, []);
+
+
+   
+
   return (
-        <WalletContext.Provider value={{ address, refreshUserInfo, token, user }}>
+        <WalletContext.Provider value={{ address, refreshUserInfo, token, user, lensToken, setLensToken }}>
             {children}
         </WalletContext.Provider>
   )

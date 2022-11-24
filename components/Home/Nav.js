@@ -8,6 +8,7 @@ import ClickOption from './ClickOption'
 import { AiFillPlusCircle } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
 import { useNotify } from '../Common/NotifyContext'
+import LensSign from './LensSign'
 
 const Nav = () => {
   const { user } = useProfile()
@@ -66,6 +67,7 @@ const Nav = () => {
           </div>
         <MdOutlineExplore className="w-12 h-12 mb-7 hover:cursor-pointer" onClick={routeToExplore}/>
         < AiFillPlusCircle className="w-12 h-12 mb-7 text-p-btn cursor-pointer" onClick={creatPost} />
+        <LensSign />
 
         </div>
         <div className='flex-end hover:cursor-pointer' onClick={showMoreOptions}>
