@@ -39,3 +39,8 @@ export const uploadFileToIpfs = async (file:File): Promise<string> => {
   const cid = await storage.put([newFile]);
   return `https://dweb.link/ipfs/${cid}/${newFile.name}`;
 }
+
+// string to string of give length
+export const stringToLength = (str:string, length:number):string => {
+  return str.slice(0,length) + (str.length > length ? "..." : "");
+}

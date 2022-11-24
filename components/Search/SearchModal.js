@@ -27,14 +27,14 @@ const SearchModal = () => {
           <HiOutlineSearch />
           <input
             type="text"
-            className={`w-full text-p-text bg-s-h-bg outline-none pl-3`}
+            className={`w-full text-p-text bg-s-bg outline-none pl-3`}
             placeholder="Search"
             onChange={onChangeSearch}
           />
         </div>
       </label>
       {communities.length > 0 && (
-        <div className="bg-s-bg rounded-[25px] absolute w-[250px]">
+        <div className="bg-s-h-bg rounded-[25px] absolute w-[250px]">
           {communities.map((community) => (
             <div
               className="hover:bg-p-h-bg m-2 flex flex-row p-2 hover:underline underline-offset-4  items-center rounded-[25px] cursor-pointer"

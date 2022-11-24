@@ -13,19 +13,6 @@ const RightPart = () => {
 
   const [joinedCommunities, setJoinedCommunities] = useState([])
 
-  const creatPost = () => {
-    // setShowOptions(!showOptions)
-    if (!user) {
-      notifyInfo('You might want to connect your wallet first')
-      return
-    }
-    showModal({
-      component: <CreatePostPopup />,
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
   const getJoinedCommunities = async () => {
     if (!user?.walletAddress) {
       notifyInfo('I think you are not logged in')
@@ -43,7 +30,7 @@ const RightPart = () => {
     }
   }, [user])
   return (
-    <div className="fixed top-[50px] h-[calc(100vh-100px)] rounded-l-[25px] shadow-xl flex flex-col items-end justify-between right-0 bg-s-h-bg min-w-[350px] pt-6 pb-14 px-10">
+    <div className="fixed top-[50px] h-[calc(100vh-100px)] rounded-[25px] shadow-xl flex flex-col items-end justify-between right-[calc(((100vw-600px)/2)-70px-350px)] bg-s-bg w-[350px] pt-6 pb-14 px-10">
       {/* <div className="py-4 h-full overflow-y-auto no-scrollbar">
         <ConnectButton chainStatus="icon" />
       </div> */}
@@ -59,7 +46,7 @@ const RightPart = () => {
           <div className="text-xl">
             {joinedCommunities.map((community, index) => (
               <a
-                className="hover:underline underline-offset-4 flex flex-row items-center p-1 px-2 cursor-pointer hover:bg-p-h-bg rounded-full"
+                className="hover:underline underline-offset-4 flex flex-row items-center p-1 px-3 cursor-pointer hover:bg-p-h-bg rounded-full my-1"
                 key={index}
                 href={`/c/${community.name}`}
               >
@@ -75,12 +62,6 @@ const RightPart = () => {
       </div>
 
       {/* create post button */}
-      <div
-        className="text-2xl py-3 px-12 primary-gradient rounded-full button-dropshadow cursor-pointer"
-        onClick={creatPost}
-      >
-        Create Post
-      </div>
     </div>
   )
 }

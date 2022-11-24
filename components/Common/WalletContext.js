@@ -1,7 +1,11 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import Web3Token from 'web3-token'
-import { getLocalToken, setLocalToken } from '../../utils/token'
+import {
+  getLocalToken,
+  removeLocalToken,
+  setLocalToken
+} from '../../utils/token'
 import { getUserInfo, postUser } from '../../api/user'
 export const WalletContext = createContext([])
 
@@ -20,6 +24,9 @@ export const WalletProvider = ({ children }) => {
     if (isDisconnected) {
       setToken(null)
       setUser(null)
+      if (getLocalToken()) {
+        removeLocalToken()
+      }
     }
   }, [isDisconnected])
 
@@ -33,6 +40,7 @@ export const WalletProvider = ({ children }) => {
   const refreshUserInfo = async () => {
     try {
       if (!address) return
+      console.log('refreshUserInfo', address)
       const userInfo = await getUserInfo(address)
       console.log(userInfo)
       setUser(userInfo)
@@ -46,7 +54,7 @@ export const WalletProvider = ({ children }) => {
     // return;
     try {
       existingToken = getLocalToken()
-      console.log(existingToken)
+      console.log('existingToken', existingToken)
       if (existingToken) {
         setToken(existingToken)
         const web3Token = await Web3Token.verify(existingToken)

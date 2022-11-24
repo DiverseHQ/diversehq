@@ -4,19 +4,22 @@ import Image from 'next/image'
 import { MdOutlineExplore, MdOutlineNotificationsActive } from 'react-icons/md'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import ClickOption from './ClickOption'
-import { AiFillPlusCircle } from 'react-icons/ai'
-import CreatePostPopup from './CreatePostPopup'
-import { useNotify } from '../Common/NotifyContext'
 import LoginButton from '../Common/UI/LoginButton'
 import LogoComponent from '../Common/UI/LogoComponent'
 import CreateCommunity from './CreateCommunity'
 import { BiNetworkChart } from 'react-icons/bi'
+import { stringToLength } from '../../utils/utils'
+import { useNotify } from '../Common/NotifyContext'
+import { FaRegCopy } from 'react-icons/fa'
+import CreatePostPopup from './CreatePostPopup'
 
 const Nav = () => {
-  const { user } = useProfile()
   const router = useRouter()
+
+  const { user } = useProfile()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
+
   const routeToExplore = () => {
     router.push('/explore')
   }
@@ -42,6 +45,29 @@ const Nav = () => {
     })
   }
 
+  const createCommunity = () => {
+    // setShowOptions(!showOptions)
+    if (!user) {
+      notifyInfo('You shall not pass, without login first')
+      return
+    }
+    showModal({
+      component: <CreateCommunity />,
+      type: modalType.fullscreen,
+      onAction: () => {},
+      extraaInfo: {}
+    })
+  }
+
+  const handleWalletAddressCopy = () => {
+    if (!user?.walletAddress) {
+      notifyInfo('Please Login')
+      return
+    }
+    navigator.clipboard.writeText(user?.walletAddress)
+    notifyInfo('Copied to clipboard')
+  }
+
   const creatPost = () => {
     // setShowOptions(!showOptions)
     if (!user) {
@@ -56,19 +82,9 @@ const Nav = () => {
     })
   }
 
-  const createCommunity = () => {
-    // setShowOptions(!showOptions)
-    showModal({
-      component: <CreateCommunity />,
-      type: modalType.fullscreen,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
-
   return (
     <div>
-      <div className="fixed top-[50px] left-0 pt-6 pb-14 flex flex-col justify-between items-start min-w-[350px] h-[calc(100vh-100px)] bg-s-h-bg rounded-r-[25px] shadow-xl px-8">
+      <div className="fixed top-[50px] left-[calc(((100vw-600px)/2)-50px-350px)] pt-6 pb-14 flex flex-col justify-between items-start w-[350px] h-[calc(100vh-100px)] bg-s-bg rounded-[25px] shadow-xl px-8">
         <div className="flex flex-col">
           <div
             className="mb-10 mx-3 hover:cursor-pointer justify-center"
@@ -99,6 +115,12 @@ const Nav = () => {
             <BiNetworkChart className="w-10 h-10" />
             <div className="ml-5">Create Community</div>
           </div>
+          <div
+            className="text-2xl py-3 px-12 primary-gradient rounded-full button-dropshadow cursor-pointer text-center"
+            onClick={creatPost}
+          >
+            Create Post
+          </div>
           {/* <div className="flex flex-row text-2xl items-center mb-6 cursor-pointer">
             <AiFillPlusCircle className="w-10 h-10" onClick={creatPost} />
             <div className="ml-5">Notifications</div>
@@ -110,7 +132,7 @@ const Nav = () => {
         </div>
         {user && (
           <div
-            className="text-2xl items-center h-[60px] bg-s-bg flex flex-row hover:cursor-pointer rounded-full pr-8 ml-3 shadow-lg"
+            className="text-xl items-center h-[60px] bg-s-h-bg flex flex-row hover:cursor-pointer rounded-full pr-8 ml-3 shadow-lg"
             onClick={showMoreOptions}
           >
             {user?.profileImageUrl && (
@@ -127,7 +149,18 @@ const Nav = () => {
                 className="rounded-full"
               />
             )}
-            <div className="pl-4">{user.name || user.address}</div>
+            <div className="pl-4 flex flex-col">
+              {user?.name && <div>{stringToLength(user?.name, 10)}</div>}
+              <div
+                className="flex flex-row items-center cursor-pointer"
+                onClick={handleWalletAddressCopy}
+              >
+                <div className="text-base sm:text-xl">
+                  {stringToLength(user.walletAddress, 10)}
+                </div>
+                <FaRegCopy className="w-8 h-8 px-2" />
+              </div>
+            </div>
           </div>
         )}
         {!user && <LoginButton />}

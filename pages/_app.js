@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
         {isDesktop && (
           <div>
             <Nav />
-            <div className="max-w-[600px] ml-[400px] overflow-y-auto no-scrollbar h-full">
+            <div className="w-[600px] ml-[calc((100vw-600px)/2)] overflow-y-auto no-scrollbar h-full">
               <Component {...pageProps} />
             </div>
             <RightPart />

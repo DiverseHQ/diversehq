@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import {
@@ -81,12 +80,10 @@ const CommunityInfoCard = ({ communityInfo, communityName }) => {
           {/* eslint-disable-next-line */}
         <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={community.bannerImageUrl} />
           <div className="absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full">
-            <Image
-              width={70}
-              height={70}
-              className="rounded-full bg-s-bg"
+            <img
+              className="rounded-full bg-s-bg w-[70px] h-[70px]"
               src={community.logoImageUrl}
-            />{' '}
+            />
           </div>
           <div className="flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl">
             <button
