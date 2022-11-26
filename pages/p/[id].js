@@ -18,7 +18,7 @@ const PostPage = () => {
     if (postInfo) {
       setComments(postInfo.comments)
     }
-  },[postInfo])
+  }, [postInfo])
 
   const fetchPostInformation = async () => {
     try {
@@ -31,23 +31,26 @@ const PostPage = () => {
   }
 
   const addCommentIdToComments = (commentId) => {
-    setComments([commentId,...comments])
+    setComments([commentId, ...comments])
   }
   return (
-      <>
+    <>
       {!postInfo && <div>Loading...</div>}
-      {postInfo &&
-      <div>
-      <PostCard post={postInfo} />
-      <div>
-      <CreateComment postId={postInfo._id} authorAddress={postInfo.author} addCommentIdToComments={addCommentIdToComments}/>
-      <CommentsSection commentsId={comments} />
-      {/* <div className='fixed bottom-16'> */}
-      {/* </div> */}
-      </div>
-   </div>
-      }
-
+      {postInfo && (
+        <div>
+          <PostCard post={postInfo} />
+          <div>
+            <CreateComment
+              postId={postInfo._id}
+              authorAddress={postInfo.author}
+              addCommentIdToComments={addCommentIdToComments}
+            />
+            <CommentsSection commentsId={comments} />
+            {/* <div className='fixed bottom-16'> */}
+            {/* </div> */}
+          </div>
+        </div>
+      )}
     </>
   )
 }

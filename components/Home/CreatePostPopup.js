@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Web3Storage } from 'web3.storage'
 import { useProfile } from '../Common/WalletContext'
-import apiEndpoint from '../../api/ApiEndpoint'
 import { useNotify } from '../Common/NotifyContext'
 import { useRouter } from 'next/router'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'

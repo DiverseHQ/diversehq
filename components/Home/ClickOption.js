@@ -1,39 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
-import { useTheme } from 'next-themes'
-import { useAccount, useDisconnect, useSigner } from 'wagmi'
-import ABI from '../../utils/DiveToken.json'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import CreateCommunity from './CreateCommunity'
-import { ethers } from 'ethers'
-import { useNotify } from '../Common/NotifyContext'
-import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config'
-import { useConnectModal } from '@rainbow-me/rainbowkit'
-
-const claimAmount = 10
+import { useDisconnect } from 'wagmi'
+import { usePopUpModal } from '../Common/CustomPopUpProvider'
 
 const ClickOption = () => {
   const router = useRouter()
   const { user } = useProfile()
-  const { theme, setTheme } = useTheme()
-  const { address } = useAccount()
   const { disconnect } = useDisconnect()
-  const { showModal, hideModal } = usePopUpModal()
-  const [diveContract, setDiveContract] = useState(null)
-  const { data: signer } = useSigner()
-  const { notifyError, notifySuccess } = useNotify()
+  const { hideModal } = usePopUpModal()
 
-  useEffect(() => {
-    if (signer) {
-      const contract = new ethers.Contract(
-        DIVE_CONTRACT_ADDRESS_MUMBAI,
-        ABI,
-        signer
-      )
-      setDiveContract(contract)
-    }
-  }, [signer])
+  // useEffect(() => {
+  //   if (signer) {
+  //     const contract = new ethers.Contract(
+  //       DIVE_CONTRACT_ADDRESS_MUMBAI,
+  //       ABI,
+  //       signer
+  //     )
+  //     setDiveContract(contract)
+  //   }
+  // }, [signer])
 
   const routeToUserProfile = () => {
     if (user) {

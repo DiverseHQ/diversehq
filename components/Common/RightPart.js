@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { getJoinedCommunitiesApi } from '../../api/community'
-import CreatePostPopup from '../Home/CreatePostPopup'
 import SearchModal from '../Search/SearchModal'
-import { modalType, usePopUpModal } from './CustomPopUpProvider'
 import { useNotify } from './NotifyContext'
 import { useProfile } from './WalletContext'
 
 const RightPart = () => {
   const { user } = useProfile()
   const { notifyInfo } = useNotify()
-  const { showModal } = usePopUpModal()
 
   const [joinedCommunities, setJoinedCommunities] = useState([])
 

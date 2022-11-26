@@ -2,55 +2,55 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { postComment } from '../../api/comment'
 import { FiSend } from 'react-icons/fi'
-import {FaHandSparkles} from 'react-icons/fa'
-import { useSigner  } from 'wagmi'
+import { FaHandSparkles } from 'react-icons/fa'
+import { useSigner } from 'wagmi'
 import ABI from '../../utils/DiveToken.json'
 import { ethers, utils } from 'ethers'
 import { useNotify } from '../Common/NotifyContext'
 import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config.ts'
 
-
 const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
-  const { user, token  } = useProfile()
+  const { user, token } = useProfile()
   const commentRef = useRef()
   const appreciateAmountRef = useRef()
-  const { data: signer } = useSigner();
-  const [diveContract,setDiveContract] = useState(null)
+  const { data: signer } = useSigner()
+  const [diveContract, setDiveContract] = useState(null)
   const { notifyError, notifySuccess } = useNotify()
 
-
   useEffect(() => {
-    if(signer){
-      const contract = new ethers.Contract(DIVE_CONTRACT_ADDRESS_MUMBAI, ABI, signer)
+    if (signer) {
+      const contract = new ethers.Contract(
+        DIVE_CONTRACT_ADDRESS_MUMBAI,
+        ABI,
+        signer
+      )
       setDiveContract(contract)
     }
-  },[signer])
-  
-
+  }, [signer])
 
   const transferGiveAppreciateAmount = async (appreciateAmount) => {
-    try{
-      console.log("authroAddress",authorAddress)
-      console.log("appreciateAddress",appreciateAmount)
-      if(!diveContract) return;
-      const res = await diveContract.transfer(authorAddress,appreciateAmount, 
-        {gasLimit: 3000000, gasPrice: 30000000000}
-      )
-      const receipt = await res.wait();
+    try {
+      console.log('authroAddress', authorAddress)
+      console.log('appreciateAddress', appreciateAmount)
+      if (!diveContract) return
+      const res = await diveContract.transfer(authorAddress, appreciateAmount, {
+        gasLimit: 3000000,
+        gasPrice: 30000000000
+      })
+      const receipt = await res.wait()
       if (receipt.status === 1) {
-        console.log("Tokens transferred: https://rinkeby.etherscan.io/tx/"+res.hash);
+        console.log(
+          'Tokens transferred: https://rinkeby.etherscan.io/tx/' + res.hash
+        )
         notifySuccess('Tokens Transferred Successfully')
+      } else {
+        console.log('Tokens transfer failed')
+        notifyError('Tokens Transfer Failed')
       }
-      else {
-          console.log("Tokens transfer failed");
-          notifyError('Tokens Transfer Failed')
-        }
-
-    } catch(error){
-      console.log(error);
+    } catch (error) {
+      console.log(error)
     }
   }
-
 
   const createComment = async () => {
     const comment = commentRef.current.value
@@ -60,12 +60,17 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
     console.log('postId', postId)
     console.log('comment', comment)
     try {
-      const comment = await postComment(token, content, postId, appreciateAmount);
+      const comment = await postComment(
+        token,
+        content,
+        postId,
+        appreciateAmount
+      )
       console.log(comment)
       addCommentIdToComments(comment._id)
-      if(appreciateAmount > 0){
+      if (appreciateAmount > 0) {
         const wei = utils.parseEther(appreciateAmount.toString())
-        console.log("wei",wei)
+        console.log('wei', wei)
         transferGiveAppreciateAmount(wei)
       }
     } catch (error) {
@@ -73,27 +78,48 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
     }
   }
   return (
-        <>
-        {user && token && (
-            <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-3 sm:rounded-3xl ">
-              <div className="flex flex-row justify-between items-center w-full">
-                <div className="flex flex-row items-center">
-                <img src={user.profileImageUrl ? user.profileImageUrl : '/gradient.jpg'} className="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
-                <div className='ml-2 font-bold text-xs sm:text-xl'>{user.name ? user.name : user.walletAddress.substring(0, 6) + '...'}</div>
-                </div>
-                <div className='flex flex-row items-center justify-center'>
-                  <FaHandSparkles className='w-5 h-5 sm:w-7 sm:h-7' />
-                  <input type="number" ref={appreciateAmountRef} className="outline-none pl-3 w-8 sm:w-12 mr-2 text-xs sm:text-xl font-bold bg-s-bg" placeholder="1" />
-                  <FiSend onClick={createComment} className="w-4 h-4 sm:w-7 sm:h-7 text-p-text"/>
-                </div>
+    <>
+      {user && token && (
+        <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-3 sm:rounded-3xl ">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div className="flex flex-row items-center">
+              <img
+                src={
+                  user.profileImageUrl ? user.profileImageUrl : '/gradient.jpg'
+                }
+                className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+              />
+              <div className="ml-2 font-bold text-xs sm:text-xl">
+                {user.name
+                  ? user.name
+                  : user.walletAddress.substring(0, 6) + '...'}
               </div>
-              <div>
-                <input type="text" ref={commentRef} className="border-none outline-none w-full mt-3 text-xs sm:text-base bg-s-bg" placeholder="Write a comment..." />
-              </div>
-
             </div>
-        )}
-        </>
+            <div className="flex flex-row items-center justify-center">
+              <FaHandSparkles className="w-5 h-5 sm:w-7 sm:h-7" />
+              <input
+                type="number"
+                ref={appreciateAmountRef}
+                className="outline-none pl-3 w-8 sm:w-12 mr-2 text-xs sm:text-xl font-bold bg-s-bg"
+                placeholder="1"
+              />
+              <FiSend
+                onClick={createComment}
+                className="w-4 h-4 sm:w-7 sm:h-7 text-p-text"
+              />
+            </div>
+          </div>
+          <div>
+            <input
+              type="text"
+              ref={commentRef}
+              className="border-none outline-none w-full mt-3 text-xs sm:text-base bg-s-bg"
+              placeholder="Write a comment..."
+            />
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
