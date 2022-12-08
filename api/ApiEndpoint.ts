@@ -6,9 +6,9 @@ switch (mode) {
     apiEndpoint = 'http://localhost:8000/apiv1'
     break
   case 'production':
-    apiEndpoint = 'https://diversehq.herokuapp.com/apiv1'
+    apiEndpoint = 'https://web-production-5080.up.railway.app/apiv1'
     break
   default:
-    apiEndpoint = 'https://diversehq.herokuapp.com/apiv1'
+    apiEndpoint = 'https://web-production-5080.up.railway.app/apiv1'
 }
 export default apiEndpoint

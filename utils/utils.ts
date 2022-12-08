@@ -1,5 +1,7 @@
 import { Web3Storage } from "web3.storage";
 import { DIVE_CONTRACT_ADDRESS_MUMBAI } from "./config";
+import { storage } from "./firebase";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 
 declare global {
   interface Window {
@@ -43,4 +45,23 @@ export const uploadFileToIpfs = async (file:File): Promise<string> => {
 // string to string of give length
 export const stringToLength = (str:string, length:number):string => {
   return str.slice(0,length) + (str.length > length ? "..." : "");
+}
+
+export const uploadFileToFirebaseAndGetUrl = async (file:File,address:string): Promise<string> => {
+  let type = file.type.split("/")[0];
+  if(!type) {
+    type = "other";
+  };
+  const storageRef = ref(storage, `${type}/${address}/${file.name}`);
+
+  const uploadedToUrl = await uploadBytes(storageRef, file).then(async(snapshot) => {
+    console.log('Uploaded a blob or file!');
+    //return file url
+    const url = await getDownloadURL(snapshot.ref).then((url) => {
+      console.log('File available at', url);
+      return url;
+    })
+    return url;
+  });
+  return uploadedToUrl;
 }

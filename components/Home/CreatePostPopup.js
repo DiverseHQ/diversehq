@@ -8,7 +8,10 @@ import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
 import FormTextInput from '../Common/UI/FormTextInput'
-import { uploadFileToIpfs } from '../../utils/utils'
+import {
+  uploadFileToFirebaseAndGetUrl
+  // uploadFileToIpfs
+} from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 
 const CreatePostPopup = ({ props }) => {
@@ -65,12 +68,14 @@ const CreatePostPopup = ({ props }) => {
       ]
 
       if (files.type.split('/')[0] === 'image') {
-        const Post = await uploadFileToIpfs(newFiles)
-        handleCreatePost('image', Post)
+        // const Post = await uploadFileToIpfs(newFiles)
+        const postUrl = await uploadFileToFirebaseAndGetUrl(newFiles)
+        handleCreatePost('image', postUrl)
       }
       if (files.type.split('/')[0] === 'video') {
-        const Post = await uploadFileToIpfs(newFiles)
-        handleCreatePost('video', Post)
+        // const Post = await uploadFileToIpfs(newFiles)
+        const postUrl = await uploadFileToFirebaseAndGetUrl(newFiles)
+        handleCreatePost('video', postUrl)
       }
     }
   }
