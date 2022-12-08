@@ -48,17 +48,19 @@ export const stringToLength = (str:string, length:number):string => {
 }
 
 export const uploadFileToFirebaseAndGetUrl = async (file:File,address:string): Promise<string> => {
-  let type = file.type.split("/")[0];
+  console.log("file",file)
+  const newFile = new File([file],file.name.replace(/\s/g, "_"),{type: file.type});
+  let type = newFile.type.split("/")[0];
   if(!type) {
     type = "other";
   };
-  const storageRef = ref(storage, `${type}/${address}/${file.name}`);
+  const storageRef = ref(storage, `${type}/${address}/${newFile.name}`);
 
-  const uploadedToUrl = await uploadBytes(storageRef, file).then(async(snapshot) => {
-    console.log('Uploaded a blob or file!');
-    //return file url
+  const uploadedToUrl = await uploadBytes(storageRef, newFile).then(async(snapshot) => {
+    console.log('Uploaded a blob or newFile!');
+    //return newFile url
     const url = await getDownloadURL(snapshot.ref).then((url) => {
-      console.log('File available at', url);
+      console.log('newFile available at', url);
       return url;
     })
     return url;

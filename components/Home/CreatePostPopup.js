@@ -15,7 +15,7 @@ import {
 import { getJoinedCommunitiesApi } from '../../api/community'
 
 const CreatePostPopup = ({ props }) => {
-  const [files, setFiles] = useState(null)
+  const [file, setFile] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState(null)
   const { user, token } = useProfile()
@@ -52,29 +52,35 @@ const CreatePostPopup = ({ props }) => {
       return
     }
     // change space to _ for all file in files
-    if (!files) {
+    if (!file) {
       notifyError('Please select a file')
       setLoading(false)
       return
-    } else if (files.length > 1) {
-      notifyError('Please select only one file')
-      setLoading(false)
-      return
     }
+    //  else if (files.length > 1) {
+    //   notifyError('Please select only one file')
+    //   setLoading(false)
+    //   return
+    // }
     // files[0].name = files[0].name.replace(/\s/g, "_");
-    if (files) {
-      const newFiles = [
-        new File([files], files.name.replace(/\s/g, '_'), { type: files.type })
-      ]
+    if (file) {
+      // array of file
+      // const newFiles = [
+      //   new File([files], files.name.replace(/\s/g, '_'), { type: files.type })
+      // ]
 
-      if (files.type.split('/')[0] === 'image') {
+      // const newfile = new File([files], files.name.replace(/\s/g, '_'), {
+      //   type: files.type
+      // })
+
+      if (file.type.split('/')[0] === 'image') {
         // const Post = await uploadFileToIpfs(newFiles)
-        const postUrl = await uploadFileToFirebaseAndGetUrl(newFiles)
+        const postUrl = await uploadFileToFirebaseAndGetUrl(file)
         handleCreatePost('image', postUrl)
       }
-      if (files.type.split('/')[0] === 'video') {
+      if (file.type.split('/')[0] === 'video') {
         // const Post = await uploadFileToIpfs(newFiles)
-        const postUrl = await uploadFileToFirebaseAndGetUrl(newFiles)
+        const postUrl = await uploadFileToFirebaseAndGetUrl(file)
         handleCreatePost('video', postUrl)
       }
     }
@@ -181,18 +187,18 @@ const CreatePostPopup = ({ props }) => {
   }
   const onImageChange = (event) => {
     const filePicked = event.target.files[0]
-    setFiles(filePicked)
+    setFile(filePicked)
     setImageValue(URL.createObjectURL(filePicked))
   }
   const removeImage = () => {
-    setFiles(null)
+    setFile(null)
     setImageValue(null)
   }
 
   const showAddedFile = () => {
     // check if the file is image or video and show it
-    if (!files) return null
-    const type = files.type.split('/')[0]
+    if (!file) return null
+    const type = file.type.split('/')[0]
     return (
       <div className="flex items-center justify-center">
         <div className="relative w-fit">
@@ -276,7 +282,7 @@ const CreatePostPopup = ({ props }) => {
             onChange={onChangeTitle}
           />
           <div className="text-base leading-relaxed  m-4">
-            {files ? (
+            {file ? (
               showAddedFile()
             ) : (
               <label htmlFor="upload-file">

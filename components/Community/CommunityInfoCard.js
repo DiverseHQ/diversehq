@@ -9,8 +9,6 @@ import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 
 const CommunityInfoCard = ({ communityInfo, communityName }) => {
-  console.log('communityInfo', communityInfo)
-  console.log('communityName', communityName)
   const { user, token, refreshUserInfo } = useProfile()
   const [community, setCommunity] = useState(communityInfo)
   const { notifyInfo } = useNotify()

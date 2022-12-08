@@ -1,7 +1,10 @@
 import { useProfile } from '../Common/WalletContext'
 import { useState } from 'react'
 import apiEndpoint from '../../api/ApiEndpoint'
-import { uploadFileToIpfs } from '../../utils/utils'
+import {
+  uploadFileToFirebaseAndGetUrl
+  // uploadFileToIpfs
+} from '../../utils/utils'
 const ChangeMonkey = () => {
   const [showModal, setShowModal] = useState(false)
   const [pfp, setPfp] = useState()
@@ -17,10 +20,11 @@ const ChangeMonkey = () => {
       return
     }
     // files[0].name = files[0].name.replace(/\s/g, "_");
-    const newFiles = [
-      new File([pfp[0]], pfp[0].name.replace(/\s/g, '_'), { type: pfp[0].type })
-    ]
-    const PFP = await uploadFileToIpfs(newFiles)
+    // const newFiles = [
+    //   new File([pfp[0]], pfp[0].name.replace(/\s/g, '_'), { type: pfp[0].type })
+    // ]
+    // const PFP = await uploadFileToIpfs(newFiles)
+    const PFP = await uploadFileToFirebaseAndGetUrl(pfp[0])
     await handleProfile(PFP)
     setShowModal(false)
   }

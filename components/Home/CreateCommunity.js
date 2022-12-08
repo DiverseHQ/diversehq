@@ -9,7 +9,10 @@ import FormTextInput from '../Common/UI/FormTextInput'
 import FormTextArea from '../Common/UI/FormTextArea'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useRouter } from 'next/router'
-import { uploadFileToIpfs } from '../../utils/utils'
+import {
+  uploadFileToFirebaseAndGetUrl
+  // uploadFileToIpfs
+} from '../../utils/utils'
 
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState('')
@@ -47,9 +50,10 @@ const CreateCommunity = () => {
       return
     }
     // change space to _ for all file in files
-    const PFP = await uploadFileToIpfs(communityPfp)
-    const Banner = await uploadFileToIpfs(communityBanner)
-    console.log(Banner)
+    // const PFP = await uploadFileToIpfs(communityPfp)
+    // const Banner = await uploadFileToIpfs(communityBanner)
+    const PFP = await uploadFileToFirebaseAndGetUrl(communityPfp)
+    const Banner = await uploadFileToFirebaseAndGetUrl(communityBanner)
     await handleCreateCommunity(PFP, Banner)
   }
 

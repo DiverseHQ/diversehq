@@ -1,7 +1,10 @@
 import React, { useCallback, useState } from 'react'
 import { AiOutlineCamera } from 'react-icons/ai'
 import { putUpdateUser } from '../../api/user'
-import { uploadFileToIpfs } from '../../utils/utils'
+import {
+  uploadFileToFirebaseAndGetUrl
+  // uploadFileToIpfs
+} from '../../utils/utils'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useNotify } from '../Common/NotifyContext'
 import PopUpWrapper from '../Common/PopUpWrapper'
@@ -37,11 +40,13 @@ const EditProfile = ({ user, showUserInfo }) => {
         bio
       }
       if (profileImageFile) {
-        const profile = await uploadFileToIpfs(profileImageFile)
+        // const profile = await uploadFileToIpfs(profileImageFile)
+        const profile = await uploadFileToFirebaseAndGetUrl(profileImageFile)
         profileData.profileImageUrl = profile
       }
       if (profileBannerFile) {
-        const banner = await uploadFileToIpfs(profileBannerFile)
+        // const banner = await uploadFileToIpfs(profileBannerFile)
+        const banner = await uploadFileToFirebaseAndGetUrl(profileBannerFile)
         profileData.bannerImageUrl = banner
       }
       const resp = await putUpdateUser(token, profileData)
