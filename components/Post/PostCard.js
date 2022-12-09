@@ -89,11 +89,9 @@ const PostCard = ({ post }) => {
             className="flex flex-row items-center"
             onClick={handleCommunityClicked}
           >
-            <Image
+            <img
               src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
-              width={isDesktop ? 30 : 26}
-              height={isDesktop ? 30 : 26}
-              className="rounded-full"
+              className="rounded-full w-[26px] h-[26px] sm:w-[30px] sm:h-[30px]"
             />
 
             <div className="pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">

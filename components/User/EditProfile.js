@@ -22,7 +22,7 @@ const EditProfile = ({ user, showUserInfo }) => {
   const [name, setName] = useState(user?.name)
   const [bio, setBio] = useState(user?.bio)
 
-  const { token, refreshUserInfo } = useProfile()
+  const { token, refreshUserInfo, address } = useProfile()
   const { notifyError, notifySuccess } = useNotify()
   const { hideModal } = usePopUpModal()
 
@@ -41,12 +41,18 @@ const EditProfile = ({ user, showUserInfo }) => {
       }
       if (profileImageFile) {
         // const profile = await uploadFileToIpfs(profileImageFile)
-        const profile = await uploadFileToFirebaseAndGetUrl(profileImageFile)
+        const profile = await uploadFileToFirebaseAndGetUrl(
+          profileImageFile,
+          address
+        )
         profileData.profileImageUrl = profile
       }
       if (profileBannerFile) {
         // const banner = await uploadFileToIpfs(profileBannerFile)
-        const banner = await uploadFileToFirebaseAndGetUrl(profileBannerFile)
+        const banner = await uploadFileToFirebaseAndGetUrl(
+          profileBannerFile,
+          address
+        )
         profileData.bannerImageUrl = banner
       }
       const resp = await putUpdateUser(token, profileData)

@@ -20,7 +20,7 @@ const CreateCommunity = () => {
   const [communityBanner, setCommunityBanner] = useState()
   const [communityDescription, setCommunityDescription] = useState('')
   const [loading, setLoading] = useState(false)
-  const { wallet, token } = useProfile()
+  const { address, token } = useProfile()
   const [headerValue, setHeaderValue] = useState(null)
   const [pfpValue, setPfpValue] = useState(null)
   const { notifyError, notifySuccess } = useNotify()
@@ -52,8 +52,8 @@ const CreateCommunity = () => {
     // change space to _ for all file in files
     // const PFP = await uploadFileToIpfs(communityPfp)
     // const Banner = await uploadFileToIpfs(communityBanner)
-    const PFP = await uploadFileToFirebaseAndGetUrl(communityPfp)
-    const Banner = await uploadFileToFirebaseAndGetUrl(communityBanner)
+    const PFP = await uploadFileToFirebaseAndGetUrl(communityPfp, address)
+    const Banner = await uploadFileToFirebaseAndGetUrl(communityBanner, address)
     await handleCreateCommunity(PFP, Banner)
   }
 
@@ -63,7 +63,7 @@ const CreateCommunity = () => {
       description: communityDescription,
       bannerImageUrl: bannerURL,
       logoImageUrl: pfpURL,
-      creator: wallet
+      creator: address
     }
     try {
       await postCreateCommunity(token, communityData).then(async (res) => {

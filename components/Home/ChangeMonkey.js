@@ -10,7 +10,7 @@ const ChangeMonkey = () => {
   const [pfp, setPfp] = useState()
   const [name, setName] = useState(null)
   const [bio, setBio] = useState(null)
-  const { token } = useProfile()
+  const { address, token } = useProfile()
   const handleSubmit = async (event) => {
     event.preventDefault()
     console.log(name, pfp, bio)
@@ -24,7 +24,7 @@ const ChangeMonkey = () => {
     //   new File([pfp[0]], pfp[0].name.replace(/\s/g, '_'), { type: pfp[0].type })
     // ]
     // const PFP = await uploadFileToIpfs(newFiles)
-    const PFP = await uploadFileToFirebaseAndGetUrl(pfp[0])
+    const PFP = await uploadFileToFirebaseAndGetUrl(pfp[0], address)
     await handleProfile(PFP)
     setShowModal(false)
   }
