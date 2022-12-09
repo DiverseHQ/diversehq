@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { putLikeOnPost } from '../../api/post'
 import { BsShareFill } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
-import useDevice from '../Common/useDevice'
+// import useDevice from '../Common/useDevice'
 
 const PostCard = ({ post }) => {
   const router = useRouter()
@@ -18,7 +18,7 @@ const PostCard = ({ post }) => {
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(post.likes.length)
   const { notifyInfo, notifyError } = useNotify()
-  const { isDesktop } = useDevice()
+  // const { isDesktop } = useDevice()
 
   useEffect(() => {
     if (!user) return
