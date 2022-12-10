@@ -14,9 +14,10 @@ const firebaseConfig = {
   projectId: "diversehq-21330",
   storageBucket: "diversehq-21330.appspot.com",
   messagingSenderId: "37535814205",
-  appId: "1:37535814205:web:a2a3152e0f615e4bcc1054",
+  appId: process.env.NEXT_PUBLIC_APP_ID,
   measurementId: "G-5DYJY39PNV"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
