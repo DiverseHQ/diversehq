@@ -4,8 +4,9 @@
 // runtimeCaching[0].handler = 'StaleWhileRevalidate'
 
 const withPWA = require('next-pwa')({
-  disable: false,
-  dest: 'public'
+  dest: 'public',
+  register: true,
+  skipWaiting: true
   // register: true,
   // runtimeCaching,
   // skipWaiting: true
