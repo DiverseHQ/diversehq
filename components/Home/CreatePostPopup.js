@@ -287,7 +287,9 @@ const CreatePostPopup = ({ props }) => {
             ) : (
               <label htmlFor="upload-file">
                 <div className="h-32 text-s-text flex flex-col justify-center items-center border border-s-text  rounded-xl">
-                  <AiOutlineCamera className="h-8 w-8" />
+                  <div>
+                    <AiOutlineCamera className="h-8 w-8" />
+                  </div>
                   <div>Add Image or Video</div>
                 </div>
               </label>
