@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PostsColumn from '../../components/Post/PostsColumn'
-import { getPostOfCommunity } from '../../api/community'
+import { getPostOfCommunity, getCommunityInfo } from '../../api/community'
 import CommunityInfoCard from '../../components/Community/CommunityInfoCard'
 import { POST_LIMIT } from '../../utils/config.ts'
 
@@ -9,6 +9,8 @@ const CommunityPage = () => {
   const { name } = useRouter().query
   const [posts, setPosts] = useState([])
   const [hasMore, setHasMore] = useState(true)
+
+  const [community, setCommunity] = useState(null)
 
   const showPosts = async () => {
     try {
@@ -33,10 +35,32 @@ const CommunityPage = () => {
     if (name) showPosts()
   }, [name])
 
+  useEffect(() => {
+    if (!community && name) {
+      fetchCommunityInformation()
+    }
+  }, [name])
+
+  const fetchCommunityInformation = async () => {
+    try {
+      const community = await getCommunityInfo(name)
+      console.log('fetchCommunityInformation', community)
+      setCommunity(community)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="pt-6">
       <div className="relative">
-        {name && <CommunityInfoCard communityName={name} />}
+        {community && (
+          <CommunityInfoCard
+            community={community}
+            setCommunity={setCommunity}
+            fetchCommunityInformation={fetchCommunityInformation}
+          />
+        )}
         {posts && (
           <PostsColumn
             getMorePost={showPosts}
