@@ -13,29 +13,35 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
   return (
-    <MasterWrapper>
-      <div className="text-p-text bg-p-bg min-h-screen">
-        {isDesktop && (
-          <div>
-            <Nav />
-            <div className="w-[600px] ml-[calc((100vw-600px)/2)] overflow-y-auto no-scrollbar h-full">
-              <Component {...pageProps} />
+    <>
+      <meta
+        name="viewport"
+        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+      />
+      <MasterWrapper>
+        <div className="text-p-text bg-p-bg min-h-screen">
+          {isDesktop && (
+            <div>
+              <Nav />
+              <div className="w-[600px] ml-[calc((100vw-600px)/2)] overflow-y-auto no-scrollbar h-full">
+                <Component {...pageProps} />
+              </div>
+              <RightPart />
             </div>
-            <RightPart />
-          </div>
-        )}
+          )}
 
-        {!isDesktop && (
-          <>
-            <MobileTopNav />
-            <div className={'pt-16 pb-16'}>
-              <Component {...pageProps} />
-            </div>
-            <MobileBottomNav />
-          </>
-        )}
-      </div>
-    </MasterWrapper>
+          {!isDesktop && (
+            <>
+              <MobileTopNav />
+              <div className={'pt-16 pb-16'}>
+                <Component {...pageProps} />
+              </div>
+              <MobileBottomNav />
+            </>
+          )}
+        </div>
+      </MasterWrapper>
+    </>
   )
 }
 

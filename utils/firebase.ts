@@ -8,15 +8,16 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDS5YZ6lDCMvEhkoRWoCf0dE1dyyDQun60",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_DIVERSEHQ_API_KEY,
   authDomain: "diversehq-21330.firebaseapp.com",
-  databaseURL: "https://diversehq-21330-default-rtdb.asia-southeast1.firebasedatabase.app",
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
   projectId: "diversehq-21330",
   storageBucket: "diversehq-21330.appspot.com",
   messagingSenderId: "37535814205",
-  appId: "1:37535814205:web:a2a3152e0f615e4bcc1054",
+  appId: process.env.NEXT_PUBLIC_APP_ID,
   measurementId: "G-5DYJY39PNV"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

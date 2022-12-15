@@ -18,7 +18,7 @@ const CreatePostPopup = ({ props }) => {
   const [file, setFile] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState(null)
-  const { user, token } = useProfile()
+  const { user, address, token } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [imageValue, setImageValue] = useState(null)
@@ -75,12 +75,12 @@ const CreatePostPopup = ({ props }) => {
 
       if (file.type.split('/')[0] === 'image') {
         // const Post = await uploadFileToIpfs(newFiles)
-        const postUrl = await uploadFileToFirebaseAndGetUrl(file)
+        const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
         handleCreatePost('image', postUrl)
       }
       if (file.type.split('/')[0] === 'video') {
         // const Post = await uploadFileToIpfs(newFiles)
-        const postUrl = await uploadFileToFirebaseAndGetUrl(file)
+        const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
         handleCreatePost('video', postUrl)
       }
     }
@@ -287,7 +287,9 @@ const CreatePostPopup = ({ props }) => {
             ) : (
               <label htmlFor="upload-file">
                 <div className="h-32 text-s-text flex flex-col justify-center items-center border border-s-text  rounded-xl">
-                  <AiOutlineCamera className="h-8 w-8" />
+                  <div>
+                    <AiOutlineCamera className="h-8 w-8" />
+                  </div>
                   <div>Add Image or Video</div>
                 </div>
               </label>

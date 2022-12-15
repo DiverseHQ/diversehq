@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { putLikeOnPost } from '../../api/post'
 import { BsShareFill } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
-import useDevice from '../Common/useDevice'
+// import useDevice from '../Common/useDevice'
 
 const PostCard = ({ post }) => {
   const router = useRouter()
@@ -18,7 +18,7 @@ const PostCard = ({ post }) => {
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(post.likes.length)
   const { notifyInfo, notifyError } = useNotify()
-  const { isDesktop } = useDevice()
+  // const { isDesktop } = useDevice()
 
   useEffect(() => {
     if (!user) return
@@ -89,11 +89,9 @@ const PostCard = ({ post }) => {
             className="flex flex-row items-center"
             onClick={handleCommunityClicked}
           >
-            <Image
+            <img
               src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
-              width={isDesktop ? 30 : 26}
-              height={isDesktop ? 30 : 26}
-              className="rounded-full"
+              className="rounded-full w-[26px] h-[26px] sm:w-[30px] sm:h-[30px]"
             />
 
             <div className="pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
