@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-import { putLikeOnPost } from '../../api/post'
+import { putLikeOnPost, deletePost } from '../../api/post'
 import { BsShareFill } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { HiOutlineTrash } from 'react-icons/hi'
 import { BiCommentDetail } from 'react-icons/bi'
 import useDevice from '../Common/useDevice'
 
@@ -20,9 +21,16 @@ const PostCard = ({ post }) => {
   const { notifyInfo, notifyError } = useNotify()
   const { isDesktop } = useDevice()
 
+  // to maintain the current author state
+  const [isAuthor, setIsAuthor] = useState(false)
+
   useEffect(() => {
     if (!user) return
     setLiked(post.likes.includes(user.walletAddress))
+    if (post.author === user.walletAddress) {
+      // if current user is the author then show the delete icon
+      setIsAuthor(true)
+    }
   }, [user])
   const handleLike = async () => {
     try {
@@ -68,6 +76,21 @@ const PostCard = ({ post }) => {
     }
   }
 
+  const handleDeletePost = async () => {
+    try {
+      if (!user || !token) {
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
+      await deletePost(post._id, token)
+      notifyInfo('Post deleted successfully')
+      handleCommunityClicked()
+    } catch (error) {
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
+
   const handleCommunityClicked = () => {
     router.push(`/c/${post.communityName}`)
   }
@@ -100,18 +123,28 @@ const PostCard = ({ post }) => {
               {post.communityName}
             </div>
           </div>
-          <div
-            className="flex flex-row items-center"
-            onClick={handleAuthorClicked}
-          >
-            <img
-              src={post.authorAvatar ? post.authorAvatar : '/gradient.jpg'}
-              className="rounded-full w-6 h-6 sm:w-8 sm:h-8"
-            />
-            <div className="pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
-              {post.authorName
-                ? post.authorName
-                : post.author.slice(0, 6) + '...'}
+          <div className="flex items-center">
+            <div
+              className="flex flex-row items-center mr-4"
+              onClick={handleDeletePost}
+            >
+              {isAuthor && (
+                <HiOutlineTrash className="text-red hover:cursor-pointer" />
+              )}
+            </div>
+            <div
+              className="flex flex-row items-center"
+              onClick={handleAuthorClicked}
+            >
+              <img
+                src={post.authorAvatar ? post.authorAvatar : '/gradient.jpg'}
+                className="rounded-full w-6 h-6 sm:w-8 sm:h-8"
+              />
+              <div className="pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
+                {post.authorName
+                  ? post.authorName
+                  : post.author.slice(0, 6) + '...'}
+              </div>
             </div>
           </div>
         </div>
@@ -121,7 +154,25 @@ const PostCard = ({ post }) => {
       </div>
       <div onClick={routeToPostPage}>
         {/* eslint-disable-next-line */}
-        {post.postImageUrl ? (<img src={post.postImageUrl} className="w-full" onLoad={() => { setLoaded(true) }} />) : (<video src={post.postVideoUrl} onLoad={() => { setLoaded(true) }} autoPlay loop controls />)} 
+        {post.postImageUrl ? (
+          <img
+            src={post.postImageUrl}
+            className="w-full"
+            onLoad={() => {
+              setLoaded(true)
+            }}
+          />
+        ) : (
+          <video
+            src={post.postVideoUrl}
+            onLoad={() => {
+              setLoaded(true)
+            }}
+            autoPlay
+            loop
+            controls
+          />
+        )}
       </div>
 
       <div className="flex flex-row justify-between items-center px-3 sm:px-5 py-2.5 sm:py-4">
