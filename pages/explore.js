@@ -34,9 +34,7 @@ const explore = () => {
         endMessage={<h4>Nothing more to show</h4>}
       >
         {communities.map((community) => {
-          return (
-            <CommunityInfoCard key={community._id} communityInfo={community} />
-          )
+          return <CommunityInfoCard key={community._id} community={community} />
         })}
       </InfiniteScroll>
     </div>
