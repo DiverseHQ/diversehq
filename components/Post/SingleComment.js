@@ -6,6 +6,7 @@ import { AiOutlineHeart } from 'react-icons/ai'
 import { FaHandSparkles } from 'react-icons/fa'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
+import { BsThreeDots } from 'react-icons/bs'
 import { deleteComment } from '../../api/comment'
 // import { getSinglePostInfo } from "../../api/post"
 import { useProfile } from '../Common/WalletContext'
@@ -23,6 +24,7 @@ const SingleComment = ({ comment, setPostInfo }) => {
   const { showModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
 
   useEffect(() => {
     if (comment?.author === user.walletAddress) {
@@ -80,6 +82,39 @@ const SingleComment = ({ comment, setPostInfo }) => {
             </div>
             <div className="flex flex-row items-center">
               {isAuthor && (
+                <div className="relative">
+                  <BsThreeDots
+                    className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                    onClick={() => setShowMenu(!showMenu)}
+                    title="More"
+                  />
+                  {showMenu && (
+                    <div className="flex flex-col absolute  w-[120px] md:w-[220px] top-[30px] shadow-lg shadow-white-500/20 bg-[#fff] rounded-[10px] gap-2 z-[100] text-bold text-md sm:text-lg">
+                      <div
+                        className="flex items-center hover:bg-[#eee] p-2 hover:cursor-pointer hover:text-red-600"
+                        onClick={handleDeleteComment}
+                      >
+                        <HiOutlineTrash
+                          className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                          title="Delete"
+                        />
+                        <span>Delete</span>
+                      </div>
+                      <div
+                        className="flex items-center hover:bg-[#eee] p-2 hover:cursor-pointer"
+                        onClick={handleEditComment}
+                      >
+                        <BiEdit
+                          className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                          title="Edit"
+                        />
+                        <span>Edit</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              {/* {isAuthor && (
                 <>
                   <HiOutlineTrash
                     className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7"
@@ -92,7 +127,7 @@ const SingleComment = ({ comment, setPostInfo }) => {
                     title="Edit"
                   />
                 </>
-              )}
+              )} */}
               <AiOutlineHeart className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn" />
               <div className="mr-3">{comment.likes.length}</div>
               <FaHandSparkles className="w-5 h-5 sm:w-7 sm:h-7 mr-1.5" />
