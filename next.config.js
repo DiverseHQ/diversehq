@@ -14,7 +14,7 @@ const withPWA = require('next-pwa')({
 const nextConfig = withPWA({
   reactStrictMode: true,
   images: {
-    domains: ['dweb.link', '*.jpeg']
+    domains: ['dweb.link', '*.jpeg', 'firebasestorage.googleapis.com']
   },
   webpack: (config) => {
     // this will override the experiments

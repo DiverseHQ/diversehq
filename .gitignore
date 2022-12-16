@@ -44,4 +44,5 @@ package-lock.json
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
+**/public/fallback-*.js
 
