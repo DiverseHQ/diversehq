@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import apiEndpoint from '../../api/ApiEndpoint'
 import SingleComment from './SingleComment'
 
-const CommentsSection = ({ commentsId }) => {
+const CommentsSection = ({ commentsId, setPostInfo }) => {
   const [comments, setComments] = useState(null)
   useEffect(() => {
     ;(async () => {
@@ -39,7 +39,13 @@ const CommentsSection = ({ commentsId }) => {
       {!comments && <div>loading...</div>}
       {comments &&
         comments.map((comment, index) => {
-          return <SingleComment comment={comment} key={index} />
+          return (
+            <SingleComment
+              comment={comment}
+              key={index}
+              setPostInfo={setPostInfo}
+            />
+          )
         })}
     </>
   )

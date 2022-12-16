@@ -45,7 +45,7 @@ const PostPage = () => {
               authorAddress={postInfo.author}
               addCommentIdToComments={addCommentIdToComments}
             />
-            <CommentsSection commentsId={comments} />
+            <CommentsSection commentsId={comments} setPostInfo={setPostInfo} />
             {/* <div className='fixed bottom-16'> */}
             {/* </div> */}
           </div>
