@@ -38,5 +38,5 @@ export const deleteComment = async (token: string, commentId: string) => {
 }
 
 export const getCommentFromCommentId = async ( commentId: string) => {
-    return await fetch(`${apiEndpoint}/comment/${commentId}`).then(r => r.json())
+    return await fetch(`${apiEndpoint}/comment/${commentId}`).then(r => r)
 }
