@@ -4,7 +4,7 @@ import React, { useEffect, useState, Suspense } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { putLikeOnPost, deletePost } from '../../api/post'
-import { BsShareFill } from 'react-icons/bs'
+import { BsShareFill, BsThreeDots } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { BiCommentDetail } from 'react-icons/bi'
@@ -24,6 +24,7 @@ const PostCard = ({ post }) => {
 
   // to maintain the current author state
   const [isAuthor, setIsAuthor] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -125,10 +126,30 @@ const PostCard = ({ post }) => {
           <div className="flex items-center">
             <div
               className="flex flex-row items-center mr-4"
-              onClick={handleDeletePost}
+              // onClick={handleDeletePost}
             >
               {isAuthor && (
-                <HiOutlineTrash className="text-red hover:cursor-pointer" />
+                <div className="relative">
+                  <BsThreeDots
+                    className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                    onClick={() => setShowMenu(!showMenu)}
+                    title="More"
+                  />
+                  {showMenu && (
+                    <div className="flex flex-col absolute left-[-100px] md:left-[-160px] w-[120px] md:w-[180px] top-[30px] shadow-lg shadow-white-500/20 bg-[#fff] rounded-[10px] gap-2 z-[100] text-bold text-md sm:text-lg">
+                      <div
+                        className="flex items-center hover:bg-[#eee] p-2 hover:cursor-pointer hover:text-red-600 rounded-[10px]"
+                        onClick={handleDeletePost}
+                      >
+                        <HiOutlineTrash
+                          className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                          title="Delete"
+                        />
+                        <span>Delete</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
             <div
