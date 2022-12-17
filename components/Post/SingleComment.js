@@ -18,7 +18,8 @@ import {
 import EditComment from './EditComment'
 TimeAgo.addDefaultLocale(en)
 
-const SingleComment = ({ comment, setPostInfo }) => {
+const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
+  const [comment, setComment] = useState(commentInfo)
   const { notifyInfo, notifyError } = useNotify()
   const { user, token } = useProfile()
   const { showModal } = usePopUpModal()
@@ -35,7 +36,7 @@ const SingleComment = ({ comment, setPostInfo }) => {
   const handleEditComment = () => {
     if (!comment) return
     showModal({
-      component: <EditComment comment={comment} />,
+      component: <EditComment comment={comment} setComment={setComment} />,
       type: modalType.normal,
       onAction: () => {},
       extraaInfo: {}
@@ -50,8 +51,9 @@ const SingleComment = ({ comment, setPostInfo }) => {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      const post = await deleteComment(token, comment?._id)
-      setPostInfo(post)
+      const deletedId = await deleteComment(token, comment?._id)
+      console.log('deletedId', deletedId)
+      removeCommentIdFromComments(comment?._id)
       // const post = await getSinglePostInfo(comment?.postId)
       notifyInfo('Comment deleted successfully')
     } catch (error) {
@@ -68,15 +70,13 @@ const SingleComment = ({ comment, setPostInfo }) => {
             <div className="flex flex-row items-center">
               <img
                 src={
-                  comment.authorDetails.profileImageUrl
-                    ? comment.authorDetails.profileImageUrl
-                    : '/gradient.jpg'
+                  comment.authorAvatar ? comment.authorAvatar : '/gradient.jpg'
                 }
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full mr-2"
               />
               <div className="ml-2 font-bold text-xs sm:text-xl">
-                {comment.authorDetails.name
-                  ? comment.authorDetails.name
+                {comment.authorName
+                  ? comment.authorName
                   : comment.author.substring(0, 6) + '...'}
               </div>
             </div>
@@ -114,20 +114,6 @@ const SingleComment = ({ comment, setPostInfo }) => {
                   )}
                 </div>
               )}
-              {/* {isAuthor && (
-                <>
-                  <HiOutlineTrash
-                    className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7"
-                    onClick={handleDeleteComment}
-                    title="Delete"
-                  />
-                  <BiEdit
-                    className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7"
-                    onClick={handleEditComment}
-                    title="Edit"
-                  />
-                </>
-              )} */}
               <AiOutlineHeart className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn" />
               <div className="mr-3">{comment.likes.length}</div>
               <FaHandSparkles className="w-5 h-5 sm:w-7 sm:h-7 mr-1.5" />

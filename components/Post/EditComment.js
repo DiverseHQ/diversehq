@@ -6,7 +6,7 @@ import { putEditComment } from '../../api/comment'
 import { useProfile } from '../Common/WalletContext'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 
-const EditComment = ({ comment }) => {
+const EditComment = ({ comment, setComment }) => {
   const [loading, setLoading] = useState(false)
   const [content, setNewContent] = useState(comment?.content)
   const { notifyError, notifySuccess } = useNotify()
@@ -25,18 +25,14 @@ const EditComment = ({ comment }) => {
       return
     }
     try {
-      const commentData = { ...comment, content }
-      console.log(commentData)
-      // it contains the authorDetails key which is not in the comments schema
-      delete commentData.authorDetails
-      console.log(commentData)
-      const res = await putEditComment(token, commentData)
+      const res = await putEditComment(token, comment._id, content)
       const resData = await res.json()
       if (res.status !== 200) {
         setLoading(false)
         notifyError(resData.msg)
         return
       }
+      setComment({ ...comment, content })
       setLoading(false)
       notifySuccess('Comment Updated')
       hideModal()

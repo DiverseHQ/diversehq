@@ -16,14 +16,14 @@ export const postComment = async (token: string, content: string, postId: string
     }).then(r => r.json())
 }
 
-export const putEditComment = async (token: string, commentData: CommentType) => {
-    return await fetch(`${apiEndpoint}/comment/edit/${commentData._id}`, {
+export const putEditComment = async (token: string, commentId: string, content: string) => {
+    return await fetch(`${apiEndpoint}/comment/edit/${commentId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             Authorization: token
         },
-        body: JSON.stringify(commentData)
+        body: JSON.stringify({content})
     }).then((res) => res)
 }
 
@@ -35,4 +35,8 @@ export const deleteComment = async (token: string, commentId: string) => {
             Authorization: token
         },
     }).then(r => r.json())
+}
+
+export const getCommentFromCommentId = async ( commentId: string) => {
+    return await fetch(`${apiEndpoint}/comment/${commentId}`).then(r => r.json())
 }

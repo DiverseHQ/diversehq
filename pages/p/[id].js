@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { getSinglePostInfo } from '../../api/post'
 import CommentsSection from '../../components/Post/CommentsSection'
 import CreateComment from '../../components/Post/CreateComment'
@@ -8,17 +8,10 @@ import PostCard from '../../components/Post/PostCard'
 const PostPage = () => {
   const { id } = useRouter().query
   const [postInfo, setPostInfo] = React.useState(null)
-  const [comments, setComments] = React.useState([])
 
   React.useEffect(() => {
     if (id) fetchPostInformation()
   }, [id])
-
-  useEffect(() => {
-    if (postInfo) {
-      setComments(postInfo.comments)
-    }
-  }, [postInfo])
 
   const fetchPostInformation = async () => {
     try {
@@ -31,7 +24,20 @@ const PostPage = () => {
   }
 
   const addCommentIdToComments = (commentId) => {
-    setComments([commentId, ...comments])
+    setPostInfo((prev) => {
+      return {
+        ...prev,
+        comments: [commentId, ...prev.comments]
+      }
+    })
+  }
+  const removeCommentIdFromComments = (commentId) => {
+    setPostInfo((prev) => {
+      return {
+        ...prev,
+        comments: prev.comments.filter((id) => id !== commentId)
+      }
+    })
   }
   return (
     <>
@@ -45,7 +51,10 @@ const PostPage = () => {
               authorAddress={postInfo.author}
               addCommentIdToComments={addCommentIdToComments}
             />
-            <CommentsSection commentsId={comments} setPostInfo={setPostInfo} />
+            <CommentsSection
+              commentsId={postInfo.comments}
+              removeCommentIdFromComments={removeCommentIdFromComments}
+            />
             {/* <div className='fixed bottom-16'> */}
             {/* </div> */}
           </div>
