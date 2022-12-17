@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 // import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
@@ -8,6 +8,7 @@ import { BsShareFill } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { BiCommentDetail } from 'react-icons/bi'
+
 // import useDevice from '../Common/useDevice'
 
 const PostCard = ({ post }) => {
@@ -150,28 +151,33 @@ const PostCard = ({ post }) => {
           {post.title}
         </div>
       </div>
-      <div onClick={routeToPostPage}>
-        {/* eslint-disable-next-line */}
+      {(post?.postImageUrl || post.postVideoUrl) && (
+        <div onClick={routeToPostPage}>
+          {/* eslint-disable-next-line */}
         {post.postImageUrl ? (
-          <img
-            src={post.postImageUrl}
-            className="w-full"
-            onLoad={() => {
-              setLoaded(true)
-            }}
-          />
-        ) : (
-          <video
-            src={post.postVideoUrl}
-            onLoad={() => {
-              setLoaded(true)
-            }}
-            autoPlay
-            loop
-            controls
-          />
-        )}
-      </div>
+            <img
+              src={post.postImageUrl}
+              className="w-full"
+              onLoad={() => {
+                console.log('loaded')
+                setLoaded(true)
+              }}
+            />
+          ) : (
+            <>
+              <video
+                src={post.postVideoUrl}
+                onLoad={() => {
+                  setLoaded(true)
+                }}
+                autoPlay
+                loop
+                controls
+              />
+            </>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-row justify-between items-center px-3 sm:px-5 py-2.5 sm:py-4">
         <div className="flex flex-row items-center">

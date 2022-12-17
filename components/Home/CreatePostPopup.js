@@ -52,27 +52,19 @@ const CreatePostPopup = ({ props }) => {
       return
     }
     // change space to _ for all file in files
-    if (!file) {
-      notifyError('Please select a file')
-      setLoading(false)
-      return
-    }
-    //  else if (files.length > 1) {
-    //   notifyError('Please select only one file')
+    // if (!file) {
+    //   notifyError('Please select a file')
     //   setLoading(false)
     //   return
     // }
-    // files[0].name = files[0].name.replace(/\s/g, "_");
+
     if (file) {
-      // array of file
-      // const newFiles = [
-      //   new File([files], files.name.replace(/\s/g, '_'), { type: files.type })
-      // ]
-
-      // const newfile = new File([files], files.name.replace(/\s/g, '_'), {
-      //   type: files.type
-      // })
-
+      // file size should be less than 5mb
+      if (file.size > 5000000) {
+        notifyError('File size should be less than 5mb')
+        setLoading(false)
+        return
+      }
       if (file.type.split('/')[0] === 'image') {
         // const Post = await uploadFileToIpfs(newFiles)
         const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
@@ -83,6 +75,8 @@ const CreatePostPopup = ({ props }) => {
         const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
         handleCreatePost('video', postUrl)
       }
+    } else {
+      handleCreatePost('text')
     }
   }
   const handleCreatePost = async (type, url) => {
@@ -90,7 +84,9 @@ const CreatePostPopup = ({ props }) => {
       communityId,
       title
     }
-    postData[type === 'image' ? 'postImageUrl' : 'postVideoUrl'] = url
+    if (type !== 'text') {
+      postData[type === 'image' ? 'postImageUrl' : 'postVideoUrl'] = url
+    }
 
     try {
       const resp = await postCreatePost(token, postData)
@@ -164,6 +160,7 @@ const CreatePostPopup = ({ props }) => {
                           ? community.logoImageUrl
                           : '/gradient.jpg'
                       }
+                      alt="community logo"
                       className="rounded-full"
                       width={30}
                       height={30}
@@ -187,6 +184,7 @@ const CreatePostPopup = ({ props }) => {
   }
   const onImageChange = (event) => {
     const filePicked = event.target.files[0]
+    if (!filePicked) return
     setFile(filePicked)
     setImageValue(URL.createObjectURL(filePicked))
   }

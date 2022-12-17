@@ -1,5 +1,5 @@
 const mode = process.env.NEXT_PUBLIC_NODE_MODE;
-// const mode = 'production'
+// const mode = 'development'
 let apiEndpoint:string  = ''
 switch (mode) {
   case 'development':
