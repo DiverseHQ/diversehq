@@ -31,7 +31,6 @@ export const WalletProvider = ({ children }) => {
   }, [isDisconnected])
 
   useEffect(() => {
-    console.log('signer isError isLoading', signer, isError, isLoading)
     if (signer && address) {
       refetchToken()
     }
