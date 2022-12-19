@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
+import { AiOutlineHeart, AiFillHeart, AiOutlineCheck } from 'react-icons/ai'
 import { FaHandSparkles } from 'react-icons/fa'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
@@ -211,17 +211,26 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
           </div>
 
           {editing ? (
-            <input
-              className="mt-3 border-b-2 focus:outline-none text-lg text-semibold w-[80%]"
-              type="text"
-              placeholder={`${content}`}
-              value={`${content}`}
-              onChange={onCommentChange}
-              onKeyUp={(e) => {
-                if (e.key === 'Enter') submitEdittedComment()
-              }}
-              required
-            />
+            <div className="flex items-center justify-between">
+              <input
+                className="mt-3 border-b-2 focus:outline-none text-lg text-semibold w-[80%]"
+                type="text"
+                placeholder={`${content}`}
+                value={`${content}`}
+                onChange={onCommentChange}
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') submitEdittedComment()
+                }}
+                required
+              />
+              <div className="flex items-center">
+                <AiOutlineCheck
+                  className="text-[24px] hover:cursor-pointer hover:text-[#66CD00]"
+                  title="Save"
+                  onClick={submitEdittedComment}
+                />
+              </div>
+            </div>
           ) : (
             <div className="mt-3">{comment.content}</div>
           )}
