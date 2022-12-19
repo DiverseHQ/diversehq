@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
@@ -7,22 +7,22 @@ import { FaHandSparkles } from 'react-icons/fa'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { BsThreeDots } from 'react-icons/bs'
-import { deleteComment, putLikeComment } from '../../api/comment'
+import {
+  deleteComment,
+  putLikeComment,
+  putEditComment
+} from '../../api/comment'
 // import { getSinglePostInfo } from "../../api/post"
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-import {
-  modalType,
-  usePopUpModal
-} from '../../components/Common/CustomPopUpProvider'
-import EditComment from './EditComment'
+// import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
 const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [comment, setComment] = useState(commentInfo)
-  const { notifyInfo, notifyError } = useNotify()
+  const { notifyInfo, notifyError, notifySuccess } = useNotify()
   const { user, token } = useProfile()
-  const { showModal } = usePopUpModal()
+  // const { showModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
@@ -31,7 +31,9 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(comment.likes.length)
 
-  console.log(likes)
+  // edit comment state
+  const [editing, setEditing] = useState(false)
+  const [content, setContent] = useState(comment?.content)
 
   useEffect(() => {
     if (comment?.author === user.walletAddress) {
@@ -39,14 +41,33 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
     }
   }, [comment])
 
-  const handleEditComment = () => {
+  const handleEditComment = async () => {
     if (!comment) return
-    showModal({
-      component: <EditComment comment={comment} setComment={setComment} />,
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
+    setEditing(true)
+
+    // showModal({
+    //   component: <EditComment comment={comment} setComment={setComment} />,
+    //   type: modalType.normal,
+    //   onAction: () => {},
+    //   extraaInfo: {}
+    // })
+  }
+
+  const submitEdittedComment = async () => {
+    try {
+      const res = await putEditComment(token, comment?._id, content)
+      const resData = await res.json()
+      if (res.status !== 200) {
+        notifyError(resData.msg)
+        return
+      }
+      setComment({ ...comment, content })
+      setEditing(false)
+      notifySuccess('Comment Updated')
+    } catch (error) {
+      console.log(error)
+      notifyError(error.message)
+    }
   }
 
   // 1. if the comment.author === user.walletAddress (same person who commented) then let them edit and delete the comment
@@ -107,6 +128,10 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
       notifyError('Something went wrong')
     }
   }
+
+  const onCommentChange = useCallback((e) => {
+    setContent(e.target.value)
+  }, [])
 
   return (
     <>
@@ -185,7 +210,21 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             </div>
           </div>
 
-          <div className="mt-3">{comment.content}</div>
+          {editing ? (
+            <input
+              className="mt-3 border-b-2 focus:outline-none text-lg text-semibold w-[80%]"
+              type="text"
+              placeholder={`${content}`}
+              value={`${content}`}
+              onChange={onCommentChange}
+              onKeyUp={(e) => {
+                if (e.key === 'Enter') submitEdittedComment()
+              }}
+              required
+            />
+          ) : (
+            <div className="mt-3">{comment.content}</div>
+          )}
         </div>
       )}
       {!comment && <></>}
