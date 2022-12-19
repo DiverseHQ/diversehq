@@ -68,6 +68,9 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
       )
       console.log(comment)
       addCommentIdToComments(comment._id)
+
+      // clear the comment input field after submit
+      commentRef.current.value = ''
       if (appreciateAmount > 0) {
         const wei = utils.parseEther(appreciateAmount.toString())
         console.log('wei', wei)
@@ -115,6 +118,9 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
               ref={commentRef}
               className="border-none outline-none w-full mt-3 text-xs sm:text-base bg-s-bg"
               placeholder="Write a comment..."
+              onKeyUp={(e) => {
+                if (e.key === 'Enter') createComment()
+              }}
             />
           </div>
         </div>
