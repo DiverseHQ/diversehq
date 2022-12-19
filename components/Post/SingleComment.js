@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
-import { AiOutlineHeart } from 'react-icons/ai'
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
 import { FaHandSparkles } from 'react-icons/fa'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { BsThreeDots } from 'react-icons/bs'
-import { deleteComment } from '../../api/comment'
+import { deleteComment, putLikeComment } from '../../api/comment'
 // import { getSinglePostInfo } from "../../api/post"
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
@@ -26,6 +26,12 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const [isAuthor, setIsAuthor] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+
+  // maintaining comment likes
+  const [liked, setLiked] = useState(false)
+  const [likes, setLikes] = useState(comment.likes.length)
+
+  console.log(likes)
 
   useEffect(() => {
     if (comment?.author === user.walletAddress) {
@@ -56,6 +62,46 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
       removeCommentIdFromComments(comment?._id)
       // const post = await getSinglePostInfo(comment?.postId)
       notifyInfo('Comment deleted successfully')
+    } catch (error) {
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
+
+  const handleLike = async () => {
+    try {
+      if (!user || !token) {
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
+      const res = await putLikeComment(token, comment?._id)
+      const resData = await res.json()
+      if (res.status !== 200) {
+        notifyError(resData.msg)
+        return
+      }
+      setLiked(true)
+      setLikes(resData.likes.length)
+    } catch (error) {
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
+
+  const handleUnlike = async () => {
+    try {
+      if (!user || !token) {
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
+      const res = await putLikeComment(token, comment?._id)
+      const resData = await res.json()
+      if (res.status !== 200) {
+        notifyError(resData.msg)
+        return
+      }
+      setLiked(false)
+      setLikes(resData.likes.length)
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
@@ -114,8 +160,20 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   )}
                 </div>
               )}
-              <AiOutlineHeart className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn" />
-              <div className="mr-3">{comment.likes.length}</div>
+              {liked ? (
+                likes !== 0 && (
+                  <AiFillHeart
+                    className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
+                    onClick={handleUnlike}
+                  />
+                )
+              ) : (
+                <AiOutlineHeart
+                  className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
+                  onClick={handleLike}
+                />
+              )}
+              <div className="mr-3">{likes}</div>
               <FaHandSparkles className="w-5 h-5 sm:w-7 sm:h-7 mr-1.5" />
               <div className="mr-3">{comment.appreciateAmount}</div>
               <div className="text-xs sm:text-base">

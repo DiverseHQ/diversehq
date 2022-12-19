@@ -1,5 +1,6 @@
 import apiEndpoint from "./ApiEndpoint"
 import { CommentType } from "../utils/types"
+import { async } from "@firebase/util"
 
 export const postComment = async (token: string, content: string, postId: string, appreciateAmount: number): Promise<CommentType> => {
     return await fetch(`${apiEndpoint}/comment`, {
@@ -39,4 +40,14 @@ export const deleteComment = async (token: string, commentId: string) => {
 
 export const getCommentFromCommentId = async ( commentId: string) => {
     return await fetch(`${apiEndpoint}/comment/${commentId}`).then(r => r)
+}
+
+export const putLikeComment = async (token: string, commentId: string) => {
+    return await fetch(`${apiEndpoint}/comment/like/${commentId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+        }
+    }).then((res) => res)
 }
