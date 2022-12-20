@@ -13,7 +13,7 @@ export const WalletProvider = ({ children }) => {
   const [token, setToken] = useState(null)
   const [user, setUser] = useState(null)
   const provider = useProvider()
-  const { data: signer, isError, isLoading } = useSigner()
+  const { data: signer } = useSigner()
   const { address, isDisconnected } = useAccount({
     onConnect({ address, connector, isReconnected }) {
       console.log('onConnect', address, connector, isReconnected)
