@@ -14,7 +14,7 @@ const firebaseConfig = {
   projectId: "diversehq-21330",
   storageBucket: "diversehq-21330.appspot.com",
   messagingSenderId: "37535814205",
-  appId: process.env.NEXT_PUBLIC_APP_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: "G-5DYJY39PNV"
 };
 
