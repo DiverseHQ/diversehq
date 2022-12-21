@@ -12,9 +12,7 @@ export const getAllPosts = async (limit, skips, sortBy) => {
 }
 
 export const getSinglePostInfo = async (id) => {
-  return await fetch(`${apiEndpoint}/post/singlePostInfo/${id}`).then((r) =>
-    r.json()
-  )
+  return await fetch(`${apiEndpoint}/post/singlePostInfo/${id}`).then((r) => r)
 }
 
 export const putLikeOnPost = async (id, token) => {

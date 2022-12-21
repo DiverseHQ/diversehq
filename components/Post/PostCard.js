@@ -1,17 +1,19 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState, Suspense } from 'react'
+import React, { useEffect, useState } from 'react'
 // import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { putLikeOnPost, deletePost } from '../../api/post'
 import { BsShareFill, BsThreeDots } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
-import { HiOutlineTrash } from 'react-icons/hi'
+// import { HiOutlineTrash } from 'react-icons/hi'
 import { BiCommentDetail } from 'react-icons/bi'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import PostDeleteDropdown from './PostDeleteDropdown'
 
 // import useDevice from '../Common/useDevice'
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, setPosts, setNotFound }) => {
   const router = useRouter()
   // const createdAt = new Date(post.createdAt)
   // eslint-disable-next-line
@@ -24,11 +26,12 @@ const PostCard = ({ post }) => {
 
   // to maintain the current author state
   const [isAuthor, setIsAuthor] = useState(false)
-  const [showMenu, setShowMenu] = useState(false)
+
+  const { showModal } = usePopUpModal()
 
   useEffect(() => {
     if (!user) return
-    setLiked(post.likes.includes(user.walletAddress))
+    setLiked(post.likes?.includes(user.walletAddress))
     if (post.author === user.walletAddress) {
       // if current user is the author then show the delete icon
       setIsAuthor(true)
@@ -86,11 +89,36 @@ const PostCard = ({ post }) => {
       }
       await deletePost(post._id, token)
       notifyInfo('Post deleted successfully')
-      handleCommunityClicked()
+      // handleCommunityClicked()
+      // remove the deleted post from the posts state array
+      if (setPosts) {
+        setPosts((prevPosts) => prevPosts.filter((p) => p?._id !== post?._id))
+      }
+
+      if (setNotFound) {
+        setNotFound(true)
+      }
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
     }
+  }
+
+  const showMoreOptions = (e) => {
+    // setShowOptions(!showOptions)
+    showModal({
+      component: <PostDeleteDropdown handleDeletePost={handleDeletePost} />,
+      type: modalType.customposition,
+      onAction: () => {},
+      extraaInfo: {
+        bottom:
+          window.innerHeight -
+          e.currentTarget.getBoundingClientRect().bottom -
+          50 +
+          'px',
+        left: e.currentTarget.getBoundingClientRect().left + 'px'
+      }
+    })
   }
 
   const handleCommunityClicked = () => {
@@ -132,23 +160,9 @@ const PostCard = ({ post }) => {
                 <div className="relative">
                   <BsThreeDots
                     className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                    onClick={() => setShowMenu(!showMenu)}
+                    onClick={showMoreOptions}
                     title="More"
                   />
-                  {showMenu && (
-                    <div className="flex flex-col absolute left-[-100px] md:left-[-160px] w-[120px] md:w-[180px] top-[30px] shadow-lg shadow-white-500/20 bg-[#fff] rounded-[10px] gap-2 z-[100] text-bold text-md sm:text-lg">
-                      <div
-                        className="flex items-center hover:bg-[#eee] p-2 hover:cursor-pointer hover:text-red-600 rounded-[10px]"
-                        onClick={handleDeletePost}
-                      >
-                        <HiOutlineTrash
-                          className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                          title="Delete"
-                        />
-                        <span>Delete</span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
             </div>
@@ -163,7 +177,7 @@ const PostCard = ({ post }) => {
               <div className="pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
                 {post.authorName
                   ? post.authorName
-                  : post.author.slice(0, 6) + '...'}
+                  : post.author?.slice(0, 6) + '...'}
               </div>
             </div>
           </div>
@@ -175,7 +189,7 @@ const PostCard = ({ post }) => {
       {(post?.postImageUrl || post.postVideoUrl) && (
         <div onClick={routeToPostPage}>
           {/* eslint-disable-next-line */}
-        {post.postImageUrl ? (
+          {post.postImageUrl ? (
             <img
               src={post.postImageUrl}
               className="w-full"
@@ -229,7 +243,7 @@ const PostCard = ({ post }) => {
           </div>
           <div className="hover:cursor-pointer hover:underline">
             {' '}
-            {post.comments.length} comments
+            {post.comments?.length} comments
           </div>
         </div>
       </div>

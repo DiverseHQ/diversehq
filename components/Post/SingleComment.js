@@ -4,8 +4,6 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import { AiOutlineHeart, AiFillHeart, AiOutlineCheck } from 'react-icons/ai'
 import { FaHandSparkles } from 'react-icons/fa'
-import { BiEdit } from 'react-icons/bi'
-import { HiOutlineTrash } from 'react-icons/hi'
 import { BsThreeDots } from 'react-icons/bs'
 import {
   deleteComment,
@@ -15,6 +13,8 @@ import {
 // import { getSinglePostInfo } from "../../api/post"
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import CommentDropdown from './CommentDropdown'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
@@ -22,10 +22,9 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [comment, setComment] = useState(commentInfo)
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
   const { user, token } = useProfile()
-  // const { showModal } = usePopUpModal()
+  const { showModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
-  const [showMenu, setShowMenu] = useState(false)
 
   // maintaining comment likes
   const [liked, setLiked] = useState(false)
@@ -133,6 +132,28 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
     setContent(e.target.value)
   }, [])
 
+  const showMoreOptions = (e) => {
+    // setShowOptions(!showOptions)
+    showModal({
+      component: (
+        <CommentDropdown
+          handleEditComment={handleEditComment}
+          handleDeleteComment={handleDeleteComment}
+        />
+      ),
+      type: modalType.customposition,
+      onAction: () => {},
+      extraaInfo: {
+        bottom:
+          window.innerHeight -
+          e.currentTarget.getBoundingClientRect().bottom -
+          100 +
+          'px',
+        left: e.currentTarget.getBoundingClientRect().left + 'px'
+      }
+    })
+  }
+
   return (
     <>
       {comment && (
@@ -156,33 +177,9 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                 <div className="relative">
                   <BsThreeDots
                     className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                    onClick={() => setShowMenu(!showMenu)}
+                    onClick={showMoreOptions}
                     title="More"
                   />
-                  {showMenu && (
-                    <div className="flex flex-col absolute  w-[120px] md:w-[220px] top-[30px] shadow-lg shadow-white-500/20 bg-[#fff] rounded-[10px] gap-2 z-[100] text-bold text-md sm:text-lg">
-                      <div
-                        className="flex items-center hover:bg-[#eee] p-2 hover:cursor-pointer hover:text-red-600"
-                        onClick={handleDeleteComment}
-                      >
-                        <HiOutlineTrash
-                          className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                          title="Delete"
-                        />
-                        <span>Delete</span>
-                      </div>
-                      <div
-                        className="flex items-center hover:bg-[#eee] p-2 hover:cursor-pointer"
-                        onClick={handleEditComment}
-                      >
-                        <BiEdit
-                          className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                          title="Edit"
-                        />
-                        <span>Edit</span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
               {liked ? (

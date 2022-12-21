@@ -66,6 +66,7 @@ const CommunityPage = () => {
             getMorePost={showPosts}
             hasMore={hasMore}
             posts={posts}
+            setPosts={setPosts}
           />
         )}
       </div>

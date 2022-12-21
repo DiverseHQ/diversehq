@@ -2,7 +2,7 @@ import React from 'react'
 import PostCard from './PostCard'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-const PostsColumn = ({ posts, getMorePost, hasMore }) => {
+const PostsColumn = ({ posts, getMorePost, hasMore, setPosts }) => {
   return (
     <>
       <InfiniteScroll
@@ -15,7 +15,7 @@ const PostsColumn = ({ posts, getMorePost, hasMore }) => {
         {posts.map((post) => {
           return (
             <div key={post._id}>
-              <PostCard key={post._id} post={post} />
+              <PostCard key={post._id} post={post} setPosts={setPosts} />
             </div>
           )
         })}

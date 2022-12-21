@@ -35,6 +35,7 @@ const Home = () => {
         getMorePost={() => {
           showPosts('new')
         }}
+        setPosts={setPosts}
         hasMore={hasMore}
       />
     </div>

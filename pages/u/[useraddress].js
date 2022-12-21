@@ -157,6 +157,7 @@ const Profile = () => {
               }}
               hasMore={hasMore}
               posts={posts}
+              setPosts={setPosts}
             />
           )}
         </div>
