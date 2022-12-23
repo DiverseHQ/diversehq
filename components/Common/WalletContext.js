@@ -1,12 +1,13 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
-import { useAccount, useProvider, useSigner } from 'wagmi'
+import { useAccount, useProvider, useSigner, useDisconnect } from 'wagmi'
 import Web3Token from 'web3-token'
 import {
   getLocalToken,
   removeLocalToken,
   setLocalToken
 } from '../../utils/token'
-import { getUserInfo, postUser } from '../../api/user'
+import { getUserInfo, postUser, getWhitelistStatus } from '../../api/user'
+import { useNotify } from './NotifyContext'
 export const WalletContext = createContext([])
 
 export const WalletProvider = ({ children }) => {
@@ -20,6 +21,31 @@ export const WalletProvider = ({ children }) => {
     }
   })
 
+  const [isWhitelisted, setIsWhitelisted] = useState(false)
+  const { notifyInfo } = useNotify()
+
+  useEffect(() => {
+    if (address) {
+      checkWhitelistStatus()
+    }
+  }, [address])
+
+  const checkWhitelistStatus = async () => {
+    try {
+      const res = await getWhitelistStatus(address)
+      const resData = await res.json()
+      console.log(resData)
+      if (res.status === 200) {
+        setIsWhitelisted(resData)
+      }
+      if (!resData) {
+        notifyInfo('You are not whitelisted')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     if (isDisconnected) {
       setToken(null)
@@ -31,10 +57,14 @@ export const WalletProvider = ({ children }) => {
   }, [isDisconnected])
 
   useEffect(() => {
-    if (signer && address) {
+    // only allow whitelisted addresses to use the system
+    if (signer && address && isWhitelisted) {
       refetchToken()
     }
-  }, [signer, address])
+    if (!isWhitelisted) {
+      console.log('You are not whitelisted')
+    }
+  }, [signer, address, isWhitelisted])
 
   const refreshUserInfo = async () => {
     try {

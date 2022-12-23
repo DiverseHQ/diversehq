@@ -1,8 +1,15 @@
 import apiEndpoint from './ApiEndpoint'
 
 export const getUserInfo = async (walletAddress) => {
-  return await fetch(`${apiEndpoint}/user/${walletAddress}`)
-    .then(res => res.json())
+  return await fetch(`${apiEndpoint}/user/${walletAddress}`).then((res) =>
+    res.json()
+  )
+}
+
+export const getWhitelistStatus = async (walletAddress) => {
+  return await fetch(
+    `${apiEndpoint}/user/checkWhitelist/${walletAddress}`
+  ).then((res) => res)
 }
 
 export const postUser = async (signedToken) => {
@@ -12,27 +19,31 @@ export const postUser = async (signedToken) => {
       'Content-Type': 'application/json',
       Authorization: signedToken
     }
-  }).then(r => r.json()).then(res => {
-    console.log(res)
   })
+    .then((r) => r.json())
+    .then((res) => {
+      console.log(res)
+    })
 }
 
-export const getUserPosts = async (walletAddress,limit,skips,sortBy) => {
-  return await fetch(`${apiEndpoint}/post/getPostsOfUser/${walletAddress}?` + new URLSearchParams({
-    limit,
-    skips,
-    sortBy
-  }))
-    .then(res => res.json())
+export const getUserPosts = async (walletAddress, limit, skips, sortBy) => {
+  return await fetch(
+    `${apiEndpoint}/post/getPostsOfUser/${walletAddress}?` +
+      new URLSearchParams({
+        limit,
+        skips,
+        sortBy
+      })
+  ).then((res) => res.json())
 }
 
 export const putUpdateUser = async (token, profileData) => {
-  return await fetch(`${apiEndpoint}/user`,{
+  return await fetch(`${apiEndpoint}/user`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: token
     },
     body: JSON.stringify(profileData)
-  }).then(r => r)
+  }).then((r) => r)
 }

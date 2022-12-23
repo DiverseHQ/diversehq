@@ -8,13 +8,13 @@ import CustomPopUpModalProvider from './CustomPopUpProvider'
 const MasterWrapper = ({ children }) => {
   return (
     <RainbowKitWrapper>
-      <WalletProvider>
-        <NotifyProvider>
+      <NotifyProvider>
+        <WalletProvider>
           <ThemeProvider defaultTheme="light">
             <CustomPopUpModalProvider>{children}</CustomPopUpModalProvider>
           </ThemeProvider>
-        </NotifyProvider>
-      </WalletProvider>
+        </WalletProvider>
+      </NotifyProvider>
     </RainbowKitWrapper>
   )
 }

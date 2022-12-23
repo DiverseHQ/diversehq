@@ -12,13 +12,15 @@ import { stringToLength } from '../../utils/utils'
 import { useNotify } from '../Common/NotifyContext'
 import { FaRegCopy } from 'react-icons/fa'
 import CreatePostPopup from './CreatePostPopup'
+import { useDisconnect } from 'wagmi'
 
 const Nav = () => {
   const router = useRouter()
 
-  const { user } = useProfile()
+  const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
+  const { disconnect } = useDisconnect()
 
   const routeToExplore = () => {
     router.push('/explore')
@@ -130,7 +132,7 @@ const Nav = () => {
             onClick={creatPost}
           /> */}
         </div>
-        {user && (
+        {user && address && (
           <div
             className="text-xl items-center h-[60px] bg-s-h-bg flex flex-row hover:cursor-pointer rounded-full pr-8 ml-3 shadow-lg"
             onClick={showMoreOptions}
@@ -163,7 +165,15 @@ const Nav = () => {
             </div>
           </div>
         )}
-        {!user && <LoginButton />}
+        {!user && !address && <LoginButton />}
+        {!user && address && (
+          <button
+            className="text-2xl bg-p-h-bg py-4 px-10 rounded-full"
+            onClick={disconnect}
+          >
+            Disconnect
+          </button>
+        )}
       </div>
     </div>
   )
