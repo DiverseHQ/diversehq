@@ -35,7 +35,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [content, setContent] = useState(comment?.content)
 
   useEffect(() => {
-    if (comment?.author === user.walletAddress) {
+    if (comment?.author === user?.walletAddress) {
       setIsAuthor(true)
     }
   }, [comment])
