@@ -69,8 +69,7 @@ const CreatePostPopup = ({ props }) => {
         // const Post = await uploadFileToIpfs(newFiles)
         const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
         handleCreatePost('image', postUrl.uploadedToUrl, postUrl.path)
-      }
-      if (file.type.split('/')[0] === 'video') {
+      } else if (file.type.split('/')[0] === 'video') {
         // const Post = await uploadFileToIpfs(newFiles)
         const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
         handleCreatePost('video', postUrl.uploadedToUrl, postUrl.path)
