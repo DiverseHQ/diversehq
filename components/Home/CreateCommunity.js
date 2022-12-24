@@ -54,7 +54,7 @@ const CreateCommunity = () => {
     // const Banner = await uploadFileToIpfs(communityBanner)
     const PFP = await uploadFileToFirebaseAndGetUrl(communityPfp, address)
     const Banner = await uploadFileToFirebaseAndGetUrl(communityBanner, address)
-    await handleCreateCommunity(PFP, Banner)
+    await handleCreateCommunity(PFP.uploadedToUrl, Banner.uploadedToUrl)
   }
 
   const handleCreateCommunity = async (pfpURL, bannerURL) => {
@@ -128,7 +128,13 @@ const CreateCommunity = () => {
           <label htmlFor="communityHeader">
             <div className="flex h-44 border-y border-s-text items-center justify-center">
               {/* eslint-disable-next-line */}
-            {headerValue && <img className="inset-0 object-cover h-full w-full " src={headerValue} alt="Header"/> }
+              {headerValue && (
+                <img
+                  className="inset-0 object-cover h-full w-full "
+                  src={headerValue}
+                  alt="Header"
+                />
+              )}
               <div className="absolute flex flex-row">
                 <div className="bg-p-bg rounded-full p-2">
                   <AiOutlineCamera className="h-8 w-8" />

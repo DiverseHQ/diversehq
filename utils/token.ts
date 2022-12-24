@@ -1,5 +1,4 @@
-
-export const getLocalToken = ():string | null => {
+export const getLocalToken = (): string | null => {
   return localStorage.getItem('token')
 }
 
