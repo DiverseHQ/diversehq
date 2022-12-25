@@ -21,7 +21,7 @@ TimeAgo.addDefaultLocale(en)
 const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [comment, setComment] = useState(commentInfo)
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
-  const { user, token } = useProfile()
+  const { user } = useProfile()
   const { showModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
@@ -54,7 +54,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const submitEdittedComment = async () => {
     try {
-      const res = await putEditComment(token, comment?._id, content)
+      const res = await putEditComment(comment?._id, content)
       const resData = await res.json()
       if (res.status !== 200) {
         notifyError(resData.msg)
@@ -73,11 +73,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   // 2. also delete the reference of that comment in the corresponding post's comment's array
   const handleDeleteComment = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      const deletedId = await deleteComment(token, comment?._id)
+      const deletedId = await deleteComment(comment?._id)
       console.log('deletedId', deletedId)
       removeCommentIdFromComments(comment?._id)
       // const post = await getSinglePostInfo(comment?.postId)
@@ -90,11 +90,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const handleLike = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      const res = await putLikeComment(token, comment?._id)
+      const res = await putLikeComment(comment?._id)
       const resData = await res.json()
       if (res.status !== 200) {
         notifyError(resData.msg)
@@ -110,11 +110,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const handleUnlike = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      const res = await putLikeComment(token, comment?._id)
+      const res = await putLikeComment(comment?._id)
       const resData = await res.json()
       if (res.status !== 200) {
         notifyError(resData.msg)

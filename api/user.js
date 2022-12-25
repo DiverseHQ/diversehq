@@ -1,4 +1,5 @@
 import apiEndpoint from './ApiEndpoint'
+import { getHeaders } from './apiHelper'
 
 export const getUserInfo = async (walletAddress) => {
   return await fetch(`${apiEndpoint}/user/${walletAddress}`).then((res) =>
@@ -15,10 +16,7 @@ export const getWhitelistStatus = async (walletAddress) => {
 export const postUser = async (signedToken) => {
   return await fetch(`${apiEndpoint}/user`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: signedToken
-    }
+    headers: getHeaders()
   })
     .then((r) => r.json())
     .then((res) => {
@@ -40,10 +38,7 @@ export const getUserPosts = async (walletAddress, limit, skips, sortBy) => {
 export const putUpdateUser = async (token, profileData) => {
   return await fetch(`${apiEndpoint}/user`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token
-    },
+    headers: getHeaders(),
     body: JSON.stringify(profileData)
   }).then((r) => r)
 }

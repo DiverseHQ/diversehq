@@ -19,7 +19,7 @@ const CommunityInfoCard = ({
   setCommunity,
   fetchCommunityInformation
 }) => {
-  const { user, token, refreshUserInfo } = useProfile()
+  const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
   const router = useRouter()
@@ -54,7 +54,7 @@ const CommunityInfoCard = ({
       return
     }
     try {
-      await putJoinCommunity(community._id, token)
+      await putJoinCommunity(community._id)
       notifyInfo('Joined 😍')
       await refreshUserInfo()
       await fetchCommunityInformation()
@@ -69,7 +69,7 @@ const CommunityInfoCard = ({
       return
     }
     try {
-      await putLeaveCommunity(community._id, token)
+      await putLeaveCommunity(community._id)
       notifyInfo('Left 😢')
       await refreshUserInfo()
       await fetchCommunityInformation()
@@ -103,7 +103,10 @@ const CommunityInfoCard = ({
       {community && (
         <div className="relative rounded-3xl shadow-lg">
           {/* eslint-disable-next-line */}
-          <img className="h-28 w-full object-cover sm:rounded-t-3xl" src={community.bannerImageUrl} />
+          <img
+            className="h-28 w-full object-cover sm:rounded-t-3xl"
+            src={community.bannerImageUrl}
+          />
           <div className="absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full">
             <img
               className="rounded-full bg-s-bg w-[70px] h-[70px]"

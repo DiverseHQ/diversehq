@@ -27,7 +27,7 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
 
   const { notifyError, notifySuccess } = useNotify()
   const { hideModal } = usePopUpModal()
-  const { token, refreshUserInfo } = useProfile()
+  const { refreshUserInfo } = useProfile()
   const router = useRouter()
 
   //   useEffect(() => {
@@ -66,7 +66,7 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
         const banner = await uploadFileToFirebaseAndGetUrl(communityBannerFile)
         communityData.bannerImageUrl = banner
       }
-      const res = await putEditCommunity(token, communityData)
+      const res = await putEditCommunity(communityData)
       console.log(res)
       const resData = await res.json()
       if (res.status !== 200) {
@@ -121,7 +121,13 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
           <label htmlFor="communityBanner">
             <div className="flex h-44 border-y border-s-text items-center justify-center">
               {/* eslint-disable-next-line */}
-              {communityBanner && <img className="inset-0 object-cover h-full w-full " src={communityBanner} alt="Header" />}
+              {communityBanner && (
+                <img
+                  className="inset-0 object-cover h-full w-full "
+                  src={communityBanner}
+                  alt="Header"
+                />
+              )}
               <div className="absolute flex flex-row">
                 <div className="bg-p-bg rounded-full p-2">
                   <AiOutlineCamera className="h-8 w-8" />

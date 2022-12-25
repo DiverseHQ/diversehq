@@ -18,7 +18,7 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
   // const createdAt = new Date(post.createdAt)
   // eslint-disable-next-line
   const [loaded, setLoaded] = useState(false)
-  const { user, token } = useProfile()
+  const { user } = useProfile()
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(post.likes.length)
   const { notifyInfo, notifyError } = useNotify()
@@ -39,13 +39,13 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
   }, [user])
   const handleLike = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
       setLiked(true)
       setLikes(likes + 1)
-      await putLikeOnPost(post._id, token)
+      await putLikeOnPost(post._id)
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
@@ -53,7 +53,7 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
   }
   const handleUnLike = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
@@ -83,11 +83,11 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
 
   const handleDeletePost = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      await deletePost(post._id, token)
+      await deletePost(post._id)
       notifyInfo('Post deleted successfully')
       // handleCommunityClicked()
       // remove the deleted post from the posts state array

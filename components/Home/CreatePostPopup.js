@@ -18,7 +18,7 @@ const CreatePostPopup = ({ props }) => {
   const [file, setFile] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState(null)
-  const { user, address, token } = useProfile()
+  const { user, address } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [imageValue, setImageValue] = useState(null)
@@ -89,7 +89,7 @@ const CreatePostPopup = ({ props }) => {
     }
 
     try {
-      const resp = await postCreatePost(token, postData)
+      const resp = await postCreatePost(postData)
       const respData = await resp.json()
       if (resp.status !== 200) {
         notifyError(respData.msg)

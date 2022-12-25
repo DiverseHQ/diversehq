@@ -22,7 +22,7 @@ const EditProfile = ({ user, showUserInfo }) => {
   const [name, setName] = useState(user?.name)
   const [bio, setBio] = useState(user?.bio)
 
-  const { token, refreshUserInfo, address } = useProfile()
+  const { refreshUserInfo, address } = useProfile()
   const { notifyError, notifySuccess } = useNotify()
   const { hideModal } = usePopUpModal()
 
@@ -55,7 +55,7 @@ const EditProfile = ({ user, showUserInfo }) => {
         )
         profileData.bannerImageUrl = banner
       }
-      const resp = await putUpdateUser(token, profileData)
+      const resp = await putUpdateUser(profileData)
       const resData = await resp.json()
       if (resp.status !== 200) {
         setLoading(false)
@@ -102,13 +102,18 @@ const EditProfile = ({ user, showUserInfo }) => {
         label="SAVE"
         onClick={handleSubmit}
         loading={loading}
-        isDisabled={!token}
       >
         <div>
           <label htmlFor="profileBanner">
             <div className="flex h-44 border-y border-s-text items-center justify-center">
               {/* eslint-disable-next-line */}
-            {profileBanner && <img className="inset-0 object-cover h-full w-full " src={profileBanner} alt="Header"/> }
+              {profileBanner && (
+                <img
+                  className="inset-0 object-cover h-full w-full "
+                  src={profileBanner}
+                  alt="Header"
+                />
+              )}
               <div className="absolute flex flex-row">
                 <div className="bg-p-bg rounded-full p-2">
                   <AiOutlineCamera className="h-8 w-8" />

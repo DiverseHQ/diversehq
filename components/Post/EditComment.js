@@ -10,7 +10,6 @@ const EditComment = ({ comment, setComment }) => {
   const [loading, setLoading] = useState(false)
   const [content, setNewContent] = useState(comment?.content)
   const { notifyError, notifySuccess } = useNotify()
-  const { token } = useProfile()
   const { hideModal } = usePopUpModal()
 
   console.log(comment)
@@ -25,7 +24,7 @@ const EditComment = ({ comment, setComment }) => {
       return
     }
     try {
-      const res = await putEditComment(token, comment._id, content)
+      const res = await putEditComment(comment._id, content)
       const resData = await res.json()
       if (res.status !== 200) {
         setLoading(false)
