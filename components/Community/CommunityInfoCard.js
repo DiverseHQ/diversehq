@@ -13,6 +13,7 @@ import {
   usePopUpModal
 } from '../../components/Common/CustomPopUpProvider'
 import EditCommunity from './EditCommunity'
+import { dateToSince } from '../../utils/utils'
 
 const CommunityInfoCard = ({
   community,
@@ -140,6 +141,12 @@ const CommunityInfoCard = ({
             <div>
               <span className="font-bold">{community.members?.length}</span>{' '}
               <span className="text-s-text"> members</span>
+            </div>
+            <div>
+              Vibing since{' '}
+              <span className="font-bold">
+                {dateToSince(community.createdAt)}
+              </span>
             </div>
           </div>
         </div>
