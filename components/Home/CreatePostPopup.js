@@ -9,10 +9,26 @@ import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
 import FormTextInput from '../Common/UI/FormTextInput'
 import {
-  uploadFileToFirebaseAndGetUrl
+  uploadFileToFirebaseAndGetUrl,
+  uploadFileToIpfsInfuraAndGetPath,
+  uploadToIpfsInfuraAndGetPath
   // uploadFileToIpfs
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
+import ToggleSwitch from '../Post/ToggleSwitch'
+import { Switch } from '@mui/material'
+import {
+  PublicationMainFocus,
+  supportedMimeTypes
+} from '../../lib/interfaces/publication'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import { uuidv4 } from '@firebase/util'
+import { pollUntilIndexed } from '../../lib/indexer/has-transaction-been-indexed'
+import {
+  useCreatePostTypedDataMutation,
+  useCreatePostViaDispatcherMutation
+} from '../../graphql/generated'
+import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 
 const CreatePostPopup = ({ props }) => {
   const [file, setFile] = useState(null)
@@ -27,11 +43,20 @@ const CreatePostPopup = ({ props }) => {
     left: '0px',
     top: '0px'
   })
+  const [isLensPost, setIsLensPost] = useState(false)
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 
-  const { notifyError, notifySuccess } = useNotify()
+  const { notifyError, notifySuccess, notifyInfo } = useNotify()
   const router = useRouter()
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
+
+  const { mutateAsync: createPostViaDispatcher } =
+    useCreatePostViaDispatcherMutation()
+  const { mutateAsync: createPostViaSignedTx } =
+    useCreatePostTypedDataMutation()
+  const { error, result, type, signTypedDataAndBroadcast } =
+    useSignTypedDataAndBroadcast()
 
   const closeModal = () => {
     setShowCommunity({ name: '', image: '' })
@@ -59,31 +84,154 @@ const CreatePostPopup = ({ props }) => {
     // }
 
     if (file) {
+      if (!supportedMimeTypes.includes(file.type)) {
+        notifyError('File type not supported')
+        setLoading(false)
+        return
+      }
       // file size should be less than 5mb
       if (file.size > 5000000) {
         notifyError('File size should be less than 5mb')
         setLoading(false)
         return
       }
-      if (file.type.split('/')[0] === 'image') {
-        // const Post = await uploadFileToIpfs(newFiles)
-        const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
-        handleCreatePost('image', postUrl.uploadedToUrl, postUrl.path)
-      } else if (file.type.split('/')[0] === 'video') {
-        // const Post = await uploadFileToIpfs(newFiles)
-        const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
-        handleCreatePost('video', postUrl.uploadedToUrl, postUrl.path)
+
+      if (isLensPost) {
+        // file should be less than 2mb
+        const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+        const ipfsPath = `ipfs://${ipfsHash}`
+        handleCreateLensPost(title, communityId, file.type, ipfsPath)
+        return
       }
+
+      const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
+      handleCreatePost(file.type, postUrl.uploadedToUrl, postUrl.path)
     } else {
+      if (isLensPost) {
+        handleCreateLensPost(title, communityId, 'text', null)
+        return
+      }
       handleCreatePost('text')
     }
   }
-  const handleCreatePost = async (type, url, path) => {
+
+  const handleCreateLensPost = async (title, communityId, mimeType, url) => {
+    let mainContentFocus = null
+    //todo handle other file types and link content
+    if (mimeType.startsWith('image')) {
+      mainContentFocus = PublicationMainFocus.IMAGE
+    } else if (mimeType.startsWith('video')) {
+      mainContentFocus = PublicationMainFocus.VIDEO
+    } else if (mimeType.startsWith('audio')) {
+      mainContentFocus = PublicationMainFocus.AUDIO
+    } else {
+      mainContentFocus = PublicationMainFocus.TEXT_ONLY
+    }
+    //todo map to community id, so that can be identified by community
+    const metadata = {
+      version: '2.0.0',
+      mainContentFocus: mainContentFocus,
+      metadata_id: uuidv4(),
+      description: title,
+      locale: 'en-US',
+      content: title,
+      external_url: 'https://diversehq.xyz',
+      image: mimeType.startsWith('image') ? url : null,
+      imageMimeType: mimeType.startsWith('image') ? mimeType : null,
+      name: title,
+      media:
+        mimeType === 'text'
+          ? null
+          : [
+              {
+                item: url,
+                type: mimeType
+              }
+            ],
+      animation_url:
+        mimeType !== 'text' && !mimeType.startsWith('image') ? url : null,
+      attributes: [],
+      tags: []
+    }
+    console.log('metadata', metadata)
+    const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
+    console.log('ipfsHash', ipfsHash)
+    const createPostRequest = {
+      profileId: lensProfile?.defaultProfile?.id,
+      contentURI: `ipfs://${ipfsHash}`,
+      collectModule: { freeCollectModule: { followerOnly: true } },
+      referenceModule: {
+        followerOnlyReferenceModule: false
+      }
+    }
+    await post(createPostRequest)
+  }
+
+  const post = async (createPostRequest) => {
+    try {
+      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+        //gasless using dispatcher
+        const dispatcherResult = (
+          await createPostViaDispatcher({
+            request: createPostRequest
+          })
+        ).createPostViaDispatcher
+        console.log(dispatcherResult)
+        console.log('index started ....')
+        const indexResult = await pollUntilIndexed({
+          txId: dispatcherResult.txId
+        })
+        console.log('index result', indexResult)
+        console.log('index ended ....')
+
+        //invalidate query to update feed
+        if (indexResult.indexed === true) {
+          notifySuccess('Post created successfully')
+          closeModal()
+        }
+      } else {
+        //gasless using signed broadcast
+        const postTypedResult = (
+          await createPostViaSignedTx({
+            request: createPostRequest
+          })
+        ).createPostTypedData
+        console.log('postTypedResult', postTypedResult)
+        signTypedDataAndBroadcast(postTypedResult.typedData, {
+          id: postTypedResult.id,
+          type: 'createPost'
+        })
+      }
+    } catch (e) {
+      setLoading(false)
+      console.log('error', e)
+      notifyError('Error creating post, report to support')
+      return
+    }
+  }
+
+  useEffect(() => {
+    if (result && type === 'createPost') {
+      setLoading(false)
+      notifySuccess('Post created successfully')
+      closeModal()
+    }
+  }, [result, type])
+
+  useEffect(() => {
+    if (error) {
+      setLoading(false)
+      notifyError(error)
+    }
+  }, [error])
+
+  const handleCreatePost = async (mimeType, url, path) => {
     const postData = {
       communityId,
       title
     }
-    if (type !== 'text') {
+    //todo handle audio file types
+    if (mimeType !== 'text') {
       postData[type === 'image' ? 'postImageUrl' : 'postVideoUrl'] = url
       postData.filePath = path
     }
@@ -229,6 +377,10 @@ const CreatePostPopup = ({ props }) => {
   }, [communityOptionsCoord])
 
   const showJoinedCommunities = (e) => {
+    if (joinedCommunities?.length === 0) {
+      notifyInfo('Hey, you ! Yes you ! Join some communities first')
+      return
+    }
     setShowCommunityOptions(true)
     setCommunityOptionsCoord({
       top: e.currentTarget.getBoundingClientRect().bottom + 10 + 'px',
@@ -249,25 +401,41 @@ const CreatePostPopup = ({ props }) => {
         label="POST"
         loading={loading}
       >
-        <div className="border border-s-text rounded-full text-p-text ml-3 w-fit px-1">
-          <button className="text-blue-500 p-1" onClick={showJoinedCommunities}>
-            {showCommunity.name ? (
-              <div className="flex justify-center items-center">
-                <Image
-                  src={showCommunity.image}
-                  className="rounded-full"
-                  width={30}
-                  height={30}
-                />
-                <h1 className="ml-2">{showCommunity.name}</h1>
-              </div>
-            ) : (
-              <div className="flex flex-row items-center justify-center">
-                <div>Choose Community</div>
-                <AiOutlineDown className="w-4 h-4 mx-1" />
-              </div>
-            )}
-          </button>
+        <div className="flex flex-row items-center justify-between">
+          <div className="border border-s-text rounded-full text-p-text ml-3 w-fit px-1">
+            <button
+              className="text-blue-500 p-1"
+              onClick={showJoinedCommunities}
+            >
+              {showCommunity.name ? (
+                <div className="flex justify-center items-center">
+                  <Image
+                    src={showCommunity.image}
+                    className="rounded-full"
+                    width={30}
+                    height={30}
+                  />
+                  <h1 className="ml-2">{showCommunity.name}</h1>
+                </div>
+              ) : (
+                <div className="flex flex-row items-center justify-center">
+                  <div>Choose Community</div>
+                  <AiOutlineDown className="w-4 h-4 mx-1" />
+                </div>
+              )}
+            </button>
+          </div>
+          <div className="flex flex-row items-center jusitify-center mr-4">
+            <img src="/lensLogo.svg" className="w-6 text-sm" />
+            <Switch
+              checked={isLensPost}
+              onChange={() => {
+                setIsLensPost(!isLensPost)
+              }}
+              disabled={!isSignedIn || !hasProfile}
+              size="small"
+            />
+          </div>
         </div>
 
         {showCommunityOptions && customOptions()}

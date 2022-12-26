@@ -17,13 +17,8 @@ const CreateTestLensHandle = () => {
   const { mutateAsync: createProfile } = useCreateProfileMutation()
   const { mutateAsync: setDefaultProfile } =
     useCreateSetDefaultProfileTypedDataMutation()
-  const {
-    loading: signTxInProgress,
-    error,
-    result,
-    type,
-    signTypedDataAndBroadcast
-  } = useSignTypedDataAndBroadcast()
+  const { error, result, type, signTypedDataAndBroadcast } =
+    useSignTypedDataAndBroadcast()
 
   const { notifyError, notifySuccess } = useNotify()
   const { hideModal } = usePopUpModal()
@@ -33,20 +28,15 @@ const CreateTestLensHandle = () => {
 
   const profileIdFromResponseResult = async (result) => {
     const logs = result?.txReceipt?.logs
-
     const topicId = utils.id(
       'ProfileCreated(uint256,address,address,string,string,address,bytes,string,uint256)'
     )
-
     const profileCreatedLog = logs?.find((l) => l.topics[0] === topicId)
-
     const profileCreatedEventLog = profileCreatedLog?.topics
-
     const profileId = utils.defaultAbiCoder.decode(
       ['uint256'],
       profileCreatedEventLog[1]
     )[0]
-
     console.log('profile id', BigNumber.from(profileId).toHexString())
     return BigNumber.from(profileId).toHexString()
   }
