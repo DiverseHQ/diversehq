@@ -22,8 +22,10 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "pages/search.js", "pages/notification.js"  ],
+    "**/*.tsx", 
+    "pages/search.js", 
+    "pages/notification.js",
+  "./eslintrc.js"  ],
   "exclude": [
     "node_modules"
   ]

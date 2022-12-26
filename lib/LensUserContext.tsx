@@ -3,26 +3,26 @@
  * Exposes the user's profile and authentication status
  */
 
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react'
 
-import useLensUser from "./auth/useLensUser";
+import useLensUser from './auth/useLensUser'
 
 const LensUserContext = createContext<ReturnType<typeof useLensUser>>(
   {} as ReturnType<typeof useLensUser>
-);
+)
 
 export default function LensUserContextProvider({
-  children,
+  children
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const lensUserQuery = useLensUser();
+  const lensUserQuery = useLensUser()
 
   return (
     <LensUserContext.Provider value={lensUserQuery}>
       {children}
     </LensUserContext.Provider>
-  );
+  )
 }
 
-export const useLensUserContext = () => useContext(LensUserContext);
+export const useLensUserContext = () => useContext(LensUserContext)

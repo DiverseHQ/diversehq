@@ -1,9 +1,11 @@
-import { endpoint, fetchData } from "../../auth-fetcher";
-import { setAccessTokenToStorage } from "./helpers";
+import { endpoint, fetchData } from '../../auth-fetcher'
+import { setAccessTokenToStorage } from './helpers'
 
-export default async function refreshAccessToken(_refreshToken: string): Promise<string> {
+export default async function refreshAccessToken(
+  _refreshToken: string
+): Promise<string> {
   console.log('refreshAccessToken', _refreshToken)
-  if(!_refreshToken) return '';
+  if (!_refreshToken) return ''
   const res = await fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -22,22 +24,22 @@ export default async function refreshAccessToken(_refreshToken: string): Promise
     }
       `,
       variables: {
-          refreshToken: _refreshToken
-        }
+        refreshToken: _refreshToken
+      }
     })
   })
   const json = await res.json()
   console.log(json)
-  if(json.errors) {
+  if (json.errors) {
     const { message } = json.errors[0] || 'Error..'
-    throw new Error(message);
+    throw new Error(message)
   }
 
   const newTokenResult = json.data
 
-  const { accessToken, refreshToken } = newTokenResult.refresh;
+  const { accessToken, refreshToken } = newTokenResult.refresh
 
   // Set in local storage
-  setAccessTokenToStorage(accessToken, refreshToken);
-  return accessToken as string;
+  setAccessTokenToStorage(accessToken, refreshToken)
+  return String(accessToken)
 }

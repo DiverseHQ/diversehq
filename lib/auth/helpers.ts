@@ -1,4 +1,4 @@
-import { STORAGE_KEY } from "../../auth-fetcher";
+import { STORAGE_KEY } from '../../auth-fetcher'
 
 /**
  * Determine if an access token is expired
@@ -6,7 +6,7 @@ import { STORAGE_KEY } from "../../auth-fetcher";
  * @returns {boolean}
  */
 export function isTokenExpired(exp: number): boolean {
-  return exp * 1000 < Date.now();
+  return exp * 1000 < Date.now()
 }
 
 /**
@@ -15,52 +15,46 @@ export function isTokenExpired(exp: number): boolean {
  * @returns { {accessToken: string; refreshToken: string; exp: number; }   | null}
  */
 export function readAccessTokenFromStorage(): {
-  accessToken: string;
-  refreshToken: string;
-  exp: number;
+  accessToken: string
+  refreshToken: string
+  exp: number
 } | null {
   // If on the server, return null
-  if (typeof window === "undefined") {
-    return null;
+  if (typeof window === 'undefined') {
+    return null
   }
 
   // Logic: Read the STORAGE_KEY from localStorage, which will return:
-  const ls = localStorage || window?.localStorage;
+  const ls = localStorage || window?.localStorage
 
   if (!ls) {
     console.error(
-      "Something went wrong finding local storage. Entering unauthenticated mode."
-    );
-    return null;
+      'Something went wrong finding local storage. Entering unauthenticated mode.'
+    )
+    return null
   }
 
   // Read key from local storage
-  const token = ls.getItem(STORAGE_KEY);
-  const tokenValue = token
-    ? (JSON.parse(token) as {
-        accessToken: string;
-        refreshToken: string;
-        exp: number;
-      })
-    : null;
-  return tokenValue;
+  const token = ls.getItem(STORAGE_KEY)
+  const tokenValue = token ? JSON.parse(token) : null
+  return tokenValue
 }
 
 export function setAccessTokenToStorage(
   accessToken: string,
   refreshToken: string
 ) {
-  const ls = localStorage || window?.localStorage;
+  const ls = localStorage || window?.localStorage
 
-  const exp = parseJwt(accessToken).exp;
+  const exp = parseJwt(accessToken).exp
 
   console.log()
 
   if (!ls) {
     console.error(
-      "Something went wrong finding local storage.  Could not set access token."
-    );
-    return null;
+      'Something went wrong finding local storage.  Could not set access token.'
+    )
+    return null
   }
 
   ls.setItem(
@@ -68,22 +62,22 @@ export function setAccessTokenToStorage(
     JSON.stringify({
       accessToken,
       refreshToken,
-      exp,
+      exp
     })
-  );
+  )
 }
 
 export function removeAccessTokenFromStorage() {
-  const ls = localStorage || window?.localStorage;
+  const ls = localStorage || window?.localStorage
 
   if (!ls) {
     console.error(
-      "Something went wrong finding local storage.  Could not remove access token."
-    );
-    return null;
+      'Something went wrong finding local storage.  Could not remove access token.'
+    )
+    return null
   }
 
-  ls.removeItem(STORAGE_KEY);
+  ls.removeItem(STORAGE_KEY)
 }
 
 /**
@@ -91,16 +85,16 @@ export function removeAccessTokenFromStorage() {
  * Lens GraphQL API (access tokens and refresh tokens).
  */
 export function parseJwt(token: string) {
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var base64Url = token.split('.')[1]
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
   var jsonPayload = decodeURIComponent(
     atob(base64)
-      .split("")
+      .split('')
       .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
       })
-      .join("")
-  );
+      .join('')
+  )
 
-  return JSON.parse(jsonPayload);
+  return JSON.parse(jsonPayload)
 }
