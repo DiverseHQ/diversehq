@@ -13,14 +13,23 @@ import { useNotify } from '../Common/NotifyContext'
 import { FaRegCopy } from 'react-icons/fa'
 import CreatePostPopup from './CreatePostPopup'
 import { useDisconnect } from 'wagmi'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import useLogin from '../../lib/auth/useLogin'
+import CreateTestLensHandle from '../User/CreateTestLensHandle'
 
 const Nav = () => {
   const router = useRouter()
+  const { mutateAsync: login } = useLogin()
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 
   const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
   const { disconnect } = useDisconnect()
+
+  async function handleLogin() {
+    await login()
+  }
 
   const routeToExplore = () => {
     router.push('/explore')
@@ -84,6 +93,20 @@ const Nav = () => {
     })
   }
 
+  const handleCreateLensProfileAndMakeDefault = () => {
+    if (!user) {
+      notifyInfo('You might want to connect your wallet first')
+      return
+    }
+
+    showModal({
+      component: <CreateTestLensHandle />,
+      type: modalType.normal,
+      onAction: () => {},
+      extraaInfo: {}
+    })
+  }
+
   return (
     <div>
       <div className="fixed top-[50px] left-[calc(((100vw-600px)/2)-50px-350px)] pt-6 pb-14 flex flex-col justify-between items-start w-[350px] h-[calc(100vh-100px)] bg-s-bg rounded-[25px] shadow-xl px-8">
@@ -133,46 +156,64 @@ const Nav = () => {
           /> */}
         </div>
         {user && address && (
-          <div
-            className="text-xl items-center h-[60px] bg-s-h-bg flex flex-row hover:cursor-pointer rounded-full pr-8 ml-3 shadow-lg"
-            onClick={showMoreOptions}
-          >
-            {user?.profileImageUrl && (
-              <img
-                src={user.profileImageUrl}
-                className="w-[65px] h-[65px] rounded-full"
-              />
+          <div>
+            {isSignedIn && hasProfile && (
+              <div>Lens Profile: {lensProfile.defaultProfile.handle}</div>
             )}
-            {user && !user.profileImageUrl && (
-              <Image
-                src="/gradient.jpg"
-                width="65"
-                height="65"
-                className="rounded-full"
-              />
+            {isSignedIn && !hasProfile && (
+              <button onClick={handleCreateLensProfileAndMakeDefault}>
+                Create Lens Profile
+              </button>
             )}
-            <div className="pl-4 flex flex-col">
-              {user?.name && <div>{stringToLength(user?.name, 10)}</div>}
-              <div
-                className="flex flex-row items-center cursor-pointer"
-                onClick={handleWalletAddressCopy}
-              >
-                <div className="text-base sm:text-xl">
-                  {stringToLength(user.walletAddress, 10)}
+            {!isSignedIn && (
+              <button onClick={handleLogin} className="text-2xl">
+                Lens Login
+              </button>
+            )}
+            <div
+              className="text-xl items-center h-[60px] bg-s-h-bg flex flex-row hover:cursor-pointer rounded-full pr-8 ml-3 shadow-lg"
+              onClick={showMoreOptions}
+            >
+              {user?.profileImageUrl && (
+                <img
+                  src={user.profileImageUrl}
+                  className="w-[65px] h-[65px] rounded-full"
+                />
+              )}
+              {user && !user.profileImageUrl && (
+                <Image
+                  src="/gradient.jpg"
+                  width="65"
+                  height="65"
+                  className="rounded-full"
+                />
+              )}
+              <div className="pl-4 flex flex-col">
+                {user?.name && <div>{stringToLength(user?.name, 10)}</div>}
+                <div
+                  className="flex flex-row items-center cursor-pointer"
+                  onClick={handleWalletAddressCopy}
+                >
+                  <div className="text-base sm:text-xl">
+                    {stringToLength(user.walletAddress, 10)}
+                  </div>
+                  <FaRegCopy className="w-8 h-8 px-2" />
                 </div>
-                <FaRegCopy className="w-8 h-8 px-2" />
               </div>
             </div>
           </div>
         )}
         {!user && !address && <LoginButton />}
         {!user && address && (
-          <button
-            className="text-2xl bg-p-h-bg py-4 px-10 rounded-full"
-            onClick={disconnect}
-          >
-            Disconnect
-          </button>
+          <div className="">
+            <div className="text-sm text-red-600 pl-6">Not whitelisted</div>
+            <button
+              className="text-2xl bg-p-h-bg py-4 px-10 rounded-full"
+              onClick={disconnect}
+            >
+              <div>Disconnect</div>
+            </button>
+          </div>
         )}
       </div>
     </div>

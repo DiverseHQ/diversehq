@@ -13,7 +13,7 @@ export const getWhitelistStatus = async (walletAddress) => {
   ).then((res) => res)
 }
 
-export const postUser = async (signedToken) => {
+export const postUser = async () => {
   return await fetch(`${apiEndpoint}/user`, {
     method: 'POST',
     headers: getHeaders()
@@ -35,7 +35,7 @@ export const getUserPosts = async (walletAddress, limit, skips, sortBy) => {
   ).then((res) => res.json())
 }
 
-export const putUpdateUser = async (token, profileData) => {
+export const putUpdateUser = async (profileData) => {
   return await fetch(`${apiEndpoint}/user`, {
     method: 'PUT',
     headers: getHeaders(),

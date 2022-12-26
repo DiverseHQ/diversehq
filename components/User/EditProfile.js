@@ -13,7 +13,6 @@ import FormTextInput from '../Common/UI/FormTextInput'
 import { useProfile } from '../Common/WalletContext'
 
 const EditProfile = ({ user, showUserInfo }) => {
-  console.log('user', user)
   const [loading, setLoading] = useState(false)
   const [profileBanner, setProfileBanner] = useState(user?.bannerImageUrl)
   const [profileImage, setProfileImage] = useState(user?.profileImageUrl)
@@ -56,7 +55,9 @@ const EditProfile = ({ user, showUserInfo }) => {
         profileData.bannerImageUrl = banner
       }
       const resp = await putUpdateUser(profileData)
+      console.log('resp', resp)
       const resData = await resp.json()
+      console.log('resData', resData)
       if (resp.status !== 200) {
         setLoading(false)
         notifyError(resData.msg)

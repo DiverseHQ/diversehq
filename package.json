@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "codegen": "graphql-codegen"
   },
   "dependencies": {
     "@biconomy/mexa": "^3.0.5",
@@ -41,6 +42,13 @@
     "web3.storage": "^4.4.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.16.1",
+    "@graphql-codegen/client-preset": "1.2.3",
+    "@graphql-codegen/fragment-matcher": "^3.3.3",
+    "@graphql-codegen/introspection": "2.2.3",
+    "@graphql-codegen/typescript": "^2.8.5",
+    "@graphql-codegen/typescript-operations": "^2.5.10",
+    "@graphql-codegen/typescript-react-query": "^4.0.6",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.28.0",

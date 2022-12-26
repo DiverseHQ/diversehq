@@ -8,6 +8,7 @@ import {
 } from '../../utils/token'
 import { getUserInfo, getWhitelistStatus } from '../../api/user'
 import { useNotify } from './NotifyContext'
+import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 export const WalletContext = createContext([])
 
 export const WalletProvider = ({ children }) => {
@@ -20,30 +21,43 @@ export const WalletProvider = ({ children }) => {
     }
   })
 
-  const [isWhitelisted, setIsWhitelisted] = useState(false)
-  const { notifyInfo } = useNotify()
+  // uncomment this if you want to enable whitelist access
+  // const [isWhitelisted, setIsWhitelisted] = useState(false)
 
-  const checkWhitelistStatus = async () => {
-    try {
-      const res = await getWhitelistStatus(address)
-      const resData = await res.json()
-      console.log('resData in checkWhitelistStatus', resData)
-      if (res.status === 200) {
-        setIsWhitelisted(resData)
-      }
-      if (!resData) {
-        notifyInfo('You are not whitelisted')
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const checkWhitelistStatus = async () => {
+  //   try {
+  //     const res = await getWhitelistStatus(address)
+  //     const resData = await res.json()
+  //     console.log('resData in checkWhitelistStatus', resData)
+  //     if (res.status === 200 && resData === true) {
+  //       setIsWhitelisted(resData)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (address) {
+  //     checkWhitelistStatus()
+  //   }
+  // }, [address])
+
+  // useEffect(() => {
+  //   // only allow whitelisted addresses to use the system
+  //   if (signer && address && isWhitelisted) {
+  //     console.log('generating token for api')
+  //     // refetchToken()
+  //     fetchWeb3Token()
+  //   }
+  // }, [signer, address, isWhitelisted])
 
   useEffect(() => {
-    if (address) {
-      checkWhitelistStatus()
+    if (signer && address) {
+      console.log('generating token for api')
+      fetchWeb3Token()
     }
-  }, [address])
+  }, [signer, address])
 
   useEffect(() => {
     if (isDisconnected) {
@@ -52,17 +66,9 @@ export const WalletProvider = ({ children }) => {
       if (getLocalToken()) {
         removeLocalToken()
       }
+      removeAccessTokenFromStorage()
     }
   }, [isDisconnected])
-
-  useEffect(() => {
-    // only allow whitelisted addresses to use the system
-    if (signer && address && isWhitelisted) {
-      console.log('generating token for api')
-      // refetchToken()
-      fetchWeb3Token()
-    }
-  }, [signer, address, isWhitelisted])
 
   const refreshUserInfo = async () => {
     try {
