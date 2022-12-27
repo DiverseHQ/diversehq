@@ -13,18 +13,6 @@ const top = () => {
     getTopCommunities()
   }, [])
 
-  const getNewCommunities = async () => {
-    if (!hasMore) return
-    const fetchedCommunities = await getAllCommunities(
-      COMMUNITY_LIMIT,
-      communities.length
-    )
-    setCommunities([...communities, ...fetchedCommunities.communities])
-    if (fetchedCommunities.communities.length < COMMUNITY_LIMIT) {
-      setHasMore(false)
-    }
-  }
-
   const getTopCommunities = async () => {
     console.log('getTopCommunities')
     if (!hasMore) return

@@ -22,11 +22,9 @@ const Home = () => {
   }
 
   useEffect(() => {
-    ;(async () => {
-      if (posts.length === 0) {
-        showPosts('new')
-      }
-    })()
+    if (posts.length === 0) {
+      showPosts('new')
+    }
   }, [])
   return (
     <div>

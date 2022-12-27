@@ -1,19 +1,23 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
-import { useAccount, useProvider, useSigner, useDisconnect } from 'wagmi'
+import {
+  useAccount,
+  //  useProvider,
+  useSigner
+  //  useDisconnect
+} from 'wagmi'
 import Web3Token from 'web3-token'
 import {
   getLocalToken,
   removeLocalToken,
   setLocalToken
 } from '../../utils/token'
-import { getUserInfo, getWhitelistStatus } from '../../api/user'
-import { useNotify } from './NotifyContext'
+import { getUserInfo } from '../../api/user'
+// import { useNotify } from './NotifyContext'
 import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 export const WalletContext = createContext([])
 
 export const WalletProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const provider = useProvider()
   const { data: signer } = useSigner()
   const { address, isDisconnected } = useAccount({
     onConnect({ address, connector, isReconnected }) {

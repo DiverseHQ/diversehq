@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { HiSparkles } from 'react-icons/hi'
 import { MdLeaderboard } from 'react-icons/md'
-import { SiHotjar } from 'react-icons/si'
+// import { SiHotjar } from 'react-icons/si'
 
 const ExploreFeedNav = () => {
   //get current page path

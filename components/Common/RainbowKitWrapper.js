@@ -22,6 +22,8 @@ const { chains, provider } = configureChains(
   [chain.polygonMumbai],
   [
     // process.env.NEXT_PUBLIC_ALCHEMY_ID
+    // ignore this line, it's just to make the linter happy
+    // eslint-disable-next-line
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID }),
     publicProvider()
   ]
@@ -38,6 +40,7 @@ const web3Auth = ({ chains }) => ({
       chains,
       options: {
         enableLogging: true,
+        // eslint-disable-next-line
         clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID, // Get your own client id from https://dashboard.web3auth.io
         network: 'testnet', // web3auth network, "mainnet", "cyan", or "aqua"
         chainId: '80001' // chainId that you want to connect with

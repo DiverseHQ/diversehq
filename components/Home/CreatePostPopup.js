@@ -15,22 +15,20 @@ import {
   // uploadFileToIpfs
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
-import ToggleSwitch from '../Post/ToggleSwitch'
+// import ToggleSwitch from '../Post/ToggleSwitch'
 import { Switch } from '@mui/material'
-import {
-  PublicationMainFocus,
-  supportedMimeTypes
-} from '../../lib/interfaces/publication'
+import { supportedMimeTypes } from '../../lib/interfaces/publication'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import { pollUntilIndexed } from '../../lib/indexer/has-transaction-been-indexed'
 import {
+  PublicationMainFocus,
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 
-const CreatePostPopup = ({ props }) => {
+const CreatePostPopup = () => {
   const [file, setFile] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState(null)
@@ -119,13 +117,13 @@ const CreatePostPopup = ({ props }) => {
     let mainContentFocus = null
     //todo handle other file types and link content
     if (mimeType.startsWith('image')) {
-      mainContentFocus = PublicationMainFocus.IMAGE
+      mainContentFocus = PublicationMainFocus.Image
     } else if (mimeType.startsWith('video')) {
-      mainContentFocus = PublicationMainFocus.VIDEO
+      mainContentFocus = PublicationMainFocus.Video
     } else if (mimeType.startsWith('audio')) {
-      mainContentFocus = PublicationMainFocus.AUDIO
+      mainContentFocus = PublicationMainFocus.Audio
     } else {
-      mainContentFocus = PublicationMainFocus.TEXT_ONLY
+      mainContentFocus = PublicationMainFocus.TextOnly
     }
     //todo map to community id, so that can be identified by community
     const metadata = {
