@@ -17,6 +17,7 @@ const useSignTypedDataAndBroadcast = () => {
 
   const signTypedDataAndBroadcast = async (typedData, dataForSig) => {
     setLoading(true)
+    setResult(null)
     const _typedData = {
       domain: typedData.domain,
       types: typedData.types,
@@ -69,6 +70,7 @@ const useSignTypedDataAndBroadcast = () => {
     error,
     result,
     type: dataForAfterSig?.type,
+    isSignedTx: signTypedDataResult?.data ? true : false,
     signTypedDataAndBroadcast
   }
 }

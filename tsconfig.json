@@ -22,7 +22,7 @@
     "pages/search.js",
     "pages/notification.js",
     "./eslintrc.js",
-    "utils/helper.js"
+    "utils/helper.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,4 +1,4 @@
-export const isValidEthereumAddress = (address) => {
+export const isValidEthereumAddress = (address: string) => {
   if (typeof address !== 'string') {
     return false
   }
@@ -16,4 +16,8 @@ export const isValidEthereumAddress = (address) => {
   }
 
   return true
+}
+
+export const sleep = (milliseconds: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds))
 }

@@ -143,7 +143,8 @@ const CreatePostPopup = () => {
       animation_url:
         mimeType !== 'text' && !mimeType.startsWith('image') ? url : null,
       attributes: [],
-      tags: []
+      tags: [],
+      appId: 'DiverseHQ'
     }
     console.log('metadata', metadata)
     const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)

@@ -1,13 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PostCard from './PostCard'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useState } from 'react'
 import { getUserPosts } from '../../api/user'
 import { POST_LIMIT } from '../../utils/config.ts'
-import { isValidEthereumAddress } from '../../utils/helper'
+import { isValidEthereumAddress } from '../../utils/helper.ts'
 import { getPostOfCommunity } from '../../api/community'
 import { getAllPosts } from '../../api/post'
-import { useEffect } from 'react'
 
 /**
  * sources are user, community, all
