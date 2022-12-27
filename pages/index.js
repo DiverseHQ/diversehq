@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { getAllPosts } from '../api/post'
 import PostsColumn from '../components/Post/PostsColumn'
 
-
 const limit = 3
 const Home = () => {
   const [posts, setPosts] = useState([])
@@ -23,7 +22,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (posts.length === 0) {
         showPosts('new')
       }
@@ -31,12 +30,16 @@ const Home = () => {
   }, [])
   return (
     <div>
-        <PostsColumn posts={posts} getMorePost={() => {
+      <PostsColumn
+        posts={posts}
+        getMorePost={() => {
           showPosts('new')
-        }} hasMore={hasMore} />
+        }}
+        setPosts={setPosts}
+        hasMore={hasMore}
+      />
     </div>
   )
 }
-
 
 export default Home

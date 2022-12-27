@@ -1,7 +1,7 @@
-import React, {  useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PostsColumn from '../../components/Post/PostsColumn'
-import { getPostOfCommunity} from '../../api/community'
+import { getPostOfCommunity, getCommunityInfo } from '../../api/community'
 import CommunityInfoCard from '../../components/Community/CommunityInfoCard'
 import { POST_LIMIT } from '../../utils/config.ts'
 
@@ -10,16 +10,23 @@ const CommunityPage = () => {
   const [posts, setPosts] = useState([])
   const [hasMore, setHasMore] = useState(true)
 
+  const [community, setCommunity] = useState(null)
+
   const showPosts = async () => {
-    try{
-      if(!hasMore) return
-      const fetchedPosts = await getPostOfCommunity(name, POST_LIMIT, posts.length, "new")
-       console.log('fetchedPosts', fetchedPosts)
-      if(fetchedPosts.posts.length < POST_LIMIT){
+    try {
+      if (!hasMore) return
+      const fetchedPosts = await getPostOfCommunity(
+        name,
+        POST_LIMIT,
+        posts.length,
+        'new'
+      )
+      console.log('fetchedPosts', fetchedPosts)
+      if (fetchedPosts.posts.length < POST_LIMIT) {
         setHasMore(false)
       }
       setPosts([...posts, ...fetchedPosts.posts])
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
   }
@@ -28,14 +35,42 @@ const CommunityPage = () => {
     if (name) showPosts()
   }, [name])
 
-  return (
-      <div className='pt-6'>
-            <div className='relative'>
-                <CommunityInfoCard communityName={name} />
-                {posts && <PostsColumn getMorePost={showPosts} hasMore={hasMore}  posts={posts} />}
-            </div>
+  useEffect(() => {
+    if (!community && name) {
+      fetchCommunityInformation()
+    }
+  }, [name])
 
+  const fetchCommunityInformation = async () => {
+    try {
+      const community = await getCommunityInfo(name)
+      console.log('fetchCommunityInformation', community)
+      setCommunity(community)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return (
+    <div className="pt-6">
+      <div className="relative">
+        {community && (
+          <CommunityInfoCard
+            community={community}
+            setCommunity={setCommunity}
+            fetchCommunityInformation={fetchCommunityInformation}
+          />
+        )}
+        {posts && (
+          <PostsColumn
+            getMorePost={showPosts}
+            hasMore={hasMore}
+            posts={posts}
+            setPosts={setPosts}
+          />
+        )}
       </div>
+    </div>
   )
 }
 
