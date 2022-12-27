@@ -1,83 +1,97 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { FaRegCopy } from 'react-icons/fa'
-import { getUserInfo, getUserPosts } from '../../api/user'
+import { getUserInfo } from '../../api/user'
 import { useNotify } from '../../components/Common/NotifyContext'
 import PostsColumn from '../../components/Post/PostsColumn'
-import { useSigner } from 'wagmi'
-import { ethers } from 'ethers'
-import ABI from '../../utils/DiveToken.json'
-import { DIVE_CONTRACT_ADDRESS_MUMBAI, POST_LIMIT } from '../../utils/config.ts'
 import { useProfile } from '../../components/Common/WalletContext'
 import {
   modalType,
   usePopUpModal
 } from '../../components/Common/CustomPopUpProvider'
 import EditProfile from '../../components/User/EditProfile'
+import { isValidEthereumAddress } from '../../utils/helper'
+import {
+  useDefaultProfileQuery,
+  useProfileQuery
+} from '../../graphql/generated'
 
 const Profile = () => {
-  const { useraddress } = useRouter().query
+  const { id } = useRouter().query
+  const [useraddress, setUserAddress] = useState(null)
+  const [handle, setHandle] = useState(null)
+  const [lensProfile, setLensProfile] = useState(null)
   const [profile, setProfile] = useState(null)
-  const [hasMore, setHasMore] = useState(true)
-  const [posts, setPosts] = useState([])
   const { notifyInfo } = useNotify()
-  const { data: signer } = useSigner()
-  const [dive, setDive] = useState('')
   const { user } = useProfile()
   const { showModal } = usePopUpModal()
+
+  const lensProfileQueryFromAddress = useDefaultProfileQuery(
+    {
+      request: {
+        ethereumAddress: useraddress
+      }
+    },
+    {
+      // Only fire the query if the address is available.
+      enabled: !!useraddress
+    }
+  )
+
+  const lensProfileFromHandle = useProfileQuery(
+    {
+      request: {
+        handle: handle
+      }
+    },
+    {
+      enabled: !!handle
+    }
+  )
+
+  useEffect(() => {
+    if (lensProfile) return
+
+    if (lensProfileQueryFromAddress?.data?.defaultProfile) {
+      setLensProfile(lensProfileQueryFromAddress.data.defaultProfile)
+    } else if (lensProfileFromHandle?.data?.profile?.ownedBy) {
+      setUserAddress(lensProfileFromHandle.data.profile.ownedBy)
+      setLensProfile(lensProfileFromHandle.data.profile)
+    }
+  }, [lensProfileQueryFromAddress, lensProfileFromHandle])
+
+  useEffect(() => {
+    if (!lensProfile) return
+    console.log('lensProfile', lensProfile)
+  }, [lensProfile])
+
+  useEffect(() => {
+    if (!id || id === '') return
+    handleIdAndGetProfile()
+  }, [id])
+
+  const handleIdAndGetProfile = async () => {
+    if (id.endsWith('.test')) {
+      console.log('handle', id)
+      //todo get address from lens handle and lens profile
+      setHandle(id)
+    }
+    if (isValidEthereumAddress(id)) {
+      setUserAddress(id)
+    }
+  }
 
   useEffect(() => {
     if (useraddress) {
       showUserInfo()
-      showPosts()
     }
   }, [useraddress])
-
-  useEffect(() => {
-    if (signer) {
-      const contract = new ethers.Contract(
-        DIVE_CONTRACT_ADDRESS_MUMBAI,
-        ABI,
-        signer
-      )
-      showUserDive(contract)
-    }
-  }, [signer])
-
-  const showUserDive = async (contract) => {
-    try {
-      const userDive = await contract.balanceOf(useraddress)
-      console.log('userDive', ethers.utils.formatEther(userDive))
-      setDive(ethers.utils.formatEther(userDive.toString()))
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   const showUserInfo = async () => {
     try {
       const userInfo = await getUserInfo(useraddress)
       console.log(userInfo)
       setProfile(userInfo)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const showPosts = async () => {
-    try {
-      if (!hasMore) return
-      const fetchedPosts = await getUserPosts(
-        useraddress.toLowerCase(),
-        POST_LIMIT,
-        posts.length,
-        'new'
-      )
-      console.log('fetchedPosts', fetchedPosts)
-      if (fetchedPosts.posts.length < POST_LIMIT) {
-        setHasMore(false)
-      }
-      setPosts([...posts, ...fetchedPosts.posts])
     } catch (error) {
       console.log(error)
     }
@@ -126,10 +140,6 @@ const Profile = () => {
                     Edit
                   </div>
                 )}
-              <div className="mx-1">
-                <span className="text-s-text">$DIVE: </span>
-                <span className="font-bold">{dive}</span>
-              </div>
               <div
                 className="self-end flex flex-row items-center my-3 px-2 py-1  cursor-pointer"
                 onClick={handleWalletAddressCopy}
@@ -140,8 +150,10 @@ const Profile = () => {
                 <FaRegCopy className="w-8 h-8 px-2" />
               </div>
             </div>
-            <div className="font-bold text-xl sm:text-2xl tracking-wider">
-              {profile.name}
+            <div className="font-bold text-base sm:text-base tracking-wider">
+              {`${profile.name ? profile.name : ''} ${
+                lensProfile?.handle ? '@' + lensProfile?.handle : ''
+              }`}
             </div>
             <div>{profile.bio}</div>
             <div>
@@ -150,15 +162,8 @@ const Profile = () => {
               <span className="text-s-text"> Communities</span>
             </div>
           </div>
-          {posts && (
-            <PostsColumn
-              getMorePost={() => {
-                showPosts()
-              }}
-              hasMore={hasMore}
-              posts={posts}
-              setPosts={setPosts}
-            />
+          {useraddress && (
+            <PostsColumn source="user" data={useraddress} sortBy="new" />
           )}
         </div>
       )}

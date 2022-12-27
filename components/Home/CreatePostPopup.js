@@ -74,12 +74,6 @@ const CreatePostPopup = () => {
       setLoading(false)
       return
     }
-    // change space to _ for all file in files
-    // if (!file) {
-    //   notifyError('Please select a file')
-    //   setLoading(false)
-    //   return
-    // }
 
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {

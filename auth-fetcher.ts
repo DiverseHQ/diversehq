@@ -59,8 +59,6 @@ export const fetchData = <TData, TVariables>(
       })
     })
 
-    console.log('res', res)
-
     const json = await res.json()
 
     if (json.errors) {

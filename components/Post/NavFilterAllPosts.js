@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
 import { HiSparkles } from 'react-icons/hi'
 import { MdLeaderboard } from 'react-icons/md'
-// import { SiHotjar } from 'react-icons/si'
 
-const ExploreFeedNav = () => {
-  //get current page path
+const NavFilterAllPosts = () => {
   const router = useRouter()
   const { pathname } = router
-  const [active, setActive] = useState('top')
+  const [active, setActive] = useState('new')
 
   useEffect(() => {
     console.log('pathname', pathname)
@@ -22,18 +22,7 @@ const ExploreFeedNav = () => {
   }, [pathname])
 
   return (
-    <div className="flex flex-row items-center p-2 gap-4">
-      <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'top' && 'bg-white'
-        }  hover:bg-[#eee]`}
-        onClick={() => {
-          router.push('/explore/top')
-        }}
-      >
-        <MdLeaderboard />
-        <button>Top</button>
-      </div>
+    <div className="flex flex-row items-center p-2 gap-4 pt-10">
       <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
           active === 'new' && 'bg-white'
@@ -42,13 +31,23 @@ const ExploreFeedNav = () => {
         <HiSparkles />
         <button
           onClick={() => {
-            router.push('/explore/new')
+            router.push('/feed/new')
           }}
         >
           New
         </button>
       </div>
-
+      <div
+        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
+          active === 'top' && 'bg-white'
+        }  hover:bg-[#eee]`}
+        onClick={() => {
+          router.push('/feed/top')
+        }}
+      >
+        <MdLeaderboard />
+        <button>Top</button>
+      </div>
       {/* <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
           active === 'hot' && 'bg-white'
@@ -64,4 +63,4 @@ const ExploreFeedNav = () => {
   )
 }
 
-export default ExploreFeedNav
+export default NavFilterAllPosts

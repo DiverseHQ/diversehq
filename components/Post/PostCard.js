@@ -10,6 +10,10 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import PostDeleteDropdown from './PostDeleteDropdown'
+import ReactTimeAgo from 'react-time-ago'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en.json'
+TimeAgo.addDefaultLocale(en)
 
 // import useDevice from '../Common/useDevice'
 
@@ -150,6 +154,13 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
             <div className="pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
               {post.communityName}
             </div>
+          </div>
+          <div>
+            {post.createdAt && (
+              <div className="text-xs text-gray-400">
+                <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
+              </div>
+            )}
           </div>
           <div className="flex items-center">
             <div
