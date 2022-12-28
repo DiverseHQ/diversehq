@@ -1,34 +1,39 @@
 import React, { useEffect, useState } from 'react'
-import { getAllCommunities } from '../api/community'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import CommunityInfoCard from '../components/Community/CommunityInfoCard'
-import { COMMUNITY_LIMIT } from '../utils/config.ts'
+import { getAllCommunities } from '../../api/community'
+import CommunityInfoCard from '../../components/Community/CommunityInfoCard'
+import ExploreFeedNav from '../../components/Explore/ExploreFeedNav'
+import { COMMUNITY_LIMIT } from '../../utils/config'
 
-const explore = () => {
+const top = () => {
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
 
-  const getMoreCommunities = async () => {
+  useEffect(() => {
+    getTopCommunities()
+  }, [])
+
+  const getTopCommunities = async () => {
+    console.log('getTopCommunities')
     if (!hasMore) return
     const fetchedCommunities = await getAllCommunities(
       COMMUNITY_LIMIT,
       communities.length,
       'top'
     )
-    console.log('fetchedCommunities', fetchedCommunities)
+    setCommunities([...communities, ...fetchedCommunities.communities])
+    console.log('fetched communities from top')
     if (fetchedCommunities.communities.length < COMMUNITY_LIMIT) {
       setHasMore(false)
     }
-    setCommunities([...communities, ...fetchedCommunities.communities])
   }
-  useEffect(() => {
-    getMoreCommunities()
-  }, [])
+
   return (
     <div className="pt-6">
+      <ExploreFeedNav />
       <InfiniteScroll
         dataLength={communities.length}
-        next={getMoreCommunities}
+        next={getTopCommunities}
         hasMore={hasMore}
         loader={<h3> Loading...</h3>}
         endMessage={<h4>Nothing more to show</h4>}
@@ -41,4 +46,4 @@ const explore = () => {
   )
 }
 
-export default explore
+export default top

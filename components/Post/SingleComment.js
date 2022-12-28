@@ -4,8 +4,6 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import { AiOutlineHeart, AiFillHeart, AiOutlineCheck } from 'react-icons/ai'
 import { FaHandSparkles } from 'react-icons/fa'
-import { BiEdit } from 'react-icons/bi'
-import { HiOutlineTrash } from 'react-icons/hi'
 import { BsThreeDots } from 'react-icons/bs'
 import {
   deleteComment,
@@ -15,17 +13,18 @@ import {
 // import { getSinglePostInfo } from "../../api/post"
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import CommentDropdown from './CommentDropdown'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
 const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [comment, setComment] = useState(commentInfo)
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
-  const { user, token } = useProfile()
-  // const { showModal } = usePopUpModal()
+  const { user } = useProfile()
+  const { showModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
-  const [showMenu, setShowMenu] = useState(false)
 
   // maintaining comment likes
   const [liked, setLiked] = useState(false)
@@ -36,7 +35,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [content, setContent] = useState(comment?.content)
 
   useEffect(() => {
-    if (comment?.author === user.walletAddress) {
+    if (comment?.author === user?.walletAddress) {
       setIsAuthor(true)
     }
   }, [comment])
@@ -55,7 +54,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const submitEdittedComment = async () => {
     try {
-      const res = await putEditComment(token, comment?._id, content)
+      const res = await putEditComment(comment?._id, content)
       const resData = await res.json()
       if (res.status !== 200) {
         notifyError(resData.msg)
@@ -74,11 +73,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   // 2. also delete the reference of that comment in the corresponding post's comment's array
   const handleDeleteComment = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      const deletedId = await deleteComment(token, comment?._id)
+      const deletedId = await deleteComment(comment?._id)
       console.log('deletedId', deletedId)
       removeCommentIdFromComments(comment?._id)
       // const post = await getSinglePostInfo(comment?.postId)
@@ -91,11 +90,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const handleLike = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      const res = await putLikeComment(token, comment?._id)
+      const res = await putLikeComment(comment?._id)
       const resData = await res.json()
       if (res.status !== 200) {
         notifyError(resData.msg)
@@ -111,11 +110,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const handleUnlike = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      const res = await putLikeComment(token, comment?._id)
+      const res = await putLikeComment(comment?._id)
       const resData = await res.json()
       if (res.status !== 200) {
         notifyError(resData.msg)
@@ -132,6 +131,28 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const onCommentChange = useCallback((e) => {
     setContent(e.target.value)
   }, [])
+
+  const showMoreOptions = (e) => {
+    // setShowOptions(!showOptions)
+    showModal({
+      component: (
+        <CommentDropdown
+          handleEditComment={handleEditComment}
+          handleDeleteComment={handleDeleteComment}
+        />
+      ),
+      type: modalType.customposition,
+      onAction: () => {},
+      extraaInfo: {
+        bottom:
+          window.innerHeight -
+          e.currentTarget.getBoundingClientRect().bottom -
+          100 +
+          'px',
+        left: e.currentTarget.getBoundingClientRect().left + 'px'
+      }
+    })
+  }
 
   return (
     <>
@@ -156,33 +177,9 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                 <div className="relative">
                   <BsThreeDots
                     className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                    onClick={() => setShowMenu(!showMenu)}
+                    onClick={showMoreOptions}
                     title="More"
                   />
-                  {showMenu && (
-                    <div className="flex flex-col absolute  w-[120px] md:w-[220px] top-[30px] shadow-lg shadow-white-500/20 bg-[#fff] rounded-[10px] gap-2 z-[100] text-bold text-md sm:text-lg">
-                      <div
-                        className="flex items-center hover:bg-[#eee] p-2 hover:cursor-pointer hover:text-red-600"
-                        onClick={handleDeleteComment}
-                      >
-                        <HiOutlineTrash
-                          className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                          title="Delete"
-                        />
-                        <span>Delete</span>
-                      </div>
-                      <div
-                        className="flex items-center hover:bg-[#eee] p-2 hover:cursor-pointer"
-                        onClick={handleEditComment}
-                      >
-                        <BiEdit
-                          className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                          title="Edit"
-                        />
-                        <span>Edit</span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
               {liked ? (

@@ -4,27 +4,26 @@
 
 @layer uitilities {
   @keyframes enteranimation {
-      0% {
-          transform: translateY(-80%);
-          opacity: 0;
+    0% {
+      transform: translateY(-80%);
+      opacity: 0;
+    }
 
-      }
-
-      100% {
-          transform: translateY(0);
-          opacity: 1;
-      }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 
   @keyframes exitanimation {
     0% {
-        transform: translateY(0);
-        opacity: 1;
+      transform: translateY(0);
+      opacity: 1;
     }
 
     100% {
-        transform: translateY(-80%);
-        opacity: 0;
+      transform: translateY(-80%);
+      opacity: 0;
     }
   }
   .mobile-top-nav {
@@ -35,7 +34,7 @@
   }
 
   .primary-gradient {
-    background: linear-gradient(93.08deg, #33EDF9 3.54%, #167BD8 103.54%);
+    background: linear-gradient(93.08deg, #33edf9 3.54%, #167bd8 103.54%);
   }
 
   .button-dropshadow {
@@ -71,11 +70,11 @@
 }
 
 :root {
-  --background: #EEF1FF;
+  --background: #eef1ff;
   --background-secondary: #ffffff;
   --accent-primary: #1d9bf0;
-  --accent-secondary: theme("colors.purple.600");
-  --accent-hover: theme("colors.purple.500");
+  --accent-secondary: theme('colors.purple.600');
+  --accent-hover: theme('colors.purple.500');
 
   --text-primary: #000000;
   --text-secondary: #9197ae;
@@ -85,20 +84,20 @@
   --background-pop: #00000038;
 
   --background-secondary-highlight: #ececec;
-  --background-primary-highlight: #D2DAFF;
-  }
+  --background-primary-highlight: #d2daff;
+}
 
-  [data-theme='dark'] {
-    --background: #000000;
-    --background-secondary: #16181C;
-    --accent-primary: #1d9bf0;
-    --accent-secondary: theme("colors.purple.600");
-    --accent-hover: theme("colors.purple.500");
+[data-theme='dark'] {
+  --background: #000000;
+  --background-secondary: #16181c;
+  --accent-primary: #1d9bf0;
+  --accent-secondary: theme('colors.purple.600');
+  --accent-hover: theme('colors.purple.500');
 
-    --text-primary: #ffffff;
-    --text-secondary: #9197ae;
+  --text-primary: #ffffff;
+  --text-secondary: #9197ae;
 
-    --border-primary: #464646;
+  --border-primary: #464646;
 
-    --background-pop: #ffffff38;
-  }
+  --background-pop: #ffffff38;
+}

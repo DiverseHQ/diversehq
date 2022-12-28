@@ -3,14 +3,13 @@ import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { useNotify } from '../Common/NotifyContext'
 import { putEditComment } from '../../api/comment'
-import { useProfile } from '../Common/WalletContext'
+// import { useProfile } from '../Common/WalletContext'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 
 const EditComment = ({ comment, setComment }) => {
   const [loading, setLoading] = useState(false)
   const [content, setNewContent] = useState(comment?.content)
   const { notifyError, notifySuccess } = useNotify()
-  const { token } = useProfile()
   const { hideModal } = usePopUpModal()
 
   console.log(comment)
@@ -25,7 +24,7 @@ const EditComment = ({ comment, setComment }) => {
       return
     }
     try {
-      const res = await putEditComment(token, comment._id, content)
+      const res = await putEditComment(comment._id, content)
       const resData = await res.json()
       if (res.status !== 200) {
         setLoading(false)

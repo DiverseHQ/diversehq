@@ -10,7 +10,7 @@ import { useNotify } from '../Common/NotifyContext'
 import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config.ts'
 
 const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
-  const { user, token } = useProfile()
+  const { user } = useProfile()
   const commentRef = useRef()
   const appreciateAmountRef = useRef()
   const { data: signer } = useSigner()
@@ -60,12 +60,7 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
     console.log('postId', postId)
     console.log('comment', comment)
     try {
-      const comment = await postComment(
-        token,
-        content,
-        postId,
-        appreciateAmount
-      )
+      const comment = await postComment(content, postId, appreciateAmount)
       console.log(comment)
       addCommentIdToComments(comment._id)
 
@@ -82,7 +77,7 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
   }
   return (
     <>
-      {user && token && (
+      {user && (
         <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-3 sm:rounded-3xl ">
           <div className="flex flex-row justify-between items-center w-full">
             <div className="flex flex-row items-center">

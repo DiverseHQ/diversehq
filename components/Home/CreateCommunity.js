@@ -20,7 +20,7 @@ const CreateCommunity = () => {
   const [communityBanner, setCommunityBanner] = useState()
   const [communityDescription, setCommunityDescription] = useState('')
   const [loading, setLoading] = useState(false)
-  const { address, token } = useProfile()
+  const { address } = useProfile()
   const [headerValue, setHeaderValue] = useState(null)
   const [pfpValue, setPfpValue] = useState(null)
   const { notifyError, notifySuccess } = useNotify()
@@ -66,7 +66,7 @@ const CreateCommunity = () => {
       creator: address
     }
     try {
-      await postCreateCommunity(token, communityData).then(async (res) => {
+      await postCreateCommunity(communityData).then(async (res) => {
         console.log(res)
         const resData = await res.json()
         console.log(resData)
