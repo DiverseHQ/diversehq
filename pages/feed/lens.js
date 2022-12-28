@@ -1,22 +1,23 @@
 import React from 'react'
-import { useEffect } from 'react'
-import LensPostsColumn from '../../components/Post/LensPostsColumn'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsExplorePublicationsColumn'
+import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
 
 const lens = () => {
-  const { data: lensProfile } = useLensUserContext()
-
-  useEffect(() => {
-    console.log('lensProfile', lensProfile)
-  }, [lensProfile])
+  const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   return (
     <>
       <NavFilterAllPosts />
-      {lensProfile?.defaultProfile?.id ? (
-        <LensPostsColumn source="all" data={lensProfile.defaultProfile.id} />
+      {lensProfile &&
+      isSignedIn &&
+      hasProfile &&
+      lensProfile?.defaultProfile?.id ? (
+        <LensPostsProfileFeedColumn
+          profileId={lensProfile?.defaultProfile?.id}
+        />
       ) : (
-        <LensPostsColumn source="all" data={null} />
+        <LensPostsExplorePublicationsColumn />
       )}
     </>
   )

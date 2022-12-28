@@ -6,7 +6,6 @@ import CommunityInfoCardFromName from '../../../components/Community/CommunityIn
 
 const CommunityPage = () => {
   const { name } = useRouter().query
-
   return (
     <div className="pt-6">
       <div className="relative">

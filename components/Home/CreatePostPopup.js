@@ -130,7 +130,7 @@ const CreatePostPopup = () => {
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
       imageMimeType: mimeType.startsWith('image') ? mimeType : null,
-      name: title,
+      name: 'Created with DiverseHQ',
       media:
         mimeType === 'text'
           ? null
@@ -143,7 +143,7 @@ const CreatePostPopup = () => {
       animation_url:
         mimeType !== 'text' && !mimeType.startsWith('image') ? url : null,
       attributes: [],
-      tags: [],
+      tags: [communityId],
       appId: 'DiverseHQ'
     }
     console.log('metadata', metadata)
