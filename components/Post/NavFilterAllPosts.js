@@ -25,21 +25,18 @@ const NavFilterAllPosts = () => {
 
   return (
     <div className="flex flex-row items-center p-2 gap-4 pt-10">
-      <div
+      <button
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
           active === 'new' && 'bg-white'
         }  hover:bg-[#eee]`}
+        onClick={() => {
+          router.push('/feed/new')
+        }}
       >
         <HiSparkles />
-        <button
-          onClick={() => {
-            router.push('/feed/new')
-          }}
-        >
-          New
-        </button>
-      </div>
-      <div
+        <div>New</div>
+      </button>
+      <button
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
           active === 'top' && 'bg-white'
         }  hover:bg-[#eee]`}
@@ -48,9 +45,9 @@ const NavFilterAllPosts = () => {
         }}
       >
         <MdLeaderboard />
-        <button>Top</button>
-      </div>
-      <div
+        <div>Top</div>
+      </button>
+      <button
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
           active === 'lens' && 'bg-white'
         }  hover:bg-[#eee]`}
@@ -59,8 +56,8 @@ const NavFilterAllPosts = () => {
         }}
       >
         <img src="/lensLogo.svg" className="h-5 w-5" alt="lens logo icon" />
-        <button>Lens</button>
-      </div>
+        <div>Lens</div>
+      </button>
       {/* <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
           active === 'hot' && 'bg-white'
