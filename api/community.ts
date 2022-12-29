@@ -71,6 +71,16 @@ export const getAllCommunities = async (
   }
 }
 
+export const getAllCommunitiesIds = async () => {
+  try {
+    return await fetch(`${apiEndpoint}/community/getAllCommunitiesIds`).then(
+      (res) => res.json()
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const postCreateCommunity = async (
   token: string,
   communityData: CommunityType

@@ -9,12 +9,14 @@ import {
 import LensPostCard from './LensPostCard'
 import { LENS_POST_LIMIT } from '../../utils/config.ts'
 import { useEffect } from 'react'
+import { useLensUserContext } from '../../lib/LensUserContext'
 
 const LensPostsCommunityPublicationsColumn = ({ communityId }) => {
   const [posts, setPosts] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState(null)
   const [nextCursor, setNextCursor] = useState(null)
+  const { data: myLensProfile } = useLensUserContext()
 
   const communityPublicationsResult = useExplorePublicationsQuery(
     {
@@ -29,6 +31,9 @@ const LensPostsCommunityPublicationsColumn = ({ communityId }) => {
         publicationTypes: [PublicationTypes.Post],
         limit: LENS_POST_LIMIT,
         sortCriteria: PublicationSortCriteria.Latest
+      },
+      reactionRequest: {
+        profileId: myLensProfile?.defaultProfile?.id
       }
     },
     {

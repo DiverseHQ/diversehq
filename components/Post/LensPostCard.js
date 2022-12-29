@@ -121,6 +121,8 @@ const LensPostCard = ({ post }) => {
       <div>Content : {post?.metadata?.content}</div>
       <div>@{post?.profile?.handle}</div>
       <div>Total Comments : {post?.stats?.totalAmountOfComments}</div>
+      <div>Upvotes : {post?.stats?.totalUpvotes}</div>
+      <div>Downvote : {post?.stats?.totalDownvotes}</div>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
+import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config.ts'
 import LensPostCard from './LensPostCard'
 
@@ -9,6 +10,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState(null)
   const [nextCursor, setNextCursor] = useState(null)
+  const { data: myLensProfile } = useLensUserContext()
 
   const profilePublicationsResult = usePublicationsQuery(
     {
@@ -17,6 +19,9 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         cursor: cursor,
         limit: LENS_POST_LIMIT,
         publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror]
+      },
+      reactionRequest: {
+        profileId: myLensProfile?.defaultProfile?.id
       }
     },
     {

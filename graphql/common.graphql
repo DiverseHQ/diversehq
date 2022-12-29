@@ -96,6 +96,8 @@ fragment ProfileFields on Profile {
 }
 
 fragment PublicationStatsFields on PublicationStats {
+  totalUpvotes
+  totalDownvotes
   totalAmountOfMirrors
   totalAmountOfCollects
   totalAmountOfComments
@@ -167,7 +169,7 @@ fragment PostFields on Post {
   }
   appId
   hidden
-  reaction(request: null)
+  reaction(request: $reactionRequest)
   mirrors(by: null)
   hasCollectedByMe
   isGated
