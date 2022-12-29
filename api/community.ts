@@ -81,10 +81,7 @@ export const getAllCommunitiesIds = async () => {
   }
 }
 
-export const postCreateCommunity = async (
-  token: string,
-  communityData: CommunityType
-) => {
+export const postCreateCommunity = async (communityData: CommunityType) => {
   return await fetch(`${apiEndpoint}/community`, {
     method: 'POST',
     headers: getHeaders(),
@@ -92,10 +89,7 @@ export const postCreateCommunity = async (
   }).then((res) => res)
 }
 
-export const putEditCommunity = async (
-  token: string,
-  communityData: CommunityType
-) => {
+export const putEditCommunity = async (communityData: CommunityType) => {
   return await fetch(
     `${apiEndpoint}/community/edit/${communityData.communityId}`,
     {

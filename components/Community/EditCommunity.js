@@ -14,7 +14,7 @@ import { useProfile } from '../Common/WalletContext'
 import { useRouter } from 'next/router'
 
 const EditCommunity = ({ community, getCommunityInformation }) => {
-  console.log(community)
+  console.log('communityTo be edited', community)
   const [loading, setLoading] = useState(false)
   const [communityBanner, setCommunityBanner] = useState(
     community?.bannerImageUrl
