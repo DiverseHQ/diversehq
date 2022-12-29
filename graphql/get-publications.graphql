@@ -1,15 +1,21 @@
-query publications($request: PublicationsQueryRequest!) {
-  publications(request: $request) {
+query publications(
+  $publicationsRequest: PublicationsQueryRequest!
+  $reactionRequest: ReactionFieldResolverRequest
+) {
+  publications(request: $publicationsRequest) {
     items {
       __typename
       ... on Post {
         ...PostFields
+        reaction(request: $reactionRequest)
       }
       ... on Comment {
         ...CommentFields
+        reaction(request: $reactionRequest)
       }
       ... on Mirror {
         ...MirrorFields
+        reaction(request: $reactionRequest)
       }
     }
     pageInfo {

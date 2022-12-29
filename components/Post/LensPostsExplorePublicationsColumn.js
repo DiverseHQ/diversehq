@@ -55,8 +55,8 @@ const LensPostsExplorePublicationsColumn = () => {
         loader={<h3> Loading...</h3>}
         endMessage={<h4>Nothing more to show</h4>}
       >
-        {posts.map((post) => {
-          return <LensPostCard key={post.id} post={post} />
+        {posts.map((post, index) => {
+          return <LensPostCard key={index} post={post} />
         })}
       </InfiniteScroll>
     </div>
