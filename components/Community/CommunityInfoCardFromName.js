@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { getCommunityInfo } from '../../api/community'
 import CommunityInfoCard from './CommunityInfoCard'
 
-const CommunityInfoCardFromName = ({ name }) => {
+const CommunityInfoCardFromName = ({ name, setCommunityId }) => {
   const [community, setCommunity] = useState(null)
 
   useEffect(() => {
@@ -18,6 +18,9 @@ const CommunityInfoCardFromName = ({ name }) => {
     try {
       const community = await getCommunityInfo(name)
       console.log('fetchCommunityInformation', community)
+      if (community?._id && setCommunityId) {
+        setCommunityId(community._id)
+      }
       setCommunity(community)
     } catch (error) {
       console.log(error)

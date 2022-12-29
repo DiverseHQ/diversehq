@@ -11,12 +11,14 @@ const NavFilterCommunity = ({ name }) => {
 
   useEffect(() => {
     console.log('pathname', pathname)
-    if (pathname.endsWith('new')) {
+    if (pathname.endsWith('/new')) {
       setActive('new')
-    } else if (pathname.endsWith('top')) {
+    } else if (pathname.endsWith('/top')) {
       setActive('top')
-    } else if (pathname.endsWith('hot')) {
+    } else if (pathname.endsWith('/hot')) {
       setActive('hot')
+    } else if (pathname.endsWith('/lens')) {
+      setActive('lens')
     }
   }, [pathname])
 
@@ -46,6 +48,17 @@ const NavFilterCommunity = ({ name }) => {
       >
         <MdLeaderboard />
         <button>Top</button>
+      </div>
+      <div
+        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
+          active === 'lens' && 'bg-white'
+        }  hover:bg-[#eee]`}
+        onClick={() => {
+          router.push(`/c/${name}/feed/lens`)
+        }}
+      >
+        <img src="/lensLogo.svg" className="h-5 w-5" alt="lens logo icon" />
+        <button>Lens</button>
       </div>
       {/* <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${

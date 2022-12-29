@@ -20,7 +20,8 @@ import {
 } from '../../graphql/generated'
 import { proxyActionStatusRequest } from '../../lib/indexer/proxy-action-status'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import LensPostsColumn from '../../components/Post/LensPostsColumn'
+import LensPostsProfilePublicationsColumn from '../../components/Post/LensPostsProfilePublicationsColumn'
+import { useLensUserContext } from '../../lib/LensUserContext'
 
 const Profile = () => {
   const { mutateAsync: proxyAction } = useProxyActionMutation()
@@ -38,6 +39,7 @@ const Profile = () => {
   const { notifyInfo } = useNotify()
   const { user } = useProfile()
   const { showModal } = usePopUpModal()
+  const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
 
   const lensProfileQueryFromAddress = useDefaultProfileQuery(
     {
@@ -249,22 +251,26 @@ const Profile = () => {
               <span className="font-bold">{profile?.communities?.length}</span>
               <span className="text-s-text"> Communities</span>
             </div>
-            {lensProfile && isFollowedByMe ? (
-              <button
-                onClick={() => {
-                  handleUnfollowProfile(lensProfile.id)
-                }}
-              >
-                Unfollow
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  handleFollowProfile(lensProfile.id)
-                }}
-              >
-                Follow
-              </button>
+            {hasProfile && isSignedIn && myLensProfile && (
+              <>
+                {lensProfile && isFollowedByMe ? (
+                  <button
+                    onClick={() => {
+                      handleUnfollowProfile(lensProfile.id)
+                    }}
+                  >
+                    Unfollow
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      handleFollowProfile(lensProfile.id)
+                    }}
+                  >
+                    Follow
+                  </button>
+                )}
+              </>
             )}
           </div>
           {lensProfile?.id && (
@@ -282,8 +288,8 @@ const Profile = () => {
           {useraddress && !showLensPosts && (
             <PostsColumn source="user" data={useraddress} sortBy="new" />
           )}
-          {showLensPosts && (
-            <LensPostsColumn source="user" data={lensProfile?.id} />
+          {showLensPosts && lensProfile?.id && (
+            <LensPostsProfilePublicationsColumn profileId={lensProfile?.id} />
           )}
         </div>
       )}
