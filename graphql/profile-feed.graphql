@@ -1,22 +1,13 @@
-query ProfileFeed(
-  $request: FeedRequest!
-  $reactionRequest: ReactionFieldResolverRequest
-) {
+query ProfileFeed($request: FeedRequest!) {
   feed(request: $request) {
     items {
       root {
         __typename
         ... on Post {
           ...PostFields
-          reaction(request: $reactionRequest)
         }
         ... on Comment {
           ...CommentFields
-          reaction(request: $reactionRequest)
-        }
-        ... on Mirror {
-          ...CommentFields
-          reaction(request: $reactionRequest)
         }
       }
       electedMirror {
