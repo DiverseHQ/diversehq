@@ -395,7 +395,7 @@ const CreatePostPopup = () => {
         loading={loading}
       >
         <div className="flex flex-row items-center justify-between">
-          <div className="border border-s-text rounded-full text-p-text ml-3 w-fit px-1">
+          <div className="border border-p-border rounded-full text-p-text ml-3 w-fit px-1">
             <button
               className="text-blue-500 p-1"
               onClick={showJoinedCommunities}
@@ -445,7 +445,7 @@ const CreatePostPopup = () => {
               showAddedFile()
             ) : (
               <label htmlFor="upload-file">
-                <div className="h-32 text-s-text flex flex-col justify-center items-center border border-s-text  rounded-xl">
+                <div className="h-32 text-s-text flex flex-col justify-center items-center border border-p-border  rounded-xl">
                   <div>
                     <AiOutlineCamera className="h-8 w-8" />
                   </div>

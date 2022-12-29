@@ -119,7 +119,7 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
       >
         <div>
           <label htmlFor="communityBanner">
-            <div className="flex h-44 border-y border-s-text items-center justify-center">
+            <div className="flex h-44 border-y border-p-border items-center justify-center">
               {/* eslint-disable-next-line */}
               {communityBanner && (
                 <img
@@ -139,7 +139,7 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
           <div
             className={`flex relative ${
               logoImage ? '' : 'border'
-            } h-24 w-24 border-s-text rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
+            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
           >
             {logoImage && (
               <label htmlFor="logoImage">
