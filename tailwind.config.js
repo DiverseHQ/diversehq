@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   darkMode: 'class',
   content: [
@@ -5,6 +6,7 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
+    // eslint-disable-next-line no-unused-vars
     typography: (theme) => ({}),
     extend: {
       colors: {
@@ -21,7 +23,8 @@ module.exports = {
         'p-border': 'var(--border-primary)' // primary border color
       },
       boxShadow: {
-        top: '0px -2px 20px 1px rgba(0, 0, 0, 0.2)'
+        top: '0px -2px 20px 1px rgba(0, 0, 0, 0.2)',
+        nav: '0px 4px 4px rgba(0, 0, 0, 0.25)'
       }
     }
   }
