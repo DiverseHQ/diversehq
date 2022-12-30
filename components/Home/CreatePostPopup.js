@@ -3,7 +3,6 @@ import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { useRouter } from 'next/router'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
-import Image from 'next/image'
 import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
@@ -224,6 +223,7 @@ const CreatePostPopup = () => {
       title
     }
     //todo handle audio file types
+    const type = mimeType.split('/')[0]
     if (mimeType !== 'text') {
       postData[type === 'image' ? 'postImageUrl' : 'postVideoUrl'] = url
       postData.filePath = path
@@ -295,14 +295,14 @@ const CreatePostPopup = () => {
                     id={community._id}
                     logoImageUrl={community.logoImageUrl}
                   >
-                    <Image
+                    <img
                       src={
                         community.logoImageUrl
                           ? community.logoImageUrl
                           : '/gradient.jpg'
                       }
                       alt="community logo"
-                      className="rounded-full"
+                      className="rounded-full w-9 h-9"
                       width={30}
                       height={30}
                     />
@@ -354,6 +354,7 @@ const CreatePostPopup = () => {
               src={imageValue}
               className="max-h-80 rounded-2xl"
               controls
+              autoPlay
             ></video>
           )}
           <AiOutlineClose
@@ -395,18 +396,16 @@ const CreatePostPopup = () => {
         loading={loading}
       >
         <div className="flex flex-row items-center justify-between">
-          <div className="border border-s-text rounded-full text-p-text ml-3 w-fit px-1">
+          <div className="border border-p-border rounded-full text-p-text ml-3 w-fit px-1">
             <button
               className="text-blue-500 p-1"
               onClick={showJoinedCommunities}
             >
               {showCommunity.name ? (
                 <div className="flex justify-center items-center">
-                  <Image
+                  <img
                     src={showCommunity.image}
-                    className="rounded-full"
-                    width={30}
-                    height={30}
+                    className="rounded-full w-9 h-9"
                   />
                   <h1 className="ml-2">{showCommunity.name}</h1>
                 </div>
@@ -445,7 +444,7 @@ const CreatePostPopup = () => {
               showAddedFile()
             ) : (
               <label htmlFor="upload-file">
-                <div className="h-32 text-s-text flex flex-col justify-center items-center border border-s-text  rounded-xl">
+                <div className="h-32 text-s-text flex flex-col justify-center items-center border border-p-border  rounded-xl">
                   <div>
                     <AiOutlineCamera className="h-8 w-8" />
                   </div>

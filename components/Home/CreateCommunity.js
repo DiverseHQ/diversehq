@@ -126,7 +126,7 @@ const CreateCommunity = () => {
       >
         <div>
           <label htmlFor="communityHeader">
-            <div className="flex h-44 border-y border-s-text items-center justify-center">
+            <div className="flex h-44 border-y border-p-border items-center justify-center">
               {/* eslint-disable-next-line */}
               {headerValue && (
                 <img
@@ -154,7 +154,7 @@ const CreateCommunity = () => {
           <div
             className={`flex relative ${
               communityPfp ? '' : 'border'
-            } h-24 w-24 border-s-text rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
+            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
           >
             {communityPfp && (
               <label htmlFor="communityPfp">

@@ -10,7 +10,7 @@ const FormTextArea = ({
 }) => {
   return (
     <label>
-      <div className="border rounded-xl border-s-text mx-4 w-ful py-2 px-4">
+      <div className="border rounded-xl border-p-border mx-4 w-ful py-2 px-4">
         <div className="pb-2">{label}</div>
         <textarea
           type="text"

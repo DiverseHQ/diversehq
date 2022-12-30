@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   darkMode: 'class',
   content: [
@@ -5,6 +6,7 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
+    // eslint-disable-next-line no-unused-vars
     typography: (theme) => ({}),
     extend: {
       colors: {
@@ -18,10 +20,13 @@ module.exports = {
         's-btn': 'var(--accent-secondary)', // secondary button color
         'p-text': 'var(--text-primary)', // primary text color
         's-text': 'var(--text-secondary)', // secondary text color
+        'ap-text': 'var(--text-anti-primary)', // anti primary text color (revert of primary color)
+        'lens-text': 'var(--text-lens)', // lens text color
         'p-border': 'var(--border-primary)' // primary border color
       },
       boxShadow: {
-        top: '0px -2px 20px 1px rgba(0, 0, 0, 0.2)'
+        top: '0px -2px 20px 1px rgba(0, 0, 0, 0.2)',
+        nav: '0px 4px 4px rgba(0, 0, 0, 0.25)'
       }
     }
   }

@@ -19,6 +19,9 @@ const LensPostsProfileFeedColumn = ({ profileId }) => {
         profileId: profileId,
         limit: LENS_POST_LIMIT,
         feedEventItemTypes: [FeedEventItemType.Post, FeedEventItemType.Mirror]
+      },
+      reactionRequest: {
+        profileId: profileId
       }
     },
     {
@@ -59,8 +62,8 @@ const LensPostsProfileFeedColumn = ({ profileId }) => {
         loader={<h3> Loading...</h3>}
         endMessage={<h4>Nothing more to show</h4>}
       >
-        {posts.map((post) => {
-          return <LensPostCard key={post.id} post={post.root} />
+        {posts.map((post, index) => {
+          return <LensPostCard key={index} post={post.root} />
         })}
       </InfiniteScroll>
     </div>

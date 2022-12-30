@@ -23,10 +23,10 @@ const NavFilterCommunity = ({ name }) => {
   }, [pathname])
 
   return (
-    <div className="flex flex-row items-center p-2 gap-4 pt-4">
+    <div className="flex flex-row items-center p-2 gap-4 pl-6 bg-white mt-2 py-3 rounded-xl space-x-9 sm:min-w-[650px]">
       <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'new' && 'bg-white'
+        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+          active === 'new' && 'bg-p-bg'
         }  hover:bg-[#eee]`}
       >
         <HiSparkles />
@@ -39,8 +39,8 @@ const NavFilterCommunity = ({ name }) => {
         </button>
       </div>
       <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'top' && 'bg-white'
+        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+          active === 'top' && 'bg-p-bg'
         }  hover:bg-[#eee]`}
         onClick={() => {
           router.push(`/c/${name}/feed/top`)
@@ -50,8 +50,8 @@ const NavFilterCommunity = ({ name }) => {
         <button>Top</button>
       </div>
       <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'lens' && 'bg-white'
+        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+          active === 'lens' && 'bg-p-bg'
         }  hover:bg-[#eee]`}
         onClick={() => {
           router.push(`/c/${name}/feed/lens`)
@@ -61,7 +61,7 @@ const NavFilterCommunity = ({ name }) => {
         <button>Lens</button>
       </div>
       {/* <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
+        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
           active === 'hot' && 'bg-white'
         }  hover:bg-[#eee]`}
         onClick={() => {

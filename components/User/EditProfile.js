@@ -106,7 +106,7 @@ const EditProfile = ({ user, showUserInfo }) => {
       >
         <div>
           <label htmlFor="profileBanner">
-            <div className="flex h-44 border-y border-s-text items-center justify-center">
+            <div className="flex h-44 border-y border-p-border items-center justify-center">
               {/* eslint-disable-next-line */}
               {profileBanner && (
                 <img
@@ -126,7 +126,7 @@ const EditProfile = ({ user, showUserInfo }) => {
           <div
             className={`flex relative ${
               profileImage ? '' : 'border'
-            } h-24 w-24 border-s-text rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
+            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
           >
             {profileImage && (
               <label htmlFor="profileImage">

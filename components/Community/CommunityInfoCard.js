@@ -13,7 +13,8 @@ import {
   usePopUpModal
 } from '../../components/Common/CustomPopUpProvider'
 import EditCommunity from './EditCommunity'
-import { dateToSince } from '../../utils/utils'
+// import { dateToSince } from '../../utils/utils'
+import { AiOutlineFileAdd } from 'react-icons/ai'
 
 const CommunityInfoCard = ({
   community,
@@ -101,9 +102,8 @@ const CommunityInfoCard = ({
 
   return (
     <>
-      {community && (
-        <div className="relative rounded-3xl shadow-lg">
-          {/* eslint-disable-next-line */}
+      {/* {community && (
+        <div className="relative rounded-3xl shadow-lg z-0">
           <img
             className="h-28 w-full object-cover sm:rounded-t-3xl"
             src={community.bannerImageUrl}
@@ -147,6 +147,90 @@ const CommunityInfoCard = ({
               <span className="font-bold">
                 {dateToSince(community.createdAt)}
               </span>
+            </div>
+          </div>
+        </div>
+      )} */}
+      {community && (
+        <div className="relative shadow-lg z-0 bg-[#FFFFFF] mb-8">
+          <img
+            className="h-28 w-full object-cover"
+            src={community.bannerImageUrl}
+          />
+          <div className="relative flex flex-row items-start justify-between px-4 md:px-8 pt-2">
+            <div className="flex flex-row gap-2">
+              <div className="border-s-bg border-4 rounded-full -translate-y-8">
+                <img
+                  className="rounded-full bg-s-bg w-[90px] h-[90px]"
+                  src={community.logoImageUrl}
+                />
+              </div>
+              <div className="flex flex-col">
+                <div
+                  className="font-bold text-xl sm:text-2xl tracking-wider hover:underline cursor-pointer"
+                  onClick={redirectToCommunityPage}
+                >
+                  {community.name}
+                </div>
+                <div>{community.description}</div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-1 sm:gap-2">
+              {isCreator && (
+                <button
+                  className="bg-p-btn rounded-full py-1 px-4 self-end text-s-text text-[14px] font-semibold"
+                  onClick={editCommunity}
+                >
+                  Edit
+                </button>
+              )}
+              <button
+                className="bg-p-btn rounded-full py-1 px-4 self-end text-s-text text-[14px] font-semibold"
+                onClick={isJoined ? leaveCommunity : joinCommunity}
+              >
+                {isJoined ? 'Leave' : 'Join'}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-row justify-between items-center px-4 md:px-8 pb-2">
+            <div className="flex flex-row gap-2 md:gap-4">
+              <div>
+                <span>Members: </span>
+                <span className="font-semibold">
+                  {community.members?.length}
+                </span>
+              </div>
+              <div>
+                <span>Posts: </span>
+                <span className="font-semibold">66</span>
+              </div>
+              <div>
+                <span>Matic transferred: </span>
+                <span className="font-semibold">0</span>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-row gap-0.5 items-center">
+                <span className="text-[14px] items-center">Lvl2</span>
+                <div className="flex flex-col w-full items-end">
+                  <div className="text-[10px] text-[#bbb]">300/500</div>
+                  <div className="relative bg-[#AA96E2] h-[3px] w-full">
+                    <div className="absolute h-full bg-[#6668FF] w-[60%]"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-row gap-0.5 items-center text-[14px] text-[#aaa]">
+                <AiOutlineFileAdd />
+                <span>
+                  Created{' '}
+                  {new Date(community.createdAt)
+                    .toDateString()
+                    .split(' ')
+                    .slice(1)
+                    .join(' ')}
+                </span>
+              </div>
             </div>
           </div>
         </div>

@@ -7,13 +7,17 @@ import CommunityInfoCardFromName from '../../../components/Community/CommunityIn
 const CommunityPage = () => {
   const { name } = useRouter().query
   return (
-    <div className="pt-6">
+    <div className="">
       <div className="relative">
         {name && (
           <>
             <CommunityInfoCardFromName name={name} />
-            <NavFilterCommunity name={name} />
-            <PostsColumn source="community" sortBy="new" data={name} />
+            <div className="w-full flex justify-center shrink-0">
+              <div className="max-w-[650px] shrink-0">
+                <NavFilterCommunity name={name} />
+                <PostsColumn source="community" sortBy="new" data={name} />
+              </div>
+            </div>
           </>
         )}
       </div>
