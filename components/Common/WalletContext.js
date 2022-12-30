@@ -24,8 +24,6 @@ export const WalletProvider = ({ children }) => {
       console.log('onConnect', address, connector, isReconnected)
     }
   })
-  const [lensToken, setLensToken] = useState(null)
-  const [lensProfile, setLensProfile] = useState(null)
 
   // uncomment this if you want to enable whitelist access
   // const [isWhitelisted, setIsWhitelisted] = useState(false)

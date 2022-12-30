@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react'
 import { client, challenge, authenticate, parseJwt } from '../../utils/lensAuth'
-import { useAccount, useProvider, useSigner, useSignMessage } from 'wagmi'
+import { useAccount, useSignMessage } from 'wagmi'
 import { useProfile } from '../Common/WalletContext'
 
 export default function LensSign() {
-  const { address, isDisconnected } = useAccount()
-  const { data: signer, isError, isLoading } = useSigner()
-  const provider = useProvider()
+  const { address } = useAccount()
   const { signMessageAsync } = useSignMessage({
     onSettled(data, error) {
       console.log('Settled', { data, error })

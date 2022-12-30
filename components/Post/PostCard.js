@@ -1,13 +1,10 @@
-import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 // import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { putLikeOnPost, deletePost } from '../../api/post'
-import { BsShareFill, BsThreeDots } from 'react-icons/bs'
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { BsThreeDots } from 'react-icons/bs'
 // import { HiOutlineTrash } from 'react-icons/hi'
-import { BiCommentDetail } from 'react-icons/bi'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import PostDeleteDropdown from './PostDeleteDropdown'
 import ReactTimeAgo from 'react-time-ago'
@@ -21,10 +18,8 @@ TimeAgo.addDefaultLocale(en)
 // import useDevice from '../Common/useDevice'
 
 const PostCard = ({ post, setPosts, setNotFound }) => {
-  const router = useRouter()
   // const createdAt = new Date(post.createdAt)
   // eslint-disable-next-line
-  const [loaded, setLoaded] = useState(false)
   const { user } = useProfile()
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(post.likes.length)
@@ -168,7 +163,11 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
 
       <div className="flex flex-row">
         <div className="flex flex-col items-center ml-[9px]">
-          <img src={'/Upvote.svg'} className="w-6 h-6" />
+          <img
+            onClick={liked ? handleUnLike : handleLike}
+            src={liked ? '/UpvoteFilled.svg' : '/Upvote.svg'}
+            className="w-6 h-6"
+          />
           {/* todo fetch from db */}
           <div>0</div>
           <img src={'/Downvote.svg'} className="w-5 h-5" />
@@ -187,19 +186,12 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
                   <img
                     src={post.postImageUrl}
                     className="object-cover pl-5 pr-6 pb-1  w-full rounded-xl"
-                    onLoad={() => {
-                      console.log('loaded')
-                      setLoaded(true)
-                    }}
                   />
                 ) : (
                   <>
                     <video
                       src={post.postVideoUrl}
                       className="object-cover rounded-xl pl-5 pr-6 pb-1 w-full"
-                      onLoad={() => {
-                        setLoaded(true)
-                      }}
                       autoPlay
                       loop
                       controls
