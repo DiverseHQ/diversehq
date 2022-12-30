@@ -1,38 +1,55 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-import { putLikeOnPost } from '../../api/post'
-import { BsShareFill } from 'react-icons/bs'
+import { putLikeOnPost, deletePost } from '../../api/post'
+import { BsShareFill, BsThreeDots } from 'react-icons/bs'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+// import { HiOutlineTrash } from 'react-icons/hi'
 import { BiCommentDetail } from 'react-icons/bi'
-import useDevice from '../Common/useDevice'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import PostDeleteDropdown from './PostDeleteDropdown'
+import ReactTimeAgo from 'react-time-ago'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en.json'
+TimeAgo.addDefaultLocale(en)
 
-const PostCard = ({ post }) => {
+// import useDevice from '../Common/useDevice'
+
+const PostCard = ({ post, setPosts, setNotFound }) => {
   const router = useRouter()
   // const createdAt = new Date(post.createdAt)
   // eslint-disable-next-line
   const [loaded, setLoaded] = useState(false)
-  const { user, token } = useProfile()
+  const { user } = useProfile()
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(post.likes.length)
   const { notifyInfo, notifyError } = useNotify()
-  const { isDesktop } = useDevice()
+  // const { isDesktop } = useDevice()
+
+  // to maintain the current author state
+  const [isAuthor, setIsAuthor] = useState(false)
+
+  const { showModal } = usePopUpModal()
 
   useEffect(() => {
     if (!user) return
-    setLiked(post.likes.includes(user.walletAddress))
+    setLiked(post.likes?.includes(user.walletAddress))
+    if (post.author === user.walletAddress) {
+      // if current user is the author then show the delete icon
+      setIsAuthor(true)
+    }
   }, [user])
   const handleLike = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
       setLiked(true)
       setLikes(likes + 1)
-      await putLikeOnPost(post._id, token)
+      await putLikeOnPost(post._id)
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
@@ -40,7 +57,7 @@ const PostCard = ({ post }) => {
   }
   const handleUnLike = async () => {
     try {
-      if (!user || !token) {
+      if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
@@ -68,6 +85,46 @@ const PostCard = ({ post }) => {
     }
   }
 
+  const handleDeletePost = async () => {
+    try {
+      if (!user) {
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
+      await deletePost(post._id)
+      notifyInfo('Post deleted successfully')
+      // handleCommunityClicked()
+      // remove the deleted post from the posts state array
+      if (setPosts) {
+        setPosts((prevPosts) => prevPosts.filter((p) => p?._id !== post?._id))
+      }
+
+      if (setNotFound) {
+        setNotFound(true)
+      }
+    } catch (error) {
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
+
+  const showMoreOptions = (e) => {
+    // setShowOptions(!showOptions)
+    showModal({
+      component: <PostDeleteDropdown handleDeletePost={handleDeletePost} />,
+      type: modalType.customposition,
+      onAction: () => {},
+      extraaInfo: {
+        bottom:
+          window.innerHeight -
+          e.currentTarget.getBoundingClientRect().bottom -
+          50 +
+          'px',
+        left: e.currentTarget.getBoundingClientRect().left + 'px'
+      }
+    })
+  }
+
   const handleCommunityClicked = () => {
     router.push(`/c/${post.communityName}`)
   }
@@ -82,79 +139,112 @@ const PostCard = ({ post }) => {
 
   //   const likeThe
   return (
-    <div className="w-full bg-s-bg pt-3 my-6 sm:rounded-3xl">
+    <div className="w-full bg-s-bg pt-3 my-6 sm:rounded-lg shadow-lg">
       <div className="px-3 sm:px-5">
-        <div className="flex flex-row justify-between items-center mb-1.5">
-          <div
-            className="flex flex-row items-center"
-            onClick={handleCommunityClicked}
-          >
-            <Image
+        <div className="flex flex-row items-center mb-1.5">
+          <div className="flex flex-row" onClick={handleCommunityClicked}>
+            <img
               src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
-              width={isDesktop ? 30 : 26}
-              height={isDesktop ? 30 : 26}
-              className="rounded-full"
+              className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
             />
-
-            <div className="pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
+            <div className="pl-1.5 font-semibold sm:text-xl hover:cursor-pointer hover:underline">
               {post.communityName}
             </div>
           </div>
-          <div
-            className="flex flex-row items-center"
-            onClick={handleAuthorClicked}
-          >
-            <img
-              src={post.authorAvatar ? post.authorAvatar : '/gradient.jpg'}
-              className="rounded-full w-6 h-6 sm:w-8 sm:h-8"
-            />
-            <div className="pl-1.5 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
-              {post.authorName
-                ? post.authorName
-                : post.author.slice(0, 6) + '...'}
+          <div>
+            {post.createdAt && (
+              <div className="text-xs text-gray-400">
+                <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
+              </div>
+            )}
+          </div>
+          <div className="flex items-center">
+            <div
+              className="flex flex-row items-center pb-0.5"
+              onClick={handleAuthorClicked}
+            >
+              <p className="pl-1.5 font-normal text-xs"> Posted by</p>
+              <div className="pl-1.5 font-normal text-xs hover:cursor-pointer hover:underline">
+                u/
+                {post.authorName
+                  ? post.authorName
+                  : post.author?.slice(0, 6) + '...'}
+              </div>
             </div>
           </div>
         </div>
-        <div className="mb-2 font-normal text-xs sm:text-base">
+        <div className="mb-2 pl-9 font-medium text-lg sm:text-base">
           {post.title}
         </div>
       </div>
-      <div onClick={routeToPostPage}>
-        {/* eslint-disable-next-line */}
-        {post.postImageUrl ? (<img src={post.postImageUrl} className="w-full" onLoad={() => { setLoaded(true) }} />) : (<video src={post.postVideoUrl} onLoad={() => { setLoaded(true) }} autoPlay loop controls />)} 
-      </div>
+      {(post?.postImageUrl || post.postVideoUrl) && (
+        <div onClick={routeToPostPage} className="rounded-lg">
+          {/* eslint-disable-next-line */}
+          {post.postImageUrl ? (
+            <img
+              src={post.postImageUrl}
+              className="object-cover pl-14 pr-6 pb-1  w-full rounded-lg"
+              onLoad={() => {
+                console.log('loaded')
+                setLoaded(true)
+              }}
+            />
+          ) : (
+            <>
+              <video
+                src={post.postVideoUrl}
+                className="object-cover rounded-lg pl-14 pr-6 pb-1 w-full"
+                onLoad={() => {
+                  setLoaded(true)
+                }}
+                autoPlay
+                loop
+                controls
+              />
+            </>
+          )}
+        </div>
+      )}
 
-      <div className="flex flex-row justify-between items-center px-3 sm:px-5 py-2.5 sm:py-4">
+      <div className="flex flex-row items-center sm:px-12 sm:py-2 space-x-28">
         <div className="flex flex-row items-center">
           {!liked && (
             <AiOutlineHeart
-              className="hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
+              className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
               onClick={handleLike}
             />
           )}
           {liked && (
             <AiFillHeart
-              className="hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
+              className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
               onClick={handleUnLike}
             />
           )}
+          {likes}
+        </div>
+        <div className="flex flex-row items-center">
           <BiCommentDetail
-            className="hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7"
+            className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7"
             onClick={routeToPostPage}
           />
+          {post.comments?.length}
+        </div>
+        <div>
           <BsShareFill
             onClick={handleShare}
             className="hover:cursor-pointer mr-3 w-4 sm:w-6 sm:h-6"
           />
         </div>
-        <div className="flex flex-row items-center text-xs sm:text-xl">
-          <div className="pr-2 hover:cursor-pointer hover:underline">
-            {likes} likes
-          </div>
-          <div className="hover:cursor-pointer hover:underline">
-            {' '}
-            {post.comments.length} comments
-          </div>
+        <div>
+          {isAuthor && (
+            <div className="relative">
+              <BsThreeDots
+                className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                onClick={showMoreOptions}
+                title="More"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

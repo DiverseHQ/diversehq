@@ -4,28 +4,26 @@
 
 @layer uitilities {
   @keyframes enteranimation {
-      0% {
-          transform: translateY(-80%);
-          opacity: 0;
-
-      }
-
-      100% {
-          transform: translateY(0);
-          opacity: 1;
-      }
-  }
-  
-  @keyframes exitanimation {
     0% {
-        transform: translateY(0);
-        opacity: 1;
+      transform: translateY(-80%);
+      opacity: 0;
     }
 
     100% {
-        transform: translateY(-80%);
-        opacity: 0;
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 
+  @keyframes exitanimation {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateY(-80%);
+      opacity: 0;
     }
   }
   .mobile-top-nav {
@@ -33,6 +31,10 @@
     top: 0; /* Stay on top */
     width: 100%; /* Full width */
     transition: top 0.5s; /* Transition effect when sliding down (and up) */
+  }
+
+  .primary-gradient {
+    background: linear-gradient(93.08deg, #33edf9 3.54%, #167bd8 103.54%);
   }
 
   .button-dropshadow {
@@ -68,32 +70,41 @@
 }
 
 :root {
-  --background: #ececec;
+  --background: #eef1ff;
   --background-secondary: #ffffff;
-  --accent-primary: #1d9bf0;
-  --accent-secondary: theme("colors.purple.600");
-  --accent-hover: theme("colors.purple.500");
+  /* --accent-primary: #1d9bf0; */
+  --accent-primary: #9378D8;
+  --accent-secondary: theme('colors.purple.600');
+  /* --accent-hover: theme('colors.purple.500'); */
+  --accent-hover: #DEE4FF;
 
   --text-primary: #000000;
-  --text-secondary: #9197ae;
+  /* --text-secondary: #9197ae; */
+  --text-secondary: #ffffff;
 
-  --border-primary: #c4c4c4;
+  /* --border-primary: #c4c4c4; */
+  --border-primary: #B1B2FF;
 
   --background-pop: #00000038;
-  }
-  
-  [data-theme='dark'] {
-    --background: #000000;
-    --background-secondary: #16181C;
-    --accent-primary: #1d9bf0;
-    --accent-secondary: theme("colors.purple.600");
-    --accent-hover: theme("colors.purple.500");
 
-    --text-primary: #ffffff;
-    --text-secondary: #9197ae;
+  --background-secondary-highlight: #ececec;
+  --background-primary-highlight: #d2daff;
 
-    --border-primary: #464646;
-    
-    --background-pop: #ffffff38;
-  }
-  
+  --bg-primary: #EEF1FF;
+  /* --color-primary: #9378d8; */
+}
+
+[data-theme='dark'] {
+  --background: #000000;
+  --background-secondary: #16181c;
+  --accent-primary: #1d9bf0;
+  --accent-secondary: theme('colors.purple.600');
+  --accent-hover: theme('colors.purple.500');
+
+  --text-primary: #ffffff;
+  --text-secondary: #9197ae;
+
+  --border-primary: #464646;
+
+  --background-pop: #ffffff38;
+}

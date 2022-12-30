@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   darkMode: 'class',
   content: [
@@ -5,21 +6,25 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
+    // eslint-disable-next-line no-unused-vars
     typography: (theme) => ({}),
     extend: {
       colors: {
-        'p-bg': 'var(--background)',
-        's-bg': 'var(--background-secondary)',
-        't-bg': 'var(--background-pop)',
-        'p-btn': 'var(--accent-primary)',
-        'p-btn-hover': 'var(--accent-hover)',
-        's-btn': 'var(--accent-secondary)',
-        'p-text': 'var(--text-primary)',
-        's-text': 'var(--text-secondary)',
-        'p-border': 'var(--border-primary)'
+        'p-bg': 'var(--background)', // background for the whole app
+        's-bg': 'var(--background-secondary)', // background for important elements like post comments to make them stand out
+        's-h-bg': 'var(--background-secondary-highlight)', // secondary highligth color
+        'p-h-bg': 'var(--background-primary-highlight)', // primary highlight color for most most importatn elements
+        't-bg': 'var(--background-pop)', // backdrop for popups
+        'p-btn': 'var(--accent-primary)', // primary button color
+        'p-btn-hover': 'var(--accent-hover)', // primary button hover color
+        's-btn': 'var(--accent-secondary)', // secondary button color
+        'p-text': 'var(--text-primary)', // primary text color
+        's-text': 'var(--text-secondary)', // secondary text color
+        'p-border': 'var(--border-primary)' // primary border color
       },
       boxShadow: {
-        top: '0px -2px 20px 1px rgba(0, 0, 0, 0.2)'
+        top: '0px -2px 20px 1px rgba(0, 0, 0, 0.2)',
+        nav: '0px 4px 4px rgba(0, 0, 0, 0.25)'
       }
     }
   }
