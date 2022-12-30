@@ -52,7 +52,7 @@ function MyApp({ Component, pageProps }) {
             <Navbar />
             <div className="flex flex-row">
               <LeftSidebar />
-              <div className="flex-1  px-4 md:px-8">
+              <div className="flex-1 px-4 md:px-8 min-h-screen">
                 <Component {...pageProps} />
               </div>
               <RightSidebar />

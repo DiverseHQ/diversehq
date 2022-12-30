@@ -13,6 +13,7 @@ import PostDeleteDropdown from './PostDeleteDropdown'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
+import Link from 'next/link'
 TimeAgo.addDefaultLocale(en)
 
 // import useDevice from '../Common/useDevice'
@@ -125,43 +126,33 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
     })
   }
 
-  const handleCommunityClicked = () => {
-    router.push(`/c/${post.communityName}`)
-  }
-
-  const handleAuthorClicked = () => {
-    router.push(`/u/${post.author}`)
-  }
-
-  const routeToPostPage = () => {
-    router.push(`/p/${post._id}`)
-  }
-
   //   const likeThe
   return (
-    <div className="w-full bg-s-bg pt-3 my-6 sm:rounded-lg shadow-lg">
-      <div className="px-3 sm:px-5">
+    <div className="px-3 sm:px-5 flex flex-row w-full bg-s-bg pt-3 my-6 sm:rounded-lg shadow-lg">
+      <div className="flex flex-col">
+        <Link
+          href={`/c/${post.communityName}`}
+          className="flex flex-row items-center"
+        >
+          <img
+            src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
+            className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+          />
+        </Link>
+      </div>
+      <div className="flex flex-col">
+        {/* top row */}
         <div className="flex flex-row items-center mb-1.5">
-          <div className="flex flex-row" onClick={handleCommunityClicked}>
-            <img
-              src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
-              className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
-            />
-            <div className="pl-1.5 font-semibold sm:text-xl hover:cursor-pointer hover:underline">
-              {post.communityName}
-            </div>
-          </div>
-          <div>
-            {post.createdAt && (
-              <div className="text-xs text-gray-400">
-                <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
+          <div className="flex flex-row items-end">
+            <Link href={`/c/${post.communityName}`}>
+              <div className="pl-1.5 font-semibold sm:text-xl hover:cursor-pointer hover:underline">
+                {post.communityName}
               </div>
-            )}
-          </div>
-          <div className="flex items-center">
-            <div
-              className="flex flex-row items-center pb-0.5"
-              onClick={handleAuthorClicked}
+            </Link>
+
+            <Link
+              href={`/u/${post.author}`}
+              className="flex flex-row items-start justify-center"
             >
               <p className="pl-1.5 font-normal text-xs"> Posted by</p>
               <div className="pl-1.5 font-normal text-xs hover:cursor-pointer hover:underline">
@@ -170,81 +161,93 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
                   ? post.authorName
                   : post.author?.slice(0, 6) + '...'}
               </div>
+            </Link>
+            <div>
+              {post.createdAt && (
+                <div className="text-xs text-gray-400 ml-2">
+                  <ReactTimeAgo
+                    date={new Date(post.createdAt)}
+                    locale="en-US"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
-        <div className="mb-2 pl-9 font-medium text-lg sm:text-base">
-          {post.title}
-        </div>
-      </div>
-      {(post?.postImageUrl || post.postVideoUrl) && (
-        <div onClick={routeToPostPage} className="rounded-lg">
-          {/* eslint-disable-next-line */}
-          {post.postImageUrl ? (
-            <img
-              src={post.postImageUrl}
-              className="object-cover pl-14 pr-6 pb-1  w-full rounded-lg"
-              onLoad={() => {
-                console.log('loaded')
-                setLoaded(true)
-              }}
-            />
-          ) : (
-            <>
-              <video
-                src={post.postVideoUrl}
-                className="object-cover rounded-lg pl-14 pr-6 pb-1 w-full"
-                onLoad={() => {
-                  setLoaded(true)
-                }}
-                autoPlay
-                loop
-                controls
-              />
-            </>
-          )}
-        </div>
-      )}
 
-      <div className="flex flex-row items-center sm:px-12 sm:py-2 space-x-28">
-        <div className="flex flex-row items-center">
-          {!liked && (
-            <AiOutlineHeart
-              className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
-              onClick={handleLike}
-            />
-          )}
-          {liked && (
-            <AiFillHeart
-              className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
-              onClick={handleUnLike}
-            />
-          )}
-          {likes}
-        </div>
-        <div className="flex flex-row items-center">
-          <BiCommentDetail
-            className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7"
-            onClick={routeToPostPage}
-          />
-          {post.comments?.length}
-        </div>
+        {/* main content */}
         <div>
-          <BsShareFill
-            onClick={handleShare}
-            className="hover:cursor-pointer mr-3 w-4 sm:w-6 sm:h-6"
-          />
+          <div className="mb-2 pl-9 font-medium text-lg sm:text-base">
+            {post.title}
+          </div>
+          {(post?.postImageUrl || post.postVideoUrl) && (
+            <Link href={`/p/${post._id}`} className="rounded-lg">
+              {/* eslint-disable-next-line */}
+              {post.postImageUrl ? (
+                <img
+                  src={post.postImageUrl}
+                  className="object-cover pl-14 pr-6 pb-1  w-full rounded-lg"
+                  onLoad={() => {
+                    console.log('loaded')
+                    setLoaded(true)
+                  }}
+                />
+              ) : (
+                <>
+                  <video
+                    src={post.postVideoUrl}
+                    className="object-cover rounded-lg pl-14 pr-6 pb-1 w-full"
+                    onLoad={() => {
+                      setLoaded(true)
+                    }}
+                    autoPlay
+                    loop
+                    controls
+                  />
+                </>
+              )}
+            </Link>
+          )}
         </div>
-        <div>
-          {isAuthor && (
-            <div className="relative">
-              <BsThreeDots
-                className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                onClick={showMoreOptions}
-                title="More"
+
+        {/* bottom row */}
+        <div className="flex flex-row items-center sm:px-12 sm:py-2 space-x-28">
+          <div className="flex flex-row items-center">
+            {!liked && (
+              <AiOutlineHeart
+                className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
+                onClick={handleLike}
               />
-            </div>
-          )}
+            )}
+            {liked && (
+              <AiFillHeart
+                className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
+                onClick={handleUnLike}
+              />
+            )}
+            {likes}
+          </div>
+          <Link href={`/p/${post._id}`} className="flex flex-row items-center">
+            <BiCommentDetail className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-7 sm:h-7" />
+            {post.comments?.length}
+          </Link>
+          <div>
+            <BsShareFill
+              onClick={handleShare}
+              className="hover:cursor-pointer mr-3 w-4 sm:w-6 sm:h-6"
+            />
+          </div>
+          <div>
+            {isAuthor && (
+              <div className="relative">
+                <BsThreeDots
+                  className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                  onClick={showMoreOptions}
+                  title="More"
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
