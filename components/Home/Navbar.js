@@ -5,19 +5,21 @@ import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useProfile } from '../Common/WalletContext'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useNotify } from '../Common/NotifyContext'
-import { modalType } from '../Common/CustomPopUpProvider'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import useLogin from '../../lib/auth/useLogin'
 import CreateTestLensHandle from '../User/CreateTestLensHandle'
 import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useQueryClient } from '@tanstack/react-query'
+import Link from 'next/link'
 
 const Navbar = () => {
   const router = useRouter()
-  const { openConnectModal, showModal } = useConnectModal()
+  const { openConnectModal } = useConnectModal()
   const { user, address } = useProfile()
   const { notifyError, notifyInfo, notifySuccess } = useNotify()
   const queryClient = useQueryClient()
+  const { showModal } = usePopUpModal()
 
   const routeToHome = () => {
     router.push('/')
@@ -26,7 +28,7 @@ const Navbar = () => {
   const { mutateAsync: login } = useLogin()
   const { mutateAsync: createSetDispatcher } =
     useCreateSetDispatcherTypedDataMutation()
-  const { result, type, signTypedDataAndBroadcast } =
+  const { result, type, loading, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast()
   const {
     error,
@@ -104,34 +106,35 @@ const Navbar = () => {
           DIVERSE HQ
         </h2>
       </div>
-      {/* <div className="hidden sm:flex flex-row items-center border-[1px] border-p-btn p-1 rounded-[50px] bg-s-text w-[200px] md:w-[300px] lg:w-[400px] xl:w-[450px] 2xl:w-[600px]  gap-2 md:gap-4">
-          <div className="bg-p-btn rounded-[22px] py-1 px-2 md:px-3 ">
-            <AiOutlineSearch className="w-[23px] h-[23px] text-s-text" />
-          </div>
-          <input
-            className="bg-transparent mr-1 text-[14px] text-[#111] outline-none w-full"
-            type="text"
-            placeholder="Search Diverse"
-          />
-        </div> */}
       <SearchModal />
       <div>
         {user && address && (
           <div className="flex flex-col gap-4">
             {isSignedIn && hasProfile && (
-              <>
-                <div className="rounded-[20px] text-[16px] font-semibold text-s-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12">
-                  Lens Profile: {lensProfile.defaultProfile.handle}
-                </div>
-                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay && (
-                  <button
-                    onClick={handleEnableDispatcher}
-                    className="rounded-[20px] text-[16px] font-semibold text-s-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
-                  >
-                    Enable Dispatcher : Recommended for smoooth experience
-                  </button>
-                )}
-              </>
+              <div className="flex flex-row items-center">
+                <Link
+                  href={`/u/${lensProfile.defaultProfile.handle}`}
+                  className="mr-2 hover:cursor-pointer hover:underline"
+                >
+                  u/{lensProfile.defaultProfile.handle}
+                </Link>
+                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
+                  !loading && (
+                    <button
+                      onClick={handleEnableDispatcher}
+                      className="rounded-lg text-sm bg-[#62F030] px-2"
+                    >
+                      Enable Dispatcher <br /> Recommended for smoooth
+                      experience
+                    </button>
+                  )}
+                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
+                  loading && (
+                    <div className="rounded-lg text-sm bg-[#62F030] px-2">
+                      Enabling Dispatcher
+                    </div>
+                  )}
+              </div>
             )}
             {isSignedIn && !hasProfile && (
               <button
