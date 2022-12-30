@@ -3,7 +3,7 @@ import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { useNotify } from '../Common/NotifyContext'
 import { putEditComment } from '../../api/comment'
-import { useProfile } from '../Common/WalletContext'
+// import { useProfile } from '../Common/WalletContext'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 
 const EditComment = ({ comment, setComment }) => {

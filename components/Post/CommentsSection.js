@@ -8,7 +8,7 @@ const CommentsSection = ({ commentsId, removeCommentIdFromComments }) => {
   const fetchCommentsFromCommentsId = async () => {
     try {
       const comments = await Promise.all(
-        commentsId.map(async (id, index) => {
+        commentsId.map(async (id) => {
           // const response = await fetch(`${apiEndpoint}/comment/${id}`).then(
           //   (r) => r
           // )
@@ -35,9 +35,8 @@ const CommentsSection = ({ commentsId, removeCommentIdFromComments }) => {
   }
 
   useEffect(() => {
-    ;(async () => {
-      await fetchCommentsFromCommentsId()
-    })()
+    if (!commentsId) return
+    fetchCommentsFromCommentsId()
   }, [commentsId])
 
   return (

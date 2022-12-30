@@ -23,8 +23,10 @@ export interface GenericMetadata {
   appId?: string
 }
 
+/* eslint-disable */
 export enum MetadataDisplayType {
   number = 'number',
   string = 'string',
   date = 'date'
 }
+/* eslint-enable */

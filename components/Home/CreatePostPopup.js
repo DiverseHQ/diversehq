@@ -15,22 +15,20 @@ import {
   // uploadFileToIpfs
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
-import ToggleSwitch from '../Post/ToggleSwitch'
+// import ToggleSwitch from '../Post/ToggleSwitch'
 import { Switch } from '@mui/material'
-import {
-  PublicationMainFocus,
-  supportedMimeTypes
-} from '../../lib/interfaces/publication'
+import { supportedMimeTypes } from '../../lib/interfaces/publication'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import { pollUntilIndexed } from '../../lib/indexer/has-transaction-been-indexed'
 import {
+  PublicationMainFocus,
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 
-const CreatePostPopup = ({ props }) => {
+const CreatePostPopup = () => {
   const [file, setFile] = useState(null)
   const [title, setTitle] = useState('')
   const [communityId, setCommunityId] = useState(null)
@@ -76,12 +74,6 @@ const CreatePostPopup = ({ props }) => {
       setLoading(false)
       return
     }
-    // change space to _ for all file in files
-    // if (!file) {
-    //   notifyError('Please select a file')
-    //   setLoading(false)
-    //   return
-    // }
 
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {
@@ -119,13 +111,13 @@ const CreatePostPopup = ({ props }) => {
     let mainContentFocus = null
     //todo handle other file types and link content
     if (mimeType.startsWith('image')) {
-      mainContentFocus = PublicationMainFocus.IMAGE
+      mainContentFocus = PublicationMainFocus.Image
     } else if (mimeType.startsWith('video')) {
-      mainContentFocus = PublicationMainFocus.VIDEO
+      mainContentFocus = PublicationMainFocus.Video
     } else if (mimeType.startsWith('audio')) {
-      mainContentFocus = PublicationMainFocus.AUDIO
+      mainContentFocus = PublicationMainFocus.Audio
     } else {
-      mainContentFocus = PublicationMainFocus.TEXT_ONLY
+      mainContentFocus = PublicationMainFocus.TextOnly
     }
     //todo map to community id, so that can be identified by community
     const metadata = {
@@ -138,7 +130,7 @@ const CreatePostPopup = ({ props }) => {
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
       imageMimeType: mimeType.startsWith('image') ? mimeType : null,
-      name: title,
+      name: 'Created with DiverseHQ',
       media:
         mimeType === 'text'
           ? null
@@ -151,7 +143,8 @@ const CreatePostPopup = ({ props }) => {
       animation_url:
         mimeType !== 'text' && !mimeType.startsWith('image') ? url : null,
       attributes: [],
-      tags: []
+      tags: [communityId],
+      appId: 'DiverseHQ'
     }
     console.log('metadata', metadata)
     const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
@@ -402,7 +395,7 @@ const CreatePostPopup = ({ props }) => {
         loading={loading}
       >
         <div className="flex flex-row items-center justify-between">
-          <div className="border border-s-text rounded-full text-p-text ml-3 w-fit px-1">
+          <div className="border border-p-border rounded-full text-p-text ml-3 w-fit px-1">
             <button
               className="text-blue-500 p-1"
               onClick={showJoinedCommunities}
@@ -452,7 +445,7 @@ const CreatePostPopup = ({ props }) => {
               showAddedFile()
             ) : (
               <label htmlFor="upload-file">
-                <div className="h-32 text-s-text flex flex-col justify-center items-center border border-s-text  rounded-xl">
+                <div className="h-32 text-s-text flex flex-col justify-center items-center border border-p-border  rounded-xl">
                   <div>
                     <AiOutlineCamera className="h-8 w-8" />
                   </div>

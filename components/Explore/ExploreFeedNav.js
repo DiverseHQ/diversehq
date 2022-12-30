@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { HiSparkles } from 'react-icons/hi'
 import { MdLeaderboard } from 'react-icons/md'
-import { SiHotjar } from 'react-icons/si'
+// import { SiHotjar } from 'react-icons/si'
 
 const ExploreFeedNav = () => {
   //get current page path
@@ -25,6 +25,17 @@ const ExploreFeedNav = () => {
     <div className="flex flex-row items-center p-2 gap-4">
       <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
+          active === 'top' && 'bg-white'
+        }  hover:bg-[#eee]`}
+        onClick={() => {
+          router.push('/explore/top')
+        }}
+      >
+        <MdLeaderboard />
+        <button>Top</button>
+      </div>
+      <div
+        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
           active === 'new' && 'bg-white'
         }  hover:bg-[#eee]`}
       >
@@ -37,17 +48,7 @@ const ExploreFeedNav = () => {
           New
         </button>
       </div>
-      <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'top' && 'bg-white'
-        }  hover:bg-[#eee]`}
-        onClick={() => {
-          router.push('/explore/top')
-        }}
-      >
-        <MdLeaderboard />
-        <button>Top</button>
-      </div>
+
       {/* <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
           active === 'hot' && 'bg-white'

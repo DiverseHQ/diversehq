@@ -1,4 +1,4 @@
-import { endpoint, fetchData } from '../../auth-fetcher'
+import { endpoint } from '../../auth-fetcher'
 import { setAccessTokenToStorage } from './helpers'
 
 export default async function refreshAccessToken(

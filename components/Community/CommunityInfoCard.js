@@ -102,7 +102,7 @@ const CommunityInfoCard = ({
   return (
     <>
       {community && (
-        <div className="relative rounded-3xl shadow-lg">
+        <div className="relative rounded-3xl shadow-lg z-0">
           {/* eslint-disable-next-line */}
           <img
             className="h-28 w-full object-cover sm:rounded-t-3xl"

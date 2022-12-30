@@ -3,7 +3,7 @@
  * Exposes the user's profile and authentication status
  */
 
-import { createContext, useContext } from 'react'
+import React, { createContext, useContext } from 'react'
 
 import useLensUser from './auth/useLensUser'
 

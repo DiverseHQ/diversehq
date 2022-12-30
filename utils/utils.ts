@@ -1,11 +1,11 @@
 import { Web3Storage } from 'web3.storage'
-import { DIVE_CONTRACT_ADDRESS_MUMBAI } from './config'
 import { storage } from './firebase'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { create } from 'ipfs-http-client'
-import { Metadata } from '../lib/interfaces/publication'
+import { PublicationMetadataV2Input } from '../graphql/generated'
 
 export const uploadFileToIpfs = async (file: File): Promise<string> => {
+  // eslint-disable-next-line
   const token: string = String(process.env.NEXT_PUBLIC_WEB_STORAGE)
   const newFile: File = new File([file], file.name.replace(/\s/g, '_'), {
     type: file.type
@@ -65,6 +65,7 @@ export const uploadFileToFirebaseAndGetUrl = async (
   return { uploadedToUrl, path }
 }
 
+/* eslint-disable */
 const client = create({
   host: 'ipfs.infura.io',
   port: 5001,
@@ -77,13 +78,17 @@ const client = create({
   }
 })
 
-export const uploadToIpfsInfura = async (data: Metadata) => {
+/* eslint-enable */
+
+export const uploadToIpfsInfura = async (data: PublicationMetadataV2Input) => {
   const result = await client.add(JSON.stringify(data))
   console.log('upload result ipfs', result)
   return result
 }
 
-export const uploadToIpfsInfuraAndGetPath = async (data: Metadata) => {
+export const uploadToIpfsInfuraAndGetPath = async (
+  data: PublicationMetadataV2Input
+) => {
   const result = await client.add(JSON.stringify(data))
   console.log('upload result ipfs', result)
   return result.path

@@ -22,6 +22,7 @@ export const hasTxBeenIndexed = async (
 export const pollUntilIndexed = async (
   input: { txHash: string } | { txId: string }
 ) => {
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const response = await hasTxBeenIndexed(input)
     console.log('pool until indexed: result', response)

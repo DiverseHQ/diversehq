@@ -1,4 +1,3 @@
-import React from 'react'
 import { useBroadcastMutation } from '../graphql/generated'
 import { pollUntilIndexed } from './indexer/has-transaction-been-indexed'
 

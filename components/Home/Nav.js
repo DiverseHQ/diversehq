@@ -16,15 +16,30 @@ import { useDisconnect } from 'wagmi'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useLogin from '../../lib/auth/useLogin'
 import CreateTestLensHandle from '../User/CreateTestLensHandle'
+import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated'
+import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
+import { useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
 const Nav = () => {
   const router = useRouter()
+  const queryClient = useQueryClient()
+
   const { mutateAsync: login } = useLogin()
-  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const { mutateAsync: createSetDispatcher } =
+    useCreateSetDispatcherTypedDataMutation()
+  const { result, type, signTypedDataAndBroadcast } =
+    useSignTypedDataAndBroadcast()
+  const {
+    error,
+    isSignedIn,
+    hasProfile,
+    data: lensProfile
+  } = useLensUserContext()
 
   const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
-  const { notifyInfo } = useNotify()
+  const { notifyInfo, notifySuccess, notifyError } = useNotify()
   const { disconnect } = useDisconnect()
 
   async function handleLogin() {
@@ -107,6 +122,42 @@ const Nav = () => {
     })
   }
 
+  const handleEnableDispatcher = async () => {
+    try {
+      const createSetDispatcherResult = (
+        await createSetDispatcher({
+          request: {
+            profileId: lensProfile?.defaultProfile?.id,
+            enable: true
+          }
+        })
+      ).createSetDispatcherTypedData
+
+      signTypedDataAndBroadcast(createSetDispatcherResult?.typedData, {
+        id: createSetDispatcherResult?.id,
+        type: 'createSetDispatcher'
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    if (result && type === 'createSetDispatcher') {
+      notifySuccess('Dispatcher Set successfully')
+      queryClient.invalidateQueries({
+        queryKey: ['defaultProfile']
+      })
+    }
+  }, [result, type])
+
+  useEffect(() => {
+    if (error) {
+      console.error(error)
+      notifyError('Something went wrong, while setting dispatcher')
+    }
+  }, [error])
+
   return (
     <div>
       <div className="fixed top-[50px] left-[calc(((100vw-600px)/2)-50px-350px)] pt-6 pb-14 flex flex-col justify-between items-start w-[350px] h-[calc(100vh-100px)] bg-s-bg rounded-[25px] shadow-xl px-8">
@@ -158,7 +209,14 @@ const Nav = () => {
         {user && address && (
           <div>
             {isSignedIn && hasProfile && (
-              <div>Lens Profile: {lensProfile.defaultProfile.handle}</div>
+              <>
+                <div>Lens Profile: {lensProfile.defaultProfile.handle}</div>
+                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay && (
+                  <button onClick={handleEnableDispatcher}>
+                    Enable Dispatcher : Recommended for smoooth experience
+                  </button>
+                )}
+              </>
             )}
             {isSignedIn && !hasProfile && (
               <button onClick={handleCreateLensProfileAndMakeDefault}>
