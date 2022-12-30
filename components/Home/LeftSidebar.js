@@ -161,7 +161,7 @@ const LeftSidebar = () => {
         {user && address && (
           <div className="flex flex-col gap-4">
             <button
-              className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-s-text bg-p-btn py-2 px-2 md:px-6 lg:px-12"
+              className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-ap-text bg-p-btn py-2 px-2 md:px-6 lg:px-12"
               onClick={createPost}
             >
               Create Post
@@ -202,7 +202,7 @@ const LeftSidebar = () => {
         {/* {!user && !address && <LoginButton />} */}
         {!user && !address && (
           <button
-            className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-s-text bg-p-btn py-2 px-2 md:px-6 lg:px-12"
+            className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-ap-text bg-p-btn py-2 px-2 md:px-6 lg:px-12"
             onClick={openConnectModal}
           >
             Start Creating
@@ -212,7 +212,7 @@ const LeftSidebar = () => {
           <div className="flex flex-col w-full">
             <div className="text-sm text-red-600">Not whitelisted</div>
             <button
-              className="font-bold flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-s-text bg-p-btn py-2 px-2 md:px-6 lg:px-12 hover:cursor-pointer"
+              className="font-bold flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-ap-text bg-p-btn py-2 px-2 md:px-6 lg:px-12 hover:cursor-pointer"
               onClick={disconnect}
             >
               Disconnect

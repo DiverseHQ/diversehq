@@ -7,9 +7,10 @@ import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsE
 const lens = () => {
   // const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   return (
-    <>
-      <NavFilterAllPosts />
-      {/* {lensProfile &&
+    <div className="w-full flex justify-center shrink-0">
+      <div className="min-w-[650px] shrink-0">
+        <NavFilterAllPosts />
+        {/* {lensProfile &&
       isSignedIn &&
       hasProfile &&
       lensProfile?.defaultProfile?.id ? (
@@ -17,9 +18,10 @@ const lens = () => {
           profileId={lensProfile?.defaultProfile?.id}
         />
       ) : ( */}
-      <LensPostsExplorePublicationsColumn />
-      {/* )} */}
-    </>
+        <LensPostsExplorePublicationsColumn />
+        {/* )} */}
+      </div>
+    </div>
   )
 }
 

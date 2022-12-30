@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
 import { useEffect } from 'react'
@@ -62,13 +61,11 @@ const NavFilterAllPosts = () => {
     setShowJoinedCommunities(!showJoinedCommunities)
   }
 
-  
-
   return (
-    <div className="flex flex-row  border pl-6 bg-white mt-10 pt-5 pb-5  rounded-xl space-x-9 items-center">
+    <div className="font-bold flex flex-row  border pl-6 bg-white mt-10 py-3  rounded-xl space-x-9 items-center">
       <button
-        className={`flex py-1 px-2 items-center hover:cursor-pointer gap-2 rounded-full ${
-          active === 'new' && 'bg-white'
+        className={`flex py-1 px-2 items-center hover:cursor-pointer gap-2 rounded-xl ${
+          active === 'new' && 'bg-p-bg'
         }  hover:bg-[#eee]`}
         onClick={() => {
           router.push('/feed/new')
@@ -79,15 +76,16 @@ const NavFilterAllPosts = () => {
       </button>
       <div className="flex flex-col">
         <button
-          className={`flex py-1 px-2  flex-row items-center hover:cursor-pointer rounded-full ${
-            active === 'new' && 'bg-white'
-          }  hover:bg-[#eee]`}
+          className={`flex py-1 px-2  flex-row items-center hover:cursor-pointer rounded-xl  hover:bg-[#eee]`}
           onClick={getJoinedCommunities}
         >
           <p>Communities</p>
           <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
         </button>
-        <div className="bg-s-bg rounded-xl absolute mt-7" ref={dropdownRef}>
+        <div
+          className="bg-s-bg rounded-xl absolute mt-7 z-50"
+          ref={dropdownRef}
+        >
           {showJoinedCommunities &&
             joinedCommunities.map((community) => {
               console.log(community)
@@ -97,18 +95,18 @@ const NavFilterAllPosts = () => {
                   className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
                   id={community._id}
                   logoImageUrl={community.logoImageUrl}
-                  onClick={() => {router.push(`/c/${community.name}`)}}
+                  onClick={() => {
+                    router.push(`/c/${community.name}`)
+                  }}
                 >
-                  <Image
+                  <img
                     src={
                       community.logoImageUrl
                         ? community.logoImageUrl
                         : '/gradient.jpg'
                     }
                     alt="community logo"
-                    className="rounded-full"
-                    width={30}
-                    height={30}
+                    className="rounded-xl w-9 h-9"
                   />
 
                   <div
@@ -124,8 +122,8 @@ const NavFilterAllPosts = () => {
         </div>
       </div>
       <button
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'top' && 'bg-white'
+        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+          active === 'top' && 'bg-p-bg'
         }  hover:bg-[#eee]`}
         onClick={() => {
           router.push('/feed/top')
@@ -135,14 +133,18 @@ const NavFilterAllPosts = () => {
         <div>Top</div>
       </button>
       <button
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'lens' && 'bg-white'
+        className={`text-lens-text flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+          active === 'lens' && 'bg-p-bg'
         }  hover:bg-[#eee]`}
         onClick={() => {
           router.push('/feed/lens')
         }}
       >
-        <img src="/lensLogo.svg" className="h-5 w-5" alt="lens logo icon" />
+        <img
+          src="/lensLogoWithoutText.svg"
+          className="h-5 w-5 "
+          alt="lens logo icon"
+        />
         <div>Lens</div>
       </button>
     </div>

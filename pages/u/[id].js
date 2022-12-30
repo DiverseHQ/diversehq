@@ -285,12 +285,19 @@ const Profile = () => {
               <div>Lens</div>
             </button>
           )}
-          {useraddress && !showLensPosts && (
-            <PostsColumn source="user" data={useraddress} sortBy="new" />
-          )}
-          {showLensPosts && lensProfile?.id && (
-            <LensPostsProfilePublicationsColumn profileId={lensProfile?.id} />
-          )}
+
+          <div className="w-full flex justify-center shrink-0">
+            <div className="min-w-[650px] shrink-0">
+              {useraddress && !showLensPosts && (
+                <PostsColumn source="user" data={useraddress} sortBy="new" />
+              )}
+              {showLensPosts && lensProfile?.id && (
+                <LensPostsProfilePublicationsColumn
+                  profileId={lensProfile?.id}
+                />
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

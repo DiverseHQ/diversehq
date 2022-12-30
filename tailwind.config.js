@@ -20,6 +20,8 @@ module.exports = {
         's-btn': 'var(--accent-secondary)', // secondary button color
         'p-text': 'var(--text-primary)', // primary text color
         's-text': 'var(--text-secondary)', // secondary text color
+        'ap-text': 'var(--text-anti-primary)', // anti primary text color (revert of primary color)
+        'lens-text': 'var(--text-lens)', // lens text color
         'p-border': 'var(--border-primary)' // primary border color
       },
       boxShadow: {

@@ -3,7 +3,6 @@ import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { useRouter } from 'next/router'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
-import Image from 'next/image'
 import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
@@ -295,14 +294,14 @@ const CreatePostPopup = () => {
                     id={community._id}
                     logoImageUrl={community.logoImageUrl}
                   >
-                    <Image
+                    <img
                       src={
                         community.logoImageUrl
                           ? community.logoImageUrl
                           : '/gradient.jpg'
                       }
                       alt="community logo"
-                      className="rounded-full"
+                      className="rounded-full w-9 h-9"
                       width={30}
                       height={30}
                     />
@@ -402,11 +401,9 @@ const CreatePostPopup = () => {
             >
               {showCommunity.name ? (
                 <div className="flex justify-center items-center">
-                  <Image
+                  <img
                     src={showCommunity.image}
-                    className="rounded-full"
-                    width={30}
-                    height={30}
+                    className="rounded-full w-9 h-9"
                   />
                   <h1 className="ml-2">{showCommunity.name}</h1>
                 </div>

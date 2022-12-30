@@ -29,20 +29,28 @@ const index = () => {
   }
 
   return (
-    <div className="pt-6">
-      <ExploreFeedNav />
-      <InfiniteScroll
-        dataLength={communities.length}
-        next={getTopCommunities}
-        hasMore={hasMore}
-        loader={<h3> Loading...</h3>}
-        endMessage={<h4>Nothing more to show</h4>}
-      >
-        {communities.map((community) => {
-          return <CommunityInfoCard key={community._id} community={community} />
-        })}
-      </InfiniteScroll>
-    </div>
+    <>
+      <div className="w-full flex justify-center shrink-0 pt-6">
+        <div className="min-w-[650px] shrink-0">
+          <ExploreFeedNav />
+        </div>
+      </div>
+      <div>
+        <InfiniteScroll
+          dataLength={communities.length}
+          next={getTopCommunities}
+          hasMore={hasMore}
+          loader={<h3> Loading...</h3>}
+          endMessage={<h4>Nothing more to show</h4>}
+        >
+          {communities.map((community) => {
+            return (
+              <CommunityInfoCard key={community._id} community={community} />
+            )
+          })}
+        </InfiniteScroll>
+      </div>
+    </>
   )
 }
 
