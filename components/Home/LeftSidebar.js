@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
@@ -7,12 +7,6 @@ import CreateCommunity from './CreateCommunity'
 import CreatePostPopup from './CreatePostPopup'
 import { useDisconnect } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { useLensUserContext } from '../../lib/LensUserContext'
-import useLogin from '../../lib/auth/useLogin'
-import CreateTestLensHandle from '../User/CreateTestLensHandle'
-import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated'
-import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import ClickOption from './ClickOption'
 // import LoginButton from '../Common/UI/LoginButton'
@@ -41,26 +35,8 @@ const LeftSidebar = () => {
     router.push('/explore')
   }
 
-  const queryClient = useQueryClient()
-
-  const { mutateAsync: login } = useLogin()
-  const { mutateAsync: createSetDispatcher } =
-    useCreateSetDispatcherTypedDataMutation()
-  const { result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
-  const {
-    error,
-    isSignedIn,
-    hasProfile,
-    data: lensProfile
-  } = useLensUserContext()
-
-  const { notifyInfo, notifySuccess, notifyError } = useNotify()
+  const { notifyInfo } = useNotify()
   const { disconnect } = useDisconnect()
-
-  async function handleLogin() {
-    await login()
-  }
 
   const showMoreOptions = (e) => {
     // setShowOptions(!showOptions)
@@ -115,56 +91,6 @@ const LeftSidebar = () => {
       extraaInfo: {}
     })
   }
-
-  const handleCreateLensProfileAndMakeDefault = () => {
-    if (!user) {
-      notifyInfo('You might want to connect your wallet first')
-      return
-    }
-
-    showModal({
-      component: <CreateTestLensHandle />,
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
-
-  const handleEnableDispatcher = async () => {
-    try {
-      const createSetDispatcherResult = (
-        await createSetDispatcher({
-          request: {
-            profileId: lensProfile?.defaultProfile?.id,
-            enable: true
-          }
-        })
-      ).createSetDispatcherTypedData
-
-      signTypedDataAndBroadcast(createSetDispatcherResult?.typedData, {
-        id: createSetDispatcherResult?.id,
-        type: 'createSetDispatcher'
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  useEffect(() => {
-    if (result && type === 'createSetDispatcher') {
-      notifySuccess('Dispatcher Set successfully')
-      queryClient.invalidateQueries({
-        queryKey: ['defaultProfile']
-      })
-    }
-  }, [result, type])
-
-  useEffect(() => {
-    if (error) {
-      console.error(error)
-      notifyError('Something went wrong, while setting dispatcher')
-    }
-  }, [error])
 
   return (
     <div className="relative flex flex-col items-start border-r-[1px] border-p-btn sticky top-[64px] right-0 h-[calc(100vh-62px)] py-8 px-4 md:px-6 lg:px-10 xl:px-12 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] justify-between">
@@ -234,29 +160,6 @@ const LeftSidebar = () => {
       <div className="flex flex-col gap-2">
         {user && address && (
           <div className="flex flex-col gap-4">
-            {isSignedIn && hasProfile && (
-              <>
-                <div>Lens Profile: {lensProfile.defaultProfile.handle}</div>
-                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay && (
-                  <button onClick={handleEnableDispatcher}>
-                    Enable Dispatcher : Recommended for smoooth experience
-                  </button>
-                )}
-              </>
-            )}
-            {isSignedIn && !hasProfile && (
-              <button onClick={handleCreateLensProfileAndMakeDefault}>
-                Create Lens Profile
-              </button>
-            )}
-            {!isSignedIn && (
-              <button
-                onClick={handleLogin}
-                className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-s-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
-              >
-                Lens Login
-              </button>
-            )}
             <button
               className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-s-text bg-p-btn py-2 px-2 md:px-6 lg:px-12"
               onClick={createPost}
@@ -306,13 +209,13 @@ const LeftSidebar = () => {
           </button>
         )}
         {!user && address && (
-          <div className="">
-            <div className="text-sm text-red-600 pl-6">Not whitelisted</div>
+          <div className="flex flex-col w-full">
+            <div className="text-sm text-red-600">Not whitelisted</div>
             <button
-              className="text-2xl bg-p-h-bg py-4 px-10 rounded-full"
+              className="font-bold flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-s-text bg-p-btn py-2 px-2 md:px-6 lg:px-12 hover:cursor-pointer"
               onClick={disconnect}
             >
-              <div>Disconnect</div>
+              Disconnect
             </button>
           </div>
         )}
