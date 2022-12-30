@@ -113,6 +113,7 @@ TimeAgo.addDefaultLocale(en)
  */
 
 const LensPostCard = ({ post }) => {
+  console.log(post)
   return (
     <div style={{ marginTop: '50px' }}>
       <div>
@@ -123,6 +124,14 @@ const LensPostCard = ({ post }) => {
       <div>Total Comments : {post?.stats?.totalAmountOfComments}</div>
       <div>Upvotes : {post?.stats?.totalUpvotes}</div>
       <div>Downvote : {post?.stats?.totalDownvotes}</div>
+      <div>Tag: {post?.metadata?.tags[0]}</div>
+      <div>MainContent Focus : {post?.metadata?.mainContentFocus}</div>
+      {post?.communityInfo && (
+        <>
+          <div>Community Name : {post?.communityInfo?.name}</div>
+          <img src={post?.communityInfo?.logoImageUrl} alt="community logo" />
+        </>
+      )}
     </div>
   )
 }

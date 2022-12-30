@@ -118,6 +118,7 @@ fragment MetadataOutputFields on MetadataOutput {
       ...MediaFields
     }
   }
+  tags
   attributes {
     displayType
     traitType
@@ -140,6 +141,7 @@ fragment MetadataOutputFields on MetadataOutput {
       }
     }
   }
+  mainContentFocus
 }
 
 fragment Erc20Fields on Erc20 {

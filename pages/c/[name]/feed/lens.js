@@ -7,7 +7,7 @@ import NavFilterCommunity from '../../../../components/Post/NavFilterCommunity'
 
 const lens = () => {
   const { name } = useRouter().query
-  const [communityId, setCommunityId] = useState(null)
+  const [communityInfo, setCommunityInfo] = useState(null)
   return (
     <div className="pt-6">
       <div className="relative">
@@ -15,11 +15,13 @@ const lens = () => {
           <>
             <CommunityInfoCardFromName
               name={name}
-              setCommunityId={setCommunityId}
+              setCommunityInfo={setCommunityInfo}
             />
             <NavFilterCommunity name={name} />
-            {communityId && (
-              <LensPostsCommunityPublicationsColumn communityId={communityId} />
+            {communityInfo && (
+              <LensPostsCommunityPublicationsColumn
+                communityInfo={communityInfo}
+              />
             )}
           </>
         )}

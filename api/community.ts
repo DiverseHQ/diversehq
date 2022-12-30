@@ -38,6 +38,26 @@ export const getCommunityInfoUsingId = async (communityId: string) => {
   }
 }
 
+export const postGetCommunityInfoUsingListOfIds = async (
+  communityIds: string[]
+) => {
+  try {
+    console.log(communityIds)
+    return await fetch(
+      `${apiEndpoint}/community/community-info-using-list-of-ids`,
+      {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+          communityIds: communityIds
+        })
+      }
+    ).then((res) => res.json())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const putJoinCommunity = async (communityId: string) => {
   return await fetch(`${apiEndpoint}/community/join/${communityId}`, {
     method: 'PUT',

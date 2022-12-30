@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config.ts'
@@ -34,7 +35,22 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     handleUserPublications()
   }, [profilePublicationsResult?.data?.publications?.pageInfo?.next])
 
-  const handleUserPublications = () => {
+  const handleSetPosts = async (newPosts) => {
+    console.log('newposts before', newPosts)
+    const communityIds = newPosts.map((post) => {
+      if (post.metadata.tags.length === 0) return 'null'
+      return post.metadata.tags[0]
+    })
+    const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
+      communityIds
+    )
+    for (let i = 0; i < newPosts.length; i++) {
+      newPosts[i].communityInfo = communityInfoForPosts[i]
+    }
+    setPosts([...posts, ...newPosts])
+  }
+
+  const handleUserPublications = async () => {
     if (!profilePublicationsResult?.data?.publications?.items) return
     if (
       profilePublicationsResult?.data?.publications?.items.length <
@@ -47,7 +63,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         profilePublicationsResult?.data?.publications?.pageInfo?.next
       )
     }
-    setPosts([...posts, ...profilePublicationsResult.data.publications.items])
+    await handleSetPosts(profilePublicationsResult.data.publications.items)
   }
 
   const getMorePosts = async () => {

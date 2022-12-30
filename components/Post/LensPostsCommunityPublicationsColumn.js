@@ -11,7 +11,7 @@ import { LENS_POST_LIMIT } from '../../utils/config.ts'
 import { useEffect } from 'react'
 import { useLensUserContext } from '../../lib/LensUserContext'
 
-const LensPostsCommunityPublicationsColumn = ({ communityId }) => {
+const LensPostsCommunityPublicationsColumn = ({ communityInfo }) => {
   const [posts, setPosts] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState(null)
@@ -24,7 +24,7 @@ const LensPostsCommunityPublicationsColumn = ({ communityId }) => {
         metadata: {
           locale: 'en-US',
           tags: {
-            all: [communityId]
+            all: [communityInfo._id]
           }
         },
         cursor: cursor,
@@ -37,7 +37,7 @@ const LensPostsCommunityPublicationsColumn = ({ communityId }) => {
       }
     },
     {
-      enabled: !!communityId
+      enabled: !!communityInfo?._id
     }
   )
 
@@ -95,7 +95,12 @@ const LensPostsCommunityPublicationsColumn = ({ communityId }) => {
         endMessage={<h4>Nothing more to show</h4>}
       >
         {posts.map((post) => {
-          return <LensPostCard key={post.id} post={post} />
+          return (
+            <LensPostCard
+              key={post.id}
+              post={{ ...post, communityInfo: communityInfo }}
+            />
+          )
         })}
       </InfiniteScroll>
     </div>

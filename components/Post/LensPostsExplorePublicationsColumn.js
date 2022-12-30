@@ -7,10 +7,13 @@ import {
   PublicationTypes,
   useExplorePublicationsQuery
 } from '../../graphql/generated'
-import LensPostCard from './LensPostCard'
 import { LENS_POST_LIMIT } from '../../utils/config.ts'
-import { getAllCommunitiesIds } from '../../api/community'
-import { useLensUserContext } from '../../lib/LensUserContext'
+import {
+  getAllCommunitiesIds,
+  postGetCommunityInfoUsingListOfIds
+} from '../../api/community'
+import LensPostCard from './LensPostCard'
+// import { useLensUserContext } from '../../lib/LensUserContext'
 
 const LensPostsExplorePublicationsColumn = () => {
   const [posts, setPosts] = useState([])
@@ -48,7 +51,22 @@ const LensPostsExplorePublicationsColumn = () => {
     }
   }
 
-  const handleExplorePublications = () => {
+  const handleSetPosts = async (newPosts) => {
+    console.log('newposts before', newPosts)
+    const communityIds = newPosts.map((post) => post.metadata.tags[0])
+    console.log('communityIds', communityIds)
+    const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
+      communityIds
+    )
+    console.log('communityInfoForPosts', communityInfoForPosts)
+    for (let i = 0; i < newPosts.length; i++) {
+      newPosts[i].communityInfo = communityInfoForPosts[i]
+    }
+    console.log('newPosts after', newPosts)
+    setPosts([...posts, ...newPosts])
+  }
+
+  const handleExplorePublications = async () => {
     console.log('lensposts explorepublications', data)
     if (data?.explorePublications?.pageInfo?.next) {
       setNextCursor(data?.explorePublications?.pageInfo?.next)
@@ -56,7 +74,7 @@ const LensPostsExplorePublicationsColumn = () => {
     if (data.explorePublications.items.length < LENS_POST_LIMIT) {
       setHasMore(false)
     }
-    setPosts([...posts, ...data.explorePublications.items])
+    await handleSetPosts(data.explorePublications.items)
   }
 
   useEffect(() => {
@@ -84,7 +102,7 @@ const LensPostsExplorePublicationsColumn = () => {
         dataLength={posts.length}
         next={getMorePosts}
         hasMore={hasMore}
-        loader={<h3> Loading...</h3>}
+        loader={<h3>Loading...</h3>}
         endMessage={<h4>Nothing more to show</h4>}
       >
         {posts.map((post, index) => {
