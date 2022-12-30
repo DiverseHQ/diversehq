@@ -62,6 +62,8 @@ const NavFilterAllPosts = () => {
     setShowJoinedCommunities(!showJoinedCommunities)
   }
 
+  
+
   return (
     <div className="flex flex-row  border pl-6 bg-white mt-10 pt-5 pb-5  rounded-xl space-x-9 items-center">
       <button
@@ -95,6 +97,7 @@ const NavFilterAllPosts = () => {
                   className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
                   id={community._id}
                   logoImageUrl={community.logoImageUrl}
+                  onClick={() => {router.push(`/c/${community.name}`)}}
                 >
                   <Image
                     src={
