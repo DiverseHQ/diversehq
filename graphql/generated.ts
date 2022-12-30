@@ -3860,6 +3860,13 @@ export type WorldcoinPhoneVerifyWebhookRequest = {
   signalType: WorldcoinPhoneVerifyType;
 };
 
+export type AddReactionMutationVariables = Exact<{
+  request: ReactionRequest;
+}>;
+
+
+export type AddReactionMutation = { __typename?: 'Mutation', addReaction?: any | null };
+
 export type BroadcastMutationVariables = Exact<{
   request: BroadcastRequest;
 }>;
@@ -4684,6 +4691,20 @@ export const OrConditionFieldsNoRecursiveFragmentDoc = `
   }
 }
     `;
+export const AddReactionDocument = `
+    mutation addReaction($request: ReactionRequest!) {
+  addReaction(request: $request)
+}
+    `;
+export const useAddReactionMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<AddReactionMutation, TError, AddReactionMutationVariables, TContext>) =>
+    useMutation<AddReactionMutation, TError, AddReactionMutationVariables, TContext>(
+      ['addReaction'],
+      (variables?: AddReactionMutationVariables) => fetchData<AddReactionMutation, AddReactionMutationVariables>(AddReactionDocument, variables)(),
+      options
+    );
 export const BroadcastDocument = `
     mutation Broadcast($request: BroadcastRequest!) {
   broadcast(request: $request) {

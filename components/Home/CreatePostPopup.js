@@ -354,6 +354,7 @@ const CreatePostPopup = () => {
               src={imageValue}
               className="max-h-80 rounded-2xl"
               controls
+              autoPlay
             ></video>
           )}
           <AiOutlineClose

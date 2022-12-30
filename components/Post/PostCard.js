@@ -195,6 +195,7 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
                       autoPlay
                       loop
                       controls
+                      muted
                     />
                   </>
                 )}
