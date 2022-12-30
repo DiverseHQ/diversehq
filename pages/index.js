@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getAllPosts } from '../api/post'
+import FilterNav from '../components/Home/FilterNav'
 import PostsColumn from '../components/Post/PostsColumn'
 
 const limit = 3
@@ -30,6 +31,7 @@ const Home = () => {
   }, [])
   return (
     <div>
+      <FilterNav />
       <PostsColumn
         posts={posts}
         getMorePost={() => {

@@ -21,7 +21,7 @@ export const WalletProvider = ({ children }) => {
     }
   })
   const [lensToken, setLensToken] = useState(null)
-  const [lensProfile, setLensProfile] = useState(null);
+  const [lensProfile, setLensProfile] = useState(null)
 
   // uncomment this if you want to enable whitelist access
   // const [isWhitelisted, setIsWhitelisted] = useState(false)
@@ -118,35 +118,6 @@ export const WalletProvider = ({ children }) => {
     }
   }
 
-<<<<<<< HEAD
-  // Lens Auth
-  useEffect(() => {
-    refreshAuthToken();
-    async function checkProfile() {
-      if (address && localStorage.getItem('STORAGE_KEY')) {
-        const token = JSON.parse(localStorage.getItem('STORAGE_KEY'));
-        console.log('Success Token From STORAGE_KEY', token)
-        setLensToken(token.accessToken)
-        // const response = await client.query({
-        //   query: getDefaultProfile,
-        //   variables: { address: address }
-        // })
-        // console.log('Lens Profile', response);
-      } else {
-        console.log('Not Logged In')
-      }
-    }
-    checkProfile();
-  }, []);
-
-
-   
-
-  return (
-        <WalletContext.Provider value={{ address, refreshUserInfo, token, user, lensToken, setLensToken }}>
-            {children}
-        </WalletContext.Provider>
-=======
   // const refetchToken = async () => {
   //   let existingToken = null
   //   let verified = false
@@ -209,7 +180,6 @@ export const WalletProvider = ({ children }) => {
     <WalletContext.Provider value={{ address, refreshUserInfo, user }}>
       {children}
     </WalletContext.Provider>
->>>>>>> dev
   )
 }
 
