@@ -28,7 +28,7 @@ const newPage = () => {
   return (
     <div className="pt-6">
       <div className="w-full flex justify-center shrink-0">
-        <div className="min-w-[650px] shrink-0">
+        <div className="max-w-[650px] shrink-0">
           <ExploreFeedNav />
         </div>
       </div>

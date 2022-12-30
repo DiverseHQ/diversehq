@@ -223,6 +223,7 @@ const CreatePostPopup = () => {
       title
     }
     //todo handle audio file types
+    const type = mimeType.split('/')[0]
     if (mimeType !== 'text') {
       postData[type === 'image' ? 'postImageUrl' : 'postVideoUrl'] = url
       postData.filePath = path

@@ -125,9 +125,9 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
 
   //   const likeThe
   return (
-    <div className="px-3 sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-6 sm:rounded-2xl shadow-sm">
+    <div className="px-3 sm:px-5 flex flex-col w-full sm:min-w-[650px] bg-s-bg pt-3 my-6 sm:rounded-2xl shadow-sm">
       {/* top row */}
-      <div className="flex flex-row items-center mb-3">
+      <div className="flex flex-row w-full items-center mb-3">
         <Link href={`/c/${post.communityName}`}>
           <img
             src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
@@ -161,7 +161,7 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
         </div>
       </div>
 
-      <div className="flex flex-row">
+      <div className="flex flex-row w-full">
         <div className="flex flex-col items-center ml-[9px]">
           <img
             onClick={liked ? handleUnLike : handleLike}

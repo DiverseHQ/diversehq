@@ -47,7 +47,7 @@ const PostPage = () => {
   }
   return (
     <div className="w-full flex justify-center shrink-0">
-      <div className="min-w-[650px] shrink-0">
+      <div className="max-w-[650px] shrink-0">
         {!postInfo && <div>Loading...</div>}
         {notFound ? (
           <div className="flex items-center justify-center w-full bg-s-bg p-3 my-6 sm:rounded-3xl shadow-lg text-bold text-2xl">
