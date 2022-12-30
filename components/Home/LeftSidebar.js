@@ -167,7 +167,7 @@ const LeftSidebar = () => {
   }, [error])
 
   return (
-    <div className="relative flex flex-col items-start border-r-[1px] border-p-btn sticky top-[78px] right-0 h-[89vh] py-8 px-4 md:px-6 lg:px-10 xl:px-12 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] justify-between">
+    <div className="relative flex flex-col items-start border-r-[1px] border-p-btn sticky top-[64px] right-0 h-[calc(100vh-62px)] py-8 px-4 md:px-6 lg:px-10 xl:px-12 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] justify-between">
       <div className="flex flex-col items-start gap-4 mb-2">
         <button
           className="flex flex-row items-center hover:bg-p-btn-hover px-2 py-2 lg:px-4 rounded-[20px] gap-1 md:gap-2"

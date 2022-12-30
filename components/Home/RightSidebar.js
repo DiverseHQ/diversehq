@@ -19,7 +19,7 @@ const RightSidebar = () => {
   ]
 
   return (
-    <div className="relative hidden lg:flex flex-col border-l-[1px] border-p-btn sticky top-[78px] h-[89vh] w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 px-4 md:px-6 lg:px-10 xl:px-12">
+    <div className="relative hidden lg:flex flex-col border-l-[1px] border-p-btn sticky top-[64px] h-[calc(100vh-62px)] w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 px-4 md:px-6 lg:px-10 xl:px-12">
       <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
         <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
           Created Communities

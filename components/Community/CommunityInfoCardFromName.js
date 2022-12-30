@@ -18,7 +18,7 @@ const CommunityInfoCardFromName = ({ name, setCommunityInfo }) => {
     try {
       const community = await getCommunityInfo(name)
       console.log('fetchCommunityInformation', community)
-      if (community) {
+      if (community && setCommunityInfo) {
         setCommunityInfo(community)
       }
       setCommunity(community)
