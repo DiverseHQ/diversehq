@@ -22,6 +22,7 @@ import { proxyActionStatusRequest } from '../../lib/indexer/proxy-action-status'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import LensPostsProfilePublicationsColumn from '../../components/Post/LensPostsProfilePublicationsColumn'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import { getNumberOfPostsUsingUserAddress } from '../../api/post'
 
 const Profile = () => {
   const { mutateAsync: proxyAction } = useProxyActionMutation()
@@ -40,6 +41,8 @@ const Profile = () => {
   const { user } = useProfile()
   const { showModal } = usePopUpModal()
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
+
+  const [numberOfPosts, setNumberOfPosts] = useState(0)
 
   const lensProfileQueryFromAddress = useDefaultProfileQuery(
     {
@@ -97,9 +100,15 @@ const Profile = () => {
     }
   }
 
+  const getNumberOfPosts = async (address) => {
+    const result = await getNumberOfPostsUsingUserAddress(address)
+    setNumberOfPosts(result.numberOfPosts)
+  }
+
   useEffect(() => {
     if (useraddress) {
       showUserInfo()
+      getNumberOfPosts(useraddress)
     }
   }, [useraddress])
 
@@ -246,11 +255,30 @@ const Profile = () => {
               }`}
             </div>
             <div>{profile.bio}</div>
+            {/* offchain data */}
             <div>
               <span className="text-s-text">Joined </span>
               <span className="font-bold">{profile?.communities?.length}</span>
               <span className="text-s-text"> Communities</span>
             </div>
+            <div>
+              <span>Post : {numberOfPosts}</span>
+            </div>
+            <div>
+              <span>Community Spells : {profile?.communityCreationSpells}</span>
+            </div>
+
+            {/* onchain lens data */}
+            {lensProfile && (
+              <>
+                <div>
+                  <span>Followers: {lensProfile?.stats?.totalFollowers}</span>
+                </div>
+                <div>
+                  <span>LensPosts : {lensProfile?.stats?.totalPosts}</span>
+                </div>
+              </>
+            )}
             {hasProfile && isSignedIn && myLensProfile && (
               <>
                 {lensProfile && isFollowedByMe ? (
@@ -273,21 +301,29 @@ const Profile = () => {
               </>
             )}
           </div>
-          {lensProfile?.id && (
-            <button
-              className={`flex flex-row ${showLensPosts && 'bg-s-bg'}`}
-              disabled={!lensProfile?.id}
-              onClick={() => {
-                setShowLensPosts(true)
-              }}
-            >
-              <img src="/lensLogo.svg" alt="lens logo" className="w-5 h-5" />
-              <div>Lens</div>
-            </button>
-          )}
-
-          <div className="w-full flex justify-center shrink-0">
+          <div className="w-full flex justify-center">
             <div className="max-w-[650px] shrink-0">
+              {lensProfile?.id && (
+                <div className="font-bold flex flex-row  border pl-6 bg-white mt-10 py-3 w-full lg:min-w-[650px]  rounded-xl space-x-9 items-center">
+                  <button
+                    className={`flex py-1 px-2 items-center hover:cursor-pointer gap-2 rounded-xl ${
+                      showLensPosts && 'bg-p-bg'
+                    }  hover:bg-[#eee]`}
+                    disabled={!lensProfile?.id}
+                    onClick={() => {
+                      setShowLensPosts(true)
+                    }}
+                  >
+                    <img
+                      src="/lensLogo.svg"
+                      alt="lens logo"
+                      className="w-5 h-5"
+                    />
+                    <div>Lens</div>
+                  </button>
+                </div>
+              )}
+
               {useraddress && !showLensPosts && (
                 <PostsColumn source="user" data={useraddress} sortBy="new" />
               )}

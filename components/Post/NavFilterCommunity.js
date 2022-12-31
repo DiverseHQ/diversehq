@@ -23,7 +23,7 @@ const NavFilterCommunity = ({ name }) => {
   }, [pathname])
 
   return (
-    <div className="flex flex-row items-center p-2 gap-4 pl-6 bg-white mt-2 py-3 rounded-xl space-x-9 sm:min-w-[650px]">
+    <div className="flex flex-row items-center p-2 gap-4 pl-6 bg-white mt-2 py-3 rounded-xl space-x-9 lg:min-w-[650px]">
       <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
           active === 'new' && 'bg-p-bg'

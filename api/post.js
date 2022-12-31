@@ -37,3 +37,31 @@ export const deletePost = async (id) => {
     headers: getHeaders()
   })
 }
+
+export const getNumberOfPostsInCommunity = async (communityId) => {
+  return await fetch(
+    `${apiEndpoint}/post/numberOfPostsInCommunity?` +
+      new URLSearchParams({ communityId })
+  ).then((r) => r.json())
+}
+
+export const getNumberOfPostsUsingUserAddress = async (address) => {
+  return await fetch(
+    `${apiEndpoint}/post/numberOfPostsOfUserAddress?` +
+      new URLSearchParams({ address })
+  ).then((r) => r.json())
+}
+
+export const putUpvoteOnPost = async (id) => {
+  return await fetch(`${apiEndpoint}/post/upvote/${id}`, {
+    method: 'PUT',
+    headers: getHeaders()
+  })
+}
+
+export const putDownvoteOnPost = async (id) => {
+  return await fetch(`${apiEndpoint}/post/downvote/${id}`, {
+    method: 'PUT',
+    headers: getHeaders()
+  })
+}

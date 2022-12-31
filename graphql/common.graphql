@@ -234,7 +234,7 @@ fragment CommentBaseFields on Comment {
   }
   appId
   hidden
-  reaction(request: null)
+  reaction(request: $reactionRequest)
   mirrors(by: null)
   hasCollectedByMe
   isGated

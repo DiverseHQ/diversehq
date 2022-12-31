@@ -92,7 +92,7 @@ const Navbar = () => {
   }, [error])
 
   return (
-    <div className="flex flex-row flex-1 z-10 justify-between px-4 md:px-8 py-2 items-center shadow-nav gap-2 sticky top-0 bg-[#eef1ff]">
+    <div className="flex flex-row flex-1 z-10 justify-between px-4 md:px-8 py-2 items-center shadow-md gap-2 sticky top-0 bg-p-bg">
       <div
         className="flex flex-row items-center border-[1px] border-[#C9A4F4] rounded-[50px] hover:cursor-pointer"
         onClick={routeToHome}

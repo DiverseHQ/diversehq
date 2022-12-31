@@ -12,8 +12,8 @@ const CommunityPage = () => {
         {name && (
           <>
             <CommunityInfoCardFromName name={name} />
-            <div className="w-full flex justify-center shrink-0">
-              <div className="max-w-[650px] shrink-0">
+            <div className="w-full flex justify-center">
+              <div className="max-w-[650px]">
                 <NavFilterCommunity name={name} />
                 <PostsColumn source="community" sortBy="new" data={name} />
               </div>
