@@ -23,6 +23,7 @@ import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast
 import LensPostsProfilePublicationsColumn from '../../components/Post/LensPostsProfilePublicationsColumn'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { getNumberOfPostsUsingUserAddress } from '../../api/post'
+import Link from 'next/link'
 
 const Profile = () => {
   const { mutateAsync: proxyAction } = useProxyActionMutation()
@@ -249,11 +250,13 @@ const Profile = () => {
                 <FaRegCopy className="w-8 h-8 px-2" />
               </div>
             </div>
-            <div className="font-bold text-base sm:text-base tracking-wider">
-              {`${profile.name ? profile.name : ''} ${
-                lensProfile?.handle ? '@' + lensProfile?.handle : ''
-              }`}
-            </div>
+            <Link href={`/u/${handle}`} className="hover:underline">
+              <div className="font-bold text-base sm:text-base tracking-wider">
+                {`${profile.name ? profile.name : ''} ${
+                  lensProfile?.handle ? 'u/' + lensProfile?.handle : ''
+                }`}
+              </div>
+            </Link>
             <div>{profile.bio}</div>
             {/* offchain data */}
             <div>
