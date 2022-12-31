@@ -22,6 +22,7 @@ import { proxyActionStatusRequest } from '../../lib/indexer/proxy-action-status'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import LensPostsProfilePublicationsColumn from '../../components/Post/LensPostsProfilePublicationsColumn'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import { getNumberOfPostsUsingUserAddress } from '../../api/post'
 
 const Profile = () => {
   const { mutateAsync: proxyAction } = useProxyActionMutation()
@@ -40,6 +41,8 @@ const Profile = () => {
   const { user } = useProfile()
   const { showModal } = usePopUpModal()
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
+
+  const [numberOfPosts, setNumberOfPosts] = useState(0)
 
   const lensProfileQueryFromAddress = useDefaultProfileQuery(
     {
@@ -97,9 +100,15 @@ const Profile = () => {
     }
   }
 
+  const getNumberOfPosts = async (address) => {
+    const result = await getNumberOfPostsUsingUserAddress(address)
+    setNumberOfPosts(result.numberOfPosts)
+  }
+
   useEffect(() => {
     if (useraddress) {
       showUserInfo()
+      getNumberOfPosts(useraddress)
     }
   }, [useraddress])
 
@@ -250,6 +259,9 @@ const Profile = () => {
               <span className="text-s-text">Joined </span>
               <span className="font-bold">{profile?.communities?.length}</span>
               <span className="text-s-text"> Communities</span>
+            </div>
+            <div>
+              <span>Post : {numberOfPosts}</span>
             </div>
             {hasProfile && isSignedIn && myLensProfile && (
               <>

@@ -37,3 +37,17 @@ export const deletePost = async (id) => {
     headers: getHeaders()
   })
 }
+
+export const getNumberOfPostsInCommunity = async (communityId) => {
+  return await fetch(
+    `${apiEndpoint}/post/numberOfPostsInCommunity?` +
+      new URLSearchParams({ communityId })
+  ).then((r) => r.json())
+}
+
+export const getNumberOfPostsUsingUserAddress = async (address) => {
+  return await fetch(
+    `${apiEndpoint}/post/numberOfPostsOfUserAddress?` +
+      new URLSearchParams({ address })
+  ).then((r) => r.json())
+}

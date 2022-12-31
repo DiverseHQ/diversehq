@@ -11,7 +11,7 @@ import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../../Common/NotifyContext'
 TimeAgo.addDefaultLocale(en)
 const LensCommentCard = ({ comment }) => {
-  const { notifyInfo, notifyError } = useNotify()
+  const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
   const [upvoteCount, setUpvoteCount] = useState(comment?.stats.totalUpvotes)
   const [downvoteCount, setDownvoteCount] = useState(

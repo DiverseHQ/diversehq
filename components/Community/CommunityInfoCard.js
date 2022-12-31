@@ -15,6 +15,7 @@ import {
 import EditCommunity from './EditCommunity'
 // import { dateToSince } from '../../utils/utils'
 import { AiOutlineFileAdd } from 'react-icons/ai'
+import { getNumberOfPostsInCommunity } from '../../api/post'
 
 const CommunityInfoCard = ({
   community,
@@ -29,7 +30,20 @@ const CommunityInfoCard = ({
   const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
 
+  const [numberOfPosts, setNumberOfPosts] = useState(0)
+
   const name = community?.name
+
+  const fetchNumberOfPosts = async () => {
+    const result = await getNumberOfPostsInCommunity(community._id)
+    setNumberOfPosts(result.numberOfPosts)
+  }
+
+  useEffect(() => {
+    if (community._id) {
+      fetchNumberOfPosts()
+    }
+  }, [community])
 
   useEffect(() => {
     if (!user || !community) return
@@ -43,8 +57,11 @@ const CommunityInfoCard = ({
   // get the community information using it's id
   const getCommunityInformation = async () => {
     try {
+      console.log('community._id', community._id)
       const comm = await getCommunityInfoUsingId(community._id)
-      setCommunity(comm)
+      fetchNumberOfPosts()
+
+      setCommunity({ ...comm, numberOfPosts })
     } catch (error) {
       console.log(error)
     }
@@ -203,7 +220,7 @@ const CommunityInfoCard = ({
               </div>
               <div>
                 <span>Posts: </span>
-                <span className="font-semibold">66</span>
+                <span className="font-semibold">{numberOfPosts}</span>
               </div>
               <div>
                 <span>Matic transferred: </span>
