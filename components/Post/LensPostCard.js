@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
@@ -128,9 +128,14 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 const LensPostCard = ({ post }) => {
   const { notifyInfo, notifyError } = useNotify()
   const [reaction, setReaction] = useState(post?.reaction)
+  const [upvoteCount, setUpvoteCount] = useState(post?.stats.totalUpvotes)
+  const [downvoteCount, setDownvoteCount] = useState(post?.stats.totalDownvotes)
   const [voteCount, setVoteCount] = useState(
     post?.stats?.totalUpvotes - post?.stats?.totalDownvotes
   )
+  useEffect(() => {
+    setVoteCount(upvoteCount - downvoteCount)
+  }, [upvoteCount, downvoteCount])
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const handleShare = async () => {
@@ -157,7 +162,12 @@ const LensPostCard = ({ post }) => {
       }
 
       setReaction(ReactionTypes.Upvote)
-      setVoteCount(voteCount + 1)
+      if (reaction === ReactionTypes.Downvote) {
+        setDownvoteCount(downvoteCount - 1)
+        setUpvoteCount(upvoteCount + 1)
+      } else {
+        setUpvoteCount(upvoteCount + 1)
+      }
       await addReaction({
         request: {
           profileId: lensProfile.defaultProfile.id,
@@ -178,7 +188,12 @@ const LensPostCard = ({ post }) => {
         return
       }
       setReaction(ReactionTypes.Downvote)
-      setVoteCount(voteCount - 1)
+      if (reaction === ReactionTypes.Upvote) {
+        setUpvoteCount(upvoteCount - 1)
+        setDownvoteCount(downvoteCount + 1)
+      } else {
+        setDownvoteCount(downvoteCount + 1)
+      }
       await addReaction({
         request: {
           profileId: lensProfile.defaultProfile.id,
@@ -233,14 +248,20 @@ const LensPostCard = ({ post }) => {
         <div className="flex flex-col items-center ml-[9px]">
           <img
             //  onClick={liked ? handleUnLike : handleLike}
-            src={reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'}
+            src={
+              reaction === ReactionTypes.Upvote
+                ? '/UpvoteFilled.svg'
+                : '/Upvote.svg'
+            }
             onClick={handleUpvote}
             className="w-6 h-6 cursor-pointer"
           />
           <div className="font-bold">{voteCount}</div>
           <img
             src={
-              reaction === 'DOWNVOTE' ? '/DownvoteFilled.svg' : '/Downvote.svg'
+              reaction === ReactionTypes.Downvote
+                ? '/DownvoteFilled.svg'
+                : '/Downvote.svg'
             }
             className="w-5 h-5 cursor-pointer"
             onClick={handleDownvote}
