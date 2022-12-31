@@ -90,6 +90,10 @@ const CreateCommunity = () => {
     const filePicked = event.target.files[0]
     console.log('filePicked', filePicked)
     if (!filePicked) return
+    if (filePicked.size > 5000000) {
+      notifyError('File size must be less than 5mb')
+      return
+    }
     setCommunityBanner(filePicked)
     console.log('filePicked', filePicked)
     setHeaderValue(URL.createObjectURL(filePicked))
@@ -98,6 +102,10 @@ const CreateCommunity = () => {
   const handlePfpChange = (event) => {
     const filePicked = event.target.files[0]
     if (!filePicked) return
+    if (filePicked.size > 5000000) {
+      notifyError('File size must be less than 5mb')
+      return
+    }
     setCommunityPfp(filePicked)
     setPfpValue(URL.createObjectURL(filePicked))
   }

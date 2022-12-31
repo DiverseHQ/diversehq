@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 // import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-import { putLikeOnPost, deletePost } from '../../api/post'
+import { deletePost, putUpvoteOnPost, putDownvoteOnPost } from '../../api/post'
 import { BsThreeDots } from 'react-icons/bs'
 // import { HiOutlineTrash } from 'react-icons/hi'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -22,8 +22,14 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
   // const createdAt = new Date(post.createdAt)
   // eslint-disable-next-line
   const { user } = useProfile()
-  const [liked, setLiked] = useState(false)
-  const [likes, setLikes] = useState(post.likes.length)
+  const [reaction, setReaction] = useState(null) // upvote, downvote, none
+  const [upvoteCount, setUpvoteCount] = useState(
+    post?.upvotes ? post.upvotes.length : 0
+  )
+  const [downvoteCount, setDownvoteCount] = useState(
+    post?.downvotes ? post.downvotes.length : 0
+  )
+  const [totalCount, setTotalCount] = useState(upvoteCount - downvoteCount)
   const { notifyInfo, notifyError } = useNotify()
   // const { isDesktop } = useDevice()
 
@@ -33,35 +39,61 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
   const { showModal } = usePopUpModal()
 
   useEffect(() => {
+    setTotalCount(upvoteCount - downvoteCount)
+  }, [upvoteCount, downvoteCount])
+
+  useEffect(() => {
     if (!user) return
-    setLiked(post.likes?.includes(user.walletAddress))
+    if (!post?.upvotes || !post?.downvotes) return
+    if (post?.upvotes.includes(user.walletAddress.toLowerCase())) {
+      setReaction('UPVOTE')
+    } else if (post?.downvotes.includes(user.walletAddress.toLowerCase())) {
+      setReaction('DOWNVOTE')
+    }
     if (post.author === user.walletAddress) {
       // if current user is the author then show the delete icon
       setIsAuthor(true)
     }
   }, [user])
-  const handleLike = async () => {
+
+  const handleUpvote = async () => {
     try {
       if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      setLiked(true)
-      setLikes(likes + 1)
-      await putLikeOnPost(post._id)
+      if (reaction === 'UPVOTE') {
+        return // already upvoted
+      }
+      if (reaction === 'DOWNVOTE') {
+        setDownvoteCount(downvoteCount - 1)
+      }
+      setUpvoteCount(upvoteCount + 1)
+      setReaction('UPVOTE')
+
+      await putUpvoteOnPost(post._id)
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
     }
   }
-  const handleUnLike = async () => {
+
+  const handleDownvote = async () => {
     try {
       if (!user) {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      setLiked(false)
-      setLikes(likes - 1)
+      if (reaction === 'DOWNVOTE') {
+        return // already downvoted
+      }
+      if (reaction === 'UPVOTE') {
+        setUpvoteCount(upvoteCount - 1)
+      }
+      setDownvoteCount(downvoteCount + 1)
+      setReaction('DOWNVOTE')
+
+      await putDownvoteOnPost(post._id)
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
@@ -170,13 +202,18 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
       <div className="flex flex-row w-full">
         <div className="flex flex-col items-center ml-[9px]">
           <img
-            onClick={liked ? handleUnLike : handleLike}
-            src={liked ? '/UpvoteFilled.svg' : '/Upvote.svg'}
-            className="w-6 h-6"
+            onClick={handleUpvote}
+            src={reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'}
+            className="w-6 h-6 cursor-pointer"
           />
-          {/* todo fetch from db */}
-          <div>0</div>
-          <img src={'/Downvote.svg'} className="w-5 h-5" />
+          <div>{totalCount}</div>
+          <img
+            onClick={handleDownvote}
+            src={
+              reaction === 'DOWNVOTE' ? '/DownvoteFilled.svg' : '/Downvote.svg'
+            }
+            className="w-5 h-5 cursor-pointer"
+          />
         </div>
 
         {/* main content */}
