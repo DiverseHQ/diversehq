@@ -1,6 +1,7 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
 import {
   useAccount,
+  useDisconnect,
   //  useProvider,
   useSigner
   //  useDisconnect
@@ -14,11 +15,15 @@ import {
 import { getUserInfo } from '../../api/user'
 // import { useNotify } from './NotifyContext'
 import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
+import { userRoles } from '../../utils/config'
+import { useNotify } from './NotifyContext'
 export const WalletContext = createContext([])
 
 export const WalletProvider = ({ children }) => {
+  const { disconnect } = useDisconnect()
   const [user, setUser] = useState(null)
   const { data: signer } = useSigner()
+  const { notifyInfo } = useNotify()
   const { address, isDisconnected } = useAccount({
     onConnect({ address, connector, isReconnected }) {
       console.log('onConnect', address, connector, isReconnected)
@@ -79,7 +84,18 @@ export const WalletProvider = ({ children }) => {
       if (!address) return
       const userInfo = await getUserInfo(address)
       console.log('userInfo', userInfo)
-      setUser(userInfo)
+      if (userInfo && userInfo.role <= userRoles.WHITELISTED_USER) {
+        setUser(userInfo)
+      } else {
+        notifyInfo(
+          'You are not whitelisted yet. Join our discord to get whitelisted.'
+        )
+        setUser(null)
+        if (getLocalToken()) {
+          removeLocalToken()
+        }
+        removeAccessTokenFromStorage()
+      }
     } catch (error) {
       console.log(error)
     }

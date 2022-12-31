@@ -25,6 +25,7 @@ const CreateCommunity = () => {
   const [pfpValue, setPfpValue] = useState(null)
   const { notifyError, notifySuccess } = useNotify()
   const { hideModal } = usePopUpModal()
+  const { user, refreshUserInfo } = useProfile()
   const router = useRouter()
 
   // function hasWhiteSpace (s) {
@@ -77,6 +78,7 @@ const CreateCommunity = () => {
           return
         }
         notifySuccess('Community created successfully')
+        refreshUserInfo()
         router.push(`/c/${resData.name}`)
         hideModal()
       })
@@ -183,6 +185,11 @@ const CreateCommunity = () => {
                 </div>
               </label>
             </div>
+          </div>
+
+          <div className="text-s-text text-sm mx-4">
+            <span className="font-bold">{user.communityCreationSpells}</span>{' '}
+            Creation Spells remaining use wisely
           </div>
 
           <FormTextInput
