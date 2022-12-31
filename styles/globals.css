@@ -102,6 +102,8 @@
 
   --bg-primary: #eef1ff;
   /* --color-primary: #9378d8; */
+
+  --btn-primary-text: #FFFFFF;
 }
 
 [data-theme='dark'] {

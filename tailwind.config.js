@@ -17,6 +17,7 @@ module.exports = {
         't-bg': 'var(--background-pop)', // backdrop for popups
         'p-btn': 'var(--accent-primary)', // primary button color
         'p-btn-hover': 'var(--accent-hover)', // primary button hover color
+        'p-btn-text': 'var(--btn-primary-text)', // primary button text color
         's-btn': 'var(--accent-secondary)', // secondary button color
         'p-text': 'var(--text-primary)', // primary text color
         's-text': 'var(--text-secondary)', // secondary text color

@@ -12,6 +12,8 @@ import Navbar from '../components/Home/Navbar'
 import LeftSidebar from '../components/Home/LeftSidebar'
 import RightSidebar from '../components/Home/RightSidebar'
 
+import NewMobileTopNav from '../components/Home/NewMobileTopNav'
+
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
   const { isDesktop } = useDevice()
@@ -38,7 +40,8 @@ function MyApp({ Component, pageProps }) {
 
             {!isDesktop && (
               <>
-                <MobileTopNav />
+                <NewMobileTopNav />
+                {/* <MobileTopNav /> */}
                 <div className={'pt-16 pb-16'}>
                   <Component {...pageProps} />
                 </div>
