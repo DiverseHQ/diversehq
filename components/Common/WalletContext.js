@@ -1,7 +1,6 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
 import {
   useAccount,
-  useDisconnect,
   //  useProvider,
   useSigner
   //  useDisconnect
@@ -20,7 +19,6 @@ import { useNotify } from './NotifyContext'
 export const WalletContext = createContext([])
 
 export const WalletProvider = ({ children }) => {
-  const { disconnect } = useDisconnect()
   const [user, setUser] = useState(null)
   const { data: signer } = useSigner()
   const { notifyInfo } = useNotify()
