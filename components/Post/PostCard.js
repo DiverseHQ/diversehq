@@ -13,6 +13,7 @@ import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
 import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
+import JoinCommunityButton from '../Community/JoinCommunityButton'
 TimeAgo.addDefaultLocale(en)
 
 // import useDevice from '../Common/useDevice'
@@ -127,37 +128,42 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
   return (
     <div className="px-3 sm:px-5 flex flex-col w-full lg:min-w-[650px] bg-s-bg pt-3 my-6 sm:rounded-2xl shadow-sm">
       {/* top row */}
-      <div className="flex flex-row w-full items-center mb-3">
-        <Link href={`/c/${post.communityName}`}>
-          <img
-            src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
-            className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
-          />
-        </Link>
-        <Link href={`/c/${post.communityName}`}>
-          <div className="pl-2 font-semibold sm:text-xl hover:cursor-pointer hover:underline">
-            {post.communityName}
-          </div>
-        </Link>
-
-        <Link
-          href={`/u/${post.author}`}
-          className="flex flex-row items-center justify-center text-s-text text-sm"
-        >
-          <p className="pl-1.5 font-normal"> posted by</p>
-          <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-            u/
-            {post.authorName
-              ? post.authorName
-              : post.author?.slice(0, 6) + '...'}
-          </div>
-        </Link>
-        <div>
-          {post.createdAt && (
-            <div className="text-sm text-s-text ml-2">
-              <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
+      <div className="flex flex-row items-center justify-between w-full">
+        <div className="flex flex-row w-full items-center mb-3">
+          <Link href={`/c/${post.communityName}`}>
+            <img
+              src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
+              className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+            />
+          </Link>
+          <Link href={`/c/${post.communityName}`}>
+            <div className="pl-2 font-semibold sm:text-xl hover:cursor-pointer hover:underline">
+              {post.communityName}
             </div>
-          )}
+          </Link>
+
+          <Link
+            href={`/u/${post.author}`}
+            className="flex flex-row items-center justify-center text-s-text text-sm"
+          >
+            <p className="pl-1.5 font-normal"> posted by</p>
+            <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+              u/
+              {post.authorName
+                ? post.authorName
+                : post.author?.slice(0, 6) + '...'}
+            </div>
+          </Link>
+          <div>
+            {post.createdAt && (
+              <div className="text-sm text-s-text ml-2">
+                <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="mr-5">
+          <JoinCommunityButton id={post.communityId} />
         </div>
       </div>
 

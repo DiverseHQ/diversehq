@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
@@ -14,6 +14,7 @@ import { FiSend } from 'react-icons/fi'
 import { useNotify } from '../Common/NotifyContext'
 import { LensInfuraEndpoint } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import JoinCommunityButton from '../Community/JoinCommunityButton'
 
 /**
  * Sample post object
@@ -128,9 +129,14 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 const LensPostCard = ({ post }) => {
   const { notifyInfo, notifyError } = useNotify()
   const [reaction, setReaction] = useState(post?.reaction)
+  const [upvoteCount, setUpvoteCount] = useState(post?.stats.totalUpvotes)
+  const [downvoteCount, setDownvoteCount] = useState(post?.stats.totalDownvotes)
   const [voteCount, setVoteCount] = useState(
     post?.stats?.totalUpvotes - post?.stats?.totalDownvotes
   )
+  useEffect(() => {
+    setVoteCount(upvoteCount - downvoteCount)
+  }, [upvoteCount, downvoteCount])
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const handleShare = async () => {
@@ -157,7 +163,12 @@ const LensPostCard = ({ post }) => {
       }
 
       setReaction(ReactionTypes.Upvote)
-      setVoteCount(voteCount + 1)
+      if (reaction === ReactionTypes.Downvote) {
+        setDownvoteCount(downvoteCount - 1)
+        setUpvoteCount(upvoteCount + 1)
+      } else {
+        setUpvoteCount(upvoteCount + 1)
+      }
       await addReaction({
         request: {
           profileId: lensProfile.defaultProfile.id,
@@ -178,7 +189,12 @@ const LensPostCard = ({ post }) => {
         return
       }
       setReaction(ReactionTypes.Downvote)
-      setVoteCount(voteCount - 1)
+      if (reaction === ReactionTypes.Upvote) {
+        setUpvoteCount(upvoteCount - 1)
+        setDownvoteCount(downvoteCount + 1)
+      } else {
+        setDownvoteCount(downvoteCount + 1)
+      }
       await addReaction({
         request: {
           profileId: lensProfile.defaultProfile.id,
@@ -194,38 +210,43 @@ const LensPostCard = ({ post }) => {
   return (
     <div className="px-3 sm:px-5 flex flex-col w-full lg:min-w-[650px] bg-s-bg pt-3 my-6 sm:rounded-2xl shadow-sm">
       {/* top row */}
-      <div className="flex flex-row w-full items-center mb-3">
-        <Link href={`/c/${post?.communityInfo?.name}`}>
-          <img
-            src={
-              post?.communityInfo?.logoImageUrl
-                ? post?.communityInfo?.logoImageUrl
-                : '/gradient.jpg'
-            }
-            className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
-          />
-        </Link>
-        <Link href={`/c/${post?.communityInfo?.name}`}>
-          <div className="pl-2 font-semibold sm:text-xl hover:cursor-pointer hover:underline">
-            {post?.communityInfo?.name}
-          </div>
-        </Link>
-
-        <Link
-          href={`/u/${post?.profile?.handle}`}
-          className="flex flex-row items-center justify-center text-s-text text-sm"
-        >
-          <p className="pl-1.5 font-normal"> posted by</p>
-          <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-            u/{post?.profile?.handle}
-          </div>
-        </Link>
-        <div>
-          {post?.createdAt && (
-            <div className="text-sm text-s-text ml-2">
-              <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
+      <div className="flex flex-row items-center justify-between w-full">
+        <div className="flex flex-row w-full items-center mb-3">
+          <Link href={`/c/${post?.communityInfo?.name}`}>
+            <img
+              src={
+                post?.communityInfo?.logoImageUrl
+                  ? post?.communityInfo?.logoImageUrl
+                  : '/gradient.jpg'
+              }
+              className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+            />
+          </Link>
+          <Link href={`/c/${post?.communityInfo?.name}`}>
+            <div className="pl-2 font-semibold sm:text-xl hover:cursor-pointer hover:underline">
+              {post?.communityInfo?.name}
             </div>
-          )}
+          </Link>
+
+          <Link
+            href={`/u/${post?.profile?.handle}`}
+            className="flex flex-row items-center justify-center text-s-text text-sm"
+          >
+            <p className="pl-1.5 font-normal"> posted by</p>
+            <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+              u/{post?.profile?.handle}
+            </div>
+          </Link>
+          <div>
+            {post?.createdAt && (
+              <div className="text-sm text-s-text ml-2">
+                <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="mr-5">
+          <JoinCommunityButton id={post.communityId} />
         </div>
       </div>
 
@@ -233,14 +254,20 @@ const LensPostCard = ({ post }) => {
         <div className="flex flex-col items-center ml-[9px]">
           <img
             //  onClick={liked ? handleUnLike : handleLike}
-            src={reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'}
+            src={
+              reaction === ReactionTypes.Upvote
+                ? '/UpvoteFilled.svg'
+                : '/Upvote.svg'
+            }
             onClick={handleUpvote}
             className="w-6 h-6 cursor-pointer"
           />
           <div className="font-bold">{voteCount}</div>
           <img
             src={
-              reaction === 'DOWNVOTE' ? '/DownvoteFilled.svg' : '/Downvote.svg'
+              reaction === ReactionTypes.Downvote
+                ? '/DownvoteFilled.svg'
+                : '/Downvote.svg'
             }
             className="w-5 h-5 cursor-pointer"
             onClick={handleDownvote}
