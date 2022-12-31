@@ -62,7 +62,7 @@ const NavFilterAllPosts = () => {
   }
 
   return (
-    <div className="font-bold flex flex-row  border pl-6 bg-white mt-10 py-3 w-full sm:min-w-[650px]  rounded-xl space-x-9 items-center">
+    <div className="font-bold flex flex-row  border pl-6 bg-white mt-10 py-3 w-full lg:min-w-[650px]  rounded-xl space-x-9 items-center">
       <button
         className={`flex py-1 px-2 items-center hover:cursor-pointer gap-2 rounded-xl ${
           active === 'new' && 'bg-p-bg'

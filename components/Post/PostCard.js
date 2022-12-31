@@ -125,7 +125,7 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
 
   //   const likeThe
   return (
-    <div className="px-3 sm:px-5 flex flex-col w-full sm:min-w-[650px] bg-s-bg pt-3 my-6 sm:rounded-2xl shadow-sm">
+    <div className="px-3 sm:px-5 flex flex-col w-full lg:min-w-[650px] bg-s-bg pt-3 my-6 sm:rounded-2xl shadow-sm">
       {/* top row */}
       <div className="flex flex-row w-full items-center mb-3">
         <Link href={`/c/${post.communityName}`}>
