@@ -13,7 +13,7 @@ TimeAgo.addDefaultLocale(en)
 const LensCommentCard = ({ comment }) => {
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
-  const [upvoteCount, setUpvoteCount] = useState(comment?.stats.totalUpvotes)
+  const [upvoteCount, setUpvoteCount] = useState(comment?.stats?.totalUpvotes)
   const [downvoteCount, setDownvoteCount] = useState(
     comment?.stats.totalDownvotes
   )
