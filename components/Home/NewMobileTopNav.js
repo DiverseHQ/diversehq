@@ -9,6 +9,22 @@ const NewMobileTopNav = () => {
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
   const { openConnectModal } = useConnectModal()
 
+  let prevScrollpos = window.pageYOffset
+
+  if (window) {
+    window.onscroll = function () {
+      const mobileTopNavEl = document.getElementById('mobile-top-navbar')
+      if (!mobileTopNavEl) return
+      const currentScrollPos = window.pageYOffset
+      if (prevScrollpos > currentScrollPos) {
+        mobileTopNavEl.style.top = '0'
+      } else {
+        mobileTopNavEl.style.top = '-100px'
+      }
+      prevScrollpos = currentScrollPos
+    }
+  }
+
   return (
     <>
       <div className="flex flex-row justify-between px-2 py-1 items-center shadow-nav">

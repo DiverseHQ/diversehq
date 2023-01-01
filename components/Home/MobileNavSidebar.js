@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
@@ -10,12 +10,20 @@ import { MdOutlineGroups, MdOutlinePerson } from 'react-icons/md'
 import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import useLogin from '../../lib/auth/useLogin'
+import CreateTestLensHandle from '../User/CreateTestLensHandle'
+import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated'
+import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
+import { useQueryClient } from '@tanstack/react-query'
+import Link from 'next/link'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
-  //   const router = useRouter()
+  const router = useRouter()
   const { user, address } = useProfile()
-  const { notifyInfo } = useNotify()
+  const { notifyInfo, notifySuccess, notifyError } = useNotify()
   const { showModal } = usePopUpModal()
+  const queryClient = useQueryClient()
 
   const createCommunity = () => {
     // setShowOptions(!showOptions)
@@ -30,6 +38,80 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       extraaInfo: {}
     })
   }
+
+  const routeToProfile = () => {
+    if (!address) {
+      notifyInfo('You might want to login first')
+      return
+    }
+    router.push(`/u/${address}`)
+  }
+
+  const { mutateAsync: login } = useLogin()
+  const { mutateAsync: createSetDispatcher } =
+    useCreateSetDispatcherTypedDataMutation()
+  const { result, type, loading, signTypedDataAndBroadcast } =
+    useSignTypedDataAndBroadcast()
+  const {
+    error,
+    isSignedIn,
+    hasProfile,
+    data: lensProfile
+  } = useLensUserContext()
+
+  async function handleLogin() {
+    await login()
+  }
+
+  const handleCreateLensProfileAndMakeDefault = () => {
+    if (!user) {
+      notifyInfo('You might want to connect your wallet first')
+      return
+    }
+
+    showModal({
+      component: <CreateTestLensHandle />,
+      type: modalType.normal,
+      onAction: () => {},
+      extraaInfo: {}
+    })
+  }
+
+  const handleEnableDispatcher = async () => {
+    try {
+      const createSetDispatcherResult = (
+        await createSetDispatcher({
+          request: {
+            profileId: lensProfile?.defaultProfile?.id,
+            enable: true
+          }
+        })
+      ).createSetDispatcherTypedData
+
+      signTypedDataAndBroadcast(createSetDispatcherResult?.typedData, {
+        id: createSetDispatcherResult?.id,
+        type: 'createSetDispatcher'
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    if (result && type === 'createSetDispatcher') {
+      notifySuccess('Dispatcher Set successfully')
+      queryClient.invalidateQueries({
+        queryKey: ['defaultProfile']
+      })
+    }
+  }, [result, type])
+
+  useEffect(() => {
+    if (error) {
+      console.error(error)
+      notifyError('Something went wrong, while setting dispatcher')
+    }
+  }, [error])
 
   return (
     <div
@@ -70,7 +152,13 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           </div>
         </div>
         <div className="flex flex-col bg-[#EEF1FF]">
-          <button className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold p-4 gap-2">
+          <button
+            className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold p-4 gap-2"
+            onClick={() => {
+              routeToProfile()
+              setIsOpenSidebar(false)
+            }}
+          >
             <MdOutlinePerson className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             <span className="text-p-text ">Profile</span>
           </button>
@@ -80,7 +168,10 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           </button>
           <button
             className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold p-4 gap-2"
-            onClick={createCommunity}
+            onClick={() => {
+              createCommunity()
+              setIsOpenSidebar(false)
+            }}
           >
             <MdOutlineGroups className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             <span className="text-p-text ">Create Community</span>
@@ -92,14 +183,64 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         </div>
         {user && address && (
           <div className="flex flex-col bg-[#62F030]">
-            <button className="flex flex-row items-center hover:font-semibold p-4 gap-2">
-              <img
-                src="/lensLogo.svg"
-                alt="Lens logo"
-                className="w-[20px] h-[20px]"
-              />
-              <span className="text-p-btn-text ">Connect Lens</span>
-            </button>
+            {isSignedIn && hasProfile && (
+              <div className="flex flex-col hover:font-semibold p-4 gap-2">
+                <Link
+                  href={`/u/${lensProfile.defaultProfile.handle}`}
+                  className="flex flex-row gap-2 items-center mr-2 hover:cursor-pointer hover:underline"
+                >
+                  <img
+                    src="/lensLogo.svg"
+                    alt="Lens logo"
+                    className="w-[20px] h-[20px]"
+                  />
+                  <span className="text-p-btn-text">
+                    {' '}
+                    u/{lensProfile.defaultProfile.handle}
+                  </span>
+                </Link>
+                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
+                  !loading && (
+                    <button
+                      onClick={handleEnableDispatcher}
+                      className="flex flex-row items-center hover:font-semibold p-4 gap-2"
+                    >
+                      <span className="text-p-btn-text">
+                        {' '}
+                        Enable Dispatcher <br /> Recommended for smoooth
+                        experience
+                      </span>
+                    </button>
+                  )}
+                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
+                  loading && (
+                    <div className="flex flex-row items-center hover:font-semibold p-4 gap-2">
+                      Enabling Dispatcher
+                    </div>
+                  )}
+              </div>
+            )}
+            {isSignedIn && !hasProfile && (
+              <button
+                onClick={handleCreateLensProfileAndMakeDefault}
+                className="flex flex-row items-center hover:font-semibold p-4 gap-2"
+              >
+                <span className="text-p-btn-text">Create Lens Profile</span>
+              </button>
+            )}
+            {!isSignedIn && (
+              <button
+                onClick={handleLogin}
+                className="flex flex-row items-center hover:font-semibold p-4 gap-2"
+              >
+                <img
+                  src="/lensLogo.svg"
+                  alt="Lens logo"
+                  className="w-[20px] h-[20px]"
+                />
+                <span className="text-p-btn-text">Lens Login</span>
+              </button>
+            )}
           </div>
         )}
         <div className="flex flex-col bg-[#EEF1FF]">

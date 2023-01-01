@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import MobileBottomNav from '../components/Home/MobileBottomNav'
-import MobileTopNav from '../components/Home/MobileTopNav'
+// import MobileTopNav from '../components/Home/MobileTopNav'
 // eslint-disable-next-line no-unused-vars
 import Nav from '../components/Home/Nav'
 import '../styles/globals.css'
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }) {
               <>
                 <NewMobileTopNav />
                 {/* <MobileTopNav /> */}
-                <div className={'pt-16 pb-16'}>
+                <div className={'pb-16'}>
                   <Component {...pageProps} />
                 </div>
                 <MobileBottomNav />

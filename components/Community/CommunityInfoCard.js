@@ -174,22 +174,24 @@ const CommunityInfoCard = ({
             className="h-28 w-full object-cover"
             src={community.bannerImageUrl}
           />
-          <div className="relative flex flex-row items-start justify-between px-4 md:px-8 pt-2">
+          <div className="relative flex flex-row items-start justify-between px-2 md:px-8 pt-2">
             <div className="flex flex-row gap-2">
-              <div className="border-s-bg border-4 rounded-full -translate-y-8">
+              <div className="shrink-0 border-s-bg border-4 rounded-full -translate-y-8">
                 <img
-                  className="rounded-full bg-s-bg w-[90px] h-[90px]"
+                  className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px]"
                   src={community.logoImageUrl}
                 />
               </div>
               <div className="flex flex-col">
-                <div
-                  className="font-bold text-xl sm:text-2xl tracking-wider hover:underline cursor-pointer"
+                <p
+                  className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer truncate"
                   onClick={redirectToCommunityPage}
                 >
                   {community.name}
+                </p>
+                <div className="text-[14px] md:text-[16px]">
+                  {community.description}
                 </div>
-                <div>{community.description}</div>
               </div>
             </div>
             <div className="flex justify-end gap-1 sm:gap-2">
@@ -211,7 +213,7 @@ const CommunityInfoCard = ({
           </div>
 
           <div className="flex flex-row justify-between items-center px-4 md:px-8 pb-2">
-            <div className="flex flex-row gap-2 md:gap-4">
+            <div className="flex flex-row gap-2 md:gap-4 text-[14px] md:text-[16px]">
               <div>
                 <span>Members: </span>
                 <span className="font-semibold">
@@ -229,7 +231,9 @@ const CommunityInfoCard = ({
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex flex-row gap-0.5 items-center">
-                <span className="text-[14px] items-center">Lvl2</span>
+                <span className="text-[12px] md:text-[14px] items-center">
+                  Lvl2
+                </span>
                 <div className="flex flex-col w-full items-end">
                   <div className="text-[10px] text-[#bbb]">300/500</div>
                   <div className="relative bg-[#AA96E2] h-[3px] w-full">
@@ -237,7 +241,7 @@ const CommunityInfoCard = ({
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row gap-0.5 items-center text-[14px] text-[#aaa]">
+              <div className="flex flex-row gap-0.5 items-center text-[12px] md:text-[14px] text-[#aaa]">
                 <AiOutlineFileAdd />
                 <span>
                   Created{' '}
