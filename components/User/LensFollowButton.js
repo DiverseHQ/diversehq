@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import {
+  ProxyActionStatusTypes,
   useCreateUnfollowTypedDataMutation,
   useProxyActionMutation
 } from '../../graphql/generated'
+import { sleep } from '../../lib/helpers'
 import { proxyActionStatusRequest } from '../../lib/indexer/proxy-action-status'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 

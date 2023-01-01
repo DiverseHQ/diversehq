@@ -10,7 +10,7 @@ import {
   usePopUpModal
 } from '../../components/Common/CustomPopUpProvider'
 import EditProfile from '../../components/User/EditProfile'
-import { isValidEthereumAddress, sleep } from '../../utils/helper.ts'
+import { isValidEthereumAddress } from '../../utils/helper.ts'
 import {
   useDefaultProfileQuery,
   useProfileQuery
@@ -25,7 +25,6 @@ const Profile = () => {
   const { id } = useRouter().query
   const [useraddress, setUserAddress] = useState(null)
   const [handle, setHandle] = useState(null)
-  const [isFollowedByMe, setIsFollowedByMe] = useState(false)
   const [lensProfile, setLensProfile] = useState(null)
   const [profile, setProfile] = useState(null)
   const [showLensPosts, setShowLensPosts] = useState(false)

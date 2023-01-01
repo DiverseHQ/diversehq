@@ -2,11 +2,6 @@ import Link from 'next/link'
 import React from 'react'
 import LensFollowButton from '../User/LensFollowButton'
 
-import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
-TimeAgo.addDefaultLocale(en)
-
 const LensNotificationFollowedCard = ({ notification }) => {
   return (
     <div className="px-2 flex flex-row items-center">

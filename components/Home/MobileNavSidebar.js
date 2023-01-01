@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
@@ -10,13 +10,6 @@ import { MdOutlineGroups, MdOutlinePerson } from 'react-icons/md'
 import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import { useLensUserContext } from '../../lib/LensUserContext'
-import useLogin from '../../lib/auth/useLogin'
-import CreateTestLensHandle from '../User/CreateTestLensHandle'
-import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated'
-import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import { useQueryClient } from '@tanstack/react-query'
-import Link from 'next/link'
 import LensLoginButton from '../Common/LensLoginButton'
 import { stringToLength } from '../../utils/utils'
 import { FaRegCopy } from 'react-icons/fa'
@@ -24,7 +17,7 @@ import { FaRegCopy } from 'react-icons/fa'
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
   const { user, address } = useProfile()
-  const { notifyInfo, notifySuccess, notifyError } = useNotify()
+  const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
 
   const createCommunity = () => {

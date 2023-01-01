@@ -2,12 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
-import { AiOutlineHeart, AiFillHeart, AiOutlineCheck } from 'react-icons/ai'
-import { FaHandSparkles } from 'react-icons/fa'
+import { AiOutlineCheck } from 'react-icons/ai'
+
 import { BsThreeDots } from 'react-icons/bs'
 import {
   deleteComment,
-  putLikeComment,
   putEditComment,
   putUpvoteComment,
   putDownvoteComment

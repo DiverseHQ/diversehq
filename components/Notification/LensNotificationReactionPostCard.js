@@ -1,10 +1,5 @@
 import React from 'react'
-
-import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
-TimeAgo.addDefaultLocale(en)
 
 const LensNotificationReactionPostCard = ({ notification }) => {
   return (
