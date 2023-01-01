@@ -12,6 +12,13 @@ export const userRoles = {
   NORMAL_USER: 2
 }
 
-export const recommendedCommunitiesIds = ['63b068ca07a65dd65e5c6687']
+export const recommendedCommunitiesIds = [
+  '63b068ca07a65dd65e5c6687', // Diverse HQ
+  '63b1c8298bce8b3e7b295915', // Crypto
+  '63b1c9ae675d8d93aaf53f6c', // airdrops
+  '63b1bb1318b63498449c1b13', // dank memes
+  '63b1c91218b63498449c1b93', // gaming
+  '63b1ccdb18b63498449c1bb0' // anime
+]
 
 export const DISCORD_INVITE_LINK = 'https://discord.gg/x7jByQKpYF'
