@@ -153,14 +153,14 @@ const CommunityInfoCard = ({
             <div className="flex justify-end gap-1 sm:gap-2 pt-2">
               {isCreator && (
                 <button
-                  className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-s-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
+                  className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
                   onClick={editCommunity}
                 >
                   Edit
                 </button>
               )}
               <button
-                className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-s-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
+                className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
                 onClick={isJoined ? leaveCommunity : joinCommunity}
               >
                 {isJoined ? 'Leave' : 'Join'}
