@@ -123,7 +123,7 @@ const CommunityInfoCard = ({
   return (
     <>
       {community && (
-        <div className="relative shadow-lg z-0 bg-[#FFFFFF] mb-6">
+        <div className="relative shadow-lg z-0 bg-s-bg mb-6">
           <img
             className="h-20 sm:h-28 w-full object-cover"
             src={community.bannerImageUrl}

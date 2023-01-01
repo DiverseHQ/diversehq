@@ -124,7 +124,7 @@ const Profile = () => {
       {profile && (
         <div className="relative">
           <img
-            className="h-28 w-full object-cover sm:rounded-t-3xl"
+            className="h-28 w-full object-cover"
             src={
               profile.bannerImageUrl ? profile.bannerImageUrl : '/gradient.jpg'
             }
@@ -139,7 +139,7 @@ const Profile = () => {
             }
           />
 
-          <div className="flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl">
+          <div className="flex flex-col px-3 sm:px-5 pb-6 bg-s-bg ">
             <div className="flex flex-row items-center self-end">
               {user &&
                 user?.walletAddress.toLowerCase() ===
@@ -161,43 +161,51 @@ const Profile = () => {
                 <FaRegCopy className="w-8 h-8 px-2" />
               </div>
             </div>
-            <Link href={`/u/${handle}`} className="hover:underline">
-              <div className="font-bold text-base sm:text-base tracking-wider">
-                {`${profile.name ? profile.name : ''} ${
-                  lensProfile?.handle ? 'u/' + lensProfile?.handle : ''
-                }`}
-              </div>
-            </Link>
+            <div className="flex flex-row items-center space-x-10">
+              <Link href={`/u/${handle}`} className="hover:underline">
+                <div className="font-bold text-base sm:text-base tracking-wider">
+                  {`${profile.name ? profile.name : ''} ${
+                    lensProfile?.handle ? 'u/' + lensProfile?.handle : ''
+                  }`}
+                </div>
+              </Link>
+              {hasProfile && isSignedIn && myLensProfile && (
+                <>
+                  <LensFollowButton lensProfile={lensProfile} />
+                </>
+              )}
+            </div>
             <div>{profile.bio}</div>
             {/* offchain data */}
-            <div>
-              <span className="text-s-text">Joined </span>
-              <span className="font-bold">{profile?.communities?.length}</span>
-              <span className="text-s-text"> Communities</span>
-            </div>
-            <div>
-              <span>Post : {numberOfPosts}</span>
-            </div>
-            <div>
-              <span>Community Spells : {profile?.communityCreationSpells}</span>
-            </div>
+            <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center">
+              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <span className="">Joined </span>
+                <span className="font-bold">
+                  {profile?.communities?.length}
+                </span>
+                <span className=""> Communities</span>
+              </div>
+              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <span>Post : {numberOfPosts}</span>
+              </div>
+              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <span>
+                  Community Spells : {profile?.communityCreationSpells}
+                </span>
+              </div>
 
-            {/* onchain lens data */}
-            {lensProfile && (
-              <>
-                <div>
-                  <span>Followers: {lensProfile?.stats?.totalFollowers}</span>
-                </div>
-                <div>
-                  <span>LensPosts : {lensProfile?.stats?.totalPosts}</span>
-                </div>
-              </>
-            )}
-            {hasProfile && isSignedIn && myLensProfile && (
-              <>
-                <LensFollowButton lensProfile={lensProfile} />
-              </>
-            )}
+              {/* onchain lens data */}
+              {lensProfile && (
+                <>
+                  <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                    <span>Followers: {lensProfile?.stats?.totalFollowers}</span>
+                  </div>
+                  <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                    <span>LensPosts : {lensProfile?.stats?.totalPosts}</span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           {/* lens filter */}

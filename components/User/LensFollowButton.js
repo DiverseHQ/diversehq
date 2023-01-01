@@ -100,6 +100,7 @@ const LensFollowButton = ({ lensProfile }) => {
           onClick={() => {
             handleUnfollowProfile(lensProfile.id)
           }}
+          className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
         >
           Unfollow
         </button>
@@ -108,6 +109,7 @@ const LensFollowButton = ({ lensProfile }) => {
           onClick={() => {
             handleFollowProfile(lensProfile.id)
           }}
+          className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
         >
           Follow
         </button>

@@ -27,7 +27,7 @@ const NewMobileTopNav = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-between px-2 py-1 items-center shadow-nav">
+      <div className="flex flex-row justify-between px-2 py-1 items-center shadow-sm">
         <div>
           {!user && !address ? (
             <button
