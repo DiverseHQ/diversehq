@@ -13,7 +13,7 @@ import ClickOption from './ClickOption'
 import { stringToLength } from '../../utils/utils'
 
 import { FaRegCopy } from 'react-icons/fa'
-import { AiOutlineCompass, AiOutlineGift } from 'react-icons/ai'
+import { AiOutlineCompass, AiOutlineGift, AiOutlineHome } from 'react-icons/ai'
 import { MdOutlineGroups } from 'react-icons/md'
 import {
   IoMdNotificationsOutline,
@@ -22,6 +22,7 @@ import {
   IoIosArrowUp
 } from 'react-icons/io'
 import { BsMoon } from 'react-icons/bs'
+import Link from 'next/link'
 
 const LeftSidebar = () => {
   const [showMore, setShowMore] = useState(false)
@@ -100,6 +101,15 @@ const LeftSidebar = () => {
   return (
     <div className="relative flex flex-col items-start border-r-[1px] border-p-btn sticky top-[64px] right-0 h-[calc(100vh-62px)] py-8 px-4 md:px-6 lg:px-10 xl:px-12 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] justify-between">
       <div className="flex flex-col items-start gap-4 mb-2">
+        <Link
+          className="flex flex-row items-center hover:bg-p-btn-hover px-2 py-2 lg:px-4 rounded-[20px] gap-1 md:gap-2"
+          href={'/'}
+        >
+          <AiOutlineHome className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+          <span className="text-[16px] md:text-[18px] font-semibold text-p-text ">
+            Home
+          </span>
+        </Link>
         <button
           className="flex flex-row items-center hover:bg-p-btn-hover px-2 py-2 lg:px-4 rounded-[20px] gap-1 md:gap-2"
           onClick={createCommunity}
