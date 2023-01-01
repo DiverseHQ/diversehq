@@ -8,26 +8,23 @@ TimeAgo.addDefaultLocale(en)
 
 const LensNotificationReactionPostCard = ({ notification }) => {
   return (
-    <div className="flex flex-row">
-      <div className="px-2">
+    <div className="px-2 flex flex-col w-full">
+      <div>
         <span className="hover:underline font-bold">
           <Link href={`/u/${notification?.profile?.handle}`}>
             u/{notification?.profile?.handle}
           </Link>
         </span>
         <span>
-          {notification?.reaction === 'UPVOTE' && ' upvoted your post '}
-          {notification?.reaction === 'DOWNVOTE' && ' downvoted your post '}
+          {notification?.reaction === 'UPVOTE' && ' upvoted your '}
+          {notification?.reaction === 'DOWNVOTE' && ' downvoted your '}
         </span>
         <span className="hover:underline font-bold">
-          <Link href={`/p/${notification?.publication?.id}`}>
-            p/{notification?.publication?.id}
-          </Link>
+          <Link href={`/p/${notification?.publication?.id}`}>Post</Link>
         </span>
       </div>
-
-      <div>
-        <ReactTimeAgo date={notification?.createdAt} locale="en-US" />
+      <div className="text-s-text">
+        {notification?.publication?.metadata?.content}
       </div>
     </div>
   )

@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { getSinglePostInfo } from '../../../api/post'
-import CommentsSection from '../CommentsSection'
-import CreateComment from '../CreateComment'
+import CombinedCommentSectionApiNew from '../../Comment/CombinedCommentSectionApiNew'
+import CombinedCommentSectionApiTop from '../../Comment/CombinedCommentSectionApiTop'
+import CommentFilterNav from '../../Comment/CommentFilterNav'
 import PostCard from '../PostCard'
 
 const PostPage = ({ id }) => {
   const [postInfo, setPostInfo] = React.useState(null)
-
   const [notFound, setNotFound] = React.useState(false)
+  const [active, setActive] = useState('top')
 
   React.useEffect(() => {
     if (id) fetchPostInformation()
@@ -27,25 +28,9 @@ const PostPage = ({ id }) => {
     }
   }
 
-  const addCommentIdToComments = (commentId) => {
-    setPostInfo((prev) => {
-      return {
-        ...prev,
-        comments: [commentId, ...prev.comments]
-      }
-    })
-  }
-  const removeCommentIdFromComments = (commentId) => {
-    setPostInfo((prev) => {
-      return {
-        ...prev,
-        comments: prev.comments.filter((id) => id !== commentId)
-      }
-    })
-  }
   return (
     <div className="w-full flex justify-center">
-      <div className="max-w-[650px] shrink-0">
+      <div className="w-full md:w-[650px]">
         {!postInfo && <div>Loading...</div>}
         {notFound ? (
           <div className="flex items-center justify-center w-full bg-s-bg p-3 my-6 sm:rounded-3xl shadow-lg text-bold text-2xl">
@@ -55,17 +40,19 @@ const PostPage = ({ id }) => {
           postInfo && (
             <div>
               <PostCard post={postInfo} setNotFound={setNotFound} />
-              <div>
-                <CreateComment
+              <CommentFilterNav active={active} setActive={setActive} />
+              {active === 'top' && (
+                <CombinedCommentSectionApiTop
                   postId={postInfo._id}
-                  authorAddress={postInfo.author}
-                  addCommentIdToComments={addCommentIdToComments}
+                  authorAddress={postInfo.authorAddress}
                 />
-                <CommentsSection
-                  commentsId={postInfo.comments}
-                  removeCommentIdFromComments={removeCommentIdFromComments}
+              )}
+              {active === 'new' && (
+                <CombinedCommentSectionApiNew
+                  postId={postInfo._id}
+                  authorAddress={postInfo.authorAddress}
                 />
-              </div>
+              )}
             </div>
           )
         )}

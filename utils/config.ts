@@ -1,4 +1,5 @@
 export const POST_LIMIT: number = 6
+export const COMMENT_LIMIT: number = 10
 export const LENS_POST_LIMIT: number = 10
 export const LENS_COMMENT_LIMIT: number = 10
 export const LENS_NOTIFICATION_LIMIT: number = 10
@@ -10,3 +11,5 @@ export const userRoles = {
   WHITELISTED_USER: 1,
   NORMAL_USER: 2
 }
+
+export const recommendedCommunitiesIds = ['63b068ca07a65dd65e5c6687']

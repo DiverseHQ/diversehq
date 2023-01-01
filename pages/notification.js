@@ -64,33 +64,38 @@ const notification = () => {
   }
 
   return (
-    <>
-      {lensProfile && lensProfile?.defaultProfile?.id && (
-        <div>
-          <InfiniteScroll
-            dataLength={notifications.length}
-            next={getMoreNotifications}
-            hasMore={hasMore}
-            loader={<h3>Loading...</h3>}
-            endMessage={<h4>Nothing more to show</h4>}
-          >
-            {notifications.map((notification, index) => {
-              return (
-                <LensNotificationCard key={index} notification={notification} />
-              )
-            })}
-          </InfiniteScroll>
-        </div>
-      )}
-      {!lensProfile && !lensProfile?.defaultProfile?.id && (
-        <div className="flex flex-col items-center justify-center h-full">
-          <h1 className="text-2xl font-bold">
-            Please sign in lens to view notifications
-          </h1>
-          <LensLoginButton />
-        </div>
-      )}
-    </>
+    <div className="w-full flex justify-center">
+      <div className="lg:w-[650px]">
+        {lensProfile && lensProfile?.defaultProfile?.id && (
+          <div>
+            <InfiniteScroll
+              dataLength={notifications.length}
+              next={getMoreNotifications}
+              hasMore={hasMore}
+              loader={<h3>Loading...</h3>}
+              endMessage={<></>}
+            >
+              {notifications.map((notification, index) => {
+                return (
+                  <LensNotificationCard
+                    key={index}
+                    notification={notification}
+                  />
+                )
+              })}
+            </InfiniteScroll>
+          </div>
+        )}
+        {!lensProfile && !lensProfile?.defaultProfile?.id && (
+          <div className="flex flex-col items-center justify-center h-full">
+            <h1 className="text-2xl font-bold">
+              Please sign in lens to view notifications
+            </h1>
+            <LensLoginButton />
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 

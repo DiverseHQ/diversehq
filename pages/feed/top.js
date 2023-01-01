@@ -5,7 +5,7 @@ import PostsColumn from '../../components/Post/PostsColumn'
 const top = () => {
   return (
     <div className="w-full flex justify-center">
-      <div className="max-w-[650px] shrink-0">
+      <div className="w-full md:w-[650px]">
         <NavFilterAllPosts />
         <PostsColumn source="all" sortBy="top" data={null} />
       </div>

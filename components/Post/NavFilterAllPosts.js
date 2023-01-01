@@ -62,11 +62,11 @@ const NavFilterAllPosts = () => {
   }
 
   return (
-    <div className="font-bold flex flex-row  border pl-6 bg-white mt-10 py-3 w-full lg:min-w-[650px]  rounded-xl space-x-9 items-center">
+    <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mt-4 sm:mt-10 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
       <button
-        className={`flex py-1 px-2 items-center hover:cursor-pointer gap-2 rounded-xl ${
+        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'new' && 'bg-p-bg'
-        }  hover:bg-[#eee]`}
+        }  hover:bg-p-btn-hover`}
         onClick={() => {
           router.push('/feed/new')
         }}
@@ -76,14 +76,14 @@ const NavFilterAllPosts = () => {
       </button>
       <div className="flex flex-col">
         <button
-          className={`flex py-1 px-2  flex-row items-center hover:cursor-pointer rounded-xl  hover:bg-[#eee]`}
+          className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-btn-hover`}
           onClick={getJoinedCommunities}
         >
           <p>Communities</p>
           <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
         </button>
         <div
-          className="bg-s-bg rounded-xl absolute mt-7 z-50"
+          className="bg-s-bg rounded-md sm:rounded-xl absolute mt-7 z-50"
           ref={dropdownRef}
         >
           {showJoinedCommunities &&
@@ -106,11 +106,11 @@ const NavFilterAllPosts = () => {
                         : '/gradient.jpg'
                     }
                     alt="community logo"
-                    className="rounded-xl w-9 h-9"
+                    className="rounded-md sm:rounded-xl w-9 h-9"
                   />
 
                   <div
-                    className="text-p-text ml-4 text-base"
+                    className="text-p-text ml-4"
                     id={community._id}
                     logoImageUrl={community.logoImageUrl}
                   >
@@ -122,9 +122,9 @@ const NavFilterAllPosts = () => {
         </div>
       </div>
       <button
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+        className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
           active === 'top' && 'bg-p-bg'
-        }  hover:bg-[#eee]`}
+        }  hover:bg-p-btn-hover`}
         onClick={() => {
           router.push('/feed/top')
         }}
@@ -133,9 +133,9 @@ const NavFilterAllPosts = () => {
         <div>Top</div>
       </button>
       <button
-        className={`text-lens-text flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+        className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
           active === 'lens' && 'bg-p-bg'
-        }  hover:bg-[#eee]`}
+        }  hover:bg-p-btn-hover`}
         onClick={() => {
           router.push('/feed/lens')
         }}

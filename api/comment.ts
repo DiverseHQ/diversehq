@@ -43,3 +43,33 @@ export const putLikeComment = async (commentId: string) => {
     headers: getHeaders()
   }).then((res) => res)
 }
+
+export const getCommentsFromPostId = async (
+  postId: string,
+  limit: number,
+  skips: number,
+  sortBy: string
+) => {
+  return await fetch(
+    `${apiEndpoint}/comment/getCommentsOfPost/${postId}?` +
+      new URLSearchParams({
+        limit: limit.toString(),
+        skips: skips.toString(),
+        sortBy
+      })
+  ).then((r) => r)
+}
+
+export const putUpvoteComment = async (commentId: string) => {
+  return await fetch(`${apiEndpoint}/comment/upvote/${commentId}`, {
+    method: 'PUT',
+    headers: getHeaders()
+  }).then((res) => res)
+}
+
+export const putDownvoteComment = async (commentId: string) => {
+  return await fetch(`${apiEndpoint}/comment/downvote/${commentId}`, {
+    method: 'PUT',
+    headers: getHeaders()
+  })
+}

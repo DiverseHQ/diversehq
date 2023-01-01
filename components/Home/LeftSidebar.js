@@ -12,7 +12,7 @@ import ClickOption from './ClickOption'
 // import LoginButton from '../Common/UI/LoginButton'
 import { stringToLength } from '../../utils/utils'
 
-import { FaRegCopy } from 'react-icons/fa'
+import { FaDiscord, FaRegCopy } from 'react-icons/fa'
 import { AiOutlineCompass, AiOutlineGift, AiOutlineHome } from 'react-icons/ai'
 import { MdOutlineGroups } from 'react-icons/md'
 import {
@@ -158,7 +158,7 @@ const LeftSidebar = () => {
         </button>
         {showMore && (
           <div className="gap-0 ml-4">
-            <div className="flex flex-row items-center bg-transparent hover:bg-[#ccc] px-2 py-1 md:px-4 rounded-[20px] gap-1 md:gap-2">
+            <div className="flex flex-row items-center bg-transparent hover:bg-s-h-bg px-2 py-1 md:px-4 rounded-[20px] gap-1 md:gap-2">
               <BsMoon className="w-[16px] h-[16px] object-contain" />
               <span className="text-[14px] text-p-text ">Dark Mode</span>
             </div>
@@ -166,6 +166,13 @@ const LeftSidebar = () => {
               <IoIosHelpCircleOutline className="w-[16px] h-[16px] object-contain" />
               <span className="text-[14px] text-p-text ">Help Center</span>
             </div>
+            <a
+              href={''}
+              className="flex flex-row items-center bg-transparent hover:bg-[#ccc] px-2 py-1 md:px-4 rounded-[20px] gap-1 md:gap-2"
+            >
+              <FaDiscord className="w-[16px] h-[16px] object-contain" />
+              <span className="text-[14px] text-p-text ">Discord</span>
+            </a>
           </div>
         )}
       </div>

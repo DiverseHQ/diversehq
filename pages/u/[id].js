@@ -200,14 +200,16 @@ const Profile = () => {
               </>
             )}
           </div>
+
+          {/* lens filter */}
           <div className="w-full flex justify-center">
-            <div className="max-w-[650px] shrink-0">
+            <div className="w-full md:w-[650px]">
               {lensProfile?.id && (
-                <div className="font-bold flex flex-row  border pl-6 bg-white mt-10 py-3 w-full lg:min-w-[650px]  rounded-xl space-x-9 items-center">
+                <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mt-4 sm:mt-10 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
                   <button
-                    className={`flex py-1 px-2 items-center hover:cursor-pointer gap-2 rounded-xl ${
+                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                       showLensPosts && 'bg-p-bg'
-                    }  hover:bg-[#eee]`}
+                    }  hover:bg-p-btn-hover`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
                       setShowLensPosts(true)

@@ -12,6 +12,7 @@ import { useNotify } from '../Common/NotifyContext'
 import { pollUntilIndexed } from '../../lib/indexer/has-transaction-been-indexed'
 import { BigNumber, utils } from 'ethers'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
+import { useQueryClient } from '@tanstack/react-query'
 
 const CreateTestLensHandle = () => {
   const { mutateAsync: createProfile } = useCreateProfileMutation()
@@ -25,6 +26,8 @@ const CreateTestLensHandle = () => {
 
   const [loading, setLoading] = useState(false)
   const [handle, setHandle] = useState('')
+
+  const queryClient = useQueryClient()
 
   const profileIdFromResponseResult = async (result) => {
     const logs = result?.txReceipt?.logs
@@ -129,6 +132,9 @@ const CreateTestLensHandle = () => {
     if (result && type === 'setDefaultProfile') {
       setLoading(false)
       notifySuccess('Profile created successfully')
+      queryClient.invalidateQueries({
+        queryKey: ['lensUser']
+      })
       hideModal()
     }
   }, [result, type])

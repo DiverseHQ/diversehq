@@ -84,10 +84,10 @@
   --accent-primary: #9378d8;
   --accent-secondary: theme('colors.purple.600');
   /* --accent-hover: theme('colors.purple.500'); */
-  --accent-hover: #dee4ff;
+  --accent-hover: #eee;
 
   --text-primary: #000000;
-  --text-secondary: #9197ae;
+  --text-secondary: #687684;
   --text-anti-primary: #ffffff;
   --text-lens: #00501e;
   /* --text-secondary: #ffffff; */
@@ -103,7 +103,7 @@
   --bg-primary: #eef1ff;
   /* --color-primary: #9378d8; */
 
-  --btn-primary-text: #FFFFFF;
+  --btn-primary-text: #ffffff;
 }
 
 [data-theme='dark'] {

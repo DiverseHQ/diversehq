@@ -9,7 +9,7 @@ TimeAgo.addDefaultLocale(en)
 
 const LensNotificationFollowedCard = ({ notification }) => {
   return (
-    <div className="flex flex-row items-center">
+    <div className="px-2 flex flex-row items-center">
       <div>
         <span>
           <Link
@@ -25,9 +25,6 @@ const LensNotificationFollowedCard = ({ notification }) => {
       {!notification?.wallet?.defaultProfile?.isFollowedByMe && (
         <LensFollowButton lensProfile={notification?.wallet?.defaultProfile} />
       )}
-      <div>
-        <ReactTimeAgo date={notification?.createdAt} locale="en-US" />
-      </div>
     </div>
   )
 }

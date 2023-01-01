@@ -75,6 +75,9 @@ const LensLoginButton = () => {
       queryClient.invalidateQueries({
         queryKey: ['defaultProfile']
       })
+      queryClient.invalidateQueries({
+        queryKey: ['lensUser']
+      })
     }
   }, [result, type])
 

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
+import { recommendedCommunitiesIds } from '../../utils/config'
 import { useProfile } from '../Common/WalletContext'
 import RightSideCommunityComponent from './RightSideCommunityComponent'
-
-//hardcoded recommended communities ids for now
-const recommendedCommunitiesIds = ['63b068ca07a65dd65e5c6687']
 
 const RightSidebar = () => {
   const { user } = useProfile()

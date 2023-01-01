@@ -15,6 +15,7 @@ import { useNotify } from '../Common/NotifyContext'
 import { LensInfuraEndpoint } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
+import useDevice from '../Common/useDevice'
 
 /**
  * Sample post object
@@ -127,6 +128,7 @@ import JoinCommunityButton from '../Community/JoinCommunityButton'
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
 const LensPostCard = ({ post }) => {
+  const { isMobile } = useDevice()
   const { notifyInfo, notifyError } = useNotify()
   const [reaction, setReaction] = useState(post?.reaction)
   const [upvoteCount, setUpvoteCount] = useState(post?.stats.totalUpvotes)
@@ -208,10 +210,10 @@ const LensPostCard = ({ post }) => {
   }
   console.log(post)
   return (
-    <div className="px-3 sm:px-5 flex flex-col w-full lg:min-w-[650px] bg-s-bg pt-3 my-6 sm:rounded-2xl shadow-sm">
+    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-2 sm:my-6 sm:rounded-2xl shadow-sm">
       {/* top row */}
-      <div className="flex flex-row items-center justify-between w-full">
-        <div className="flex flex-row w-full items-center mb-3">
+      <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
+        <div className="flex flex-row w-full items-center">
           <Link href={`/c/${post?.communityInfo?.name}`}>
             <img
               src={
@@ -223,14 +225,14 @@ const LensPostCard = ({ post }) => {
             />
           </Link>
           <Link href={`/c/${post?.communityInfo?.name}`}>
-            <div className="pl-2 font-semibold sm:text-xl hover:cursor-pointer hover:underline">
+            <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
               {post?.communityInfo?.name}
             </div>
           </Link>
 
           <Link
             href={`/u/${post?.profile?.handle}`}
-            className="flex flex-row items-center justify-center text-s-text text-sm"
+            className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
           >
             <p className="pl-1.5 font-normal"> posted by</p>
             <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
@@ -239,69 +241,71 @@ const LensPostCard = ({ post }) => {
           </Link>
           <div>
             {post?.createdAt && (
-              <div className="text-sm text-s-text ml-2">
+              <div className="text-xs sm:text-sm text-s-text ml-2">
                 <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
               </div>
             )}
           </div>
         </div>
-        <div className="mr-5">
+        <div className="mr-2 sm:mr-5">
           <JoinCommunityButton id={post.communityId} />
         </div>
       </div>
 
       <div className="flex flex-row w-full">
-        <div className="flex flex-col items-center ml-[9px]">
-          <img
-            //  onClick={liked ? handleUnLike : handleLike}
-            src={
-              reaction === ReactionTypes.Upvote
-                ? '/UpvoteFilled.svg'
-                : '/Upvote.svg'
-            }
-            onClick={handleUpvote}
-            className="w-6 h-6 cursor-pointer"
-          />
-          <div className="font-bold">{voteCount}</div>
-          <img
-            src={
-              reaction === ReactionTypes.Downvote
-                ? '/DownvoteFilled.svg'
-                : '/Downvote.svg'
-            }
-            className="w-5 h-5 cursor-pointer"
-            onClick={handleDownvote}
-          />
-        </div>
+        {!isMobile && (
+          <div className="flex flex-col items-center ml-[9px] mt-2">
+            <img
+              //  onClick={liked ? handleUnLike : handleLike}
+              src={
+                reaction === ReactionTypes.Upvote
+                  ? '/UpvoteFilled.svg'
+                  : '/Upvote.svg'
+              }
+              onClick={handleUpvote}
+              className="w-6 h-6 cursor-pointer"
+            />
+            <div className="font-bold">{voteCount}</div>
+            <img
+              src={
+                reaction === ReactionTypes.Downvote
+                  ? '/DownvoteFilled.svg'
+                  : '/Downvote.svg'
+              }
+              className="w-5 h-5 cursor-pointer"
+              onClick={handleDownvote}
+            />
+          </div>
+        )}
 
         {/* main content */}
         <div className="flex flex-col w-full">
           <div>
-            <div className="mb-2 pl-5 font-medium text-lg sm:text-base">
+            <div className="mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg sm:text-base">
               {post?.metadata?.content}
             </div>
             {post?.metadata?.mainContentFocus ===
               PublicationMainFocus.Image && (
               <Link href={`/p/${post?.id}`}>
                 {/* eslint-disable-next-line */}
-                <div className="pl-5 pr-6 pb-1">
+                <div className="sm:pl-5  sm:pr-6 sm:pb-1">
                   <img
                     src={`${LensInfuraEndpoint}${
                       post?.metadata?.media[0]?.original.url.split('//')[1]
                     }`}
-                    className="image-unselectable object-cover rounded-xl w-full"
+                    className="image-unselectable object-cover sm:rounded-xl w-full"
                   />
                 </div>
               </Link>
             )}
             {post?.metadata?.mainContentFocus ===
               PublicationMainFocus.Video && (
-              <div className="rounded-lg pl-5 pr-6 pb-1">
+              <div className="rounded-lg sm:pl-5 sm:pr-6 sm:pb-1">
                 <video
                   src={`${LensInfuraEndpoint}${
                     post?.metadata?.media[0]?.original.url.split('//')[1]
                   }`}
-                  className="image-unselectable object-cover rounded-xl  w-full"
+                  className="image-unselectable object-cover sm:rounded-xl  w-full"
                   autoPlay
                   muted
                   loop
@@ -312,7 +316,31 @@ const LensPostCard = ({ post }) => {
           </div>
 
           {/* bottom row */}
-          <div className="flex flex-row items-center sm:px-6 sm:py-2 space-x-28">
+          <div className="text-s-text sm:text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
+            {isMobile && (
+              <div className="flex flex-row items-center gap-x-2">
+                <img
+                  src={
+                    reaction === ReactionTypes.Upvote
+                      ? '/UpvoteFilled.svg'
+                      : '/Upvote.svg'
+                  }
+                  onClick={handleUpvote}
+                  className="w-5 h-5 cursor-pointer"
+                />
+                <div className="font-bold">{voteCount}</div>
+                <img
+                  src={
+                    reaction === ReactionTypes.Downvote
+                      ? '/DownvoteFilled.svg'
+                      : '/Downvote.svg'
+                  }
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={handleDownvote}
+                />
+              </div>
+            )}
+
             <Link href={`/p/${post.id}`} className="flex flex-row items-center">
               {post?.stats?.totalAmountOfComments === 0 && (
                 <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
@@ -325,7 +353,7 @@ const LensPostCard = ({ post }) => {
             <div>
               <FiSend
                 onClick={handleShare}
-                className="hover:cursor-pointer mr-3 w-4 sm:w-7 sm:h-7"
+                className="hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7"
               />
             </div>
             {/* <div>
