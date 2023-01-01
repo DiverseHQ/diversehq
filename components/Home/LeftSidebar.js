@@ -119,12 +119,15 @@ const LeftSidebar = () => {
             Create Community
           </span>
         </button>
-        <button className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2">
+        <Link
+          href={`/notification`}
+          className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"
+        >
           <IoMdNotificationsOutline className="w-[24px] h-[24px] object-contain" />
           <span className="text-[18px] font-semibold text-p-text ">
             Notifications
           </span>
-        </button>
+        </Link>
         <button
           className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"
           onClick={routeToExplore}
