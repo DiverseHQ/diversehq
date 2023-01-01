@@ -12,7 +12,8 @@ import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import LensLoginButton from '../Common/LensLoginButton'
 import { stringToLength } from '../../utils/utils'
-import { FaRegCopy } from 'react-icons/fa'
+import { FaDiscord, FaRegCopy } from 'react-icons/fa'
+import { DISCORD_INVITE_LINK } from '../../utils/config'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -143,6 +144,15 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             <IoIosHelpCircleOutline className="w-[20px] h-[20px]" />
             <span className="text-p-text">Help Center</span>
           </button>
+          <a
+            href={DISCORD_INVITE_LINK}
+            target={'_blank'}
+            rel="noreferrer"
+            className="flex flex-row items-center gap-2 py-4 hover:bg-p-btn-hover hover:font-semibold"
+          >
+            <FaDiscord className="w-[20px] h-[20px]" />
+            <span className="text-p-text ">Discord</span>
+          </a>
         </div>
       </div>
     </div>

@@ -13,3 +13,5 @@ export const userRoles = {
 }
 
 export const recommendedCommunitiesIds = ['63b068ca07a65dd65e5c6687']
+
+export const DISCORD_INVITE_LINK = 'https://discord.gg/x7jByQKpYF'

@@ -23,6 +23,7 @@ import {
 } from 'react-icons/io'
 import { BsMoon } from 'react-icons/bs'
 import Link from 'next/link'
+import { DISCORD_INVITE_LINK } from '../../utils/config'
 
 const LeftSidebar = () => {
   const [showMore, setShowMore] = useState(false)
@@ -167,7 +168,9 @@ const LeftSidebar = () => {
               <span className="text-[14px] text-p-text ">Help Center</span>
             </div>
             <a
-              href={''}
+              href={DISCORD_INVITE_LINK}
+              target={'_blank'}
+              rel="noreferrer"
               className="flex flex-row items-center bg-transparent hover:bg-[#ccc] px-2 py-1 md:px-4 rounded-[20px] gap-1 md:gap-2"
             >
               <FaDiscord className="w-[16px] h-[16px] object-contain" />
