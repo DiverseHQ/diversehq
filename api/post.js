@@ -51,3 +51,17 @@ export const getNumberOfPostsUsingUserAddress = async (address) => {
       new URLSearchParams({ address })
   ).then((r) => r.json())
 }
+
+export const putUpvoteOnPost = async (id) => {
+  return await fetch(`${apiEndpoint}/post/upvote/${id}`, {
+    method: 'PUT',
+    headers: getHeaders()
+  })
+}
+
+export const putDownvoteOnPost = async (id) => {
+  return await fetch(`${apiEndpoint}/post/downvote/${id}`, {
+    method: 'PUT',
+    headers: getHeaders()
+  })
+}

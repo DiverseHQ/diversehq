@@ -1,67 +1,67 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
+import { useProfile } from '../Common/WalletContext'
+import RightSideCommunityComponent from './RightSideCommunityComponent'
+
+//hardcoded recommended communities ids for now
+const recommendedCommunitiesIds = ['63b068ca07a65dd65e5c6687']
 
 const RightSidebar = () => {
-  const createdCommunities = [
-    { name: 'Lens Community' },
-    { name: 'Clash of Clans' },
-    { name: 'Developers' }
-  ]
+  const { user } = useProfile()
 
-  const mostVisitedCommunities = [
-    { name: 'Lens Community' },
-    { name: 'Clash of Clans' },
-    { name: 'Developers' }
-  ]
+  const [createdCommunities, setCreatedCommunities] = useState([])
+  const [recommendedCommunities, setRecommendedCommunities] = useState([])
 
-  const recommendedCommunities = [
-    { name: 'Lens Community' },
-    { name: 'Clash of Clans' }
-  ]
+  const fetchCommunitiesAndSetState = async (ids, setState) => {
+    try {
+      const communities = await postGetCommunityInfoUsingListOfIds(ids)
+      setState(communities)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    if (!user) return
+    fetchCommunitiesAndSetState(user.createdCommunities, setCreatedCommunities)
+  }, [user])
+
+  useEffect(() => {
+    fetchCommunitiesAndSetState(
+      recommendedCommunitiesIds,
+      setRecommendedCommunities
+    )
+  }, [])
 
   return (
     <div className="relative hidden lg:flex flex-col border-l-[1px] border-p-btn sticky top-[64px] h-[calc(100vh-62px)] w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 px-4 md:px-6 lg:px-10 xl:px-12">
-      <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
-        <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
-          Created Communities
-        </h3>
-        {createdCommunities.map((community, i) => {
-          return (
-            <div
-              key={i}
-              className="flex flex-row gap-2 items-center hover:bg-[#eee] rounded-full p-0.5"
-            >
-              <div className="w-[40px] h-[40px] bg-[#D9D9D9] rounded-full"></div>
-              <span>{community.name}</span>
-            </div>
-          )
-        })}
-      </div>
-      <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
+      {createdCommunities.length > 0 && (
+        <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
+          <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
+            Created Communities
+          </h3>
+          {createdCommunities.map((community, i) => {
+            return <RightSideCommunityComponent key={i} community={community} />
+          })}
+        </div>
+      )}
+      {/* <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
         <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
           Most Visited Communities
         </h3>
         {mostVisitedCommunities.map((community, i) => {
-          return (
-            <div key={i} className="flex flex-row gap-2 items-center">
-              <div className="w-[40px] h-[40px] bg-[#D9D9D9] rounded-full"></div>
-              <span>{community.name}</span>
-            </div>
-          )
+          return <RightSideCommunityComponent key={i} community={community} />
         })}
-      </div>
-      <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
-        <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
-          Recommended Communities
-        </h3>
-        {recommendedCommunities.map((community, i) => {
-          return (
-            <div key={i} className="flex flex-row gap-2 items-center">
-              <div className="w-[40px] h-[40px] bg-[#D9D9D9] rounded-full"></div>
-              <span>{community.name}</span>
-            </div>
-          )
-        })}
-      </div>
+      </div> */}
+      {recommendedCommunities.length > 0 && (
+        <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
+          <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
+            Recommended Communities
+          </h3>
+          {recommendedCommunities.map((community, i) => {
+            return <RightSideCommunityComponent key={i} community={community} />
+          })}
+        </div>
+      )}
     </div>
   )
 }
