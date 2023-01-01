@@ -139,7 +139,7 @@ const Navbar = () => {
             {isSignedIn && !hasProfile && (
               <button
                 onClick={handleCreateLensProfileAndMakeDefault}
-                className="rounded-[20px] text-[16px] font-semibold text-s-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
+                className="rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
               >
                 Create Lens Profile
               </button>
@@ -147,7 +147,7 @@ const Navbar = () => {
             {!isSignedIn && (
               <button
                 onClick={handleLogin}
-                className="rounded-[20px] text-[16px] font-semibold text-s-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
+                className="rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
               >
                 Lens Login
               </button>
@@ -156,7 +156,7 @@ const Navbar = () => {
         )}
         {!user && !address && (
           <button
-            className="justify-end bg-p-btn text-s-text px-4 py-2 rounded-[50px] text-[14px] font-bold"
+            className="justify-end bg-p-btn text-p-btn-text px-4 py-2 rounded-[50px] text-[14px] font-bold"
             onClick={openConnectModal}
           >
             Connect Wallet
