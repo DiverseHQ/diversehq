@@ -153,7 +153,7 @@ const LensPostCard = ({ post }) => {
       })
     } catch (error) {
       console.log(error)
-      notifyError('Something went wrong')
+      notifyError('Failed to share post')
     }
   }
   const handleUpvote = async () => {

@@ -150,7 +150,6 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
       await putUpvoteComment(comment?._id)
     } catch (error) {
       console.log(error)
-      notifyError('Something went wrong')
     }
   }
 
@@ -172,7 +171,6 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
       await putDownvoteComment(comment?._id)
     } catch (error) {
       console.log(error)
-      notifyError('Something went wrong')
     }
   }
 

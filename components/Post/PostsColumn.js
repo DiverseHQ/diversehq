@@ -85,6 +85,7 @@ const PostsColumn = ({ source, sortBy, data }) => {
 
   useEffect(() => {
     if (posts.length === 0) {
+      setPosts([])
       getMorePosts()
     }
   }, [])

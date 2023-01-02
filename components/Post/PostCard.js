@@ -76,7 +76,6 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
       await putUpvoteOnPost(post._id)
     } catch (error) {
       console.log(error)
-      notifyError('Something went wrong')
     }
   }
 
@@ -98,7 +97,6 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
       await putDownvoteOnPost(post._id)
     } catch (error) {
       console.log(error)
-      notifyError('Something went wrong')
     }
   }
 
