@@ -84,11 +84,16 @@ const PostsColumn = ({ source, sortBy, data }) => {
   }
 
   useEffect(() => {
-    if (posts.length === 0) {
-      setPosts([])
+    console.log('change data', data)
+    setPosts([])
+    setHasMore(true)
+  }, [data])
+
+  useEffect(() => {
+    if (hasMore && posts.length === 0) {
       getMorePosts()
     }
-  }, [])
+  }, [data, hasMore, posts])
   return (
     <>
       <InfiniteScroll
