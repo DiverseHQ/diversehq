@@ -228,7 +228,7 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
         {/* main content */}
         <div className="flex flex-col w-full">
           <div>
-            <div className="mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg sm:text-base">
+            <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg sm:text-base">
               {post.title}
             </div>
             {post?.postImageUrl && (

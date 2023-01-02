@@ -66,29 +66,32 @@ const notification = () => {
   return (
     <div className="w-full flex justify-center">
       <div className="lg:w-[650px]">
-        {lensProfile && lensProfile?.defaultProfile?.id && (
-          <div>
-            <InfiniteScroll
-              dataLength={notifications.length}
-              next={getMoreNotifications}
-              hasMore={hasMore}
-              loader={<h3>Loading...</h3>}
-              endMessage={<></>}
-            >
-              {notifications.map((notification, index) => {
-                return (
-                  <LensNotificationCard
-                    key={index}
-                    notification={notification}
-                  />
-                )
-              })}
-            </InfiniteScroll>
-          </div>
-        )}
-        {!lensProfile && !lensProfile?.defaultProfile?.id && (
-          <div className="flex flex-col items-center justify-center h-full">
-            <h1 className="text-2xl font-bold">
+        {lensProfile &&
+          isSignedIn &&
+          hasProfile &&
+          lensProfile?.defaultProfile?.id && (
+            <div>
+              <InfiniteScroll
+                dataLength={notifications.length}
+                next={getMoreNotifications}
+                hasMore={hasMore}
+                loader={<h3>Loading...</h3>}
+                endMessage={<></>}
+              >
+                {notifications.map((notification, index) => {
+                  return (
+                    <LensNotificationCard
+                      key={index}
+                      notification={notification}
+                    />
+                  )
+                })}
+              </InfiniteScroll>
+            </div>
+          )}
+        {(!isSignedIn || !hasProfile) && (
+          <div className="flex flex-col mt-10 items-center justify-center h-full">
+            <h1 className="text-2xl font-bold mb-4">
               Please sign in lens to view notifications
             </h1>
             <LensLoginButton />

@@ -23,7 +23,7 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
   const { mutateAsync: createCommentViaDispatcher } =
     useCreateCommentViaDispatcherMutation()
 
-  const { notifySuccess, notifyError } = useNotify()
+  const { notifyError } = useNotify()
 
   const commentRef = useRef()
   const [loading, setLoading] = useState(false)
@@ -82,8 +82,10 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
         setComments((prev) => [
           {
             profile: {
-              original: {
-                url: user?.profileImageUrl
+              picture: {
+                original: {
+                  url: user?.profileImageUrl
+                }
               },
               handle: lensProfile?.defaultProfile?.handle
             },
@@ -107,7 +109,7 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
 
         //invalidate query to update feed
         if (indexResult.indexed === true) {
-          notifySuccess('Comment created successfully')
+          console.log('comment created successfully')
         }
       } else {
         const commentTypedResult = (
@@ -121,14 +123,20 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
         setComments((prev) => [
           {
             profile: {
-              original: {
-                url: user?.profileImageUrl
+              picture: {
+                original: {
+                  url: user?.profileImageUrl
+                }
               },
               handle: lensProfile?.defaultProfile?.handle
             },
             createdAt: new Date().toISOString(),
             metadata: {
               content: commentRef.current.value
+            },
+            stats: {
+              totalUpvotes: 0,
+              totalDownvotes: 0
             }
           },
           ...prev
@@ -160,7 +168,7 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
   return (
     <div>
       {hasProfile && isSignedIn && lensProfile?.defaultProfile?.id && (
-        <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-3 sm:rounded-3xl ">
+        <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
           <div className="flex flex-row justify-between items-center w-full">
             <div className="flex flex-row items-center">
               <img

@@ -32,15 +32,17 @@ const CombinedCommentSectionApiNew = ({ postId, authorAddress }) => {
     }
   }
 
-  const getNextComments = async () => {
-    await handleGetMoreComments()
-  }
+  useEffect(() => {
+    console.log('change post', postId)
+    setComments([])
+    setHasMore(true)
+  }, [postId])
 
   useEffect(() => {
-    if (comments.length === 0) {
-      getNextComments()
+    if (hasMore && comments.length === 0) {
+      handleGetMoreComments()
     }
-  }, [])
+  }, [postId, hasMore, comments])
 
   const removeComment = (commentId) => {
     setComments((prev) => {
@@ -58,7 +60,7 @@ const CombinedCommentSectionApiNew = ({ postId, authorAddress }) => {
 
       <InfiniteScroll
         dataLength={comments.length}
-        next={getNextComments}
+        next={handleGetMoreComments}
         hasMore={hasMore}
         loader={<h3> Loading...</h3>}
         endMessage={<></>}

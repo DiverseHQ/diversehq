@@ -177,7 +177,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   return (
     <>
       {comment && (
-        <div className="px-3 sm:px-5 w-full bg-s-bg my-6 sm:rounded-3xl py-3">
+        <div className="px-3 sm:px-5 w-full bg-s-bg my-3 sm:rounded-2xl py-3">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center">
               <img
