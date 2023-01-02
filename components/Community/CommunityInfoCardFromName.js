@@ -9,7 +9,7 @@ const CommunityInfoCardFromName = ({ name, setCommunityInfo }) => {
   const [community, setCommunity] = useState(null)
 
   useEffect(() => {
-    if (!community && name) {
+    if (name) {
       fetchCommunityInformation()
     }
   }, [name])

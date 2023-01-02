@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
@@ -10,20 +10,16 @@ import { MdOutlineGroups, MdOutlinePerson } from 'react-icons/md'
 import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import { useLensUserContext } from '../../lib/LensUserContext'
-import useLogin from '../../lib/auth/useLogin'
-import CreateTestLensHandle from '../User/CreateTestLensHandle'
-import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated'
-import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import { useQueryClient } from '@tanstack/react-query'
-import Link from 'next/link'
+import LensLoginButton from '../Common/LensLoginButton'
+import { stringToLength } from '../../utils/utils'
+import { FaDiscord, FaRegCopy } from 'react-icons/fa'
+import { DISCORD_INVITE_LINK } from '../../utils/config'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
   const { user, address } = useProfile()
-  const { notifyInfo, notifySuccess, notifyError } = useNotify()
+  const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
-  const queryClient = useQueryClient()
 
   const createCommunity = () => {
     // setShowOptions(!showOptions)
@@ -47,71 +43,14 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     router.push(`/u/${address}`)
   }
 
-  const { mutateAsync: login } = useLogin()
-  const { mutateAsync: createSetDispatcher } =
-    useCreateSetDispatcherTypedDataMutation()
-  const { result, type, loading, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
-  const {
-    error,
-    isSignedIn,
-    hasProfile,
-    data: lensProfile
-  } = useLensUserContext()
-
-  async function handleLogin() {
-    await login()
-  }
-
-  const handleCreateLensProfileAndMakeDefault = () => {
-    if (!user) {
-      notifyInfo('You might want to connect your wallet first')
+  const handleWalletAddressCopy = () => {
+    if (!user?.walletAddress) {
+      notifyInfo('Please Login')
       return
     }
-
-    showModal({
-      component: <CreateTestLensHandle />,
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
+    navigator.clipboard.writeText(user?.walletAddress)
+    notifyInfo('Copied to clipboard')
   }
-
-  const handleEnableDispatcher = async () => {
-    try {
-      const createSetDispatcherResult = (
-        await createSetDispatcher({
-          request: {
-            profileId: lensProfile?.defaultProfile?.id,
-            enable: true
-          }
-        })
-      ).createSetDispatcherTypedData
-
-      signTypedDataAndBroadcast(createSetDispatcherResult?.typedData, {
-        id: createSetDispatcherResult?.id,
-        type: 'createSetDispatcher'
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  useEffect(() => {
-    if (result && type === 'createSetDispatcher') {
-      notifySuccess('Dispatcher Set successfully')
-      queryClient.invalidateQueries({
-        queryKey: ['defaultProfile']
-      })
-    }
-  }, [result, type])
-
-  useEffect(() => {
-    if (error) {
-      console.error(error)
-      notifyError('Something went wrong, while setting dispatcher')
-    }
-  }, [error])
 
   return (
     <div
@@ -130,17 +69,29 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       )}
 
       <div
-        className={`flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg border gap-4 bg-[#E7ECF0] ${
+        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg border gap-4 ${
           isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
         } `}
       >
         <div className="flex flex-row justify-between p-4 gap-2">
           {user && address && (
             <div className="flex flex-col gap-1">
-              <div className="w-[55px] h-[55px] bg-[#333] rounded-full"></div>
-              <h3 className="font-semibold text-[18px]">Funny Pop</h3>
+              <img
+                src={user?.profileImageUrl}
+                className="w-[55px] h-[55px] bg-[#333] rounded-full"
+              />
+              {user?.name && (
+                <h3 className="font-semibold text-[18px]">{user.name}</h3>
+              )}
+              <div
+                className="text-sm flex flex-row items-center cursor-pointer"
+                onClick={handleWalletAddressCopy}
+              >
+                <div className="">{stringToLength(user.walletAddress, 8)}</div>
+                <FaRegCopy className="w-7 h-7 px-2" />
+              </div>
               <span className="text-[14px] text-s-text">
-                4 Communities joined
+                {user.communities.length} Communities joined
               </span>
             </div>
           )}
@@ -151,9 +102,11 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col bg-[#EEF1FF]">
+        <div className="flex flex-col px-4 bg-p-bg">
+          <LensLoginButton />
+
           <button
-            className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold p-4 gap-2"
+            className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold py-4 gap-2"
             onClick={() => {
               routeToProfile()
               setIsOpenSidebar(false)
@@ -162,96 +115,44 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             <MdOutlinePerson className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             <span className="text-p-text ">Profile</span>
           </button>
-          <button className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold p-4 gap-2">
+          <button className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold py-4 gap-2">
             <MdOutlineGroups className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             <span className="text-p-text ">Your Communities</span>
           </button>
           <button
-            className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold p-4 gap-2"
+            className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold py-4 gap-2"
             onClick={() => {
               createCommunity()
               setIsOpenSidebar(false)
             }}
           >
             <MdOutlineGroups className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-            <span className="text-p-text ">Create Community</span>
+            <span className="text-p-text">Create Community</span>
           </button>
-          <button className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold p-4 gap-2">
+          <button className="flex flex-row items-center hover:bg-p-btn-hover hover:font-semibold py-4 gap-2">
             <AiOutlineGift className="w-[24px] h-[24px] object-contain" />
             <span className="text-p-text">XP Gift</span>
           </button>
         </div>
-        {user && address && (
-          <div className="flex flex-col bg-[#62F030]">
-            {isSignedIn && hasProfile && (
-              <div className="flex flex-col hover:font-semibold p-4 gap-2">
-                <Link
-                  href={`/u/${lensProfile.defaultProfile.handle}`}
-                  className="flex flex-row gap-2 items-center mr-2 hover:cursor-pointer hover:underline"
-                >
-                  <img
-                    src="/lensLogo.svg"
-                    alt="Lens logo"
-                    className="w-[20px] h-[20px]"
-                  />
-                  <span className="text-p-btn-text">
-                    {' '}
-                    u/{lensProfile.defaultProfile.handle}
-                  </span>
-                </Link>
-                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
-                  !loading && (
-                    <button
-                      onClick={handleEnableDispatcher}
-                      className="flex flex-row items-center hover:font-semibold p-4 gap-2"
-                    >
-                      <span className="text-p-btn-text">
-                        {' '}
-                        Enable Dispatcher <br /> Recommended for smoooth
-                        experience
-                      </span>
-                    </button>
-                  )}
-                {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
-                  loading && (
-                    <div className="flex flex-row items-center hover:font-semibold p-4 gap-2">
-                      Enabling Dispatcher
-                    </div>
-                  )}
-              </div>
-            )}
-            {isSignedIn && !hasProfile && (
-              <button
-                onClick={handleCreateLensProfileAndMakeDefault}
-                className="flex flex-row items-center hover:font-semibold p-4 gap-2"
-              >
-                <span className="text-p-btn-text">Create Lens Profile</span>
-              </button>
-            )}
-            {!isSignedIn && (
-              <button
-                onClick={handleLogin}
-                className="flex flex-row items-center hover:font-semibold p-4 gap-2"
-              >
-                <img
-                  src="/lensLogo.svg"
-                  alt="Lens logo"
-                  className="w-[20px] h-[20px]"
-                />
-                <span className="text-p-btn-text">Lens Login</span>
-              </button>
-            )}
-          </div>
-        )}
-        <div className="flex flex-col bg-[#EEF1FF]">
-          <button className="flex flex-row items-center gap-2 p-4 hover:bg-p-btn-hover hover:font-semibold">
+
+        <div className="flex flex-col px-4">
+          <button className="flex flex-row items-center gap-2 py-4 hover:bg-p-btn-hover hover:font-semibold">
             <BsMoon className="w-[20px] h-[20px]" />
             <span className="text-p-text">Dark Mode</span>
           </button>
-          <button className="flex flex-row items-center gap-2 p-4 hover:bg-p-btn-hover hover:font-semibold">
+          <button className="flex flex-row items-center gap-2 py-4 hover:bg-p-btn-hover hover:font-semibold">
             <IoIosHelpCircleOutline className="w-[20px] h-[20px]" />
             <span className="text-p-text">Help Center</span>
           </button>
+          <a
+            href={DISCORD_INVITE_LINK}
+            target={'_blank'}
+            rel="noreferrer"
+            className="flex flex-row items-center gap-2 py-4 hover:bg-p-btn-hover hover:font-semibold"
+          >
+            <FaDiscord className="w-[20px] h-[20px]" />
+            <span className="text-p-text ">Discord</span>
+          </a>
         </div>
       </div>
     </div>

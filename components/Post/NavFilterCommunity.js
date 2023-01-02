@@ -23,25 +23,22 @@ const NavFilterCommunity = ({ name }) => {
   }, [pathname])
 
   return (
-    <div className="flex flex-row items-center p-2 gap-4 pl-6 bg-white mt-2 py-3 rounded-xl space-x-9 lg:min-w-[650px]">
-      <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+    <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white sm:mt-10 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
+      <button
+        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'new' && 'bg-p-bg'
-        }  hover:bg-[#eee]`}
+        }  hover:bg-p-btn-hover`}
+        onClick={() => {
+          router.push(`/c/${name}/feed/new`)
+        }}
       >
         <HiSparkles />
-        <button
-          onClick={() => {
-            router.push(`/c/${name}/feed/new`)
-          }}
-        >
-          New
-        </button>
-      </div>
+        <div>New</div>
+      </button>
       <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'top' && 'bg-p-bg'
-        }  hover:bg-[#eee]`}
+        }  hover:bg-p-btn-hover`}
         onClick={() => {
           router.push(`/c/${name}/feed/top`)
         }}
@@ -50,9 +47,9 @@ const NavFilterCommunity = ({ name }) => {
         <button>Top</button>
       </div>
       <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
+        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'lens' && 'bg-p-bg'
-        }  hover:bg-[#eee]`}
+        }  hover:bg-p-btn-hover`}
         onClick={() => {
           router.push(`/c/${name}/feed/lens`)
         }}

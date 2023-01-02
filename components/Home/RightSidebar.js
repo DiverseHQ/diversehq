@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
+import {
+  getCreatedCommunitiesApi,
+  postGetCommunityInfoUsingListOfIds
+} from '../../api/community'
+import { recommendedCommunitiesIds } from '../../utils/config'
+import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import RightSideCommunityComponent from './RightSideCommunityComponent'
 
-//hardcoded recommended communities ids for now
-const recommendedCommunitiesIds = ['63b068ca07a65dd65e5c6687']
-
 const RightSidebar = () => {
   const { user } = useProfile()
+  const { notifyError } = useNotify()
 
   const [createdCommunities, setCreatedCommunities] = useState([])
   const [recommendedCommunities, setRecommendedCommunities] = useState([])
@@ -20,9 +23,21 @@ const RightSidebar = () => {
       console.log(error)
     }
   }
+
+  const fetchAndSetCreatedCommunities = async () => {
+    try {
+      const communities = await getCreatedCommunitiesApi()
+      if (communities.length > 0) {
+        setCreatedCommunities(communities)
+      }
+    } catch (error) {
+      console.log(error)
+      notifyError("Couldn't fetch created communities")
+    }
+  }
   useEffect(() => {
     if (!user) return
-    fetchCommunitiesAndSetState(user.createdCommunities, setCreatedCommunities)
+    fetchAndSetCreatedCommunities()
   }, [user])
 
   useEffect(() => {

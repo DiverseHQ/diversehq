@@ -2,43 +2,48 @@ import React, { useState, useEffect, useCallback } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
-import { AiOutlineHeart, AiFillHeart, AiOutlineCheck } from 'react-icons/ai'
-import { FaHandSparkles } from 'react-icons/fa'
+import { AiOutlineCheck } from 'react-icons/ai'
+
 import { BsThreeDots } from 'react-icons/bs'
 import {
   deleteComment,
-  putLikeComment,
-  putEditComment
+  putEditComment,
+  putUpvoteComment,
+  putDownvoteComment
 } from '../../api/comment'
 // import { getSinglePostInfo } from "../../api/post"
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CommentDropdown from './CommentDropdown'
+import { ReactionTypes } from '../../graphql/generated'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
 const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [comment, setComment] = useState(commentInfo)
+  const [reaction, setReaction] = useState(null)
+  const [upvoteCount, setUpvoteCount] = useState(
+    comment?.upvotes ? comment?.upvotes.length : 0
+  )
+  const [downvoteCount, setDownvoteCount] = useState(
+    comment?.downvotes ? comment?.downvotes.length : 0
+  )
+  const [totalCount, setTotalCount] = useState(upvoteCount - downvoteCount)
+
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
   const { user } = useProfile()
   const { showModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
 
-  // maintaining comment likes
-  const [liked, setLiked] = useState(false)
-  const [likes, setLikes] = useState(comment.likes.length)
-
   // edit comment state
   const [editing, setEditing] = useState(false)
   const [content, setContent] = useState(comment?.content)
 
   useEffect(() => {
-    if (comment?.author === user?.walletAddress) {
-      setIsAuthor(true)
-    }
-  }, [comment])
+    setTotalCount(upvoteCount - downvoteCount)
+  }, [upvoteCount, downvoteCount])
 
   const handleEditComment = async () => {
     if (!comment) return
@@ -88,46 +93,6 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
     }
   }
 
-  const handleLike = async () => {
-    try {
-      if (!user) {
-        notifyInfo('You might want to connect your wallet first')
-        return
-      }
-      const res = await putLikeComment(comment?._id)
-      const resData = await res.json()
-      if (res.status !== 200) {
-        notifyError(resData.msg)
-        return
-      }
-      setLiked(true)
-      setLikes(resData.likes.length)
-    } catch (error) {
-      console.log(error)
-      notifyError('Something went wrong')
-    }
-  }
-
-  const handleUnlike = async () => {
-    try {
-      if (!user) {
-        notifyInfo('You might want to connect your wallet first')
-        return
-      }
-      const res = await putLikeComment(comment?._id)
-      const resData = await res.json()
-      if (res.status !== 200) {
-        notifyError(resData.msg)
-        return
-      }
-      setLiked(false)
-      setLikes(resData.likes.length)
-    } catch (error) {
-      console.log(error)
-      notifyError('Something went wrong')
-    }
-  }
-
   const onCommentChange = useCallback((e) => {
     setContent(e.target.value)
   }, [])
@@ -153,6 +118,63 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
       }
     })
   }
+  useEffect(() => {
+    if (!user) return
+    if (!comment?.upvotes || !comment?.downvotes) return
+    if (comment?.upvotes.includes(user.walletAddress.toLowerCase())) {
+      setReaction('UPVOTE')
+    } else if (comment?.downvotes.includes(user.walletAddress.toLowerCase())) {
+      setReaction('DOWNVOTE')
+    }
+    if (comment.author === user.walletAddress) {
+      // if current user is the author then show the delete icon
+      setIsAuthor(true)
+    }
+  }, [user, comment])
+
+  const handleUpvote = async () => {
+    try {
+      if (!user) {
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
+      if (reaction === 'UPVOTE') {
+        return // already upvoted
+      }
+      if (reaction === 'DOWNVOTE') {
+        setDownvoteCount(downvoteCount - 1)
+      }
+      setUpvoteCount(upvoteCount + 1)
+      setReaction('UPVOTE')
+
+      await putUpvoteComment(comment?._id)
+    } catch (error) {
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
+
+  const handleDownvote = async () => {
+    try {
+      if (!user) {
+        notifyInfo('You might want to connect your wallet first')
+        return
+      }
+      if (reaction === 'DOWNVOTE') {
+        return // already downvoted
+      }
+      if (reaction === 'UPVOTE') {
+        setUpvoteCount(upvoteCount - 1)
+      }
+      setDownvoteCount(downvoteCount + 1)
+      setReaction('DOWNVOTE')
+
+      await putDownvoteComment(comment?._id)
+    } catch (error) {
+      console.log(error)
+      notifyError('Something went wrong')
+    }
+  }
 
   return (
     <>
@@ -172,65 +194,76 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   : comment.author.substring(0, 6) + '...'}
               </div>
             </div>
-            <div className="flex flex-row items-center">
+            <div className="text-xs sm:text-base">
+              <ReactTimeAgo
+                date={new Date(comment.updatedAt || comment.createdAt)}
+                locale="en-US"
+              />
+            </div>
+          </div>
+
+          <div className="pl-12">
+            {editing ? (
+              <div className="flex items-center justify-between">
+                <input
+                  className="mt-3 border-b-2 focus:outline-none text-lg text-semibold w-[80%]"
+                  type="text"
+                  placeholder={`${content}`}
+                  value={`${content}`}
+                  onChange={onCommentChange}
+                  onKeyUp={(e) => {
+                    if (e.key === 'Enter') submitEdittedComment()
+                  }}
+                  required
+                />
+                <div className="flex items-center">
+                  <AiOutlineCheck
+                    className="text-[24px] hover:cursor-pointer hover:text-[#66CD00]"
+                    title="Save"
+                    onClick={submitEdittedComment}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="mt-3">{comment.content}</div>
+            )}
+
+            <div className="flex flex-row items-end space-x-14">
+              {/* upvote and downvote */}
+              <div className="flex flex-row items-center gap-x-2 pt-2">
+                <img
+                  //  onClick={liked ? handleUnLike : handleLike}
+                  src={
+                    reaction === ReactionTypes.Upvote
+                      ? '/UpvoteFilled.svg'
+                      : '/Upvote.svg'
+                  }
+                  onClick={handleUpvote}
+                  className="w-5 h-5 cursor-pointer"
+                />
+                <div className="font-bold">{totalCount}</div>
+                <img
+                  src={
+                    reaction === ReactionTypes.Downvote
+                      ? '/DownvoteFilled.svg'
+                      : '/Downvote.svg'
+                  }
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={handleDownvote}
+                />
+              </div>
+
               {isAuthor && (
                 <div className="relative">
                   <BsThreeDots
-                    className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                    className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
                     onClick={showMoreOptions}
                     title="More"
                   />
                 </div>
               )}
-              {liked ? (
-                likes !== 0 && (
-                  <AiFillHeart
-                    className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
-                    onClick={handleUnlike}
-                  />
-                )
-              ) : (
-                <AiOutlineHeart
-                  className="hover:cursor-pointer mr-1.5 w-5 h-5 sm:w-7 sm:h-7 text-p-btn"
-                  onClick={handleLike}
-                />
-              )}
-              <div className="mr-3">{likes}</div>
-              <FaHandSparkles className="w-5 h-5 sm:w-7 sm:h-7 mr-1.5" />
-              <div className="mr-3">{comment.appreciateAmount}</div>
-              <div className="text-xs sm:text-base">
-                <ReactTimeAgo
-                  date={new Date(comment.updatedAt || comment.createdAt)}
-                  locale="en-US"
-                />
-              </div>
             </div>
           </div>
-
-          {editing ? (
-            <div className="flex items-center justify-between">
-              <input
-                className="mt-3 border-b-2 focus:outline-none text-lg text-semibold w-[80%]"
-                type="text"
-                placeholder={`${content}`}
-                value={`${content}`}
-                onChange={onCommentChange}
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') submitEdittedComment()
-                }}
-                required
-              />
-              <div className="flex items-center">
-                <AiOutlineCheck
-                  className="text-[24px] hover:cursor-pointer hover:text-[#66CD00]"
-                  title="Save"
-                  onClick={submitEdittedComment}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="mt-3">{comment.content}</div>
-          )}
         </div>
       )}
       {!comment && <></>}

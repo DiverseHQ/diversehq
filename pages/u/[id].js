@@ -10,31 +10,21 @@ import {
   usePopUpModal
 } from '../../components/Common/CustomPopUpProvider'
 import EditProfile from '../../components/User/EditProfile'
-import { isValidEthereumAddress, sleep } from '../../utils/helper.ts'
+import { isValidEthereumAddress } from '../../utils/helper.ts'
 import {
-  ProxyActionStatusTypes,
-  useCreateUnfollowTypedDataMutation,
   useDefaultProfileQuery,
-  useProfileQuery,
-  useProxyActionMutation
+  useProfileQuery
 } from '../../graphql/generated'
-import { proxyActionStatusRequest } from '../../lib/indexer/proxy-action-status'
-import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import LensPostsProfilePublicationsColumn from '../../components/Post/LensPostsProfilePublicationsColumn'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { getNumberOfPostsUsingUserAddress } from '../../api/post'
 import Link from 'next/link'
+import LensFollowButton from '../../components/User/LensFollowButton'
 
 const Profile = () => {
-  const { mutateAsync: proxyAction } = useProxyActionMutation()
-  const { mutateAsync: unFollow } = useCreateUnfollowTypedDataMutation()
-  const { isSignedTx, error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
-
   const { id } = useRouter().query
   const [useraddress, setUserAddress] = useState(null)
   const [handle, setHandle] = useState(null)
-  const [isFollowedByMe, setIsFollowedByMe] = useState(false)
   const [lensProfile, setLensProfile] = useState(null)
   const [profile, setProfile] = useState(null)
   const [showLensPosts, setShowLensPosts] = useState(false)
@@ -78,12 +68,6 @@ const Profile = () => {
       setLensProfile(lensProfileFromHandle.data.profile)
     }
   }, [lensProfileQueryFromAddress, lensProfileFromHandle])
-
-  useEffect(() => {
-    if (!lensProfile) return
-    setIsFollowedByMe(lensProfile?.isFollowedByMe)
-    console.log('lensProfile', lensProfile)
-  }, [lensProfile])
 
   useEffect(() => {
     if (!id || id === '') return
@@ -135,85 +119,12 @@ const Profile = () => {
     })
   }
 
-  const handleFollowProfile = async (profileId) => {
-    const followProfileResult = (
-      await proxyAction({
-        request: {
-          follow: {
-            freeFollow: {
-              profileId: profileId
-            }
-          }
-        }
-      })
-    ).proxyAction
-    console.log('followProfileResult index start', followProfileResult)
-    setIsFollowedByMe(true)
-
-    // waiting untill proxy action is complete
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      try {
-        const statusResult = await proxyActionStatusRequest(followProfileResult)
-        console.log('statusResult', statusResult)
-        if (statusResult.status === ProxyActionStatusTypes.Complete) {
-          console.log('proxy action free follow: complete', statusResult)
-          break
-        }
-      } catch (e) {
-        console.error(e)
-        break
-      }
-      await sleep(1000)
-    }
-
-    console.log('followProfileResult index end', followProfileResult)
-  }
-
-  const handleUnfollowProfile = async (profileId) => {
-    try {
-      const unfollowProfileResult = (
-        await unFollow({
-          request: {
-            profile: profileId
-          }
-        })
-      ).createUnfollowTypedData
-      console.log('unfollowProfileResult', unfollowProfileResult)
-
-      signTypedDataAndBroadcast(unfollowProfileResult.typedData, {
-        id: unfollowProfileResult.id,
-        type: 'unfollow'
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  useEffect(() => {
-    if (type === 'unfollow' && result) {
-      console.log('Successfully unfollowed', result)
-    }
-  }, [type, result])
-
-  useEffect(() => {
-    if (!error) return
-    console.error(error)
-  }, [error])
-
-  useEffect(() => {
-    if (isSignedTx) {
-      console.log('isSignedTx', isSignedTx)
-      setIsFollowedByMe(false)
-    }
-  }, [isSignedTx])
-
   return (
     <div className="pt-6">
       {profile && (
         <div className="relative">
           <img
-            className="h-28 w-full object-cover sm:rounded-t-3xl"
+            className="h-28 w-full object-cover"
             src={
               profile.bannerImageUrl ? profile.bannerImageUrl : '/gradient.jpg'
             }
@@ -228,7 +139,7 @@ const Profile = () => {
             }
           />
 
-          <div className="flex flex-col px-3 sm:px-5 mb-5 pb-6 bg-s-bg sm:rounded-b-3xl">
+          <div className="flex flex-col px-3 sm:px-5 pb-6 bg-s-bg ">
             <div className="flex flex-row items-center self-end">
               {user &&
                 user?.walletAddress.toLowerCase() ===
@@ -250,68 +161,62 @@ const Profile = () => {
                 <FaRegCopy className="w-8 h-8 px-2" />
               </div>
             </div>
-            <Link href={`/u/${handle}`} className="hover:underline">
-              <div className="font-bold text-base sm:text-base tracking-wider">
-                {`${profile.name ? profile.name : ''} ${
-                  lensProfile?.handle ? 'u/' + lensProfile?.handle : ''
-                }`}
-              </div>
-            </Link>
+            <div className="flex flex-row items-center space-x-10">
+              <Link href={`/u/${handle}`} className="hover:underline">
+                <div className="font-bold text-base sm:text-base tracking-wider">
+                  {`${profile.name ? profile.name : ''} ${
+                    lensProfile?.handle ? 'u/' + lensProfile?.handle : ''
+                  }`}
+                </div>
+              </Link>
+              {hasProfile && isSignedIn && myLensProfile && (
+                <>
+                  <LensFollowButton lensProfile={lensProfile} />
+                </>
+              )}
+            </div>
             <div>{profile.bio}</div>
             {/* offchain data */}
-            <div>
-              <span className="text-s-text">Joined </span>
-              <span className="font-bold">{profile?.communities?.length}</span>
-              <span className="text-s-text"> Communities</span>
-            </div>
-            <div>
-              <span>Post : {numberOfPosts}</span>
-            </div>
-            <div>
-              <span>Community Spells : {profile?.communityCreationSpells}</span>
-            </div>
+            <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center">
+              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <span className="">Joined </span>
+                <span className="font-bold">
+                  {profile?.communities?.length}
+                </span>
+                <span className=""> Communities</span>
+              </div>
+              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <span>Post : {numberOfPosts}</span>
+              </div>
+              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <span>
+                  Community Spells : {profile?.communityCreationSpells}
+                </span>
+              </div>
 
-            {/* onchain lens data */}
-            {lensProfile && (
-              <>
-                <div>
-                  <span>Followers: {lensProfile?.stats?.totalFollowers}</span>
-                </div>
-                <div>
-                  <span>LensPosts : {lensProfile?.stats?.totalPosts}</span>
-                </div>
-              </>
-            )}
-            {hasProfile && isSignedIn && myLensProfile && (
-              <>
-                {lensProfile && isFollowedByMe ? (
-                  <button
-                    onClick={() => {
-                      handleUnfollowProfile(lensProfile.id)
-                    }}
-                  >
-                    Unfollow
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      handleFollowProfile(lensProfile.id)
-                    }}
-                  >
-                    Follow
-                  </button>
-                )}
-              </>
-            )}
+              {/* onchain lens data */}
+              {lensProfile && (
+                <>
+                  <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                    <span>Followers: {lensProfile?.stats?.totalFollowers}</span>
+                  </div>
+                  <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                    <span>LensPosts : {lensProfile?.stats?.totalPosts}</span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
+
+          {/* lens filter */}
           <div className="w-full flex justify-center">
-            <div className="max-w-[650px] shrink-0">
+            <div className="w-full md:w-[650px]">
               {lensProfile?.id && (
-                <div className="font-bold flex flex-row  border pl-6 bg-white mt-10 py-3 w-full lg:min-w-[650px]  rounded-xl space-x-9 items-center">
+                <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mt-4 sm:mt-10 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
                   <button
-                    className={`flex py-1 px-2 items-center hover:cursor-pointer gap-2 rounded-xl ${
+                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                       showLensPosts && 'bg-p-bg'
-                    }  hover:bg-[#eee]`}
+                    }  hover:bg-p-btn-hover`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
                       setShowLensPosts(true)

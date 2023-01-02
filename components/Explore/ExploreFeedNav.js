@@ -22,32 +22,29 @@ const ExploreFeedNav = () => {
   }, [pathname])
 
   return (
-    <div className="flex flex-row items-center p-2 gap-4">
-      <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'top' && 'bg-white'
-        }  hover:bg-[#eee]`}
+    <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mt-4 sm:mt-0 mb-4 py-1 sm:py-3 w-full   sm:rounded-xl space-x-4 sm:space-x-9 items-center">
+      <button
+        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+          active === 'top' && 'bg-p-bg'
+        }  hover:bg-p-btn-hover`}
         onClick={() => {
           router.push('/explore/top')
         }}
       >
         <MdLeaderboard />
-        <button>Top</button>
-      </div>
-      <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${
-          active === 'new' && 'bg-white'
-        }  hover:bg-[#eee]`}
+        <div>Top</div>
+      </button>
+      <button
+        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+          active === 'new' && 'bg-p-bg'
+        }  hover:bg-p-btn-hover`}
+        onClick={() => {
+          router.push('/explore/new')
+        }}
       >
         <HiSparkles />
-        <button
-          onClick={() => {
-            router.push('/explore/new')
-          }}
-        >
-          New
-        </button>
-      </div>
+        <div>New</div>
+      </button>
 
       {/* <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full ${

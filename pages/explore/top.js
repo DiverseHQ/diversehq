@@ -31,7 +31,7 @@ const top = () => {
   return (
     <div className="pt-6">
       <div className="w-full flex justify-center">
-        <div className="max-w-[650px] shrink-0">
+        <div className="w-full md:w-[650px]">
           <ExploreFeedNav />
         </div>
       </div>
@@ -40,7 +40,7 @@ const top = () => {
         next={getTopCommunities}
         hasMore={hasMore}
         loader={<h3> Loading...</h3>}
-        endMessage={<h4>Nothing more to show</h4>}
+        endMessage={<></>}
       >
         {communities.map((community) => {
           return <CommunityInfoCard key={community._id} community={community} />

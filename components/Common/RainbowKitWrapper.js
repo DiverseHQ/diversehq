@@ -16,7 +16,7 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 
-import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
+// import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 
 const { chains, provider } = configureChains(
   [chain.polygonMumbai],
@@ -29,41 +29,41 @@ const { chains, provider } = configureChains(
   ]
 )
 
-const web3Auth = ({ chains }) => ({
-  id: 'web3auth',
-  name: 'Web3Auth',
-  iconUrl:
-    'https://pbs.twimg.com/profile_images/1481186409231044610/JAe7k861_400x400.jpg',
-  iconBackground: '#0c2f78',
-  createConnector: () => {
-    const connector = new Web3AuthConnector({
-      chains,
-      options: {
-        enableLogging: true,
-        // eslint-disable-next-line
-        clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID, // Get your own client id from https://dashboard.web3auth.io
-        network: 'testnet', // web3auth network, "mainnet", "cyan", or "aqua"
-        chainId: '80001' // chainId that you want to connect with
-      }
-    })
+// const web3Auth = ({ chains }) => ({
+//   id: 'web3auth',
+//   name: 'Web3Auth',
+//   iconUrl:
+//     'https://pbs.twimg.com/profile_images/1481186409231044610/JAe7k861_400x400.jpg',
+//   iconBackground: '#0c2f78',
+//   createConnector: () => {
+//     const connector = new Web3AuthConnector({
+//       chains,
+//       options: {
+//         enableLogging: true,
+//         // eslint-disable-next-line
+//         clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID, // Get your own client id from https://dashboard.web3auth.io
+//         network: 'testnet', // web3auth network, "mainnet", "cyan", or "aqua"
+//         chainId: '80001' // chainId that you want to connect with
+//       }
+//     })
 
-    return {
-      connector,
-      mobile: {
-        getUri: async () => (await connector.getProvider()).connector.uri
-      },
-      qrCode: {
-        getUri: async () => (await connector.getProvider()).connector.uri
-      }
-    }
-  }
-})
+//     return {
+//       connector,
+//       mobile: {
+//         getUri: async () => (await connector.getProvider()).connector.uri
+//       },
+//       qrCode: {
+//         getUri: async () => (await connector.getProvider()).connector.uri
+//       }
+//     }
+//   }
+// })
 
 const connectors = connectorsForWallets([
-  {
-    groupName: 'Web2',
-    wallets: [web3Auth({ chains })]
-  },
+  // {
+  //   groupName: 'Web2',
+  //   wallets: [web3Auth({ chains })]
+  // },
   {
     groupName: 'Popular',
     wallets: [

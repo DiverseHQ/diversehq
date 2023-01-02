@@ -55,16 +55,17 @@ const CreateCommunity = () => {
     // const Banner = await uploadFileToIpfs(communityBanner)
     const PFP = await uploadFileToFirebaseAndGetUrl(communityPfp, address)
     const Banner = await uploadFileToFirebaseAndGetUrl(communityBanner, address)
-    await handleCreateCommunity(PFP.uploadedToUrl, Banner.uploadedToUrl)
+    await handleCreateCommunity(PFP, Banner)
   }
 
-  const handleCreateCommunity = async (pfpURL, bannerURL) => {
+  const handleCreateCommunity = async (pfp, banner) => {
     const communityData = {
       name: communityName,
       description: communityDescription,
-      bannerImageUrl: bannerURL,
-      logoImageUrl: pfpURL,
-      creator: address
+      bannerImageUrl: banner.uploadedToUrl,
+      logoImageUrl: pfp.uploadedToUrl,
+      bannerFilePath: banner.path,
+      logoFilePath: pfp.path
     }
     try {
       await postCreateCommunity(communityData).then(async (res) => {

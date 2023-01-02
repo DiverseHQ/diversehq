@@ -11,6 +11,7 @@ import LensUserContextProvider from '../../lib/LensUserContext'
 const queryClient = new QueryClient()
 
 const MasterWrapper = ({ children }) => {
+  // pushing to make vercel happy
   return (
     <RainbowKitWrapper>
       <NotifyProvider>

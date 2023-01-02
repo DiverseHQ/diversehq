@@ -13,7 +13,7 @@ TimeAgo.addDefaultLocale(en)
 const LensCommentCard = ({ comment }) => {
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
-  const [upvoteCount, setUpvoteCount] = useState(comment?.stats.totalUpvotes)
+  const [upvoteCount, setUpvoteCount] = useState(comment?.stats?.totalUpvotes)
   const [downvoteCount, setDownvoteCount] = useState(
     comment?.stats.totalDownvotes
   )
@@ -119,8 +119,8 @@ const LensCommentCard = ({ comment }) => {
           <div className="pl-12">
             <div className="mt-3">{comment?.metadata?.content}</div>
 
+            {/* upvote and downvote */}
             <div className="flex flex-row items-center gap-x-2 pt-2">
-              {/* upvote and downvote */}
               <img
                 //  onClick={liked ? handleUnLike : handleLike}
                 src={

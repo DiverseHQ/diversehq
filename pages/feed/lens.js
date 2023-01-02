@@ -8,7 +8,7 @@ const lens = () => {
   // const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   return (
     <div className="w-full flex justify-center">
-      <div className="max-w-[650px] shrink-0">
+      <div className="w-full md:w-[650px]">
         <NavFilterAllPosts />
         {/* {lensProfile &&
       isSignedIn &&

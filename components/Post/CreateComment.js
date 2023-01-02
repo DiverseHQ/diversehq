@@ -9,7 +9,7 @@ import { FiSend } from 'react-icons/fi'
 // import { useNotify } from '../Common/NotifyContext'
 // import { DIVE_CONTRACT_ADDRESS_MUMBAI } from '../../utils/config.ts'
 
-const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
+const CreateComment = ({ postId, setComments, authorAddress }) => {
   const { user } = useProfile()
   const commentRef = useRef()
   console.log('authorAddress', authorAddress)
@@ -86,7 +86,7 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
     try {
       const comment = await postComment(content, postId, 0)
       console.log(comment)
-      addCommentIdToComments(comment._id)
+      setComments((comments) => [comment, ...comments])
 
       // clear the comment input field after submit
       commentRef.current.value = ''
@@ -126,7 +126,7 @@ const CreateComment = ({ postId, addCommentIdToComments, authorAddress }) => {
               />
             </div>
           </div>
-          <div>
+          <div className="pl-10">
             <input
               type="text"
               ref={commentRef}

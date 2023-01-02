@@ -12,8 +12,8 @@ import ClickOption from './ClickOption'
 // import LoginButton from '../Common/UI/LoginButton'
 import { stringToLength } from '../../utils/utils'
 
-import { FaRegCopy } from 'react-icons/fa'
-import { AiOutlineCompass, AiOutlineGift } from 'react-icons/ai'
+import { FaDiscord, FaRegCopy } from 'react-icons/fa'
+import { AiOutlineCompass, AiOutlineGift, AiOutlineHome } from 'react-icons/ai'
 import { MdOutlineGroups } from 'react-icons/md'
 import {
   IoMdNotificationsOutline,
@@ -22,6 +22,8 @@ import {
   IoIosArrowUp
 } from 'react-icons/io'
 import { BsMoon } from 'react-icons/bs'
+import Link from 'next/link'
+import { DISCORD_INVITE_LINK } from '../../utils/config'
 
 const LeftSidebar = () => {
   const [showMore, setShowMore] = useState(false)
@@ -100,6 +102,15 @@ const LeftSidebar = () => {
   return (
     <div className="relative flex flex-col items-start border-r-[1px] border-p-btn sticky top-[64px] right-0 h-[calc(100vh-62px)] py-8 px-4 md:px-6 lg:px-10 xl:px-12 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] justify-between">
       <div className="flex flex-col items-start gap-4 mb-2">
+        <Link
+          className="flex flex-row items-center hover:bg-p-btn-hover px-2 py-2 lg:px-4 rounded-[20px] gap-1 md:gap-2"
+          href={'/'}
+        >
+          <AiOutlineHome className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+          <span className="text-[16px] md:text-[18px] font-semibold text-p-text ">
+            Home
+          </span>
+        </Link>
         <button
           className="flex flex-row items-center hover:bg-p-btn-hover px-2 py-2 lg:px-4 rounded-[20px] gap-1 md:gap-2"
           onClick={createCommunity}
@@ -109,12 +120,15 @@ const LeftSidebar = () => {
             Create Community
           </span>
         </button>
-        <button className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2">
+        <Link
+          href={`/notification`}
+          className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"
+        >
           <IoMdNotificationsOutline className="w-[24px] h-[24px] object-contain" />
           <span className="text-[18px] font-semibold text-p-text ">
             Notifications
           </span>
-        </button>
+        </Link>
         <button
           className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"
           onClick={routeToExplore}
@@ -145,7 +159,7 @@ const LeftSidebar = () => {
         </button>
         {showMore && (
           <div className="gap-0 ml-4">
-            <div className="flex flex-row items-center bg-transparent hover:bg-[#ccc] px-2 py-1 md:px-4 rounded-[20px] gap-1 md:gap-2">
+            <div className="flex flex-row items-center bg-transparent hover:bg-s-h-bg px-2 py-1 md:px-4 rounded-[20px] gap-1 md:gap-2">
               <BsMoon className="w-[16px] h-[16px] object-contain" />
               <span className="text-[14px] text-p-text ">Dark Mode</span>
             </div>
@@ -153,6 +167,15 @@ const LeftSidebar = () => {
               <IoIosHelpCircleOutline className="w-[16px] h-[16px] object-contain" />
               <span className="text-[14px] text-p-text ">Help Center</span>
             </div>
+            <a
+              href={DISCORD_INVITE_LINK}
+              target={'_blank'}
+              rel="noreferrer"
+              className="flex flex-row items-center bg-transparent hover:bg-[#ccc] px-2 py-1 md:px-4 rounded-[20px] gap-1 md:gap-2"
+            >
+              <FaDiscord className="w-[16px] h-[16px] object-contain" />
+              <span className="text-[14px] text-p-text ">Discord</span>
+            </a>
           </div>
         )}
       </div>

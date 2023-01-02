@@ -44,7 +44,8 @@ const EditProfile = ({ user, showUserInfo }) => {
           profileImageFile,
           address
         )
-        profileData.profileImageUrl = profile
+        profileData.profileImageUrl = profile.uploadedToUrl
+        profileData.profileFilePath = profile.path
       }
       if (profileBannerFile) {
         // const banner = await uploadFileToIpfs(profileBannerFile)
@@ -52,7 +53,8 @@ const EditProfile = ({ user, showUserInfo }) => {
           profileBannerFile,
           address
         )
-        profileData.bannerImageUrl = banner
+        profileData.bannerImageUrl = banner.uploadedToUrl
+        profileData.bannerFilePath = banner.path
       }
       const resp = await putUpdateUser(profileData)
       console.log('resp', resp)

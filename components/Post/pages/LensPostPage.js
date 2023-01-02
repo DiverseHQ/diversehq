@@ -35,7 +35,7 @@ const LensPostPage = ({ id }) => {
   }, [error])
   return (
     <div className="w-full flex justify-center">
-      <div className="max-w-[650px] shrink-0">
+      <div className="w-full md:w-[650px]">
         {!postInfo && <div>Loading...</div>}
 
         {/* lens post card */}

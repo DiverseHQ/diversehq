@@ -69,7 +69,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
           next={getMorePosts}
           hasMore={hasMore}
           loader={<h3>Loading...</h3>}
-          endMessage={<h4>Nothing more to show</h4>}
+          endMessage={<></>}
         >
           {comments.map((comment, index) => {
             return <LensCommentCard key={index} comment={comment} />
