@@ -145,7 +145,7 @@ const Profile = () => {
                 user?.walletAddress.toLowerCase() ===
                   useraddress.toLowerCase() && (
                   <div
-                    className="text-base text-p-text bg-p-btn px-2 mx-2 rounded-full cursor-pointer"
+                    className="text-base text-p-btn-text bg-p-btn px-2 mx-2 rounded-full cursor-pointer"
                     onClick={handleEditProfile}
                   >
                     Edit
