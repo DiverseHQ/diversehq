@@ -32,13 +32,13 @@ const LeftSidebar = () => {
   const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
   const { openConnectModal } = useConnectModal()
+  const { disconnect } = useDisconnect()
 
   const routeToExplore = () => {
     router.push('/explore')
   }
 
   const { notifyInfo } = useNotify()
-  const { disconnect } = useDisconnect()
 
   const showMoreOptions = (e) => {
     // setShowOptions(!showOptions)

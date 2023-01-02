@@ -14,12 +14,14 @@ import LensLoginButton from '../Common/LensLoginButton'
 import { stringToLength } from '../../utils/utils'
 import { FaDiscord, FaRegCopy } from 'react-icons/fa'
 import { DISCORD_INVITE_LINK } from '../../utils/config'
+import { useDisconnect } from 'wagmi'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
   const { user, address } = useProfile()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
+  const { disconnect } = useDisconnect()
 
   const createCommunity = () => {
     // setShowOptions(!showOptions)
@@ -93,9 +95,9 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <span className="text-[14px] text-s-text">
                 {user.communities.length} Communities joined
               </span>
+              <div onClick={disconnect}>Disconnect</div>
             </div>
           )}
-          {!user && !address && <ConnectButton accountStatus="avatar" />}
           <div className="jutify-end">
             <button onClick={() => setIsOpenSidebar(!isOpenSidebar)}>
               <IoIosClose className="w-[40px] h-[40px]" />
