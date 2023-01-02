@@ -124,7 +124,7 @@ export const WalletProvider = ({ children }) => {
 
       const signedToken = await Web3Token.sign(
         async (msg) => await signer.signMessage(msg),
-        '1d'
+        '7d'
       )
 
       setLocalToken(signedToken)
@@ -133,67 +133,10 @@ export const WalletProvider = ({ children }) => {
       console.log(error)
     }
   }
-
-  // const refetchToken = async () => {
-  //   let existingToken = null
-  //   let verified = false
-  //   // return;
-  //   try {
-  //     existingToken = getLocalToken()
-  //     console.log('existingToken', existingToken)
-  //     if (existingToken) {
-  //       setToken(existingToken)
-  //       const web3Token = Web3Token.verify(existingToken)
-  //       console.log('web3Token', web3Token)
-  //       console.log(web3Token.address, web3Token.body)
-  //       if (
-  //         !web3Token ||
-  //         !web3Token.address ||
-  //         !web3Token.body ||
-  //         web3Token.address.toLowerCase() !== address.toLowerCase()
-  //       ) {
-  //         verified = false
-  //       } else {
-  //         verified = true
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  //   console.log('existingToken', existingToken)
-  //   console.log('verified', verified)
-  //   if (!existingToken || !verified) {
-  //     // if (!web3) {
-  //     //   await connectWallet()
-  //     // }
-  //     if (!provider) {
-  //       alert('No Provider but trying to sign in')
-  //     }
-  //     console.log('provider', provider)
-  //     // alert("hi")
-  //     console.log('signer', signer)
-  //     // return;
-  //     // const ethProvider = new ethers.providers.Web3Provider(provider)
-  //     // const signer = ethProvider.getSigner()
-  //     const signedToken = await Web3Token.sign(
-  //       async (msg) => await signer.signMessage(msg),
-  //       '1d'
-  //     )
-  //     console.log(signedToken)
-  //     setToken(signedToken)
-  //     try {
-  //       await postUser(signedToken)
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //     setLocalToken(signedToken)
-  //     // localStorage.setItem('token', signedToken)
-  //   }
-  //   await refreshUserInfo()
-  // }
-
   return (
-    <WalletContext.Provider value={{ address, refreshUserInfo, user }}>
+    <WalletContext.Provider
+      value={{ address, refreshUserInfo, user, fetchWeb3Token }}
+    >
       {children}
     </WalletContext.Provider>
   )

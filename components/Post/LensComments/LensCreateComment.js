@@ -179,18 +179,11 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
                 }
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
               />
-              <div className="ml-2 font-bold text-xs sm:text-xl">
+              <div className="ml-2 font-bold text-base">
                 {lensProfile?.defaultProfile?.handle}
               </div>
             </div>
             <div className="flex flex-row items-center justify-center">
-              {/* <FaHandSparkles className="w-5 h-5 sm:w-7 sm:h-7" />
-              <input
-                type="number"
-                ref={appreciateAmountRef}
-                className="outline-none pl-3 w-8 sm:w-12 mr-2 text-xs sm:text-xl font-bold bg-s-bg"
-                placeholder="1"
-              /> */}
               {!loading && (
                 <FiSend
                   onClick={createComment}
@@ -207,11 +200,11 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
               )}
             </div>
           </div>
-          <div className="pl-10">
+          <div className="pl-8 sm:pl-10">
             <input
               type="text"
               ref={commentRef}
-              className="border-none outline-none w-full mt-3 text-xs sm:text-base bg-s-bg"
+              className="border-none outline-none w-full mt-1 text-base bg-s-bg"
               placeholder="Write a comment..."
               onKeyUp={(e) => {
                 if (e.key === 'Enter') createComment()

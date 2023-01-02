@@ -101,7 +101,7 @@ const LensCommentCard = ({ comment }) => {
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full mr-2"
               />
               <Link href={`/u/${comment?.profile?.handle}`}>
-                <div className="hover:underline ml-2 font-bold text-xs sm:text-xl">
+                <div className="hover:underline font-bold text-base">
                   u/{comment?.profile?.handle}
                 </div>
               </Link>
@@ -116,8 +116,8 @@ const LensCommentCard = ({ comment }) => {
             </div>
           </div>
 
-          <div className="pl-12">
-            <div className="mt-3">{comment?.metadata?.content}</div>
+          <div className="pl-8 sm:pl-10">
+            <div className="mt-1">{comment?.metadata?.content}</div>
 
             {/* upvote and downvote */}
             <div className="flex flex-row items-center gap-x-2 pt-2">
