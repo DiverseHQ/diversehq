@@ -226,7 +226,7 @@ const Profile = () => {
                     }  hover:bg-p-btn-hover`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
-                      setShowLensPosts(true)
+                      setShowLensPosts(!showLensPosts)
                     }}
                   >
                     <img
