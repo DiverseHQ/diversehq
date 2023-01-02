@@ -1,7 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { IoIosClose } from 'react-icons/io'
 import { IoIosHelpCircleOutline } from 'react-icons/io'
 import { BsMoon } from 'react-icons/bs'

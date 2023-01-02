@@ -161,14 +161,21 @@ const Profile = () => {
                 <FaRegCopy className="w-8 h-8 px-2" />
               </div>
             </div>
-            <div className="flex flex-row items-center space-x-10">
-              <Link href={`/u/${handle}`} className="hover:underline">
-                <div className="font-bold text-base sm:text-base tracking-wider">
-                  {`${profile.name ? profile.name : ''} ${
-                    lensProfile?.handle ? 'u/' + lensProfile?.handle : ''
-                  }`}
-                </div>
-              </Link>
+            <div className="flex flex-row items-center justify-between sm:justify-start sm:space-x-10">
+              <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
+                {profile.name && <div>{profile.name}</div>}
+                {!profile.name && profile.walletAddress && (
+                  <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
+                )}
+                {lensProfile?.handle && (
+                  <Link
+                    href={`/u/${lensProfile?.handle}`}
+                    className="hover:underline cursor-pointer"
+                  >
+                    u/{lensProfile?.handle}
+                  </Link>
+                )}
+              </div>
               {hasProfile && isSignedIn && myLensProfile && (
                 <>
                   <LensFollowButton lensProfile={lensProfile} />
