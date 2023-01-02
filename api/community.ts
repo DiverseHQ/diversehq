@@ -136,13 +136,22 @@ export const searchCommunityFromName = async (
   }
 }
 
-export const getJoinedCommunitiesApi = async (
-  walletAddress: string
-): Promise<CommunityType[]> => {
+export const getJoinedCommunitiesApi = async (): Promise<CommunityType[]> => {
   try {
-    return await fetch(
-      `${apiEndpoint}/community/getJoinedCommunitiesOfUser?walletAddress=${walletAddress}`
-    ).then((res) => res.json())
+    return await fetch(`${apiEndpoint}/community/getJoinedCommunitiesOfUser`, {
+      headers: getHeaders()
+    }).then((res) => res.json())
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
+
+export const getCreatedCommunitiesApi = async (): Promise<CommunityType[]> => {
+  try {
+    return await fetch(`${apiEndpoint}/community/getCreatedCommunitiesOfUser`, {
+      headers: getHeaders()
+    }).then((res) => res.json())
   } catch (error) {
     console.log(error)
     return []

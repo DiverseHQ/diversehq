@@ -256,7 +256,7 @@ const CreatePostPopup = () => {
       notifyError('I think you are not logged in')
       return
     }
-    const response = await getJoinedCommunitiesApi(user.walletAddress)
+    const response = await getJoinedCommunitiesApi()
     setJoinedCommunities(response)
   }
   const customOptions = () => {

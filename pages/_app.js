@@ -6,8 +6,6 @@ import Nav from '../components/Home/Nav'
 import '../styles/globals.css'
 import MasterWrapper from '../components/Common/MasterWrapper'
 import useDevice from '../components/Common/useDevice'
-// eslint-disable-next-line no-unused-vars
-import RightPart from '../components/Common/RightPart'
 import Navbar from '../components/Home/Navbar'
 import LeftSidebar from '../components/Home/LeftSidebar'
 import RightSidebar from '../components/Home/RightSidebar'
@@ -41,16 +39,6 @@ function MyApp({ Component, pageProps }) {
       <MasterWrapper>
         {!isDesktop && (
           <div className="text-p-text bg-p-bg min-h-screen">
-            {/* {isDesktop && (
-            <div>
-              <Nav />
-              <div className="w-[600px] ml-[calc((100vw-600px)/2)] overflow-y-auto no-scrollbar h-full">
-                <Component {...pageProps} />
-              </div>
-              <RightPart />
-            </div>
-          )} */}
-
             {!isDesktop && (
               <>
                 <NewMobileTopNav />

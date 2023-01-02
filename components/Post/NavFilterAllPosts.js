@@ -56,7 +56,7 @@ const NavFilterAllPosts = () => {
       notifyError('I think you are not logged in')
       return
     }
-    const response = await getJoinedCommunitiesApi(user.walletAddress)
+    const response = await getJoinedCommunitiesApi()
     setJoinedCommunities(response)
     setShowJoinedCommunities(!showJoinedCommunities)
   }

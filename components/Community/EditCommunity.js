@@ -59,12 +59,14 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
       if (logoImageFile) {
         // const logo = await uploadFileToIpfs(logoImageFile)
         const logo = await uploadFileToFirebaseAndGetUrl(logoImageFile)
-        communityData.logoImageUrl = logo
+        communityData.logoImageUrl = logo.uploadedToUrl
+        communityData.logoFilePath = logo.path
       }
       if (communityBannerFile) {
         // const banner = await uploadFileToIpfs(communityBannerFile)
         const banner = await uploadFileToFirebaseAndGetUrl(communityBannerFile)
-        communityData.bannerImageUrl = banner
+        communityData.bannerImageUrl = banner.uploadedToUrl
+        communityData.bannerFilePath = banner.path
       }
       const res = await putEditCommunity(communityData)
       console.log(res)
