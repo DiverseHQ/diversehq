@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import MobileNavSidebar from './MobileNavSidebar'
-// import { useSigner } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 const NewMobileTopNav = () => {
-  const { user } = useProfile()
+  const { user, fetchWeb3Token } = useProfile()
+  const { address } = useAccount()
   // const { data: signer } = useSigner()
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
   const { openConnectModal } = useConnectModal()
@@ -30,7 +31,7 @@ const NewMobileTopNav = () => {
     <>
       <div className="flex flex-row justify-between px-2 py-1 items-center shadow-sm">
         <div>
-          {!user && (
+          {!address && (
             <button
               className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn px-4 py-1"
               onClick={openConnectModal}
@@ -38,7 +39,16 @@ const NewMobileTopNav = () => {
               Connect Wallet
             </button>
           )}
-
+          {!user && address && (
+            <button
+              className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn px-4 py-1"
+              onClick={() => {
+                fetchWeb3Token()
+              }}
+            >
+              Sign In
+            </button>
+          )}
           {user && (
             <img
               src={user?.profileImageUrl}

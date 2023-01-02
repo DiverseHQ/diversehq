@@ -90,11 +90,12 @@ export const WalletProvider = ({ children }) => {
       if (!signer) {
         alert('No Signer but trying to sign in')
       }
-
+      console.log('requesting signature from metamask')
       const signedToken = await Web3Token.sign(
         async (msg) => await signer.signMessage(msg),
         '7d'
       )
+      console.log('signedToken', signedToken)
 
       setLocalToken(signedToken)
       await refreshUserInfo()
