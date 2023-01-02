@@ -12,7 +12,6 @@ import {
   setLocalToken
 } from '../../utils/token'
 import { getUserInfo } from '../../api/user'
-// import { useNotify } from './NotifyContext'
 import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 import { userRoles } from '../../utils/config'
 import { useNotify } from './NotifyContext'
@@ -27,37 +26,6 @@ export const WalletProvider = ({ children }) => {
       console.log('onConnect', address, connector, isReconnected)
     }
   })
-
-  // uncomment this if you want to enable whitelist access
-  // const [isWhitelisted, setIsWhitelisted] = useState(false)
-
-  // const checkWhitelistStatus = async () => {
-  //   try {
-  //     const res = await getWhitelistStatus(address)
-  //     const resData = await res.json()
-  //     console.log('resData in checkWhitelistStatus', resData)
-  //     if (res.status === 200 && resData === true) {
-  //       setIsWhitelisted(resData)
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (address) {
-  //     checkWhitelistStatus()
-  //   }
-  // }, [address])
-
-  // useEffect(() => {
-  //   // only allow whitelisted addresses to use the system
-  //   if (signer && address && isWhitelisted) {
-  //     console.log('generating token for api')
-  //     // refetchToken()
-  //     fetchWeb3Token()
-  //   }
-  // }, [signer, address, isWhitelisted])
 
   useEffect(() => {
     if (signer && address) {
@@ -103,14 +71,15 @@ export const WalletProvider = ({ children }) => {
     try {
       let existingTokenOnLocalStorage = null
       existingTokenOnLocalStorage = getLocalToken()
+      console.log('existingTokenOnLocalStorage', existingTokenOnLocalStorage)
 
       //return if token is already in local storage and is not expired
       if (existingTokenOnLocalStorage) {
         const web3Token = Web3Token.verify(existingTokenOnLocalStorage)
+        console.log('web3Token', web3Token)
         if (
           web3Token &&
-          web3Token.address &&
-          web3Token.address.toLowerCase() === address.toLowerCase()
+          new Date(web3Token?.body['expiration-time']) > new Date()
         ) {
           await refreshUserInfo()
           return
