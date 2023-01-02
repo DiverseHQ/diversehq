@@ -12,6 +12,7 @@ import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { putEditCommunity } from '../../api/community'
 import { useProfile } from '../Common/WalletContext'
 import { useRouter } from 'next/router'
+import { useAccount } from 'wagmi'
 
 const EditCommunity = ({ community, getCommunityInformation }) => {
   console.log('communityTo be edited', community)
@@ -29,6 +30,7 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
   const { hideModal } = usePopUpModal()
   const { refreshUserInfo } = useProfile()
   const router = useRouter()
+  const { address } = useAccount()
 
   //   useEffect(() => {
   //     setLogoImage(
@@ -58,13 +60,16 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
       }
       if (logoImageFile) {
         // const logo = await uploadFileToIpfs(logoImageFile)
-        const logo = await uploadFileToFirebaseAndGetUrl(logoImageFile)
+        const logo = await uploadFileToFirebaseAndGetUrl(logoImageFile, address)
         communityData.logoImageUrl = logo.uploadedToUrl
         communityData.logoFilePath = logo.path
       }
       if (communityBannerFile) {
         // const banner = await uploadFileToIpfs(communityBannerFile)
-        const banner = await uploadFileToFirebaseAndGetUrl(communityBannerFile)
+        const banner = await uploadFileToFirebaseAndGetUrl(
+          communityBannerFile,
+          address
+        )
         communityData.bannerImageUrl = banner.uploadedToUrl
         communityData.bannerFilePath = banner.path
       }
