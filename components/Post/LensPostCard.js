@@ -234,44 +234,93 @@ const LensPostCard = ({ post }) => {
         <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-2 sm:my-6 sm:rounded-2xl shadow-sm">
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
-            <div className="flex flex-row w-full items-center">
-              <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                <img
-                  src={
-                    postInfo?.communityInfo?.logoImageUrl
-                      ? postInfo?.communityInfo?.logoImageUrl
-                      : '/gradient.jpg'
-                  }
-                  className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
-                />
-              </Link>
-              <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
-                  {postInfo?.communityInfo?.name}
-                </div>
-              </Link>
-
-              <Link
-                href={`/u/${postInfo?.profile?.handle}`}
-                className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-              >
-                <p className="pl-1.5 font-normal"> posted by</p>
-                <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                  u/{postInfo?.profile?.handle}
-                </div>
-              </Link>
-              <div>
-                {postInfo?.createdAt && (
-                  <div className="text-xs sm:text-sm text-s-text ml-2">
-                    <ReactTimeAgo
-                      date={new Date(postInfo.createdAt)}
-                      locale="en-US"
+            {!isMobile && (
+              <>
+                <div className="flex flex-row w-full items-center">
+                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                    <img
+                      src={
+                        postInfo?.communityInfo?.logoImageUrl
+                          ? postInfo?.communityInfo?.logoImageUrl
+                          : '/gradient.jpg'
+                      }
+                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
                     />
+                  </Link>
+                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                    <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
+                      {postInfo?.communityInfo?.name}
+                    </div>
+                  </Link>
+
+                  <Link
+                    href={`/u/${postInfo?.profile?.handle}`}
+                    className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                  >
+                    <p className="pl-1.5 font-normal"> posted by</p>
+                    <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                      u/{postInfo?.profile?.handle}
+                    </div>
+                  </Link>
+                  <div>
+                    {postInfo?.createdAt && (
+                      <div className="text-xs sm:text-sm text-s-text ml-2">
+                        <ReactTimeAgo
+                          date={new Date(postInfo.createdAt)}
+                          locale="en-US"
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-            <div className="mr-2 sm:mr-5">
+                </div>
+              </>
+            )}
+
+            {isMobile && (
+              <>
+                <div className="flex flex-row w-full items-center">
+                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                    <img
+                      src={
+                        postInfo?.communityInfo?.logoImageUrl
+                          ? postInfo?.communityInfo?.logoImageUrl
+                          : '/gradient.jpg'
+                      }
+                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                    />
+                  </Link>
+                  <div className="flex flex-col justify-center items-start">
+                    <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                      <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
+                        {postInfo?.communityInfo?.name}
+                      </div>
+                    </Link>
+                    <div className="flex flex-row items-center justify-start">
+                      <Link
+                        href={`/u/${postInfo?.profile?.handle}`}
+                        className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                      >
+                        <p className="pl-1.5 font-normal"> posted by</p>
+                        <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                          u/{postInfo?.profile?.handle}
+                        </div>
+                      </Link>
+                      <div>
+                        {postInfo?.createdAt && (
+                          <div className="text-xs sm:text-sm text-s-text ml-2">
+                            <ReactTimeAgo
+                              date={new Date(postInfo.createdAt)}
+                              locale="en-US"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+            <div className="sm:mr-5">
               <JoinCommunityButton id={postInfo.communityId} />
             </div>
           </div>
@@ -326,7 +375,7 @@ const LensPostCard = ({ post }) => {
                 )}
                 {postInfo?.metadata?.mainContentFocus ===
                   PublicationMainFocus.Video && (
-                  <div className="rounded-lg sm:pl-5 sm:pr-6 sm:pb-1">
+                  <div className="sm:pl-5 sm:pr-6 sm:pb-1">
                     <video
                       src={`${LensInfuraEndpoint}${
                         postInfo?.metadata?.media[0]?.original.url.split(

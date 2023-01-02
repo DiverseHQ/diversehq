@@ -166,40 +166,95 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
     <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-2 sm:my-6 sm:rounded-2xl shadow-sm">
       {/* top row */}
       <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
-        <div className="flex flex-row w-full items-center">
-          <Link href={`/c/${post.communityName}`}>
-            <img
-              src={post.communityLogo ? post.communityLogo : '/gradient.jpg'}
-              className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
-            />
-          </Link>
-          <Link href={`/c/${post.communityName}`}>
-            <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
-              {post.communityName}
-            </div>
-          </Link>
+        {!isMobile && (
+          <>
+            <div className="flex flex-row w-full items-center">
+              <Link href={`/c/${post.communityName}`}>
+                <img
+                  src={
+                    post.communityLogo ? post.communityLogo : '/gradient.jpg'
+                  }
+                  className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                />
+              </Link>
+              <Link href={`/c/${post.communityName}`}>
+                <div className="pl-2 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
+                  {post.communityName}
+                </div>
+              </Link>
 
-          <Link
-            href={`/u/${post.author}`}
-            className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-          >
-            <p className="pl-1.5 font-normal"> posted by</p>
-            <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-              u/
-              {post.authorName
-                ? post.authorName
-                : post.author?.slice(0, 6) + '...'}
-            </div>
-          </Link>
-          <div>
-            {post.createdAt && (
-              <div className="text-xs sm:text-sm text-s-text ml-2">
-                <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
+              <Link
+                href={`/u/${post.author}`}
+                className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+              >
+                <p className="pl-1.5"> posted by</p>
+                <div className="pl-1.5 hover:cursor-pointer hover:underline">
+                  u/
+                  {post.authorName
+                    ? post.authorName
+                    : post.author?.slice(0, 6) + '...'}
+                </div>
+              </Link>
+              <div>
+                {post.createdAt && (
+                  <div className="text-xs sm:text-sm text-s-text ml-2">
+                    <ReactTimeAgo
+                      date={new Date(post.createdAt)}
+                      locale="en-US"
+                    />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-        <div className="mr-2 sm:mr-5">
+            </div>
+          </>
+        )}
+
+        {isMobile && (
+          <>
+            <div className="flex flex-row w-full items-center">
+              <Link href={`/c/${post.communityName}`}>
+                <img
+                  src={
+                    post.communityLogo ? post.communityLogo : '/gradient.jpg'
+                  }
+                  className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                />
+              </Link>
+              <div className="flex flex-col justify-center items-start">
+                <Link href={`/c/${post.communityName}`}>
+                  <div className="pl-2 font-bold text-base sm:text-xl hover:cursor-pointer hover:underline">
+                    {post.communityName}
+                  </div>
+                </Link>
+                <div className="flex flex-row items-center justify-start">
+                  <Link
+                    href={`/u/${post.author}`}
+                    className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                  >
+                    <p className="pl-1.5"> posted by</p>
+                    <div className="pl-1.5 hover:cursor-pointer hover:underline">
+                      u/
+                      {post.authorName
+                        ? post.authorName
+                        : post.author?.slice(0, 6) + '...'}
+                    </div>
+                  </Link>
+                  <div>
+                    {post.createdAt && (
+                      <div className="text-xs sm:text-sm text-s-text ml-2">
+                        <ReactTimeAgo
+                          date={new Date(post.createdAt)}
+                          locale="en-US"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        <div className="sm:mr-5">
           <JoinCommunityButton id={post.communityId} />
         </div>
       </div>
@@ -243,7 +298,7 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
               </Link>
             )}
             {post?.postVideoUrl && (
-              <div className="rounded-lg sm:pl-5 sm:pr-6 sm:pb-1">
+              <div className="sm:pl-5 sm:pr-6 sm:pb-1">
                 <video
                   src={post.postVideoUrl}
                   className="image-unselectable object-cover sm:rounded-xl  w-full"
