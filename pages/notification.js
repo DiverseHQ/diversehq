@@ -22,7 +22,7 @@ const notification = () => {
               className="h-5 w-5 "
               alt="lens logo icon"
             />
-            <div>Top</div>
+            <div>Lens</div>
           </button>
         </div>
 

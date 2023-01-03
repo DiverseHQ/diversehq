@@ -343,22 +343,22 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
               className="flex flex-row items-center"
             >
               {post.comments?.length === 0 && (
-                <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
+                <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
               )}
               {post.comments?.length > 0 && (
-                <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
+                <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
               )}
               {post.comments?.length}
             </Link>
             <div>
               <FiSend
                 onClick={handleShare}
-                className="hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7"
+                className="hover:cursor-pointer mr-3 w-5 h-5"
               />
             </div>
             <div className="relative">
               <BsThreeDots
-                className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
                 onClick={showMoreOptions}
                 title="More"
               />

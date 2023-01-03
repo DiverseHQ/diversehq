@@ -61,8 +61,8 @@ const LensPostsProfileFeedColumn = ({ profileId }) => {
         hasMore={hasMore}
         loader={<h3> Loading...</h3>}
         endMessage={
-          <div className="w-full flex flex-row items-center text-center justify-center">
-            --- Nothing more to show ---
+          <div className="w-full flex flex-row items-center text-center justify-center py-4">
+            --- You have reached the end ---
           </div>
         }
       >

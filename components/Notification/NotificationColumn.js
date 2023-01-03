@@ -24,6 +24,7 @@ const NotificationColumn = () => {
         setHasMore(false)
       }
       setNotifications([...notifications, ...fetchedNotifications])
+      fetchAndSetNotificationCount()
     } catch (error) {
       console.log(error)
     }
