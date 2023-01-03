@@ -1,6 +1,7 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
 import {
   useAccount,
+  useDisconnect,
   //  useProvider,
   useSigner
   //  useDisconnect
@@ -26,6 +27,7 @@ export const WalletProvider = ({ children }) => {
       console.log('onConnect', address, connector, isReconnected)
     }
   })
+  const { disconnect } = useDisconnect()
 
   useEffect(() => {
     if (signer && address) {
@@ -87,7 +89,8 @@ export const WalletProvider = ({ children }) => {
           }
         }
       } catch (error) {
-        console.log(error)
+        disconnect()
+        console.log('error from verfiying token', error)
       }
 
       //if token is not in local storage or is expired, fetch a new one and save it to local storage and state
