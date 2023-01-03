@@ -236,12 +236,23 @@ const CommunityInfoCard = ({
                 <div className="flex flex-row px-5 gap-1 items-center">
                   <img src={'/levelDropIcon.svg'} className="w-4 h-4" />
                   <div className="text-[12px] md:text-[14px] items-center">
-                    Lvl0
+                    {`Lvl${currentLevel}`}
                   </div>
                   <div className="flex flex-col w-[100px] items-end">
-                    <div className="text-[10px] text-[#bbb]">0/0</div>
+                    <div className="text-[10px] text-[#bbb]">
+                      {currentXP}/{levelThreshold}
+                    </div>
                     <div className="relative bg-[#AA96E2] h-[3px] w-full">
-                      <div className="absolute h-full bg-[#6668FF] w-[0%]"></div>
+                      <div
+                        className="absolute h-full bg-[#6668FF] w-[0%]"
+                        style={{
+                          width: `${calculateBarPercentage(
+                            levelThreshold,
+                            currentXP
+                          )}%`,
+                          maxWidth: '100%'
+                        }}
+                      ></div>
                     </div>
                   </div>
                 </div>
