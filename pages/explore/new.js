@@ -36,7 +36,42 @@ const newPage = () => {
         dataLength={communities.length}
         next={getNewCommunities}
         hasMore={hasMore}
-        loader={<h3> Loading...</h3>}
+        loader={
+          <>
+            <div className="w-full h-[150px] sm:h-[250px] bg-gray-100 animate-pulse my-4 sm:my-6">
+              <div className="w-full h-[100px] sm:h-[200px] bg-gray-300" />
+              <div className="w-full flex flex-row items-center space-x-4 p-4">
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+              </div>
+            </div>
+            <div className="w-full h-[150px] sm:h-[250px] bg-gray-100 animate-pulse my-4 sm:my-6">
+              <div className="w-full h-[100px] sm:h-[200px] bg-gray-300" />
+              <div className="w-full flex flex-row items-center space-x-4 p-4">
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+              </div>
+            </div>
+            <div className="w-full h-[150px] sm:h-[250px] bg-gray-100 animate-pulse my-4 sm:my-6">
+              <div className="w-full h-[100px] sm:h-[200px] bg-gray-300" />
+              <div className="w-full flex flex-row items-center space-x-4 p-4">
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+              </div>
+            </div>
+            <div className="w-full h-[150px] sm:h-[250px] bg-gray-100 animate-pulse my-4 sm:my-6">
+              <div className="w-full h-[100px] sm:h-[200px] bg-gray-300" />
+              <div className="w-full flex flex-row items-center space-x-4 p-4">
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded-full" />
+              </div>
+            </div>
+          </>
+        }
         endMessage={
           <div className="w-full flex flex-row items-center text-center justify-center py-4 text-s-text text-sm">
             --- You have reached the end ---
