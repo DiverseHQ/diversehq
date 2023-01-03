@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
@@ -28,6 +28,7 @@ import {
 // import { BsMoon } from 'react-icons/bs'
 import Link from 'next/link'
 import { DISCORD_INVITE_LINK } from '../../utils/config'
+import useNotificationsCount from '../Notification/useNotificationsCount'
 
 const LeftSidebar = () => {
   // const [showMore, setShowMore] = useState(false)
@@ -37,7 +38,7 @@ const LeftSidebar = () => {
   const { showModal } = usePopUpModal()
   const { openConnectModal } = useConnectModal()
   const { disconnect } = useDisconnect()
-
+  const { notificationsCount } = useNotificationsCount()
   const routeToExplore = () => {
     router.push('/explore')
   }
@@ -98,11 +99,6 @@ const LeftSidebar = () => {
     })
   }
 
-  useEffect(() => {
-    console.log('user', user)
-    console.log('address', address)
-  }, [user, address])
-
   return (
     <div className="relative flex flex-col items-start border-r-[1px] border-p-btn sticky top-[64px] right-0 h-[calc(100vh-62px)] py-8 px-4 md:px-6 lg:px-10 xl:px-12 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] justify-between">
       <div className="flex flex-col items-start gap-4 mb-2">
@@ -132,6 +128,12 @@ const LeftSidebar = () => {
           <span className="text-[18px] font-semibold text-p-text ">
             Notifications
           </span>
+          {/* a green count dot */}
+          {notificationsCount > 0 && (
+            <div className="px-1 text-xs text-p-btn-text bg-green-500 rounded-full ml-1">
+              <span>{notificationsCount}</span>
+            </div>
+          )}
         </Link>
         <button
           className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"

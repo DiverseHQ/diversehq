@@ -85,7 +85,6 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
     console.log('comment', comment)
     try {
       const comment = await postComment(content, postId, 0)
-      console.log(comment)
       setComments((comments) => [comment, ...comments])
 
       // clear the comment input field after submit

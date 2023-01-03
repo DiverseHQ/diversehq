@@ -1,102 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { NotificationTypes, useNotificationsQuery } from '../graphql/generated'
-import { useLensUserContext } from '../lib/LensUserContext'
-import { LENS_NOTIFICATION_LIMIT } from '../utils/config'
-import LensNotificationCard from '../components/Notification/LensNotificationCard'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import LensLoginButton from '../components/Common/LensLoginButton'
+import React, { useState } from 'react'
+import LensNotificationColumn from '../components/Notification/LensNotificationColumn'
+import NotificationColumn from '../components/Notification/NotificationColumn'
 const notification = () => {
-  const [notifications, setNotifications] = useState([])
-  const [hasMore, setHasMore] = useState(true)
-  const [cursor, setCursor] = useState(null)
-  const [nextCursor, setNextCursor] = useState(null)
-
-  const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
-  const { data } = useNotificationsQuery(
-    {
-      request: {
-        profileId: lensProfile?.defaultProfile?.id,
-        cursor: cursor,
-        limit: LENS_NOTIFICATION_LIMIT,
-        notificationTypes: [
-          NotificationTypes.CommentedPost,
-          NotificationTypes.CommentedComment,
-          NotificationTypes.Followed,
-          NotificationTypes.ReactionPost,
-          NotificationTypes.ReactionComment
-        ]
-      },
-      reactionRequest: {
-        profileId: lensProfile?.defaultProfile?.id
-      }
-    },
-    {
-      enabled: !!lensProfile?.defaultProfile?.id && isSignedIn && hasProfile
-    }
-  )
-  const getMoreNotifications = async () => {
-    if (nextCursor) {
-      setCursor(nextCursor)
-      return
-    }
-  }
-
-  useEffect(() => {
-    if (!data?.notifications?.items) return
-    handleNotifications()
-  }, [data?.notifications?.pageInfo?.next])
-
-  const handleNotifications = async () => {
-    console.log('data.notifications.items', data.notifications.items)
-    if (data.notifications.items.length > 0) {
-      setNotifications([...notifications, ...data.notifications.items])
-    }
-    if (data.notifications.items.length === 0) {
-      setHasMore(false)
-      return
-    }
-    if (data?.notifications?.pageInfo?.next) {
-      setNextCursor(data?.notifications?.pageInfo?.next)
-    }
-    if (data.notifications.items.length < LENS_NOTIFICATION_LIMIT) {
-      setHasMore(false)
-    }
-  }
+  const [showLensNotifications, setShowLensNotifications] = useState(false)
 
   return (
     <div className="w-full flex justify-center">
       <div className="lg:w-[650px]">
-        {lensProfile &&
-          isSignedIn &&
-          hasProfile &&
-          lensProfile?.defaultProfile?.id && (
-            <div>
-              <InfiniteScroll
-                dataLength={notifications.length}
-                next={getMoreNotifications}
-                hasMore={hasMore}
-                loader={<h3>Loading...</h3>}
-                endMessage={<></>}
-              >
-                {notifications.map((notification, index) => {
-                  return (
-                    <LensNotificationCard
-                      key={index}
-                      notification={notification}
-                    />
-                  )
-                })}
-              </InfiniteScroll>
-            </div>
-          )}
-        {(!isSignedIn || !hasProfile) && (
-          <div className="flex flex-col mt-10 items-center justify-center h-full">
-            <h1 className="text-2xl font-bold mb-4">
-              Please sign in lens to view notifications
-            </h1>
-            <LensLoginButton />
-          </div>
-        )}
+        {/* filter nav */}
+        <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white sm:mt-0 py-1 mb-2 sm:mb-4 sm:py-3 w-full sm:rounded-xl space-x-9 items-center">
+          <button
+            className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+              showLensNotifications && 'bg-p-bg'
+            }  hover:bg-p-btn-hover`}
+            onClick={() => {
+              setShowLensNotifications(!showLensNotifications)
+            }}
+          >
+            <img
+              src="/lensLogoWithoutText.svg"
+              className="h-5 w-5 "
+              alt="lens logo icon"
+            />
+            <div>Top</div>
+          </button>
+        </div>
+
+        {/* notifications */}
+        {showLensNotifications && <LensNotificationColumn />}
+        {!showLensNotifications && <NotificationColumn />}
       </div>
     </div>
   )

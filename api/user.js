@@ -48,3 +48,24 @@ export const putUpdateUser = async (profileData) => {
     body: JSON.stringify(profileData)
   }).then((r) => r)
 }
+
+export const getUnReadNotificationsCount = async () => {
+  return await fetch(`${apiEndpoint}/user/unread-notification-count`, {
+    method: 'GET',
+    headers: getHeaders()
+  }).then((res) => res.json())
+}
+
+export const getAllNotifications = async (limit, skips) => {
+  return await fetch(
+    `${apiEndpoint}/user/get-all-notifications?` +
+      new URLSearchParams({
+        limit,
+        skips
+      }),
+    {
+      method: 'GET',
+      headers: getHeaders()
+    }
+  ).then((res) => res.json())
+}
