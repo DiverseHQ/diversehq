@@ -93,6 +93,10 @@ export const WalletProvider = ({ children }) => {
         console.log('error from verfiying token', error)
       }
 
+      if (!existingTokenOnLocalStorage) {
+        console.log('no existing token on local storage')
+      }
+
       //if token is not in local storage or is expired, fetch a new one and save it to local storage and state
       if (!signer) {
         alert('No Signer but trying to sign in')
@@ -108,6 +112,7 @@ export const WalletProvider = ({ children }) => {
               'Have you unlocked metamask and are connected to this page?'
             )
           }
+          disconnect()
 
           console.log(err.toString())
         }
