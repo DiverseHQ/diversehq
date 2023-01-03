@@ -73,17 +73,21 @@ export const WalletProvider = ({ children }) => {
       existingTokenOnLocalStorage = getLocalToken()
       console.log('existingTokenOnLocalStorage', existingTokenOnLocalStorage)
 
-      //return if token is already in local storage and is not expired
-      if (existingTokenOnLocalStorage) {
-        const web3Token = Web3Token.verify(existingTokenOnLocalStorage)
-        console.log('web3Token', web3Token)
-        if (
-          web3Token &&
-          new Date(web3Token?.body['expiration-time']) > new Date()
-        ) {
-          await refreshUserInfo()
-          return
+      try {
+        //return if token is already in local storage and is not expired
+        if (existingTokenOnLocalStorage) {
+          const web3Token = Web3Token.verify(existingTokenOnLocalStorage)
+          console.log('web3Token', web3Token)
+          if (
+            web3Token &&
+            new Date(web3Token?.body['expiration-time']) > new Date()
+          ) {
+            await refreshUserInfo()
+            return
+          }
         }
+      } catch (error) {
+        console.log(error)
       }
 
       //if token is not in local storage or is expired, fetch a new one and save it to local storage and state
