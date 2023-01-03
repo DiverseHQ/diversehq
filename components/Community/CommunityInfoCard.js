@@ -120,6 +120,53 @@ const CommunityInfoCard = ({
 
   const { isMobile } = useDevice()
 
+  const calculateBarPercentage = (currentXP, threshold) => {
+    const percentage = Math.round((threshold * 100) / currentXP)
+    return percentage
+  }
+
+  // const calculateLevel = (currentXP, levelThreshold) => {
+  //   let currentLevel = 0
+  //   while (currentXP >= levelThreshold) {
+  //     setCurrentLevel((prev) => prev + 1)
+  //     currentXP -= levelThreshold
+  //     setLevelThreshold((prev) => prev * 1.5) // Increase the threshold for each subsequent level
+  //   }
+  //   return currentLevel
+  // }
+
+  const [currentXP, setCurrentXP] = useState(
+    numberOfPosts * 10 + community.members?.length * 25
+  )
+  const [levelThreshold, setLevelThreshold] = useState(250)
+  const [currentLevel, setCurrentLevel] = useState(0)
+
+  const calculateLevelAndThreshold = () => {
+    let tempLevel = currentLevel
+    let tempXP = currentXP
+    let tempThreshold = levelThreshold
+    while (tempXP >= tempThreshold) {
+      tempXP -= tempThreshold
+      tempLevel++
+      tempThreshold *= 1.5
+    }
+    setCurrentLevel(tempLevel)
+    setLevelThreshold(tempThreshold) // Increase the threshold for each subsequent level
+    console.log('Templevel', tempLevel, 'TempThreshold', tempThreshold)
+  }
+
+  useEffect(() => {
+    calculateLevelAndThreshold()
+  }, [currentXP])
+
+  useEffect(() => {
+    setCurrentXP(numberOfPosts * 10 + community.members?.length * 25)
+  }, [numberOfPosts, community])
+
+  // useEffect(() => {
+  //   setCurrentLevel(calculateLevel(currentXP, levelThreshold))
+  // }, [levelThreshold])
+
   return (
     <>
       {community && (
@@ -244,12 +291,21 @@ const CommunityInfoCard = ({
                   {' '}
                   <div className="flex flex-row gap-1 items-center">
                     <div className="text-[12px] md:text-[14px] items-center">
-                      Lvl0
+                      {`Lvl${currentLevel}`}
                     </div>
                     <div className="flex flex-col w-full items-end">
-                      <div className="text-[10px] text-[#bbb]">0/0</div>
+                      <div className="text-[10px] text-[#bbb]">{`${currentXP}/${levelThreshold}`}</div>
                       <div className="relative bg-[#AA96E2] h-[3px] w-full">
-                        <div className="absolute h-full bg-[#6668FF] w-[0%]"></div>
+                        <div
+                          className="absolute h-full bg-[#6668FF]"
+                          style={{
+                            width: `${calculateBarPercentage(
+                              levelThreshold,
+                              currentXP
+                            )}%`,
+                            maxWidth: '100%'
+                          }}
+                        ></div>
                       </div>
                     </div>
                   </div>
