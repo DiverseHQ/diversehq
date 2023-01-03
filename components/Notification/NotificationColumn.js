@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getAllNotifications } from '../../api/user'
 import { NOTIFICATION_LIMIT } from '../../utils/config'
+import LensLoginButton from '../Common/LensLoginButton'
 import { useProfile } from '../Common/WalletContext'
 import NotificationCard from './NotificationCard'
 import useNotificationCount from './useNotificationsCount'
@@ -37,19 +38,32 @@ const NotificationColumn = () => {
 
   return (
     <div>
-      <div>
-        <InfiniteScroll
-          dataLength={notifications.length}
-          next={getMoreNotifications}
-          hasMore={hasMore}
-          loader={<h3>Loading...</h3>}
-          endMessage={<></>}
-        >
-          {notifications.map((notification, index) => {
-            return <NotificationCard key={index} notification={notification} />
-          })}
-        </InfiniteScroll>
-      </div>
+      {user && (
+        <div>
+          <InfiniteScroll
+            dataLength={notifications.length}
+            next={getMoreNotifications}
+            hasMore={hasMore}
+            loader={<h3>Loading...</h3>}
+            endMessage={
+              <div className="w-full flex flex-row items-center text-center justify-center">
+                --- Nothing more to show ---
+              </div>
+            }
+          >
+            {notifications.map((notification, index) => {
+              return (
+                <NotificationCard key={index} notification={notification} />
+              )
+            })}
+          </InfiniteScroll>
+        </div>
+      )}
+      {!user && (
+        <div className="w-full flex items-center flex-row justify-center">
+          <LensLoginButton />
+        </div>
+      )}
     </div>
   )
 }

@@ -41,7 +41,11 @@ const index = () => {
           next={getTopCommunities}
           hasMore={hasMore}
           loader={<h3> Loading...</h3>}
-          endMessage={<></>}
+          endMessage={
+            <div className="w-full flex flex-row items-center text-center justify-center">
+              --- Nothing more to show ---
+            </div>
+          }
         >
           {communities.map((community) => {
             return (
