@@ -66,7 +66,7 @@ const SearchModal = () => {
       <input
         className="bg-transparent mr-1 text-[14px] text-[#111] outline-none w-full"
         type="text"
-        placeholder="Search Diverse"
+        placeholder="Search Diverse Communities"
         onChange={onChangeSearch}
       />
       {isLoading ? (

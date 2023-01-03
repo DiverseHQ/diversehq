@@ -28,9 +28,9 @@ const CreateCommunity = () => {
   const { user, refreshUserInfo } = useProfile()
   const router = useRouter()
 
-  // function hasWhiteSpace (s) {
-  //   return /\s/g.test(s)
-  // }
+  function hasWhiteSpace(s) {
+    return /\s/g.test(s)
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -45,8 +45,13 @@ const CreateCommunity = () => {
       setLoading(false)
       return
     }
-    if (communityName.length > 16) {
+    if (communityName.length > 26) {
       notifyError('Community name must be less than 16 characters')
+      setLoading(false)
+      return
+    }
+    if (hasWhiteSpace(communityName)) {
+      notifyError('Community name cannot contain spaces')
       setLoading(false)
       return
     }

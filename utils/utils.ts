@@ -99,3 +99,7 @@ export const uploadFileToIpfsInfuraAndGetPath = async (file: File) => {
   console.log('upload result ipfs', result)
   return result.path
 }
+
+export const hasWhiteSpace = (s: string): boolean => {
+  return /\s/g.test(s)
+}

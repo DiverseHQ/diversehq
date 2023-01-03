@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
@@ -13,20 +13,24 @@ import ClickOption from './ClickOption'
 import { stringToLength } from '../../utils/utils'
 
 import { FaDiscord, FaRegCopy } from 'react-icons/fa'
-import { AiOutlineCompass, AiOutlineGift, AiOutlineHome } from 'react-icons/ai'
+import {
+  AiOutlineCompass,
+  //  AiOutlineGift,
+  AiOutlineHome
+} from 'react-icons/ai'
 import { MdOutlineGroups } from 'react-icons/md'
 import {
-  IoMdNotificationsOutline,
-  IoIosHelpCircleOutline,
-  IoIosArrowDown,
-  IoIosArrowUp
+  IoMdNotificationsOutline
+  // IoIosHelpCircleOutline,
+  // IoIosArrowDown,
+  // IoIosArrowUp
 } from 'react-icons/io'
-import { BsMoon } from 'react-icons/bs'
+// import { BsMoon } from 'react-icons/bs'
 import Link from 'next/link'
 import { DISCORD_INVITE_LINK } from '../../utils/config'
 
 const LeftSidebar = () => {
-  const [showMore, setShowMore] = useState(false)
+  // const [showMore, setShowMore] = useState(false)
 
   const router = useRouter()
   const { user, address } = useProfile()
@@ -138,14 +142,25 @@ const LeftSidebar = () => {
             Explorer
           </span>
         </button>
-        <button className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2">
+        <a
+          href={DISCORD_INVITE_LINK}
+          target="_blank"
+          rel="noreferrer"
+          className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"
+        >
+          <FaDiscord className="w-[24px] h-[24px] object-contain" />
+          <span className="text-[18px] font-semibold text-p-text ">
+            Discord
+          </span>
+        </a>
+        {/* <button className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2">
           <AiOutlineGift className="w-[24px] h-[24px] object-contain" />
           <span className="text-[18px] font-semibold text-p-text ">
             XP Gift
           </span>
-        </button>
+        </button> */}
       </div>
-      <div>
+      {/* <div>
         <button
           className="flex flex-row items-center bg-transparent hover:bg-[#ccc] px-2 py-1 md:px-4 rounded-[20px] gap-1 md:gap-2"
           onClick={() => setShowMore((prev) => !prev)}
@@ -178,7 +193,7 @@ const LeftSidebar = () => {
             </a>
           </div>
         )}
-      </div>
+      </div> */}
       <div className="flex-1">
         <p>
           Create an account to follow your favorite communities and start taking

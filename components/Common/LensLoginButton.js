@@ -92,7 +92,7 @@ const LensLoginButton = () => {
       {user && address && (
         <div className="flex flex-col gap-4">
           {isSignedIn && hasProfile && (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-start">
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
                 <Link
                   href={`/u/${lensProfile.defaultProfile.handle}`}

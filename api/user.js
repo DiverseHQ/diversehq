@@ -2,8 +2,14 @@ import apiEndpoint from './ApiEndpoint'
 import { getHeaders } from './apiHelper'
 
 export const getUserInfo = async (walletAddress) => {
-  return await fetch(`${apiEndpoint}/user/${walletAddress}`).then((res) =>
-    res.json()
+  return await fetch(`${apiEndpoint}/user/walletaddress/${walletAddress}`).then(
+    (res) => res.json()
+  )
+}
+
+export const getUserFromAddressOrName = async (addressOrName) => {
+  return await fetch(`${apiEndpoint}/user/nameoraddress/${addressOrName}`).then(
+    (res) => res
   )
 }
 
