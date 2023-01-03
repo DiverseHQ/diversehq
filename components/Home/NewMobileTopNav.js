@@ -32,15 +32,14 @@ const NewMobileTopNav = () => {
     <>
       <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm">
         <div>
-          {!address ||
-            (!signer && (
-              <button
-                className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn px-4 py-1"
-                onClick={openConnectModal}
-              >
-                Connect Wallet
-              </button>
-            ))}
+          {(!address || !signer) && (
+            <button
+              className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn px-4 py-1"
+              onClick={openConnectModal}
+            >
+              Connect Wallet
+            </button>
+          )}
           {!user && address && signer && (
             <button
               className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn px-4 py-1"
