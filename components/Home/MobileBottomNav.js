@@ -5,7 +5,9 @@ import { MdOutlineExplore } from 'react-icons/md'
 import { BsSearch } from 'react-icons/bs'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CreatePostPopup from './CreatePostPopup'
+import useNotificationsCount from '../Notification/useNotificationsCount'
 const MobileBottomNav = () => {
+  const { notificationsCount } = useNotificationsCount()
   const { showModal } = usePopUpModal()
   const router = useRouter()
   const routeToHome = () => {
@@ -28,6 +30,7 @@ const MobileBottomNav = () => {
   const routeToSearch = () => {
     router.push('/search')
   }
+
   return (
     <div className="fixed bottom-0 w-full py-2.5 flex flex-row justify-evenly items-center bg-p-bg shadow-top">
       <AiOutlineHome className="w-7 h-7 " onClick={routeToHome} />
@@ -37,7 +40,14 @@ const MobileBottomNav = () => {
         onClick={showCreatePostModal}
       />
       <BsSearch className="w-6 h-6 " onClick={routeToSearch} />
-      <AiOutlineBell className="w-7 h-7 " onClick={routeToNotifications} />
+      <div className="relative">
+        <AiOutlineBell className="w-7 h-7 " onClick={routeToNotifications} />
+        {notificationsCount > 0 && (
+          <div className="absolute top-0 left-0 px-1 text-xs text-p-btn-text bg-green-500 rounded-full">
+            <span>{notificationsCount}</span>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

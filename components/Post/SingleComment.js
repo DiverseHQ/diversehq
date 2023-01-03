@@ -17,6 +17,7 @@ import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CommentDropdown from './CommentDropdown'
 import { ReactionTypes } from '../../graphql/generated'
+import Link from 'next/link'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
@@ -177,20 +178,24 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   return (
     <>
       {comment && (
-        <div className="px-3 sm:px-5 w-full bg-s-bg my-6 sm:rounded-3xl py-3">
+        <div className="px-3 sm:px-5 w-full bg-s-bg my-3 sm:rounded-2xl py-2">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center">
               <img
                 src={
                   comment.authorAvatar ? comment.authorAvatar : '/gradient.jpg'
                 }
-                className="w-6 h-6 sm:w-8 sm:h-8 rounded-full mr-2"
+                className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
               />
-              <div className="ml-2 font-bold text-xs sm:text-xl">
+              <Link
+                href={`/u/${comment.author}`}
+                className="hover:underline ml-2 font-bold text-base "
+              >
+                u/
                 {comment.authorName
                   ? comment.authorName
                   : comment.author.substring(0, 6) + '...'}
-              </div>
+              </Link>
             </div>
             <div className="text-xs sm:text-base">
               <ReactTimeAgo
@@ -200,11 +205,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             </div>
           </div>
 
-          <div className="pl-12">
+          <div className="pl-8 sm:pl-10">
             {editing ? (
               <div className="flex items-center justify-between">
                 <input
-                  className="mt-3 border-b-2 focus:outline-none text-lg text-semibold w-[80%]"
+                  className="mt-1 border-b-2 focus:outline-none text-base sm:text-lg sm:text-semibold w-[80%]"
                   type="text"
                   placeholder={`${content}`}
                   value={`${content}`}
@@ -216,14 +221,14 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                 />
                 <div className="flex items-center">
                   <AiOutlineCheck
-                    className="text-[24px] hover:cursor-pointer hover:text-[#66CD00]"
+                    className="text-base sm:text-[24px] hover:cursor-pointer hover:text-[#66CD00]"
                     title="Save"
                     onClick={submitEdittedComment}
                   />
                 </div>
               </div>
             ) : (
-              <div className="mt-3">{comment.content}</div>
+              <div className="mt-1">{comment.content}</div>
             )}
 
             <div className="flex flex-row items-end space-x-14">

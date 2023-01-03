@@ -92,7 +92,11 @@ const LensPostsCommunityPublicationsColumn = ({ communityInfo }) => {
         next={getMorePosts}
         hasMore={hasMore}
         loader={<h3> Loading...</h3>}
-        endMessage={<></>}
+        endMessage={
+          <div className="w-full flex flex-row items-center text-center justify-center py-4 text-s-text text-sm">
+            --- You have reached the end ---
+          </div>
+        }
       >
         {posts.map((post) => {
           return (

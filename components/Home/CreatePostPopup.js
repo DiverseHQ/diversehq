@@ -80,9 +80,9 @@ const CreatePostPopup = () => {
         setLoading(false)
         return
       }
-      // file size should be less than 5mb
-      if (file.size > 5000000) {
-        notifyError('File size should be less than 5mb')
+      // file size should be less than 10mb
+      if (file.size > 10000000) {
+        notifyError('File size should be less than 10mb')
         setLoading(false)
         return
       }
@@ -278,7 +278,7 @@ const CreatePostPopup = () => {
             }`}
             style={communityOptionsCoord}
           >
-            <div className="bg-s-bg rounded-2xl">
+            <div className="bg-s-bg rounded-2xl max-h-[450px] overflow-auto">
               {joinedCommunities.map((community) => {
                 console.log(community)
                 return (
@@ -422,9 +422,12 @@ const CreatePostPopup = () => {
             <Switch
               checked={isLensPost}
               onChange={() => {
+                if (!isSignedIn || !hasProfile) {
+                  notifyInfo('You need to be logged in lens to do that')
+                  return
+                }
                 setIsLensPost(!isLensPost)
               }}
-              disabled={!isSignedIn || !hasProfile}
               size="small"
             />
           </div>
@@ -449,6 +452,9 @@ const CreatePostPopup = () => {
                     <AiOutlineCamera className="h-8 w-8" />
                   </div>
                   <div>Add Image or Video</div>
+                  <div className="text-sm">
+                    (Leave Empty for only text post)
+                  </div>
                 </div>
               </label>
             )}

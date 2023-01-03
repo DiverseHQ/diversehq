@@ -16,6 +16,7 @@ import { LensInfuraEndpoint } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
+import { getCommunityInfoUsingId } from '../../api/community'
 
 /**
  * Sample post object
@@ -136,11 +137,29 @@ const LensPostCard = ({ post }) => {
   const [voteCount, setVoteCount] = useState(
     post?.stats?.totalUpvotes - post?.stats?.totalDownvotes
   )
+  const [postInfo, setPostInfo] = useState(post)
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+
+  const fetchCommunityInformationAndSetPost = async () => {
+    const communityId = post?.metadata?.tags?.[0]
+    if (!communityId) return
+    const communityInfo = await getCommunityInfoUsingId(communityId)
+    setPostInfo({ ...post, communityInfo })
+  }
+
+  useEffect(() => {
+    if (!post) return
+    if (!post?.communityInfo) {
+      fetchCommunityInformationAndSetPost()
+    } else {
+      setPostInfo(post)
+    }
+  }, [post])
+
   const handleShare = async () => {
     try {
       const url = `${window.origin}/p/${post.id}`
@@ -210,123 +229,114 @@ const LensPostCard = ({ post }) => {
   }
   console.log(post)
   return (
-    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-2 sm:my-6 sm:rounded-2xl shadow-sm">
-      {/* top row */}
-      <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
-        <div className="flex flex-row w-full items-center">
-          <Link href={`/c/${post?.communityInfo?.name}`}>
-            <img
-              src={
-                post?.communityInfo?.logoImageUrl
-                  ? post?.communityInfo?.logoImageUrl
-                  : '/gradient.jpg'
-              }
-              className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
-            />
-          </Link>
-          <Link href={`/c/${post?.communityInfo?.name}`}>
-            <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
-              {post?.communityInfo?.name}
-            </div>
-          </Link>
+    <>
+      {postInfo && (
+        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-2 sm:my-6 sm:rounded-2xl shadow-sm">
+          {/* top row */}
+          <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
+            {!isMobile && (
+              <>
+                <div className="flex flex-row w-full items-center">
+                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                    <img
+                      src={
+                        postInfo?.communityInfo?.logoImageUrl
+                          ? postInfo?.communityInfo?.logoImageUrl
+                          : '/gradient.jpg'
+                      }
+                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                    />
+                  </Link>
+                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                    <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
+                      {postInfo?.communityInfo?.name}
+                    </div>
+                  </Link>
 
-          <Link
-            href={`/u/${post?.profile?.handle}`}
-            className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-          >
-            <p className="pl-1.5 font-normal"> posted by</p>
-            <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-              u/{post?.profile?.handle}
-            </div>
-          </Link>
-          <div>
-            {post?.createdAt && (
-              <div className="text-xs sm:text-sm text-s-text ml-2">
-                <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="mr-2 sm:mr-5">
-          <JoinCommunityButton id={post.communityId} />
-        </div>
-      </div>
-
-      <div className="flex flex-row w-full">
-        {!isMobile && (
-          <div className="flex flex-col items-center ml-[9px] mt-2">
-            <img
-              //  onClick={liked ? handleUnLike : handleLike}
-              src={
-                reaction === ReactionTypes.Upvote
-                  ? '/UpvoteFilled.svg'
-                  : '/Upvote.svg'
-              }
-              onClick={handleUpvote}
-              className="w-6 h-6 cursor-pointer"
-            />
-            <div className="font-bold">{voteCount}</div>
-            <img
-              src={
-                reaction === ReactionTypes.Downvote
-                  ? '/DownvoteFilled.svg'
-                  : '/Downvote.svg'
-              }
-              className="w-5 h-5 cursor-pointer"
-              onClick={handleDownvote}
-            />
-          </div>
-        )}
-
-        {/* main content */}
-        <div className="flex flex-col w-full">
-          <div>
-            <div className="mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg sm:text-base">
-              {post?.metadata?.content}
-            </div>
-            {post?.metadata?.mainContentFocus ===
-              PublicationMainFocus.Image && (
-              <Link href={`/p/${post?.id}`}>
-                {/* eslint-disable-next-line */}
-                <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                  <img
-                    src={`${LensInfuraEndpoint}${
-                      post?.metadata?.media[0]?.original.url.split('//')[1]
-                    }`}
-                    className="image-unselectable object-cover sm:rounded-xl w-full"
-                  />
+                  <Link
+                    href={`/u/${postInfo?.profile?.handle}`}
+                    className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                  >
+                    <p className="pl-1.5 font-normal"> posted by</p>
+                    <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                      u/{postInfo?.profile?.handle}
+                    </div>
+                  </Link>
+                  <div>
+                    {postInfo?.createdAt && (
+                      <div className="text-xs sm:text-sm text-s-text ml-2">
+                        <ReactTimeAgo
+                          date={new Date(postInfo.createdAt)}
+                          locale="en-US"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </Link>
+              </>
             )}
-            {post?.metadata?.mainContentFocus ===
-              PublicationMainFocus.Video && (
-              <div className="rounded-lg sm:pl-5 sm:pr-6 sm:pb-1">
-                <video
-                  src={`${LensInfuraEndpoint}${
-                    post?.metadata?.media[0]?.original.url.split('//')[1]
-                  }`}
-                  className="image-unselectable object-cover sm:rounded-xl  w-full"
-                  autoPlay
-                  muted
-                  loop
-                  controls
-                />
-              </div>
+
+            {isMobile && (
+              <>
+                <div className="flex flex-row w-full items-center">
+                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                    <img
+                      src={
+                        postInfo?.communityInfo?.logoImageUrl
+                          ? postInfo?.communityInfo?.logoImageUrl
+                          : '/gradient.jpg'
+                      }
+                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                    />
+                  </Link>
+                  <div className="flex flex-col justify-center items-start">
+                    <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                      <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
+                        {postInfo?.communityInfo?.name}
+                      </div>
+                    </Link>
+                    <div className="flex flex-row items-center justify-start">
+                      <Link
+                        href={`/u/${postInfo?.profile?.handle}`}
+                        className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                      >
+                        <p className="pl-1.5 font-normal"> posted by</p>
+                        <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                          u/{postInfo?.profile?.handle}
+                        </div>
+                      </Link>
+                      <div>
+                        {postInfo?.createdAt && (
+                          <div className="text-xs sm:text-sm text-s-text ml-2">
+                            <ReactTimeAgo
+                              date={new Date(postInfo.createdAt)}
+                              locale="en-US"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
+            <div className="sm:mr-5">
+              <JoinCommunityButton id={postInfo.communityId} />
+            </div>
           </div>
 
-          {/* bottom row */}
-          <div className="text-s-text sm:text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
-            {isMobile && (
-              <div className="flex flex-row items-center gap-x-2">
+          <div className="flex flex-row w-full">
+            {!isMobile && (
+              <div className="flex flex-col items-center ml-[9px] mt-2">
                 <img
+                  //  onClick={liked ? handleUnLike : handleLike}
                   src={
                     reaction === ReactionTypes.Upvote
                       ? '/UpvoteFilled.svg'
                       : '/Upvote.svg'
                   }
                   onClick={handleUpvote}
-                  className="w-5 h-5 cursor-pointer"
+                  className="w-6 h-6 cursor-pointer"
                 />
                 <div className="font-bold">{voteCount}</div>
                 <img
@@ -341,22 +351,92 @@ const LensPostCard = ({ post }) => {
               </div>
             )}
 
-            <Link href={`/p/${post.id}`} className="flex flex-row items-center">
-              {post?.stats?.totalAmountOfComments === 0 && (
-                <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
-              )}
-              {post?.stats?.totalAmountOfComments > 0 && (
-                <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
-              )}
-              {post?.stats?.totalAmountOfComments}
-            </Link>
-            <div>
-              <FiSend
-                onClick={handleShare}
-                className="hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7"
-              />
-            </div>
-            {/* <div>
+            {/* main content */}
+            <div className="flex flex-col w-full">
+              <div>
+                <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg sm:text-base">
+                  {postInfo?.metadata?.content}
+                </div>
+                {postInfo?.metadata?.mainContentFocus ===
+                  PublicationMainFocus.Image && (
+                  <Link href={`/p/${postInfo?.id}`}>
+                    {/* eslint-disable-next-line */}
+                    <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                      <img
+                        src={`${LensInfuraEndpoint}${
+                          postInfo?.metadata?.media[0]?.original.url.split(
+                            '//'
+                          )[1]
+                        }`}
+                        className="image-unselectable object-cover sm:rounded-xl w-full"
+                      />
+                    </div>
+                  </Link>
+                )}
+                {postInfo?.metadata?.mainContentFocus ===
+                  PublicationMainFocus.Video && (
+                  <div className="sm:pl-5 sm:pr-6 sm:pb-1">
+                    <video
+                      src={`${LensInfuraEndpoint}${
+                        postInfo?.metadata?.media[0]?.original.url.split(
+                          '//'
+                        )[1]
+                      }`}
+                      className="image-unselectable object-cover sm:rounded-xl  w-full"
+                      autoPlay
+                      muted
+                      loop
+                      controls
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* bottom row */}
+              <div className="text-s-text sm:text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
+                {isMobile && (
+                  <div className="flex flex-row items-center gap-x-2">
+                    <img
+                      src={
+                        reaction === ReactionTypes.Upvote
+                          ? '/UpvoteFilled.svg'
+                          : '/Upvote.svg'
+                      }
+                      onClick={handleUpvote}
+                      className="w-5 h-5 cursor-pointer"
+                    />
+                    <div className="font-bold">{voteCount}</div>
+                    <img
+                      src={
+                        reaction === ReactionTypes.Downvote
+                          ? '/DownvoteFilled.svg'
+                          : '/Downvote.svg'
+                      }
+                      className="w-5 h-5 cursor-pointer"
+                      onClick={handleDownvote}
+                    />
+                  </div>
+                )}
+
+                <Link
+                  href={`/p/${postInfo.id}`}
+                  className="flex flex-row items-center"
+                >
+                  {postInfo?.stats?.totalAmountOfComments === 0 && (
+                    <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
+                  )}
+                  {postInfo?.stats?.totalAmountOfComments > 0 && (
+                    <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
+                  )}
+                  {postInfo?.stats?.totalAmountOfComments}
+                </Link>
+                <div>
+                  <FiSend
+                    onClick={handleShare}
+                    className="hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7"
+                  />
+                </div>
+                {/* <div>
                {isAuthor && (
                  <div className="relative">
                    <BsThreeDots
@@ -367,10 +447,12 @@ const LensPostCard = ({ post }) => {
                  </div>
                )}
              </div> */}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 

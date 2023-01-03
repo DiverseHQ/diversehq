@@ -40,7 +40,11 @@ const top = () => {
         next={getTopCommunities}
         hasMore={hasMore}
         loader={<h3> Loading...</h3>}
-        endMessage={<></>}
+        endMessage={
+          <div className="w-full flex flex-row items-center text-center justify-center py-4 text-s-text text-sm">
+            --- You have reached the end ---
+          </div>
+        }
       >
         {communities.map((community) => {
           return <CommunityInfoCard key={community._id} community={community} />

@@ -2,8 +2,14 @@ import apiEndpoint from './ApiEndpoint'
 import { getHeaders } from './apiHelper'
 
 export const getUserInfo = async (walletAddress) => {
-  return await fetch(`${apiEndpoint}/user/${walletAddress}`).then((res) =>
-    res.json()
+  return await fetch(`${apiEndpoint}/user/walletaddress/${walletAddress}`).then(
+    (res) => res.json()
+  )
+}
+
+export const getUserFromAddressOrName = async (addressOrName) => {
+  return await fetch(`${apiEndpoint}/user/nameoraddress/${addressOrName}`).then(
+    (res) => res
   )
 }
 
@@ -41,4 +47,25 @@ export const putUpdateUser = async (profileData) => {
     headers: getHeaders(),
     body: JSON.stringify(profileData)
   }).then((r) => r)
+}
+
+export const getUnReadNotificationsCount = async () => {
+  return await fetch(`${apiEndpoint}/user/unread-notification-count`, {
+    method: 'GET',
+    headers: getHeaders()
+  }).then((res) => res.json())
+}
+
+export const getAllNotifications = async (limit, skips) => {
+  return await fetch(
+    `${apiEndpoint}/user/get-all-notifications?` +
+      new URLSearchParams({
+        limit,
+        skips
+      }),
+    {
+      method: 'GET',
+      headers: getHeaders()
+    }
+  ).then((res) => res.json())
 }

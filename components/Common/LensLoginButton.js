@@ -92,26 +92,33 @@ const LensLoginButton = () => {
       {user && address && (
         <div className="flex flex-col gap-4">
           {isSignedIn && hasProfile && (
-            <div className="flex flex-row items-center">
-              <Link
-                href={`/u/${lensProfile.defaultProfile.handle}`}
-                className="mr-2 hover:cursor-pointer hover:underline"
-              >
-                u/{lensProfile.defaultProfile.handle}
-              </Link>
+            <div className="flex flex-col items-start">
+              {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
+                <Link
+                  href={`/u/${lensProfile.defaultProfile.handle}`}
+                  className="mr-2 hover:cursor-pointer hover:underline"
+                >
+                  u/{lensProfile.defaultProfile.handle}
+                </Link>
+              )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
                 !loading && (
                   <button
                     onClick={handleEnableDispatcher}
-                    className="rounded-lg text-sm bg-[#62F030] px-2"
+                    className="flex flex-col items-center rounded-lg text-sm bg-[#62F030] px-2"
                   >
-                    Enable Dispatcher <br /> Recommended for smoooth experience
+                    <div>
+                      <span>u/{lensProfile?.defaultProfile?.handle}</span>
+                    </div>
+                    <div>
+                      <spa>Go Signless</spa>
+                    </div>
                   </button>
                 )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
                 loading && (
                   <div className="rounded-lg text-sm bg-[#62F030] px-2">
-                    Enabling Dispatcher
+                    Enabling...
                   </div>
                 )}
             </div>

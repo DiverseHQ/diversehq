@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { AiOutlineCamera } from 'react-icons/ai'
 import { putUpdateUser } from '../../api/user'
 import {
+  hasWhiteSpace,
   uploadFileToFirebaseAndGetUrl
   // uploadFileToIpfs
 } from '../../utils/utils'
@@ -31,6 +32,24 @@ const EditProfile = ({ user, showUserInfo }) => {
     if (!name || !bio) {
       setLoading(false)
       notifyError('Please fill all fields')
+      return
+    }
+    if (name.length > 26) {
+      setLoading(false)
+      notifyError('Name must be less than 26 characters')
+      return
+    }
+    if (hasWhiteSpace(name)) {
+      setLoading(false)
+      notifyError('Name cannot contain spaces')
+      return
+    }
+
+    if (name.endsWith('.lens') || name.endsWith('.test')) {
+      setLoading(false)
+      notifyError(
+        'Name cannot end with .lens or .test. It is reserved for Lens'
+      )
       return
     }
     try {

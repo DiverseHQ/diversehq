@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { FaRegCopy } from 'react-icons/fa'
-import { getUserInfo } from '../../api/user'
+import { getUserFromAddressOrName, getUserInfo } from '../../api/user'
 import { useNotify } from '../../components/Common/NotifyContext'
 import PostsColumn from '../../components/Post/PostsColumn'
 import { useProfile } from '../../components/Common/WalletContext'
@@ -35,6 +35,11 @@ const Profile = () => {
 
   const [numberOfPosts, setNumberOfPosts] = useState(0)
 
+  useEffect(() => {
+    if (!id || id === '') return
+    handleIdAndGetProfile()
+  }, [id])
+
   const lensProfileQueryFromAddress = useDefaultProfileQuery(
     {
       request: {
@@ -60,28 +65,23 @@ const Profile = () => {
 
   useEffect(() => {
     if (lensProfile) return
-
     if (lensProfileQueryFromAddress?.data?.defaultProfile) {
       setLensProfile(lensProfileQueryFromAddress.data.defaultProfile)
-    } else if (lensProfileFromHandle?.data?.profile?.ownedBy) {
+    }
+    if (lensProfileFromHandle?.data?.profile?.ownedBy) {
+      console.log('lensProfileFromHandle', lensProfileFromHandle)
       setUserAddress(lensProfileFromHandle.data.profile.ownedBy)
       setLensProfile(lensProfileFromHandle.data.profile)
     }
   }, [lensProfileQueryFromAddress, lensProfileFromHandle])
-
-  useEffect(() => {
-    if (!id || id === '') return
-    handleIdAndGetProfile()
-  }, [id])
 
   const handleIdAndGetProfile = async () => {
     if (id.endsWith('.test')) {
       console.log('handle', id)
       //todo get address from lens handle and lens profile
       setHandle(id)
-    }
-    if (isValidEthereumAddress(id)) {
-      setUserAddress(id)
+    } else {
+      showUserInfoFromAddressOrName(id)
     }
   }
 
@@ -92,13 +92,35 @@ const Profile = () => {
 
   useEffect(() => {
     if (useraddress) {
-      showUserInfo()
+      console.log('useraddress', useraddress)
+      showUserInfoFromAddress()
       getNumberOfPosts(useraddress)
     }
   }, [useraddress])
 
-  const showUserInfo = async () => {
+  const showUserInfoFromAddressOrName = async (id) => {
     try {
+      if (profile) return
+      console.log('showUserINfoFromAddressOrName', id)
+      const res = await getUserFromAddressOrName(id)
+      console.log(res)
+      if (res.status === 200) {
+        const userInfo = await res.json()
+        console.log(userInfo)
+        setProfile(userInfo)
+        setUserAddress(userInfo.walletAddress)
+      } else {
+        console.log('not found')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const showUserInfoFromAddress = async () => {
+    try {
+      if (profile) return
+      if (!isValidEthereumAddress(useraddress)) return
       const userInfo = await getUserInfo(useraddress)
       console.log(userInfo)
       setProfile(userInfo)
@@ -112,7 +134,9 @@ const Profile = () => {
   }
   const handleEditProfile = () => {
     showModal({
-      component: <EditProfile user={user} showUserInfo={showUserInfo} />,
+      component: (
+        <EditProfile user={user} showUserInfo={showUserInfoFromAddress} />
+      ),
       type: modalType.normal,
       onAction: () => {},
       extraaInfo: {}
@@ -161,14 +185,21 @@ const Profile = () => {
                 <FaRegCopy className="w-8 h-8 px-2" />
               </div>
             </div>
-            <div className="flex flex-row items-center space-x-10">
-              <Link href={`/u/${handle}`} className="hover:underline">
-                <div className="font-bold text-base sm:text-base tracking-wider">
-                  {`${profile.name ? profile.name : ''} ${
-                    lensProfile?.handle ? 'u/' + lensProfile?.handle : ''
-                  }`}
-                </div>
-              </Link>
+            <div className="flex flex-row items-center justify-between sm:justify-start sm:space-x-10">
+              <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
+                {profile.name && <div>{profile.name}</div>}
+                {!profile.name && profile.walletAddress && (
+                  <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
+                )}
+                {lensProfile?.handle && (
+                  <Link
+                    href={`/u/${lensProfile?.handle}`}
+                    className="hover:underline cursor-pointer"
+                  >
+                    u/{lensProfile?.handle}
+                  </Link>
+                )}
+              </div>
               {hasProfile && isSignedIn && myLensProfile && (
                 <>
                   <LensFollowButton lensProfile={lensProfile} />
@@ -219,7 +250,7 @@ const Profile = () => {
                     }  hover:bg-p-btn-hover`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
-                      setShowLensPosts(true)
+                      setShowLensPosts(!showLensPosts)
                     }}
                   >
                     <img
@@ -241,6 +272,14 @@ const Profile = () => {
                 />
               )}
             </div>
+          </div>
+        </div>
+      )}
+      {!profile && (
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="text-2xl font-bold">No Profile Found</div>
+          <div className="text-sm text-gray-500">
+            This user has not created a profile yet.
           </div>
         </div>
       )}

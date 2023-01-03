@@ -13,13 +13,13 @@ TimeAgo.addDefaultLocale(en)
 const LensCommentCard = ({ comment }) => {
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
-  const [upvoteCount, setUpvoteCount] = useState(comment?.stats?.totalUpvotes)
+  const [upvoteCount, setUpvoteCount] = useState(
+    comment?.stats?.totalUpvotes ? comment?.stats?.totalUpvotes : 0
+  )
   const [downvoteCount, setDownvoteCount] = useState(
-    comment?.stats.totalDownvotes
+    comment?.stats?.totalDownvotes ? comment?.stats?.totalDownvotes : 0
   )
-  const [voteCount, setVoteCount] = useState(
-    comment?.stats?.totalUpvotes - comment?.stats?.totalDownvotes
-  )
+  const [voteCount, setVoteCount] = useState(upvoteCount - downvoteCount)
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 
@@ -82,7 +82,7 @@ const LensCommentCard = ({ comment }) => {
   return (
     <>
       {comment && (
-        <div className="px-3 sm:px-5 w-full bg-s-bg my-6 sm:rounded-3xl py-3">
+        <div className="px-3 sm:px-5 w-full bg-s-bg my-3 sm:rounded-2xl py-2">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center">
               <img
@@ -101,7 +101,7 @@ const LensCommentCard = ({ comment }) => {
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full mr-2"
               />
               <Link href={`/u/${comment?.profile?.handle}`}>
-                <div className="hover:underline ml-2 font-bold text-xs sm:text-xl">
+                <div className="hover:underline font-bold text-base">
                   u/{comment?.profile?.handle}
                 </div>
               </Link>
@@ -116,8 +116,8 @@ const LensCommentCard = ({ comment }) => {
             </div>
           </div>
 
-          <div className="pl-12">
-            <div className="mt-3">{comment?.metadata?.content}</div>
+          <div className="pl-8 sm:pl-10">
+            <div className="mt-1">{comment?.metadata?.content}</div>
 
             {/* upvote and downvote */}
             <div className="flex flex-row items-center gap-x-2 pt-2">

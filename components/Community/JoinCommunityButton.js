@@ -28,7 +28,7 @@ const JoinCommunityButton = ({ id }) => {
     <>
       {!joined && (
         <button
-          className="text-xs sm:text-base text-p-btn-text bg-p-btn px-3 py-1 h-fit w-fit rounded-full"
+          className="text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-1 h-fit w-fit rounded-full"
           onClick={handleJoin}
           disabled={joined}
         >

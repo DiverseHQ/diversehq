@@ -83,7 +83,7 @@ const NavFilterAllPosts = () => {
           <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
         </button>
         <div
-          className="bg-s-bg rounded-md sm:rounded-xl absolute mt-7 z-50"
+          className="bg-s-bg rounded-md sm:rounded-xl absolute mt-7 z-50 max-h-[500px] overflow-y-auto overflow-x-hidden"
           ref={dropdownRef}
         >
           {showJoinedCommunities &&
@@ -94,7 +94,6 @@ const NavFilterAllPosts = () => {
                   key={community._id}
                   className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
                   id={community._id}
-                  logoImageUrl={community.logoImageUrl}
                   onClick={() => {
                     router.push(`/c/${community.name}`)
                   }}
@@ -109,11 +108,7 @@ const NavFilterAllPosts = () => {
                     className="rounded-md sm:rounded-xl w-9 h-9"
                   />
 
-                  <div
-                    className="text-p-text ml-4"
-                    id={community._id}
-                    logoImageUrl={community.logoImageUrl}
-                  >
+                  <div className="text-p-text ml-4" id={community._id}>
                     {community.name}
                   </div>
                 </div>

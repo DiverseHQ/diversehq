@@ -16,7 +16,7 @@ const top = () => {
             <div className="w-full flex justify-center">
               <div className="w-full md:w-[650px]">
                 <NavFilterCommunity name={name} />
-                <PostsColumn source="community" sortBy="new" data={name} />
+                <PostsColumn source="community" sortBy="top" data={name} />
               </div>
             </div>
           </>
