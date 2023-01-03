@@ -14,7 +14,7 @@ class MyDocument extends Document {
           <meta name="apple-mobile-web-app-title" content="DiverseHQ" />
           <meta
             name="description"
-            content="Join Communities, Share your Creativity and get Rewarded for your work."
+            content="Join Communities, Share your Creativity and get Rewarded."
           />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
@@ -26,13 +26,13 @@ class MyDocument extends Document {
 
           <meta
             name="twitter:card"
-            content="Join Communities, Share your Creativity and get Rewarded for your work."
+            content="Join Communities, Share your Creativity and get Rewarded."
           />
           <meta name="twitter:url" content="https://app.diversehq.xyz" />
           <meta name="twitter:title" content="DiverseHQ" />
           <meta
             name="twitter:description"
-            content="Join Communities, Share your Creativity and get Rewarded for your work."
+            content="Join Communities, Share your Creativity and get Rewarded."
           />
           <meta
             name="twitter:image"
@@ -43,7 +43,7 @@ class MyDocument extends Document {
           <meta property="og:title" content="DiverseHQ" />
           <meta
             property="og:description"
-            content="Join Communities, Share your Creativity and get Rewarded for your work."
+            content="Join Communities, Share your Creativity and get Rewarded."
           />
           <meta property="og:site_name" content="DiverseHQ" />
           <meta property="og:url" content="https://app.diversehq.xyz" />
@@ -67,7 +67,7 @@ class MyDocument extends Document {
           <meta name="apple-mobile-web-app-title" content="DiverseHQ" />
           <meta
             name="description"
-            content="Join Communities, Share your Creativity and get Rewarded for your work."
+            content="Join Communities, Share your Creativity and get Rewarded."
           />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
@@ -96,13 +96,13 @@ class MyDocument extends Document {
 
           <meta
             name="twitter:card"
-            content="Join Communities, Share your Creativity and get Rewarded for your work."
+            content="Join Communities, Share your Creativity and get Rewarded."
           />
           <meta name="twitter:url" content="https://app.diversehq.xyz" />
           <meta name="twitter:title" content="DiverseHQ" />
           <meta
             name="twitter:description"
-            content="Join Communities, Share your Creativity and get Rewarded for your work."
+            content="Join Communities, Share your Creativity and get Rewarded."
           />
           <meta
             name="twitter:image"
@@ -113,7 +113,7 @@ class MyDocument extends Document {
           <meta property="og:title" content="DiverseHQ" />
           <meta
             property="og:description"
-            content="Join Communities, Share your Creativity and get Rewarded for your work."
+            content="Join Communities, Share your Creativity and get Rewarded."
           />
           <meta property="og:site_name" content="DiverseHQ" />
           <meta property="og:url" content="https://app.diversehq.xyz" />
