@@ -98,10 +98,20 @@ export const WalletProvider = ({ children }) => {
         alert('No Signer but trying to sign in')
       }
       console.log('requesting signature from metamask')
-      const signedToken = await Web3Token.sign(
-        async (msg) => await signer.signMessage(msg),
-        '7d'
-      )
+      const signedToken = await Web3Token.sign(async (msg) => {
+        try {
+          return await signer.signMessage(msg)
+        } catch (err) {
+          const { reason } = err
+          if (reason === 'unknown account #0') {
+            return console.log(
+              'Have you unlocked metamask and are connected to this page?'
+            )
+          }
+
+          console.log(err.toString())
+        }
+      }, '7d')
       console.log('signedToken', signedToken)
 
       setLocalToken(signedToken)
