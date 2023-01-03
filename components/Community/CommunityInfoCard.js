@@ -141,25 +141,24 @@ const CommunityInfoCard = ({
   const [levelThreshold, setLevelThreshold] = useState(250)
   const [currentLevel, setCurrentLevel] = useState(0)
 
+  // 1lvl = 250xp
+  // 1post = 10xp
+  // 1member = 25xp
   const calculateLevelAndThreshold = () => {
-    let tempLevel = currentLevel
-    let tempXP = currentXP
-    let tempThreshold = levelThreshold
-    while (tempXP >= tempThreshold) {
-      tempXP -= tempThreshold
-      tempLevel++
-      tempThreshold *= 1.5
-    }
-    setCurrentLevel(tempLevel)
-    setLevelThreshold(tempThreshold) // Increase the threshold for each subsequent level
-    console.log('Templevel', tempLevel, 'TempThreshold', tempThreshold)
+    const lvl = Math.floor(currentXP / 250)
+    setCurrentLevel(lvl)
+    const threshold = 250 * (lvl + 1)
+    setLevelThreshold(threshold)
   }
 
   useEffect(() => {
-    calculateLevelAndThreshold()
+    console.log('currentXP', currentXP)
+    calculateLevelAndThreshold(currentXP)
   }, [currentXP])
 
   useEffect(() => {
+    console.log('numberOfPosts', numberOfPosts)
+    console.log('community.members?.length', community.members?.length)
     setCurrentXP(numberOfPosts * 10 + community.members?.length * 25)
   }, [numberOfPosts, community])
 
