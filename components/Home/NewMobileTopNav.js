@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import MobileNavSidebar from './MobileNavSidebar'
-import { useAccount } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 
 const NewMobileTopNav = () => {
   const { user, fetchWeb3Token } = useProfile()
@@ -10,6 +10,7 @@ const NewMobileTopNav = () => {
   // const { data: signer } = useSigner()
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
   const { openConnectModal } = useConnectModal()
+  const { data: signer } = useSigner()
 
   let prevScrollpos = window.pageYOffset
 
@@ -29,17 +30,18 @@ const NewMobileTopNav = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-between px-2 py-1 items-center shadow-sm">
+      <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm">
         <div>
-          {!address && (
-            <button
-              className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn px-4 py-1"
-              onClick={openConnectModal}
-            >
-              Connect Wallet
-            </button>
-          )}
-          {!user && address && (
+          {!address ||
+            (!signer && (
+              <button
+                className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn px-4 py-1"
+                onClick={openConnectModal}
+              >
+                Connect Wallet
+              </button>
+            ))}
+          {!user && address && signer && (
             <button
               className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn px-4 py-1"
               onClick={() => {
