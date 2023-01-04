@@ -80,9 +80,9 @@ const CreatePostPopup = () => {
         setLoading(false)
         return
       }
-      // file size should be less than 10mb
-      if (file.size > 10000000) {
-        notifyError('File size should be less than 10mb')
+      // file size should be less than 8mb
+      if (file.size > 8000000) {
+        notifyError('File size should be less than 8mb')
         setLoading(false)
         return
       }
