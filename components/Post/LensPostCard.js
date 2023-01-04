@@ -423,17 +423,17 @@ const LensPostCard = ({ post }) => {
                   className="flex flex-row items-center"
                 >
                   {postInfo?.stats?.totalAmountOfComments === 0 && (
-                    <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
+                    <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                   )}
                   {postInfo?.stats?.totalAmountOfComments > 0 && (
-                    <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-6 sm:h-6" />
+                    <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                   )}
                   {postInfo?.stats?.totalAmountOfComments}
                 </Link>
                 <div>
                   <FiSend
                     onClick={handleShare}
-                    className="hover:cursor-pointer mr-3 w-5 h-5 sm:w-7 sm:h-7"
+                    className="hover:cursor-pointer mr-3 w-5 h-5"
                   />
                 </div>
                 {/* <div>
