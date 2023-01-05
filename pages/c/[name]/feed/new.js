@@ -8,7 +8,7 @@ const newPage = () => {
   const { name } = useRouter().query
   const [notFound, setNotFound] = useState(false)
   return (
-    <div className="pt-6 relative">
+    <div className="relative">
       {name && !notFound && (
         <>
           <CommunityInfoCardFromName name={name} setNotFound={setNotFound} />

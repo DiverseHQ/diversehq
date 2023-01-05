@@ -18,6 +18,7 @@ import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CommentDropdown from './CommentDropdown'
 import { ReactionTypes } from '../../graphql/generated'
 import Link from 'next/link'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
@@ -181,7 +182,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
         <div className="px-3 sm:px-5 w-full bg-s-bg my-3 sm:rounded-2xl py-2">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center">
-              <img
+              <ImageWithPulsingLoader
                 src={
                   comment.authorAvatar ? comment.authorAvatar : '/gradient.jpg'
                 }

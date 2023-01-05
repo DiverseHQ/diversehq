@@ -19,7 +19,7 @@ const useNotificationsCount = () => {
       setNotificationsCount(0)
     }
   }, [user])
-  return { notificationsCount, fetchAndSetNotificationCount }
+  return { notificationsCount, setNotificationsCount }
 }
 
 export default useNotificationsCount

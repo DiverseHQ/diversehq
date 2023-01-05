@@ -9,6 +9,7 @@ import {
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../../Common/NotifyContext'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 TimeAgo.addDefaultLocale(en)
 const LensCommentCard = ({ comment }) => {
   const { notifyInfo } = useNotify()
@@ -85,21 +86,18 @@ const LensCommentCard = ({ comment }) => {
         <div className="px-3 sm:px-5 w-full bg-s-bg my-3 sm:rounded-2xl py-2">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center">
-              <img
+              {/* commenting for now */}
+              {/* todo : ability to set lens profile image and fetch here */}
+
+              <ImageWithPulsingLoader
                 src={
-                  //   !comment?.profile?.original?.url.startsWith(
-                  //     'https://pbs.twimg.com'
-                  //   )
-                  //     ? comment?.profile?.original?.url
-                  //     : '/gradient.jpg'
-                  !comment?.profile?.picture?.original?.url.startsWith(
-                    'https://pbs.twimg.com'
-                  )
+                  comment?.profile?.picture
                     ? comment?.profile?.picture?.original?.url
                     : '/gradient.jpg'
                 }
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full mr-2"
               />
+
               <Link href={`/u/${comment?.profile?.handle}`}>
                 <div className="hover:underline font-bold text-base">
                   u/{comment?.profile?.handle}

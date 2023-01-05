@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import {
   getAllCommunities,
-  getCreatedCommunitiesApi,
-  postGetCommunityInfoUsingListOfIds
+  getCreatedCommunitiesApi
+  // postGetCommunityInfoUsingListOfIds
 } from '../../api/community'
-import { recommendedCommunitiesIds } from '../../utils/config'
+// import { recommendedCommunitiesIds } from '../../utils/config'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import RightSideCommunityComponent from './RightSideCommunityComponent'

@@ -10,7 +10,7 @@ const lens = () => {
   const [communityInfo, setCommunityInfo] = useState(null)
   const [notFound, setNotFound] = useState(false)
   return (
-    <div className="relative pt-6">
+    <div className="relative">
       {name && !notFound && (
         <>
           <CommunityInfoCardFromName

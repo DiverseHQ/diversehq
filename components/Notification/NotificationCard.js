@@ -14,7 +14,7 @@ const NotificationCard = ({ notification }) => {
   return (
     <div
       className={`justify-between my-4 px-3 py-2 sm:p-3 ${
-        notification.isRead ? 'sm:bg-s-bg' : 'bg-s-h-bg'
+        notification.isRead ? 'bg-s-h-bg' : 'bg-s-bg'
       } sm:rounded-xl border-b sm:border-none shadow-sm flex flex-row w-full `}
     >
       {notification.type === notificationTypes.COMMENT && (

@@ -13,7 +13,7 @@ const NavFilterAllPosts = () => {
   const dropdownRef = useRef(null)
   const router = useRouter()
   const { pathname } = router
-  const [active, setActive] = useState('new')
+  const [active, setActive] = useState('lens')
   const { user } = useProfile()
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
@@ -63,6 +63,21 @@ const NavFilterAllPosts = () => {
 
   return (
     <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mt-4 sm:mt-10 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
+      <button
+        className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
+          active === 'lens' && 'bg-p-bg'
+        }  hover:bg-p-btn-hover`}
+        onClick={() => {
+          router.push('/feed/lens')
+        }}
+      >
+        <img
+          src="/lensLogoWithoutText.svg"
+          className="h-5 w-5 "
+          alt="lens logo icon"
+        />
+        <div>Lens</div>
+      </button>
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'new' && 'bg-p-bg'
@@ -126,21 +141,6 @@ const NavFilterAllPosts = () => {
       >
         <MdLeaderboard />
         <div>Top</div>
-      </button>
-      <button
-        className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
-          active === 'lens' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover`}
-        onClick={() => {
-          router.push('/feed/lens')
-        }}
-      >
-        <img
-          src="/lensLogoWithoutText.svg"
-          className="h-5 w-5 "
-          alt="lens logo icon"
-        />
-        <div>Lens</div>
       </button>
     </div>
   )

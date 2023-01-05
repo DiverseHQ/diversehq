@@ -1,7 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { postComment } from '../../api/comment'
 import { FiSend } from 'react-icons/fi'
+import Image from 'next/image'
 // import { FaHandSparkles } from 'react-icons/fa'
 // import { useSigner } from 'wagmi'
 // import ABI from '../../utils/DiveToken.json'
@@ -12,6 +13,7 @@ import { FiSend } from 'react-icons/fi'
 const CreateComment = ({ postId, setComments, authorAddress }) => {
   const { user } = useProfile()
   const commentRef = useRef()
+  const [loading, setLoading] = useState(false)
   console.log('authorAddress', authorAddress)
   // const appreciateAmountRef = useRef()
   // const { data: signer } = useSigner()
@@ -84,6 +86,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
     console.log('postId', postId)
     console.log('comment', comment)
     try {
+      setLoading(true)
       const comment = await postComment(content, postId, 0)
       setComments((comments) => [comment, ...comments])
 
@@ -91,6 +94,8 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
       commentRef.current.value = ''
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
   return (
@@ -112,10 +117,20 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
               </div>
             </div>
             <div className="flex flex-row items-center justify-center">
-              <FiSend
-                onClick={createComment}
-                className="w-4 h-4 sm:w-6 sm:h-6 text-p-text"
-              />
+              {!loading && (
+                <FiSend
+                  onClick={createComment}
+                  className="w-4 h-4 sm:w-7 sm:h-7 text-p-text"
+                />
+              )}
+              {loading && (
+                <Image
+                  src="/loading.svg"
+                  alt="loading"
+                  width={30}
+                  height={30}
+                />
+              )}
             </div>
           </div>
           <div className="pl-8 sm:pl-10">
@@ -127,6 +142,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
               onKeyUp={(e) => {
                 if (e.key === 'Enter') createComment()
               }}
+              disabled={loading}
             />
           </div>
         </div>
