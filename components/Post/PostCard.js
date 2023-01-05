@@ -6,7 +6,6 @@ import { deletePost, putUpvoteOnPost, putDownvoteOnPost } from '../../api/post'
 import { BsThreeDots } from 'react-icons/bs'
 // import { HiOutlineTrash } from 'react-icons/hi'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import PostDeleteDropdown from './PostDeleteDropdown'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
@@ -18,13 +17,17 @@ import useDevice from '../Common/useDevice'
 import { ReactionTypes } from '../../graphql/generated'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
+import { BiEdit } from 'react-icons/bi'
+import { HiOutlineTrash } from 'react-icons/hi'
+import EditPostPopup from './EditPostPopup'
 TimeAgo.addDefaultLocale(en)
 
 // import useDevice from '../Common/useDevice'
 
-const PostCard = ({ post, setPosts, setNotFound }) => {
+const PostCard = ({ _post, setPosts, setNotFound }) => {
   // const createdAt = new Date(post.createdAt)
   // eslint-disable-next-line
+  const [post, setPost] = useState(_post)
   const { user } = useProfile()
   const [reaction, setReaction] = useState(null) // upvote, downvote, none
   const [upvoteCount, setUpvoteCount] = useState(
@@ -143,6 +146,12 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
     }
   }
 
+  const showEditModal = () => {
+    showModal({
+      component: <EditPostPopup post={post} setPost={setPost} />
+    })
+  }
+
   const showMoreOptions = (e) => {
     if (!isAuthor) {
       notifyInfo('It may happen that some buttons are under construction.')
@@ -150,15 +159,33 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
     }
     // setShowOptions(!showOptions)
     showModal({
-      component: <PostDeleteDropdown handleDeletePost={handleDeletePost} />,
+      component: (
+        <>
+          <div className="cursor-pointer">
+            <div
+              className="flex items-center px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow hover:bg-[#eee] hover:cursor-pointer "
+              onClick={showEditModal}
+            >
+              <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" title="Edit" />
+              <span>Edit</span>
+            </div>
+            <div
+              className="flex items-center px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow hover:bg-[#eee] hover:cursor-pointer hover:text-red-600"
+              onClick={handleDeletePost}
+            >
+              <HiOutlineTrash
+                className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                title="Delete"
+              />
+              <span>Delete</span>
+            </div>
+          </div>
+        </>
+      ),
       type: modalType.customposition,
       onAction: () => {},
       extraaInfo: {
-        bottom:
-          window.innerHeight -
-          e.currentTarget.getBoundingClientRect().bottom -
-          50 +
-          'px',
+        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
         left: e.currentTarget.getBoundingClientRect().left + 'px'
       }
     })
@@ -369,13 +396,15 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
                 className="hover:cursor-pointer mr-3 w-5 h-5"
               />
             </div>
-            <div className="relative">
-              <BsThreeDots
-                className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
-                onClick={showMoreOptions}
-                title="More"
-              />
-            </div>
+            {isAuthor && (
+              <div className="relative">
+                <BsThreeDots
+                  className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
+                  onClick={showMoreOptions}
+                  title="More"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

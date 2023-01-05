@@ -31,6 +31,14 @@ export const postCreatePost = async (postData) => {
   }).then((r) => r)
 }
 
+export const putEditPost = async (id, postData) => {
+  return await fetch(`${apiEndpoint}/post/edit/${id}`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(postData)
+  }).then((r) => r)
+}
+
 export const deletePost = async (id) => {
   return await fetch(`${apiEndpoint}/post/${id}`, {
     method: 'DELETE',

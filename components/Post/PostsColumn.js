@@ -102,14 +102,6 @@ const PostsColumn = ({ source, sortBy, data }) => {
         next={getMorePosts}
         hasMore={hasMore}
         loader={
-          // animate-pulse posts card skeleton
-          // <div className="w-full flex flex-row items-center text-center justify-center py-4 text-s-text text-sm">
-          //   <div className="animate-pulse flex flex-row items-center justify-center">
-          //     <div className="w-4 h-4 bg-gray-500 rounded-full mr-2"></div>
-          //     <div className="w-4 h-4 bg-gray-500 rounded-full mr-2"></div>
-          //     <div className="w-4 h-4 bg-gray-500 rounded-full mr-2"></div>
-          //   </div>
-          // </div>
           <>
             <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 animate-pulse my-3 sm:my-6">
               <div className="w-full flex flex-row items-center space-x-4 p-4">
@@ -144,7 +136,7 @@ const PostsColumn = ({ source, sortBy, data }) => {
         {posts.map((post) => {
           return (
             <div key={post._id}>
-              <PostCard key={post._id} post={post} setPosts={setPosts} />
+              <PostCard key={post._id} _post={post} setPosts={setPosts} />
             </div>
           )
         })}

@@ -48,7 +48,7 @@ export const uploadFileToFirebaseAndGetUrl = async (
   if (!type) {
     type = 'other'
   }
-  const path = `${type}/${address}/${newFile.name}`
+  const path = `${type}/${address.toLowerCase()}/${newFile.name}`
   const storageRef = ref(storage, path)
 
   const uploadedToUrl = await uploadBytes(storageRef, newFile).then(

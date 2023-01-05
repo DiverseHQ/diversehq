@@ -51,7 +51,7 @@ const PostPage = ({ id }) => {
         ) : (
           postInfo && (
             <div>
-              <PostCard post={postInfo} setNotFound={setNotFound} />
+              <PostCard _post={postInfo} setNotFound={setNotFound} />
               <CommentFilterNav active={active} setActive={setActive} />
               {active === 'top' && (
                 <CombinedCommentSectionApiTop

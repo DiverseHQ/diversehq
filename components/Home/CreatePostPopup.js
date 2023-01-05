@@ -327,7 +327,7 @@ const CreatePostPopup = () => {
     const filePicked = event.target.files[0]
     if (!filePicked) return
     setFile(filePicked)
-    setImageValue(URL.createObjectURL(filePicked))
+    setImageValue(new URL.createObjectURL(filePicked))
   }
   const removeImage = () => {
     setFile(null)
