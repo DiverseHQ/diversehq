@@ -4,7 +4,8 @@ import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 
 const JoinCommunityButton = ({ id }) => {
-  const [joined, setJoined] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [joined, setJoined] = useState(true)
   const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   useEffect(() => {
@@ -18,15 +19,18 @@ const JoinCommunityButton = ({ id }) => {
       return
     }
     try {
+      setLoading(true)
       await putJoinCommunity(id)
       await refreshUserInfo()
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
   return (
     <>
-      {!joined && (
+      {!joined && !loading && (
         <button
           className="text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-1 h-fit w-fit rounded-full"
           onClick={handleJoin}
@@ -35,7 +39,15 @@ const JoinCommunityButton = ({ id }) => {
           Join
         </button>
       )}
-      {joined && <></>}
+      {loading && (
+        <button
+          className="text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-1 h-fit w-fit rounded-full"
+          disabled={loading}
+        >
+          Joining...
+        </button>
+      )}
+      {joined && !loading && <></>}
     </>
   )
 }

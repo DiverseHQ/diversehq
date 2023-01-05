@@ -324,7 +324,7 @@ const LensPostCard = ({ post }) => {
               </>
             )}
             <div className="sm:mr-5">
-              <JoinCommunityButton id={postInfo.communityId} />
+              <JoinCommunityButton id={postInfo.communityInfo._id} />
             </div>
           </div>
 
