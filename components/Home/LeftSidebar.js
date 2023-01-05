@@ -35,9 +35,11 @@ const LeftSidebar = () => {
   const router = useRouter()
   const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
-  const { notificationsCount } = useNotificationsCount()
-  const routeToExplore = () => {
-    router.push('/explore')
+  const { notificationsCount, setNotificationsCount } = useNotificationsCount()
+
+  const routeToNotifications = () => {
+    setNotificationsCount(0)
+    router.push('/notification')
   }
 
   const { notifyInfo } = useNotify()
@@ -117,9 +119,9 @@ const LeftSidebar = () => {
             Create Community
           </span>
         </button>
-        <Link
-          href={`/notification`}
+        <button
           className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"
+          onClick={routeToNotifications}
         >
           <IoMdNotificationsOutline className="w-[24px] h-[24px] object-contain" />
           <span className="text-[18px] font-semibold text-p-text ">
@@ -131,16 +133,16 @@ const LeftSidebar = () => {
               <span>{notificationsCount}</span>
             </div>
           )}
-        </Link>
-        <button
+        </button>
+        <Link
           className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"
-          onClick={routeToExplore}
+          href={'/explore'}
         >
           <AiOutlineCompass className="w-[24px] h-[24px] object-contain" />
           <span className="text-[18px] font-semibold text-p-text ">
             Explorer
           </span>
-        </button>
+        </Link>
         <a
           href={DISCORD_INVITE_LINK}
           target="_blank"
