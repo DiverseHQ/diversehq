@@ -17,6 +17,7 @@ import EditCommunity from './EditCommunity'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const CommunityInfoCard = ({
   community,
@@ -170,15 +171,15 @@ const CommunityInfoCard = ({
     <>
       {community && (
         <div className="relative shadow-lg z-0 bg-s-bg mb-6">
-          <img
+          <ImageWithPulsingLoader
             className="h-20 sm:h-28 w-full object-cover"
             src={community.bannerImageUrl}
           />
           <div className="relative flex flex-row items-start justify-between px-2 mb-[-10px] md:px-8">
             <div className="flex flex-row gap-2">
               <div className="shrink-0 border-s-bg border-4 rounded-full sm:-translate-y-8 -translate-y-6">
-                <img
-                  className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px]"
+                <ImageWithPulsingLoader
+                  className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                   src={community.logoImageUrl}
                 />
               </div>

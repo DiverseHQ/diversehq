@@ -75,6 +75,38 @@
     -webkit-user-select: none;
     -ms-user-select: none;
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 9px;
+    border-radius: 20px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #eef1ff;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #9378d8;
+    border-radius: 30px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9378d8;
+  }
 }
 
 :root {

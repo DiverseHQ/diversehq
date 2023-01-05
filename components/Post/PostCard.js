@@ -16,6 +16,8 @@ import { FiSend } from 'react-icons/fi'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
 import { ReactionTypes } from '../../graphql/generated'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import { useRouter } from 'next/router'
 TimeAgo.addDefaultLocale(en)
 
 // import useDevice from '../Common/useDevice'
@@ -39,6 +41,8 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
   const [isAuthor, setIsAuthor] = useState(false)
 
   const { showModal } = usePopUpModal()
+
+  const router = useRouter()
 
   useEffect(() => {
     setTotalCount(upvoteCount - downvoteCount)
@@ -163,18 +167,18 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
   const { isMobile } = useDevice()
 
   return (
-    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-2 sm:my-6 sm:rounded-2xl shadow-sm">
+    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-1 my-2 sm:my-4 sm:rounded-2xl shadow-sm">
       {/* top row */}
       <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
         {!isMobile && (
           <>
             <div className="flex flex-row w-full items-center">
               <Link href={`/c/${post.communityName}`}>
-                <img
+                <ImageWithPulsingLoader
                   src={
                     post.communityLogo ? post.communityLogo : '/gradient.jpg'
                   }
-                  className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                  className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                 />
               </Link>
               <Link href={`/c/${post.communityName}`}>
@@ -213,7 +217,7 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
           <>
             <div className="flex flex-row w-full items-center">
               <Link href={`/c/${post.communityName}`}>
-                <img
+                <ImageWithPulsingLoader
                   src={
                     post.communityLogo ? post.communityLogo : '/gradient.jpg'
                   }
@@ -283,16 +287,23 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
         {/* main content */}
         <div className="flex flex-col w-full">
           <div>
-            <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg sm:text-base">
+            <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg ">
               {post.title}
             </div>
             {post?.postImageUrl && (
               <Link href={`/p/${post?._id}`}>
                 {/* eslint-disable-next-line */}
                 <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                  <img
+                  {/* <img
                     src={post.postImageUrl}
                     className="image-unselectable object-cover sm:rounded-xl w-full"
+                  /> */}
+                  <ImageWithPulsingLoader
+                    src={post.postImageUrl}
+                    className={`image-unselectable sm:rounded-xl object-contain w-full ${
+                      router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
+                    }`}
+                    loaderClassName="sm:rounded-xl w-full h-[300px]"
                   />
                 </div>
               </Link>
@@ -301,7 +312,9 @@ const PostCard = ({ post, setPosts, setNotFound }) => {
               <div className="sm:pl-5 sm:pr-6 sm:pb-1">
                 <video
                   src={post.postVideoUrl}
-                  className="image-unselectable object-cover sm:rounded-xl  w-full"
+                  className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                    router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
+                  }`}
                   autoPlay
                   muted
                   loop

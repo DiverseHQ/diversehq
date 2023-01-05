@@ -1,4 +1,3 @@
-import { useConnectModal } from '@rainbow-me/rainbowkit'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { useQueryClient } from 'wagmi'
@@ -10,6 +9,7 @@ import CreateTestLensHandle from '../User/CreateTestLensHandle'
 import { modalType, usePopUpModal } from './CustomPopUpProvider'
 import { useNotify } from './NotifyContext'
 import { useProfile } from './WalletContext'
+import ConnectWalletAndSignInButton from './ConnectWalletAndSignInButton'
 
 const LensLoginButton = () => {
   const {
@@ -23,7 +23,6 @@ const LensLoginButton = () => {
   const { showModal } = usePopUpModal()
 
   const queryClient = useQueryClient()
-  const { openConnectModal } = useConnectModal()
 
   const { mutateAsync: login } = useLogin()
   const { mutateAsync: createSetDispatcher } =
@@ -141,13 +140,12 @@ const LensLoginButton = () => {
           )}
         </div>
       )}
-      {!user && !address && (
-        <button
-          className="justify-end bg-p-btn text-p-btn-text px-4 py-2 rounded-[50px] text-[14px] font-bold"
-          onClick={openConnectModal}
-        >
-          Connect Wallet
-        </button>
+      {!user && (
+        <ConnectWalletAndSignInButton
+          connectWalletLabel={'Connect'}
+          SignInLabel={'Sign In'}
+          DisconnectLabel={'Disconnect'}
+        />
       )}
     </div>
   )

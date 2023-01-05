@@ -5,8 +5,6 @@ import { useProfile } from '../Common/WalletContext'
 import { usePopUpModal, modalType } from '../Common/CustomPopUpProvider'
 import CreateCommunity from './CreateCommunity'
 import CreatePostPopup from './CreatePostPopup'
-import { useDisconnect } from 'wagmi'
-import { useConnectModal } from '@rainbow-me/rainbowkit'
 import Image from 'next/image'
 import ClickOption from './ClickOption'
 // import LoginButton from '../Common/UI/LoginButton'
@@ -29,6 +27,7 @@ import {
 import Link from 'next/link'
 import { DISCORD_INVITE_LINK } from '../../utils/config'
 import useNotificationsCount from '../Notification/useNotificationsCount'
+import ConnectWalletAndSignInButton from '../Common/ConnectWalletAndSignInButton'
 
 const LeftSidebar = () => {
   // const [showMore, setShowMore] = useState(false)
@@ -36,8 +35,6 @@ const LeftSidebar = () => {
   const router = useRouter()
   const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
-  const { openConnectModal } = useConnectModal()
-  const { disconnect } = useDisconnect()
   const { notificationsCount } = useNotificationsCount()
   const routeToExplore = () => {
     router.push('/explore')
@@ -245,24 +242,12 @@ const LeftSidebar = () => {
           </div>
         )}
         {/* {!user && !address && <LoginButton />} */}
-        {!user && !address && (
-          <button
-            className="flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn py-2 px-2 md:px-6 lg:px-12"
-            onClick={openConnectModal}
-          >
-            Start Creating
-          </button>
-        )}
-        {!user && address && (
-          <div className="flex flex-col w-full">
-            <div className="text-sm text-red-600">Not whitelisted</div>
-            <button
-              className="font-bold flex flex-row items-center justify-center w-full rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-p-btn py-2 px-2 md:px-6 lg:px-12 hover:cursor-pointer"
-              onClick={disconnect}
-            >
-              Disconnect
-            </button>
-          </div>
+        {!user && (
+          <ConnectWalletAndSignInButton
+            connectWalletLabel={'Start Creating'}
+            SignInLabel={'Sign In'}
+            DisconnectLabel={'Disconnect'}
+          />
         )}
       </div>
     </div>

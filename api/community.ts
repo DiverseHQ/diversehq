@@ -22,7 +22,7 @@ export const getCommunityInfo = async (name: string) => {
   try {
     return await fetch(
       `${apiEndpoint}/community/communityInfoUsingName/${name}`
-    ).then((res) => res.json())
+    ).then((res) => res)
   } catch (error) {
     console.log(error)
   }

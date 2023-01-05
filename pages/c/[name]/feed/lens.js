@@ -8,28 +8,36 @@ import NavFilterCommunity from '../../../../components/Post/NavFilterCommunity'
 const lens = () => {
   const { name } = useRouter().query
   const [communityInfo, setCommunityInfo] = useState(null)
+  const [notFound, setNotFound] = useState(false)
   return (
-    <div className="pt-6">
-      <div className="relative">
-        {name && (
-          <>
-            <CommunityInfoCardFromName
-              name={name}
-              setCommunityInfo={setCommunityInfo}
-            />
-            <div className="w-full flex justify-center">
-              <div className="w-full md:w-[650px]">
-                <NavFilterCommunity name={name} />
-                {communityInfo && (
-                  <LensPostsCommunityPublicationsColumn
-                    communityInfo={communityInfo}
-                  />
-                )}
-              </div>
+    <div className="relative pt-6">
+      {name && !notFound && (
+        <>
+          <CommunityInfoCardFromName
+            name={name}
+            setCommunityInfo={setCommunityInfo}
+            setNotFound={setNotFound}
+          />
+          <div className="w-full flex justify-center">
+            <div className="w-full md:w-[650px]">
+              <NavFilterCommunity name={name} />
+              {communityInfo && (
+                <LensPostsCommunityPublicationsColumn
+                  communityInfo={communityInfo}
+                />
+              )}
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
+      {notFound && (
+        // not found page
+        <div className="w-full flex justify-center my-20">
+          <div className="w-full md:w-[650px] flex flex-row items-center text-center justify-center">
+            Community not found
+          </div>
+        </div>
+      )}
     </div>
   )
 }

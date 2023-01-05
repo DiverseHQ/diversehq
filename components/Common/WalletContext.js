@@ -27,12 +27,15 @@ export const WalletProvider = ({ children }) => {
       console.log('onConnect', address, connector, isReconnected)
     }
   })
+  const [loading, setLoading] = useState(false)
   const { disconnect } = useDisconnect()
 
   useEffect(() => {
     if (signer && address) {
       console.log('generating token for api')
-      fetchWeb3Token()
+      if (getLocalToken()) {
+        fetchWeb3Token()
+      }
     }
   }, [signer, address])
 
@@ -40,6 +43,7 @@ export const WalletProvider = ({ children }) => {
     if (isDisconnected) {
       console.log('isDisconnected', isDisconnected)
       setUser(null)
+      setLoading(false)
       if (getLocalToken()) {
         removeLocalToken()
       }
@@ -49,6 +53,7 @@ export const WalletProvider = ({ children }) => {
 
   const refreshUserInfo = async () => {
     try {
+      setLoading(true)
       if (!address) return
       const userInfo = await getUserInfo(address)
       console.log('userInfo', userInfo)
@@ -66,6 +71,8 @@ export const WalletProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -127,7 +134,7 @@ export const WalletProvider = ({ children }) => {
   }
   return (
     <WalletContext.Provider
-      value={{ address, refreshUserInfo, user, fetchWeb3Token }}
+      value={{ address, refreshUserInfo, user, fetchWeb3Token, loading }}
     >
       {children}
     </WalletContext.Provider>

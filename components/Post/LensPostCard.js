@@ -17,6 +17,8 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
 import { getCommunityInfoUsingId } from '../../api/community'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import { useRouter } from 'next/router'
 
 /**
  * Sample post object
@@ -228,6 +230,7 @@ const LensPostCard = ({ post }) => {
     }
   }
   console.log(post)
+  const router = useRouter()
   return (
     <>
       {postInfo && (
@@ -238,13 +241,13 @@ const LensPostCard = ({ post }) => {
               <>
                 <div className="flex flex-row w-full items-center">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                    <img
+                    <ImageWithPulsingLoader
                       src={
                         postInfo?.communityInfo?.logoImageUrl
                           ? postInfo?.communityInfo?.logoImageUrl
                           : '/gradient.jpg'
                       }
-                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>
                   <Link href={`/c/${postInfo?.communityInfo?.name}`}>
@@ -280,7 +283,7 @@ const LensPostCard = ({ post }) => {
               <>
                 <div className="flex flex-row w-full items-center">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                    <img
+                    <ImageWithPulsingLoader
                       src={
                         postInfo?.communityInfo?.logoImageUrl
                           ? postInfo?.communityInfo?.logoImageUrl
@@ -354,7 +357,7 @@ const LensPostCard = ({ post }) => {
             {/* main content */}
             <div className="flex flex-col w-full">
               <div>
-                <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg sm:text-base">
+                <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg">
                   {postInfo?.metadata?.content}
                 </div>
                 {postInfo?.metadata?.mainContentFocus ===
@@ -362,13 +365,17 @@ const LensPostCard = ({ post }) => {
                   <Link href={`/p/${postInfo?.id}`}>
                     {/* eslint-disable-next-line */}
                     <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                      <img
+                      <ImageWithPulsingLoader
                         src={`${LensInfuraEndpoint}${
                           postInfo?.metadata?.media[0]?.original.url.split(
                             '//'
                           )[1]
                         }`}
-                        className="image-unselectable object-cover sm:rounded-xl w-full"
+                        className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                          router.pathname.startsWith('/p')
+                            ? ''
+                            : 'max-h-[500px]'
+                        }`}
                       />
                     </div>
                   </Link>
@@ -382,7 +389,9 @@ const LensPostCard = ({ post }) => {
                           '//'
                         )[1]
                       }`}
-                      className="image-unselectable object-cover sm:rounded-xl  w-full"
+                      className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                        router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
+                      }`}
                       autoPlay
                       muted
                       loop
