@@ -20,6 +20,7 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import { getNumberOfPostsUsingUserAddress } from '../../api/post'
 import Link from 'next/link'
 import LensFollowButton from '../../components/User/LensFollowButton'
+import ImageWithPulsingLoader from '../../components/Common/UI/ImageWithPulsingLoader'
 
 const Profile = () => {
   const { id } = useRouter().query
@@ -32,7 +33,7 @@ const Profile = () => {
   const { user } = useProfile()
   const { showModal } = usePopUpModal()
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
-
+  const [notFound, setNotFound] = useState(false)
   const [numberOfPosts, setNumberOfPosts] = useState(0)
 
   useEffect(() => {
@@ -68,6 +69,9 @@ const Profile = () => {
     if (lensProfileQueryFromAddress?.data?.defaultProfile) {
       setLensProfile(lensProfileQueryFromAddress.data.defaultProfile)
     }
+    if (lensProfileFromHandle.data && !lensProfileFromHandle.data.profile) {
+      setNotFound(true)
+    }
     if (lensProfileFromHandle?.data?.profile?.ownedBy) {
       console.log('lensProfileFromHandle', lensProfileFromHandle)
       setUserAddress(lensProfileFromHandle.data.profile.ownedBy)
@@ -86,8 +90,14 @@ const Profile = () => {
   }
 
   const getNumberOfPosts = async (address) => {
-    const result = await getNumberOfPostsUsingUserAddress(address)
-    setNumberOfPosts(result.numberOfPosts)
+    try {
+      console.log('getNumberOfPosts', address)
+      const result = await getNumberOfPostsUsingUserAddress(address)
+      console.log('result', result)
+      setNumberOfPosts(result.numberOfPosts)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
@@ -111,8 +121,10 @@ const Profile = () => {
         setUserAddress(userInfo.walletAddress)
       } else {
         console.log('not found')
+        setNotFound(true)
       }
     } catch (error) {
+      setNotFound(true)
       console.log(error)
     }
   }
@@ -144,17 +156,17 @@ const Profile = () => {
   }
 
   return (
-    <div className="pt-6">
+    <div>
       {profile && (
         <div className="relative">
-          <img
+          <ImageWithPulsingLoader
             className="h-28 w-full object-cover"
             src={
               profile.bannerImageUrl ? profile.bannerImageUrl : '/gradient.jpg'
             }
           />
 
-          <img
+          <ImageWithPulsingLoader
             className="absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
             src={
               profile?.profileImageUrl
@@ -275,8 +287,39 @@ const Profile = () => {
           </div>
         </div>
       )}
-      {!profile && (
-        <div className="flex flex-col items-center justify-center h-full">
+      {!profile && !notFound && (
+        <>
+          <div className="w-full bg-gray-100 animate-pulse my-4 sm:my-6">
+            <div className="w-full h-[100px] bg-gray-300" />
+            <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
+              <div className="w-32 h-4 bg-gray-300 rounded-full" />
+              <div className="w-32 h-4 bg-gray-300 rounded-full" />
+              <div className="w-20 h-4 bg-gray-300 rounded-full" />
+            </div>
+            <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
+              <div className="w-20 h-4 bg-gray-300 rounded-full" />
+              <div className="w-28 h-4 bg-gray-300 rounded-full" />
+            </div>
+          </div>
+          <div className="w-full flex justify-center">
+            <div className="w-full md:w-[650px]">
+              <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 animate-pulse my-3 sm:my-6">
+                <div className="w-full flex flex-row items-center space-x-4 p-4">
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 rounded-full animate-pulse" />
+                  <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300" />
+                  <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300" />
+                </div>
+                <div className="w-full flex flex-row items-center space-x-4 sm:p-4 pr-4">
+                  <div className="w-6 sm:w-[50px] h-4 " />
+                  <div className="w-full mr-4 rounded-2xl bg-gray-300 h-[200px] sm:h-[300px]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {notFound && (
+        <div className="flex flex-col items-center justify-center h-full mt-10">
           <div className="text-2xl font-bold">No Profile Found</div>
           <div className="text-sm text-gray-500">
             This user has not created a profile yet.
