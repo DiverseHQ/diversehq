@@ -148,19 +148,20 @@ const LensPostCard = ({ post }) => {
 
   const fetchCommunityInformationAndSetPost = async () => {
     const communityId = post?.metadata?.tags?.[0]
+    console.log('communityId', communityId)
     if (!communityId) return
     const communityInfo = await getCommunityInfoUsingId(communityId)
+    console.log('communityInfo', communityInfo)
     setPostInfo({ ...post, communityInfo })
   }
 
   useEffect(() => {
-    if (!post) return
-    if (!post?.communityInfo) {
+    console.log('lenspotsCardPost', postInfo)
+    if (!postInfo) return
+    if (!postInfo?.communityInfo) {
       fetchCommunityInformationAndSetPost()
-    } else {
-      setPostInfo(post)
     }
-  }, [post])
+  }, [postInfo])
 
   const handleShare = async () => {
     try {
@@ -324,7 +325,7 @@ const LensPostCard = ({ post }) => {
               </>
             )}
             <div className="sm:mr-5">
-              <JoinCommunityButton id={postInfo.communityInfo._id} />
+              <JoinCommunityButton id={postInfo?.communityInfo?._id} />
             </div>
           </div>
 
