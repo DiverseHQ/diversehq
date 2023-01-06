@@ -25,7 +25,7 @@ import {
 } from 'react-icons/io'
 // import { BsMoon } from 'react-icons/bs'
 import Link from 'next/link'
-import { DISCORD_INVITE_LINK } from '../../utils/config'
+import { DISCORD_INVITE_LINK, userRoles } from '../../utils/config'
 import useNotificationsCount from '../Notification/useNotificationsCount'
 import ConnectWalletAndSignInButton from '../Common/ConnectWalletAndSignInButton'
 
@@ -67,6 +67,14 @@ const LeftSidebar = () => {
       notifyInfo('You shall not pass, without login first')
       return
     }
+    if (
+      user?.role >= userRoles.WHITELISTED_USER &&
+      user?.communityCreationSpells <= 0
+    ) {
+      notifyInfo('You have used all your community creation spells')
+      return
+    }
+
     showModal({
       component: <CreateCommunity />,
       type: modalType.fullscreen,
