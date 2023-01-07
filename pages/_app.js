@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 // import MobileBottomNav from '../components/Home/MobileBottomNav'
 // import MobileTopNav from '../components/Home/MobileTopNav'
 // eslint-disable-next-line no-unused-vars
@@ -16,10 +16,10 @@ import { NextSeo } from 'next-seo'
 import MainLayout from '../components/Home/MainLayout'
 
 function MyApp({ Component, pageProps }) {
-  const [mounted, setMounted] = useState(false)
-  // const { isDesktop } = useDevice()
-  useEffect(() => setMounted(true), [])
-  if (!mounted) return null
+  // const [mounted, setMounted] = useState(false)
+  // // const { isDesktop } = useDevice()
+  // useEffect(() => setMounted(true), [])
+  // if (!mounted) return null
   return (
     <>
       {/* <DefaultSeo
