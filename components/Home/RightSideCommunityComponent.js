@@ -9,6 +9,7 @@ const RightSideCommunityComponent = ({ community }) => {
     <Link
       href={`/c/${community?.name}`}
       className="flex flex-row gap-2 items-center hover:bg-[#eee] rounded-full p-2"
+      passHref
     >
       <ImageWithPulsingLoader
         src={

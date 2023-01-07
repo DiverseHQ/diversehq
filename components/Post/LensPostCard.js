@@ -241,7 +241,7 @@ const LensPostCard = ({ post }) => {
             {!isMobile && (
               <>
                 <div className="flex flex-row w-full items-center">
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                  <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
                       src={
                         postInfo?.communityInfo?.logoImageUrl
@@ -283,7 +283,7 @@ const LensPostCard = ({ post }) => {
             {isMobile && (
               <>
                 <div className="flex flex-row w-full items-center">
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                  <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
                       src={
                         postInfo?.communityInfo?.logoImageUrl
@@ -303,6 +303,7 @@ const LensPostCard = ({ post }) => {
                       <Link
                         href={`/u/${postInfo?.profile?.handle}`}
                         className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                        passHref
                       >
                         <p className="pl-1.5 font-normal"> posted by</p>
                         <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
@@ -363,7 +364,7 @@ const LensPostCard = ({ post }) => {
                 </div>
                 {postInfo?.metadata?.mainContentFocus ===
                   PublicationMainFocus.Image && (
-                  <Link href={`/p/${postInfo?.id}`}>
+                  <Link href={`/p/${postInfo?.id}`} passHref>
                     {/* eslint-disable-next-line */}
                     <div className="sm:pl-5  sm:pr-6 sm:pb-1">
                       <ImageWithPulsingLoader
@@ -431,6 +432,7 @@ const LensPostCard = ({ post }) => {
                 <Link
                   href={`/p/${postInfo.id}`}
                   className="flex flex-row items-center"
+                  passHref
                 >
                   {postInfo?.stats?.totalAmountOfComments === 0 && (
                     <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />

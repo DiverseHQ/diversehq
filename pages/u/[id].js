@@ -207,6 +207,7 @@ const Profile = () => {
                   <Link
                     href={`/u/${lensProfile?.handle}`}
                     className="hover:underline cursor-pointer"
+                    passHref
                   >
                     u/{lensProfile?.handle}
                   </Link>

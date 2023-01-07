@@ -11,6 +11,7 @@ const Navbar = () => {
         <Link
           className="flex flex-row items-center w-fit hover:cursor-pointer"
           href={'/'}
+          passHref
         >
           <img
             className="w-[44px] h-[44px] object-contain"
