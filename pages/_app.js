@@ -34,6 +34,19 @@ function MyApp({ Component, pageProps }) {
           cardType: 'summary_large_image'
         }}
       /> */}
+
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+      />
+      <Script id="google-analytics-script" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}');
+          `}
+      </Script>
       <NextSeo
         title="DiverseHQ"
         description="We believe access and content reach is not just for famous few. Join us in our mission to democratize and give this power back to you."
@@ -56,18 +69,6 @@ function MyApp({ Component, pageProps }) {
           cardType: 'summary_large_image'
         }}
       />
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
-      />
-      <Script id="google-analytics-script" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}');
-          `}
-      </Script>
       <MasterWrapper>
         {!isDesktop && (
           <div className="text-p-text bg-p-bg min-h-screen">

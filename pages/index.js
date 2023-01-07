@@ -15,16 +15,25 @@ const Home = () => {
         image={'https://app.diversehq.xyz/apple-touch-icon.png'}
       /> */}
       <NextSeo
-        title={'Home / DiverseHQ'}
-        description={
-          'Join Communities, Share your Creativity and get Rewarded.'
-        }
-        canonical={'https://app.diversehq.xyz'}
+        title="DiverseHQ"
+        description="We believe access and content reach is not just for famous few. Join us in our mission to democratize and give this power back to you."
         openGraph={{
-          title: 'Home / DiverseHQ',
-          description:
-            'Join Communities, Share your Creativity and get Rewarded.',
-          url: 'https://app.diversehq.xyz'
+          type: 'website',
+          locale: 'en_US',
+          url: 'https://diversehq.xyz',
+          site_name: 'DiverseHQ',
+          images: [
+            {
+              url: 'https://diversehq.xyz/vector-bg.png',
+              width: 1200,
+              height: 630,
+              alt: 'DiverseHQ'
+            }
+          ]
+        }}
+        twitter={{
+          handle: '@useDiverseHQ',
+          cardType: 'summary_large_image'
         }}
       />
       <div className="w-full flex justify-center">
