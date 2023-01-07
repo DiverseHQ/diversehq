@@ -109,8 +109,8 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
 
   const handleShare = async () => {
     try {
-      const url = `${window.origin}/p/${post._id}`
-      const text = `${post.title} ${url}`
+      const url = window.location.href
+      const text = `${post.title}`
       const title = 'Share this post'
       navigator.share({
         title,
@@ -194,13 +194,13 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
   const { isMobile } = useDevice()
 
   return (
-    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-1 my-2 sm:my-4 sm:rounded-2xl shadow-sm">
+    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-1 my-2 sm:my-3 sm:rounded-2xl shadow-sm">
       {/* top row */}
       <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
         {!isMobile && (
           <>
-            <div className="flex flex-row w-full items-center">
-              <Link href={`/c/${post.communityName}`}>
+            <div className="flex flex-row w-full items-center pb-1">
+              <Link href={`/c/${post.communityName}`} passHref>
                 <ImageWithPulsingLoader
                   src={
                     post.communityLogo ? post.communityLogo : '/gradient.jpg'
@@ -243,7 +243,7 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
         {isMobile && (
           <>
             <div className="flex flex-row w-full items-center">
-              <Link href={`/c/${post.communityName}`}>
+              <Link href={`/c/${post.communityName}`} passHref>
                 <ImageWithPulsingLoader
                   src={
                     post.communityLogo ? post.communityLogo : '/gradient.jpg'
@@ -252,7 +252,7 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
                 />
               </Link>
               <div className="flex flex-col justify-center items-start">
-                <Link href={`/c/${post.communityName}`}>
+                <Link href={`/c/${post.communityName}`} passHref>
                   <div className="pl-2 font-bold text-base sm:text-xl hover:cursor-pointer hover:underline">
                     {post.communityName}
                   </div>
@@ -261,6 +261,7 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
                   <Link
                     href={`/u/${post.author}`}
                     className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                    passHref
                   >
                     <p className="pl-1.5"> posted by</p>
                     <div className="pl-1.5 hover:cursor-pointer hover:underline">
@@ -318,7 +319,7 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
               {post.title}
             </div>
             {post?.postImageUrl && (
-              <Link href={`/p/${post?._id}`}>
+              <Link href={`/p/${post?._id}`} passHref>
                 {/* eslint-disable-next-line */}
                 <div className="sm:pl-5  sm:pr-6 sm:pb-1">
                   {/* <img
@@ -381,6 +382,7 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
             <Link
               href={`/p/${post._id}`}
               className="flex flex-row items-center"
+              passHref
             >
               {post.comments?.length === 0 && (
                 <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />

@@ -38,35 +38,40 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
     const content = commentRef.current.value
     if (!content || content === '') return
     setLoading(true)
-    const ipfsHash = await uploadToIpfsInfuraAndGetPath({
-      version: '2.0.0',
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      metadata_id: uuidv4(),
-      description: content,
-      locale: 'en-US',
-      content: content,
-      external_url: 'https://diversehq.xyz',
-      image: null,
-      imageMimeType: null,
-      name: 'Create with DiverseHQ',
-      attributes: [],
-      tags: [],
-      appId: 'DiverseHQ'
-    })
+    try {
+      const ipfsHash = await uploadToIpfsInfuraAndGetPath({
+        version: '2.0.0',
+        mainContentFocus: PublicationMainFocus.TextOnly,
+        metadata_id: uuidv4(),
+        description: content,
+        locale: 'en-US',
+        content: content,
+        external_url: 'https://diversehq.xyz',
+        image: null,
+        imageMimeType: null,
+        name: 'Create with DiverseHQ',
+        attributes: [],
+        tags: [],
+        appId: 'DiverseHQ'
+      })
 
-    console.log('ipfsHash', ipfsHash)
+      console.log('ipfsHash', ipfsHash)
 
-    const createCommentRequest = {
-      profileId: lensProfile?.defaultProfile?.id,
-      publicationId: postId,
-      contentURI: `ipfs://${ipfsHash}`,
-      collectModule: { revertCollectModule: true },
-      referenceModule: {
-        followerOnlyReferenceModule: false
+      const createCommentRequest = {
+        profileId: lensProfile?.defaultProfile?.id,
+        publicationId: postId,
+        contentURI: `ipfs://${ipfsHash}`,
+        collectModule: { revertCollectModule: true },
+        referenceModule: {
+          followerOnlyReferenceModule: false
+        }
       }
-    }
 
-    await comment(createCommentRequest)
+      await comment(createCommentRequest)
+    } catch (error) {
+      console.log('error', error)
+      setLoading(false)
+    }
   }
 
   const comment = async (createCommentRequest) => {
@@ -98,6 +103,7 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
         ])
 
         setLoading(false)
+        commentRef.current.value = ''
 
         console.log(dispatcherResult)
         console.log('index started ....')
@@ -142,6 +148,7 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
           ...prev
         ])
         setLoading(false)
+        commentRef.current.value = ''
 
         signTypedDataAndBroadcast(commentTypedResult.typedData, {
           id: commentTypedResult.id,

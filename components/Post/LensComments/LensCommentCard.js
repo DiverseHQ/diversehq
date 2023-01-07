@@ -98,7 +98,7 @@ const LensCommentCard = ({ comment }) => {
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full mr-2"
               />
 
-              <Link href={`/u/${comment?.profile?.handle}`}>
+              <Link href={`/u/${comment?.profile?.handle}`} passHref>
                 <div className="hover:underline font-bold text-base">
                   u/{comment?.profile?.handle}
                 </div>
