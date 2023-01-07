@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import MobileBottomNav from '../components/Home/MobileBottomNav'
+// import MobileBottomNav from '../components/Home/MobileBottomNav'
 // import MobileTopNav from '../components/Home/MobileTopNav'
 // eslint-disable-next-line no-unused-vars
-import Nav from '../components/Home/Nav'
+// import Nav from '../components/Home/Nav'
 import '../styles/globals.css'
 import MasterWrapper from '../components/Common/MasterWrapper'
-import useDevice from '../components/Common/useDevice'
-import Navbar from '../components/Home/Navbar'
-import LeftSidebar from '../components/Home/LeftSidebar'
-import RightSidebar from '../components/Home/RightSidebar'
+// import useDevice from '../components/Common/useDevice'
+// import Navbar from '../components/Home/Navbar'
+// import LeftSidebar from '../components/Home/LeftSidebar'
+// import RightSidebar from '../components/Home/RightSidebar'
 
-import NewMobileTopNav from '../components/Home/NewMobileTopNav'
+// import NewMobileTopNav from '../components/Home/NewMobileTopNav'
 import Script from 'next/script'
 import { NextSeo } from 'next-seo'
+import MainLayout from '../components/Home/MainLayout'
 
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
-  const { isDesktop } = useDevice()
+  // const { isDesktop } = useDevice()
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
   return (
@@ -70,32 +71,9 @@ function MyApp({ Component, pageProps }) {
         }}
       />
       <MasterWrapper>
-        {!isDesktop && (
-          <div className="text-p-text bg-p-bg min-h-screen">
-            {!isDesktop && (
-              <>
-                <NewMobileTopNav />
-                {/* <MobileTopNav /> */}
-                <div className={'pb-16'}>
-                  <Component {...pageProps} />
-                </div>
-                <MobileBottomNav />
-              </>
-            )}
-          </div>
-        )}
-        {isDesktop && (
-          <div className="relative min-h-screen bg-p-bg">
-            <Navbar />
-            <div className="flex flex-row">
-              <LeftSidebar />
-              <div className="flex-1 min-h-screen">
-                <Component {...pageProps} />
-              </div>
-              <RightSidebar />
-            </div>
-          </div>
-        )}
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
       </MasterWrapper>
     </>
   )

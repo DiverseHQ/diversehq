@@ -1,4 +1,4 @@
-import { NextSeo } from 'next-seo'
+// import { NextSeo } from 'next-seo'
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getAllCommunities } from '../../api/community'
@@ -31,7 +31,7 @@ const index = () => {
 
   return (
     <>
-      <NextSeo
+      {/* <NextSeo
         title="Explore"
         description="Connect, learn, and grow with like-minded individuals in our Explore Communities."
         canonical={window.location.href}
@@ -42,7 +42,7 @@ const index = () => {
             'Connect, learn, and grow with like-minded individuals in our Explore Communities.',
           site_name: 'DiverseHQ'
         }}
-      />
+      /> */}
       <div className="w-full flex justify-center shrink-0 pt-6">
         <div className="w-full md:w-[650px]">
           <ExploreFeedNav />
