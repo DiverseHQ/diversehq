@@ -12,7 +12,7 @@ import RightSidebar from '../components/Home/RightSidebar'
 
 import NewMobileTopNav from '../components/Home/NewMobileTopNav'
 import Script from 'next/script'
-import { DefaultSeo } from 'next-seo'
+import { DefaultSeo, NextSeo } from 'next-seo'
 
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }) {
       <DefaultSeo
         openGraph={{
           type: 'website',
-          locale: 'en_IE',
+          locale: 'en_US',
           url: 'https://diversehq.xyz/',
           siteName: 'DiverseHQ'
         }}
@@ -34,6 +34,28 @@ function MyApp({ Component, pageProps }) {
           cardType: 'summary_large_image'
         }}
         defaultTitle="DiverseHQ"
+      />
+      <NextSeo
+        title="DiverseHQ"
+        description="We believe access and content reach is not just for famous few. Join us in our mission to democratize and give this power back to you."
+        openGraph={{
+          type: 'website',
+          locale: 'en_US',
+          url: 'https://diversehq.xyz',
+          site_name: 'DiverseHQ',
+          images: [
+            {
+              url: 'https://diversehq.xyz/vector-bg.png',
+              width: 1200,
+              height: 630,
+              alt: 'DiverseHQ'
+            }
+          ]
+        }}
+        twitter={{
+          handle: '@useDiverseHQ',
+          cardType: 'summary_large_image'
+        }}
       />
       <Script
         strategy="afterInteractive"
