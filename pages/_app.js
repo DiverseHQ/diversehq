@@ -12,7 +12,6 @@ import RightSidebar from '../components/Home/RightSidebar'
 
 import NewMobileTopNav from '../components/Home/NewMobileTopNav'
 import Script from 'next/script'
-import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
@@ -21,14 +20,6 @@ function MyApp({ Component, pageProps }) {
   if (!mounted) return null
   return (
     <>
-      <Head>
-        <title>DiverseHQ</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
-        />
-      </Head>
-
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
