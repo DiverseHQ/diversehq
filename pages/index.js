@@ -1,3 +1,4 @@
+import { NextSeo } from 'next-seo'
 import React from 'react'
 import LensPostsExplorePublicationsColumn from '../components/Post/LensPostsExplorePublicationsColumn'
 import NavFilterAllPosts from '../components/Post/NavFilterAllPosts'
@@ -13,6 +14,19 @@ const Home = () => {
         url={'https://app.diversehq.xyz'}
         image={'https://app.diversehq.xyz/apple-touch-icon.png'}
       /> */}
+      <NextSeo
+        title={'Home / DiverseHQ'}
+        description={
+          'Join Communities, Share your Creativity and get Rewarded.'
+        }
+        canonical={'https://app.diversehq.xyz'}
+        openGraph={{
+          title: 'Home / DiverseHQ',
+          description:
+            'Join Communities, Share your Creativity and get Rewarded.',
+          url: 'https://app.diversehq.xyz'
+        }}
+      />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
           <NavFilterAllPosts />
