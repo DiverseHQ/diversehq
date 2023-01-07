@@ -52,7 +52,7 @@ function MyApp({ Component, pageProps }) {
         openGraph={{
           type: 'website',
           locale: 'en_IE',
-          url: 'https://diversehq.xyz',
+          url: 'https://app.diversehq.xyz',
           siteName: 'DiverseHQ'
         }}
         twitter={{

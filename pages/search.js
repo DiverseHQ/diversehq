@@ -3,7 +3,7 @@ import { postGetCommunityInfoUsingListOfIds } from '../api/community'
 import SearchModal from '../components/Search/SearchModal'
 import { recommendedCommunitiesIds } from '../utils/config'
 import RightSideCommunityComponent from '../components/Home/RightSideCommunityComponent'
-
+import { NextSeo } from 'next-seo'
 const search = () => {
   const [recommendedCommunities, setRecommendedCommunities] = useState([])
   const fetchCommunitiesAndSetState = async (ids, setState) => {
@@ -23,6 +23,13 @@ const search = () => {
   console.log('search')
   return (
     <>
+      <NextSeo
+        title="DiverseHQ / Search"
+        description="Search and connect with communities that reflect your interests and values on DiverseHQ!"
+        openGraph={{
+          url: 'https://app.diversehq.xyz/search'
+        }}
+      />
       <div className="mt-10 w-screen flex flex-col items-center">
         <SearchModal />
         {recommendedCommunities.length > 0 && (

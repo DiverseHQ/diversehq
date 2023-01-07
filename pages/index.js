@@ -16,24 +16,9 @@ const Home = () => {
       /> */}
       <NextSeo
         title="DiverseHQ"
-        description="We believe access and content reach is not just for famous few. Join us in our mission to democratize and give this power back to you."
+        description="Join Communities, Share your Creativity and get Rewarded."
         openGraph={{
-          type: 'website',
-          locale: 'en_US',
-          url: 'https://diversehq.xyz',
-          site_name: 'DiverseHQ',
-          images: [
-            {
-              url: 'https://diversehq.xyz/vector-bg.png',
-              width: 1200,
-              height: 630,
-              alt: 'DiverseHQ'
-            }
-          ]
-        }}
-        twitter={{
-          handle: '@useDiverseHQ',
-          cardType: 'summary_large_image'
+          url: 'https://app.diversehq.xyz'
         }}
       />
       <div className="w-full flex justify-center">
