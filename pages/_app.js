@@ -12,7 +12,7 @@ import RightSidebar from '../components/Home/RightSidebar'
 
 import NewMobileTopNav from '../components/Home/NewMobileTopNav'
 import Script from 'next/script'
-import { DefaultSeo, NextSeo } from 'next-seo'
+import { NextSeo } from 'next-seo'
 
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
   if (!mounted) return null
   return (
     <>
-      <DefaultSeo
+      {/* <DefaultSeo
         openGraph={{
           type: 'website',
           locale: 'en_US',
@@ -33,8 +33,7 @@ function MyApp({ Component, pageProps }) {
           site: '@useDiverseHQ',
           cardType: 'summary_large_image'
         }}
-        defaultTitle="DiverseHQ"
-      />
+      /> */}
       <NextSeo
         title="DiverseHQ"
         description="We believe access and content reach is not just for famous few. Join us in our mission to democratize and give this power back to you."
