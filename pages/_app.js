@@ -12,7 +12,7 @@ import MasterWrapper from '../components/Common/MasterWrapper'
 
 // import NewMobileTopNav from '../components/Home/NewMobileTopNav'
 import Script from 'next/script'
-import { NextSeo } from 'next-seo'
+import { DefaultSeo } from 'next-seo'
 import MainLayout from '../components/Home/MainLayout'
 
 function MyApp({ Component, pageProps }) {
@@ -48,7 +48,19 @@ function MyApp({ Component, pageProps }) {
           gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}');
           `}
       </Script>
-      <NextSeo
+      <DefaultSeo
+        openGraph={{
+          type: 'website',
+          locale: 'en_IE',
+          url: 'https://diversehq.xyz',
+          siteName: 'DiverseHQ'
+        }}
+        twitter={{
+          handle: '@useDiverseHQ',
+          cardType: 'summary_large_image'
+        }}
+      />
+      {/* <NextSeo
         title="DiverseHQ"
         description="We believe access and content reach is not just for famous few. Join us in our mission to democratize and give this power back to you."
         openGraph={{
@@ -69,7 +81,7 @@ function MyApp({ Component, pageProps }) {
           handle: '@useDiverseHQ',
           cardType: 'summary_large_image'
         }}
-      />
+      /> */}
       <MasterWrapper>
         <MainLayout>
           <Component {...pageProps} />
