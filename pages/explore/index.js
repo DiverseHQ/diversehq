@@ -1,7 +1,7 @@
+import { NextSeo } from 'next-seo'
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getAllCommunities } from '../../api/community'
-import SinglePageSeoHead from '../../components/Common/SinglePageSeoHead'
 import CommunityInfoCard from '../../components/Community/CommunityInfoCard'
 import ExploreFeedNav from '../../components/Explore/ExploreFeedNav'
 import { COMMUNITY_LIMIT } from '../../utils/config'
@@ -31,12 +31,17 @@ const index = () => {
 
   return (
     <>
-      <SinglePageSeoHead
-        title={'Explore'}
-        description={
-          'Connect, learn, and grow with like-minded individuals in our Explore Communities.'
-        }
-        url={window.location.href}
+      <NextSeo
+        title="Explore"
+        description="Connect, learn, and grow with like-minded individuals in our Explore Communities."
+        canonical={window.location.href}
+        openGraph={{
+          url: window.location.href,
+          title: 'Explore',
+          description:
+            'Connect, learn, and grow with like-minded individuals in our Explore Communities.',
+          site_name: 'DiverseHQ'
+        }}
       />
       <div className="w-full flex justify-center shrink-0 pt-6">
         <div className="w-full md:w-[650px]">

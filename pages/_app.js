@@ -12,6 +12,7 @@ import RightSidebar from '../components/Home/RightSidebar'
 
 import NewMobileTopNav from '../components/Home/NewMobileTopNav'
 import Script from 'next/script'
+import { DefaultSeo } from 'next-seo'
 
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false)
@@ -20,6 +21,20 @@ function MyApp({ Component, pageProps }) {
   if (!mounted) return null
   return (
     <>
+      <DefaultSeo
+        openGraph={{
+          type: 'website',
+          locale: 'en_IE',
+          url: 'https://diversehq.xyz/',
+          siteName: 'DiverseHQ'
+        }}
+        twitter={{
+          handle: '@useDiverseHQ',
+          site: '@useDiverseHQ',
+          cardType: 'summary_large_image'
+        }}
+        defaultTitle="DiverseHQ"
+      />
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
