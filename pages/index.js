@@ -15,7 +15,7 @@ const Home = () => {
         image={'https://app.diversehq.xyz/apple-touch-icon.png'}
       /> */}
       <NextSeo
-        title="DiverseHQ"
+        title="Home / DiverseHQ"
         description="Join Communities, Share your Creativity and get Rewarded."
         openGraph={{
           url: 'https://app.diversehq.xyz'

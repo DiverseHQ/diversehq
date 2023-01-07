@@ -2,15 +2,24 @@ import React from 'react'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsExplorePublicationsColumn'
+import { NextSeo } from 'next-seo'
 // import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
 
 const lens = () => {
   // const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   return (
-    <div className="w-full flex justify-center">
-      <div className="w-full md:w-[650px]">
-        <NavFilterAllPosts />
-        {/* {lensProfile &&
+    <>
+      <NextSeo
+        title="Lens Feed / DiverseHQ"
+        description="Lens Feed from diverse communities on DiverseHQ."
+        openGraph={{
+          url: 'https://app.diversehq.xyz/feed/lens'
+        }}
+      />
+      <div className="w-full flex justify-center">
+        <div className="w-full md:w-[650px]">
+          <NavFilterAllPosts />
+          {/* {lensProfile &&
       isSignedIn &&
       hasProfile &&
       lensProfile?.defaultProfile?.id ? (
@@ -18,10 +27,11 @@ const lens = () => {
           profileId={lensProfile?.defaultProfile?.id}
         />
       ) : ( */}
-        <LensPostsExplorePublicationsColumn />
-        {/* )} */}
+          <LensPostsExplorePublicationsColumn />
+          {/* )} */}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
