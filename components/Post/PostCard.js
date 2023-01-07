@@ -109,8 +109,8 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
 
   const handleShare = async () => {
     try {
-      const url = `${window.origin}/p/${post._id}`
-      const text = `${post.title} ${url}`
+      const url = window.location.href
+      const text = `${post.title}`
       const title = 'Share this post'
       navigator.share({
         title,
