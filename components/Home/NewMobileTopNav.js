@@ -11,7 +11,7 @@ const NewMobileTopNav = () => {
 
   let prevScrollpos = null
 
-  if (window) {
+  if (typeof window !== 'undefined') {
     prevScrollpos = window.pageYOffset
     window.onscroll = function () {
       const mobileTopNavEl = document.getElementById('mobile-top-navbar')
