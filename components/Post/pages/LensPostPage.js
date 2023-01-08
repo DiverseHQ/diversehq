@@ -4,11 +4,11 @@ import { useLensUserContext } from '../../../lib/LensUserContext'
 import CombinedCommentSection from '../LensComments/CombinedCommentSection'
 import LensPostCard from '../LensPostCard'
 
-const LensPostPage = ({ id }) => {
-  const [postInfo, setPostInfo] = useState(null)
-  const [notFound, setNotFound] = useState(false)
+const LensPostPage = ({ id, post }) => {
+  const [postInfo, setPostInfo] = useState(post)
+  // const [notFound, setNotFound] = useState(false)
   const { data: lensProfile } = useLensUserContext()
-  const { data, error } = usePublicationQuery(
+  const { data } = usePublicationQuery(
     {
       request: {
         publicationId: id
@@ -18,25 +18,25 @@ const LensPostPage = ({ id }) => {
       }
     },
     {
-      enabled: !!id
+      enabled: !!id && !!lensProfile?.defaultProfile?.id
     }
   )
 
   useEffect(() => {
     if (!data?.publication) return
-    console.log(data.publication)
+    console.log('data.publication', data.publication)
     setPostInfo(data.publication)
   }, [data])
 
-  useEffect(() => {
-    if (!error) return
-    setNotFound(true)
-    console.log(error)
-  }, [error])
+  // useEffect(() => {
+  //   if (!error) return
+  //   setNotFound(true)
+  //   console.log(error)
+  // }, [error])
   return (
     <div className="w-full flex justify-center">
       <div className="w-full md:w-[650px]">
-        {!postInfo && (
+        {!post && (
           <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 animate-pulse my-3 sm:my-6">
             <div className="w-full flex flex-row items-center space-x-4 p-4">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 rounded-full animate-pulse" />
@@ -51,16 +51,10 @@ const LensPostPage = ({ id }) => {
         )}
 
         {/* lens post card */}
-        {notFound ? (
-          <div className="flex items-center justify-center w-full bg-s-bg p-3 my-6 sm:rounded-3xl shadow-lg text-bold text-2xl">
-            <h2>Post was deleted or does not exist</h2>
+        {postInfo && (
+          <div>
+            <LensPostCard post={postInfo} />
           </div>
-        ) : (
-          postInfo && (
-            <div>
-              <LensPostCard post={postInfo} setNotFound={setNotFound} />
-            </div>
-          )
         )}
         <CombinedCommentSection postId={id} postInfo={postInfo} />
       </div>

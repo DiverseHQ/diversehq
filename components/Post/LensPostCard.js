@@ -143,6 +143,15 @@ const LensPostCard = ({ post }) => {
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
+
+  //update stats if post is updated
+  useEffect(() => {
+    setPostInfo(post)
+    setReaction(post?.reaction)
+    setUpvoteCount(post?.stats.totalUpvotes)
+    setDownvoteCount(post?.stats.totalDownvotes)
+  }, [post])
+
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 

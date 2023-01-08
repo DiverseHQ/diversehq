@@ -24,7 +24,7 @@ TimeAgo.addDefaultLocale(en)
 
 // import useDevice from '../Common/useDevice'
 
-const PostCard = ({ _post, setPosts, setNotFound }) => {
+const PostCard = ({ _post, setPosts }) => {
   // const createdAt = new Date(post.createdAt)
   // eslint-disable-next-line
   const [post, setPost] = useState(_post)
@@ -137,8 +137,8 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
         setPosts((prevPosts) => prevPosts.filter((p) => p?._id !== post?._id))
       }
 
-      if (setNotFound) {
-        setNotFound(true)
+      if (router.pathname.startsWith('/p/')) {
+        router.push('/')
       }
     } catch (error) {
       console.log(error)
