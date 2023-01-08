@@ -9,24 +9,18 @@ const OffChainPostSeo = ({ post }) => {
       openGraph={{
         url: `https://app.diversehq.xyz/p/${post?._id}`,
         title: stringToLength(post?.title, 60),
-        images:
-          typeof post?.postImageUrl !== 'undefined'
-            ? [
-                {
-                  url: post?.postImageUrl,
-                  alt: post?.title
-                }
-              ]
-            : [],
-        videos:
-          typeof post?.postVideoUrl !== 'undefined'
-            ? [
-                {
-                  url: post?.postVideoUrl,
-                  alt: post?.title
-                }
-              ]
-            : []
+        images: [
+          {
+            url: post?.postImageUrl,
+            alt: post?.title
+          }
+        ],
+        videos: [
+          {
+            url: post?.postVideoUrl,
+            alt: post?.title
+          }
+        ]
       }}
     />
   )
