@@ -56,7 +56,6 @@ function MyApp({ Component, pageProps }) {
       </Script>
       <DefaultSeo
         title="DiverseHQ"
-        description="We believe access and content reach is not just for famous few. Join us in our mission to democratize and give this power back to you."
         openGraph={{
           type: 'website',
           locale: 'en_IE',
