@@ -10,7 +10,7 @@ const OffChainPostSeo = ({ post }) => {
         url: `https://app.diversehq.xyz/p/${post?._id}`,
         title: stringToLength(post?.title, 60),
         images:
-          typeof post?.postImageUrl === 'string'
+          typeof post?.postImageUrl !== 'undefined'
             ? [
                 {
                   url: post?.postImageUrl,
@@ -19,7 +19,7 @@ const OffChainPostSeo = ({ post }) => {
               ]
             : [],
         videos:
-          typeof post?.postVideoUrl === 'string'
+          typeof post?.postVideoUrl !== 'undefined'
             ? [
                 {
                   url: post?.postVideoUrl,
