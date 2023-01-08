@@ -18,6 +18,7 @@ export const uploadFileToIpfs = async (file: File): Promise<string> => {
 // string to string of give length
 export const stringToLength = (str: string, length: number): string => {
   if (!str) return str
+  if (str.length <= length) return str
   return str.slice(0, length) + (str.length > length ? '...' : '')
 }
 

@@ -6,12 +6,10 @@ import { stringToLength } from '../../../utils/utils'
 const LensPostSeo = ({ post }) => {
   return (
     <NextSeo
-      title={stringToLength(post?.metadata?.content, 15)}
-      description={post?.metadata?.content}
+      title={stringToLength(post?.metadata?.content, 60)}
       openGraph={{
         url: `https://app.diversehq.xyz/p/${post?.id}`,
-        title: stringToLength(post?.metadata?.content, 15),
-        description: post?.metadata?.content,
+        title: stringToLength(post?.metadata?.content, 60),
         images:
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [

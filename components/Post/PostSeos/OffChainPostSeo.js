@@ -5,28 +5,28 @@ import { stringToLength } from '../../../utils/utils'
 const OffChainPostSeo = ({ post }) => {
   return (
     <NextSeo
-      title={stringToLength(post?.title, 15)}
-      description={post?.title}
+      title={stringToLength(post?.title, 60)}
       openGraph={{
         url: `https://app.diversehq.xyz/p/${post?._id}`,
-        title: stringToLength(post?.title, 15),
-        description: post?.title,
-        images: post?.postImageUrl
-          ? [
-              {
-                url: post?.postImageUrl,
-                alt: post?.title
-              }
-            ]
-          : [],
-        videos: post?.postVideoUrl
-          ? [
-              {
-                url: post?.postVideoUrl,
-                alt: post?.title
-              }
-            ]
-          : []
+        title: stringToLength(post?.title, 60),
+        images:
+          typeof post?.postImageUrl === 'string'
+            ? [
+                {
+                  url: post?.postImageUrl,
+                  alt: post?.title
+                }
+              ]
+            : [],
+        videos:
+          typeof post?.postVideoUrl === 'string'
+            ? [
+                {
+                  url: post?.postVideoUrl,
+                  alt: post?.title
+                }
+              ]
+            : []
       }}
     />
   )

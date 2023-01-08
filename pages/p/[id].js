@@ -6,6 +6,7 @@ import PostNotFound from '../../components/Post/pages/PostNotFound'
 import PostPage from '../../components/Post/pages/PostPage'
 import LensPostSeo from '../../components/Post/PostSeos/LensPostSeo'
 import OffChainPostSeo from '../../components/Post/PostSeos/OffChainPostSeo'
+import PostNotFoundSeo from '../../components/Post/PostSeos/PostNotFoundSeo'
 import getSinglePublicationInfo from '../../lib/post/get-single-publication-info'
 
 // types are post, lens, notFound
@@ -17,6 +18,7 @@ const Page = ({ type, post, id }) => {
     <>
       {type === 'lens' && <LensPostSeo post={post} />}
       {type === 'post' && <OffChainPostSeo post={post} />}
+      {type === 'notFound' && <PostNotFoundSeo />}
       {type === 'lens' && <LensPostPage id={id} post={post} />}
       {type === 'post' && <PostPage id={id} post={post} />}
       {type === 'notFound' && <PostNotFound />}
