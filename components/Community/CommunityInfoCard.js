@@ -19,11 +19,8 @@ import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
-const CommunityInfoCard = ({
-  community,
-  setCommunity,
-  fetchCommunityInformation
-}) => {
+const CommunityInfoCard = ({ _community }) => {
+  const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
@@ -40,6 +37,19 @@ const CommunityInfoCard = ({
     const result = await getNumberOfPostsInCommunity(community._id)
     setNumberOfPosts(result.numberOfPosts)
   }
+
+  const fetchCommunityInformation = useCallback(async () => {
+    try {
+      const res = await getCommunityInfoUsingId(community._id)
+      if (res.status !== 200) {
+        return
+      }
+      const result = await res.json()
+      setCommunity(result)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [community._id])
 
   useEffect(() => {
     if (community._id) {

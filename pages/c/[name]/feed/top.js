@@ -1,35 +1,56 @@
-import { useRouter } from 'next/router'
-import React, { useState } from 'react'
-import CommunityInfoCardFromName from '../../../../components/Community/CommunityInfoCardFromName'
+import React from 'react'
+import { getCommunityInfo } from '../../../../api/community'
+import CommunityInfoCard from '../../../../components/Community/CommunityInfoCard'
+import CommunityPageSeo from '../../../../components/Community/CommunityPageSeo'
+import CommunityNotFound from '../../../../components/Community/Page/CommunityNotFound'
 import NavFilterCommunity from '../../../../components/Post/NavFilterCommunity'
 import PostsColumn from '../../../../components/Post/PostsColumn'
 
-const top = () => {
-  const { name } = useRouter().query
-  const [notFound, setNotFound] = useState(false)
+const top = ({ community }) => {
   return (
     <div className="relative">
-      {name && !notFound && (
+      {community && <CommunityPageSeo community={community} />}
+      {community && (
         <>
-          <CommunityInfoCardFromName name={name} setNotFound={setNotFound} />
+          <CommunityInfoCard _community={community} />
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
-              <NavFilterCommunity name={name} />
-              <PostsColumn source="community" sortBy="top" data={name} />
+              <NavFilterCommunity name={community.name} />
+              <PostsColumn
+                source="community"
+                sortBy="top"
+                data={community.name}
+              />
             </div>
           </div>
         </>
       )}
-      {notFound && (
-        // not found page
-        <div className="w-full flex justify-center my-20">
-          <div className="w-full md:w-[650px] flex flex-row items-center text-center justify-center">
-            Community not found
-          </div>
-        </div>
-      )}
+      {!community && <CommunityNotFound />}
     </div>
   )
+}
+
+export async function getServerSideProps({ params = {} }) {
+  const { name } = params
+  const fetchCommunityInfo = async (name) => {
+    try {
+      const res = await getCommunityInfo(name)
+      if (res.status !== 200) {
+        return null
+      }
+      const result = await res.json()
+      return result
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+  const community = await fetchCommunityInfo(name)
+  return {
+    props: {
+      community
+    }
+  }
 }
 
 export default top
