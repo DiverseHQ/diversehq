@@ -16,8 +16,8 @@ import getSinglePublicationInfo from '../../lib/post/get-single-publication-info
 const Page = ({ type, post, id }) => {
   return (
     <>
-      {type === 'lens' && <LensPostSeo post={post} />}
       {type === 'post' && <OffChainPostSeo post={post} />}
+      {type === 'lens' && <LensPostSeo post={post} />}
       {type === 'notFound' && <PostNotFoundSeo />}
       {type === 'lens' && <LensPostPage id={id} post={post} />}
       {type === 'post' && <PostPage id={id} post={post} />}
