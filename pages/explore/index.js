@@ -113,7 +113,7 @@ const index = () => {
         >
           {communities.map((community) => {
             return (
-              <CommunityInfoCard key={community._id} community={community} />
+              <CommunityInfoCard key={community._id} _community={community} />
             )
           })}
         </InfiniteScroll>

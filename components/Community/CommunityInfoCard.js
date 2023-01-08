@@ -49,17 +49,17 @@ const CommunityInfoCard = ({ _community }) => {
     } catch (error) {
       console.log(error)
     }
-  }, [community._id])
+  }, [community?._id])
 
   useEffect(() => {
-    if (community._id) {
+    if (community?._id) {
       fetchNumberOfPosts()
     }
   }, [community])
 
   useEffect(() => {
     if (!user || !community) return
-    setIsJoined(!!user?.communities?.includes(community._id))
+    setIsJoined(!!user?.communities?.includes(community?._id))
 
     if (user.walletAddress === community.creator) {
       setIsCreator(true)
@@ -147,7 +147,7 @@ const CommunityInfoCard = ({ _community }) => {
   // }
 
   const [currentXP, setCurrentXP] = useState(
-    numberOfPosts * 10 + community.members?.length * 25
+    numberOfPosts * 10 + community?.members?.length * 25
   )
   const [levelThreshold, setLevelThreshold] = useState(250)
   const [currentLevel, setCurrentLevel] = useState(0)
@@ -169,8 +169,8 @@ const CommunityInfoCard = ({ _community }) => {
 
   useEffect(() => {
     console.log('numberOfPosts', numberOfPosts)
-    console.log('community.members?.length', community.members?.length)
-    setCurrentXP(numberOfPosts * 10 + community.members?.length * 25)
+    console.log('community.members?.length', community?.members?.length)
+    setCurrentXP(numberOfPosts * 10 + community?.members?.length * 25)
   }, [numberOfPosts, community])
 
   // useEffect(() => {
