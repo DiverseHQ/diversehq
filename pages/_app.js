@@ -14,6 +14,7 @@ import MasterWrapper from '../components/Common/MasterWrapper'
 import Script from 'next/script'
 import { DefaultSeo } from 'next-seo'
 import MainLayout from '../components/Home/MainLayout'
+import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
   // const [mounted, setMounted] = useState(false)
@@ -35,6 +36,11 @@ function MyApp({ Component, pageProps }) {
           cardType: 'summary_large_image'
         }}
       /> */}
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
+        <meta name="theme-color" content="#eef1ff" />
+      </Head>
 
       <Script
         strategy="afterInteractive"
