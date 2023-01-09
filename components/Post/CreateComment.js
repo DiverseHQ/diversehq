@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { postComment } from '../../api/comment'
 import { FiSend } from 'react-icons/fi'
-import Image from 'next/image'
 // import { FaHandSparkles } from 'react-icons/fa'
 // import { useSigner } from 'wagmi'
 // import ABI from '../../utils/DiveToken.json'
@@ -120,15 +119,14 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
               {!loading && (
                 <FiSend
                   onClick={createComment}
-                  className="w-4 h-4 sm:w-7 sm:h-7 text-p-text"
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
                 />
               )}
               {loading && (
-                <Image
+                <img
                   src="/loading.svg"
                   alt="loading"
-                  width={30}
-                  height={30}
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                 />
               )}
             </div>
@@ -137,7 +135,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
             <input
               type="text"
               ref={commentRef}
-              className="border-none outline-none w-full mt-1 text-xs sm:text-base bg-s-bg"
+              className="border-none outline-none w-full mt-1 text-base bg-s-bg"
               placeholder="Write a comment..."
               onKeyUp={(e) => {
                 if (e.key === 'Enter') createComment()

@@ -7,6 +7,7 @@ import { MdLeaderboard } from 'react-icons/md'
 import { RiArrowDropDownLine } from 'react-icons/ri'
 import { getJoinedCommunitiesApi } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useProfile } from '../Common/WalletContext'
 
 const NavFilterAllPosts = () => {
@@ -17,6 +18,8 @@ const NavFilterAllPosts = () => {
   const { user } = useProfile()
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
+  const [fetchingJoinedCommunities, setFetchingJoinedCommunities] =
+    useState(false)
   const { notifyError } = useNotify()
 
   useEffect(() => {
@@ -56,9 +59,17 @@ const NavFilterAllPosts = () => {
       notifyError('I think you are not logged in')
       return
     }
-    const response = await getJoinedCommunitiesApi()
-    setJoinedCommunities(response)
-    setShowJoinedCommunities(!showJoinedCommunities)
+    try {
+      setFetchingJoinedCommunities(true)
+      const response = await getJoinedCommunitiesApi()
+      setJoinedCommunities(response)
+      setShowJoinedCommunities(!showJoinedCommunities)
+    } catch (error) {
+      console.log('error', error)
+      notifyError('Error getting joined communities')
+    } finally {
+      setFetchingJoinedCommunities(false)
+    }
   }
 
   return (
@@ -103,7 +114,6 @@ const NavFilterAllPosts = () => {
         >
           {showJoinedCommunities &&
             joinedCommunities.map((community) => {
-              console.log(community)
               return (
                 <div
                   key={community._id}
@@ -113,14 +123,14 @@ const NavFilterAllPosts = () => {
                     router.push(`/c/${community.name}`)
                   }}
                 >
-                  <img
+                  <ImageWithPulsingLoader
                     src={
                       community.logoImageUrl
                         ? community.logoImageUrl
                         : '/gradient.jpg'
                     }
                     alt="community logo"
-                    className="rounded-md sm:rounded-xl w-9 h-9"
+                    className="rounded-full object-cover w-9 h-9"
                   />
 
                   <div className="text-p-text ml-4" id={community._id}>
@@ -129,6 +139,22 @@ const NavFilterAllPosts = () => {
                 </div>
               )
             })}
+          {fetchingJoinedCommunities && (
+            <>
+              <div className="flex flex-row items-center justify-center p-2 m-2">
+                <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+              </div>
+              <div className="flex flex-row items-center justify-center p-2 m-2">
+                <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+              </div>
+              <div className="flex flex-row items-center justify-center p-2 m-2">
+                <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+              </div>
+            </>
+          )}
         </div>
       </div>
       <button

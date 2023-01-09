@@ -26,6 +26,7 @@ import {
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const CreatePostPopup = () => {
   const [file, setFile] = useState(null)
@@ -295,7 +296,7 @@ const CreatePostPopup = () => {
                     id={community._id}
                     logoImageUrl={community.logoImageUrl}
                   >
-                    <img
+                    <ImageWithPulsingLoader
                       src={
                         community.logoImageUrl
                           ? community.logoImageUrl
@@ -303,8 +304,6 @@ const CreatePostPopup = () => {
                       }
                       alt="community logo"
                       className="rounded-full w-9 h-9"
-                      width={30}
-                      height={30}
                     />
 
                     <div

@@ -54,8 +54,12 @@ const RightSidebar = () => {
   useEffect(() => {
     if (!user) return
     fetchAndSetCreatedCommunities()
-    fetchTopCommunities()
   }, [user])
+
+  useEffect(() => {
+    if (topCommunities.length > 0) return
+    fetchTopCommunities()
+  }, [])
 
   // useEffect(() => {
   //   fetchCommunitiesAndSetState(

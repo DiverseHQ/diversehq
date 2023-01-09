@@ -7,7 +7,7 @@ import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CreatePostPopup from './CreatePostPopup'
 import useNotificationsCount from '../Notification/useNotificationsCount'
 const MobileBottomNav = () => {
-  const { notificationsCount } = useNotificationsCount()
+  const { notificationsCount, setNotificationsCount } = useNotificationsCount()
   const { showModal } = usePopUpModal()
   const router = useRouter()
   const routeToHome = () => {
@@ -17,6 +17,7 @@ const MobileBottomNav = () => {
     router.push('/explore')
   }
   const routeToNotifications = () => {
+    setNotificationsCount(0)
     router.push('/notification')
   }
   const showCreatePostModal = () => {
