@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 // import MobileBottomNav from '../components/Home/MobileBottomNav'
 // import MobileTopNav from '../components/Home/MobileTopNav'
 // eslint-disable-next-line no-unused-vars
@@ -15,12 +15,32 @@ import Script from 'next/script'
 import { DefaultSeo } from 'next-seo'
 import MainLayout from '../components/Home/MainLayout'
 import Head from 'next/head'
+import { Router } from 'next/router'
+import Loader from '../components/Loader'
+// import { useRouter } from 'next/router'
 
 function MyApp({ Component, pageProps }) {
   // const [mounted, setMounted] = useState(false)
   // // const { isDesktop } = useDevice()
   // useEffect(() => setMounted(true), [])
   // if (!mounted) return null
+  // const [isLoading, setIsLoading] = useState(true)
+  // const router = useRouter()
+  // useEffect(() => {
+  //   router.isReady && setIsLoading(false)
+  // }, [])
+  const [isLoading, setIsLoading] = useState(false)
+  useEffect(() => {
+    Router.events.on('routeChangeStart', () => {
+      setIsLoading(true)
+    })
+    Router.events.on('routeChangeComplete', () => {
+      setIsLoading(false)
+    })
+    Router.events.on('routeChangeError', () => {
+      setIsLoading(false)
+    })
+  }, [Router])
   return (
     <>
       {/* <DefaultSeo
@@ -92,7 +112,8 @@ function MyApp({ Component, pageProps }) {
       /> */}
       <MasterWrapper>
         <MainLayout>
-          <Component {...pageProps} />
+          {isLoading && <Loader />}
+          {!isLoading && <Component {...pageProps} />}
         </MainLayout>
       </MasterWrapper>
     </>

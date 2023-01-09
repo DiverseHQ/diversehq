@@ -329,6 +329,7 @@ const CreatePostPopup = () => {
     setImageValue(URL.createObjectURL(filePicked))
   }
   const removeImage = () => {
+    if (loading) return
     setFile(null)
     setImageValue(null)
   }
@@ -370,6 +371,7 @@ const CreatePostPopup = () => {
   }, [communityOptionsCoord])
 
   const showJoinedCommunities = (e) => {
+    if (loading) return
     if (joinedCommunities?.length === 0) {
       notifyInfo('Hey, you ! Yes you ! Join some communities first')
       return
@@ -427,6 +429,7 @@ const CreatePostPopup = () => {
                 }
                 setIsLensPost(!isLensPost)
               }}
+              disabled={loading}
               size="small"
             />
           </div>
@@ -440,6 +443,7 @@ const CreatePostPopup = () => {
             placeholder="Here you go"
             value={title}
             onChange={onChangeTitle}
+            disabled={loading}
           />
           <div className="text-base leading-relaxed  m-4">
             {file ? (
@@ -464,6 +468,7 @@ const CreatePostPopup = () => {
             accept="image/*,video/*"
             hidden
             onChange={onImageChange}
+            disabled={loading}
           />
         </div>
       </PopUpWrapper>
