@@ -8,12 +8,6 @@ import {
 export default async function getSinglePublicationInfo(
   id: String
 ): Promise<PublicationQuery> {
-  let profileId = null
-  if (typeof localStorage !== 'undefined') {
-    profileId = localStorage.getItem('lensUserProfileId')
-    console.log('profileId', profileId)
-  }
-
   return await fetchData<PublicationQuery, PublicationQueryVariables>(
     PublicationDocument,
     {
@@ -21,7 +15,7 @@ export default async function getSinglePublicationInfo(
         publicationId: id
       },
       reactionRequest: {
-        profileId: profileId
+        profileId: null
       }
     }
   )()

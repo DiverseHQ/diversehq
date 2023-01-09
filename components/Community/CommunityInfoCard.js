@@ -26,6 +26,12 @@ const CommunityInfoCard = ({ _community }) => {
   const { showModal } = usePopUpModal()
   const router = useRouter()
 
+  useEffect(() => {
+    if (community) {
+      setCommunity(_community)
+    }
+  }, [_community])
+
   const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
 

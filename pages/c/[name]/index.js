@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PostsColumn from '../../../components/Post/PostsColumn'
 import NavFilterCommunity from '../../../components/Post/NavFilterCommunity'
 import { getCommunityInfo } from '../../../api/community'
@@ -6,6 +6,9 @@ import CommunityInfoCard from '../../../components/Community/CommunityInfoCard'
 import CommunityNotFound from '../../../components/Community/Page/CommunityNotFound'
 import CommunityPageSeo from '../../../components/Community/CommunityPageSeo'
 const CommunityPage = ({ community }) => {
+  useEffect(() => {
+    console.log('community', community)
+  }, [community])
   return (
     <div className="relative">
       {community && <CommunityPageSeo community={community} />}
