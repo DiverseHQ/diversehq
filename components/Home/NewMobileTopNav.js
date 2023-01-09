@@ -9,9 +9,10 @@ const NewMobileTopNav = () => {
   // const { data: signer } = useSigner()
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
 
-  let prevScrollpos = window.pageYOffset
+  let prevScrollpos = null
 
-  if (window) {
+  if (typeof window !== 'undefined') {
+    prevScrollpos = window.pageYOffset
     window.onscroll = function () {
       const mobileTopNavEl = document.getElementById('mobile-top-navbar')
       if (!mobileTopNavEl) return

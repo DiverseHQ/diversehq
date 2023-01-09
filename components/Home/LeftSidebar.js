@@ -203,12 +203,7 @@ const LeftSidebar = () => {
           </div>
         )}
       </div> */}
-      <div className="flex-1">
-        <p>
-          Create an account to follow your favorite communities and start taking
-          part in conversations.
-        </p>
-      </div>
+
       <div className="flex flex-col gap-2">
         {user && address && (
           <div className="flex flex-col gap-4">

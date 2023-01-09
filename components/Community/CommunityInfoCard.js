@@ -19,15 +19,18 @@ import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
-const CommunityInfoCard = ({
-  community,
-  setCommunity,
-  fetchCommunityInformation
-}) => {
+const CommunityInfoCard = ({ _community }) => {
+  const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
   const router = useRouter()
+
+  useEffect(() => {
+    if (community) {
+      setCommunity(_community)
+    }
+  }, [_community])
 
   const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
@@ -41,15 +44,28 @@ const CommunityInfoCard = ({
     setNumberOfPosts(result.numberOfPosts)
   }
 
+  const fetchCommunityInformation = useCallback(async () => {
+    try {
+      const res = await getCommunityInfoUsingId(community._id)
+      if (res.status !== 200) {
+        return
+      }
+      const result = await res.json()
+      setCommunity(result)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [community?._id])
+
   useEffect(() => {
-    if (community._id) {
+    if (community?._id) {
       fetchNumberOfPosts()
     }
   }, [community])
 
   useEffect(() => {
     if (!user || !community) return
-    setIsJoined(!!user?.communities?.includes(community._id))
+    setIsJoined(!!user?.communities?.includes(community?._id))
 
     if (user.walletAddress === community.creator) {
       setIsCreator(true)
@@ -137,7 +153,7 @@ const CommunityInfoCard = ({
   // }
 
   const [currentXP, setCurrentXP] = useState(
-    numberOfPosts * 10 + community.members?.length * 25
+    numberOfPosts * 10 + community?.members?.length * 25
   )
   const [levelThreshold, setLevelThreshold] = useState(250)
   const [currentLevel, setCurrentLevel] = useState(0)
@@ -159,8 +175,8 @@ const CommunityInfoCard = ({
 
   useEffect(() => {
     console.log('numberOfPosts', numberOfPosts)
-    console.log('community.members?.length', community.members?.length)
-    setCurrentXP(numberOfPosts * 10 + community.members?.length * 25)
+    console.log('community.members?.length', community?.members?.length)
+    setCurrentXP(numberOfPosts * 10 + community?.members?.length * 25)
   }, [numberOfPosts, community])
 
   // useEffect(() => {

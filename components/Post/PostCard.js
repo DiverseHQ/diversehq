@@ -20,11 +20,12 @@ import { useRouter } from 'next/router'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import EditPostPopup from './EditPostPopup'
+import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 TimeAgo.addDefaultLocale(en)
 
 // import useDevice from '../Common/useDevice'
 
-const PostCard = ({ _post, setPosts, setNotFound }) => {
+const PostCard = ({ _post, setPosts }) => {
   // const createdAt = new Date(post.createdAt)
   // eslint-disable-next-line
   const [post, setPost] = useState(_post)
@@ -137,8 +138,8 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
         setPosts((prevPosts) => prevPosts.filter((p) => p?._id !== post?._id))
       }
 
-      if (setNotFound) {
-        setNotFound(true)
+      if (router.pathname.startsWith('/p/')) {
+        router.push('/')
       }
     } catch (error) {
       console.log(error)
@@ -186,7 +187,10 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
       onAction: () => {},
       extraaInfo: {
         top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-        left: e.currentTarget.getBoundingClientRect().left + 'px'
+        right:
+          window.innerWidth -
+          e.currentTarget.getBoundingClientRect().right +
+          'px'
       }
     })
   }
@@ -338,13 +342,11 @@ const PostCard = ({ _post, setPosts, setNotFound }) => {
             )}
             {post?.postVideoUrl && (
               <div className="sm:pl-5 sm:pr-6 sm:pb-1">
-                <video
+                <VideoWithAutoPause
                   src={post.postVideoUrl}
                   className={`image-unselectable object-contain sm:rounded-xl w-full ${
                     router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                   }`}
-                  autoPlay
-                  muted
                   loop
                   controls
                 />
