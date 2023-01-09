@@ -186,7 +186,10 @@ const PostCard = ({ _post, setPosts }) => {
       onAction: () => {},
       extraaInfo: {
         top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-        left: e.currentTarget.getBoundingClientRect().left + 'px'
+        right:
+          window.innerWidth -
+          e.currentTarget.getBoundingClientRect().right +
+          'px'
       }
     })
   }
