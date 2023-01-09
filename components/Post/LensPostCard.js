@@ -19,6 +19,7 @@ import useDevice from '../Common/useDevice'
 import { getCommunityInfoUsingId } from '../../api/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
+import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 
 /**
  * Sample post object
@@ -394,7 +395,7 @@ const LensPostCard = ({ post }) => {
                 {postInfo?.metadata?.mainContentFocus ===
                   PublicationMainFocus.Video && (
                   <div className="sm:pl-5 sm:pr-6 sm:pb-1">
-                    <video
+                    <VideoWithAutoPause
                       src={`${LensInfuraEndpoint}${
                         postInfo?.metadata?.media[0]?.original.url.split(
                           '//'
@@ -403,8 +404,6 @@ const LensPostCard = ({ post }) => {
                       className={`image-unselectable object-contain sm:rounded-xl w-full ${
                         router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                       }`}
-                      autoPlay
-                      muted
                       loop
                       controls
                     />

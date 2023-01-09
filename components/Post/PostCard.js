@@ -20,6 +20,7 @@ import { useRouter } from 'next/router'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import EditPostPopup from './EditPostPopup'
+import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 TimeAgo.addDefaultLocale(en)
 
 // import useDevice from '../Common/useDevice'
@@ -341,13 +342,11 @@ const PostCard = ({ _post, setPosts }) => {
             )}
             {post?.postVideoUrl && (
               <div className="sm:pl-5 sm:pr-6 sm:pb-1">
-                <video
+                <VideoWithAutoPause
                   src={post.postVideoUrl}
                   className={`image-unselectable object-contain sm:rounded-xl w-full ${
                     router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                   }`}
-                  autoPlay
-                  muted
                   loop
                   controls
                 />
