@@ -104,3 +104,7 @@ export const uploadFileToIpfsInfuraAndGetPath = async (file: File) => {
 export const hasWhiteSpace = (s: string): boolean => {
   return /\s/g.test(s)
 }
+
+export const countLinesFromMarkdown = (markdownText: string): number => {
+  return (markdownText.match(/\n/g) || []).length
+}

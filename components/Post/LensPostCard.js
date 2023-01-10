@@ -12,7 +12,7 @@ import {
 import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
 import { useNotify } from '../Common/NotifyContext'
-import { LensInfuraEndpoint } from '../../utils/config'
+import { LensInfuraEndpoint, MAX_CONTENT_LINES } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
@@ -21,6 +21,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
+import { countLinesFromMarkdown } from '../../utils/utils'
 
 /**
  * Sample post object
@@ -237,6 +238,17 @@ const LensPostCard = ({ post }) => {
     }
   }
   const router = useRouter()
+  const [showMore, setShowMore] = useState(
+    countLinesFromMarkdown(postInfo?.metadata?.content) > MAX_CONTENT_LINES &&
+      router.pathname !== '/p/[id]'
+  )
+
+  useEffect(() => {
+    setShowMore(
+      countLinesFromMarkdown(postInfo?.metadata?.content) > MAX_CONTENT_LINES &&
+        router.pathname !== '/p/[id]'
+    )
+  }, [postInfo])
   return (
     <>
       {postInfo && (
@@ -364,10 +376,25 @@ const LensPostCard = ({ post }) => {
             {/* main content */}
             <div className="flex flex-col w-full">
               <div>
-                <div className="mb-2 px-3 sm:pl-5">
-                  <Markup className="break-words font-medium text-base sm:text-lg">
-                    {postInfo?.metadata?.content}
-                  </Markup>
+                <div className="mb-2 px-3 sm:pl-5 ">
+                  <div
+                    className={`${
+                      showMore ? 'h-[150px]' : ''
+                    } overflow-hidden break-words`}
+                  >
+                    <Markup
+                      className={`${
+                        showMore ? 'line-clamp-5' : ''
+                      } linkify whitespace-pre-wrap break-words font-medium text-base sm:text-lg`}
+                    >
+                      {postInfo?.metadata?.content}
+                    </Markup>
+                  </div>
+                  {showMore && (
+                    <Link href={`/p/${postInfo?.id}`} className="text-blue-400">
+                      Show more
+                    </Link>
+                  )}
                 </div>
                 {postInfo?.metadata?.mainContentFocus ===
                   PublicationMainFocus.Image && (

@@ -24,6 +24,8 @@ import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 TimeAgo.addDefaultLocale(en)
 
 import Markup from '../Lexical/Markup'
+import { countLinesFromMarkdown } from '../../utils/utils'
+import { MAX_CONTENT_LINES } from '../../utils/config'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -49,6 +51,17 @@ const PostCard = ({ _post, setPosts }) => {
   const { showModal } = usePopUpModal()
 
   const router = useRouter()
+  const [showMore, setShowMore] = useState(
+    countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES &&
+      router.pathname !== '/p/[id]'
+  )
+
+  useEffect(() => {
+    setShowMore(
+      countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES &&
+        router.pathname !== '/p/[id]'
+    )
+  }, [post])
 
   useEffect(() => {
     setTotalCount(upvoteCount - downvoteCount)
@@ -320,9 +333,25 @@ const PostCard = ({ _post, setPosts }) => {
         <div className="flex flex-col w-full">
           <div>
             <div className="mb-2 px-3 sm:pl-5 ">
-              <Markup className="break-words font-medium text-base sm:text-lg">
-                {post?.title}
-              </Markup>
+              <div
+                className={`${
+                  showMore ? 'h-[150px]' : ''
+                } overflow-hidden break-words`}
+              >
+                <Markup
+                  className={`${
+                    showMore ? 'line-clamp-5' : ''
+                  } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words font-medium text-base sm:text-lg`}
+                >
+                  {post?.title}
+                </Markup>
+                {/* todo showmore for clamped text */}
+              </div>
+              {showMore && (
+                <Link href={`/p/${post._id}`} className="text-blue-400">
+                  Show more
+                </Link>
+              )}
             </div>
             {post?.postImageUrl && (
               <Link href={`/p/${post?._id}`} passHref>

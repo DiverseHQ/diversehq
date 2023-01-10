@@ -26,6 +26,18 @@
       opacity: 0;
     }
   }
+
+  /* span a {
+    color: #1d9bf0;
+    text-decoration-color: #1d9bf0;
+    text-decoration: underline;
+  }
+
+  span a:hover {
+    border-bottom: 1px solid #1d9bf0;
+    border: 1px solid #000000;
+  } */
+
   .mobile-top-nav {
     position: fixed; /* Make it stick/fixed */
     top: 0; /* Stay on top */
