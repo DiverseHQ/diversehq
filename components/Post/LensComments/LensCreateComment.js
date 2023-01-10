@@ -14,9 +14,8 @@ import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 
-const LensCreateComment = ({ postId, authorAddress, setComments }) => {
-  const { error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
+const LensCreateComment = ({ postId, setComments }) => {
+  const { error, signTypedDataAndBroadcast } = useSignTypedDataAndBroadcast()
 
   const { mutateAsync: createCommentWithSign } =
     useCreateCommentTypedDataMutation()
@@ -29,7 +28,6 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
   const [loading, setLoading] = useState(false)
 
   // todo: add appreciate amoount using contract
-  console.log('authorAddress', authorAddress)
 
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { user } = useProfile()
@@ -161,12 +159,6 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
   }
 
   useEffect(() => {
-    if (result && type === 'createComment') {
-      console.log('comment created successfully result', result)
-    }
-  }, [result, type])
-
-  useEffect(() => {
     if (error) {
       notifyError(error)
     }
@@ -194,7 +186,7 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
               {!loading && (
                 <FiSend
                   onClick={createComment}
-                  className="w-4 h-4 sm:w-7 sm:h-7 text-p-text"
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
                 />
               )}
               {loading && (
@@ -212,7 +204,7 @@ const LensCreateComment = ({ postId, authorAddress, setComments }) => {
               type="text"
               ref={commentRef}
               className="border-none outline-none w-full mt-1 text-base bg-s-bg"
-              placeholder="Write a comment..."
+              placeholder="Say it.."
               onKeyUp={(e) => {
                 if (e.key === 'Enter') createComment()
               }}

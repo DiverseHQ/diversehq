@@ -136,7 +136,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
               type="text"
               ref={commentRef}
               className="border-none outline-none w-full mt-1 text-base bg-s-bg"
-              placeholder="Write a comment..."
+              placeholder="Say it.."
               onKeyUp={(e) => {
                 if (e.key === 'Enter') createComment()
               }}
