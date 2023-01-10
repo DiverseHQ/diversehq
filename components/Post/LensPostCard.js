@@ -300,7 +300,7 @@ const LensPostCard = ({ post }) => {
                           ? postInfo?.communityInfo?.logoImageUrl
                           : '/gradient.jpg'
                       }
-                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>
                   <div className="flex flex-col justify-center items-start">

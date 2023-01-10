@@ -252,7 +252,7 @@ const PostCard = ({ _post, setPosts }) => {
                   src={
                     post.communityLogo ? post.communityLogo : '/gradient.jpg'
                   }
-                  className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                  className="object-cover rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
                 />
               </Link>
               <div className="flex flex-col justify-center items-start">
