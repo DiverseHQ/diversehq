@@ -7,11 +7,11 @@ import { WalletProvider } from './WalletContext'
 import RainbowKitWrapper from './RainbowKitWrapper'
 import CustomPopUpModalProvider from './CustomPopUpProvider'
 import LensUserContextProvider from '../../lib/LensUserContext'
+import LexicalWrapper from './LexicalWrapper'
 
 const queryClient = new QueryClient()
 
 const MasterWrapper = ({ children }) => {
-  // pushing to make vercel happy
   return (
     <RainbowKitWrapper>
       <NotifyProvider>
@@ -19,7 +19,11 @@ const MasterWrapper = ({ children }) => {
           <LensUserContextProvider>
             <WalletProvider>
               <ThemeProvider defaultTheme="light">
-                <CustomPopUpModalProvider>{children}</CustomPopUpModalProvider>
+                <LexicalWrapper>
+                  <CustomPopUpModalProvider>
+                    {children}
+                  </CustomPopUpModalProvider>
+                </LexicalWrapper>
               </ThemeProvider>
             </WalletProvider>
           </LensUserContextProvider>

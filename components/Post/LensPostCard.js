@@ -20,6 +20,7 @@ import { getCommunityInfoUsingId } from '../../api/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+import Markup from '../Lexical/Markup'
 
 /**
  * Sample post object
@@ -363,8 +364,10 @@ const LensPostCard = ({ post }) => {
             {/* main content */}
             <div className="flex flex-col w-full">
               <div>
-                <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg">
-                  {postInfo?.metadata?.content}
+                <div className="mb-2 px-3 sm:pl-5">
+                  <Markup className="break-words font-medium text-base sm:text-lg">
+                    {postInfo?.metadata?.content}
+                  </Markup>
                 </div>
                 {postInfo?.metadata?.mainContentFocus ===
                   PublicationMainFocus.Image && (

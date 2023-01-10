@@ -23,6 +23,8 @@ import EditPostPopup from './EditPostPopup'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 TimeAgo.addDefaultLocale(en)
 
+import Markup from '../Lexical/Markup'
+// import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
 const PostCard = ({ _post, setPosts }) => {
@@ -317,8 +319,10 @@ const PostCard = ({ _post, setPosts }) => {
         {/* main content */}
         <div className="flex flex-col w-full">
           <div>
-            <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg ">
-              {post.title}
+            <div className="mb-2 px-3 sm:pl-5 ">
+              <Markup className="break-words font-medium text-base sm:text-lg">
+                {post?.title}
+              </Markup>
             </div>
             {post?.postImageUrl && (
               <Link href={`/p/${post?._id}`} passHref>
