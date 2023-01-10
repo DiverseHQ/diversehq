@@ -22,7 +22,8 @@
     "pages/search.js",
     "pages/notification.js",
     "./eslintrc.js",
-    "utils/helper.ts"
+    "utils/helper.ts",
+    "components/Lexical/ImagesPlugin.js"
   ],
   "exclude": ["node_modules"]
 }

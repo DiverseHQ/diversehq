@@ -10,8 +10,13 @@ import {
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../../Common/NotifyContext'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import { LensInfuraEndpoint } from '../../../utils/config'
+import LensRepliedComments from './LensRepliesComments'
+import LensCreateComment from './LensCreateComment'
 TimeAgo.addDefaultLocale(en)
+
 const LensCommentCard = ({ comment }) => {
+  const [showCreateComment, setShowCreateComment] = useState(false)
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
   const [upvoteCount, setUpvoteCount] = useState(
@@ -24,12 +29,18 @@ const LensCommentCard = ({ comment }) => {
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 
+  const [comments, setComments] = useState([])
+
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
 
   const handleUpvote = async () => {
     if (reaction === ReactionTypes.Upvote) return
+    if (!comment?.id) {
+      notifyInfo('not indexed yet, try again later')
+      return
+    }
     try {
       if (!isSignedIn || !hasProfile) {
         notifyInfo('How about loging in lens, first?')
@@ -62,6 +73,10 @@ const LensCommentCard = ({ comment }) => {
         notifyInfo('How about loging in lens, first?')
         return
       }
+      if (!comment?.id) {
+        notifyInfo('not indexed yet, try again later')
+        return
+      }
       setReaction(ReactionTypes.Downvote)
       if (reaction === ReactionTypes.Upvote) {
         setUpvoteCount(upvoteCount - 1)
@@ -83,19 +98,22 @@ const LensCommentCard = ({ comment }) => {
   return (
     <>
       {comment && (
-        <div className="px-3 sm:px-5 w-full bg-s-bg my-3 sm:rounded-2xl py-2">
-          <div className="flex flex-row items-center justify-between">
-            <div className="flex flex-row items-center">
+        <div className="w-full">
+          {/* top row */}
+          <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center pr-2">
               {/* commenting for now */}
               {/* todo : ability to set lens profile image and fetch here */}
 
               <ImageWithPulsingLoader
                 src={
-                  comment?.profile?.picture
-                    ? comment?.profile?.picture?.original?.url
+                  comment?.profile?.picture?.original?.url?.startsWith('ipfs')
+                    ? `${LensInfuraEndpoint}${
+                        comment?.profile?.picture?.original?.url.split('//')[1]
+                      }`
                     : '/gradient.jpg'
                 }
-                className="w-6 h-6 sm:w-8 sm:h-8 rounded-full mr-2"
+                className="w-6 h-6 rounded-full mr-1"
               />
 
               <Link href={`/u/${comment?.profile?.handle}`} passHref>
@@ -104,41 +122,72 @@ const LensCommentCard = ({ comment }) => {
                 </div>
               </Link>
             </div>
-            <div className="flex flex-row items-center">
-              <div className="text-xs sm:text-base">
-                <ReactTimeAgo
-                  date={new Date(comment.createdAt)}
-                  locale="en-US"
-                />
-              </div>
-            </div>
+            <ReactTimeAgo date={new Date(comment.createdAt)} locale="en-US" />
           </div>
 
-          <div className="pl-8 sm:pl-10">
-            <div className="mt-1">{comment?.metadata?.content}</div>
+          {/* padded content with line*/}
+          <div className="flex flex-row w-full">
+            {/* vertical line */}
+            <div className="w-7 flex flex-row items-center justify-center py-2">
+              <div className="border-l-2 border-gray-300 h-full"></div>
+            </div>
+            <div className="w-full">
+              {/* content */}
+              <div className="mt-1">{comment?.metadata?.content}</div>
 
-            {/* upvote and downvote */}
-            <div className="flex flex-row items-center gap-x-2 pt-2">
-              <img
-                //  onClick={liked ? handleUnLike : handleLike}
-                src={
-                  reaction === ReactionTypes.Upvote
-                    ? '/UpvoteFilled.svg'
-                    : '/Upvote.svg'
-                }
-                onClick={handleUpvote}
-                className="w-5 h-5 cursor-pointer"
-              />
-              <div className="font-bold">{voteCount}</div>
-              <img
-                src={
-                  reaction === ReactionTypes.Downvote
-                    ? '/DownvoteFilled.svg'
-                    : '/Downvote.svg'
-                }
-                className="w-5 h-5 cursor-pointer"
-                onClick={handleDownvote}
-              />
+              {/* last row */}
+              <div className="flex flex-row items-center space-x-10 pb-2 pt-1">
+                {/* upvote and downvote */}
+                <div className="flex flex-row items-center gap-x-2">
+                  <img
+                    src={
+                      reaction === ReactionTypes.Upvote
+                        ? '/UpvoteFilled.svg'
+                        : '/Upvote.svg'
+                    }
+                    onClick={handleUpvote}
+                    className="w-6 h-6 cursor-pointer hover:bg-gray-100 px-1 rounded-md"
+                  />
+                  <div className="font-bold">{voteCount}</div>
+                  <img
+                    src={
+                      reaction === ReactionTypes.Downvote
+                        ? '/DownvoteFilled.svg'
+                        : '/Downvote.svg'
+                    }
+                    className="w-6 h-6 cursor-pointer hover:bg-gray-100 px-1 rounded-md"
+                    onClick={handleDownvote}
+                  />
+                </div>
+                <button
+                  className="hover:bg-gray-100 px-1 rounded-md"
+                  onClick={() => {
+                    setShowCreateComment(!showCreateComment)
+                  }}
+                >
+                  Reply
+                </button>
+              </div>
+
+              {/* create comment if showCreateComment is true */}
+              {showCreateComment && (
+                <LensCreateComment
+                  postId={comment.id}
+                  addComment={(commnet) => {
+                    setComments([commnet, ...comments])
+                    setShowCreateComment(false)
+                  }}
+                />
+              )}
+
+              {/* replies */}
+              <div className="w-full">
+                <LensRepliedComments
+                  commentId={comment.id}
+                  comments={comments}
+                  setComments={setComments}
+                />
+              </div>
             </div>
           </div>
         </div>

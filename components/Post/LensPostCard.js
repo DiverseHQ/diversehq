@@ -12,7 +12,7 @@ import {
 import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
 import { useNotify } from '../Common/NotifyContext'
-import { LensInfuraEndpoint } from '../../utils/config'
+import { LensInfuraEndpoint, MAX_CONTENT_LINES } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
@@ -20,6 +20,8 @@ import { getCommunityInfoUsingId } from '../../api/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+import Markup from '../Lexical/Markup'
+import { countLinesFromMarkdown } from '../../utils/utils'
 
 /**
  * Sample post object
@@ -158,15 +160,12 @@ const LensPostCard = ({ post }) => {
 
   const fetchCommunityInformationAndSetPost = async () => {
     const communityId = post?.metadata?.tags?.[0]
-    console.log('communityId', communityId)
     if (!communityId) return
     const communityInfo = await getCommunityInfoUsingId(communityId)
-    console.log('communityInfo', communityInfo)
     setPostInfo({ ...post, communityInfo })
   }
 
   useEffect(() => {
-    console.log('lenspotsCardPost', postInfo)
     if (!postInfo) return
     if (!postInfo?.communityInfo) {
       fetchCommunityInformationAndSetPost()
@@ -176,11 +175,9 @@ const LensPostCard = ({ post }) => {
   const handleShare = async () => {
     try {
       const url = window.location.href
-      const text = `${post?.metadata?.content}`
       const title = 'Share this post'
       navigator.share({
         title,
-        text,
         url
       })
     } catch (error) {
@@ -240,8 +237,18 @@ const LensPostCard = ({ post }) => {
       console.log(error)
     }
   }
-  console.log(post)
   const router = useRouter()
+  const [showMore, setShowMore] = useState(
+    countLinesFromMarkdown(postInfo?.metadata?.content) > MAX_CONTENT_LINES &&
+      router.pathname !== '/p/[id]'
+  )
+
+  useEffect(() => {
+    setShowMore(
+      countLinesFromMarkdown(postInfo?.metadata?.content) > MAX_CONTENT_LINES &&
+        router.pathname !== '/p/[id]'
+    )
+  }, [postInfo])
   return (
     <>
       {postInfo && (
@@ -300,7 +307,7 @@ const LensPostCard = ({ post }) => {
                           ? postInfo?.communityInfo?.logoImageUrl
                           : '/gradient.jpg'
                       }
-                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>
                   <div className="flex flex-col justify-center items-start">
@@ -342,7 +349,7 @@ const LensPostCard = ({ post }) => {
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center ml-[9px] mt-2">
+              <div className="flex flex-col items-center ml-[9px] my-2">
                 <img
                   //  onClick={liked ? handleUnLike : handleLike}
                   src={
@@ -369,8 +376,25 @@ const LensPostCard = ({ post }) => {
             {/* main content */}
             <div className="flex flex-col w-full">
               <div>
-                <div className="break-words mb-2 px-3 sm:pl-5 font-medium text-base sm:text-lg">
-                  {postInfo?.metadata?.content}
+                <div className="mb-2 px-3 sm:pl-5 ">
+                  <div
+                    className={`${
+                      showMore ? 'h-[150px]' : ''
+                    } overflow-hidden break-words`}
+                  >
+                    <Markup
+                      className={`${
+                        showMore ? 'line-clamp-5' : ''
+                      } linkify whitespace-pre-wrap break-words font-medium text-base sm:text-lg`}
+                    >
+                      {postInfo?.metadata?.content}
+                    </Markup>
+                  </div>
+                  {showMore && (
+                    <Link href={`/p/${postInfo?.id}`} className="text-blue-400">
+                      Show more
+                    </Link>
+                  )}
                 </div>
                 {postInfo?.metadata?.mainContentFocus ===
                   PublicationMainFocus.Image && (

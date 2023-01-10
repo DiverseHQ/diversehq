@@ -10,7 +10,7 @@ const FormTextInput = ({
 }) => {
   return (
     <label>
-      <div className="border rounded-xl border-p-border mx-4 w-ful py-2 px-4 my-4">
+      <div className="border rounded-xl border-p-border mx-4 py-2 px-4 my-4">
         <div className="pb-2">{label}</div>
         <input
           type="text"

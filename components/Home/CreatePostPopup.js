@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { useRouter } from 'next/router'
@@ -6,7 +6,17 @@ import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
-import FormTextInput from '../Common/UI/FormTextInput'
+// import FormTextInput from '../Common/UI/FormTextInput'
+import {
+  $convertToMarkdownString,
+  TEXT_FORMAT_TRANSFORMERS
+} from '@lexical/markdown'
+import { ContentEditable } from '@lexical/react/LexicalContentEditable'
+import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
+import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin'
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import {
   uploadFileToFirebaseAndGetUrl,
   uploadFileToIpfsInfuraAndGetPath,
@@ -27,6 +37,10 @@ import {
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import ImagesPlugin from '../Lexical/ImagesPlugin'
+import LexicalAutoLinkPlugin from '../Lexical/LexicalAutoLinkPlugin'
+
+const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
 const CreatePostPopup = () => {
   const [file, setFile] = useState(null)
@@ -41,8 +55,10 @@ const CreatePostPopup = () => {
     left: '0px',
     top: '0px'
   })
-  const [isLensPost, setIsLensPost] = useState(false)
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const [isLensPost, setIsLensPost] = useState(
+    (isSignedIn && hasProfile) || false
+  )
 
   const { notifyError, notifySuccess, notifyInfo } = useNotify()
   const router = useRouter()
@@ -303,7 +319,7 @@ const CreatePostPopup = () => {
                           : '/gradient.jpg'
                       }
                       alt="community logo"
-                      className="rounded-full w-9 h-9"
+                      className="rounded-full w-9 h-9 object-cover"
                     />
 
                     <div
@@ -383,9 +399,9 @@ const CreatePostPopup = () => {
     })
   }
 
-  const onChangeTitle = useCallback((e) => {
-    setTitle(e.target.value)
-  }, [])
+  // const onChangeTitle = useCallback((e) => {
+  //   setTitle(e.target.value)
+  // }, [])
 
   const PopUpModal = () => {
     return (
@@ -438,13 +454,50 @@ const CreatePostPopup = () => {
         {showCommunityOptions && customOptions()}
         {/* <!-- Modal body --> */}
         <div>
-          <FormTextInput
+          {/* <FormTextInput
             label="Title"
             placeholder="Here you go"
             value={title}
             onChange={onChangeTitle}
             disabled={loading}
-          />
+          /> */}
+          {/* Rich text editor */}
+          <div className="relative">
+            {/* todo toolbar for rich text editor */}
+            {/* <ToolbarPlugin /> */}
+            <RichTextPlugin
+              contentEditable={
+                <ContentEditable className="block min-h-[70px] overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 " />
+              }
+              placeholder={
+                <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
+                  {"What's on your mind?"}
+                </div>
+              }
+            />
+            <OnChangePlugin
+              onChange={(editorState) => {
+                editorState.read(() => {
+                  const markdown = $convertToMarkdownString(TRANSFORMERS)
+                  console.log('markdown', markdown)
+                  setTitle(markdown)
+                })
+              }}
+            />
+            <HistoryPlugin />
+            <HashtagPlugin />
+            <LexicalAutoLinkPlugin />
+            <ImagesPlugin
+              onPaste={async (files) => {
+                const file = files[0]
+                if (!file) return
+                setFile(file)
+                setImageValue(URL.createObjectURL(file))
+              }}
+            />
+            <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          </div>
+
           <div className="text-base leading-relaxed  m-4">
             {file ? (
               showAddedFile()

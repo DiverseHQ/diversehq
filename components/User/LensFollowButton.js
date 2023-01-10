@@ -93,6 +93,8 @@ const LensFollowButton = ({ lensProfile }) => {
     }
   }, [isSignedTx, type])
 
+  console.log('lensProfile', lensProfile)
+
   return (
     <>
       {lensProfile && isFollowedByMe ? (
@@ -111,7 +113,7 @@ const LensFollowButton = ({ lensProfile }) => {
           }}
           className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
         >
-          Follow
+          {lensProfile.isFollowing ? 'Follow back' : 'Follow'}
         </button>
       )}
     </>

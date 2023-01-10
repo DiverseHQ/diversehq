@@ -5,7 +5,7 @@ import LensFollowButton from '../User/LensFollowButton'
 const LensNotificationFollowedCard = ({ notification }) => {
   return (
     <div className="px-2 flex flex-row items-center">
-      <div>
+      <div className="pr-2">
         <span>
           <Link
             href={`/u/${notification?.wallet?.defaultProfile?.handle}`}
