@@ -303,7 +303,7 @@ const CreatePostPopup = () => {
                           : '/gradient.jpg'
                       }
                       alt="community logo"
-                      className="rounded-full w-9 h-9"
+                      className="rounded-full w-9 h-9 object-cover"
                     />
 
                     <div
