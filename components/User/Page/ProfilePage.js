@@ -136,11 +136,15 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                   </Link>
                 )}
               </div>
-              {hasProfile && isSignedIn && myLensProfile && (
-                <>
-                  <LensFollowButton lensProfile={lensProfile} />
-                </>
-              )}
+              {hasProfile &&
+                isSignedIn &&
+                myLensProfile &&
+                lensProfile.ownedBy?.toLowerCase() !==
+                  user?.walletAddress?.toLowerCase() && (
+                  <>
+                    <LensFollowButton lensProfile={lensProfile} />
+                  </>
+                )}
             </div>
             <div>{profile.bio}</div>
             {/* offchain data */}

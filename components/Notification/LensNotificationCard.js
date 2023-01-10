@@ -15,7 +15,6 @@ const NotificationTypeName = {
 }
 
 const LensNotificationCard = ({ notification }) => {
-  console.log('notification', notification)
   return (
     <div className="justify-between my-4 px-3 py-2 sm:p-3 sm:bg-s-bg sm:rounded-xl border-b sm:border-none shadow-sm flex flex-row w-full">
       {notification?.__typename ===
