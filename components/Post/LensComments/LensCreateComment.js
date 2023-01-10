@@ -1,7 +1,5 @@
 import { uuidv4 } from '@firebase/util'
-import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
-import { FiSend } from 'react-icons/fi'
 import {
   PublicationMainFocus,
   useCreateCommentTypedDataMutation,
@@ -14,7 +12,7 @@ import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 
-const LensCreateComment = ({ postId, setComments }) => {
+const LensCreateComment = ({ postId, addComment }) => {
   const { error, signTypedDataAndBroadcast } = useSignTypedDataAndBroadcast()
 
   const { mutateAsync: createCommentWithSign } =
@@ -81,24 +79,41 @@ const LensCreateComment = ({ postId, setComments }) => {
           })
         ).createCommentViaDispatcher
 
+        console.log('dispatcherResult', dispatcherResult)
+
         //sending comment to feed without waiting for transaction to be indexed
-        setComments((prev) => [
-          {
-            profile: {
-              picture: {
-                original: {
-                  url: user?.profileImageUrl
-                }
-              },
-              handle: lensProfile?.defaultProfile?.handle
+        addComment({
+          profile: {
+            picture: {
+              original: {
+                url: lensProfile?.defaultProfile?.picture?.original?.url
+              }
             },
-            createdAt: new Date().toISOString(),
-            metadata: {
-              content: commentRef.current.value
-            }
+            handle: lensProfile?.defaultProfile?.handle
           },
-          ...prev
-        ])
+          createdAt: new Date().toISOString(),
+          metadata: {
+            content: commentRef.current.value
+          }
+        })
+
+        // setComments((prev) => [
+        //   {
+        //     profile: {
+        //       picture: {
+        //         original: {
+        //           url: user?.profileImageUrl
+        //         }
+        //       },
+        //       handle: lensProfile?.defaultProfile?.handle
+        //     },
+        //     createdAt: new Date().toISOString(),
+        //     metadata: {
+        //       content: commentRef.current.value
+        //     }
+        //   },
+        //   ...prev
+        // ])
 
         setLoading(false)
         commentRef.current.value = ''
@@ -121,30 +136,49 @@ const LensCreateComment = ({ postId, setComments }) => {
             request: createCommentRequest
           })
         ).createCommentTypedData
-        console.log(commentTypedResult)
+        console.log('commentTypedResult', commentTypedResult)
 
         //sending comment to feed without waiting for transaction to be indexed
-        setComments((prev) => [
-          {
-            profile: {
-              picture: {
-                original: {
-                  url: user?.profileImageUrl
-                }
-              },
-              handle: lensProfile?.defaultProfile?.handle
+
+        addComment({
+          profile: {
+            picture: {
+              original: {
+                url: lensProfile?.defaultProfile?.picture?.original?.url
+              }
             },
-            createdAt: new Date().toISOString(),
-            metadata: {
-              content: commentRef.current.value
-            },
-            stats: {
-              totalUpvotes: 0,
-              totalDownvotes: 0
-            }
+            handle: lensProfile?.defaultProfile?.handle
           },
-          ...prev
-        ])
+          createdAt: new Date().toISOString(),
+          metadata: {
+            content: commentRef.current.value
+          },
+          stats: {
+            totalUpvotes: 0,
+            totalDownvotes: 0
+          }
+        })
+        // setComments((prev) => [
+        //   {
+        //     profile: {
+        //       picture: {
+        //         original: {
+        //           url: user?.profileImageUrl
+        //         }
+        //       },
+        //       handle: lensProfile?.defaultProfile?.handle
+        //     },
+        //     createdAt: new Date().toISOString(),
+        //     metadata: {
+        //       content: commentRef.current.value
+        //     },
+        //     stats: {
+        //       totalUpvotes: 0,
+        //       totalDownvotes: 0
+        //     }
+        //   },
+        //   ...prev
+        // ])
         setLoading(false)
         commentRef.current.value = ''
 
@@ -182,7 +216,7 @@ const LensCreateComment = ({ postId, setComments }) => {
                 {lensProfile?.defaultProfile?.handle}
               </div>
             </div>
-            <div className="flex flex-row items-center justify-center">
+            {/* <div className="flex flex-row items-center justify-center">
               {!loading && (
                 <FiSend
                   onClick={createComment}
@@ -190,26 +224,49 @@ const LensCreateComment = ({ postId, setComments }) => {
                 />
               )}
               {loading && (
-                <Image
+                <img
                   src="/loading.svg"
                   alt="loading"
-                  width={30}
-                  height={30}
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                 />
               )}
-            </div>
+            </div> */}
           </div>
           <div className="pl-8 sm:pl-10">
             <input
               type="text"
               ref={commentRef}
-              className="border-none outline-none w-full mt-1 text-base bg-s-bg"
+              className={`border-none outline-none w-full mt-1   text-base bg-s-bg ${
+                loading ? 'text-s-text' : 'text-p-text'
+              }`}
               placeholder="Say it.."
               onKeyUp={(e) => {
                 if (e.key === 'Enter') createComment()
               }}
               disabled={loading}
             />
+            <div className="w-full flex flex-row justify-end">
+              <button
+                disabled={loading}
+                onClick={createComment}
+                className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
+              >
+                {loading ? 'Commenting...' : 'Comment'}
+              </button>
+              {/* {!loading && (
+                <FiSend
+                  onClick={createComment}
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
+                />
+              )}
+              {loading && (
+                <img
+                  src="/loading.svg"
+                  alt="loading"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
+                />
+              )} */}
+            </div>
           </div>
         </div>
       )}

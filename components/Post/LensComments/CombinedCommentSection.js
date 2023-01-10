@@ -46,6 +46,10 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
     setComments([...comments, ...newComments])
   }
 
+  const addComment = (comment) => {
+    setComments([comment, ...comments])
+  }
+
   const getMorePosts = async () => {
     if (nextCursor) {
       setCursor(nextCursor)
@@ -59,11 +63,12 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
         <LensCreateComment
           postId={postId}
           authorAddress={postInfo.profile}
-          setComments={setComments}
+          addComment={addComment}
+          // setComments={setComments}
         />
       )}
       {/* comments section */}
-      <div>
+      <div className="bg-s-bg sm:rounded-2xl my-3 px-3 sm:px-5 py-2">
         <InfiniteScroll
           dataLength={comments.length}
           next={getMorePosts}

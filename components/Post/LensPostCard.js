@@ -158,15 +158,12 @@ const LensPostCard = ({ post }) => {
 
   const fetchCommunityInformationAndSetPost = async () => {
     const communityId = post?.metadata?.tags?.[0]
-    console.log('communityId', communityId)
     if (!communityId) return
     const communityInfo = await getCommunityInfoUsingId(communityId)
-    console.log('communityInfo', communityInfo)
     setPostInfo({ ...post, communityInfo })
   }
 
   useEffect(() => {
-    console.log('lenspotsCardPost', postInfo)
     if (!postInfo) return
     if (!postInfo?.communityInfo) {
       fetchCommunityInformationAndSetPost()
@@ -240,7 +237,6 @@ const LensPostCard = ({ post }) => {
       console.log(error)
     }
   }
-  console.log(post)
   const router = useRouter()
   return (
     <>
@@ -342,7 +338,7 @@ const LensPostCard = ({ post }) => {
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center ml-[9px] mt-2">
+              <div className="flex flex-col items-center ml-[9px] my-2">
                 <img
                   //  onClick={liked ? handleUnLike : handleLike}
                   src={

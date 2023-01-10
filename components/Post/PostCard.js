@@ -297,7 +297,7 @@ const PostCard = ({ _post, setPosts }) => {
 
       <div className="flex flex-row w-full">
         {!isMobile && (
-          <div className="flex flex-col items-center ml-[9px] mt-2">
+          <div className="flex flex-col items-center ml-[9px] my-2">
             <img
               onClick={handleUpvote}
               src={reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'}

@@ -41,8 +41,10 @@ const CreatePostPopup = () => {
     left: '0px',
     top: '0px'
   })
-  const [isLensPost, setIsLensPost] = useState(false)
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const [isLensPost, setIsLensPost] = useState(
+    (isSignedIn && hasProfile) || false
+  )
 
   const { notifyError, notifySuccess, notifyInfo } = useNotify()
   const router = useRouter()
