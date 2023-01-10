@@ -111,11 +111,9 @@ const PostCard = ({ _post, setPosts }) => {
   const handleShare = async () => {
     try {
       const url = window.location.href
-      const text = `${post.title}`
       const title = 'Share this post'
       navigator.share({
         title,
-        text,
         url
       })
     } catch (error) {

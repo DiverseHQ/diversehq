@@ -173,11 +173,9 @@ const LensPostCard = ({ post }) => {
   const handleShare = async () => {
     try {
       const url = window.location.href
-      const text = `${post?.metadata?.content}`
       const title = 'Share this post'
       navigator.share({
         title,
-        text,
         url
       })
     } catch (error) {
