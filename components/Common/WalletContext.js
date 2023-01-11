@@ -22,17 +22,12 @@ export const WalletProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const { data: signer } = useSigner()
   const { notifyInfo } = useNotify()
-  const { address, isDisconnected } = useAccount({
-    onConnect({ address, connector, isReconnected }) {
-      console.log('onConnect', address, connector, isReconnected)
-    }
-  })
+  const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
   const { disconnect } = useDisconnect()
 
   useEffect(() => {
     if (signer && address) {
-      console.log('generating token for api')
       if (getLocalToken()) {
         fetchWeb3Token()
       }
@@ -41,7 +36,6 @@ export const WalletProvider = ({ children }) => {
 
   useEffect(() => {
     if (isDisconnected) {
-      console.log('isDisconnected', isDisconnected)
       setUser(null)
       setLoading(false)
       if (getLocalToken()) {
@@ -56,7 +50,6 @@ export const WalletProvider = ({ children }) => {
       setLoading(true)
       if (!address) return
       const userInfo = await getUserInfo(address)
-      console.log('userInfo', userInfo)
       if (userInfo && userInfo.role <= userRoles.WHITELISTED_USER) {
         setUser(userInfo)
       } else {
@@ -80,13 +73,11 @@ export const WalletProvider = ({ children }) => {
     try {
       let existingTokenOnLocalStorage = null
       existingTokenOnLocalStorage = getLocalToken()
-      console.log('existingTokenOnLocalStorage', existingTokenOnLocalStorage)
 
       try {
         //return if token is already in local storage and is not expired
         if (existingTokenOnLocalStorage) {
           const web3Token = Web3Token.verify(existingTokenOnLocalStorage)
-          console.log('web3Token', web3Token)
           if (
             web3Token &&
             new Date(web3Token?.body['expiration-time']) > new Date()

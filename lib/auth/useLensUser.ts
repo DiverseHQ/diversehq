@@ -34,15 +34,6 @@ export default function useLensUser() {
     }
   }, [localStorageQuery.data, address])
 
-  useEffect(() => {
-    if (lensProfileQuery?.data?.defaultProfile?.id) {
-      localStorage.setItem(
-        'lensUserProfileId',
-        lensProfileQuery.data.defaultProfile.id
-      )
-    }
-  }, [lensProfileQuery?.data])
-
   return {
     isSignedIn: !!address && !!localStorageQuery.data,
     hasProfile: !!lensProfileQuery.data?.defaultProfile,
