@@ -52,22 +52,17 @@ const LensPostsExplorePublicationsColumn = () => {
   }
 
   const handleSetPosts = async (newPosts) => {
-    console.log('newposts before', newPosts)
     const communityIds = newPosts.map((post) => post.metadata.tags[0])
-    console.log('communityIds', communityIds)
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
     )
-    console.log('communityInfoForPosts', communityInfoForPosts)
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
-    console.log('newPosts after', newPosts)
     setPosts([...posts, ...newPosts])
   }
 
   const handleExplorePublications = async () => {
-    console.log('lensposts explorepublications', data)
     if (data?.explorePublications?.pageInfo?.next) {
       setNextCursor(data?.explorePublications?.pageInfo?.next)
     }
@@ -89,10 +84,8 @@ const LensPostsExplorePublicationsColumn = () => {
 
   const getAndSetAllCommunitiesIds = async () => {
     let allCommunitiesIds = await getAllCommunitiesIds()
-    console.log('allCommunitiesIds', allCommunitiesIds)
     //tag ids out of object
     allCommunitiesIds = allCommunitiesIds.map((community) => community._id)
-    console.log('allCommunitiesIds', allCommunitiesIds)
     setCommunityIds(allCommunitiesIds)
   }
 

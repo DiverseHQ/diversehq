@@ -32,6 +32,9 @@ const LensLoginButton = () => {
 
   async function handleLogin() {
     await login()
+    await queryClient.invalidateQueries({
+      queryKey: ['lensUser', 'defaultProfile']
+    })
   }
 
   const handleCreateLensProfileAndMakeDefault = () => {
@@ -68,15 +71,22 @@ const LensLoginButton = () => {
     }
   }
 
+  const onSetDispatcherSuccess = async () => {
+    notifySuccess('No more signing required for many actions')
+    await queryClient.invalidateQueries({
+      queryKey: ['lensUser']
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ['defaultProfile']
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ['lensUser', 'defaultProfile']
+    })
+  }
+
   useEffect(() => {
     if (result && type === 'createSetDispatcher') {
-      notifySuccess('Dispatcher Set successfully')
-      queryClient.invalidateQueries({
-        queryKey: ['defaultProfile']
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['lensUser']
-      })
+      onSetDispatcherSuccess()
     }
   }, [result, type])
 

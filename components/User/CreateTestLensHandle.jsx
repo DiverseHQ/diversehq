@@ -128,14 +128,20 @@ const CreateTestLensHandle = () => {
     }
   }
 
+  const onSetDefaultProfileSuccess = async () => {
+    setLoading(false)
+    notifySuccess('Profile created successfully')
+    await queryClient.invalidateQueries({
+      queryKey: ['lensUser', 'defaultProfile']
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ['defaultProfile']
+    })
+    hideModal()
+  }
   useEffect(() => {
     if (result && type === 'setDefaultProfile') {
-      setLoading(false)
-      notifySuccess('Profile created successfully')
-      queryClient.invalidateQueries({
-        queryKey: ['lensUser']
-      })
-      hideModal()
+      onSetDefaultProfileSuccess()
     }
   }, [result, type])
 
