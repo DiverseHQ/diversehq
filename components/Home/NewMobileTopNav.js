@@ -52,9 +52,9 @@ const NewMobileTopNav = () => {
         </div>
         <div>
           <img
-            src="/logo.svg"
+            src="/LogoV3TrimmedWithBG.png"
             alt="DiverseHQ logo"
-            className="w-[35px] h-[35px]"
+            className="w-[32px] h-[32px]"
           />
         </div>
         {/* <div>
