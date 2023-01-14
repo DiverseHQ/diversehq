@@ -4,6 +4,7 @@ import { LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 
 const LensPostSeo = ({ post }) => {
+  console.log('lensPostSEo post', post)
   return (
     <NextSeo
       title={stringToLength(post?.metadata?.content, 60)}
@@ -28,7 +29,12 @@ const LensPostSeo = ({ post }) => {
                   url: `${LensInfuraEndpoint}${
                     post?.metadata?.media[0]?.original.url.split('//')[1]
                   }`,
-                  alt: post?.metadata?.content
+                  alt: post?.metadata?.content,
+                  secureUrl: `${LensInfuraEndpoint}${
+                    post?.metadata?.media[0]?.original.url.split('//')[1]
+                  }`,
+                  type: post?.metadata?.media[0]?.original?.mimeType,
+                  width: 450
                 }
               ]
             : []
