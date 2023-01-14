@@ -3,6 +3,7 @@ import { storage } from './firebase'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { create } from 'ipfs-http-client'
 import { PublicationMetadataV2Input } from '../graphql/generated'
+import { BigNumber, utils } from 'ethers'
 
 export const uploadFileToIpfs = async (file: File): Promise<string> => {
   // eslint-disable-next-line
@@ -107,4 +108,22 @@ export const hasWhiteSpace = (s: string): boolean => {
 
 export const countLinesFromMarkdown = (markdownText: string): number => {
   return (markdownText.match(/\n/g) || []).length
+}
+
+export const postIdFromIndexedResult = (
+  profileId: string,
+  indexedResult: any
+) => {
+  const logs = indexedResult.txReceipt.logs
+  const topicId = utils.id(
+    'PostCreated(uint256,uint256,string,address,bytes,address,bytes,uint256)'
+  )
+  const profileCreatedLog = logs.find((l: any) => l.topics[0] === topicId)
+  let profileCreatedEventLog = profileCreatedLog.topics
+  const publicationId = utils.defaultAbiCoder.decode(
+    ['uint256'],
+    profileCreatedEventLog[2]
+  )[0]
+  const postId = profileId + '-' + BigNumber.from(publicationId).toHexString()
+  return postId
 }

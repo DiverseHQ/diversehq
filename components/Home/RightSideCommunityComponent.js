@@ -15,7 +15,7 @@ const RightSideCommunityComponent = ({ community }) => {
         src={
           community?.logoImageUrl ? community?.logoImageUrl : '/gradient.jpg'
         }
-        className="w-[40px] h-[40px]  rounded-full"
+        className="w-[40px] h-[40px] object-cover  rounded-full"
       />
       <span>{community?.name}</span>
     </Link>

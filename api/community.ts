@@ -42,7 +42,6 @@ export const postGetCommunityInfoUsingListOfIds = async (
   communityIds: string[]
 ) => {
   try {
-    console.log(communityIds)
     return await fetch(
       `${apiEndpoint}/community/community-info-using-list-of-ids`,
       {

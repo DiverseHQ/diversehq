@@ -18,6 +18,7 @@ import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPl
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import {
+  postIdFromIndexedResult,
   uploadFileToFirebaseAndGetUrl,
   uploadFileToIpfsInfuraAndGetPath,
   uploadToIpfsInfuraAndGetPath
@@ -195,7 +196,13 @@ const CreatePostPopup = () => {
 
         //invalidate query to update feed
         if (indexResult.indexed === true) {
-          notifySuccess('Post created successfully')
+          console.log('index success result', indexResult)
+          notifySuccess('Post has been created ...')
+          const postId = postIdFromIndexedResult(
+            lensProfile?.defaultProfile?.id,
+            indexResult
+          )
+          router.push(`/p/${postId}`)
           closeModal()
         }
       } else {
@@ -221,8 +228,10 @@ const CreatePostPopup = () => {
 
   useEffect(() => {
     if (result && type === 'createPost') {
+      notifySuccess('Post has been created ...')
       setLoading(false)
-      notifySuccess('Post created successfully')
+      const postId = postIdFromIndexedResult(result)
+      router.push(`/p/${postId}`)
       closeModal()
     }
   }, [result, type])
@@ -297,7 +306,6 @@ const CreatePostPopup = () => {
           >
             <div className="bg-s-bg rounded-2xl max-h-[450px] overflow-auto">
               {joinedCommunities.map((community) => {
-                console.log(community)
                 return (
                   <div
                     key={community._id}
@@ -479,7 +487,6 @@ const CreatePostPopup = () => {
               onChange={(editorState) => {
                 editorState.read(() => {
                   const markdown = $convertToMarkdownString(TRANSFORMERS)
-                  console.log('markdown', markdown)
                   setTitle(markdown)
                 })
               }}
