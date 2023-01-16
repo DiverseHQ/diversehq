@@ -1,12 +1,7 @@
 import React from 'react'
 import { Drawer } from '@mui/material'
 
-const BottomDrawerWrapper = ({
-  children,
-  isDrawerOpen,
-  setIsDrawerOpen,
-  height
-}) => {
+const BottomDrawerWrapper = ({ children, isDrawerOpen, setIsDrawerOpen }) => {
   return (
     <Drawer
       anchor="bottom"
@@ -17,7 +12,9 @@ const BottomDrawerWrapper = ({
       sx={{
         '& .MuiDrawer-paper': {
           borderRadius: '50px 50px 0px 0px',
-          height: height
+          // height: height,
+          maxHeight: '300px',
+          overflowY: 'auto'
         }
       }}
     >

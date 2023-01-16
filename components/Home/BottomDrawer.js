@@ -77,7 +77,6 @@ const BottomDrawer = () => {
       <BottomDrawerWrapper
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
-        height="296px"
       >
         <div className="flex flex-col justify-center items-center">
           <h1 className="font-bold text-lg mt-5">Choose your Feed</h1>
@@ -175,7 +174,7 @@ const BottomDrawer = () => {
             </div>
           </div>
           <button
-            className=" border rounded-full w-[384px] py-3 text-lg font-bold bg-s-h-bg"
+            className=" border rounded-full w-[384px] py-3 text-lg font-bold bg-s-h-bg mb-1"
             onClick={() => setIsDrawerOpen(false)}
           >
             Cancel

@@ -452,7 +452,7 @@ const PostCard = ({ _post, setPosts }) => {
                 <BottomDrawerWrapper
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
-                  height="235px"
+                  // height="235px"
                 >
                   <div className="flex flex-col justify-center">
                     <div

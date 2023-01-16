@@ -19,6 +19,7 @@ import { FaDiscord, FaRegCopy } from 'react-icons/fa'
 import { DISCORD_INVITE_LINK } from '../../utils/config'
 import { useDisconnect } from 'wagmi'
 import { getCreatedCommunitiesApi } from '../../api/community'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -30,6 +31,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const [showCreatedCommunities, setShowCreatedCommunities] = useState(false)
   const dropdownRef = useRef(null)
   const createdCommunitiesButtonRef = useRef(null)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   useEffect(() => {
     const handleClick = (event) => {
@@ -183,13 +185,52 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               onClick={() => {
                 console.log('clicked')
                 setShowCreatedCommunities(true)
+                setIsDrawerOpen(true)
               }}
               ref={createdCommunitiesButtonRef}
             >
               <MdOutlineGroups className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
               <span className="text-p-text ">Your Communities</span>
             </button>
-            <div
+            <BottomDrawerWrapper
+              isDrawerOpen={isDrawerOpen}
+              setIsDrawerOpen={setIsDrawerOpen}
+              height="296px"
+            >
+              <div className="flex flex-col justify-center items-center">
+                <h1 className="font-bold text-lg mt-5">Created Communities</h1>
+                <div
+                  className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start"
+                  ref={dropdownRef}
+                >
+                  {createdCommunities.map((community) => (
+                    <div
+                      key={community._id}
+                      className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
+                      id={community._id}
+                      onClick={() => {
+                        router.push(`/c/${community.name}`)
+                        setIsOpenSidebar(false)
+                      }}
+                    >
+                      <img
+                        src={
+                          community.logoImageUrl
+                            ? community.logoImageUrl
+                            : '/gradient.jpg'
+                        }
+                        alt="community logo"
+                        className="rounded-md sm:rounded-xl w-9 h-9"
+                      />
+                      <div className="text-p-text ml-4" id={community._id}>
+                        {community.name}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </BottomDrawerWrapper>
+            {/* <div
               className="bg-s-bg rounded-md sm:rounded-xl absolute mt-7 z-50 max-h-[300px] overflow-y-auto overflow-x-hidden"
               ref={dropdownRef}
             >
@@ -218,7 +259,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                     </div>
                   </div>
                 ))}
-            </div>
+            </div> */}
           </div>
           <button
             className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
