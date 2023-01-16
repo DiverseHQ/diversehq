@@ -3,6 +3,7 @@ import { useProfile } from '../Common/WalletContext'
 import MobileNavSidebar from './MobileNavSidebar'
 import ConnectWalletAndSignInButton from '../Common/ConnectWalletAndSignInButton'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import BottomDrawer from './BottomDrawer'
 
 const NewMobileTopNav = () => {
   const { user } = useProfile()
@@ -57,6 +58,8 @@ const NewMobileTopNav = () => {
             className="w-[35px] h-[35px]"
           />
         </div>
+        <BottomDrawer />
+
         {/* <div>
           <AiOutlineCompass className="text-[22px]" />
         </div> */}
