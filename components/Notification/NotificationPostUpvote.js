@@ -15,7 +15,7 @@ const NotificationPostUpvote = ({ notification }) => {
         </span>
         <span>{' upvoted your '}</span>
         <span className="hover:underline font-bold">
-          <Link href={`/p/${notification?.post._id}`}>Post</Link>
+          <Link href={`/p/${notification?.post?._id}`}>Post</Link>
         </span>
       </div>
       <div className="text-s-text">{notification?.post?.title}</div>
