@@ -127,16 +127,21 @@ const PostCard = ({ _post, setPosts }) => {
   }
 
   const handleShare = async () => {
+    if (!navigator.canShare) {
+      notifyInfo(`Your browser doesn't support the Web Share API.`)
+      return
+    }
+
     try {
       const url = window.location.href
       const title = 'Share this post'
-      navigator.share({
+      await navigator.share({
         title,
         url
       })
     } catch (error) {
       console.log(error)
-      notifyError('Something went wrong')
+      notifyError('Something went wrong when sharing')
     }
   }
 
