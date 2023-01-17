@@ -308,23 +308,43 @@ const CommunityInfoCard = ({ _community }) => {
           )}
 
           <div className="flex flex-row justify-between items-center px-5 py-1 md:px-8 pb-2">
-            {/* stats */}
-            <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-xs md:text-[16px]">
-              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
-                <span>Members: </span>
-                <span className="font-semibold">
-                  {community.members?.length}
-                </span>
+            {/* stats UI for mobile */}
+            {isMobile ? (
+              <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-[14px]">
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                  <span className="font-semibold">
+                    {community.members?.length}
+                  </span>
+                  <span className="font-light">Members</span>
+                </div>
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                  <span className="font-semibold">{numberOfPosts}</span>
+                  <span className="font-light">Posts</span>
+                </div>
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                  <span className="font-semibold">0</span>
+                  <span className="font-light">Matic</span>
+                </div>
               </div>
-              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
-                <span>Posts: </span>
-                <span className="font-semibold">{numberOfPosts}</span>
+            ) : (
+              <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-xs md:text-[16px]">
+                {/* stats UI for desktop */}
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                  <span>Members: </span>
+                  <span className="font-semibold">
+                    {community.members?.length}
+                  </span>
+                </div>
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                  <span>Posts: </span>
+                  <span className="font-semibold">{numberOfPosts}</span>
+                </div>
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                  <span>Matic transferred: </span>
+                  <span className="font-semibold">0</span>
+                </div>
               </div>
-              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
-                <span>Matic transferred: </span>
-                <span className="font-semibold">0</span>
-              </div>
-            </div>
+            )}
 
             {/* todo make dynamic from the backend */}
 

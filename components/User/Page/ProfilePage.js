@@ -12,6 +12,7 @@ import LensPostsProfilePublicationsColumn from '../../Post/LensPostsProfilePubli
 import PostsColumn from '../../Post/PostsColumn'
 import EditProfile from '../EditProfile'
 import LensFollowButton from '../LensFollowButton'
+import useDevice from '../../Common/useDevice'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -22,6 +23,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const { showModal } = usePopUpModal()
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
   const [numberOfPosts, setNumberOfPosts] = useState(0)
+  const { isMobile } = useDevice()
 
   useEffect(() => {
     console.log('profile', profile)
@@ -150,36 +152,76 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 )}
             </div>
             <div>{profile.bio}</div>
-            {/* offchain data */}
-            <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center">
-              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
-                <span className="">Joined </span>
-                <span className="font-bold">
-                  {profile?.communities?.length}
-                </span>
-                <span className=""> Communities</span>
-              </div>
-              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
-                <span>Post : {numberOfPosts}</span>
-              </div>
-              <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
-                <span>
-                  Community Spells : {profile?.communityCreationSpells}
-                </span>
-              </div>
+            {isMobile ? (
+              <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px]">
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                  <span className="font-bold">
+                    {profile?.communities?.length}
+                  </span>
+                  <span className="">Joined</span>
+                </div>
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                  <span className="font-semibold">{numberOfPosts}</span>
+                  <span className="font-light">Posts</span>
+                </div>
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                  <span className="font-semibold">
+                    {profile?.communityCreationSpells}
+                  </span>
+                  <span className="font-light">Spells</span>
+                </div>
 
-              {/* onchain lens data */}
-              {lensProfile && (
-                <>
-                  <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
-                    <span>Followers: {lensProfile?.stats?.totalFollowers}</span>
-                  </div>
-                  <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
-                    <span>LensPosts : {lensProfile?.stats?.totalPosts}</span>
-                  </div>
-                </>
-              )}
-            </div>
+                {/* onchain lens data */}
+                {lensProfile && (
+                  <>
+                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                      <span className="font-bold">
+                        {lensProfile?.stats?.totalFollowers}
+                      </span>
+                      <span className="font-light">Followers</span>
+                    </div>
+                    <div className="flex flex-col items-center bg-[#62F030] py-1 px-2 sm:px-4 rounded-[10px] text-ap-text">
+                      <span className="font-bold">
+                        {lensProfile?.stats?.totalPosts}
+                      </span>
+                      <span className="font-light">LensPosts</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center">
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                  <span className="">Joined </span>
+                  <span className="font-bold">
+                    {profile?.communities?.length}
+                  </span>
+                  <span className=""> Communities</span>
+                </div>
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                  <span>Post : {numberOfPosts}</span>
+                </div>
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                  <span>
+                    Community Spells : {profile?.communityCreationSpells}
+                  </span>
+                </div>
+
+                {/* onchain lens data */}
+                {lensProfile && (
+                  <>
+                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                      <span>
+                        Followers: {lensProfile?.stats?.totalFollowers}
+                      </span>
+                    </div>
+                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                      <span>LensPosts : {lensProfile?.stats?.totalPosts}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           {/* lens filter */}
