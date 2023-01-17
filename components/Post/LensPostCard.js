@@ -27,6 +27,7 @@ import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { BsThreeDots } from 'react-icons/bs'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { HiOutlineTrash } from 'react-icons/hi'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 
 /**
  * Sample post object
@@ -290,18 +291,17 @@ const LensPostCard = ({ post }) => {
     showModal({
       component: (
         <>
-          <div className="cursor-pointer">
-            <div
-              className="flex items-center px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow hover:bg-[#eee] hover:cursor-pointer text-red-600"
-              onClick={handleDeletePost}
-            >
-              <HiOutlineTrash
-                className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                title="Delete"
-              />
-              <span>Delete</span>
-            </div>
-          </div>
+          <MoreOptionsModal
+            list={[
+              {
+                label: 'Delete Post',
+                onClick: handleDeletePost,
+                icon: () => (
+                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                )
+              }
+            ]}
+          />
         </>
       ),
       type: modalType.customposition,

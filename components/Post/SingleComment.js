@@ -15,10 +15,13 @@ import {
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import CommentDropdown from './CommentDropdown'
+// import CommentDropdown from './CommentDropdown'
 import { ReactionTypes } from '../../graphql/generated'
 import Link from 'next/link'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import { BiEdit } from 'react-icons/bi'
+import { HiOutlineTrash } from 'react-icons/hi'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
@@ -35,7 +38,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
   const { user } = useProfile()
-  const { showModal } = usePopUpModal()
+  const { showModal, hideModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
 
@@ -50,7 +53,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const handleEditComment = async () => {
     if (!comment) return
     setEditing(true)
-
+    hideModal()
     // showModal({
     //   component: <EditComment comment={comment} setComment={setComment} />,
     //   type: modalType.normal,
@@ -82,6 +85,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
     try {
       if (!user) {
         notifyInfo('You might want to connect your wallet first')
+        hideModal()
         return
       }
       const deletedId = await deleteComment(comment?._id)
@@ -92,6 +96,8 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
+    } finally {
+      hideModal()
     }
   }
 
@@ -103,10 +109,28 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
     // setShowOptions(!showOptions)
     showModal({
       component: (
-        <CommentDropdown
-          handleEditComment={handleEditComment}
-          handleDeleteComment={handleDeleteComment}
-        />
+        // <CommentDropdown
+        //   handleEditComment={handleEditComment}
+        //   handleDeleteComment={handleDeleteComment}
+        // />
+        <>
+          <MoreOptionsModal
+            list={[
+              {
+                label: 'Edit Comment',
+                onClick: handleEditComment,
+                icon: () => <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+              },
+              {
+                label: 'Delete Comment',
+                onClick: handleDeleteComment,
+                icon: () => (
+                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                )
+              }
+            ]}
+          />
+        </>
       ),
       type: modalType.customposition,
       onAction: () => {},

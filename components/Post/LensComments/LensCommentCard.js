@@ -5,7 +5,8 @@ import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
 import {
   ReactionTypes,
-  useAddReactionMutation
+  useAddReactionMutation,
+  useHidePublicationMutation
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../../Common/NotifyContext'
@@ -13,9 +14,15 @@ import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import { LensInfuraEndpoint } from '../../../utils/config'
 import LensRepliedComments from './LensRepliesComments'
 import LensCreateComment from './LensCreateComment'
+import { BsThreeDots } from 'react-icons/bs'
+import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
+import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
+import { useRouter } from 'next/router'
+import { HiOutlineTrash } from 'react-icons/hi'
 TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
+  const router = useRouter()
   const [showCreateComment, setShowCreateComment] = useState(false)
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
@@ -28,7 +35,18 @@ const LensCommentCard = ({ comment }) => {
   const [voteCount, setVoteCount] = useState(upvoteCount - downvoteCount)
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const [isAuthor, setIsAuthor] = useState(
+    lensProfile?.defaultProfile?.id === comment?.profile?.id
+  )
 
+  const { showModal, hideModal } = usePopUpModal()
+
+  const { mutateAsync: deleteComment } = useHidePublicationMutation()
+
+  useEffect(() => {
+    if (!comment || !lensProfile) return
+    setIsAuthor(lensProfile?.defaultProfile?.id === comment?.profile?.id)
+  }, [comment, lensProfile])
   const [comments, setComments] = useState([])
 
   useEffect(() => {
@@ -94,6 +112,62 @@ const LensCommentCard = ({ comment }) => {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleDeleteComment = async () => {
+    if (!comment?.id) {
+      notifyInfo('not indexed yet, try again later')
+      return
+    }
+    try {
+      if (!isSignedIn || !hasProfile) {
+        notifyInfo('How about loging in lens, first?')
+        return
+      }
+      if (!isAuthor) {
+        notifyInfo('You are not the author of this comment')
+        return
+      }
+      await deleteComment({
+        request: {
+          publicationId: comment.id
+        }
+      })
+      router.reload()
+      hideModal()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const showMoreOptions = async (e) => {
+    if (!isAuthor) return
+    if (!comment?.id) {
+      notifyInfo('not indexed yet, come back later')
+      return
+    }
+    showModal({
+      component: (
+        <>
+          <MoreOptionsModal
+            list={[
+              {
+                label: 'Delete Comment',
+                onClick: handleDeleteComment,
+                icon: () => (
+                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                )
+              }
+            ]}
+          />
+        </>
+      ),
+      type: modalType.customposition,
+      onAction: () => {},
+      extraaInfo: {
+        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
+        left: e.currentTarget.getBoundingClientRect().left + 'px'
+      }
+    })
   }
   return (
     <>
@@ -171,6 +245,13 @@ const LensCommentCard = ({ comment }) => {
                 >
                   Reply
                 </button>
+                {isAuthor && (
+                  <BsThreeDots
+                    className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
+                    onClick={showMoreOptions}
+                    title="More"
+                  />
+                )}
               </div>
 
               {/* create comment if showCreateComment is true */}

@@ -89,6 +89,7 @@ const LensCreateComment = ({ postId, addComment }) => {
                 url: lensProfile?.defaultProfile?.picture?.original?.url
               }
             },
+            id: lensProfile?.defaultProfile?.id,
             handle: lensProfile?.defaultProfile?.handle
           },
           createdAt: new Date().toISOString(),

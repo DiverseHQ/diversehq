@@ -28,6 +28,7 @@ import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import ReactEmbedo from './embed/ReactEmbedo'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -186,7 +187,23 @@ const PostCard = ({ _post, setPosts }) => {
     showModal({
       component: (
         <>
-          <div className="cursor-pointer">
+          <MoreOptionsModal
+            list={[
+              {
+                label: 'Edit Post',
+                onClick: showEditModal,
+                icon: () => <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+              },
+              {
+                label: 'Delete Post',
+                onClick: handleDeletePost,
+                icon: () => (
+                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                )
+              }
+            ]}
+          />
+          {/* <div className="cursor-pointer">
             <div
               className="flex items-center px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow hover:bg-[#eee] hover:cursor-pointer "
               onClick={showEditModal}
@@ -204,7 +221,7 @@ const PostCard = ({ _post, setPosts }) => {
               />
               <span>Delete</span>
             </div>
-          </div>
+          </div> */}
         </>
       ),
       type: modalType.customposition,

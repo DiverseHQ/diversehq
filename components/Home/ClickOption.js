@@ -3,6 +3,10 @@ import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
 import { useDisconnect } from 'wagmi'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+
+import { CgProfile } from 'react-icons/cg'
+import { AiOutlineDisconnect } from 'react-icons/ai'
 
 const ClickOption = () => {
   const router = useRouter()
@@ -52,27 +56,22 @@ const ClickOption = () => {
   // }
 
   return (
-    <div className="cursor-pointer">
-      {/* commneting dark mode toggle for now default light mode */}
-      {/* <div
-        className="px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow "
-        onClick={toggleTheme}
-      >
-        {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-      </div> */}
-      <div
-        className="px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow "
-        onClick={routeToUserProfile}
-      >
-        View Profile
-      </div>
-      <div
-        className="px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow "
-        onClick={disconnectAndClear}
-      >
-        Disconnect
-      </div>
-    </div>
+    <MoreOptionsModal
+      list={[
+        {
+          label: 'View Profile',
+          onClick: routeToUserProfile,
+          icon: () => <CgProfile className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+        },
+        {
+          label: 'Disconnect',
+          onClick: disconnectAndClear,
+          icon: () => (
+            <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+          )
+        }
+      ]}
+    />
   )
 }
 
