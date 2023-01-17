@@ -368,7 +368,7 @@ const CreatePostPopup = () => {
           {type === 'image' && (
             <img
               src={imageValue}
-              className="max-h-80 rounded-2xl"
+              className="max-h-80 rounded-2xl object-cover"
               alt="Your amazing post"
             />
           )}
@@ -376,9 +376,9 @@ const CreatePostPopup = () => {
           {type === 'video' && (
             <video
               src={imageValue}
-              className="max-h-80 rounded-2xl"
+              className="max-h-80 rounded-2xl object-cover"
               controls
-              autoPlay
+              muted
             ></video>
           )}
           <AiOutlineClose

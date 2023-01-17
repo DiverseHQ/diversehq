@@ -176,7 +176,7 @@ const CreateCommunity = () => {
               <label htmlFor="communityPfp">
                 {' '}
                 <Image
-                  className="rounded-full"
+                  className="rounded-full object-cover"
                   width={100}
                   height={100}
                   src={pfpValue}

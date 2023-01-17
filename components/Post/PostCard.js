@@ -24,8 +24,9 @@ import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 TimeAgo.addDefaultLocale(en)
 
 import Markup from '../Lexical/Markup'
-import { countLinesFromMarkdown } from '../../utils/utils'
+import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
+import ReactEmbedo from './embed/ReactEmbedo'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -48,7 +49,7 @@ const PostCard = ({ _post, setPosts }) => {
   // to maintain the current author state
   const [isAuthor, setIsAuthor] = useState(false)
 
-  const { showModal } = usePopUpModal()
+  const { showModal, hideModal } = usePopUpModal()
 
   const router = useRouter()
   const [showMore, setShowMore] = useState(
@@ -157,6 +158,8 @@ const PostCard = ({ _post, setPosts }) => {
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
+    } finally {
+      hideModal()
     }
   }
 
@@ -164,6 +167,7 @@ const PostCard = ({ _post, setPosts }) => {
     showModal({
       component: <EditPostPopup post={post} setPost={setPost} />
     })
+    hideModal()
   }
 
   const showMoreOptions = (e) => {
@@ -357,10 +361,6 @@ const PostCard = ({ _post, setPosts }) => {
               <Link href={`/p/${post?._id}`} passHref>
                 {/* eslint-disable-next-line */}
                 <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                  {/* <img
-                    src={post.postImageUrl}
-                    className="image-unselectable object-cover sm:rounded-xl w-full"
-                  /> */}
                   <ImageWithPulsingLoader
                     src={post.postImageUrl}
                     className={`image-unselectable sm:rounded-xl object-contain w-full ${
@@ -383,8 +383,15 @@ const PostCard = ({ _post, setPosts }) => {
                 />
               </div>
             )}
+            {!post?.postImageUrl &&
+              !post?.postVideoUrl &&
+              getURLsFromText(post?.title).length > 0 && (
+                <ReactEmbedo
+                  url={getURLsFromText(post?.title)[0]}
+                  className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
+                />
+              )}
           </div>
-
           {/* bottom row */}
           <div className="text-s-text sm:text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
             {isMobile && (

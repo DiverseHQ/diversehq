@@ -53,7 +53,9 @@ const CreateTestLensHandle = () => {
   const handleCreateTestLensHandle = async () => {
     if (handle === '') return
     if (!checkIfHandleFollowsRules(handle)) {
-      notifyError('Handle must be minimum of 5 length and maximum of 31 length')
+      notifyError(
+        'Handle must be minimum of 5 length and maximum of 31 length, and only supports lower case characters, numbers, - and _'
+      )
       return
     }
     setLoading(true)

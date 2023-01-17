@@ -127,3 +127,8 @@ export const postIdFromIndexedResult = (
   const postId = profileId + '-' + BigNumber.from(publicationId).toHexString()
   return postId
 }
+
+export const getURLsFromText = (text: string) => {
+  const urlRegex = /(((https?:\/\/)|(www\.))\S+)/g
+  return text.match(urlRegex) ?? []
+}
