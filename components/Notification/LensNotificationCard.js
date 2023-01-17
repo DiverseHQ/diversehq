@@ -2,7 +2,7 @@ import React from 'react'
 import LensNotificationCommentedPostCard from './LensNotificationCommentedPostCard'
 import LensNotificationFollowedCard from './LensNotificationFollowedCard'
 import LensNotificationReactionPostCard from './LensNotificationReactionPostCard'
-import LensNOtificationMentionCard from './LensNOtificationMentionCard'
+import LensNotificationMentionCard from './LensNotificationMentionCard'
 
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
@@ -34,7 +34,7 @@ const LensNotificationCard = ({ notification }) => {
       <div>
         {notification?.__typename ===
           NotificationTypeName.NewMentionNotification && (
-          <LensNOtificationMentionCard notification={notification} />
+          <LensNotificationMentionCard notification={notification} />
         )}
       </div>
       <div className="items-end shrink-0">
