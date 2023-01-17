@@ -29,6 +29,7 @@ const ClickOption = () => {
     if (user) {
       router.push(`/u/${user.walletAddress}`)
     }
+    hideModal()
   }
 
   const disconnectAndClear = () => {

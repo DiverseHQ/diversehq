@@ -22,12 +22,13 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
-import { countLinesFromMarkdown } from '../../utils/utils'
+import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { BsThreeDots } from 'react-icons/bs'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import ReactEmbedo from './embed/ReactEmbedo'
 
 /**
  * Sample post object
@@ -517,6 +518,16 @@ const LensPostCard = ({ post }) => {
                     />
                   </div>
                 )}
+                {postInfo?.metadata?.mainContentFocus !==
+                  PublicationMainFocus.Image &&
+                  postInfo?.metadata?.mainContentFocus !==
+                    PublicationMainFocus.Video &&
+                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
+                    <ReactEmbedo
+                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
+                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
+                    />
+                  )}
               </div>
 
               {/* bottom row */}
