@@ -5,6 +5,7 @@ import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
+import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 
 const MainLayout = ({ children }) => {
   const { isDesktop } = useDevice()
@@ -16,7 +17,10 @@ const MainLayout = ({ children }) => {
             <>
               <NewMobileTopNav />
               {/* <MobileTopNav /> */}
-              <div className={'pb-16'}>{children}</div>
+              <div className={'pb-16'}>
+                <ScrollToTopButton />
+                {children}
+              </div>
               <MobileBottomNav />
             </>
           )}
@@ -27,7 +31,10 @@ const MainLayout = ({ children }) => {
           <Navbar />
           <div className="flex flex-row">
             <LeftSidebar />
-            <div className="flex-1 min-h-screen">{children}</div>
+            <div className="relative flex-1 min-h-screen">
+              <ScrollToTopButton />
+              {children}
+            </div>
             <RightSidebar />
           </div>
         </div>
