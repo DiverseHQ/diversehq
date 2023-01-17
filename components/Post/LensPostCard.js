@@ -7,7 +7,8 @@ import Link from 'next/link'
 import {
   PublicationMainFocus,
   ReactionTypes,
-  useAddReactionMutation
+  useAddReactionMutation,
+  useHidePublicationMutation
 } from '../../graphql/generated'
 import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
@@ -23,6 +24,9 @@ import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
 import { countLinesFromMarkdown } from '../../utils/utils'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
+import { BsThreeDots } from 'react-icons/bs'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import { HiOutlineTrash } from 'react-icons/hi'
 
 /**
  * Sample post object
@@ -148,6 +152,8 @@ const LensPostCard = ({ post }) => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
 
+  const { showModal, hideModal } = usePopUpModal()
+
   //update stats if post is updated
   useEffect(() => {
     setPostInfo(post)
@@ -158,6 +164,16 @@ const LensPostCard = ({ post }) => {
 
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const [isAuthor, setIsAuthor] = useState(
+    lensProfile?.defaultProfile?.id === post?.profile?.id
+  )
+
+  useEffect(() => {
+    if (!post || !lensProfile) return
+    setIsAuthor(lensProfile?.defaultProfile?.id === post?.profile?.id)
+  }, [post, lensProfile])
+
+  const { mutateAsync: removePost } = useHidePublicationMutation()
 
   const fetchCommunityInformationAndSetPost = async () => {
     const communityId = post?.metadata?.tags?.[0]
@@ -258,6 +274,47 @@ const LensPostCard = ({ post }) => {
         router.pathname !== '/p/[id]'
     )
   }, [postInfo])
+
+  const handleDeletePost = async () => {
+    await removePost({
+      request: {
+        publicationId: post?.id
+      }
+    })
+    window.location.reload()
+    hideModal()
+  }
+
+  const showMoreOptions = async (e) => {
+    if (!isAuthor) return
+    showModal({
+      component: (
+        <>
+          <div className="cursor-pointer">
+            <div
+              className="flex items-center px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow hover:bg-[#eee] hover:cursor-pointer text-red-600"
+              onClick={handleDeletePost}
+            >
+              <HiOutlineTrash
+                className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                title="Delete"
+              />
+              <span>Delete</span>
+            </div>
+          </div>
+        </>
+      ),
+      type: modalType.customposition,
+      onAction: () => {},
+      extraaInfo: {
+        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
+        right:
+          window.innerWidth -
+          e.currentTarget.getBoundingClientRect().right +
+          'px'
+      }
+    })
+  }
   return (
     <>
       {postInfo && (
@@ -507,17 +564,17 @@ const LensPostCard = ({ post }) => {
                     className="hover:cursor-pointer mr-3 w-5 h-5"
                   />
                 </div>
-                {/* <div>
-               {isAuthor && (
-                 <div className="relative">
-                   <BsThreeDots
-                     className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                     onClick={showMoreOptions}
-                     title="More"
-                   />
-                 </div>
-               )}
-             </div> */}
+                <div>
+                  {isAuthor && (
+                    <div className="relative">
+                      <BsThreeDots
+                        className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                        onClick={showMoreOptions}
+                        title="More"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

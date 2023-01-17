@@ -1,48 +1,55 @@
-import { ApolloClient, InMemoryCache, gql, createHttpLink } from '@apollo/client'
-import { setContext } from '@apollo/client/link/context';
+import {
+  ApolloClient,
+  InMemoryCache,
+  gql,
+  createHttpLink
+} from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 
 const API_URL = 'https://api.lens.dev'
 
 /* configuring Apollo GraphQL Client */
 const authLink = setContext((_, { headers }) => {
-    const token = window.localStorage.getItem('STORAGE_KEY');
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token.accessToken}` : "",
-      }
+  const token = window.localStorage.getItem('STORAGE_KEY')
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token.accessToken}` : ''
     }
-  })
-
-  const httpLink = createHttpLink({
-    uri: API_URL
-  })
-
-  export const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-    onError: ({ networkError, graphQLErrors }) => {  console.log('graphQLErrors', graphQLErrors)        }
-  
-  })
-
-  //Parse the token and return the expiration date
-  export function parseJwt(token) {
-    var base64Url = token.split(".")[1];
-    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    var jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-  
-    return JSON.parse(jsonPayload);
   }
+})
 
-  // Authenticate
-  export const challenge = gql`
+const httpLink = createHttpLink({
+  uri: API_URL
+})
+
+export const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+  onError: ({ networkError, graphQLErrors }) => {
+    console.log('graphQLErrors', graphQLErrors)
+    console.log('networkError', networkError)
+  }
+})
+
+//Parse the token and return the expiration date
+export function parseJwt(token) {
+  var base64Url = token.split('.')[1]
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+  var jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      })
+      .join('')
+  )
+
+  return JSON.parse(jsonPayload)
+}
+
+// Authenticate
+export const challenge = gql`
   query Challenge($address: EthereumAddress!) {
     challenge(request: { address: $address }) {
       text
@@ -51,20 +58,13 @@ const authLink = setContext((_, { headers }) => {
 `
 
 export const authenticate = gql`
-  mutation Authenticate(
-    $address: EthereumAddress!
-    $signature: Signature!
-  ) {
-    authenticate(request: {
-      address: $address,
-      signature: $signature
-    }) {
+  mutation Authenticate($address: EthereumAddress!, $signature: Signature!) {
+    authenticate(request: { address: $address, signature: $signature }) {
       accessToken
       refreshToken
     }
   }
 `
-
 
 // Refresh Auth Token
 const REFRESH_AUTHENTICATION = `
@@ -80,13 +80,13 @@ const refreshAuth = async (refreshToken) => {
     mutation: gql(REFRESH_AUTHENTICATION),
     variables: {
       request: {
-        refreshToken,
-      },
-    },
-  });
-   console.log('Refresh result', result)
-  return result;
-};
+        refreshToken
+      }
+    }
+  })
+  console.log('Refresh result', result)
+  return result
+}
 // const refreshAuth = gql`
 //   mutation Refresh {
 //     refresh(request: {
@@ -99,34 +99,32 @@ const refreshAuth = async (refreshToken) => {
 // `
 
 export async function refreshAuthToken() {
-  const token = JSON.parse(localStorage.getItem('STORAGE_KEY'));
+  const token = JSON.parse(localStorage.getItem('STORAGE_KEY'))
   console.log('LensToken', token)
-  if (!token) return;
+  if (!token) return
   try {
-    console.log("token:", { token });
-    const authData = await refreshAuth(token.refreshToken);
+    console.log('token:', { token })
+    const authData = await refreshAuth(token.refreshToken)
 
-    console.log("authData:", { authData });
-    const { accessToken, refreshToken } = authData.data.refresh;
-    const exp = parseJwt(refreshToken).exp;
+    console.log('authData:', { authData })
+    const { accessToken, refreshToken } = authData.data.refresh
+    const exp = parseJwt(refreshToken).exp
 
     localStorage.setItem(
       'STORAGE_KEY',
       JSON.stringify({
         accessToken,
         refreshToken,
-        exp,
+        exp
       })
-    );
-
+    )
   } catch (err) {
-    console.log("error:", err);
+    console.log('error:', err)
   }
 }
 
-
-// GET Default Profile 
-const GET_DEFAULT_PROFILES = `
+// GET Default Profile
+export const GET_DEFAULT_PROFILES = `
   query($request: DefaultProfileRequest!) {
     defaultProfile(request: $request) {
       id
@@ -209,14 +207,13 @@ const GET_DEFAULT_PROFILES = `
       }
     }
   }
-`;
-
-export const getDefaultProfile = gql`
-query DefaultProfile($address: EthereumAddress!) {
-  defaultProfile(request: { ethereumAddress: $address}) {
-    id
-    handle
-  }
-}
 `
 
+export const getDefaultProfile = gql`
+  query DefaultProfile($address: EthereumAddress!) {
+    defaultProfile(request: { ethereumAddress: $address }) {
+      id
+      handle
+    }
+  }
+`
