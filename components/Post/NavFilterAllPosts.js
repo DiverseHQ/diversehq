@@ -23,7 +23,6 @@ const NavFilterAllPosts = () => {
   const { notifyError } = useNotify()
 
   useEffect(() => {
-    console.log('pathname', pathname)
     if (pathname.endsWith('/new')) {
       setActive('new')
     } else if (pathname.endsWith('/top')) {
