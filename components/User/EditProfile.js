@@ -170,14 +170,15 @@ const EditProfile = ({ user, showUserInfo }) => {
 
           <FormTextInput
             label="Name"
-            placeholder="Your Sudo Name"
+            placeholder="Your Pseudo Name"
             value={name}
             onChange={onChangeName}
+            maxLength={20}
             required
           />
           <FormTextArea
             label="Bio"
-            placeholder="Show the world what you are..."
+            placeholder="Say something more about you..."
             value={bio}
             onChange={onChangeBio}
             required

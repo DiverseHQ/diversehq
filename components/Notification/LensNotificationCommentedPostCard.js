@@ -8,7 +8,7 @@ const LensNotificationCommentedPostCard = ({ notification }) => {
       <div>
         <span className="hover:underline font-bold">
           <Link href={`/u/${notification?.profile?.handle}`}>
-            {notification?.profile?.handle}
+            u/{notification?.profile?.handle}
           </Link>
         </span>
         <span>{' commented on your '}</span>

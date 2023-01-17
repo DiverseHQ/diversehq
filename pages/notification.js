@@ -3,7 +3,7 @@ import LensNotificationColumn from '../components/Notification/LensNotificationC
 import NotificationColumn from '../components/Notification/NotificationColumn'
 import NotificationSeo from '../components/Notification/NotificationSeo'
 const notification = () => {
-  const [showLensNotifications, setShowLensNotifications] = useState(false)
+  const [showLensNotifications, setShowLensNotifications] = useState(true)
 
   return (
     <>

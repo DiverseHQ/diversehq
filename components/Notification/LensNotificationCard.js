@@ -2,6 +2,7 @@ import React from 'react'
 import LensNotificationCommentedPostCard from './LensNotificationCommentedPostCard'
 import LensNotificationFollowedCard from './LensNotificationFollowedCard'
 import LensNotificationReactionPostCard from './LensNotificationReactionPostCard'
+import LensNOtificationMentionCard from './LensNOtificationMentionCard'
 
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
@@ -11,7 +12,8 @@ TimeAgo.addDefaultLocale(en)
 const NotificationTypeName = {
   NewFollowerNotification: 'NewFollowerNotification',
   NewCommentNotification: 'NewCommentNotification',
-  NewReactionNotification: 'NewReactionNotification'
+  NewReactionNotification: 'NewReactionNotification',
+  NewMentionNotification: 'NewMentionNotification'
 }
 
 const LensNotificationCard = ({ notification }) => {
@@ -29,6 +31,12 @@ const LensNotificationCard = ({ notification }) => {
         NotificationTypeName.NewReactionNotification && (
         <LensNotificationReactionPostCard notification={notification} />
       )}
+      <div>
+        {notification?.__typename ===
+          NotificationTypeName.NewMentionNotification && (
+          <LensNOtificationMentionCard notification={notification} />
+        )}
+      </div>
       <div className="items-end shrink-0">
         <ReactTimeAgo date={notification?.createdAt} locale="en-US" />
       </div>

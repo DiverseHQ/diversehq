@@ -240,13 +240,16 @@ const LensPostCard = ({ post }) => {
   }
   const router = useRouter()
   const [showMore, setShowMore] = useState(
-    countLinesFromMarkdown(postInfo?.metadata?.content) > MAX_CONTENT_LINES &&
+    (countLinesFromMarkdown(postInfo?.metadata?.content) > MAX_CONTENT_LINES ||
+      postInfo?.metadata?.content.length > 400) &&
       router.pathname !== '/p/[id]'
   )
 
   useEffect(() => {
     setShowMore(
-      countLinesFromMarkdown(postInfo?.metadata?.content) > MAX_CONTENT_LINES &&
+      (countLinesFromMarkdown(postInfo?.metadata?.content) >
+        MAX_CONTENT_LINES ||
+        postInfo?.metadata?.content.length > 400) &&
         router.pathname !== '/p/[id]'
     )
   }, [postInfo])
@@ -378,19 +381,26 @@ const LensPostCard = ({ post }) => {
             <div className="flex flex-col w-full">
               <div>
                 <div className="mb-2 px-3 sm:pl-5 ">
-                  <div
-                    className={`${
-                      showMore ? 'h-[150px]' : ''
-                    } overflow-hidden break-words`}
-                  >
-                    <Markup
+                  {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
+                    <div className="font-medium text-lg w-full">
+                      {postInfo?.metadata?.name}
+                    </div>
+                  )}
+                  {postInfo?.metadata?.name !== postInfo?.metadata?.content && (
+                    <div
                       className={`${
-                        showMore ? 'line-clamp-5' : ''
-                      } linkify whitespace-pre-wrap break-words font-medium text-base sm:text-lg`}
+                        showMore ? 'h-[150px]' : ''
+                      } overflow-hidden break-words`}
                     >
-                      {postInfo?.metadata?.content}
-                    </Markup>
-                  </div>
+                      <Markup
+                        className={`${
+                          showMore ? 'line-clamp-5' : ''
+                        } linkify whitespace-pre-wrap break-words text-xs sm:text-base`}
+                      >
+                        {postInfo?.metadata?.content}
+                      </Markup>
+                    </div>
+                  )}
                   {showMore && (
                     <Link href={`/p/${postInfo?.id}`} className="text-blue-400">
                       Show more

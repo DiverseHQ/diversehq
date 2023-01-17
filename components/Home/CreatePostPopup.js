@@ -40,12 +40,16 @@ import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImagesPlugin from '../Lexical/ImagesPlugin'
 import LexicalAutoLinkPlugin from '../Lexical/LexicalAutoLinkPlugin'
+import FormTextInput from '../Common/UI/FormTextInput'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { $getRoot } from 'lexical'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
 const CreatePostPopup = () => {
-  const [file, setFile] = useState(null)
   const [title, setTitle] = useState('')
+  const [file, setFile] = useState(null)
+  const [content, setContent] = useState('')
   const [communityId, setCommunityId] = useState(null)
   const { user, address } = useProfile()
   const [loading, setLoading] = useState(false)
@@ -60,6 +64,15 @@ const CreatePostPopup = () => {
   const [isLensPost, setIsLensPost] = useState(
     (isSignedIn && hasProfile) || false
   )
+  const [editor] = useLexicalComposerContext()
+
+  useEffect(() => {
+    return () => {
+      editor?.update(() => {
+        $getRoot().clear()
+      })
+    }
+  }, [])
 
   const { notifyError, notifySuccess, notifyInfo } = useNotify()
   const router = useRouter()
@@ -86,7 +99,7 @@ const CreatePostPopup = () => {
       setLoading(false)
       return
     }
-    if (!title) {
+    if (!title || title.trim() === '') {
       notifyError('Please enter a title')
       setLoading(false)
       return
@@ -114,13 +127,13 @@ const CreatePostPopup = () => {
       }
 
       const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
-      handleCreatePost(file.type, postUrl.uploadedToUrl, postUrl.path)
+      handleCreatePost(title, file.type, postUrl.uploadedToUrl, postUrl.path)
     } else {
       if (isLensPost) {
         handleCreateLensPost(title, communityId, 'text', null)
         return
       }
-      handleCreatePost('text')
+      handleCreatePost(title, 'text')
     }
   }
 
@@ -141,13 +154,13 @@ const CreatePostPopup = () => {
       version: '2.0.0',
       mainContentFocus: mainContentFocus,
       metadata_id: uuidv4(),
-      description: title,
+      description: 'Created with DiverseHQ',
       locale: 'en-US',
-      content: title,
+      content: content && content.trim() !== '' ? content : title,
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
       imageMimeType: mimeType.startsWith('image') ? mimeType : null,
-      name: 'Created with DiverseHQ',
+      name: title,
       media:
         mimeType === 'text'
           ? null
@@ -243,10 +256,11 @@ const CreatePostPopup = () => {
     }
   }, [error])
 
-  const handleCreatePost = async (mimeType, url, path) => {
+  const handleCreatePost = async (title, mimeType, url, path) => {
     const postData = {
       communityId,
-      title
+      title,
+      content
     }
     //todo handle audio file types
     const type = mimeType.split('/')[0]
@@ -407,10 +421,6 @@ const CreatePostPopup = () => {
     })
   }
 
-  // const onChangeTitle = useCallback((e) => {
-  //   setTitle(e.target.value)
-  // }, [])
-
   const PopUpModal = () => {
     return (
       // simple modal
@@ -419,6 +429,7 @@ const CreatePostPopup = () => {
         onClick={handleSubmit}
         label="POST"
         loading={loading}
+        isDisabled={!communityId}
       >
         <div className="flex flex-row items-center justify-between">
           <div className="border border-p-border rounded-full text-p-text ml-3 w-fit px-1">
@@ -462,24 +473,26 @@ const CreatePostPopup = () => {
         {showCommunityOptions && customOptions()}
         {/* <!-- Modal body --> */}
         <div>
-          {/* <FormTextInput
+          <FormTextInput
             label="Title"
-            placeholder="Here you go"
+            placeholder="gib me title"
+            maxLength={60}
             value={title}
-            onChange={onChangeTitle}
+            onChange={(e) => setTitle(e.target.value)}
             disabled={loading}
-          /> */}
+          />
           {/* Rich text editor */}
           <div className="relative">
             {/* todo toolbar for rich text editor */}
             {/* <ToolbarPlugin /> */}
             <RichTextPlugin
               contentEditable={
-                <ContentEditable className="block min-h-[70px] overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 " />
+                <ContentEditable className="block min-h-[70px] overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px]" />
               }
               placeholder={
                 <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
-                  {"What's on your mind?"}
+                  <div>{"What's this about...? (optional)"}</div>
+                  <div>{'Here, You can write in markdown too!'} </div>
                 </div>
               }
             />
@@ -487,7 +500,7 @@ const CreatePostPopup = () => {
               onChange={(editorState) => {
                 editorState.read(() => {
                   const markdown = $convertToMarkdownString(TRANSFORMERS)
-                  setTitle(markdown)
+                  setContent(markdown)
                 })
               }}
             />

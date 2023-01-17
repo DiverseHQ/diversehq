@@ -82,8 +82,6 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
     const comment = commentRef.current.value
     if (!comment || comment === '') return
     const content = comment
-    console.log('postId', postId)
-    console.log('comment', comment)
     try {
       setLoading(true)
       const comment = await postComment(content, postId, 0)

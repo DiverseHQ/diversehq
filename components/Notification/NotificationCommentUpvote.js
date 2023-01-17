@@ -13,7 +13,7 @@ const NotificationCommentUpvote = ({ notification }) => {
               : `u/${stringToLength(notification?.sender?.walletAddress, 10)}`}
           </Link>
         </span>
-        <span>{' upvoted your comment of'}</span>
+        <span>{' upvoted your comment of '}</span>
         <span className="hover:underline font-bold">
           <Link href={`/p/${notification?.comment?.postId}`}>Post</Link>
         </span>

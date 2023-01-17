@@ -59,6 +59,7 @@ const PostCard = ({ _post, setPosts }) => {
   )
 
   useEffect(() => {
+    console.log('post', post)
     setShowMore(
       countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES &&
         router.pathname !== '/p/[id]'
@@ -338,24 +339,31 @@ const PostCard = ({ _post, setPosts }) => {
         <div className="flex flex-col w-full">
           <div>
             <div className="mb-2 px-3 sm:pl-5 ">
-              <div
-                className={`${
-                  showMore ? 'h-[150px]' : ''
-                } overflow-hidden break-words`}
-              >
-                <Markup
-                  className={`${
-                    showMore ? 'line-clamp-5' : ''
-                  } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words font-medium text-base sm:text-lg`}
-                >
-                  {post?.title}
-                </Markup>
-                {/* todo showmore for clamped text */}
-              </div>
-              {showMore && (
-                <Link href={`/p/${post._id}`} className="text-blue-400">
-                  Show more
-                </Link>
+              {post?.title?.length <= 60 && (
+                <div className="font-medium text-lg w-full">{post?.title}</div>
+              )}
+              {(post?.content || post?.title?.length > 60) && (
+                <>
+                  <div
+                    className={`${
+                      showMore ? 'h-[150px]' : ''
+                    } overflow-hidden break-words`}
+                  >
+                    <Markup
+                      className={`${
+                        showMore ? 'line-clamp-5' : ''
+                      } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-xs sm:text-base`}
+                    >
+                      {post?.content ? post?.content : post?.title}
+                    </Markup>
+                    {/* todo showmore for clamped text */}
+                  </div>
+                  {showMore && (
+                    <Link href={`/p/${post._id}`} className="text-blue-400">
+                      Show more
+                    </Link>
+                  )}
+                </>
               )}
             </div>
             {post?.postImageUrl &&

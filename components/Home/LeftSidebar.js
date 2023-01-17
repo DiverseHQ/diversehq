@@ -10,7 +10,7 @@ import ClickOption from './ClickOption'
 // import LoginButton from '../Common/UI/LoginButton'
 import { stringToLength } from '../../utils/utils'
 
-import { FaDiscord, FaRegCopy } from 'react-icons/fa'
+import { FaDiscord } from 'react-icons/fa'
 import {
   AiOutlineCompass,
   //  AiOutlineGift,
@@ -28,6 +28,7 @@ import Link from 'next/link'
 import { DISCORD_INVITE_LINK, userRoles } from '../../utils/config'
 import useNotificationsCount from '../Notification/useNotificationsCount'
 import ConnectWalletAndSignInButton from '../Common/ConnectWalletAndSignInButton'
+import { useLensUserContext } from '../../lib/LensUserContext'
 
 const LeftSidebar = () => {
   // const [showMore, setShowMore] = useState(false)
@@ -35,6 +36,7 @@ const LeftSidebar = () => {
   const router = useRouter()
   const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
+  const { data: lensProfile, hasProfile, isSignedIn } = useLensUserContext()
   const { notificationsCount, setNotificationsCount } = useNotificationsCount()
 
   const routeToNotifications = () => {
@@ -83,14 +85,14 @@ const LeftSidebar = () => {
     })
   }
 
-  const handleWalletAddressCopy = () => {
-    if (!user?.walletAddress) {
-      notifyInfo('Please Login')
-      return
-    }
-    navigator.clipboard.writeText(user?.walletAddress)
-    notifyInfo('Copied to clipboard')
-  }
+  // const handleWalletAddressCopy = () => {
+  //   if (!user?.walletAddress) {
+  //     notifyInfo('Please Login')
+  //     return
+  //   }
+  //   navigator.clipboard.writeText(user?.walletAddress)
+  //   notifyInfo('Copied to clipboard')
+  // }
 
   const createPost = () => {
     // setShowOptions(!showOptions)
@@ -214,7 +216,7 @@ const LeftSidebar = () => {
               Create Post
             </button>
             <div
-              className="flex flex-row bg-[#FFFFFF] rounded-full items-center justify-between py-1 pr-1 md:pr-2 hover:cursor-pointer h-[50px] gap-2 md:gap-4"
+              className="flex flex-row bg-s-bg rounded-full items-center justify-between py-1 pr-1 md:pr-2 hover:cursor-pointer h-[50px]"
               onClick={showMoreOptions}
             >
               {user?.profileImageUrl && (
@@ -231,9 +233,21 @@ const LeftSidebar = () => {
                   className="rounded-full"
                 />
               )}
-              <div className="flex flex-col">
-                {user?.name && <div>{stringToLength(user?.name, 8)}</div>}
-                <div
+              <div className="flex flex-col items-start justify-center pr-1">
+                {user?.name && (
+                  <div className="font-bold">
+                    {stringToLength(user?.name, 8)}
+                  </div>
+                )}
+                {hasProfile && isSignedIn && (
+                  <div className="text-xs">
+                    {stringToLength(
+                      `u/${lensProfile?.defaultProfile?.handle}`,
+                      18
+                    )}
+                  </div>
+                )}
+                {/* <div
                   className="flex flex-row items-center cursor-pointer"
                   onClick={handleWalletAddressCopy}
                 >
@@ -241,7 +255,7 @@ const LeftSidebar = () => {
                     {stringToLength(user.walletAddress, 8)}
                   </div>
                   <FaRegCopy className="w-8 h-8 px-2" />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
