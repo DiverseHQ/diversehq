@@ -26,6 +26,7 @@ TimeAgo.addDefaultLocale(en)
 import Markup from '../Lexical/Markup'
 import { countLinesFromMarkdown } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
+import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -353,24 +354,29 @@ const PostCard = ({ _post, setPosts }) => {
                 </Link>
               )}
             </div>
-            {post?.postImageUrl && (
-              <Link href={`/p/${post?._id}`} passHref>
-                {/* eslint-disable-next-line */}
+            {post?.postImageUrl &&
+              (!router.pathname.startsWith('/p') ? (
+                <Link href={`/p/${post?._id}`} passHref>
+                  {/* eslint-disable-next-line */}
+                  <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                    {/* <img
+                        src={post.postImageUrl}
+                        className="image-unselectable object-cover sm:rounded-xl w-full"
+                      /> */}
+                    <ImageWithPulsingLoader
+                      src={post.postImageUrl}
+                      className={`image-unselectable sm:rounded-xl object-contain w-full ${
+                        router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
+                      }`}
+                      loaderClassName="sm:rounded-xl w-full h-[300px]"
+                    />
+                  </div>
+                </Link>
+              ) : (
                 <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                  {/* <img
-                    src={post.postImageUrl}
-                    className="image-unselectable object-cover sm:rounded-xl w-full"
-                  /> */}
-                  <ImageWithPulsingLoader
-                    src={post.postImageUrl}
-                    className={`image-unselectable sm:rounded-xl object-contain w-full ${
-                      router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
-                    }`}
-                    loaderClassName="sm:rounded-xl w-full h-[300px]"
-                  />
+                  <ImageWithFullScreenZoom src={post.postImageUrl} />
                 </div>
-              </Link>
-            )}
+              ))}
             {post?.postVideoUrl && (
               <div className="sm:pl-5 sm:pr-6 sm:pb-1">
                 <VideoWithAutoPause
@@ -411,20 +417,31 @@ const PostCard = ({ _post, setPosts }) => {
                 />
               </div>
             )}
-
-            <Link
-              href={`/p/${post._id}`}
-              className="flex flex-row items-center"
-              passHref
-            >
-              {post.comments?.length === 0 && (
-                <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
-              )}
-              {post.comments?.length > 0 && (
-                <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-              )}
-              {post.comments?.length}
-            </Link>
+            {!router.pathname.startsWith('/p') ? (
+              <Link
+                href={`/p/${post._id}`}
+                className="flex flex-row items-center"
+                passHref
+              >
+                {post.comments?.length === 0 && (
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                )}
+                {post.comments?.length > 0 && (
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                )}
+                {post.comments?.length}
+              </Link>
+            ) : (
+              <div className="flex flex-row items-center">
+                {post.comments?.length === 0 && (
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                )}
+                {post.comments?.length > 0 && (
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                )}
+                {post.comments?.length}
+              </div>
+            )}
             <div>
               <FiSend
                 onClick={handleShare}
