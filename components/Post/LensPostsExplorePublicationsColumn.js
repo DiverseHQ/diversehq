@@ -85,7 +85,7 @@ const LensPostsExplorePublicationsColumn = () => {
   const getAndSetAllCommunitiesIds = async () => {
     let allCommunitiesIds = await getAllCommunitiesIds()
     //tag ids out of object
-    allCommunitiesIds = allCommunitiesIds.map((community) => community._id)
+    allCommunitiesIds = allCommunitiesIds?.map((community) => community._id)
     setCommunityIds(allCommunitiesIds)
   }
 

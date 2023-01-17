@@ -6,7 +6,7 @@ import { getUserInfo } from '../../../api/user'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 import { useNotify } from '../../Common/NotifyContext'
-import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import ImageWithLoaderAndZoom from '../../Common/UI/ImageWithLoaderAndZoom'
 import { useProfile } from '../../Common/WalletContext'
 import LensPostsProfilePublicationsColumn from '../../Post/LensPostsProfilePublicationsColumn'
 import PostsColumn from '../../Post/PostsColumn'
@@ -82,19 +82,22 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     <div>
       {profile && (
         <div className="relative">
-          <ImageWithPulsingLoader
+          <ImageWithLoaderAndZoom
             className="h-28 w-full object-cover"
             src={
               profile.bannerImageUrl ? profile.bannerImageUrl : '/gradient.jpg'
             }
           />
 
-          <ImageWithPulsingLoader
-            className="absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
+          <ImageWithLoaderAndZoom
+            className="absolute -top-10 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
             src={
               profile?.profileImageUrl
                 ? profile?.profileImageUrl
                 : '/gradient.jpg'
+            }
+            loaderClassName={
+              'absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20'
             }
           />
 

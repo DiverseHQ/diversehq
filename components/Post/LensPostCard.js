@@ -22,6 +22,7 @@ import { useRouter } from 'next/router'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
 import { countLinesFromMarkdown } from '../../utils/utils'
+import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 
 /**
  * Sample post object
@@ -397,25 +398,36 @@ const LensPostCard = ({ post }) => {
                   )}
                 </div>
                 {postInfo?.metadata?.mainContentFocus ===
-                  PublicationMainFocus.Image && (
-                  <Link href={`/p/${postInfo?.id}`} passHref>
-                    {/* eslint-disable-next-line */}
+                  PublicationMainFocus.Image &&
+                  (!router.pathname.startsWith('/p') ? (
+                    <Link href={`/p/${postInfo?.id}`} passHref>
+                      {/* eslint-disable-next-line */}
+                      <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                        <ImageWithPulsingLoader
+                          src={`${LensInfuraEndpoint}${
+                            postInfo?.metadata?.media[0]?.original.url.split(
+                              '//'
+                            )[1]
+                          }`}
+                          className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                            router.pathname.startsWith('/p')
+                              ? ''
+                              : 'max-h-[500px]'
+                          }`}
+                        />
+                      </div>
+                    </Link>
+                  ) : (
                     <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                      <ImageWithPulsingLoader
+                      <ImageWithFullScreenZoom
                         src={`${LensInfuraEndpoint}${
                           postInfo?.metadata?.media[0]?.original.url.split(
                             '//'
                           )[1]
                         }`}
-                        className={`image-unselectable object-contain sm:rounded-xl w-full ${
-                          router.pathname.startsWith('/p')
-                            ? ''
-                            : 'max-h-[500px]'
-                        }`}
                       />
                     </div>
-                  </Link>
-                )}
+                  ))}
                 {postInfo?.metadata?.mainContentFocus ===
                   PublicationMainFocus.Video && (
                   <div className="sm:pl-5 sm:pr-6 sm:pb-1">
