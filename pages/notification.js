@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import LensNotificationColumn from '../components/Notification/LensNotificationColumn'
 import NotificationColumn from '../components/Notification/NotificationColumn'
 import NotificationSeo from '../components/Notification/NotificationSeo'
+import useNotificationsCount from '../components/Notification/useNotificationsCount'
+import { GiBreakingChain } from 'react-icons/gi'
 const notification = () => {
   const [showLensNotifications, setShowLensNotifications] = useState(true)
-
+  const { notificationsCount, setNotificationsCount } = useNotificationsCount()
   return (
     <>
       <NotificationSeo />
@@ -15,9 +17,9 @@ const notification = () => {
             <button
               className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                 showLensNotifications && 'bg-p-bg'
-              }  hover:bg-p-btn-hover`}
+              }  hover:bg-p-btn-hover relative`}
               onClick={() => {
-                setShowLensNotifications(!showLensNotifications)
+                setShowLensNotifications(true)
               }}
             >
               <img
@@ -26,6 +28,24 @@ const notification = () => {
                 alt="lens logo icon"
               />
               <div>Lens</div>
+            </button>
+
+            <button
+              className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+                !showLensNotifications && 'bg-p-bg'
+              }  hover:bg-p-btn-hover relative`}
+              onClick={() => {
+                setShowLensNotifications(false)
+                setNotificationsCount(0)
+              }}
+            >
+              <GiBreakingChain className="h-5 w-5" />
+              <div>{'Off-chain '}</div>
+              {notificationsCount > 0 && showLensNotifications && (
+                <div className="absolute left-0 top-0 leading-[4px] p-1text-[8px] text-p-btn-text bg-p-btn rounded-full">
+                  <span>{notificationsCount}</span>
+                </div>
+              )}
             </button>
           </div>
 

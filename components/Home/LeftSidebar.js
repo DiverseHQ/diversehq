@@ -38,9 +38,11 @@ const LeftSidebar = () => {
   const { showModal } = usePopUpModal()
   const { data: lensProfile, hasProfile, isSignedIn } = useLensUserContext()
   const { notificationsCount, setNotificationsCount } = useNotificationsCount()
+  const [showDot, setShowDot] = React.useState(true)
 
   const routeToNotifications = () => {
     setNotificationsCount(0)
+    setShowDot(false)
     router.push('/notification')
   }
 
@@ -130,7 +132,7 @@ const LeftSidebar = () => {
           </span>
         </button>
         <button
-          className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2"
+          className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2 relative"
           onClick={routeToNotifications}
         >
           <IoMdNotificationsOutline className="w-[24px] h-[24px] object-contain" />
@@ -139,9 +141,13 @@ const LeftSidebar = () => {
           </span>
           {/* a green count dot */}
           {notificationsCount > 0 && (
-            <div className="px-1 text-xs text-p-btn-text bg-green-500 rounded-full ml-1">
+            <div className="top-2 left-4 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-p-btn rounded-full">
               <span>{notificationsCount}</span>
             </div>
+          )}
+          {(notificationsCount === 0 || !notificationsCount) && showDot && (
+            // a green circle
+            <div className="absolute top-2 left-4 w-[8px] h-[8px] bg-p-btn rounded-full" />
           )}
         </button>
         <Link
