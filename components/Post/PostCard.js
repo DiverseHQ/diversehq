@@ -66,9 +66,9 @@ const PostCard = ({ _post, setPosts }) => {
     console.log('post', post)
     setShowMore(
       (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES ||
-        post?.content > 400 ||
+        post?.content.length > 400 ||
         countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES ||
-        post?.title > 400) &&
+        post?.title.length > 400) &&
         router.pathname !== '/p/[id]'
     )
   }, [post])
