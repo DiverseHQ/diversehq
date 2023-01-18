@@ -31,12 +31,20 @@ const NewMobileTopNav = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full bg-p-bg z-100 backdrop-blur-md backdrop-opacity-60">
+      <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-50 min-h-[50px] backdrop-blur-lg bg-white/50">
         {router.pathname.startsWith('/p/') ||
-        router.pathname.startsWith('/c/') ? (
+        router.pathname.startsWith('/c/') ||
+        router.pathname.startsWith('/u/') ? (
           <div className="h-[32px] flex flex-row items-center gap-2 text-[18px]">
-            <BiArrowBack onClick={() => router.push('/')} />
-            <span className="font-semibold">Back to Home</span>
+            <BiArrowBack
+              onClick={() => router.back()}
+              className="w-6 h-6 hover:bg-p-btn-hover rounded-full"
+            />
+            <span className="font-semibold">
+              {router.pathname.startsWith('/p/') && 'Post'}
+              {router.pathname.startsWith('/c/') && 'Community'}
+              {router.pathname.startsWith('/u/') && 'Profile'}
+            </span>
           </div>
         ) : (
           <>
@@ -61,7 +69,7 @@ const NewMobileTopNav = () => {
                 // />
               )}
             </div>
-            {router.pathname.startsWith('/') && (
+            {router.pathname === '/' && (
               <div>
                 <span
                   className={`font-semibold text-[18px] ${
