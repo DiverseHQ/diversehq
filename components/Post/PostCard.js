@@ -179,9 +179,11 @@ const PostCard = ({ _post, setPosts }) => {
 
   const showEditModal = () => {
     showModal({
-      component: <EditPostPopup post={post} setPost={setPost} />
+      component: <EditPostPopup post={post} setPost={setPost} />,
+      type: modalType.fullscreen,
+      onAction: () => {},
+      extraaInfo: {}
     })
-    hideModal()
   }
 
   const showMoreOptions = (e) => {

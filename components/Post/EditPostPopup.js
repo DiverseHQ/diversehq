@@ -1,4 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import { ContentEditable } from '@lexical/react/LexicalContentEditable'
+import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
+import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin'
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
+import React, { useCallback, useEffect, useState } from 'react'
 import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
 import { putEditPost } from '../../api/post'
 import { supportedMimeTypes } from '../../lib/interfaces/publication'
@@ -8,17 +14,40 @@ import { useNotify } from '../Common/NotifyContext'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { useProfile } from '../Common/WalletContext'
+import ImagesPlugin from '../Lexical/ImagesPlugin'
+import LexicalAutoLinkPlugin from '../Lexical/LexicalAutoLinkPlugin'
+import {
+  $convertToMarkdownString,
+  $convertFromMarkdownString,
+  TEXT_FORMAT_TRANSFORMERS
+} from '@lexical/markdown'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { $getRoot } from 'lexical'
+
+const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
 const EditPostPopup = ({ post, setPost }) => {
   console.log('post', post)
   const [file, setFile] = useState(null)
   const [title, setTitle] = useState(post?.title)
+  const [content, setContent] = useState(post?.content)
   const [loading, setLoading] = useState(false)
   const { hideModal } = usePopUpModal()
   const [imageUrl, setImageUrl] = useState(post?.postImageUrl)
   const [videoUrl, setVideoUrl] = useState(post?.postVideoUrl)
   const { address } = useProfile()
   const { notifyError, notifySuccess } = useNotify()
+  const [editor] = useLexicalComposerContext()
+  useEffect(() => {
+    editor?.update(() => {
+      $convertFromMarkdownString(content, TRANSFORMERS)
+    })
+    return () => {
+      editor?.update(() => {
+        $getRoot().clear()
+      })
+    }
+  }, [])
 
   const closeModal = () => {
     hideModal()
@@ -28,8 +57,7 @@ const EditPostPopup = ({ post, setPost }) => {
     setTitle(e.target.value)
   }, [])
 
-  const onFileChange = (event) => {
-    const filePicked = event.target.files[0]
+  const onFileChange = (filePicked) => {
     if (!filePicked) return
     setFile(filePicked)
     const url = URL.createObjectURL(filePicked)
@@ -113,7 +141,8 @@ const EditPostPopup = ({ post, setPost }) => {
   const handleEditPost = async (mimeType, url, filePath) => {
     if (!post._id) return
     const postData = {
-      title: title
+      title: title,
+      content: content
     }
 
     const type = mimeType.split('/')[0]
@@ -162,6 +191,40 @@ const EditPostPopup = ({ post, setPost }) => {
           value={title}
           onChange={onChangeTitle}
         />
+        <div className="relative">
+          {/* todo toolbar for rich text editor */}
+          {/* <ToolbarPlugin /> */}
+          <RichTextPlugin
+            contentEditable={
+              <ContentEditable className="block min-h-[70px] overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px]" />
+            }
+            placeholder={
+              <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
+                <div>{"What's this about...? (optional)"}</div>
+                <div>{'Here, You can write in markdown too!'} </div>
+              </div>
+            }
+          />
+          <OnChangePlugin
+            onChange={(editorState) => {
+              editorState.read(() => {
+                const markdown = $convertToMarkdownString(TRANSFORMERS)
+                setContent(markdown)
+              })
+            }}
+          />
+          <HistoryPlugin />
+          <HashtagPlugin />
+          <LexicalAutoLinkPlugin />
+          <ImagesPlugin
+            onPaste={async (files) => {
+              const file = files[0]
+              if (!file) return
+              onFileChange(file)
+            }}
+          />
+          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+        </div>
         <div className="text-base leading-relaxed  m-4">
           {imageUrl || videoUrl ? (
             showAddedFile()
@@ -182,7 +245,11 @@ const EditPostPopup = ({ post, setPost }) => {
           id="upload-file"
           accept="image/*,video/*"
           hidden
-          onChange={onFileChange}
+          onChange={(e) => {
+            const file = e.target.files[0]
+            if (!file) return
+            onFileChange(file)
+          }}
         />
       </div>
     </PopUpWrapper>
