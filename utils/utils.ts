@@ -110,6 +110,26 @@ export const countLinesFromMarkdown = (markdownText: string): number => {
   return (markdownText?.match(/\n/g) || []).length
 }
 
+export const commentIdFromIndexedResult = (
+  profileId: string,
+  indexedResult: any
+) => {
+  const logs = indexedResult.txReceipt!.logs
+
+  const topicId = utils.id(
+    'CommentCreated(uint256,uint256,string,uint256,uint256,bytes,address,bytes,address,bytes,uint256)'
+  )
+  const profileCreatedLog = logs.find((l: any) => l.topics[0] === topicId)
+  let profileCreatedEventLog = profileCreatedLog!.topics
+  const publicationId = utils.defaultAbiCoder.decode(
+    ['uint256'],
+    profileCreatedEventLog[2]
+  )[0]
+  const commentId =
+    profileId + '-' + BigNumber.from(publicationId).toHexString()
+  return commentId
+}
+
 export const postIdFromIndexedResult = (
   profileId: string,
   indexedResult: any

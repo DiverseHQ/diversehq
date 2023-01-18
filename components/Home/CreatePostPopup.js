@@ -33,6 +33,8 @@ import { uuidv4 } from '@firebase/util'
 import { pollUntilIndexed } from '../../lib/indexer/has-transaction-been-indexed'
 import {
   PublicationMainFocus,
+  ReactionTypes,
+  useAddReactionMutation,
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
@@ -65,6 +67,7 @@ const CreatePostPopup = () => {
     (isSignedIn && hasProfile) || false
   )
   const [editor] = useLexicalComposerContext()
+  const { mutateAsync: addReaction } = useAddReactionMutation()
 
   useEffect(() => {
     return () => {
@@ -190,6 +193,30 @@ const CreatePostPopup = () => {
     await post(createPostRequest)
   }
 
+  const onSuccessLensPost = async (result) => {
+    notifySuccess('Post has been created ...')
+    try {
+      console.log('result', result)
+      const postId = postIdFromIndexedResult(
+        lensProfile?.defaultProfile?.id,
+        result
+      )
+      console.log('postId', postId)
+      await addReaction({
+        request: {
+          profileId: lensProfile?.defaultProfile?.id,
+          publicationId: postId,
+          reaction: ReactionTypes.Upvote
+        }
+      })
+      router.push(`/p/${postId}`)
+    } catch (e) {
+      console.log('error adding reaction', e)
+    }
+    setLoading(false)
+    closeModal()
+  }
+
   const post = async (createPostRequest) => {
     try {
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
@@ -209,14 +236,7 @@ const CreatePostPopup = () => {
 
         //invalidate query to update feed
         if (indexResult.indexed === true) {
-          console.log('index success result', indexResult)
-          notifySuccess('Post has been created ...')
-          const postId = postIdFromIndexedResult(
-            lensProfile?.defaultProfile?.id,
-            indexResult
-          )
-          router.push(`/p/${postId}`)
-          closeModal()
+          await onSuccessLensPost(indexResult)
         }
       } else {
         //gasless using signed broadcast
@@ -241,11 +261,7 @@ const CreatePostPopup = () => {
 
   useEffect(() => {
     if (result && type === 'createPost') {
-      notifySuccess('Post has been created ...')
-      setLoading(false)
-      const postId = postIdFromIndexedResult(result)
-      router.push(`/p/${postId}`)
-      closeModal()
+      onSuccessLensPost(result)
     }
   }, [result, type])
 

@@ -2,18 +2,25 @@ import { uuidv4 } from '@firebase/util'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   PublicationMainFocus,
+  ReactionTypes,
+  useAddReactionMutation,
   useCreateCommentTypedDataMutation,
   useCreateCommentViaDispatcherMutation
 } from '../../../graphql/generated'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
-import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
+import {
+  commentIdFromIndexedResult,
+  uploadToIpfsInfuraAndGetPath
+} from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 
 const LensCreateComment = ({ postId, addComment }) => {
-  const { error, signTypedDataAndBroadcast } = useSignTypedDataAndBroadcast()
+  const { error, result, type, signTypedDataAndBroadcast } =
+    useSignTypedDataAndBroadcast()
+  const { mutateAsync: addReaction } = useAddReactionMutation()
 
   const { mutateAsync: createCommentWithSign } =
     useCreateCommentTypedDataMutation()
@@ -29,6 +36,45 @@ const LensCreateComment = ({ postId, addComment }) => {
 
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { user } = useProfile()
+
+  const onSuccessCreateComment = async (result) => {
+    const commentId = commentIdFromIndexedResult(
+      lensProfile?.defaultProfile?.id,
+      result
+    )
+    await addReaction({
+      request: {
+        profileId: lensProfile?.defaultProfile?.id,
+        publicationId: commentId,
+        reaction: ReactionTypes.Upvote
+      }
+    })
+    setLoading(false)
+    commentRef.current.value = ''
+    //sending comment to feed without waiting for transaction to be indexed
+    addComment({
+      id: commentId,
+      profile: {
+        picture: {
+          original: {
+            url: lensProfile?.defaultProfile?.picture?.original?.url
+          }
+        },
+        id: lensProfile?.defaultProfile?.id,
+        handle: lensProfile?.defaultProfile?.handle
+      },
+      createdAt: new Date().toISOString(),
+      metadata: {
+        content: commentRef.current.value
+      },
+      stats: {
+        totalUpvotes: 1,
+        totalDownvotes: 0
+      },
+      reaction: ReactionTypes.Upvote
+    })
+  }
+
   const createComment = async () => {
     if (!lensProfile?.defaultProfile?.id) return
     const content = commentRef.current.value
@@ -80,45 +126,6 @@ const LensCreateComment = ({ postId, addComment }) => {
         ).createCommentViaDispatcher
 
         console.log('dispatcherResult', dispatcherResult)
-
-        //sending comment to feed without waiting for transaction to be indexed
-        addComment({
-          profile: {
-            picture: {
-              original: {
-                url: lensProfile?.defaultProfile?.picture?.original?.url
-              }
-            },
-            id: lensProfile?.defaultProfile?.id,
-            handle: lensProfile?.defaultProfile?.handle
-          },
-          createdAt: new Date().toISOString(),
-          metadata: {
-            content: commentRef.current.value
-          }
-        })
-
-        // setComments((prev) => [
-        //   {
-        //     profile: {
-        //       picture: {
-        //         original: {
-        //           url: user?.profileImageUrl
-        //         }
-        //       },
-        //       handle: lensProfile?.defaultProfile?.handle
-        //     },
-        //     createdAt: new Date().toISOString(),
-        //     metadata: {
-        //       content: commentRef.current.value
-        //     }
-        //   },
-        //   ...prev
-        // ])
-
-        setLoading(false)
-        commentRef.current.value = ''
-
         console.log(dispatcherResult)
         console.log('index started ....')
         const indexResult = await pollUntilIndexed({
@@ -129,6 +136,7 @@ const LensCreateComment = ({ postId, addComment }) => {
 
         //invalidate query to update feed
         if (indexResult.indexed === true) {
+          onSuccessCreateComment(indexResult)
           console.log('comment created successfully')
         }
       } else {
@@ -138,51 +146,6 @@ const LensCreateComment = ({ postId, addComment }) => {
           })
         ).createCommentTypedData
         console.log('commentTypedResult', commentTypedResult)
-
-        //sending comment to feed without waiting for transaction to be indexed
-
-        addComment({
-          profile: {
-            picture: {
-              original: {
-                url: lensProfile?.defaultProfile?.picture?.original?.url
-              }
-            },
-            handle: lensProfile?.defaultProfile?.handle
-          },
-          createdAt: new Date().toISOString(),
-          metadata: {
-            content: commentRef.current.value
-          },
-          stats: {
-            totalUpvotes: 0,
-            totalDownvotes: 0
-          }
-        })
-        // setComments((prev) => [
-        //   {
-        //     profile: {
-        //       picture: {
-        //         original: {
-        //           url: user?.profileImageUrl
-        //         }
-        //       },
-        //       handle: lensProfile?.defaultProfile?.handle
-        //     },
-        //     createdAt: new Date().toISOString(),
-        //     metadata: {
-        //       content: commentRef.current.value
-        //     },
-        //     stats: {
-        //       totalUpvotes: 0,
-        //       totalDownvotes: 0
-        //     }
-        //   },
-        //   ...prev
-        // ])
-        setLoading(false)
-        commentRef.current.value = ''
-
         signTypedDataAndBroadcast(commentTypedResult.typedData, {
           id: commentTypedResult.id,
           type: 'createComment'
@@ -192,6 +155,19 @@ const LensCreateComment = ({ postId, addComment }) => {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    if (result && type === 'createComment') {
+      onSuccessCreateComment(result)
+    }
+  }, [result, type])
+
+  useEffect(() => {
+    if (error) {
+      setLoading(false)
+      notifyError(error)
+    }
+  }, [error])
 
   useEffect(() => {
     if (error) {
@@ -217,21 +193,6 @@ const LensCreateComment = ({ postId, addComment }) => {
                 {lensProfile?.defaultProfile?.handle}
               </div>
             </div>
-            {/* <div className="flex flex-row items-center justify-center">
-              {!loading && (
-                <FiSend
-                  onClick={createComment}
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
-                />
-              )}
-              {loading && (
-                <img
-                  src="/loading.svg"
-                  alt="loading"
-                  className="w-5 h-5 sm:w-6 sm:h-6"
-                />
-              )}
-            </div> */}
           </div>
           <div className="pl-8 sm:pl-10">
             <input
@@ -254,19 +215,6 @@ const LensCreateComment = ({ postId, addComment }) => {
               >
                 {loading ? 'Commenting...' : 'Comment'}
               </button>
-              {/* {!loading && (
-                <FiSend
-                  onClick={createComment}
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
-                />
-              )}
-              {loading && (
-                <img
-                  src="/loading.svg"
-                  alt="loading"
-                  className="w-5 h-5 sm:w-6 sm:h-6"
-                />
-              )} */}
             </div>
           </div>
         </div>
