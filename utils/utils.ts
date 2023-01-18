@@ -107,7 +107,7 @@ export const hasWhiteSpace = (s: string): boolean => {
 }
 
 export const countLinesFromMarkdown = (markdownText: string): number => {
-  return (markdownText.match(/\n/g) || []).length
+  return (markdownText?.match(/\n/g) || []).length
 }
 
 export const postIdFromIndexedResult = (
