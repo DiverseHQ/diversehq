@@ -55,14 +55,20 @@ const PostCard = ({ _post, setPosts }) => {
 
   const router = useRouter()
   const [showMore, setShowMore] = useState(
-    countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES &&
+    (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES ||
+      post?.content > 400 ||
+      countLinesFromMarkdown(post?.titile) > MAX_CONTENT_LINES ||
+      post?.title > 400) &&
       router.pathname !== '/p/[id]'
   )
 
   useEffect(() => {
     console.log('post', post)
     setShowMore(
-      countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES &&
+      (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES ||
+        post?.content > 400 ||
+        countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES ||
+        post?.title > 400) &&
         router.pathname !== '/p/[id]'
     )
   }, [post])
