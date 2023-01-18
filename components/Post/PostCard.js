@@ -362,7 +362,9 @@ const PostCard = ({ _post, setPosts }) => {
           <div>
             <div className="mb-2 px-3 sm:pl-5 ">
               {post?.title?.length <= 60 && (
-                <div className="font-medium text-lg w-full">{post?.title}</div>
+                <div className="font-medium text-base sm:text-lg w-full">
+                  {post?.title}
+                </div>
               )}
               {(post?.content || post?.title?.length > 60) && (
                 <>
@@ -374,7 +376,7 @@ const PostCard = ({ _post, setPosts }) => {
                     <Markup
                       className={`${
                         showMore ? 'line-clamp-5' : ''
-                      } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-xs sm:text-base`}
+                      } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
                     >
                       {post?.content ? post?.content : post?.title}
                     </Markup>
