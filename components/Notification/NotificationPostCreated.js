@@ -11,9 +11,9 @@ const NotificationPostCreated = ({ notification }) => {
 
   const [showMore, setShowMore] = useState(
     (countLinesFromMarkdown(notification.post?.content) > MAX_CONTENT_LINES ||
-      notification.post?.content.length > 400 ||
+      notification.post?.content?.length > 400 ||
       countLinesFromMarkdown(notification.post?.titile) > MAX_CONTENT_LINES ||
-      notification.post?.title.length > 400) &&
+      notification.post?.title?.length > 400) &&
       router.pathname !== '/p/[id]'
   )
 
@@ -21,9 +21,9 @@ const NotificationPostCreated = ({ notification }) => {
     setShowMore(
       (countLinesFromMarkdown(notification?.post?.content) >
         MAX_CONTENT_LINES ||
-        notification?.post?.content.length > 400 ||
+        notification?.post?.content?.length > 400 ||
         countLinesFromMarkdown(notification?.post?.title) > MAX_CONTENT_LINES ||
-        notification?.post?.title.length > 400) &&
+        notification?.post?.title?.length > 400) &&
         router.pathname !== '/p/[id]'
     )
   }, [notification?.post])

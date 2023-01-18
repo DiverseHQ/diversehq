@@ -6,7 +6,8 @@ export const LENS_NOTIFICATION_LIMIT: number = 10
 export const NOTIFICATION_LIMIT: number = 10
 export const COMMUNITY_LIMIT: number = 5
 export const LensInfuraEndpoint: string = 'https://lens.infura-ipfs.io/ipfs/'
-export const MAX_CONTENT_LINES: number = 3
+export const MAX_CONTENT_LINES: number = 4
+export const MAX_CONTENT_LINES_FOR_POST: number = 6
 
 export const userRoles = {
   ADMIN_USER: 0,

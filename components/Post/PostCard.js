@@ -25,7 +25,7 @@ TimeAgo.addDefaultLocale(en)
 
 import Markup from '../Lexical/Markup'
 import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
-import { MAX_CONTENT_LINES } from '../../utils/config'
+import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import ReactEmbedo from './embed/ReactEmbedo'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
@@ -55,20 +55,20 @@ const PostCard = ({ _post, setPosts }) => {
 
   const router = useRouter()
   const [showMore, setShowMore] = useState(
-    (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES ||
-      post?.content.length > 400 ||
-      countLinesFromMarkdown(post?.titile) > MAX_CONTENT_LINES ||
-      post?.title.length > 400) &&
+    (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES_FOR_POST ||
+      post?.content?.length > 400 ||
+      countLinesFromMarkdown(post?.titile) > MAX_CONTENT_LINES_FOR_POST ||
+      post?.title?.length > 400) &&
       router.pathname !== '/p/[id]'
   )
 
   useEffect(() => {
     console.log('post', post)
     setShowMore(
-      (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES ||
-        post?.content.length > 400 ||
-        countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES ||
-        post?.title.length > 400) &&
+      (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES_FOR_POST ||
+        post?.content?.length > 400 ||
+        countLinesFromMarkdown(post?.title) > MAX_CONTENT_LINES_FOR_POST ||
+        post?.title?.length > 400) &&
         router.pathname !== '/p/[id]'
     )
   }, [post])

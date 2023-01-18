@@ -48,7 +48,7 @@ const LensNotificationReactionPostCard = ({ notification }) => {
         notification?.publication?.metadata?.content && (
         <div
           className={`${
-            showMore ? 'h-[150px]' : ''
+            showMore ? 'h-[100px]' : ''
           } overflow-hidden break-words`}
         >
           <Markup

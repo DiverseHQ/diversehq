@@ -13,7 +13,10 @@ import {
 import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
 import { useNotify } from '../Common/NotifyContext'
-import { LensInfuraEndpoint, MAX_CONTENT_LINES } from '../../utils/config'
+import {
+  LensInfuraEndpoint,
+  MAX_CONTENT_LINES_FOR_POST
+} from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
@@ -263,16 +266,17 @@ const LensPostCard = ({ post }) => {
   }
   const router = useRouter()
   const [showMore, setShowMore] = useState(
-    (countLinesFromMarkdown(postInfo?.metadata?.content) > MAX_CONTENT_LINES ||
-      postInfo?.metadata?.content.length > 400) &&
+    (countLinesFromMarkdown(postInfo?.metadata?.content) >
+      MAX_CONTENT_LINES_FOR_POST ||
+      postInfo?.metadata?.content?.length > 400) &&
       router.pathname !== '/p/[id]'
   )
 
   useEffect(() => {
     setShowMore(
       (countLinesFromMarkdown(postInfo?.metadata?.content) >
-        MAX_CONTENT_LINES ||
-        postInfo?.metadata?.content.length > 400) &&
+        MAX_CONTENT_LINES_FOR_POST ||
+        postInfo?.metadata?.content?.length > 400) &&
         router.pathname !== '/p/[id]'
     )
   }, [postInfo])

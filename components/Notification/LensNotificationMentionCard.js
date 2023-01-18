@@ -55,7 +55,7 @@ const LensNotificationMentionCard = ({ notification }) => {
         notification?.mentionPublication?.metadata?.content && (
         <div
           className={`${
-            showMore ? 'h-[150px]' : ''
+            showMore ? 'h-[100px]' : ''
           } overflow-hidden break-words`}
         >
           <Markup
