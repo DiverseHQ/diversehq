@@ -56,9 +56,9 @@ const PostCard = ({ _post, setPosts }) => {
   const router = useRouter()
   const [showMore, setShowMore] = useState(
     (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES ||
-      post?.content > 400 ||
+      post?.content.length > 400 ||
       countLinesFromMarkdown(post?.titile) > MAX_CONTENT_LINES ||
-      post?.title > 400) &&
+      post?.title.length > 400) &&
       router.pathname !== '/p/[id]'
   )
 
