@@ -31,7 +31,7 @@ const NewMobileTopNav = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-50 min-h-[50px] backdrop-blur-lg bg-white/50">
+      <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] backdrop-blur-lg bg-white/50">
         {router.pathname.startsWith('/p/') ||
         router.pathname.startsWith('/c/') ||
         router.pathname.startsWith('/u/') ? (
