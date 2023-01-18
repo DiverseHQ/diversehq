@@ -462,7 +462,7 @@ const LensPostCard = ({ post }) => {
                       <Markup
                         className={`${
                           showMore ? 'line-clamp-5' : ''
-                        } linkify whitespace-pre-wrap break-words text-xs sm:text-base`}
+                        } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                       >
                         {postInfo?.metadata?.content}
                       </Markup>

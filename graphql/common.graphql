@@ -215,6 +215,7 @@ fragment MirrorFields on Mirror {
 }
 
 fragment CommentBaseFields on Comment {
+  __typename
   id
   profile {
     ...ProfileFields

@@ -141,13 +141,13 @@ const LeftSidebar = () => {
           </span>
           {/* a green count dot */}
           {notificationsCount > 0 && (
-            <div className="top-2 left-4 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-p-btn rounded-full">
+            <div className="top-2 left-4 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full">
               <span>{notificationsCount}</span>
             </div>
           )}
           {(notificationsCount === 0 || !notificationsCount) && showDot && (
             // a green circle
-            <div className="absolute top-2 left-4 w-[8px] h-[8px] bg-p-btn rounded-full" />
+            <div className="absolute top-2 left-4 w-[8px] h-[8px] bg-red-500 rounded-full" />
           )}
         </button>
         <Link

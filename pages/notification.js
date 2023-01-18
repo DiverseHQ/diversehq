@@ -42,7 +42,7 @@ const notification = () => {
               <GiBreakingChain className="h-5 w-5" />
               <div>{'Off-chain '}</div>
               {notificationsCount > 0 && showLensNotifications && (
-                <div className="absolute left-0 top-0 leading-[4px] p-1text-[8px] text-p-btn-text bg-p-btn rounded-full">
+                <div className="absolute left-0 top-0 leading-[4px] p-1 font-bold text-[8px] text-p-btn-text bg-red-500 rounded-full">
                   <span>{notificationsCount}</span>
                 </div>
               )}
