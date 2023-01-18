@@ -67,7 +67,7 @@ const SearchModal = () => {
                 >
                   <img
                     src={community.logoImageUrl}
-                    className="w-10 h-10 mr-5 rounded-full"
+                    className="w-10 h-10 mr-5 rounded-full object-cover"
                   />
                   <div>{community.name}</div>
                 </div>
