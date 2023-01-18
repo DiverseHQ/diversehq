@@ -368,7 +368,7 @@ const PostCard = ({ _post, setPosts }) => {
           <div>
             <div className="mb-2 px-3 sm:pl-5 ">
               {post?.title?.length <= 60 && (
-                <div className="font-medium text-base sm:text-lg w-full">
+                <div className="font-medium text-base sm:text-lg w-full break-words">
                   {post?.title}
                 </div>
               )}

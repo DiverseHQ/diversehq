@@ -449,7 +449,7 @@ const LensPostCard = ({ post }) => {
               <div>
                 <div className="mb-2 px-3 sm:pl-5 ">
                   {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
-                    <div className="font-medium text-lg w-full">
+                    <div className="font-medium text-lg w-full break-words">
                       {postInfo?.metadata?.name}
                     </div>
                   )}
