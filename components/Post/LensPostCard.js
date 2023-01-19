@@ -469,7 +469,10 @@ const LensPostCard = ({ post }) => {
                     </div>
                   )}
                   {showMore && (
-                    <Link href={`/p/${postInfo?.id}`} className="text-blue-400">
+                    <Link
+                      href={`/p/${postInfo?.id}`}
+                      className="text-blue-400 text-sm sm:text-base"
+                    >
                       Show more
                     </Link>
                   )}

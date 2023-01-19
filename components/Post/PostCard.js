@@ -391,7 +391,10 @@ const PostCard = ({ _post, setPosts }) => {
                     {/* todo showmore for clamped text */}
                   </div>
                   {showMore && (
-                    <Link href={`/p/${post._id}`} className="text-blue-400">
+                    <Link
+                      href={`/p/${post._id}`}
+                      className="text-blue-400 text-sm sm:text-base"
+                    >
                       Show more
                     </Link>
                   )}

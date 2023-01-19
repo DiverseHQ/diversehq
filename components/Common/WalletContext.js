@@ -28,6 +28,7 @@ export const WalletProvider = ({ children }) => {
 
   useEffect(() => {
     if (signer && address) {
+      console.log('token', getLocalToken())
       if (getLocalToken()) {
         fetchWeb3Token()
       }
@@ -35,7 +36,8 @@ export const WalletProvider = ({ children }) => {
   }, [signer, address])
 
   useEffect(() => {
-    if (isDisconnected) {
+    if (isDisconnected && user) {
+      console.log('disconnected triggered')
       setUser(null)
       setLoading(false)
       if (getLocalToken()) {
