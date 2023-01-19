@@ -11,7 +11,6 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
 import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
-import { FiSend } from 'react-icons/fi'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
 import { ReactionTypes } from '../../graphql/generated'
@@ -29,6 +28,7 @@ import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import ReactEmbedo from './embed/ReactEmbedo'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import PostShareButton from './PostShareButton'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -133,24 +133,24 @@ const PostCard = ({ _post, setPosts }) => {
     }
   }
 
-  const handleShare = async () => {
-    if (!navigator.canShare) {
-      notifyInfo(`Your browser doesn't support the Web Share API.`)
-      return
-    }
+  // const handleShare = async () => {
+  //   if (!navigator.canShare) {
+  //     notifyInfo(`Your browser doesn't support the Web Share API.`)
+  //     return
+  //   }
 
-    try {
-      const url = window.location.href
-      const title = 'Share this post'
-      await navigator.share({
-        title,
-        url
-      })
-    } catch (error) {
-      console.log(error)
-      notifyError('Something went wrong when sharing')
-    }
-  }
+  //   try {
+  //     const url = window.location.href
+  //     const title = 'Share this post'
+  //     await navigator.share({
+  //       title,
+  //       url
+  //     })
+  //   } catch (error) {
+  //     console.log(error)
+  //     notifyError('Something went wrong when sharing')
+  //   }
+  // }
 
   const handleDeletePost = async () => {
     try {
@@ -497,9 +497,9 @@ const PostCard = ({ _post, setPosts }) => {
               </div>
             )}
             <div>
-              <FiSend
-                onClick={handleShare}
-                className="hover:cursor-pointer mr-3 w-5 h-5"
+              <PostShareButton
+                url={`https://app.diversehq.xyz/p/${post?._id}`}
+                text={post?.title}
               />
             </div>
             {isAuthor && (

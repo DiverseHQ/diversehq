@@ -11,7 +11,6 @@ import {
   useHidePublicationMutation
 } from '../../graphql/generated'
 import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
-import { FiSend } from 'react-icons/fi'
 import { useNotify } from '../Common/NotifyContext'
 import {
   LensInfuraEndpoint,
@@ -32,6 +31,7 @@ import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import ReactEmbedo from './embed/ReactEmbedo'
+import PostShareButton from './PostShareButton'
 
 /**
  * Sample post object
@@ -145,7 +145,7 @@ import ReactEmbedo from './embed/ReactEmbedo'
 
 const LensPostCard = ({ post }) => {
   const { isMobile } = useDevice()
-  const { notifyInfo, notifyError } = useNotify()
+  const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(post?.reaction)
   const [upvoteCount, setUpvoteCount] = useState(post?.stats.totalUpvotes)
   const [downvoteCount, setDownvoteCount] = useState(post?.stats.totalDownvotes)
@@ -194,24 +194,24 @@ const LensPostCard = ({ post }) => {
     }
   }, [postInfo])
 
-  const handleShare = async () => {
-    if (!navigator.canShare) {
-      notifyInfo(`Your browser doesn't support the Web Share API.`)
-      return
-    }
+  // const handleShare = async () => {
+  //   if (!navigator.canShare) {
+  //     notifyInfo(`Your browser doesn't support the Web Share API.`)
+  //     return
+  //   }
 
-    try {
-      const url = window.location.href
-      const title = 'Share this post'
-      await navigator.share({
-        title,
-        url
-      })
-    } catch (error) {
-      console.log(error)
-      notifyError('Failed to share post')
-    }
-  }
+  //   try {
+  //     const url = window.location.href
+  //     const title = 'Share this post'
+  //     await navigator.share({
+  //       title,
+  //       url
+  //     })
+  //   } catch (error) {
+  //     console.log(error)
+  //     notifyError('Failed to share post')
+  //   }
+  // }
   const handleUpvote = async () => {
     if (reaction === ReactionTypes.Upvote) return
     try {
@@ -577,9 +577,9 @@ const LensPostCard = ({ post }) => {
                   {postInfo?.stats?.totalAmountOfComments}
                 </Link>
                 <div>
-                  <FiSend
-                    onClick={handleShare}
-                    className="hover:cursor-pointer mr-3 w-5 h-5"
+                  <PostShareButton
+                    url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
+                    text={postInfo?.metadata?.name}
                   />
                 </div>
                 <div>
