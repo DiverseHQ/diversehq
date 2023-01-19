@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { FaArrowCircleUp } from 'react-icons/fa'
+import { useRouter } from 'next/router'
 
 const ScrollToTopButton = ({ ...props }) => {
   const [visible, setVisible] = useState(false)
+  const router = useRouter()
 
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop
@@ -26,8 +28,13 @@ const ScrollToTopButton = ({ ...props }) => {
 
   return (
     <div
+      // top button is up in the post page decided using router.pathname
       {...props}
-      className={`cursor-pointer text-[36px] text-p-btn bg-p-btn-text rounded-full sticky z-10 top-[calc(100vh-110px)] md:top-[calc(100vh-60px)] left-[calc(100vw-20px)] mr-[20px] ${
+      className={`cursor-pointer text-[36px] text-p-btn bg-p-btn-text rounded-full sticky z-10 ${
+        router.pathname.startsWith('/p/')
+          ? 'top-[calc(100vh-160px)]'
+          : 'top-[calc(100vh-110px)]'
+      }  md:top-[calc(100vh-60px)] left-[calc(100vw-20px)] mr-[20px] ${
         visible ? 'inline-block' : 'hidden'
       } ${props.className}`}
       onClick={scrollToTop}

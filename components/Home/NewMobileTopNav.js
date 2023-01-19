@@ -36,10 +36,12 @@ const NewMobileTopNav = () => {
         router.pathname.startsWith('/c/') ||
         router.pathname.startsWith('/u/') ? (
           <div className="h-[32px] flex flex-row items-center gap-2 text-[18px]">
-            <BiArrowBack
-              onClick={() => router.back()}
-              className="w-6 h-6 hover:bg-p-btn-hover rounded-full"
-            />
+            <div className="flex items-center justify-center w-8 h-8 hover:bg-p-btn-hover rounded-full">
+              <BiArrowBack
+                onClick={() => router.back()}
+                className="w-6 h-6 rounded-full cursor-pointer"
+              />
+            </div>
             <span className="font-semibold">
               {router.pathname.startsWith('/p/') && 'Post'}
               {router.pathname.startsWith('/c/') && 'Community'}
