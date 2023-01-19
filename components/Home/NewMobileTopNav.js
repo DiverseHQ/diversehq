@@ -62,57 +62,20 @@ const NewMobileTopNav = () => {
                   className="w-[35px] h-[35px] rounded-full"
                   loaderClassName={'w-[35px] h-[35px] rounded-full'}
                 />
-                // <img
-                //   src={user?.profileImageUrl}
-                //   onClick={() => setIsOpenSidebar(true)}
-                //   className="w-[35px] h-[35px] rounded-full"
-                // />
               )}
             </div>
-            {router.pathname === '/' && (
-              <div>
-                <span
-                  className={`font-semibold text-[18px] ${
-                    !user ? '-ml-[40px]' : ''
-                  }`}
-                >
-                  Home
-                </span>
-              </div>
-            )}
-            {router.pathname.startsWith('/explore') && (
-              <div>
-                <span
-                  className={`font-semibold text-[18px] ${
-                    !user ? '-ml-[40px]' : ''
-                  }`}
-                >
-                  Explore
-                </span>
-              </div>
-            )}
-            {router.pathname.startsWith('/search') && (
-              <div>
-                <span
-                  className={`font-semibold text-[18px] ${
-                    !user ? '-ml-[40px]' : ''
-                  }`}
-                >
-                  Search
-                </span>
-              </div>
-            )}
-            {router.pathname.startsWith('/notification') && (
-              <div>
-                <span
-                  className={`font-semibold text-[18px] ${
-                    !user ? '-ml-[40px]' : ''
-                  }`}
-                >
-                  Notifications
-                </span>
-              </div>
-            )}
+            <div>
+              <span
+                className={`font-semibold text-[18px] ${
+                  !user ? '-ml-[40px]' : ''
+                }`}
+              >
+                {router.pathname === '/' && 'Home'}
+                {router.pathname.startsWith('/explore') && 'Explore'}
+                {router.pathname.startsWith('/notification') && 'Notifications'}
+                {router.pathname.startsWith('/search') && 'Search'}
+              </span>
+            </div>
             <div>
               <img
                 src="/LogoV3TrimmedWithBG.png"
