@@ -16,6 +16,7 @@ import {
 } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
+import useDevice from '../../Common/useDevice'
 
 const LensCreateComment = ({ postId, addComment }) => {
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -36,6 +37,7 @@ const LensCreateComment = ({ postId, addComment }) => {
 
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { user } = useProfile()
+  const { isMobile } = useDevice()
 
   const onSuccessCreateComment = async (result) => {
     const commentId = commentIdFromIndexedResult(
@@ -177,48 +179,91 @@ const LensCreateComment = ({ postId, addComment }) => {
 
   return (
     <div>
-      {hasProfile && isSignedIn && lensProfile?.defaultProfile?.id && (
-        <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
-          <div className="flex flex-row justify-between items-center w-full">
-            <div className="flex flex-row items-center">
-              <img
-                src={
-                  user?.profileImageUrl
-                    ? user?.profileImageUrl
-                    : '/gradient.jpg'
-                }
-                className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+      {hasProfile &&
+        isSignedIn &&
+        lensProfile?.defaultProfile?.id &&
+        (!isMobile ? (
+          <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
+            <div className="flex flex-row justify-between items-center w-full">
+              <div className="flex flex-row items-center">
+                <img
+                  src={
+                    user?.profileImageUrl
+                      ? user?.profileImageUrl
+                      : '/gradient.jpg'
+                  }
+                  className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+                />
+                <div className="ml-2 font-bold text-base">
+                  {lensProfile?.defaultProfile?.handle}
+                </div>
+              </div>
+            </div>
+            <div className="pl-8 sm:pl-10">
+              <input
+                type="text"
+                ref={commentRef}
+                className={`border-none outline-none w-full mt-1   text-base bg-s-bg ${
+                  loading ? 'text-s-text' : 'text-p-text'
+                }`}
+                placeholder="Say it.."
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') createComment()
+                }}
+                disabled={loading}
               />
-              <div className="ml-2 font-bold text-base">
-                {lensProfile?.defaultProfile?.handle}
+              <div className="w-full flex flex-row justify-end">
+                <button
+                  disabled={loading}
+                  onClick={createComment}
+                  className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
+                >
+                  {loading ? 'Commenting...' : 'Comment'}
+                </button>
               </div>
             </div>
           </div>
-          <div className="pl-8 sm:pl-10">
-            <input
-              type="text"
-              ref={commentRef}
-              className={`border-none outline-none w-full mt-1   text-base bg-s-bg ${
-                loading ? 'text-s-text' : 'text-p-text'
-              }`}
-              placeholder="Say it.."
-              onKeyUp={(e) => {
-                if (e.key === 'Enter') createComment()
-              }}
-              disabled={loading}
-            />
-            <div className="w-full flex flex-row justify-end">
-              <button
-                disabled={loading}
-                onClick={createComment}
-                className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
-              >
-                {loading ? 'Commenting...' : 'Comment'}
-              </button>
+        ) : (
+          <div className="px-3 sm:px-5 w-full bg-s-bg py-3 fixed z-10 top-[calc(100vh-110px)]">
+            <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4">
+              <div className="flex flex-row gap-2 sm:gap-4 items-center w-full">
+                <div className="flex flex-row items-center">
+                  <img
+                    src={
+                      user?.profileImageUrl
+                        ? user?.profileImageUrl
+                        : '/gradient.jpg'
+                    }
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+                  />
+                </div>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    ref={commentRef}
+                    className={`border-none outline-none w-full text-base sm:text-[18px] py-1 px-4 sm:py-2 rounded-[18px] bg-p-bg font-medium ${
+                      loading ? 'text-s-text' : 'text-p-text'
+                    }`}
+                    placeholder="What do you think?"
+                    onKeyUp={(e) => {
+                      if (e.key === 'Enter') createComment()
+                    }}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-row items-center justify-center">
+                <button
+                  disabled={loading}
+                  onClick={createComment}
+                  className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
+                >
+                  {loading ? 'Commenting...' : 'Comment'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        ))}
     </div>
   )
 }
