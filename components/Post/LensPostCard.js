@@ -194,24 +194,6 @@ const LensPostCard = ({ post }) => {
     }
   }, [postInfo])
 
-  // const handleShare = async () => {
-  //   if (!navigator.canShare) {
-  //     notifyInfo(`Your browser doesn't support the Web Share API.`)
-  //     return
-  //   }
-
-  //   try {
-  //     const url = window.location.href
-  //     const title = 'Share this post'
-  //     await navigator.share({
-  //       title,
-  //       url
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //     notifyError('Failed to share post')
-  //   }
-  // }
   const handleUpvote = async () => {
     if (reaction === ReactionTypes.Upvote) return
     try {
@@ -469,7 +451,10 @@ const LensPostCard = ({ post }) => {
                     </div>
                   )}
                   {showMore && (
-                    <Link href={`/p/${postInfo?.id}`} className="text-blue-400">
+                    <Link
+                      href={`/p/${postInfo?.id}`}
+                      className="text-blue-400 text-sm sm:text-base"
+                    >
                       Show more
                     </Link>
                   )}
@@ -535,7 +520,7 @@ const LensPostCard = ({ post }) => {
               </div>
 
               {/* bottom row */}
-              <div className="text-s-text sm:text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
+              <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-2">
                     <img

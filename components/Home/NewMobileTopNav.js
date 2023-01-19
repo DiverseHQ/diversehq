@@ -76,6 +76,7 @@ const NewMobileTopNav = () => {
                 {router.pathname.startsWith('/explore') && 'Explore'}
                 {router.pathname.startsWith('/notification') && 'Notifications'}
                 {router.pathname.startsWith('/search') && 'Search'}
+                {router.pathname.startsWith('/feed') && 'Home'}
               </span>
             </div>
             <div>
