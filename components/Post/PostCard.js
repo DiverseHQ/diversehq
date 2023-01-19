@@ -446,7 +446,7 @@ const PostCard = ({ _post, setPosts }) => {
               )}
           </div>
           {/* bottom row */}
-          <div className="text-s-text sm:text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
+          <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
             {isMobile && (
               <div className="flex flex-row items-center gap-x-2">
                 <img
