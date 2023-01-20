@@ -104,11 +104,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
             </div>
           </>
         }
-        endMessage={
-          <div className="w-full flex flex-row items-center text-center justify-center py-4 text-s-text text-sm">
-            --- You have reached the end ---
-          </div>
-        }
+        endMessage={<></>}
       >
         {posts.map((post) => {
           return <LensPostCard key={post.id} post={post} />

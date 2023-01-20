@@ -1,16 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { useRouter } from 'next/router'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
-import {
-  AiOutlineCamera,
-  AiOutlineClose,
-  AiOutlineDown,
-  AiOutlineSearch
-} from 'react-icons/ai'
+import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
 // import FormTextInput from '../Common/UI/FormTextInput'
 import {
   $convertToMarkdownString,
@@ -44,12 +39,12 @@ import {
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImagesPlugin from '../Lexical/ImagesPlugin'
 import LexicalAutoLinkPlugin from '../Lexical/LexicalAutoLinkPlugin'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $getRoot } from 'lexical'
+import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
@@ -86,7 +81,6 @@ const CreatePostPopup = () => {
   const router = useRouter()
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
-  const [filteredJoinedCommunities, setFilteredJoinedCommunities] = useState([])
 
   const { mutateAsync: createPostViaDispatcher } =
     useCreatePostViaDispatcherMutation()
@@ -307,7 +301,10 @@ const CreatePostPopup = () => {
     }
   }
 
-  const handleDropDown = (id, name, logoImageUrl) => {
+  const handleSelect = (community) => {
+    const id = community._id
+    const name = community.name
+    const logoImageUrl = community.logoImageUrl
     setShowCommunityOptions(false)
     setCommunityId(id)
     setShowCommunity({ name, image: logoImageUrl })
@@ -320,23 +317,6 @@ const CreatePostPopup = () => {
     }
     const response = await getJoinedCommunitiesApi()
     setJoinedCommunities(response)
-    setFilteredJoinedCommunities(response)
-  }
-
-  const inputRef = useRef()
-  const onChangeSearch = (e) => {
-    const { value } = e.target
-    console.log(value)
-    if (value.trim() === '') {
-      setFilteredJoinedCommunities(joinedCommunities)
-      return
-    }
-
-    setFilteredJoinedCommunities(
-      joinedCommunities.filter((community) => {
-        return community?.name?.toLowerCase()?.includes(value.toLowerCase())
-      })
-    )
   }
 
   const customOptions = () => {
@@ -358,54 +338,13 @@ const CreatePostPopup = () => {
             }`}
             style={communityOptionsCoord}
           >
-            <div className="bg-s-bg rounded-2xl max-h-[450px] overflow-auto">
-              <div className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl bg-p-btn gap-4 text-p-btn-text">
-                <div className="bg-p-btn-text rounded-[22px] py-1 px-2 ">
-                  <AiOutlineSearch className="w-[18px] h-[18px] text-p-btn" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search joined"
-                  className="bg-transparent outline-none text-p-btn-text w-[100px] sm:w-[160px] font-medium"
-                  ref={inputRef}
-                  onChange={onChangeSearch}
-                />
-              </div>
-              {filteredJoinedCommunities.map((community) => {
-                return (
-                  <div
-                    key={community._id}
-                    onClick={() => {
-                      handleDropDown(
-                        community._id,
-                        community.name,
-                        community.logoImageUrl
-                      )
-                    }}
-                    className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
-                    id={community._id}
-                    logoImageUrl={community.logoImageUrl}
-                  >
-                    <ImageWithPulsingLoader
-                      src={
-                        community.logoImageUrl
-                          ? community.logoImageUrl
-                          : '/gradient.jpg'
-                      }
-                      alt="community logo"
-                      className="rounded-full w-9 h-9 object-cover"
-                    />
-
-                    <div
-                      className="text-p-text ml-4 text-base "
-                      id={community._id}
-                      logoImageUrl={community.logoImageUrl}
-                    >
-                      {community.name}
-                    </div>
-                  </div>
-                )
-              })}
+            <div className="bg-white/50  backdrop-blur-lg rounded-2xl max-h-[450px] overflow-auto">
+              <FilterListWithSearch
+                list={joinedCommunities}
+                type="community"
+                filterParam="name"
+                handleSelect={handleSelect}
+              />
             </div>
           </div>
         </div>

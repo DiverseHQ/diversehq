@@ -269,9 +269,9 @@ const LensPostCard = ({ post }) => {
 
   const handleDeletePost = async () => {
     try {
-      if (post?.media?.length > 0) {
-        const medias = post?.media
-        console.log(medias)
+      if (post?.metadata?.media?.length > 0) {
+        const medias = post?.metadata?.media
+        console.log('medias', medias)
         for (const media of medias) {
           if (media?.original?.url?.startsWith('ipfs://')) {
             try {
@@ -484,37 +484,41 @@ const LensPostCard = ({ post }) => {
                     </Link>
                   )}
                 </div>
-                {postInfo?.metadata?.mainContentFocus ===
-                  PublicationMainFocus.Image &&
-                  (!router.pathname.startsWith('/p') ? (
-                    <Link href={`/p/${postInfo?.id}`} passHref>
-                      {/* eslint-disable-next-line */}
-                      <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                        <ImageWithPulsingLoader
-                          src={`${LensInfuraEndpoint}${
-                            postInfo?.metadata?.media[0]?.original.url.split(
-                              '//'
-                            )[1]
-                          }`}
-                          className={`image-unselectable object-contain sm:rounded-xl w-full ${
-                            router.pathname.startsWith('/p')
-                              ? ''
-                              : 'max-h-[500px]'
-                          }`}
-                        />
-                      </div>
-                    </Link>
-                  ) : (
-                    <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                      <ImageWithFullScreenZoom
-                        src={`${LensInfuraEndpoint}${
-                          postInfo?.metadata?.media[0]?.original.url.split(
-                            '//'
-                          )[1]
-                        }`}
-                      />
-                    </div>
-                  ))}
+                {postInfo?.metadata?.media.length > 0 && (
+                  <>
+                    {postInfo?.metadata?.mainContentFocus ===
+                      PublicationMainFocus.Image &&
+                      (!router.pathname.startsWith('/p') ? (
+                        <Link href={`/p/${postInfo?.id}`} passHref>
+                          {/* eslint-disable-next-line */}
+                          <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                            <ImageWithPulsingLoader
+                              src={`${LensInfuraEndpoint}${
+                                postInfo?.metadata?.media[0]?.original.url.split(
+                                  '//'
+                                )[1]
+                              }`}
+                              className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                                router.pathname.startsWith('/p')
+                                  ? ''
+                                  : 'max-h-[500px]'
+                              }`}
+                            />
+                          </div>
+                        </Link>
+                      ) : (
+                        <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                          <ImageWithFullScreenZoom
+                            src={`${LensInfuraEndpoint}${
+                              postInfo?.metadata?.media[0]?.original.url.split(
+                                '//'
+                              )[1]
+                            }`}
+                          />
+                        </div>
+                      ))}
+                  </>
+                )}
                 {postInfo?.metadata?.mainContentFocus ===
                   PublicationMainFocus.Video && (
                   <div className="sm:pl-5 sm:pr-6 sm:pb-1">

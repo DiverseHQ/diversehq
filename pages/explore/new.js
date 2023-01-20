@@ -102,11 +102,7 @@ const newPage = () => {
               </div>
             </>
           }
-          endMessage={
-            <div className="w-full flex flex-row items-center text-center justify-center py-4 text-s-text text-sm">
-              --- You have reached the end ---
-            </div>
-          }
+          endMessage={<></>}
         >
           {communities.map((community) => {
             return (

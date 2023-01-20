@@ -7,8 +7,8 @@ import CommunitySelectDiv from '../../Community/CommunitySelectDiv'
  * list is the list of items to be filtered
  */
 
-const FilterListWithSearch = ({ list, type, filterParam }) => {
-  const [filteredList, setFilteredList] = useState([])
+const FilterListWithSearch = ({ list, type, filterParam, handleSelect }) => {
+  const [filteredList, setFilteredList] = useState(list)
 
   const onChangeSearch = (e) => {
     const { value } = e.target
@@ -29,31 +29,34 @@ const FilterListWithSearch = ({ list, type, filterParam }) => {
 
   return (
     <>
-      <div className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl bg-p-btn gap-4 text-p-btn-text">
-        <div className="bg-p-btn-text rounded-[22px] py-1 px-2 ">
-          <AiOutlineSearch className="w-[18px] h-[18px] text-p-btn" />
+      {/* search input */}
+      <div className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl gap-4">
+        <div className="rounded-[22px] py-1 px-2">
+          <AiOutlineSearch className="w-6 h-6 text-p-btn" />
         </div>
         <input
           type="text"
           placeholder="Search ..."
-          className="bg-transparent outline-none text-p-btn-text w-[100px] sm:w-[160px] font-medium"
+          className="outline-none w-full font-medium bg-transparent"
           onChange={onChangeSearch}
+          autoFocus={true}
         />
       </div>
-      {filteredList?.length > 0 ? (
+      {filteredList?.length > 0 && (
         <>
           {filteredList.map((item) => {
             return (
               <>
                 {type === 'community' && (
-                  <CommunitySelectDiv community={item} />
+                  <CommunitySelectDiv
+                    community={item}
+                    handleSelect={handleSelect}
+                  />
                 )}
               </>
             )
           })}
         </>
-      ) : (
-        <>{type === 'community' && <span>No community found</span>}</>
       )}
     </>
   )

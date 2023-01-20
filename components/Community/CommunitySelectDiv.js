@@ -1,15 +1,13 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
-const CommunitySelectDiv = ({ community }) => {
-  const router = useRouter()
+const CommunitySelectDiv = ({ community, handleSelect }) => {
   return (
     <div
       className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn gap-4"
       id={community._id}
       onClick={() => {
-        router.push(`/c/${community.name}`)
+        handleSelect(community)
       }}
     >
       <ImageWithPulsingLoader

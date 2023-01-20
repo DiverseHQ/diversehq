@@ -39,7 +39,8 @@ const Modal = ({
         <div className="flex justify-center items-center relative w-full h-full">
           <div
             className={`w-full h-full absolute ${
-              type !== modalType.customposition && 'bg-t-bg'
+              type !== modalType.customposition &&
+              'bg-black/40 backdrop-opacity-40  backdrop-blur-sm'
             } z-0`}
             onClick={onBackBtnClick}
           ></div>
