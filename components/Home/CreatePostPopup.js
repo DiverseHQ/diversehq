@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { useRouter } from 'next/router'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
-import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
+import {
+  AiOutlineCamera,
+  AiOutlineClose,
+  AiOutlineDown,
+  AiOutlineSearch
+} from 'react-icons/ai'
 // import FormTextInput from '../Common/UI/FormTextInput'
 import {
   $convertToMarkdownString,
@@ -81,6 +86,7 @@ const CreatePostPopup = () => {
   const router = useRouter()
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
+  const [filteredJoinedCommunities, setFilteredJoinedCommunities] = useState([])
 
   const { mutateAsync: createPostViaDispatcher } =
     useCreatePostViaDispatcherMutation()
@@ -314,7 +320,25 @@ const CreatePostPopup = () => {
     }
     const response = await getJoinedCommunitiesApi()
     setJoinedCommunities(response)
+    setFilteredJoinedCommunities(response)
   }
+
+  const inputRef = useRef()
+  const onChangeSearch = (e) => {
+    const { value } = e.target
+    console.log(value)
+    if (value.trim() === '') {
+      setFilteredJoinedCommunities(joinedCommunities)
+      return
+    }
+
+    setFilteredJoinedCommunities(
+      joinedCommunities.filter((community) => {
+        return community?.name?.toLowerCase()?.includes(value.toLowerCase())
+      })
+    )
+  }
+
   const customOptions = () => {
     return (
       <div className="fixed flex flex-row justify-center items-center z-50 top-0 left-0 no-scrollbar w-full h-full">
@@ -335,7 +359,19 @@ const CreatePostPopup = () => {
             style={communityOptionsCoord}
           >
             <div className="bg-s-bg rounded-2xl max-h-[450px] overflow-auto">
-              {joinedCommunities.map((community) => {
+              <div className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl bg-p-btn gap-4 text-p-btn-text">
+                <div className="bg-p-btn-text rounded-[22px] py-1 px-2 ">
+                  <AiOutlineSearch className="w-[18px] h-[18px] text-p-btn" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search joined"
+                  className="bg-transparent outline-none text-p-btn-text w-[100px] sm:w-[160px] font-medium"
+                  ref={inputRef}
+                  onChange={onChangeSearch}
+                />
+              </div>
+              {filteredJoinedCommunities.map((community) => {
                 return (
                   <div
                     key={community._id}

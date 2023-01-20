@@ -7,8 +7,8 @@ import { MdLeaderboard } from 'react-icons/md'
 import { RiArrowDropDownLine } from 'react-icons/ri'
 import { getJoinedCommunitiesApi } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useProfile } from '../Common/WalletContext'
+import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 
 const NavFilterAllPosts = () => {
   const dropdownRef = useRef(null)
@@ -38,7 +38,7 @@ const NavFilterAllPosts = () => {
     const handleClick = (event) => {
       // Check if the target element of the click is the dropdown element
       // or a descendant of the dropdown element
-      if (!dropdownRef.current.contains(event.target)) {
+      if (!dropdownRef.current?.contains(event.target)) {
         // Hide the dropdown
         setShowJoinedCommunities(false)
       }
@@ -111,33 +111,15 @@ const NavFilterAllPosts = () => {
           className="bg-s-bg rounded-md sm:rounded-xl absolute mt-7 z-50 max-h-[500px] overflow-y-auto overflow-x-hidden"
           ref={dropdownRef}
         >
-          {showJoinedCommunities &&
-            joinedCommunities.map((community) => {
-              return (
-                <div
-                  key={community._id}
-                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
-                  id={community._id}
-                  onClick={() => {
-                    router.push(`/c/${community.name}`)
-                  }}
-                >
-                  <ImageWithPulsingLoader
-                    src={
-                      community.logoImageUrl
-                        ? community.logoImageUrl
-                        : '/gradient.jpg'
-                    }
-                    alt="community logo"
-                    className="rounded-full object-cover w-9 h-9"
-                  />
-
-                  <div className="text-p-text ml-4" id={community._id}>
-                    {community.name}
-                  </div>
-                </div>
-              )
-            })}
+          {showJoinedCommunities && (
+            <>
+              <FilterListWithSearch
+                list={joinedCommunities}
+                type="community"
+                filterParam="name"
+              />
+            </>
+          )}
           {fetchingJoinedCommunities && (
             <>
               <div className="flex flex-row items-center justify-center p-2 m-2">
