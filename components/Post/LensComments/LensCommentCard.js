@@ -19,6 +19,8 @@ import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import { useRouter } from 'next/router'
 import { HiOutlineTrash } from 'react-icons/hi'
+import useDevice from '../../Common/useDevice'
+import PopUpWrapper from '../../Common/PopUpWrapper'
 TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
@@ -169,6 +171,32 @@ const LensCommentCard = ({ comment }) => {
       }
     })
   }
+  const { isMobile } = useDevice()
+
+  const openReplyModal = async () => {
+    showModal({
+      component: (
+        <PopUpWrapper
+          title={'Reply'}
+          lable={'Reply'}
+          onClick={() => {}}
+          loading={false}
+        >
+          <LensCreateComment
+            postId={comment.id}
+            addComment={(commnet) => {
+              setComments([commnet, ...comments])
+              setShowCreateComment(false)
+            }}
+            isReply={true}
+          />
+        </PopUpWrapper>
+      ),
+      type: modalType.fullscreen,
+      onAction: () => {},
+      extraaInfo: {}
+    })
+  }
   return (
     <>
       {comment && (
@@ -234,13 +262,19 @@ const LensCommentCard = ({ comment }) => {
                   />
                 </div>
                 <button
-                  className="hover:bg-gray-100 px-1 rounded-md"
+                  className={`${
+                    showCreateComment ? 'bg-gray-100' : ''
+                  } hover:bg-gray-100 px-1 rounded-md`}
                   onClick={() => {
                     if (!comment?.id) {
                       notifyInfo('not indexed yet, try again later')
                       return
                     }
-                    setShowCreateComment(!showCreateComment)
+                    if (isMobile) {
+                      openReplyModal()
+                    } else {
+                      setShowCreateComment(!showCreateComment)
+                    }
                   }}
                 >
                   Reply
@@ -255,7 +289,7 @@ const LensCommentCard = ({ comment }) => {
               </div>
 
               {/* create comment if showCreateComment is true */}
-              {showCreateComment && (
+              {showCreateComment && !isMobile && (
                 <LensCreateComment
                   postId={comment.id}
                   addComment={(commnet) => {

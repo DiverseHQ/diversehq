@@ -133,25 +133,6 @@ const PostCard = ({ _post, setPosts }) => {
     }
   }
 
-  // const handleShare = async () => {
-  //   if (!navigator.canShare) {
-  //     notifyInfo(`Your browser doesn't support the Web Share API.`)
-  //     return
-  //   }
-
-  //   try {
-  //     const url = window.location.href
-  //     const title = 'Share this post'
-  //     await navigator.share({
-  //       title,
-  //       url
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //     notifyError('Something went wrong when sharing')
-  //   }
-  // }
-
   const handleDeletePost = async () => {
     try {
       if (!user) {
@@ -211,25 +192,6 @@ const PostCard = ({ _post, setPosts }) => {
               }
             ]}
           />
-          {/* <div className="cursor-pointer">
-            <div
-              className="flex items-center px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow hover:bg-[#eee] hover:cursor-pointer "
-              onClick={showEditModal}
-            >
-              <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" title="Edit" />
-              <span>Edit</span>
-            </div>
-            <div
-              className="flex items-center px-3 py-2 bg-s-bg rounded-full my-2 button-dropshadow hover:bg-[#eee] hover:cursor-pointer hover:text-red-600"
-              onClick={handleDeletePost}
-            >
-              <HiOutlineTrash
-                className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                title="Delete"
-              />
-              <span>Delete</span>
-            </div>
-          </div> */}
         </>
       ),
       type: modalType.customposition,
@@ -379,7 +341,7 @@ const PostCard = ({ _post, setPosts }) => {
                   <div
                     className={`${
                       showMore ? 'h-[150px]' : ''
-                    } overflow-hidden break-words`}
+                    } sm:max-w-[550px]  overflow-hidden break-words`}
                   >
                     <Markup
                       className={`${

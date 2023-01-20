@@ -18,7 +18,7 @@ import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
 
-const LensCreateComment = ({ postId, addComment }) => {
+const LensCreateComment = ({ postId, addComment, isReply = false }) => {
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast()
   const { mutateAsync: addReaction } = useAddReactionMutation()
@@ -38,6 +38,11 @@ const LensCreateComment = ({ postId, addComment }) => {
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { user } = useProfile()
   const { isMobile } = useDevice()
+  const [showAtBottom, setShowAtBottom] = useState(isMobile && !isReply)
+
+  useEffect(() => {
+    setShowAtBottom(isMobile && !isReply)
+  }, [isMobile, isReply])
 
   const onSuccessCreateComment = async (result) => {
     const commentId = commentIdFromIndexedResult(
@@ -52,7 +57,6 @@ const LensCreateComment = ({ postId, addComment }) => {
       }
     })
     setLoading(false)
-    commentRef.current.value = ''
     //sending comment to feed without waiting for transaction to be indexed
     addComment({
       id: commentId,
@@ -75,6 +79,7 @@ const LensCreateComment = ({ postId, addComment }) => {
       },
       reaction: ReactionTypes.Upvote
     })
+    commentRef.current.value = ''
   }
 
   const createComment = async () => {
@@ -182,7 +187,7 @@ const LensCreateComment = ({ postId, addComment }) => {
       {hasProfile &&
         isSignedIn &&
         lensProfile?.defaultProfile?.id &&
-        (!isMobile ? (
+        (!showAtBottom ? (
           <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex flex-row items-center">

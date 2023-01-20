@@ -88,6 +88,12 @@ export const uploadToIpfsInfura = async (data: PublicationMetadataV2Input) => {
   return result
 }
 
+export const unpinFromIpfsInfura = async (hash: string) => {
+  const result = await client.pin.rm(hash)
+  console.log('unpin result ipfs', result)
+  return result
+}
+
 export const uploadToIpfsInfuraAndGetPath = async (
   data: PublicationMetadataV2Input
 ) => {

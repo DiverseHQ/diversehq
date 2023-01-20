@@ -492,7 +492,7 @@ const CreatePostPopup = () => {
           <FormTextInput
             label="Title"
             placeholder="gib me title"
-            maxLength={60}
+            maxLength={100}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             disabled={loading}

@@ -24,7 +24,11 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
-import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
+import {
+  countLinesFromMarkdown,
+  getURLsFromText,
+  unpinFromIpfsInfura
+} from '../../utils/utils'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { BsThreeDots } from 'react-icons/bs'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -264,13 +268,34 @@ const LensPostCard = ({ post }) => {
   }, [postInfo])
 
   const handleDeletePost = async () => {
-    await removePost({
-      request: {
-        publicationId: post?.id
+    try {
+      if (post?.media?.length > 0) {
+        const medias = post?.media
+        console.log(medias)
+        for (const media of medias) {
+          if (media?.original?.url?.startsWith('ipfs://')) {
+            try {
+              const hash = media?.original?.url?.split('ipfs://')[1]
+              console.log('unpinninghash', hash)
+              await unpinFromIpfsInfura(hash)
+            } catch (error) {
+              console.log(error)
+            }
+          }
+        }
       }
-    })
-    window.location.reload()
-    hideModal()
+
+      await removePost({
+        request: {
+          publicationId: post?.id
+        }
+      })
+      hideModal()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      // router.reload()
+    }
   }
 
   const showMoreOptions = async (e) => {
