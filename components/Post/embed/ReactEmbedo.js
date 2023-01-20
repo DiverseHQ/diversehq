@@ -24,7 +24,9 @@ const AllowedEmbedoRegexList = [
   // eslint-disable-next-line
   /(http|https)?:\/\/(www\.)?vimeo(\.[a-z]+)\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/,
   /(http|https):\/\/gist\.github\.com\/(\w+)\/(\w+)/,
-  /^(http|https):\/\/soundcloud\.com\/(\w+)\/.*$/
+  /^(http|https):\/\/soundcloud\.com\/(\w+)\/.*$/,
+  // music youtube
+  /^(http|https):\/\/music\.youtube\.com\/watch\?v=.*$/
 ]
 
 /* eslint-enable */
@@ -75,6 +77,7 @@ const ReactEmbedo = ({ url, ...props }) => {
         pinterest: true,
         reddit: true,
         flickr: true,
+        soundCloud: true,
         facebook: {
           appId: '712654940465859',
           version: 'v9.0',

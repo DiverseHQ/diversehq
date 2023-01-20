@@ -9,6 +9,7 @@ const FormTextInput = ({ label, className, value, maxLength, ...props }) => {
           <input
             type="text"
             value={value}
+            maxLength={maxLength}
             className={`w-full text-p-text bg-p-bg outline-none ${className}`}
             {...props}
           />

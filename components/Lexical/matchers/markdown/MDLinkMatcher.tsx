@@ -8,7 +8,13 @@ const createHyperlink = (
 ) => {
   const keyId = '_' + href + '-' + uuid().slice(-7)
   return (
-    <a key={keyId} href={href} target="_blank" rel="noopener noreferrer">
+    <a
+      key={keyId}
+      className="text-blue-500"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {title}
     </a>
   )

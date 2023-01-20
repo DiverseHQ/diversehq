@@ -188,8 +188,10 @@ const EditPostPopup = ({ post, setPost }) => {
         <FormTextInput
           label="Title"
           placeholder="Here you go"
+          maxLength={100}
           value={title}
           onChange={onChangeTitle}
+          disabled={loading}
         />
         <div className="relative">
           {/* todo toolbar for rich text editor */}

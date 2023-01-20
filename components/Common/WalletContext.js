@@ -28,14 +28,16 @@ export const WalletProvider = ({ children }) => {
 
   useEffect(() => {
     if (signer && address) {
+      console.log('token', getLocalToken())
       if (getLocalToken()) {
-        fetchWeb3Token()
+        fetchWeb3Token(true)
       }
     }
   }, [signer, address])
 
   useEffect(() => {
-    if (isDisconnected) {
+    if (isDisconnected && user) {
+      console.log('disconnected triggered')
       setUser(null)
       setLoading(false)
       if (getLocalToken()) {
@@ -69,7 +71,8 @@ export const WalletProvider = ({ children }) => {
     }
   }
 
-  const fetchWeb3Token = async () => {
+  const fetchWeb3Token = async (useEffectCalled) => {
+    console.log('fetching web3 token')
     try {
       let existingTokenOnLocalStorage = null
       existingTokenOnLocalStorage = getLocalToken()
@@ -78,7 +81,14 @@ export const WalletProvider = ({ children }) => {
         //return if token is already in local storage and is not expired
         if (existingTokenOnLocalStorage) {
           const web3Token = Web3Token.verify(existingTokenOnLocalStorage)
-          if (
+          console.log('web3Token', web3Token)
+          if (web3Token.address.toLowerCase() !== address.toLowerCase()) {
+            removeLocalToken()
+            removeAccessTokenFromStorage()
+            setUser(null)
+            setLoading(false)
+            return
+          } else if (
             web3Token &&
             new Date(web3Token?.body['expiration-time']) > new Date()
           ) {
@@ -90,6 +100,8 @@ export const WalletProvider = ({ children }) => {
         disconnect()
         console.log('error from verfiying token', error)
       }
+      console.log('useEffectCalled', useEffectCalled)
+      if (useEffectCalled === true) return
 
       if (!existingTokenOnLocalStorage) {
         console.log('no existing token on local storage')
@@ -100,6 +112,7 @@ export const WalletProvider = ({ children }) => {
         alert('No Signer but trying to sign in')
       }
       console.log('requesting signature from metamask')
+
       const signedToken = await Web3Token.sign(async (msg) => {
         try {
           return await signer.signMessage(msg)
