@@ -34,17 +34,21 @@ const PopUpWrapper = ({
 
           <div className="text-p-text ml-4 text-xl">{title}</div>
         </div>
-        {!loading ? (
-          <button
-            className="text-p-btn-text bg-p-btn px-3 py-1 font-bold uppercase rounded-full text-base text-p-btn-text"
-            type="button"
-            onClick={onClick}
-            disabled={loading || isDisabled}
-          >
-            {label}
-          </button>
-        ) : (
-          <Image src="/loading.svg" alt="loading" width={30} height={30} />
+        {onClick && (
+          <>
+            {!loading ? (
+              <button
+                className="text-p-btn-text bg-p-btn px-3 py-1 font-bold uppercase rounded-full text-base text-p-btn-text"
+                type="button"
+                onClick={onClick}
+                disabled={loading || isDisabled}
+              >
+                {label}
+              </button>
+            ) : (
+              <Image src="/loading.svg" alt="loading" width={30} height={30} />
+            )}
+          </>
         )}
       </div>
       {children}

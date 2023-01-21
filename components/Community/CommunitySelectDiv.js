@@ -4,7 +4,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 const CommunitySelectDiv = ({ community, handleSelect }) => {
   return (
     <div
-      className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn gap-4"
+      className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl text-p-text hover:bg-p-btn hover:text-p-btn-text gap-4"
       id={community._id}
       onClick={() => {
         handleSelect(community)
@@ -16,9 +16,7 @@ const CommunitySelectDiv = ({ community, handleSelect }) => {
         className="rounded-full object-cover w-9 h-9"
       />
 
-      <div className="text-p-text" id={community._id}>
-        {community.name}
-      </div>
+      <div id={community._id}>{community.name}</div>
     </div>
   )
 }

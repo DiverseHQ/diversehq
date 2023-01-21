@@ -464,7 +464,7 @@ const LensPostCard = ({ post }) => {
                     <div
                       className={`${
                         showMore ? 'h-[150px]' : ''
-                      } overflow-hidden break-words`}
+                      } sm:max-w-[550px] overflow-hidden break-words`}
                     >
                       <Markup
                         className={`${

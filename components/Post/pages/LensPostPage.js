@@ -28,13 +28,8 @@ const LensPostPage = ({ id, post }) => {
     setPostInfo(data.publication)
   }, [data])
 
-  // useEffect(() => {
-  //   if (!error) return
-  //   setNotFound(true)
-  //   console.log(error)
-  // }, [error])
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center pb-[50px]">
       <div className="w-full md:w-[650px]">
         {!post && (
           <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 animate-pulse my-3 sm:my-6">

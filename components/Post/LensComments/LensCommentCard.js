@@ -176,17 +176,13 @@ const LensCommentCard = ({ comment }) => {
   const openReplyModal = async () => {
     showModal({
       component: (
-        <PopUpWrapper
-          title={'Reply'}
-          lable={'Reply'}
-          onClick={() => {}}
-          loading={false}
-        >
+        <PopUpWrapper title={'Reply'} label={'Reply'} loading={false}>
           <LensCreateComment
             postId={comment.id}
             addComment={(comment) => {
               setComments([comment, ...comments])
               setShowCreateComment(false)
+              hideModal()
             }}
             isReply={true}
             replyCommentData={comment}
