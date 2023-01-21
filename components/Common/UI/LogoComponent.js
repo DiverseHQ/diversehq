@@ -16,6 +16,10 @@ const LogoComponent = () => {
       <div className="text-xs sm:text-2xl mx-2 text-p-btn font-semibold">
         Diverse HQ
       </div>
+      <div className="flex flex-col justify-center items-start">
+        <div className="text-xs text-s-text leading-3">Beta</div>
+        <div className="text-xs text-s-text leading-3">Testnet</div>
+      </div>
     </Link>
   )
 }

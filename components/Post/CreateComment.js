@@ -163,7 +163,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
                   />
                 </div>
                 <div className="flex-1">
-                  <input
+                  <textarea
                     type="text"
                     ref={commentRef}
                     className="border-none outline-none w-full text-base sm:text-[18px] py-1 px-4 sm:py-2 rounded-[18px] bg-p-bg font-medium"
@@ -172,7 +172,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
                       if (e.key === 'Enter') createComment()
                     }}
                     disabled={loading}
-                  />
+                  ></textarea>
                 </div>
               </div>
               <div className="flex flex-row items-center justify-center">
