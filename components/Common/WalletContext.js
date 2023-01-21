@@ -16,6 +16,7 @@ import { getUserInfo } from '../../api/user'
 import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 import { userRoles } from '../../utils/config'
 import { useNotify } from './NotifyContext'
+import { useQueryClient } from '@tanstack/react-query'
 export const WalletContext = createContext([])
 
 export const WalletProvider = ({ children }) => {
@@ -25,6 +26,7 @@ export const WalletProvider = ({ children }) => {
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
   const { disconnect } = useDisconnect()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (signer && address) {
@@ -35,15 +37,22 @@ export const WalletProvider = ({ children }) => {
     }
   }, [signer, address])
 
+  const handleDisconnected = async () => {
+    console.log('disconnected triggered')
+    setUser(null)
+    setLoading(false)
+    if (getLocalToken()) {
+      removeLocalToken()
+    }
+    removeAccessTokenFromStorage()
+    await queryClient.invalidateQueries({
+      queryKey: ['lensUser', 'defaultProfile']
+    })
+  }
+
   useEffect(() => {
     if (isDisconnected && user) {
-      console.log('disconnected triggered')
-      setUser(null)
-      setLoading(false)
-      if (getLocalToken()) {
-        removeLocalToken()
-      }
-      removeAccessTokenFromStorage()
+      handleDisconnected()
     }
   }, [isDisconnected])
 
