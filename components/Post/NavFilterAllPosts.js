@@ -118,7 +118,7 @@ const NavFilterAllPosts = () => {
                 type="community"
                 filterParam="name"
                 handleSelect={(community) => {
-                  router.push(`/c/${community.id}`)
+                  router.push(`/c/${community?.name}`)
                 }}
               />
             </>

@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import CommunitySelectDiv from '../../Community/CommunitySelectDiv'
 /*
+ * list is the list of items to be filtered
  * types are community, ...
  * filterParam is the params to be searched upon, mostly a string value
- * list is the list of items to be filtered
+ * handleSelect is the operation to perform when list item is clicked
  */
 
 const FilterListWithSearch = ({ list, type, filterParam, handleSelect }) => {
