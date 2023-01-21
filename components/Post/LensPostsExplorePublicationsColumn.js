@@ -13,6 +13,7 @@ import {
   postGetCommunityInfoUsingListOfIds
 } from '../../api/community'
 import LensPostCard from './LensPostCard'
+import { useLensUserContext } from '../../lib/LensUserContext'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 
 const LensPostsExplorePublicationsColumn = () => {
@@ -21,7 +22,7 @@ const LensPostsExplorePublicationsColumn = () => {
   const [cursor, setCursor] = useState(null)
   const [nextCursor, setNextCursor] = useState(null)
   const [communityIds, setCommunityIds] = useState(null)
-  // const { data: myLensProfile } = useLensUserContext()
+  const { data: myLensProfile } = useLensUserContext()
   const { data } = useExplorePublicationsQuery(
     {
       request: {
@@ -35,10 +36,12 @@ const LensPostsExplorePublicationsColumn = () => {
         publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror],
         limit: LENS_POST_LIMIT,
         sortCriteria: PublicationSortCriteria.Latest
+      },
+      reactionRequest: {
+        profileId: myLensProfile?.defaultProfile?.id
+          ? myLensProfile?.defaultProfile?.id
+          : null
       }
-      // reactionRequest: {
-      //   profileId: myLensProfile?.defaultProfile?.id
-      // }
     },
     {
       enabled: !!communityIds
