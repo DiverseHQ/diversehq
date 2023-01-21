@@ -31,6 +31,8 @@ const NavFilterAllPosts = () => {
       setActive('hot')
     } else if (pathname.endsWith('/lens')) {
       setActive('lens')
+    } else {
+      setActive('lens')
     }
   }, [pathname])
 
@@ -108,7 +110,7 @@ const NavFilterAllPosts = () => {
           <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
         </button>
         <div
-          className="bg-white/70  backdrop-blur-lg rounded-md sm:rounded-xl absolute mt-7 z-40 max-h-[500px] overflow-y-auto overflow-x-hidden"
+          className="bg-white/70  backdrop-blur-lg rounded-md sm:rounded-xl absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
           ref={dropdownRef}
         >
           {showJoinedCommunities && (

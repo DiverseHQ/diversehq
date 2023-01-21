@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 // import MobileBottomNav from '../components/Home/MobileBottomNav'
 // import MobileTopNav from '../components/Home/MobileTopNav'
 // eslint-disable-next-line no-unused-vars
@@ -15,9 +15,18 @@ import Script from 'next/script'
 import { DefaultSeo } from 'next-seo'
 import MainLayout from '../components/Home/MainLayout'
 import Head from 'next/head'
-import { Router } from 'next/router'
+import { useRouter } from 'next/router'
 import Loader from '../components/Loader'
+import { useRef } from 'react'
 // import { useRouter } from 'next/router'
+
+const ROUTES_TO_RETAIN = [
+  '/',
+  '/feed/lens',
+  '/feed/new',
+  '/feed/top',
+  '/feed/hot'
+]
 
 function MyApp({ Component, pageProps }) {
   // const [mounted, setMounted] = useState(false)
@@ -30,32 +39,58 @@ function MyApp({ Component, pageProps }) {
   //   router.isReady && setIsLoading(false)
   // }, [])
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const retainedComponents = useRef({})
+
+  const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
+
+  // Add Component to retainedComponents if we haven't got it already
+  if (isRetainableRoute && !retainedComponents.current[router.asPath]) {
+    console.log('adding component to retainedComponents', router.asPath)
+    const MemoComponent = memo(Component)
+    retainedComponents.current[router.asPath] = {
+      component: <MemoComponent {...pageProps} />,
+      scrollPos: 0
+    }
+  }
+
+  // Save the scroll position of current page before leaving
+  const handleRouteChangeStart = () => {
+    setIsLoading(true)
+    if (isRetainableRoute) {
+      console.log('saving scroll pos', router.asPath)
+      console.log('window.scrollY', window.scrollY)
+      retainedComponents.current[router.asPath].scrollPos = window.scrollY
+    }
+  }
+
+  // code for loading on route change
   useEffect(() => {
-    Router.events.on('routeChangeStart', () => {
-      setIsLoading(true)
-    })
-    Router.events.on('routeChangeComplete', () => {
+    router.events.on('routeChangeStart', handleRouteChangeStart)
+    router.events.on('routeChangeComplete', () => {
       setIsLoading(false)
     })
-    Router.events.on('routeChangeError', () => {
+    router.events.on('routeChangeError', () => {
       setIsLoading(false)
     })
-  }, [Router])
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart)
+    }
+  }, [router.asPath])
+
+  // Scroll to the saved position when we load a retained component
+  useEffect(() => {
+    if (isRetainableRoute && !isLoading) {
+      console.log(
+        'scrolling to',
+        retainedComponents.current[router.asPath].scrollPos
+      )
+      window.scrollTo(0, retainedComponents.current[router.asPath].scrollPos)
+    }
+  }, [Component, pageProps, isLoading])
+
   return (
     <>
-      {/* <DefaultSeo
-        openGraph={{
-          type: 'website',
-          locale: 'en_US',
-          url: 'https://diversehq.xyz/',
-          siteName: 'DiverseHQ'
-        }}
-        twitter={{
-          handle: '@useDiverseHQ',
-          site: '@useDiverseHQ',
-          cardType: 'summary_large_image'
-        }}
-      /> */}
       <Head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
@@ -88,32 +123,27 @@ function MyApp({ Component, pageProps }) {
           cardType: 'summary_large_image'
         }}
       />
-      {/* <NextSeo
-        title="DiverseHQ"
-        description="We believe access and content reach is not just for famous few. Join us in our mission to democratize and give this power back to you."
-        openGraph={{
-          type: 'website',
-          locale: 'en_US',
-          url: 'https://diversehq.xyz',
-          site_name: 'DiverseHQ',
-          images: [
-            {
-              url: 'https://diversehq.xyz/vector-bg.png',
-              width: 1200,
-              height: 630,
-              alt: 'DiverseHQ'
-            }
-          ]
-        }}
-        twitter={{
-          handle: '@useDiverseHQ',
-          cardType: 'summary_large_image'
-        }}
-      /> */}
       <MasterWrapper>
         <MainLayout>
-          {isLoading && <Loader />}
-          {!isLoading && <Component {...pageProps} />}
+          <>
+            <div>
+              {Object.entries(retainedComponents.current).map(([path, c]) => (
+                <div
+                  key={path}
+                  style={{
+                    display:
+                      router.asPath === path && !isLoading ? 'block' : 'none'
+                  }}
+                >
+                  {c.component}
+                </div>
+              ))}
+            </div>
+            {isLoading && <Loader />}
+            {!isRetainableRoute && (
+              <>{!isLoading && <Component {...pageProps} />}</>
+            )}
+          </>
         </MainLayout>
       </MasterWrapper>
     </>

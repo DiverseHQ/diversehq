@@ -533,6 +533,7 @@ const LensPostCard = ({ post }) => {
                       }`}
                       loop
                       controls
+                      muted
                     />
                   </div>
                 )}

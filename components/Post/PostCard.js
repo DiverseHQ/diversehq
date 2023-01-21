@@ -395,6 +395,7 @@ const PostCard = ({ _post, setPosts }) => {
                   }`}
                   loop
                   controls
+                  muted
                 />
               </div>
             )}
