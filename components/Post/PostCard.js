@@ -48,9 +48,7 @@ const PostCard = ({ _post, setPosts }) => {
   const [totalCount, setTotalCount] = useState(upvoteCount - downvoteCount)
   const { notifyInfo, notifyError } = useNotify()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const { isDesktop } = useDevice()
-
-  // const { isDesktop } = useDevice()
+  const { isMobile } = useDevice()
 
   // to maintain the current author state
   const [isAuthor, setIsAuthor] = useState(false)
@@ -176,9 +174,10 @@ const PostCard = ({ _post, setPosts }) => {
       notifyInfo('It may happen that some buttons are under construction.')
       return
     }
-    if (!isDesktop) {
+    if (isMobile) {
       // open the bottom drawer
       setIsDrawerOpen(true)
+      return
     }
     // setShowOptions(!showOptions)
     showModal({
@@ -213,8 +212,6 @@ const PostCard = ({ _post, setPosts }) => {
       }
     })
   }
-
-  const { isMobile } = useDevice()
 
   return (
     <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 border-b-[0.5px] sm:my-3 sm:rounded-2xl shadow-sm">
@@ -483,42 +480,25 @@ const PostCard = ({ _post, setPosts }) => {
                 <BottomDrawerWrapper
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
+                  showClose
                   // height="235px"
                 >
-                  <div className="flex flex-col justify-center">
-                    <div
-                      className="flex items-center mt-10 px-3 py-2 my-2 hover:bg-[#eee] hover:cursor-pointer font-medium"
-                      onClick={() => {
-                        showEditModal()
-                        setIsDrawerOpen(false)
-                      }}
-                    >
-                      <BiEdit
-                        className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                        title="Edit"
-                      />
-                      <span>Edit</span>
-                    </div>
-                    <div
-                      className="flex items-center px-3 py-2 my-2 hover:bg-[#eee] hover:cursor-pointer hover:text-red-600 font-medium text-red-600"
-                      onClick={() => {
-                        handleDeletePost()
-                        setIsDrawerOpen(false)
-                      }}
-                    >
-                      <HiOutlineTrash
-                        className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6 "
-                        title="Delete"
-                      />
-                      <span>Delete</span>
-                    </div>
-                    <button
-                      className=" border rounded-full w-[384px] py-3 text-lg font-bold bg-s-h-bg text-s-h-text hover:bg-s-h-bg-hover hover:text-s-h-text-hover hover:cursor-pointer self-center mt-3 "
-                      onClick={() => setIsDrawerOpen(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <MoreOptionsModal
+                    list={[
+                      {
+                        label: 'Edit Post',
+                        onClick: showEditModal,
+                        icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
+                      },
+                      {
+                        label: 'Delete Post',
+                        onClick: handleDeletePost,
+                        icon: () => (
+                          <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                        )
+                      }
+                    ]}
+                  />
                 </BottomDrawerWrapper>
               </div>
             )}

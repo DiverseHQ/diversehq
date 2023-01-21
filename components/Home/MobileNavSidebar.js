@@ -118,8 +118,8 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
 
   return (
     <div
-      className={`text-black z-0 fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${
-        isOpenSidebar ? 'z-50' : ''
+      className={`text-black fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${
+        isOpenSidebar ? 'z-50' : 'z-0'
       }`}
     >
       {/* backdrop */}

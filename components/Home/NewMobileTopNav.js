@@ -5,6 +5,7 @@ import ConnectWalletAndSignInButton from '../Common/ConnectWalletAndSignInButton
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import { BiArrowBack } from 'react-icons/bi'
+import MobileFilterDrawerButton from './MobileFilterDrawerButton'
 // import BottomDrawer from './BottomDrawer'
 
 const NewMobileTopNav = () => {
@@ -80,13 +81,14 @@ const NewMobileTopNav = () => {
                 {router.pathname.startsWith('/feed') && 'Home'}
               </span>
             </div>
-            <div>
+            {/* <div>
               <img
                 src="/LogoV3TrimmedWithBG.png"
                 alt="DiverseHQ logo"
                 className="w-[32px] h-[32px]"
               />
-            </div>
+            </div> */}
+            <MobileFilterDrawerButton />
           </>
         )}
         {/* <div>

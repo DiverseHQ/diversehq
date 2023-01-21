@@ -36,6 +36,7 @@ import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import ReactEmbedo from './embed/ReactEmbedo'
 import PostShareButton from './PostShareButton'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 
 /**
  * Sample post object
@@ -157,6 +158,7 @@ const LensPostCard = ({ post }) => {
     post?.stats?.totalUpvotes - post?.stats?.totalDownvotes
   )
   const [postInfo, setPostInfo] = useState(post)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
@@ -300,6 +302,11 @@ const LensPostCard = ({ post }) => {
 
   const showMoreOptions = async (e) => {
     if (!isAuthor) return
+    if (isMobile) {
+      // open the bottom drawer
+      setIsDrawerOpen(true)
+      return
+    }
     showModal({
       component: (
         <>
@@ -308,9 +315,7 @@ const LensPostCard = ({ post }) => {
               {
                 label: 'Delete Post',
                 onClick: handleDeletePost,
-                icon: () => (
-                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                )
+                icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
               }
             ]}
           />
@@ -596,13 +601,33 @@ const LensPostCard = ({ post }) => {
                 </div>
                 <div>
                   {isAuthor && (
-                    <div className="relative">
-                      <BsThreeDots
-                        className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                        onClick={showMoreOptions}
-                        title="More"
-                      />
-                    </div>
+                    <>
+                      <div className="relative">
+                        <BsThreeDots
+                          className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                          onClick={showMoreOptions}
+                          title="More"
+                        />
+                      </div>
+                      <BottomDrawerWrapper
+                        isDrawerOpen={isDrawerOpen}
+                        setIsDrawerOpen={setIsDrawerOpen}
+                        showClose
+                        // height="235px"
+                      >
+                        <MoreOptionsModal
+                          list={[
+                            {
+                              label: 'Delete Post',
+                              onClick: handleDeletePost,
+                              icon: () => (
+                                <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                              )
+                            }
+                          ]}
+                        />
+                      </BottomDrawerWrapper>
+                    </>
                   )}
                 </div>
               </div>

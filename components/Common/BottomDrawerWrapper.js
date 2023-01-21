@@ -1,7 +1,12 @@
 import React from 'react'
 import { Drawer } from '@mui/material'
 
-const BottomDrawerWrapper = ({ children, isDrawerOpen, setIsDrawerOpen }) => {
+const BottomDrawerWrapper = ({
+  children,
+  isDrawerOpen,
+  setIsDrawerOpen,
+  showClose
+}) => {
   return (
     <Drawer
       anchor="bottom"
@@ -13,12 +18,12 @@ const BottomDrawerWrapper = ({ children, isDrawerOpen, setIsDrawerOpen }) => {
         '& .MuiDrawer-paper': {
           borderRadius: '50px 50px 0px 0px',
           // height: height,
-          maxHeight: '300px',
+          maxHeight: '350px',
           overflowY: 'auto'
         }
       }}
     >
-      <div className="self-center mt-1">
+      <div className="self-center mt-1 pb-4">
         <svg
           width="36"
           height="5"
@@ -31,6 +36,18 @@ const BottomDrawerWrapper = ({ children, isDrawerOpen, setIsDrawerOpen }) => {
       </div>
 
       {children}
+      {showClose && (
+        <div className="px-4 w-full bg-s-bg mb-3 mt-1">
+          <button
+            onClick={() => {
+              setIsDrawerOpen(false)
+            }}
+            className="bg-p-bg rounded-full text-center flex font-bold text-p-text py-1 justify-center items-center text-p-text w-full text-xl "
+          >
+            Close
+          </button>
+        </div>
+      )}
     </Drawer>
   )
 }

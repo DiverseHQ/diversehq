@@ -10,7 +10,7 @@ import { useProfile } from '../Common/WalletContext'
 import { useEffect } from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
-const BottomDrawer = () => {
+const MobileFilterDrawerButton = () => {
   const { user } = useProfile()
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
   const [fetchingJoinedCommunities, setFetchingJoinedCommunities] =
@@ -185,4 +185,4 @@ const BottomDrawer = () => {
   )
 }
 
-export default BottomDrawer
+export default MobileFilterDrawerButton
