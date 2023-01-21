@@ -29,6 +29,7 @@ import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import ReactEmbedo from './embed/ReactEmbedo'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -46,6 +47,9 @@ const PostCard = ({ _post, setPosts }) => {
   )
   const [totalCount, setTotalCount] = useState(upvoteCount - downvoteCount)
   const { notifyInfo, notifyError } = useNotify()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { isDesktop } = useDevice()
+
   // const { isDesktop } = useDevice()
 
   // to maintain the current author state
@@ -171,6 +175,10 @@ const PostCard = ({ _post, setPosts }) => {
     if (!isAuthor) {
       notifyInfo('It may happen that some buttons are under construction.')
       return
+    }
+    if (!isDesktop) {
+      // open the bottom drawer
+      setIsDrawerOpen(true)
     }
     // setShowOptions(!showOptions)
     showModal({
@@ -472,6 +480,46 @@ const PostCard = ({ _post, setPosts }) => {
                   onClick={showMoreOptions}
                   title="More"
                 />
+                <BottomDrawerWrapper
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                  // height="235px"
+                >
+                  <div className="flex flex-col justify-center">
+                    <div
+                      className="flex items-center mt-10 px-3 py-2 my-2 hover:bg-[#eee] hover:cursor-pointer font-medium"
+                      onClick={() => {
+                        showEditModal()
+                        setIsDrawerOpen(false)
+                      }}
+                    >
+                      <BiEdit
+                        className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                        title="Edit"
+                      />
+                      <span>Edit</span>
+                    </div>
+                    <div
+                      className="flex items-center px-3 py-2 my-2 hover:bg-[#eee] hover:cursor-pointer hover:text-red-600 font-medium text-red-600"
+                      onClick={() => {
+                        handleDeletePost()
+                        setIsDrawerOpen(false)
+                      }}
+                    >
+                      <HiOutlineTrash
+                        className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6 "
+                        title="Delete"
+                      />
+                      <span>Delete</span>
+                    </div>
+                    <button
+                      className=" border rounded-full w-[384px] py-3 text-lg font-bold bg-s-h-bg text-s-h-text hover:bg-s-h-bg-hover hover:text-s-h-text-hover hover:cursor-pointer self-center mt-3 "
+                      onClick={() => setIsDrawerOpen(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </BottomDrawerWrapper>
               </div>
             )}
           </div>

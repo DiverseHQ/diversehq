@@ -5,6 +5,7 @@ import ConnectWalletAndSignInButton from '../Common/ConnectWalletAndSignInButton
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import { BiArrowBack } from 'react-icons/bi'
+// import BottomDrawer from './BottomDrawer'
 
 const NewMobileTopNav = () => {
   const { user } = useProfile()
