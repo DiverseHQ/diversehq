@@ -10,6 +10,7 @@ import {
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
+import { LensInfuraEndpoint } from '../../../utils/config'
 import {
   commentIdFromIndexedResult,
   uploadToIpfsInfuraAndGetPath
@@ -17,8 +18,14 @@ import {
 import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
+import Link from 'next/link'
 
-const LensCreateComment = ({ postId, addComment, isReply = false }) => {
+const LensCreateComment = ({
+  postId,
+  addComment,
+  replyCommentData,
+  isReply = false
+}) => {
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast()
   const { mutateAsync: addReaction } = useAddReactionMutation()
@@ -188,46 +195,84 @@ const LensCreateComment = ({ postId, addComment, isReply = false }) => {
         isSignedIn &&
         lensProfile?.defaultProfile?.id &&
         (!showAtBottom ? (
-          <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
-            <div className="flex flex-row justify-between items-center w-full">
-              <div className="flex flex-row items-center">
-                <img
-                  src={
-                    user?.profileImageUrl
-                      ? user?.profileImageUrl
-                      : '/gradient.jpg'
-                  }
-                  className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+          <>
+            {isMobile && (
+              <div className="px-3 sm:px-5  w-full pt-2 sm:rounded-2xl flex flex-row gap-4">
+                <div className="flex flex-col items-start">
+                  <div>
+                    <img
+                      src={
+                        replyCommentData?.profile?.picture?.original?.url?.startsWith(
+                          'ipfs'
+                        )
+                          ? `${LensInfuraEndpoint}${
+                              replyCommentData?.profile?.picture?.original?.url.split(
+                                '//'
+                              )[1]
+                            }`
+                          : '/gradient.jpg'
+                      }
+                      className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+                    />
+                  </div>
+                  <div className="w-[2px] min-h-[60px] h-full bg-[#ccc] ml-3"></div>
+                </div>
+                <div className="flex flex-col">
+                  <Link
+                    href={`/u/${replyCommentData?.profile?.handle}`}
+                    passHref
+                  >
+                    <div className="hover:underline font-bold text-base">
+                      u/{replyCommentData?.profile?.handle}
+                    </div>
+                  </Link>
+                  <div className="pb-4">
+                    {replyCommentData?.metadata?.content}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
+              <div className="flex flex-row justify-between items-center w-full">
+                <div className="flex flex-row items-center">
+                  <img
+                    src={
+                      user?.profileImageUrl
+                        ? user?.profileImageUrl
+                        : '/gradient.jpg'
+                    }
+                    className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+                  />
+                  <div className="ml-2 font-bold text-base">
+                    {lensProfile?.defaultProfile?.handle}
+                  </div>
+                </div>
+              </div>
+              <div className="pl-8 sm:pl-10">
+                <input
+                  type="text"
+                  ref={commentRef}
+                  className={`border-none outline-none w-full mt-1   text-base bg-s-bg ${
+                    loading ? 'text-s-text' : 'text-p-text'
+                  }`}
+                  placeholder="What do you think?"
+                  onKeyUp={(e) => {
+                    if (e.key === 'Enter') createComment()
+                  }}
+                  disabled={loading}
                 />
-                <div className="ml-2 font-bold text-base">
-                  {lensProfile?.defaultProfile?.handle}
+                <div className="w-full flex flex-row justify-end">
+                  <button
+                    disabled={loading}
+                    onClick={createComment}
+                    className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
+                  >
+                    {loading ? 'Commenting...' : 'Comment'}
+                  </button>
                 </div>
               </div>
             </div>
-            <div className="pl-8 sm:pl-10">
-              <input
-                type="text"
-                ref={commentRef}
-                className={`border-none outline-none w-full mt-1   text-base bg-s-bg ${
-                  loading ? 'text-s-text' : 'text-p-text'
-                }`}
-                placeholder="Say it.."
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') createComment()
-                }}
-                disabled={loading}
-              />
-              <div className="w-full flex flex-row justify-end">
-                <button
-                  disabled={loading}
-                  onClick={createComment}
-                  className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
-                >
-                  {loading ? 'Commenting...' : 'Comment'}
-                </button>
-              </div>
-            </div>
-          </div>
+          </>
         ) : (
           <div className="px-3 sm:px-5 w-full bg-s-bg py-3 fixed z-10 top-[calc(100vh-110px)]">
             <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4">

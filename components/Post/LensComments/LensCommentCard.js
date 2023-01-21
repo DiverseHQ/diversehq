@@ -184,11 +184,12 @@ const LensCommentCard = ({ comment }) => {
         >
           <LensCreateComment
             postId={comment.id}
-            addComment={(commnet) => {
-              setComments([commnet, ...comments])
+            addComment={(comment) => {
+              setComments([comment, ...comments])
               setShowCreateComment(false)
             }}
             isReply={true}
+            replyCommentData={comment}
           />
         </PopUpWrapper>
       ),
