@@ -35,7 +35,7 @@ const Modal = ({
 
   if (visiblity)
     return (
-      <div className="flex flex-row justify-center items-center fixed z-40 no-scrollbar w-full h-full">
+      <div className="flex flex-row justify-center items-center fixed z-50 no-scrollbar w-full h-full">
         <div className="flex justify-center items-center relative w-full h-full">
           <div
             className={`w-full h-full absolute ${

@@ -54,7 +54,7 @@
   }
 
   .box-shadow-top {
-    box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 1);
   }
 
   .no-scrollbar::-webkit-scrollbar {
@@ -165,7 +165,7 @@
   --background-pop: #ffffff38;
 }
 
-.custom-zoom [data-rmiz-modal-overlay="visible"] {
+.custom-zoom [data-rmiz-modal-overlay='visible'] {
   background-color: rgb(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
 }

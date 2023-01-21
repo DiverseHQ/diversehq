@@ -26,7 +26,7 @@ module.exports = {
         'p-border': 'var(--border-primary)' // primary border color
       },
       boxShadow: {
-        top: '0px -2px 20px 1px rgba(0, 0, 0, 0.2)',
+        top: '0px -2px 5px 1px rgba(0, 0, 0, 0.1)',
         nav: '0px 4px 4px rgba(0, 0, 0, 0.25)'
       }
     }

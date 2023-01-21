@@ -30,7 +30,7 @@ const ScrollToTopButton = ({ ...props }) => {
     <div
       // top button is up in the post page decided using router.pathname
       {...props}
-      className={`cursor-pointer text-[36px] text-p-btn bg-p-btn-text rounded-full sticky z-10 ${
+      className={`cursor-pointer text-[36px] text-p-btn bg-p-btn-text rounded-full sticky z-50 ${
         router.pathname.startsWith('/p/')
           ? 'top-[calc(100vh-160px)]'
           : 'top-[calc(100vh-110px)]'

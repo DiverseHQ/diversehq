@@ -1,9 +1,12 @@
 import React, { useCallback, useState } from 'react'
 import { AiOutlineCamera } from 'react-icons/ai'
 import { putUpdateUser } from '../../api/user'
+import { useCreateSetProfileImageUriViaDispatcherMutation } from '../../graphql/generated'
+import { useLensUserContext } from '../../lib/LensUserContext'
 import {
   hasWhiteSpace,
-  uploadFileToFirebaseAndGetUrl
+  uploadFileToFirebaseAndGetUrl,
+  uploadFileToIpfsInfuraAndGetPath
   // uploadFileToIpfs
 } from '../../utils/utils'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -21,6 +24,10 @@ const EditProfile = ({ user, showUserInfo }) => {
   const [profileImageFile, setProfileImageFile] = useState(null)
   const [name, setName] = useState(user?.name)
   const [bio, setBio] = useState(user?.bio)
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+
+  const { mutateAsync: createSetProfileImageUriViaDispatcher } =
+    useCreateSetProfileImageUriViaDispatcherMutation()
 
   const { refreshUserInfo, address } = useProfile()
   const { notifyError, notifySuccess } = useNotify()
@@ -65,6 +72,30 @@ const EditProfile = ({ user, showUserInfo }) => {
         )
         profileData.profileImageUrl = profile.uploadedToUrl
         profileData.profileFilePath = profile.path
+
+        // todo later make this separate with ui/ux for user to choose
+        try {
+          // update lens profile image
+          if (
+            isSignedIn &&
+            hasProfile &&
+            lensProfile?.defaultProfile?.dispatcher?.canUseRelay
+          ) {
+            const hash = await uploadFileToIpfsInfuraAndGetPath(
+              profileImageFile
+            )
+            console.log('hash', hash)
+
+            await createSetProfileImageUriViaDispatcher({
+              request: {
+                profileId: lensProfile.defaultProfile.id,
+                url: `ipfs://${hash}`
+              }
+            })
+          }
+        } catch (error) {
+          console.log(error)
+        }
       }
       if (profileBannerFile) {
         // const banner = await uploadFileToIpfs(profileBannerFile)
@@ -76,9 +107,7 @@ const EditProfile = ({ user, showUserInfo }) => {
         profileData.bannerFilePath = banner.path
       }
       const resp = await putUpdateUser(profileData)
-      console.log('resp', resp)
       const resData = await resp.json()
-      console.log('resData', resData)
       if (resp.status !== 200) {
         setLoading(false)
         notifyError(resData.msg)
@@ -127,11 +156,11 @@ const EditProfile = ({ user, showUserInfo }) => {
       >
         <div>
           <label htmlFor="profileBanner">
-            <div className="flex h-44 border-y border-p-border items-center justify-center">
+            <div className="flex h-40 border-y border-p-border items-center justify-center">
               {/* eslint-disable-next-line */}
               {profileBanner && (
                 <img
-                  className="inset-0 object-cover h-full w-full "
+                  className="inset-0 object-cover h-40 w-full "
                   src={profileBanner}
                   alt="Header"
                 />
@@ -168,21 +197,23 @@ const EditProfile = ({ user, showUserInfo }) => {
             </div>
           </div>
 
-          <FormTextInput
-            label="Name"
-            placeholder="Your Pseudo Name"
-            value={name}
-            onChange={onChangeName}
-            maxLength={20}
-            required
-          />
-          <FormTextArea
-            label="Bio"
-            placeholder="Say something more about you..."
-            value={bio}
-            onChange={onChangeBio}
-            required
-          />
+          <div className="mt-[-40px]">
+            <FormTextInput
+              label="Name"
+              placeholder="Your Pseudo Name"
+              value={name}
+              onChange={onChangeName}
+              maxLength={20}
+              required
+            />
+            <FormTextArea
+              label="Bio"
+              placeholder="Say something more about you..."
+              value={bio}
+              onChange={onChangeBio}
+              required
+            />
+          </div>
           <input
             type="file"
             id="profileImage"

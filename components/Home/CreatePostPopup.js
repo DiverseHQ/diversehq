@@ -422,8 +422,8 @@ const CreatePostPopup = () => {
         loading={loading}
         isDisabled={!communityId}
       >
-        <div className="flex flex-row items-center justify-between">
-          <div className="border border-p-border rounded-full text-p-text ml-3 w-fit px-1">
+        <div className="flex flex-row items-center justify-between px-4">
+          <div className="border border-p-border rounded-full text-p-text w-fit px-1">
             <button
               className="text-blue-500 p-1"
               onClick={showJoinedCommunities}
@@ -444,8 +444,8 @@ const CreatePostPopup = () => {
               )}
             </button>
           </div>
-          <div className="flex flex-row items-center jusitify-center mr-4">
-            <img src="/lensLogo.svg" className="w-6 text-sm" />
+          <div className="flex flex-row items-center jusitify-center">
+            <img src="/lensLogo.svg" className="w-6" />
             <Switch
               checked={isLensPost}
               onChange={() => {
@@ -483,7 +483,6 @@ const CreatePostPopup = () => {
               placeholder={
                 <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
                   <div>{"What's this about...? (optional)"}</div>
-                  <div>{'Here, You can write in markdown too!'} </div>
                 </div>
               }
             />
