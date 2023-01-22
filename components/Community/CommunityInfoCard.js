@@ -187,7 +187,7 @@ const CommunityInfoCard = ({ _community }) => {
   return (
     <>
       {community && (
-        <div className="relative shadow z-0 bg-s-bg mb-6">
+        <div className="relative shadow z-0 bg-s-bg mb-3">
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
             <ImageWithPulsingLoader
