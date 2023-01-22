@@ -6,6 +6,8 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import { BiArrowBack } from 'react-icons/bi'
 import MobileFilterDrawerButton from './MobileFilterDrawerButton'
+import ExploreFilterDrawerButton from '../Explore/ExploreFilterDrawerButton'
+import NotificationFilterDrawerButton from '../Notification/NotificationFilterDrawerButton'
 // import BottomDrawer from './BottomDrawer'
 
 const NewMobileTopNav = () => {
@@ -20,6 +22,10 @@ const NewMobileTopNav = () => {
     window.onscroll = function () {
       const mobileTopNavEl = document.getElementById('mobile-top-navbar')
       if (!mobileTopNavEl) return
+      if (router.pathname !== '/' && !router.pathname.startsWith('/feed/')) {
+        mobileTopNavEl.style.top = '0'
+        return
+      }
       const currentScrollPos = window.pageYOffset
       if (prevScrollpos > currentScrollPos) {
         mobileTopNavEl.style.top = '0'
@@ -32,7 +38,13 @@ const NewMobileTopNav = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] backdrop-blur-lg bg-white/50">
+      <div
+        id="mobile-top-navbar"
+        className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] backdrop-blur-lg bg-white/70"
+        style={{
+          transition: 'top 0.5s ease-in-out'
+        }}
+      >
         {router.pathname.startsWith('/p/') ||
         router.pathname.startsWith('/c/') ||
         router.pathname.startsWith('/u/') ? (
@@ -51,7 +63,7 @@ const NewMobileTopNav = () => {
           </div>
         ) : (
           <>
-            <div>
+            <div className="min-w-[70px]">
               {!user && (
                 <ConnectWalletAndSignInButton
                   connectWalletLabel="Connect"
@@ -80,7 +92,16 @@ const NewMobileTopNav = () => {
               </span>
             </div>
 
-            <MobileFilterDrawerButton />
+            {(router.pathname === '/' ||
+              router.pathname.startsWith('/feed')) && (
+              <MobileFilterDrawerButton />
+            )}
+            {router.pathname.startsWith('/explore') && (
+              <ExploreFilterDrawerButton />
+            )}
+            {router.pathname.startsWith('/notification') && (
+              <NotificationFilterDrawerButton />
+            )}
           </>
         )}
       </div>

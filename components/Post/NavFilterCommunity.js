@@ -23,7 +23,7 @@ const NavFilterCommunity = ({ name }) => {
   }, [pathname])
 
   return (
-    <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white sm:mt-10 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
+    <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mb-1 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'new' && 'bg-p-bg'
@@ -35,7 +35,7 @@ const NavFilterCommunity = ({ name }) => {
         <HiSparkles />
         <div>New</div>
       </button>
-      <div
+      <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'top' && 'bg-p-bg'
         }  hover:bg-p-btn-hover`}
@@ -44,9 +44,9 @@ const NavFilterCommunity = ({ name }) => {
         }}
       >
         <MdLeaderboard />
-        <button>Top</button>
-      </div>
-      <div
+        <div>Top</div>
+      </button>
+      <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'lens' && 'bg-p-bg'
         }  hover:bg-p-btn-hover`}
@@ -55,8 +55,8 @@ const NavFilterCommunity = ({ name }) => {
         }}
       >
         <img src="/lensLogo.svg" className="h-5 w-5" alt="lens logo icon" />
-        <button>Lens</button>
-      </div>
+        <div>Lens</div>
+      </button>
       {/* <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
           active === 'hot' && 'bg-white'

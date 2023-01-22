@@ -139,25 +139,33 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       >
         <div className="flex flex-row justify-between px-4 pt-4 gap-2">
           {user && address && (
-            <div className="flex flex-col gap-1">
-              <img
-                src={user?.profileImageUrl}
-                className="w-[55px] h-[55px] bg-[#333] rounded-full"
-              />
-              {user?.name && (
-                <h3 className="font-semibold text-[18px]">{user.name}</h3>
-              )}
-              <div
-                className="text-sm flex flex-row items-center cursor-pointer"
-                onClick={handleWalletAddressCopy}
-              >
-                <div className="">{stringToLength(user.walletAddress, 8)}</div>
-                <FaRegCopy className="w-7 h-7 px-2" />
+            <div className="flex flex-col">
+              <div className="flex flex-row gap-1">
+                <img
+                  src={user?.profileImageUrl}
+                  className="w-[55px] h-[55px] bg-[#333] rounded-full"
+                />
+                <div className="flex flex-col items-start ml-4">
+                  {user?.name && (
+                    <h3 className="font-semibold text-[18px]">{user.name}</h3>
+                  )}
+                  <div
+                    className="text-sm flex flex-row items-center cursor-pointer"
+                    onClick={handleWalletAddressCopy}
+                  >
+                    <div className="">
+                      {stringToLength(user.walletAddress, 8)}
+                    </div>
+                    <FaRegCopy className="w-7 h-7 px-2" />
+                  </div>
+                </div>
               </div>
-              <span className="text-[14px] text-s-text">
-                Joined {user.communities.length} Communities
-              </span>
-              <div onClick={disconnect}>Disconnect</div>
+              <div className="mt-4">
+                <LensLoginButton />
+              </div>
+              <div className="mt-2 text-red-400" onClick={disconnect}>
+                Disconnect
+              </div>
             </div>
           )}
           <div className="jutify-end">
@@ -167,8 +175,6 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           </div>
         </div>
         <div className="flex flex-col px-4 bg-p-bg">
-          <LensLoginButton />
-
           <button
             className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
             onClick={() => {
@@ -176,91 +182,23 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               setIsOpenSidebar(false)
             }}
           >
-            <MdOutlinePerson className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-            <span className="text-p-text ">Profile</span>
+            <MdOutlinePerson className="w-6 h-6 object-contain" />
+            <span className="text-p-text text-xl">Profile</span>
           </button>
-          <div className="flex flex-col">
-            <button
-              className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
-              onClick={() => {
-                console.log('clicked')
-                setShowCreatedCommunities(true)
-                setIsDrawerOpen(true)
-              }}
-              ref={createdCommunitiesButtonRef}
-            >
-              <MdOutlineGroups className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-              <span className="text-p-text ">Your Communities</span>
-            </button>
-            <BottomDrawerWrapper
-              isDrawerOpen={isDrawerOpen}
-              setIsDrawerOpen={setIsDrawerOpen}
-              height="296px"
-            >
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="font-bold text-lg mt-5">Created Communities</h1>
-                <div
-                  className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start"
-                  ref={dropdownRef}
-                >
-                  {createdCommunities.map((community) => (
-                    <div
-                      key={community._id}
-                      className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
-                      id={community._id}
-                      onClick={() => {
-                        router.push(`/c/${community.name}`)
-                        setIsOpenSidebar(false)
-                      }}
-                    >
-                      <img
-                        src={
-                          community.logoImageUrl
-                            ? community.logoImageUrl
-                            : '/gradient.jpg'
-                        }
-                        alt="community logo"
-                        className="rounded-md sm:rounded-xl w-9 h-9"
-                      />
-                      <div className="text-p-text ml-4" id={community._id}>
-                        {community.name}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </BottomDrawerWrapper>
-            {/* <div
-              className="bg-s-bg rounded-md sm:rounded-xl absolute mt-7 z-50 max-h-[300px] overflow-y-auto overflow-x-hidden"
-              ref={dropdownRef}
-            >
-              {showCreatedCommunities &&
-                createdCommunities.map((community) => (
-                  <div
-                    key={community._id}
-                    className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
-                    id={community._id}
-                    onClick={() => {
-                      router.push(`/c/${community.name}`)
-                      setIsOpenSidebar(false)
-                    }}
-                  >
-                    <img
-                      src={
-                        community.logoImageUrl
-                          ? community.logoImageUrl
-                          : '/gradient.jpg'
-                      }
-                      alt="community logo"
-                      className="rounded-md sm:rounded-xl w-9 h-9"
-                    />
-                    <div className="text-p-text ml-4" id={community._id}>
-                      {community.name}
-                    </div>
-                  </div>
-                ))}
-            </div> */}
-          </div>
+
+          <button
+            className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
+            onClick={() => {
+              console.log('clicked')
+              setShowCreatedCommunities(true)
+              setIsDrawerOpen(true)
+            }}
+            ref={createdCommunitiesButtonRef}
+          >
+            <MdOutlineGroups className="w-6 h-6 object-contain" />
+            <span className="text-p-text text-xl">Your Communities</span>
+          </button>
+
           <button
             className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
             onClick={() => {
@@ -268,43 +206,58 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               setIsOpenSidebar(false)
             }}
           >
-            <MdOutlineCreateNewFolder className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-            <span className="text-p-text">Create Community</span>
+            <MdOutlineCreateNewFolder className="w-6 h-6 object-contain" />
+            <span className="text-p-text text-xl">Create Community</span>
           </button>
-          {/* <button className="flex flex-row items-center  hover:font-semibold py-4 gap-2">
-            <AiOutlineGift className="w-[24px] h-[24px] object-contain" />
-            <span className="text-p-text">XP Gift</span>
-          </button> */}
           <a
             href={DISCORD_INVITE_LINK}
             target={'_blank'}
             rel="noreferrer"
             className="flex flex-row items-center gap-2 py-4  hover:font-semibold"
           >
-            <FaDiscord className="w-[20px] h-[20px]" />
-            <span className="text-p-text ">Discord</span>
+            <FaDiscord className="w-6 h-6" />
+            <span className="text-p-text text-xl">Discord</span>
           </a>
         </div>
 
-        {/* <div className="flex flex-col px-4">
-          <button className="flex flex-row items-center gap-2 py-4  hover:font-semibold">
-            <BsMoon className="w-[20px] h-[20px]" />
-            <span className="text-p-text">Dark Mode</span>
-          </button>
-          <button className="flex flex-row items-center gap-2 py-4  hover:font-semibold">
-            <IoIosHelpCircleOutline className="w-[20px] h-[20px]" />
-            <span className="text-p-text">Help Center</span>
-          </button>
-          <a
-            href={DISCORD_INVITE_LINK}
-            target={'_blank'}
-            rel="noreferrer"
-            className="flex flex-row items-center gap-2 py-4  hover:font-semibold"
-          >
-            <FaDiscord className="w-[20px] h-[20px]" />
-            <span className="text-p-text ">Discord</span>
-          </a>
-        </div> */}
+        <BottomDrawerWrapper
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
+          height="296px"
+        >
+          <div className="flex flex-col justify-center items-center">
+            <h1 className="font-bold text-lg mt-5">Created Communities</h1>
+            <div
+              className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start"
+              ref={dropdownRef}
+            >
+              {createdCommunities.map((community) => (
+                <div
+                  key={community._id}
+                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
+                  id={community._id}
+                  onClick={() => {
+                    router.push(`/c/${community.name}`)
+                    setIsOpenSidebar(false)
+                  }}
+                >
+                  <img
+                    src={
+                      community.logoImageUrl
+                        ? community.logoImageUrl
+                        : '/gradient.jpg'
+                    }
+                    alt="community logo"
+                    className="rounded-md sm:rounded-xl w-9 h-9"
+                  />
+                  <div className="text-p-text ml-4" id={community._id}>
+                    {community.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </BottomDrawerWrapper>
       </div>
     </div>
   )

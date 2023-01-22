@@ -52,7 +52,10 @@ const MobileFilterDrawerButton = () => {
   }
   return (
     <div>
-      <button onClick={() => setIsDrawerOpen(true)}>
+      <button
+        onClick={() => setIsDrawerOpen(true)}
+        className="flex flex-row items-center justify-center bg-p-btn-hover p-1 rounded-md"
+      >
         <svg
           width="22"
           height="22"
@@ -67,6 +70,7 @@ const MobileFilterDrawerButton = () => {
             stroke-linejoin="round"
           />
         </svg>
+        <span className="pl-2">{active}</span>
       </button>
       <BottomDrawerWrapper
         isDrawerOpen={isDrawerOpen}
@@ -75,7 +79,7 @@ const MobileFilterDrawerButton = () => {
       >
         <div className="flex flex-col justify-center items-center">
           <h1 className="font-bold text-lg mt-5">Choose your Feed</h1>
-          <div className="font-medium  text-base border-b p-0.5 w-full flex flex-row mt-6  justify-center items-center space-x-20 ">
+          <div className="font-medium  text-base border-b p-0.5 w-full flex flex-row mt-2  justify-center items-center space-x-20 ">
             <button
               className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
                 active === 'lens' && 'bg-p-bg'

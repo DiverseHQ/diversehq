@@ -3,10 +3,12 @@ import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsExplorePublicationsColumn'
 import { NextSeo } from 'next-seo'
+import useDevice from '../../components/Common/useDevice'
 // import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
 
 const lens = () => {
   // const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
+  const { isDesktop } = useDevice()
   return (
     <>
       <NextSeo
@@ -18,7 +20,7 @@ const lens = () => {
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
-          <NavFilterAllPosts />
+          {isDesktop && <NavFilterAllPosts />}
           {/* {lensProfile &&
       isSignedIn &&
       hasProfile &&

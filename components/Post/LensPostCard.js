@@ -335,7 +335,7 @@ const LensPostCard = ({ post }) => {
   return (
     <>
       {postInfo && (
-        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-2 sm:my-3 sm:rounded-2xl shadow-sm">
+        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 border-b-[0.5px] sm:my-3 sm:rounded-2xl shadow-sm">
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
@@ -599,37 +599,36 @@ const LensPostCard = ({ post }) => {
                     text={postInfo?.metadata?.name}
                   />
                 </div>
-                <div>
-                  {isAuthor && (
-                    <>
-                      <div className="relative">
-                        <BsThreeDots
-                          className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                          onClick={showMoreOptions}
-                          title="More"
-                        />
-                      </div>
-                      <BottomDrawerWrapper
-                        isDrawerOpen={isDrawerOpen}
-                        setIsDrawerOpen={setIsDrawerOpen}
-                        showClose
-                        // height="235px"
-                      >
-                        <MoreOptionsModal
-                          list={[
-                            {
-                              label: 'Delete Post',
-                              onClick: handleDeletePost,
-                              icon: () => (
-                                <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                              )
-                            }
-                          ]}
-                        />
-                      </BottomDrawerWrapper>
-                    </>
-                  )}
-                </div>
+
+                {isAuthor && (
+                  <>
+                    <div className="relative">
+                      <BsThreeDots
+                        className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
+                        onClick={showMoreOptions}
+                        title="More"
+                      />
+                    </div>
+                    <BottomDrawerWrapper
+                      isDrawerOpen={isDrawerOpen}
+                      setIsDrawerOpen={setIsDrawerOpen}
+                      showClose
+                      // height="235px"
+                    >
+                      <MoreOptionsModal
+                        list={[
+                          {
+                            label: 'Delete Post',
+                            onClick: handleDeletePost,
+                            icon: () => (
+                              <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                            )
+                          }
+                        ]}
+                      />
+                    </BottomDrawerWrapper>
+                  </>
+                )}
               </div>
             </div>
           </div>
