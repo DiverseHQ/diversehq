@@ -10,7 +10,6 @@ import MobileFilterDrawerButton from './MobileFilterDrawerButton'
 
 const NewMobileTopNav = () => {
   const { user } = useProfile()
-  // const { data: signer } = useSigner()
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
   const router = useRouter()
 
@@ -64,7 +63,6 @@ const NewMobileTopNav = () => {
                   src={user?.profileImageUrl}
                   onClick={() => setIsOpenSidebar(true)}
                   className="w-[35px] h-[35px] rounded-full"
-                  loaderClassName={'w-[35px] h-[35px] rounded-full'}
                 />
               )}
             </div>
@@ -81,19 +79,10 @@ const NewMobileTopNav = () => {
                 {router.pathname.startsWith('/feed') && 'Home'}
               </span>
             </div>
-            {/* <div>
-              <img
-                src="/LogoV3TrimmedWithBG.png"
-                alt="DiverseHQ logo"
-                className="w-[32px] h-[32px]"
-              />
-            </div> */}
+
             <MobileFilterDrawerButton />
           </>
         )}
-        {/* <div>
-          <AiOutlineCompass className="text-[22px]" />
-        </div> */}
       </div>
       {isOpenSidebar && (
         <MobileNavSidebar
