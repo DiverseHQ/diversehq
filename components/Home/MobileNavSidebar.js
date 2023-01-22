@@ -20,6 +20,7 @@ import { DISCORD_INVITE_LINK } from '../../utils/config'
 import { useDisconnect } from 'wagmi'
 import { getCreatedCommunitiesApi } from '../../api/community'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -90,7 +91,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     showModal({
       component: <CreateCommunity />,
       type: modalType.normal,
-      onAction: () => {},
+      onAction: () => { },
       extraaInfo: {}
     })
   }
@@ -118,9 +119,8 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
 
   return (
     <div
-      className={`text-black fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${
-        isOpenSidebar ? 'z-50' : 'z-0'
-      }`}
+      className={`text-black fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${isOpenSidebar ? 'z-50' : 'z-0'
+        }`}
     >
       {/* backdrop */}
       {isOpenSidebar && (
@@ -133,9 +133,8 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       )}
 
       <div
-        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg border gap-4 ${
-          isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
-        } `}
+        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg border gap-4 ${isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
+          } `}
       >
         <div className="flex flex-row justify-between px-4 pt-4 gap-2">
           {user && address && (
@@ -223,38 +222,423 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         <BottomDrawerWrapper
           isDrawerOpen={isDrawerOpen}
           setIsDrawerOpen={setIsDrawerOpen}
-          height="296px"
+          showClose={true}
         >
           <div className="flex flex-col justify-center items-center">
             <h1 className="font-bold text-lg mt-5">Created Communities</h1>
             <div
-              className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start"
+              className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen "
               ref={dropdownRef}
             >
               {createdCommunities.map((community) => (
                 <div
                   key={community._id}
-                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
+                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn-hover mx-4"
                   id={community._id}
                   onClick={() => {
                     router.push(`/c/${community.name}`)
                     setIsOpenSidebar(false)
                   }}
                 >
-                  <img
+                  <ImageWithPulsingLoader
                     src={
                       community.logoImageUrl
                         ? community.logoImageUrl
                         : '/gradient.jpg'
                     }
                     alt="community logo"
-                    className="rounded-md sm:rounded-xl w-9 h-9"
+                    className="rounded-full object-cover w-12 h-12"
                   />
-                  <div className="text-p-text ml-4" id={community._id}>
+
+                  <div className="text-p-text ml-4 text-lg font-semibold" id={community._id}>
                     {community.name}
                   </div>
                 </div>
               ))}
+              <div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div>
+              <div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div>
+              <div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div><div
+                key={1}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn "
+                id={1}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
+                <div className="text-p-text ml-4 text-lg font-semibold" id={1}>
+                  80 Hazar ke Joote Gang
+                </div>
+              </div>
+              {/* // This ends here */}
             </div>
           </div>
         </BottomDrawerWrapper>
