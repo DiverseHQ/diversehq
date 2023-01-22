@@ -5,7 +5,7 @@ const BottomDrawerWrapper = ({
   children,
   isDrawerOpen,
   setIsDrawerOpen,
-  showClose
+  showClose = true
 }) => {
   return (
     <Drawer

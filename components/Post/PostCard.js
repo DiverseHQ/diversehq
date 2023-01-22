@@ -487,12 +487,18 @@ const PostCard = ({ _post, setPosts }) => {
                     list={[
                       {
                         label: 'Edit Post',
-                        onClick: showEditModal,
+                        onClick: async () => {
+                          showEditModal()
+                          setIsDrawerOpen(false)
+                        },
                         icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
                       },
                       {
                         label: 'Delete Post',
-                        onClick: handleDeletePost,
+                        onClick: async () => {
+                          await handleDeletePost()
+                          setIsDrawerOpen(false)
+                        },
                         icon: () => (
                           <HiOutlineTrash className="mr-1.5 w-6 h-6" />
                         )

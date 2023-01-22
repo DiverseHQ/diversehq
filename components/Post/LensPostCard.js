@@ -296,7 +296,7 @@ const LensPostCard = ({ post }) => {
     } catch (error) {
       console.log(error)
     } finally {
-      // router.reload()
+      router.reload()
     }
   }
 
@@ -619,7 +619,10 @@ const LensPostCard = ({ post }) => {
                         list={[
                           {
                             label: 'Delete Post',
-                            onClick: handleDeletePost,
+                            onClick: async () => {
+                              await handleDeletePost()
+                              setIsDrawerOpen(false)
+                            },
                             icon: () => (
                               <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
                             )
