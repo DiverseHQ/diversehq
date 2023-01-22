@@ -8,6 +8,7 @@ import { BiArrowBack } from 'react-icons/bi'
 import MobileFilterDrawerButton from './MobileFilterDrawerButton'
 import ExploreFilterDrawerButton from '../Explore/ExploreFilterDrawerButton'
 import NotificationFilterDrawerButton from '../Notification/NotificationFilterDrawerButton'
+import SearchModal from '../Search/SearchModal'
 // import BottomDrawer from './BottomDrawer'
 
 const NewMobileTopNav = () => {
@@ -47,6 +48,7 @@ const NewMobileTopNav = () => {
       >
         {router.pathname.startsWith('/p/') ||
         router.pathname.startsWith('/c/') ||
+        router.pathname.startsWith('/search') ||
         router.pathname.startsWith('/u/') ? (
           <div className="h-[32px] flex flex-row items-center gap-2 text-[18px]">
             <div className="flex items-center justify-center w-8 h-8 hover:bg-p-btn-hover rounded-full">
@@ -59,6 +61,7 @@ const NewMobileTopNav = () => {
               {router.pathname.startsWith('/p/') && 'Post'}
               {router.pathname.startsWith('/c/') && 'Community'}
               {router.pathname.startsWith('/u/') && 'Profile'}
+              {router.pathname.startsWith('/search') && <SearchModal />}
             </span>
           </div>
         ) : (
@@ -87,7 +90,6 @@ const NewMobileTopNav = () => {
                 {router.pathname === '/' && 'Home'}
                 {router.pathname.startsWith('/explore') && 'Explore'}
                 {router.pathname.startsWith('/notification') && 'Notifications'}
-                {router.pathname.startsWith('/search') && 'Search'}
                 {router.pathname.startsWith('/feed') && 'Home'}
               </span>
             </div>

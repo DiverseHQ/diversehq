@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 // import { postGetCommunityInfoUsingListOfIds } from '../api/community'
-import SearchModal from '../components/Search/SearchModal'
+// import SearchModal from '../components/Search/SearchModal'
 // import { recommendedCommunitiesIds } from '../utils/config'
 import RightSideCommunityComponent from '../components/Home/RightSideCommunityComponent'
 import { NextSeo } from 'next-seo'
@@ -52,10 +52,10 @@ const search = () => {
           url: 'https://app.diversehq.xyz/search'
         }}
       />
-      <div className="mt-10 w-screen flex flex-col items-center">
-        <SearchModal />
+      <div className="w-screen flex flex-col px-4 mt-10">
+        {/* <SearchModal /> */}
         {topCommunities.length > 0 && (
-          <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6 mt-20">
+          <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
             <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
               Top Communities
             </h3>
