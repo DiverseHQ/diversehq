@@ -66,7 +66,7 @@ const NewMobileTopNav = () => {
           </div>
         ) : (
           <>
-            <div className="min-w-[70px]">
+            <div className="min-w-[60px]">
               {!user && (
                 <ConnectWalletAndSignInButton
                   connectWalletLabel="Connect"
