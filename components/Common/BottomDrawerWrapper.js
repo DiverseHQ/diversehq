@@ -16,10 +16,7 @@ const BottomDrawerWrapper = ({
       }}
       sx={{
         '& .MuiDrawer-paper': {
-          borderRadius: '50px 50px 0px 0px',
-          // height: height,
-          maxHeight: '350px',
-          overflowY: 'auto'
+          borderRadius: '50px 50px 0px 0px'
         }
       }}
     >
@@ -34,8 +31,9 @@ const BottomDrawerWrapper = ({
           <rect width="36" height="5" rx="2.5" fill="#B3B4F3" />
         </svg>
       </div>
-
-      {children}
+      <div className="max-h-[350px] overflow-y-scroll overflow-x-hidden">
+        {children}
+      </div>
       {showClose && (
         <div className="px-4 w-full bg-s-bg mb-3 mt-1">
           <button

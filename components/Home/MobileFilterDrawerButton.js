@@ -9,12 +9,10 @@ import { getJoinedCommunitiesApi } from '../../api/community'
 import { useProfile } from '../Common/WalletContext'
 import { useEffect } from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import { stringToLength } from '../../utils/utils'
 
 const MobileFilterDrawerButton = () => {
   const { user } = useProfile()
-  const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
-  const [fetchingJoinedCommunities, setFetchingJoinedCommunities] =
-    useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const { notifyError } = useNotify()
   const [active, setActive] = useState('lens')
@@ -45,15 +43,11 @@ const MobileFilterDrawerButton = () => {
       return
     }
     try {
-      setFetchingJoinedCommunities(true)
       const response = await getJoinedCommunitiesApi()
       setJoinedCommunities(response)
-      setShowJoinedCommunities(!showJoinedCommunities)
     } catch (error) {
       console.log('error', error)
       notifyError('Error getting joined communities')
-    } finally {
-      setFetchingJoinedCommunities(false)
     }
   }
   return (
@@ -77,6 +71,7 @@ const MobileFilterDrawerButton = () => {
       <BottomDrawerWrapper
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
+        showClose={true}
       >
         <div className="flex flex-col justify-center items-center">
           <h1 className="font-bold text-lg mt-5">Choose your Feed</h1>
@@ -123,14 +118,15 @@ const MobileFilterDrawerButton = () => {
               <div>Top</div>
             </button>
           </div>
-          <div className="mt-5">
-            <div className="flex flex-row overflow-x-auto w-screen no-scrollbar">
-              {showJoinedCommunities &&
+
+          <div className="py-2">
+            <div className="flex flex-row items-center overflow-x-auto w-screen no-scrollbar">
+              {joinedCommunities.length > 0 &&
                 joinedCommunities.map((community) => {
                   return (
                     <div
                       key={community?._id}
-                      className="flex flex-col items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
+                      className="flex flex-col items-center justify-center min-w-[80px] cursor-pointer p-2 rounded-2xl hover:bg-p-btn mx-1"
                       id={community?._id}
                       onClick={() => {
                         router.push(`/c/${community.name}`)
@@ -143,42 +139,50 @@ const MobileFilterDrawerButton = () => {
                             : '/gradient.jpg'
                         }
                         alt="community logo"
-                        className="rounded-full object-cover w-10 h-10"
+                        className="rounded-full object-cover w-16 h-16"
                       />
 
                       <div
-                        className="text-p-text font-medium"
+                        className="text-p-text text-xs font-bold break-keep pt-1"
                         id={community._id}
                       >
-                        {community.name}
+                        {stringToLength(community.name, 10)}
                       </div>
                     </div>
                   )
                 })}
-              {fetchingJoinedCommunities && (
-                <>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                </>
-              )}
             </div>
           </div>
-          <button
-            className=" border rounded-full w-[384px] py-3 text-lg font-bold bg-s-h-bg mb-1"
-            onClick={() => setIsDrawerOpen(false)}
-          >
-            Cancel
-          </button>
+
+          {/* <div className="flex flex-row overflow-x-auto w-screen no-scrollbar">
+            {showJoinedCommunities &&
+              joinedCommunities.map((community) => {
+                return (
+                  <div
+                    key={community?._id}
+                    className="flex flex-col items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
+                    id={community?._id}
+                    onClick={() => {
+                      router.push(`/c/${community.name}`)
+                    }}
+                  >
+                    <ImageWithPulsingLoader
+                      src={
+                        community.logoImageUrl
+                          ? community.logoImageUrl
+                          : '/gradient.jpg'
+                      }
+                      alt="community logo"
+                      className="rounded-full object-cover w-10 h-10"
+                    />
+
+                    <div className="text-p-text font-medium" id={community._id}>
+                      {community.name}
+                    </div>
+                  </div>
+                )
+              })}
+          </div> */}
         </div>
       </BottomDrawerWrapper>
     </div>
