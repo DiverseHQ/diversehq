@@ -335,7 +335,7 @@ const LensPostCard = ({ post }) => {
   return (
     <>
       {postInfo && (
-        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 border-b-[0.5px] sm:my-3 sm:rounded-2xl shadow-sm">
+        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 border-b-[0.5px] sm:my-3 sm:rounded-2xl shadow-sm">
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
@@ -464,7 +464,7 @@ const LensPostCard = ({ post }) => {
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center ml-1.5 my-2">
+              <div className="flex flex-col items-center ml-1.5 mt-1">
                 <div className="hover:bg-p-btn-hover rounded-md p-1">
                   <img
                     //  onClick={liked ? handleUnLike : handleLike}
@@ -477,7 +477,7 @@ const LensPostCard = ({ post }) => {
                     className="w-6 h-6 cursor-pointer"
                   />
                 </div>
-                <div className="font-bold">{voteCount}</div>
+                <div className="font-bold leading-5">{voteCount}</div>
                 <div className="hover:bg-p-btn-hover rounded-md p-1">
                   <img
                     src={
@@ -493,7 +493,7 @@ const LensPostCard = ({ post }) => {
             )}
 
             {/* main content */}
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
                 <div className="mb-2 px-3 sm:pl-3.5 ">
                   {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (

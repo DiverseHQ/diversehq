@@ -349,7 +349,7 @@ const PostCard = ({ _post, setPosts }) => {
 
       <div className="flex flex-row w-full">
         {!isMobile && (
-          <div className="flex flex-col items-center ml-1.5 my-2">
+          <div className="flex flex-col items-center ml-1.5 mt-1">
             <div className="hover:bg-p-btn-hover rounded-md p-1">
               <img
                 onClick={handleUpvote}
@@ -359,7 +359,7 @@ const PostCard = ({ _post, setPosts }) => {
                 className="w-6 h-6 cursor-pointer"
               />
             </div>
-            <div>{totalCount}</div>
+            <div className="font-bold leading-5">{totalCount}</div>
             <div className="hover:bg-p-btn-hover rounded-md p-1">
               <img
                 onClick={handleDownvote}
@@ -375,7 +375,7 @@ const PostCard = ({ _post, setPosts }) => {
         )}
 
         {/* main content */}
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col justify-between w-full min-h-[76px]">
           <div>
             <div className="mb-2 px-3 sm:pl-3.5 ">
               {post?.title?.length <= 60 && (
@@ -456,7 +456,7 @@ const PostCard = ({ _post, setPosts }) => {
               )}
           </div>
           {/* bottom row */}
-          <div className="text-p-text flex flex-row items-center px-3 sm:px-6 pt-1 justify-between sm:justify-start sm:space-x-28">
+          <div className="text-p-text  flex flex-row items-center px-3 sm:px-3.5 pt-1 justify-between sm:justify-start sm:space-x-28">
             {isMobile && (
               <div className="flex flex-row items-center gap-x-2">
                 <div className="hover:bg-p-btn-hover rounded-md p-1">
