@@ -35,7 +35,7 @@ const MobileBottomNav = () => {
   }
 
   return (
-    <div className="fixed bottom-0 w-full py-2.5 flex flex-row justify-evenly items-center bg-p-bg shadow-top">
+    <div className="fixed bottom-0 w-full py-2 flex flex-row justify-evenly items-center bg-p-bg shadow-top">
       <AiOutlineHome className="w-7 h-7 " onClick={routeToHome} />
       <MdOutlineExplore className="w-7 h-7 " onClick={routeToExplore} />
       <AiFillPlusCircle

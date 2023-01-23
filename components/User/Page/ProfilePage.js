@@ -13,6 +13,7 @@ import PostsColumn from '../../Post/PostsColumn'
 import EditProfile from '../EditProfile'
 import LensFollowButton from '../LensFollowButton'
 import useDevice from '../../Common/useDevice'
+import { GiBreakingChain } from 'react-icons/gi'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -228,14 +229,25 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
               {lensProfile?.id && (
-                <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mt-4 sm:mt-10 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
+                <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mb-1 mt-2 sm:mt-6 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
+                  <button
+                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+                      !showLensPosts && 'bg-p-bg'
+                    }  hover:bg-p-btn-hover`}
+                    onClick={() => {
+                      setShowLensPosts(false)
+                    }}
+                  >
+                    <GiBreakingChain className="h-5 w-5" />
+                    <div>Off-chain</div>
+                  </button>
                   <button
                     className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                       showLensPosts && 'bg-p-bg'
                     }  hover:bg-p-btn-hover`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
-                      setShowLensPosts(!showLensPosts)
+                      setShowLensPosts(true)
                     }}
                   >
                     <img

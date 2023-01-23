@@ -4,12 +4,14 @@ import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getAllCommunities } from '../../api/community'
 import { COMMUNITY_LIMIT } from '../../utils/config'
+import useDevice from '../Common/useDevice'
 import CommunityInfoCard from '../Community/CommunityInfoCard'
 import ExploreFeedNav from './ExploreFeedNav'
 
 const ExploreTopCommunitiesPage = () => {
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
+  const { isDesktop } = useDevice()
 
   useEffect(() => {
     getTopCommunities()
@@ -34,7 +36,7 @@ const ExploreTopCommunitiesPage = () => {
     <>
       <div className="w-full flex justify-center shrink-0 pt-6">
         <div className="w-full md:w-[650px]">
-          <ExploreFeedNav />
+          {isDesktop && <ExploreFeedNav />}
         </div>
       </div>
       <div>

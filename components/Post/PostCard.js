@@ -29,6 +29,7 @@ import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import ReactEmbedo from './embed/ReactEmbedo'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -46,7 +47,8 @@ const PostCard = ({ _post, setPosts }) => {
   )
   const [totalCount, setTotalCount] = useState(upvoteCount - downvoteCount)
   const { notifyInfo, notifyError } = useNotify()
-  // const { isDesktop } = useDevice()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { isMobile } = useDevice()
 
   // to maintain the current author state
   const [isAuthor, setIsAuthor] = useState(false)
@@ -172,6 +174,11 @@ const PostCard = ({ _post, setPosts }) => {
       notifyInfo('It may happen that some buttons are under construction.')
       return
     }
+    if (isMobile) {
+      // open the bottom drawer
+      setIsDrawerOpen(true)
+      return
+    }
     // setShowOptions(!showOptions)
     showModal({
       component: (
@@ -205,8 +212,6 @@ const PostCard = ({ _post, setPosts }) => {
       }
     })
   }
-
-  const { isMobile } = useDevice()
 
   return (
     <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 border-b-[0.5px] border-p-border sm:my-3 sm:rounded-2xl shadow-sm">
@@ -472,6 +477,29 @@ const PostCard = ({ _post, setPosts }) => {
                   onClick={showMoreOptions}
                   title="More"
                 />
+                <BottomDrawerWrapper
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                  showClose
+                  // height="235px"
+                >
+                  <MoreOptionsModal
+                    list={[
+                      {
+                        label: 'Edit Post',
+                        onClick: showEditModal,
+                        icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
+                      },
+                      {
+                        label: 'Delete Post',
+                        onClick: handleDeletePost,
+                        icon: () => (
+                          <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                        )
+                      }
+                    ]}
+                  />
+                </BottomDrawerWrapper>
               </div>
             )}
           </div>

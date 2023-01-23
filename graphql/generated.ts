@@ -4118,6 +4118,13 @@ export type RefreshAccessTokenMutationVariables = Exact<{
 
 export type RefreshAccessTokenMutation = { __typename?: 'Mutation', refresh: { __typename?: 'AuthenticationResult', accessToken: any, refreshToken: any } };
 
+export type SearchProfilesQueryVariables = Exact<{
+  request: SearchQueryRequest;
+}>;
+
+
+export type SearchProfilesQuery = { __typename?: 'Query', search: { __typename: 'ProfileSearchResult', items: Array<{ __typename?: 'Profile', id: any, name?: string | null, bio?: string | null, isFollowedByMe: boolean, isFollowing: boolean, followNftAddress?: any | null, metadata?: any | null, isDefault: boolean, handle: any, ownedBy: any, attributes?: Array<{ __typename?: 'Attribute', displayType?: string | null, traitType?: string | null, key: string, value: string }> | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null }, small?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null, medium?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null } | { __typename?: 'NftImage', contractAddress: any, tokenId: string, uri: any, verified: boolean } | null, coverPicture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null }, small?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null, medium?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null } | { __typename?: 'NftImage', contractAddress: any, tokenId: string, uri: any, verified: boolean } | null, dispatcher?: { __typename?: 'Dispatcher', address: any, canUseRelay: boolean } | null, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number, totalPosts: number, totalComments: number, totalMirrors: number, totalPublications: number, totalCollects: number }, followModule?: { __typename?: 'FeeFollowModuleSettings', type: FollowModules, recipient: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename?: 'ProfileFollowModuleSettings', type: FollowModules, contractAddress: any } | { __typename?: 'RevertFollowModuleSettings', type: FollowModules, contractAddress: any } | { __typename?: 'UnknownFollowModuleSettings', type: FollowModules, contractAddress: any, followModuleReturnData: any } | null, onChainIdentity: { __typename?: 'OnChainIdentity', proofOfHumanity: boolean, ens?: { __typename?: 'EnsOnChainIdentity', name?: any | null } | null, sybilDotOrg: { __typename?: 'SybilDotOrgIdentity', verified: boolean, source: { __typename?: 'SybilDotOrgIdentitySource', twitter: { __typename?: 'SybilDotOrgTwitterIdentity', handle?: string | null } } }, worldcoin: { __typename?: 'WorldcoinIdentity', isHuman: boolean } } }>, pageInfo: { __typename?: 'PaginatedResultInfo', prev?: any | null, next?: any | null, totalCount?: number | null } } | { __typename?: 'PublicationSearchResult' } };
+
 export type CreateSetDefaultProfileTypedDataMutationVariables = Exact<{
   request: CreateSetDefaultProfileRequest;
 }>;
@@ -5599,6 +5606,38 @@ export const useRefreshAccessTokenMutation = <
     useMutation<RefreshAccessTokenMutation, TError, RefreshAccessTokenMutationVariables, TContext>(
       ['RefreshAccessToken'],
       (variables?: RefreshAccessTokenMutationVariables) => fetchData<RefreshAccessTokenMutation, RefreshAccessTokenMutationVariables>(RefreshAccessTokenDocument, variables)(),
+      options
+    );
+export const SearchProfilesDocument = `
+    query SearchProfiles($request: SearchQueryRequest!) {
+  search(request: $request) {
+    ... on ProfileSearchResult {
+      __typename
+      items {
+        ... on Profile {
+          ...ProfileFields
+        }
+      }
+      pageInfo {
+        ...CommonPaginatedResultInfoFields
+      }
+    }
+  }
+}
+    ${ProfileFieldsFragmentDoc}
+${MediaFieldsFragmentDoc}
+${FollowModuleFieldsFragmentDoc}
+${CommonPaginatedResultInfoFieldsFragmentDoc}`;
+export const useSearchProfilesQuery = <
+      TData = SearchProfilesQuery,
+      TError = unknown
+    >(
+      variables: SearchProfilesQueryVariables,
+      options?: UseQueryOptions<SearchProfilesQuery, TError, TData>
+    ) =>
+    useQuery<SearchProfilesQuery, TError, TData>(
+      ['SearchProfiles', variables],
+      fetchData<SearchProfilesQuery, SearchProfilesQueryVariables>(SearchProfilesDocument, variables),
       options
     );
 export const CreateSetDefaultProfileTypedDataDocument = `

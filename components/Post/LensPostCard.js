@@ -36,6 +36,7 @@ import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import ReactEmbedo from './embed/ReactEmbedo'
 import PostShareButton from './PostShareButton'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 
 /**
  * Sample post object
@@ -157,6 +158,7 @@ const LensPostCard = ({ post }) => {
     post?.stats?.totalUpvotes - post?.stats?.totalDownvotes
   )
   const [postInfo, setPostInfo] = useState(post)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
@@ -300,6 +302,11 @@ const LensPostCard = ({ post }) => {
 
   const showMoreOptions = async (e) => {
     if (!isAuthor) return
+    if (isMobile) {
+      // open the bottom drawer
+      setIsDrawerOpen(true)
+      return
+    }
     showModal({
       component: (
         <>
@@ -308,9 +315,7 @@ const LensPostCard = ({ post }) => {
               {
                 label: 'Delete Post',
                 onClick: handleDeletePost,
-                icon: () => (
-                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                )
+                icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
               }
             ]}
           />
@@ -330,7 +335,7 @@ const LensPostCard = ({ post }) => {
   return (
     <>
       {postInfo && (
-        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 my-2 sm:my-3 sm:rounded-2xl shadow-sm">
+        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 border-b-[0.5px] sm:my-3 sm:rounded-2xl shadow-sm">
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
@@ -594,8 +599,9 @@ const LensPostCard = ({ post }) => {
                     text={postInfo?.metadata?.name}
                   />
                 </div>
-                <div>
-                  {isAuthor && (
+
+                {isAuthor && (
+                  <>
                     <div className="relative">
                       <BsThreeDots
                         className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
@@ -603,8 +609,26 @@ const LensPostCard = ({ post }) => {
                         title="More"
                       />
                     </div>
-                  )}
-                </div>
+                    <BottomDrawerWrapper
+                      isDrawerOpen={isDrawerOpen}
+                      setIsDrawerOpen={setIsDrawerOpen}
+                      showClose
+                      // height="235px"
+                    >
+                      <MoreOptionsModal
+                        list={[
+                          {
+                            label: 'Delete Post',
+                            onClick: handleDeletePost,
+                            icon: () => (
+                              <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                            )
+                          }
+                        ]}
+                      />
+                    </BottomDrawerWrapper>
+                  </>
+                )}
               </div>
             </div>
           </div>
