@@ -16,26 +16,26 @@ const NewMobileTopNav = () => {
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
   const router = useRouter()
 
-  let prevScrollpos = null
+  // let prevScrollpos = null
 
-  if (typeof window !== 'undefined') {
-    prevScrollpos = window.pageYOffset
-    window.onscroll = function () {
-      const mobileTopNavEl = document.getElementById('mobile-top-navbar')
-      if (!mobileTopNavEl) return
-      if (router.pathname !== '/' && !router.pathname.startsWith('/feed/')) {
-        mobileTopNavEl.style.top = '0'
-        return
-      }
-      const currentScrollPos = window.pageYOffset
-      if (prevScrollpos > currentScrollPos) {
-        mobileTopNavEl.style.top = '0'
-      } else {
-        mobileTopNavEl.style.top = '-100px'
-      }
-      prevScrollpos = currentScrollPos
-    }
-  }
+  // if (typeof window !== 'undefined') {
+  //   prevScrollpos = window.pageYOffset
+  //   window.onscroll = function () {
+  //     const mobileTopNavEl = document.getElementById('mobile-top-navbar')
+  //     if (!mobileTopNavEl) return
+  //     if (router.pathname !== '/' && !router.pathname.startsWith('/feed/')) {
+  //       mobileTopNavEl.style.top = '0'
+  //       return
+  //     }
+  //     const currentScrollPos = window.pageYOffset
+  //     if (prevScrollpos > currentScrollPos) {
+  //       mobileTopNavEl.style.top = '0'
+  //     } else {
+  //       mobileTopNavEl.style.top = '-100px'
+  //     }
+  //     prevScrollpos = currentScrollPos
+  //   }
+  // }
 
   return (
     <>
