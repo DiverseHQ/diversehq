@@ -18,7 +18,7 @@ const MasterWrapper = ({ children }) => {
         <QueryClientProvider client={queryClient}>
           <LensUserContextProvider>
             <WalletProvider>
-              <ThemeProvider defaultTheme="light">
+              <ThemeProvider defaultTheme="system">
                 <LexicalWrapper>
                   <CustomPopUpModalProvider>
                     {children}

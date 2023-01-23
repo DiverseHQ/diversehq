@@ -61,7 +61,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-2.5 items-center shadow-md gap-2 sticky top-0 bg-p-bg dark:bg-s-bg transition-all delay-400">
+    <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-2.5 items-center shadow-md gap-2 sticky top-0 bg-p-bg dark:bg-s-bg">
       {/* <div className="w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px]">
         <LogoComponent />
       </div>

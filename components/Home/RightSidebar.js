@@ -119,20 +119,6 @@ const RightSidebar = () => {
           communitiesList={topCommunities}
         />
       )}
-
-      {topCommunities?.length > 0 && (
-        <CommunitiesDiv
-          text="Top Communities"
-          communitiesList={topCommunities}
-        />
-      )}
-
-      {topCommunities?.length > 0 && (
-        <CommunitiesDiv
-          text="Top Communities"
-          communitiesList={topCommunities}
-        />
-      )}
     </div>
   )
 }

@@ -13,7 +13,7 @@ const MainLayout = ({ children }) => {
   return (
     <>
       {!isDesktop && (
-        <div className="text-p-text bg-p-bg min-h-screen">
+        <div className="text-p-text bg-p-bg min-h-screen transition-all duration-500">
           {!isDesktop && (
             <>
               <NewMobileTopNav />
@@ -28,7 +28,7 @@ const MainLayout = ({ children }) => {
         </div>
       )}
       {isDesktop && (
-        <div className="relative min-h-screen bg-p-bg">
+        <div className="relative min-h-screen bg-p-bg transition-all duration-500">
           <Navbar />
           <div className="flex flex-row">
             <NewLeftSidebar />
