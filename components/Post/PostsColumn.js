@@ -6,6 +6,7 @@ import { POST_LIMIT } from '../../utils/config.ts'
 import { isValidEthereumAddress } from '../../utils/helper.ts'
 import { getPostOfCommunity } from '../../api/community'
 import { getAllPosts } from '../../api/post'
+import { useRouter } from 'next/router'
 
 /**
  * sources are user, community, all
@@ -16,6 +17,7 @@ import { getAllPosts } from '../../api/post'
  */
 
 const PostsColumn = ({ source, sortBy, data }) => {
+  const router = useRouter()
   const [hasMore, setHasMore] = useState(true)
   const [posts, setPosts] = useState([])
 
@@ -61,6 +63,11 @@ const PostsColumn = ({ source, sortBy, data }) => {
   const handleGetMorePostsForAll = async () => {
     try {
       if (!hasMore) return
+      if (
+        (sortBy === 'top' && router.pathname !== '/feed/top') ||
+        (sortBy === 'new' && router.pathname !== '/feed/new')
+      )
+        return
       const fetchedPosts = await getAllPosts(POST_LIMIT, posts.length, sortBy)
       console.log('fetchedPosts', fetchedPosts)
       if (fetchedPosts.posts.length < POST_LIMIT) {

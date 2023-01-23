@@ -8,14 +8,6 @@ const Home = () => {
   const { isDesktop } = useDevice()
   return (
     <>
-      {/* <SinglePageSeoHead
-        title={'Home / DiverseHQ'}
-        description={
-          'Join Communities, Share your Creativity and get Rewarded.'
-        }
-        url={'https://app.diversehq.xyz'}
-        image={'https://app.diversehq.xyz/apple-touch-icon.png'}
-      /> */}
       <NextSeo
         title="Home / DiverseHQ"
         description="You don't need audience to earn from your content. Join communities, share your content and earn from it."

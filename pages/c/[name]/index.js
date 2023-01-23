@@ -1,10 +1,10 @@
 import React from 'react'
-import PostsColumn from '../../../components/Post/PostsColumn'
 import NavFilterCommunity from '../../../components/Post/NavFilterCommunity'
 import { getCommunityInfo } from '../../../api/community'
 import CommunityInfoCard from '../../../components/Community/CommunityInfoCard'
 import CommunityNotFound from '../../../components/Community/Page/CommunityNotFound'
 import CommunityPageSeo from '../../../components/Community/CommunityPageSeo'
+import LensPostsCommunityPublicationsColumn from '../../../components/Post/LensPostsCommunityPublicationsColumn'
 const CommunityPage = ({ community }) => {
   return (
     <div className="relative">
@@ -15,11 +15,7 @@ const CommunityPage = ({ community }) => {
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
               <NavFilterCommunity name={community.name} />
-              <PostsColumn
-                source="community"
-                sortBy="new"
-                data={community.name}
-              />
+              <LensPostsCommunityPublicationsColumn communityInfo={community} />
             </div>
           </div>
         </>

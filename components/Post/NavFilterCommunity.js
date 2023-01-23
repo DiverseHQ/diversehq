@@ -7,7 +7,7 @@ import { MdLeaderboard } from 'react-icons/md'
 const NavFilterCommunity = ({ name }) => {
   const router = useRouter()
   const { pathname } = router
-  const [active, setActive] = useState('new')
+  const [active, setActive] = useState('lens')
 
   useEffect(() => {
     console.log('pathname', pathname)
@@ -19,11 +19,24 @@ const NavFilterCommunity = ({ name }) => {
       setActive('hot')
     } else if (pathname.endsWith('/lens')) {
       setActive('lens')
+    } else {
+      setActive('lens')
     }
   }, [pathname])
 
   return (
     <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mb-1 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
+      <button
+        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+          active === 'lens' && 'bg-p-bg'
+        }  hover:bg-p-btn-hover`}
+        onClick={() => {
+          router.push(`/c/${name}/feed/lens`)
+        }}
+      >
+        <img src="/lensLogo.svg" className="h-5 w-5" alt="lens logo icon" />
+        <div>Lens</div>
+      </button>
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'new' && 'bg-p-bg'
@@ -45,17 +58,6 @@ const NavFilterCommunity = ({ name }) => {
       >
         <MdLeaderboard />
         <div>Top</div>
-      </button>
-      <button
-        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-          active === 'lens' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover`}
-        onClick={() => {
-          router.push(`/c/${name}/feed/lens`)
-        }}
-      >
-        <img src="/lensLogo.svg" className="h-5 w-5" alt="lens logo icon" />
-        <div>Lens</div>
       </button>
       {/* <div
         className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${

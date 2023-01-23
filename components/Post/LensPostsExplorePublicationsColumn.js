@@ -14,9 +14,11 @@ import {
 } from '../../api/community'
 import LensPostCard from './LensPostCard'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import { useRouter } from 'next/router'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 
 const LensPostsExplorePublicationsColumn = () => {
+  const router = useRouter()
   const [posts, setPosts] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState(null)
@@ -48,7 +50,11 @@ const LensPostsExplorePublicationsColumn = () => {
     }
   )
   const getMorePosts = async () => {
-    if (nextCursor) {
+    if (
+      nextCursor &&
+      (router.pathname === '/' || router.pathname === '/feed/lens')
+    ) {
+      console.log('fetching more posts')
       setCursor(nextCursor)
       return
     }
