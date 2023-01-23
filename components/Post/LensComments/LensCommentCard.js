@@ -21,6 +21,7 @@ import { useRouter } from 'next/router'
 import { HiOutlineTrash } from 'react-icons/hi'
 import useDevice from '../../Common/useDevice'
 import PopUpWrapper from '../../Common/PopUpWrapper'
+import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
 TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
@@ -40,6 +41,8 @@ const LensCommentCard = ({ comment }) => {
   const [isAuthor, setIsAuthor] = useState(
     lensProfile?.defaultProfile?.id === comment?.profile?.id
   )
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { isMobile } = useDevice()
 
   const { showModal, hideModal } = usePopUpModal()
 
@@ -143,8 +146,14 @@ const LensCommentCard = ({ comment }) => {
   }
   const showMoreOptions = async (e) => {
     if (!isAuthor) return
+
     if (!comment?.id) {
       notifyInfo('not indexed yet, come back later')
+      return
+    }
+    if (isMobile) {
+      // open the bottom drawer
+      setIsDrawerOpen(true)
       return
     }
     showModal({
@@ -171,7 +180,6 @@ const LensCommentCard = ({ comment }) => {
       }
     })
   }
-  const { isMobile } = useDevice()
 
   const openReplyModal = async () => {
     showModal({
@@ -277,11 +285,32 @@ const LensCommentCard = ({ comment }) => {
                   Reply
                 </button>
                 {isAuthor && (
-                  <BsThreeDots
-                    className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
-                    onClick={showMoreOptions}
-                    title="More"
-                  />
+                  <>
+                    <BsThreeDots
+                      className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
+                      onClick={showMoreOptions}
+                      title="More"
+                    />
+                    <BottomDrawerWrapper
+                      isDrawerOpen={isDrawerOpen}
+                      setIsDrawerOpen={setIsDrawerOpen}
+                    >
+                      <MoreOptionsModal
+                        list={[
+                          {
+                            label: 'Delete Comment',
+                            onClick: async () => {
+                              await handleDeleteComment()
+                              setIsDrawerOpen(false)
+                            },
+                            icon: () => (
+                              <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                            )
+                          }
+                        ]}
+                      />
+                    </BottomDrawerWrapper>
+                  </>
                 )}
               </div>
 

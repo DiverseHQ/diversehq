@@ -22,6 +22,8 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
+import useDevice from '../Common/useDevice'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
@@ -41,6 +43,8 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const { showModal, hideModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { isMobile } = useDevice()
 
   // edit comment state
   const [editing, setEditing] = useState(false)
@@ -106,6 +110,15 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   }, [])
 
   const showMoreOptions = (e) => {
+    if (!isAuthor) {
+      notifyInfo('It may happen that some buttons are under construction.')
+      return
+    }
+    if (isMobile) {
+      // open the bottom drawer
+      setIsDrawerOpen(true)
+      return
+    }
     // setShowOptions(!showOptions)
     showModal({
       component: (
@@ -118,12 +131,18 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             list={[
               {
                 label: 'Edit Comment',
-                onClick: handleEditComment,
+                onClick: async () => {
+                  handleEditComment()
+                  setIsDrawerOpen(false)
+                },
                 icon: () => <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
               },
               {
                 label: 'Delete Comment',
-                onClick: handleDeleteComment,
+                onClick: async () => {
+                  await handleDeleteComment
+                  setIsDrawerOpen(false)
+                },
                 icon: () => (
                   <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
                 )
@@ -282,13 +301,39 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
               </div>
 
               {isAuthor && (
-                <div className="relative">
-                  <BsThreeDots
-                    className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
-                    onClick={showMoreOptions}
-                    title="More"
-                  />
-                </div>
+                <>
+                  <div className="relative">
+                    <BsThreeDots
+                      className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
+                      onClick={showMoreOptions}
+                      title="More"
+                    />
+                  </div>
+
+                  <BottomDrawerWrapper
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                  >
+                    <MoreOptionsModal
+                      list={[
+                        {
+                          label: 'Edit Comment',
+                          onClick: handleEditComment,
+                          icon: () => (
+                            <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                          )
+                        },
+                        {
+                          label: 'Delete Comment',
+                          onClick: handleDeleteComment,
+                          icon: () => (
+                            <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                          )
+                        }
+                      ]}
+                    />
+                  </BottomDrawerWrapper>
+                </>
               )}
             </div>
           </div>

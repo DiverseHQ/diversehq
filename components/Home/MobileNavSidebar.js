@@ -20,6 +20,7 @@ import { DISCORD_INVITE_LINK } from '../../utils/config'
 import { useDisconnect } from 'wagmi'
 import { getCreatedCommunitiesApi } from '../../api/community'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -223,34 +224,38 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         <BottomDrawerWrapper
           isDrawerOpen={isDrawerOpen}
           setIsDrawerOpen={setIsDrawerOpen}
-          height="296px"
+          showClose={true}
         >
           <div className="flex flex-col justify-center items-center">
             <h1 className="font-bold text-lg mt-5">Created Communities</h1>
             <div
-              className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start"
+              className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen "
               ref={dropdownRef}
             >
               {createdCommunities.map((community) => (
                 <div
                   key={community._id}
-                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
+                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn-hover mx-4"
                   id={community._id}
                   onClick={() => {
                     router.push(`/c/${community.name}`)
                     setIsOpenSidebar(false)
                   }}
                 >
-                  <img
+                  <ImageWithPulsingLoader
                     src={
                       community.logoImageUrl
                         ? community.logoImageUrl
                         : '/gradient.jpg'
                     }
                     alt="community logo"
-                    className="rounded-md sm:rounded-xl w-9 h-9"
+                    className="rounded-full object-cover w-12 h-12"
                   />
-                  <div className="text-p-text ml-4" id={community._id}>
+
+                  <div
+                    className="text-p-text ml-4 text-lg font-semibold"
+                    id={community._id}
+                  >
                     {community.name}
                   </div>
                 </div>

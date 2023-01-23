@@ -229,7 +229,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
               {lensProfile?.id && (
-                <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mb-1 mt-2 sm:mt-6 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center">
+                <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mb-1 mt-2 sm:mt-6 py-1 sm:py-3 w-full sm:rounded-xl justify-start space-x-9 items-center">
                   <button
                     className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                       !showLensPosts && 'bg-p-bg'
