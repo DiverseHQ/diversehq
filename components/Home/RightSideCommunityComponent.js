@@ -8,7 +8,7 @@ const RightSideCommunityComponent = ({ community }) => {
   return (
     <Link
       href={`/c/${community?.name}`}
-      className="flex flex-row gap-2 items-center hover:bg-[#eee] rounded-full "
+      className="flex flex-row gap-2 items-center text-p-text hover:bg-p-hover hover:text-p-hover-text rounded-[15px]"
       passHref
     >
       <ImageWithPulsingLoader
@@ -17,7 +17,7 @@ const RightSideCommunityComponent = ({ community }) => {
         }
         className="w-[40px] h-[40px] object-cover  rounded-full"
       />
-      <span className="text-p-text">{community?.name}</span>
+      <span>{community?.name}</span>
     </Link>
   )
 }

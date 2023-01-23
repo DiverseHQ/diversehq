@@ -78,7 +78,7 @@ const NavFilterAllPosts = () => {
       <button
         className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
           active === 'lens' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover`}
+        }  hover:bg-p-hover hover:text-p-hover-text`}
         onClick={() => {
           router.push('/feed/lens')
         }}
@@ -93,7 +93,7 @@ const NavFilterAllPosts = () => {
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'new' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover`}
+        }  hover:bg-p-hover hover:text-p-hover-text`}
         onClick={() => {
           router.push('/feed/new')
         }}
@@ -103,14 +103,14 @@ const NavFilterAllPosts = () => {
       </button>
       <div className="flex flex-col">
         <button
-          className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-btn-hover`}
+          className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-hover hover:text-p-hover-text`}
           onClick={getJoinedCommunities}
         >
           <p>Communities</p>
           <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
         </button>
         <div
-          className="bg-white/70  backdrop-blur-lg rounded-md sm:rounded-xl absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
+          className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-md sm:rounded-xl absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
           ref={dropdownRef}
         >
           {showJoinedCommunities && (
@@ -146,7 +146,7 @@ const NavFilterAllPosts = () => {
       <button
         className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
           active === 'top' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover`}
+        }  hover:bg-p-hover hover:text-p-hover-text`}
         onClick={() => {
           router.push('/feed/top')
         }}

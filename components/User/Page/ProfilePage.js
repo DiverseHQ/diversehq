@@ -154,18 +154,18 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
             </div>
             <div>{profile.bio}</div>
             {isMobile ? (
-              <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px]">
+              <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px] dark:bg-p-bg">
                 <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
                   <span className="font-bold">
                     {profile?.communities?.length}
                   </span>
                   <span className="">Joined</span>
                 </div>
-                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
                   <span className="font-semibold">{numberOfPosts}</span>
                   <span className="font-light">Posts</span>
                 </div>
-                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
                   <span className="font-semibold">
                     {profile?.communityCreationSpells}
                   </span>
@@ -175,13 +175,13 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 {/* onchain lens data */}
                 {lensProfile && (
                   <>
-                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
                       <span className="font-bold">
                         {lensProfile?.stats?.totalFollowers}
                       </span>
                       <span className="font-light">Followers</span>
                     </div>
-                    <div className="flex flex-col items-center bg-[#62F030] py-1 px-2 sm:px-4 rounded-[10px] text-ap-text">
+                    <div className="flex flex-col items-center bg-[#62F030] py-1 px-2 sm:px-4 rounded-[10px] text-ap-text dark:bg-p-bg">
                       <span className="font-bold">
                         {lensProfile?.stats?.totalPosts}
                       </span>
@@ -192,17 +192,17 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
               </div>
             ) : (
               <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center">
-                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
                   <span className="">Joined </span>
                   <span className="font-bold">
                     {profile?.communities?.length}
                   </span>
                   <span className=""> Communities</span>
                 </div>
-                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
                   <span>Post : {numberOfPosts}</span>
                 </div>
-                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
                   <span>
                     Community Spells : {profile?.communityCreationSpells}
                   </span>
@@ -211,12 +211,12 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 {/* onchain lens data */}
                 {lensProfile && (
                   <>
-                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
                       <span>
                         Followers: {lensProfile?.stats?.totalFollowers}
                       </span>
                     </div>
-                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
                       <span>LensPosts : {lensProfile?.stats?.totalPosts}</span>
                     </div>
                   </>

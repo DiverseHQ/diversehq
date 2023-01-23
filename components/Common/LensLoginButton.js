@@ -99,7 +99,7 @@ const LensLoginButton = () => {
   return (
     <div>
       {user && address && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 text-p-text">
           {isSignedIn && hasProfile && (
             <div className="flex flex-col items-start">
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (

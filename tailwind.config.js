@@ -23,7 +23,9 @@ module.exports = {
         's-text': 'var(--text-secondary)', // secondary text color
         'ap-text': 'var(--text-anti-primary)', // anti primary text color (revert of primary color)
         'lens-text': 'var(--text-lens)', // lens text color
-        'p-border': 'var(--border-primary)' // primary border color
+        'p-border': 'var(--border-primary)', // primary border color
+        'p-hover': 'var(--hover-primary)', // primary hover color
+        'p-hover-text': 'var(--hover-primary-text)' // primary hover text color
       },
       boxShadow: {
         top: '0px -2px 5px 1px rgba(0, 0, 0, 0.1)',

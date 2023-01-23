@@ -76,7 +76,7 @@ const NewLeftSidebar = () => {
             Create Post
           </button>
           <button
-            className="flex flex-row items-center justify-center w-full px-2 py-2 rounded-[10px] border-[1px] border-p-btn dark:border-p-text text-p-btn dark:text-p-text text-[16px] font-semibold hover:bg-p-btn dark\:hover\:bg-[#000] hover:text-p-btn-text"
+            className="flex flex-row items-center justify-center w-full px-2 py-2 rounded-[10px] border-[1px] border-p-btn dark:border-p-text text-p-btn dark:text-p-text text-[16px] font-semibold"
             onClick={createCommunity}
           >
             Create Community
@@ -85,7 +85,7 @@ const NewLeftSidebar = () => {
       </div>
       <div className="bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border">
         <Link
-          className="flex flex-row items-center hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2 text-p-text"
+          className="flex flex-row items-center hover:bg-p-hover hover:text-p-hover-text px-2 py-2 md:px-4 rounded-[15px] gap-1 md:gap-2 text-p-text"
           href={'/'}
         >
           <AiOutlineHome className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
@@ -95,7 +95,7 @@ const NewLeftSidebar = () => {
           href={DISCORD_INVITE_LINK}
           target="_blank"
           rel="noreferrer"
-          className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-2 py-2 md:px-4 rounded-[20px] gap-1 md:gap-2 relative w-full text-p-text"
+          className="flex flex-row items-center bg-transparent hover:bg-p-hover hover:text-p-hover-text px-2 py-2 md:px-4 rounded-[15px] gap-1 md:gap-2 relative w-full text-p-text"
         >
           <FaDiscord className="w-[24px] h-[24px] object-contain" />
           <span className="text-[16px] font-medium">Discord</span>
