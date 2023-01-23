@@ -30,13 +30,13 @@ import {
   unpinFromIpfsInfura
 } from '../../utils/utils'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-import { BsThreeDots } from 'react-icons/bs'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import ReactEmbedo from './embed/ReactEmbedo'
 import PostShareButton from './PostShareButton'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { RiMore2Fill } from 'react-icons/ri'
 
 /**
  * Sample post object
@@ -335,7 +335,7 @@ const LensPostCard = ({ post }) => {
   return (
     <>
       {postInfo && (
-        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 border-b-[0.5px] sm:my-3 sm:rounded-2xl shadow-sm">
+        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 border-b-[0.5px] sm:my-3 sm:rounded-2xl shadow-sm">
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
@@ -425,41 +425,77 @@ const LensPostCard = ({ post }) => {
                 </div>
               </>
             )}
-            <div className="sm:mr-5">
+            <div className="sm:mr-5 flex flex-row items-center">
               <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+              {isAuthor && (
+                <div className="relative">
+                  <div className="hover:bg-p-btn-hover rounded-md p-1">
+                    <RiMore2Fill
+                      className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
+                      onClick={showMoreOptions}
+                      title="More"
+                    />
+                  </div>
+                  <BottomDrawerWrapper
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                    showClose
+                    // height="235px"
+                  >
+                    <MoreOptionsModal
+                      list={[
+                        {
+                          label: 'Delete Post',
+                          onClick: async () => {
+                            await handleDeletePost()
+                            setIsDrawerOpen(false)
+                          },
+                          icon: () => (
+                            <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                          )
+                        }
+                      ]}
+                    />
+                  </BottomDrawerWrapper>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center ml-[9px] my-2 text-p-text">
-                <img
-                  //  onClick={liked ? handleUnLike : handleLike}
-                  src={
-                    reaction === ReactionTypes.Upvote
-                      ? '/UpvoteFilled.svg'
-                      : '/Upvote.svg'
-                  }
-                  onClick={handleUpvote}
-                  className="w-6 h-6 cursor-pointer"
-                />
-                <div className="font-bold">{voteCount}</div>
-                <img
-                  src={
-                    reaction === ReactionTypes.Downvote
-                      ? '/DownvoteFilled.svg'
-                      : '/Downvote.svg'
-                  }
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={handleDownvote}
-                />
+              <div className="flex flex-col items-center ml-1.5 mt-1">
+                <div className="hover:bg-p-btn-hover rounded-md p-1">
+                  <img
+                    //  onClick={liked ? handleUnLike : handleLike}
+                    src={
+                      reaction === ReactionTypes.Upvote
+                        ? '/UpvoteFilled.svg'
+                        : '/Upvote.svg'
+                    }
+                    onClick={handleUpvote}
+                    className="w-6 h-6 cursor-pointer"
+                  />
+                </div>
+                <div className="font-bold leading-5">{voteCount}</div>
+                <div className="hover:bg-p-btn-hover rounded-md p-1">
+                  <img
+                    src={
+                      reaction === ReactionTypes.Downvote
+                        ? '/DownvoteFilled.svg'
+                        : '/Downvote.svg'
+                    }
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={handleDownvote}
+                  />
+                </div>
               </div>
             )}
 
             {/* main content */}
-            <div className="flex flex-col w-full text-p-text">
+            <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
-                <div className="mb-2 px-3 sm:pl-5 ">
+                <div className="mb-2 px-3 sm:pl-3.5 ">
                   {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
                     <div className="font-medium text-base sm:text-lg w-full break-words">
                       {postInfo?.metadata?.name}
@@ -555,83 +591,67 @@ const LensPostCard = ({ post }) => {
               </div>
 
               {/* bottom row */}
-              <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
+              <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-1 justify-between sm:justify-start sm:space-x-28">
                 {isMobile && (
-                  <div className="flex flex-row items-center gap-x-2 text-p-text">
-                    <img
-                      src={
-                        reaction === ReactionTypes.Upvote
-                          ? '/UpvoteFilled.svg'
-                          : '/Upvote.svg'
-                      }
-                      onClick={handleUpvote}
-                      className="w-5 h-5 cursor-pointer"
-                    />
+                  <div className="flex flex-row items-center gap-x-2">
+                    <div className="hover:bg-p-btn-hover rounded-md p-1">
+                      <img
+                        src={
+                          reaction === ReactionTypes.Upvote
+                            ? '/UpvoteFilled.svg'
+                            : '/Upvote.svg'
+                        }
+                        onClick={handleUpvote}
+                        className="w-5 h-5 cursor-pointer"
+                      />
+                    </div>
                     <div className="font-bold">{voteCount}</div>
-                    <img
-                      src={
-                        reaction === ReactionTypes.Downvote
-                          ? '/DownvoteFilled.svg'
-                          : '/Downvote.svg'
-                      }
-                      className="w-5 h-5 cursor-pointer"
-                      onClick={handleDownvote}
-                    />
+                    <div className="hover:bg-p-btn-hover rounded-md p-1">
+                      <img
+                        src={
+                          reaction === ReactionTypes.Downvote
+                            ? '/DownvoteFilled.svg'
+                            : '/Downvote.svg'
+                        }
+                        className="w-5 h-5 cursor-pointer"
+                        onClick={handleDownvote}
+                      />
+                    </div>
                   </div>
                 )}
-
-                <Link
-                  href={`/p/${postInfo.id}`}
-                  className="flex flex-row items-center"
-                  passHref
-                >
-                  {postInfo?.stats?.totalAmountOfComments === 0 && (
-                    <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                <div className="hover:bg-p-btn-hover rounded-md p-1">
+                  {!router.pathname.startsWith('/p') ? (
+                    <Link
+                      href={`/p/${postInfo.id}`}
+                      className="flex flex-row items-center"
+                      passHref
+                    >
+                      {postInfo?.stats?.totalAmountOfComments === 0 && (
+                        <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      )}
+                      {postInfo?.stats?.totalAmountOfComments > 0 && (
+                        <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      )}
+                      {postInfo?.stats?.totalAmountOfComments}
+                    </Link>
+                  ) : (
+                    <div className="flex flex-row items-center">
+                      {postInfo?.stats?.totalAmountOfComments === 0 && (
+                        <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      )}
+                      {postInfo?.stats?.totalAmountOfComments > 0 && (
+                        <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      )}
+                      {postInfo?.stats?.totalAmountOfComments}
+                    </div>
                   )}
-                  {postInfo?.stats?.totalAmountOfComments > 0 && (
-                    <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                  )}
-                  {postInfo?.stats?.totalAmountOfComments}
-                </Link>
-                <div>
+                </div>
+                <div className="hover:bg-p-btn-hover rounded-md p-1">
                   <PostShareButton
                     url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
                     text={postInfo?.metadata?.name}
                   />
                 </div>
-
-                {isAuthor && (
-                  <>
-                    <div className="relative">
-                      <BsThreeDots
-                        className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-6 sm:h-6"
-                        onClick={showMoreOptions}
-                        title="More"
-                      />
-                    </div>
-                    <BottomDrawerWrapper
-                      isDrawerOpen={isDrawerOpen}
-                      setIsDrawerOpen={setIsDrawerOpen}
-                      showClose
-                      // height="235px"
-                    >
-                      <MoreOptionsModal
-                        list={[
-                          {
-                            label: 'Delete Post',
-                            onClick: async () => {
-                              await handleDeletePost()
-                              setIsDrawerOpen(false)
-                            },
-                            icon: () => (
-                              <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                            )
-                          }
-                        ]}
-                      />
-                    </BottomDrawerWrapper>
-                  </>
-                )}
               </div>
             </div>
           </div>

@@ -19,6 +19,7 @@ import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
 import Link from 'next/link'
+import { FiSend } from 'react-icons/fi'
 
 const LensCreateComment = ({
   postId,
@@ -248,33 +249,38 @@ const LensCreateComment = ({
                   </div>
                 </div>
               </div>
-              <div className="pl-8 sm:pl-10">
-                <input
-                  type="text"
+              <div className="px-10">
+                <textarea
                   ref={commentRef}
-                  className={`border-none outline-none w-full mt-1   text-base bg-s-bg ${
+                  className={`border-none outline-none w-full mt-1 text-base bg-s-bg ${
                     loading ? 'text-s-text' : 'text-p-text'
                   }`}
-                  placeholder="What do you think?"
+                  placeholder="Say it..."
                   onKeyUp={(e) => {
                     if (e.key === 'Enter') createComment()
                   }}
                   disabled={loading}
+                  rows={1}
+                  style={{ resize: 'none' }}
+                  onInput={(e) => {
+                    e.target.style.height = 'auto'
+                    e.target.style.height = e.target.scrollHeight + 'px'
+                  }}
                 />
-                <div className="w-full flex flex-row justify-end">
-                  <button
-                    disabled={loading}
-                    onClick={createComment}
-                    className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
-                  >
-                    {loading ? 'Commenting...' : 'Comment'}
-                  </button>
-                </div>
+              </div>
+              <div className="w-full flex flex-row justify-end">
+                <button
+                  disabled={loading}
+                  onClick={createComment}
+                  className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
+                >
+                  {loading ? 'Sending...' : 'Send'}
+                </button>
               </div>
             </div>
           </>
         ) : (
-          <div className="px-3 sm:px-5 w-full bg-s-bg py-3 fixed z-10 top-[calc(100vh-110px)]">
+          <div className="px-2 sm:px-5 w-full bg-s-bg py-3 fixed z-50 bottom-[50px]">
             <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4">
               <div className="flex flex-row gap-2 sm:gap-4 items-center w-full">
                 <div className="flex flex-row items-center">
@@ -288,28 +294,40 @@ const LensCreateComment = ({
                   />
                 </div>
                 <div className="flex-1">
-                  <input
+                  <textarea
                     type="text"
                     ref={commentRef}
-                    className={`border-none outline-none w-full text-base sm:text-[18px] py-1 px-4 sm:py-2 rounded-[18px] bg-p-bg font-medium ${
+                    className={`border-none outline-none w-full text-base sm:text-[18px] py-1 px-4 sm:py-2 rounded-xl bg-p-bg font-medium ${
                       loading ? 'text-s-text' : 'text-p-text'
                     }`}
                     placeholder="What do you think?"
                     onKeyUp={(e) => {
                       if (e.key === 'Enter') createComment()
                     }}
+                    onInput={(e) => {
+                      e.target.style.height = 'auto'
+                      e.target.style.height = `${e.target.scrollHeight}px`
+                    }}
                     disabled={loading}
+                    rows={1}
+                    style={{ resize: 'none' }}
                   />
                 </div>
               </div>
               <div className="flex flex-row items-center justify-center">
-                <button
-                  disabled={loading}
-                  onClick={createComment}
-                  className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
-                >
-                  {loading ? 'Commenting...' : 'Comment'}
-                </button>
+                {!loading && (
+                  <FiSend
+                    onClick={createComment}
+                    className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
+                  />
+                )}
+                {loading && (
+                  <img
+                    src="/loading.svg"
+                    alt="loading"
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  />
+                )}
               </div>
             </div>
           </div>

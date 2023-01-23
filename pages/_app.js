@@ -16,7 +16,7 @@ import { DefaultSeo } from 'next-seo'
 import MainLayout from '../components/Home/MainLayout'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import Loader from '../components/Loader'
+// import Loader from '../components/Loader'
 import { useRef } from 'react'
 // import { useRouter } from 'next/router'
 
@@ -124,25 +124,22 @@ function MyApp({ Component, pageProps }) {
         }}
       />
       <MasterWrapper>
-        <MainLayout>
+        <MainLayout isLoading={isLoading}>
           <>
             <div>
               {Object.entries(retainedComponents.current).map(([path, c]) => (
                 <div
                   key={path}
                   style={{
-                    display:
-                      router.asPath === path && !isLoading ? 'block' : 'none'
+                    display: router.asPath === path ? 'block' : 'none'
                   }}
                 >
                   {c.component}
                 </div>
               ))}
             </div>
-            {isLoading && <Loader />}
-            {!isRetainableRoute && (
-              <>{!isLoading && <Component {...pageProps} />}</>
-            )}
+
+            {!isRetainableRoute && <Component {...pageProps} />}
           </>
         </MainLayout>
       </MasterWrapper>

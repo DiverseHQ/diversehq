@@ -200,9 +200,13 @@ const LeftSidebar = () => {
                 />
               )}
               <div className="flex flex-col items-start justify-center pr-1">
-                {user?.name && (
+                {user?.name ? (
                   <div className="font-bold">
                     {stringToLength(user?.name, 8)}
+                  </div>
+                ) : (
+                  <div className="text-base sm:text-lg">
+                    {stringToLength(user.walletAddress, 8)}
                   </div>
                 )}
                 {hasProfile && isSignedIn && (

@@ -24,6 +24,7 @@ import {
 } from '../../api/community'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -160,51 +161,51 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         </div>
         <div className="flex flex-col px-4 bg-p-bg">
           <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
+            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
             onClick={() => {
               routeToProfile()
               setIsOpenSidebar(false)
             }}
           >
-            <MdOutlinePerson className="w-6 h-6 object-contain" />
+            <MdOutlinePerson className="w-7 h-7 object-contain" />
             <span className="text-p-text text-xl">Profile</span>
           </button>
 
           <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
+            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
             onClick={() => setShowCreatedCommunities(true)}
             ref={createdCommunitiesButtonRef}
           >
-            <MdOutlineGroups className="w-6 h-6 object-contain" />
-            <span className="text-p-text text-xl">Your Communities</span>
+            <AiOutlineUsergroupAdd className="w-7 h-7 object-contain" />
+            <span className="text-p-text text-xl">Created Communities</span>
           </button>
 
           <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
+            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
             onClick={() => setShowJoinedCommunities(true)}
             ref={createdCommunitiesButtonRef}
           >
-            <MdOutlineGroups className="w-6 h-6 object-contain" />
+            <MdOutlineGroups className="w-7 h-7 object-contain" />
             <span className="text-p-text text-xl">Joined Communities</span>
           </button>
 
           <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
+            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
             onClick={() => {
               createCommunity()
               setIsOpenSidebar(false)
             }}
           >
-            <MdOutlineCreateNewFolder className="w-6 h-6 object-contain" />
+            <MdOutlineCreateNewFolder className="w-7 h-7 object-contain" />
             <span className="text-p-text text-xl">Create Community</span>
           </button>
           <a
             href={DISCORD_INVITE_LINK}
             target={'_blank'}
             rel="noreferrer"
-            className="flex flex-row items-center gap-2 py-4  hover:font-semibold"
+            className="flex flex-row items-center gap-3 py-4  hover:font-semibold"
           >
-            <FaDiscord className="w-6 h-6" />
+            <FaDiscord className="w-7 h-7" />
             <span className="text-p-text text-xl">Discord</span>
           </a>
         </div>

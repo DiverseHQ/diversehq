@@ -9,6 +9,7 @@ import {
   LENS_SEARCH_PROFILE_LIMIT
 } from '../../utils/config'
 import { stringToLength } from '../../utils/utils'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const LensProfilesSearchModal = ({
   searchTerm,
@@ -52,7 +53,7 @@ const LensProfilesSearchModal = ({
                 handleProfileClicked(profile.handle)
               }}
             >
-              <img
+              <ImageWithPulsingLoader
                 src={
                   profile?.picture?.original?.url
                     ? profile?.picture?.original?.url.startsWith('ipfs://')
