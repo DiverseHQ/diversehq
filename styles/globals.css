@@ -148,6 +148,8 @@
   /* --color-primary: #9378d8; */
 
   --btn-primary-text: #ffffff;
+  --hover-primary: #eee;
+  --hover-primary-text: #000;
 }
 
 [data-theme='dark'] {
@@ -165,6 +167,9 @@
   --background-pop: #ffffff38;
 
   --btn-primary-text: #D7DADC;
+
+  --hover-primary: #D7DADC;
+  --hover-primary-text: #1A1A1B;
 }
 
 .custom-zoom [data-rmiz-modal-overlay='visible'] {

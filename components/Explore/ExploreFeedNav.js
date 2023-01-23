@@ -22,11 +22,11 @@ const ExploreFeedNav = () => {
   }, [pathname])
 
   return (
-    <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mt-4 sm:mt-0 mb-4 py-1 sm:py-3 w-full   sm:rounded-xl space-x-4 sm:space-x-9 items-center">
+    <div className="font-bold text-sm sm:text-base flex flex-row  border-[1px] border-p-border px-3 sm:px-6 bg-white dark:bg-s-bg mt-4 sm:mt-0 mb-4 py-1 sm:py-3 w-full sm:rounded-xl space-x-4 sm:space-x-9 items-center">
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'top' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover`}
+        }  hover:bg-p-hover hover:text-p-hover-text`}
         onClick={() => {
           router.push('/explore/top')
         }}
@@ -37,7 +37,7 @@ const ExploreFeedNav = () => {
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'new' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover`}
+        }  hover:bg-p-hover hover:text-p-hover-text`}
         onClick={() => {
           router.push('/explore/new')
         }}
