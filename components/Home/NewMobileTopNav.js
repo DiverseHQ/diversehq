@@ -9,12 +9,14 @@ import MobileFilterDrawerButton from './MobileFilterDrawerButton'
 import ExploreFilterDrawerButton from '../Explore/ExploreFilterDrawerButton'
 import NotificationFilterDrawerButton from '../Notification/NotificationFilterDrawerButton'
 import SearchModal from '../Search/SearchModal'
+import { useLensUserContext } from '../../lib/LensUserContext'
 // import BottomDrawer from './BottomDrawer'
 
 const NewMobileTopNav = () => {
   const { user } = useProfile()
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
   const router = useRouter()
+  const { hasProfile, isSignedIn } = useLensUserContext()
 
   // let prevScrollpos = null
 
@@ -74,11 +76,16 @@ const NewMobileTopNav = () => {
                 />
               )}
               {user && (
-                <ImageWithPulsingLoader
-                  src={user?.profileImageUrl}
-                  onClick={() => setIsOpenSidebar(true)}
-                  className="w-[35px] h-[35px] rounded-full"
-                />
+                <div className="relative">
+                  <ImageWithPulsingLoader
+                    src={user?.profileImageUrl}
+                    onClick={() => setIsOpenSidebar(true)}
+                    className="w-[35px] h-[35px] rounded-full"
+                  />
+                  {(!isSignedIn || !hasProfile) && (
+                    <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full" />
+                  )}
+                </div>
               )}
             </div>
             <div>
