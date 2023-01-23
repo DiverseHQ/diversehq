@@ -591,7 +591,7 @@ const LensPostCard = ({ post }) => {
               </div>
 
               {/* bottom row */}
-              <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-1 justify-between sm:justify-start sm:space-x-28">
+              <div className="text-p-text flex flex-row items-center px-3 sm:px-4.5 pt-1 justify-between sm:justify-start sm:space-x-28">
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-2">
                     <div className="hover:bg-p-btn-hover rounded-md p-1">
