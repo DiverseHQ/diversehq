@@ -209,7 +209,7 @@ const PostCard = ({ _post, setPosts }) => {
   const { isMobile } = useDevice()
 
   return (
-    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 border-b-[0.5px] sm:my-3 sm:rounded-2xl shadow-sm">
+    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 border-b-[0.5px] border-p-border sm:my-3 sm:rounded-2xl shadow-sm">
       {/* top row */}
       <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
         {!isMobile && (
@@ -224,7 +224,7 @@ const PostCard = ({ _post, setPosts }) => {
                 />
               </Link>
               <Link href={`/c/${post.communityName}`}>
-                <div className="pl-2 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline">
+                <div className="pl-2 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline text-p-text">
                   {post.communityName}
                 </div>
               </Link>
@@ -266,7 +266,7 @@ const PostCard = ({ _post, setPosts }) => {
                   className="object-cover rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
                 />
               </Link>
-              <div className="flex flex-col justify-center items-start">
+              <div className="flex flex-col justify-center items-start text-p-text">
                 <Link href={`/c/${post.communityName}`} passHref>
                   <div className="pl-2 font-bold text-base sm:text-xl hover:cursor-pointer hover:underline">
                     {post.communityName}
@@ -308,7 +308,7 @@ const PostCard = ({ _post, setPosts }) => {
 
       <div className="flex flex-row w-full">
         {!isMobile && (
-          <div className="flex flex-col items-center ml-[9px] my-2">
+          <div className="flex flex-col items-center ml-[9px] my-2 text-p-text">
             <img
               onClick={handleUpvote}
               src={reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'}
@@ -328,7 +328,7 @@ const PostCard = ({ _post, setPosts }) => {
         )}
 
         {/* main content */}
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full text-p-text">
           <div>
             <div className="mb-2 px-3 sm:pl-5 ">
               {post?.title?.length <= 60 && (
@@ -411,7 +411,7 @@ const PostCard = ({ _post, setPosts }) => {
           {/* bottom row */}
           <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
             {isMobile && (
-              <div className="flex flex-row items-center gap-x-2">
+              <div className="flex flex-row items-center gap-x-2 text-p-text">
                 <img
                   //  onClick={liked ? handleUnLike : handleLike}
                   src={

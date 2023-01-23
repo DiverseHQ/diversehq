@@ -8,6 +8,25 @@ import {
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import RightSideCommunityComponent from './RightSideCommunityComponent'
+import { HiOutlineSparkles } from 'react-icons/hi'
+
+const CommunitiesDiv = ({ text, communitiesList }) => {
+  /*
+    text is the heading text
+    communitiesList is the list of communities to map over
+  */
+  return (
+    <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6 bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border py-1 px-3">
+      <div className="flex flex-row gap-1 xl:gap-2 items-center text-p-text">
+        <HiOutlineSparkles className="w-[20px] h-[20px]" />
+        <h3 className="text-[18px] font-medium">{text}</h3>
+      </div>
+      {communitiesList?.map((community, i) => {
+        return <RightSideCommunityComponent key={i} community={community} />
+      })}
+    </div>
+  )
+}
 
 const RightSidebar = () => {
   const { user } = useProfile()
@@ -69,16 +88,12 @@ const RightSidebar = () => {
   // }, [])
 
   return (
-    <div className="relative hidden lg:flex flex-col border-l-[1px] border-p-btn sticky top-[64px] h-[calc(100vh-62px)] w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 px-4 md:px-6 lg:px-10 xl:px-12 overflow-scroll no-scrollbar">
-      {createdCommunities.length > 0 && (
-        <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
-          <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
-            Created Communities
-          </h3>
-          {createdCommunities.map((community, i) => {
-            return <RightSideCommunityComponent key={i} community={community} />
-          })}
-        </div>
+    <div className="relative hidden lg:flex flex-col sticky top-[64px] h-[calc(100vh-62px)] w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar">
+      {createdCommunities?.length > 0 && (
+        <CommunitiesDiv
+          text="Created Communities"
+          communitiesList={createdCommunities}
+        />
       )}
       {/* <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
         <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
@@ -98,15 +113,25 @@ const RightSidebar = () => {
           })}
         </div>
       )} */}
-      {topCommunities.length > 0 && (
-        <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
-          <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
-            Top Communities
-          </h3>
-          {topCommunities.map((community, i) => {
-            return <RightSideCommunityComponent key={i} community={community} />
-          })}
-        </div>
+      {topCommunities?.length > 0 && (
+        <CommunitiesDiv
+          text="Top Communities"
+          communitiesList={topCommunities}
+        />
+      )}
+
+      {topCommunities?.length > 0 && (
+        <CommunitiesDiv
+          text="Top Communities"
+          communitiesList={topCommunities}
+        />
+      )}
+
+      {topCommunities?.length > 0 && (
+        <CommunitiesDiv
+          text="Top Communities"
+          communitiesList={topCommunities}
+        />
       )}
     </div>
   )

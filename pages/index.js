@@ -2,6 +2,7 @@ import { NextSeo } from 'next-seo'
 import React from 'react'
 import LensPostsExplorePublicationsColumn from '../components/Post/LensPostsExplorePublicationsColumn'
 import NavFilterAllPosts from '../components/Post/NavFilterAllPosts'
+import CreatePostBar from '../components/Home/CreatePostBar'
 
 const Home = () => {
   return (
@@ -23,6 +24,7 @@ const Home = () => {
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
+          <CreatePostBar />
           <NavFilterAllPosts />
           {/* latter make this a feed of posts from the user's default profile */}
           {/* {lensProfile &&

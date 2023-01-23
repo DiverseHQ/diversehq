@@ -3,6 +3,7 @@ import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsExplorePublicationsColumn'
 import { NextSeo } from 'next-seo'
+import CreatePostBar from '../../components/Home/CreatePostBar'
 // import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
 
 const lens = () => {
@@ -18,6 +19,7 @@ const lens = () => {
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
+          <CreatePostBar />
           <NavFilterAllPosts />
           {/* {lensProfile &&
       isSignedIn &&

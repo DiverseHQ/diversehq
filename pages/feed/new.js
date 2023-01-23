@@ -1,5 +1,6 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
+import CreatePostBar from '../../components/Home/CreatePostBar'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import PostsColumn from '../../components/Post/PostsColumn'
 
@@ -15,6 +16,7 @@ const newPage = () => {
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
+          <CreatePostBar />
           <NavFilterAllPosts />
           <PostsColumn source="all" sortBy="new" data={null} />
         </div>

@@ -347,7 +347,7 @@ const LensPostCard = ({ post }) => {
                     />
                   </Link>
                   <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                    <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
+                    <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline text-p-text">
                       {postInfo?.communityInfo?.name}
                     </div>
                   </Link>
@@ -388,7 +388,7 @@ const LensPostCard = ({ post }) => {
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>
-                  <div className="flex flex-col justify-center items-start">
+                  <div className="flex flex-col justify-center items-start text-p-text">
                     <Link href={`/c/${postInfo?.communityInfo?.name}`}>
                       <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
                         {postInfo?.communityInfo?.name}
@@ -427,7 +427,7 @@ const LensPostCard = ({ post }) => {
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center ml-[9px] my-2">
+              <div className="flex flex-col items-center ml-[9px] my-2 text-p-text">
                 <img
                   //  onClick={liked ? handleUnLike : handleLike}
                   src={
@@ -452,7 +452,7 @@ const LensPostCard = ({ post }) => {
             )}
 
             {/* main content */}
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full text-p-text">
               <div>
                 <div className="mb-2 px-3 sm:pl-5 ">
                   {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
@@ -552,7 +552,7 @@ const LensPostCard = ({ post }) => {
               {/* bottom row */}
               <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
                 {isMobile && (
-                  <div className="flex flex-row items-center gap-x-2">
+                  <div className="flex flex-row items-center gap-x-2 text-p-text">
                     <img
                       src={
                         reaction === ReactionTypes.Upvote

@@ -39,12 +39,12 @@ const SearchModal = () => {
     router.push(`/c/${name}`)
   }
   return (
-    <div className="relative flex flex-row items-center border-[1px] border-p-btn p-1 rounded-[50px] bg-s-bg w-[300px] md:w-[300px] lg:w-[400px] xl:aw-[450px] 2xl:w-[650px]  gap-2 md:gap-4">
-      <div className="bg-p-btn rounded-[22px] py-1 px-2 md:px-3 ">
+    <div className="relative flex flex-row items-center border-[1px] border-p-btn dark:border-0 p-1 rounded-[14px] bg-s-bg dark:bg-[#272729] w-[300px] lg:w-[400px] xl:aw-[450px] 2xl:w-[650px]  gap-2 md:gap-4">
+      <div className="bg-p-btn rounded-[12px] py-1 px-2 lg:px-3 ">
         <AiOutlineSearch className="w-[23px] h-[23px] text-s-bg" />
       </div>
       <input
-        className="bg-transparent mr-1 text-[14px] text-[#111] outline-none w-full"
+        className="bg-transparent mr-1 text-[14px] text-[#111] dark:text-p-btn-text outline-none w-full"
         type="text"
         placeholder="Search Diverse Communities"
         ref={inputRef}

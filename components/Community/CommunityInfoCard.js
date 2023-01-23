@@ -187,7 +187,7 @@ const CommunityInfoCard = ({ _community }) => {
   return (
     <>
       {community && (
-        <div className="relative shadow-lg z-0 bg-s-bg mb-6">
+        <div className="relative shadow-lg z-0 bg-s-bg mb-6 text-p-text">
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
             <ImageWithPulsingLoader
@@ -311,17 +311,17 @@ const CommunityInfoCard = ({ _community }) => {
             {/* stats UI for mobile */}
             {isMobile ? (
               <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-[14px]">
-                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                <div className="flex flex-col items-center bg-s-h-bg dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
                   <span className="font-semibold">
                     {community.members?.length}
                   </span>
                   <span className="font-light">Members</span>
                 </div>
-                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                <div className="flex flex-col items-center bg-s-h-bg dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
                   <span className="font-semibold">{numberOfPosts}</span>
                   <span className="font-light">Posts</span>
                 </div>
-                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                <div className="flex flex-col items-center bg-s-h-bg dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
                   <span className="font-semibold">0</span>
                   <span className="font-light">Matic</span>
                 </div>
@@ -329,17 +329,17 @@ const CommunityInfoCard = ({ _community }) => {
             ) : (
               <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-xs md:text-[16px]">
                 {/* stats UI for desktop */}
-                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Members: </span>
                   <span className="font-semibold">
                     {community.members?.length}
                   </span>
                 </div>
-                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Posts: </span>
                   <span className="font-semibold">{numberOfPosts}</span>
                 </div>
-                <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full">
+                <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Matic transferred: </span>
                   <span className="font-semibold">0</span>
                 </div>

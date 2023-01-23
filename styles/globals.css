@@ -137,7 +137,7 @@
   /* --text-secondary: #ffffff; */
 
   /* --border-primary: #c4c4c4; */
-  --border-primary: #b1b2ff;
+  --border-primary: #9378d8;
 
   --background-pop: #00000038;
 
@@ -151,18 +151,20 @@
 }
 
 [data-theme='dark'] {
-  --background: #000000;
-  --background-secondary: #16181c;
-  --accent-primary: #1d9bf0;
+  --background: #030303;
+  --background-secondary: #1A1A1B;
+  --accent-primary: #9378D8;
   --accent-secondary: theme('colors.purple.600');
   --accent-hover: theme('colors.purple.500');
 
-  --text-primary: #ffffff;
+  --text-primary: #D7DADC;
   --text-secondary: #9197ae;
 
-  --border-primary: #464646;
+  --border-primary: #343536;
 
   --background-pop: #ffffff38;
+
+  --btn-primary-text: #D7DADC;
 }
 
 .custom-zoom [data-rmiz-modal-overlay='visible'] {
