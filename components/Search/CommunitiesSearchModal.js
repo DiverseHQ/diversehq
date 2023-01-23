@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useEffect } from 'react'
 import { searchCommunityFromName } from '../../api/community'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const CommunitiesSearchModal = ({
   searchTerm,
@@ -42,7 +43,7 @@ const CommunitiesSearchModal = ({
                 handleCommunityClicked(community.name)
               }}
             >
-              <img
+              <ImageWithPulsingLoader
                 src={community.logoImageUrl}
                 className="w-10 h-10 mr-5 rounded-full object-cover"
               />

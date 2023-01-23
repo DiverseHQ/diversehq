@@ -8,7 +8,7 @@ const MoreOptionsModal = ({ list }) => {
           return (
             <div
               key={index}
-              className={`flex items-center px-5 sm:px-3 py-2 bg-s-bg text-xl sm:rounded-xl my-1 hover:bg-[#eee] hover:cursor-pointer ${
+              className={`flex items-center px-5 sm:px-3 py-2 bg-s-bg text-xl sm:text-base sm:rounded-xl my-1 hover:bg-[#eee] hover:cursor-pointer ${
                 item.label.includes('Delete') && 'text-red-500'
               } ${item.className ? item.className : ''}}`}
               onClick={item.onClick}
