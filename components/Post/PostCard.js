@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
-// import Image from 'next/image'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { deletePost, putUpvoteOnPost, putDownvoteOnPost } from '../../api/post'
-import { BsThreeDots } from 'react-icons/bs'
-// import { HiOutlineTrash } from 'react-icons/hi'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
@@ -30,6 +27,7 @@ import ReactEmbedo from './embed/ReactEmbedo'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { RiMore2Fill } from 'react-icons/ri'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -306,36 +304,80 @@ const PostCard = ({ _post, setPosts }) => {
             </div>
           </>
         )}
-        <div className="sm:mr-5">
+        <div className="sm:mr-5 flex flex-row items-center">
           <JoinCommunityButton id={post.communityId} />
+          {isAuthor && (
+            <div className="relative">
+              <div className="hover:bg-p-btn-hover rounded-md p-1">
+                <RiMore2Fill
+                  className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
+                  onClick={showMoreOptions}
+                  title="More"
+                />
+              </div>
+              <BottomDrawerWrapper
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
+                showClose
+                // height="235px"
+              >
+                <MoreOptionsModal
+                  list={[
+                    {
+                      label: 'Edit Post',
+                      onClick: async () => {
+                        showEditModal()
+                        setIsDrawerOpen(false)
+                      },
+                      icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
+                    },
+                    {
+                      label: 'Delete Post',
+                      onClick: async () => {
+                        await handleDeletePost()
+                        setIsDrawerOpen(false)
+                      },
+                      icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                    }
+                  ]}
+                />
+              </BottomDrawerWrapper>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="flex flex-row w-full">
         {!isMobile && (
-          <div className="flex flex-col items-center ml-[9px] my-2">
-            <img
-              onClick={handleUpvote}
-              src={reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'}
-              className="w-6 h-6 cursor-pointer"
-            />
+          <div className="flex flex-col items-center ml-1.5 my-2">
+            <div className="hover:bg-p-btn-hover rounded-md p-1">
+              <img
+                onClick={handleUpvote}
+                src={
+                  reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'
+                }
+                className="w-6 h-6 cursor-pointer"
+              />
+            </div>
             <div>{totalCount}</div>
-            <img
-              onClick={handleDownvote}
-              src={
-                reaction === 'DOWNVOTE'
-                  ? '/DownvoteFilled.svg'
-                  : '/Downvote.svg'
-              }
-              className="w-5 h-5 cursor-pointer"
-            />
+            <div className="hover:bg-p-btn-hover rounded-md p-1">
+              <img
+                onClick={handleDownvote}
+                src={
+                  reaction === 'DOWNVOTE'
+                    ? '/DownvoteFilled.svg'
+                    : '/Downvote.svg'
+                }
+                className="w-5 h-5 cursor-pointer"
+              />
+            </div>
           </div>
         )}
 
         {/* main content */}
         <div className="flex flex-col w-full">
           <div>
-            <div className="mb-2 px-3 sm:pl-5 ">
+            <div className="mb-2 px-3 sm:pl-3.5 ">
               {post?.title?.length <= 60 && (
                 <div className="font-medium text-base sm:text-lg w-full break-words">
                   {post?.title}
@@ -414,100 +456,69 @@ const PostCard = ({ _post, setPosts }) => {
               )}
           </div>
           {/* bottom row */}
-          <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-2 justify-between sm:justify-start sm:space-x-28">
+          <div className="text-p-text flex flex-row items-center px-3 sm:px-6 pt-1 justify-between sm:justify-start sm:space-x-28">
             {isMobile && (
               <div className="flex flex-row items-center gap-x-2">
-                <img
-                  //  onClick={liked ? handleUnLike : handleLike}
-                  src={
-                    reaction === ReactionTypes.Upvote
-                      ? '/UpvoteFilled.svg'
-                      : '/Upvote.svg'
-                  }
-                  onClick={handleUpvote}
-                  className="w-5 h-5 cursor-pointer"
-                />
+                <div className="hover:bg-p-btn-hover rounded-md p-1">
+                  <img
+                    //  onClick={liked ? handleUnLike : handleLike}
+                    src={
+                      reaction === ReactionTypes.Upvote
+                        ? '/UpvoteFilled.svg'
+                        : '/Upvote.svg'
+                    }
+                    onClick={handleUpvote}
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                </div>
                 <div className="font-bold">{totalCount}</div>
-                <img
-                  src={
-                    reaction === ReactionTypes.Downvote
-                      ? '/DownvoteFilled.svg'
-                      : '/Downvote.svg'
-                  }
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={handleDownvote}
-                />
+                <div className="hover:bg-p-btn-hover rounded-md p-1">
+                  <img
+                    src={
+                      reaction === ReactionTypes.Downvote
+                        ? '/DownvoteFilled.svg'
+                        : '/Downvote.svg'
+                    }
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={handleDownvote}
+                  />
+                </div>
               </div>
             )}
-            {!router.pathname.startsWith('/p') ? (
-              <Link
-                href={`/p/${post._id}`}
-                className="flex flex-row items-center"
-                passHref
-              >
-                {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                )}
-                {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                )}
-                {post.comments?.length}
-              </Link>
-            ) : (
-              <div className="flex flex-row items-center">
-                {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                )}
-                {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                )}
-                {post.comments?.length}
-              </div>
-            )}
-            <div>
+            <div className="hover:bg-p-btn-hover rounded-md p-1">
+              {!router.pathname.startsWith('/p') ? (
+                <Link
+                  href={`/p/${post._id}`}
+                  className="flex flex-row items-center"
+                  passHref
+                >
+                  {post.comments?.length === 0 && (
+                    <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                  )}
+                  {post.comments?.length > 0 && (
+                    <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                  )}
+                  {post.comments?.length}
+                </Link>
+              ) : (
+                <div className="flex flex-row items-center">
+                  {post.comments?.length === 0 && (
+                    <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                  )}
+                  {post.comments?.length > 0 && (
+                    <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                  )}
+                  {post.comments?.length}
+                </div>
+              )}
+            </div>
+
+            <div className="hover:bg-p-btn-hover rounded-md p-1">
               <PostShareButton
                 url={`https://app.diversehq.xyz/p/${post?._id}`}
                 text={post?.title}
               />
             </div>
-            {isAuthor && (
-              <div className="relative">
-                <BsThreeDots
-                  className="hover:cursor-pointer mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
-                  onClick={showMoreOptions}
-                  title="More"
-                />
-                <BottomDrawerWrapper
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                  showClose
-                  // height="235px"
-                >
-                  <MoreOptionsModal
-                    list={[
-                      {
-                        label: 'Edit Post',
-                        onClick: async () => {
-                          showEditModal()
-                          setIsDrawerOpen(false)
-                        },
-                        icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
-                      },
-                      {
-                        label: 'Delete Post',
-                        onClick: async () => {
-                          await handleDeletePost()
-                          setIsDrawerOpen(false)
-                        },
-                        icon: () => (
-                          <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                        )
-                      }
-                    ]}
-                  />
-                </BottomDrawerWrapper>
-              </div>
-            )}
           </div>
         </div>
       </div>
