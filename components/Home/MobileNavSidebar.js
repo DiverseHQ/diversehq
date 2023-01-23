@@ -18,7 +18,10 @@ import { stringToLength } from '../../utils/utils'
 import { FaDiscord, FaRegCopy } from 'react-icons/fa'
 import { DISCORD_INVITE_LINK } from '../../utils/config'
 import { useDisconnect } from 'wagmi'
-import { getCreatedCommunitiesApi } from '../../api/community'
+import {
+  getCreatedCommunitiesApi,
+  getJoinedCommunitiesApi
+} from '../../api/community'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
@@ -30,40 +33,9 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const { disconnect } = useDisconnect()
   const [createdCommunities, setCreatedCommunities] = useState([])
   const [showCreatedCommunities, setShowCreatedCommunities] = useState(false)
-  const dropdownRef = useRef(null)
   const createdCommunitiesButtonRef = useRef(null)
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-
-  useEffect(() => {
-    const handleClick = (event) => {
-      // Check if the target element of the click is the dropdown element
-      // or a descendant of the dropdown element
-      console.log('showCreatedCommunities', showCreatedCommunities)
-      if (!dropdownRef?.current) return
-      if (
-        !dropdownRef.current.contains(event.target) &&
-        !createdCommunitiesButtonRef.current.contains(event.target)
-      ) {
-        // Hide the dropdown
-        setShowCreatedCommunities(false)
-      }
-    }
-    document.addEventListener('click', handleClick)
-
-    // if (!dropdownRef?.current) return
-    // if (!showCreatedCommunities) {
-    //   document.removeEventListener('click', handleClick)
-    // } else {
-    //   document.addEventListener('click', handleClick)
-    // }
-    // Add the event listener
-    // document.addEventListener('click', handleClick)
-
-    // Remove the event listener when the component is unmounted
-    return () => {
-      document.removeEventListener('click', handleClick)
-    }
-  }, [dropdownRef])
+  const [joinedCommunities, setJoinedCommunities] = useState([])
+  const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
 
   const fetchAndSetCreatedCommunities = async () => {
     try {
@@ -80,6 +52,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   useEffect(() => {
     if (!user) return
     fetchAndSetCreatedCommunities()
+    getJoinedCommunities()
   }, [user])
 
   const createCommunity = () => {
@@ -113,9 +86,19 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     notifyInfo('Copied to clipboard')
   }
 
-  useEffect(() => {
-    console.log('showCreatedCommunities', showCreatedCommunities)
-  }, [showCreatedCommunities])
+  const getJoinedCommunities = async () => {
+    if (!user?.walletAddress) {
+      notifyError('I think you are not logged in')
+      return
+    }
+    try {
+      const response = await getJoinedCommunitiesApi()
+      setJoinedCommunities(response)
+    } catch (error) {
+      console.log('error', error)
+      notifyError('Error getting joined communities')
+    }
+  }
 
   return (
     <div
@@ -189,15 +172,20 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
 
           <button
             className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
-            onClick={() => {
-              console.log('clicked')
-              setShowCreatedCommunities(true)
-              setIsDrawerOpen(true)
-            }}
+            onClick={() => setShowCreatedCommunities(true)}
             ref={createdCommunitiesButtonRef}
           >
             <MdOutlineGroups className="w-6 h-6 object-contain" />
             <span className="text-p-text text-xl">Your Communities</span>
+          </button>
+
+          <button
+            className="flex flex-row items-center  hover:font-semibold py-4 gap-2"
+            onClick={() => setShowJoinedCommunities(true)}
+            ref={createdCommunitiesButtonRef}
+          >
+            <MdOutlineGroups className="w-6 h-6 object-contain" />
+            <span className="text-p-text text-xl">Joined Communities</span>
           </button>
 
           <button
@@ -221,17 +209,55 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           </a>
         </div>
 
+        {/* joined communities here */}
         <BottomDrawerWrapper
-          isDrawerOpen={isDrawerOpen}
-          setIsDrawerOpen={setIsDrawerOpen}
+          isDrawerOpen={showJoinedCommunities}
+          setIsDrawerOpen={setShowJoinedCommunities}
+        >
+          <div className="flex flex-col justify-center items-center">
+            <h1 className="font-bold text-lg mt-5">Joined Communities</h1>
+            <div className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
+              {joinedCommunities.map((community) => (
+                <div
+                  key={community._id}
+                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn-hover mx-4"
+                  id={community._id}
+                  onClick={() => {
+                    router.push(`/c/${community.name}`)
+                    setIsOpenSidebar(false)
+                  }}
+                >
+                  <ImageWithPulsingLoader
+                    src={
+                      community.logoImageUrl
+                        ? community.logoImageUrl
+                        : '/gradient.jpg'
+                    }
+                    alt="community logo"
+                    className="rounded-full object-cover w-12 h-12"
+                  />
+
+                  <div
+                    className="text-p-text ml-4 text-lg font-semibold"
+                    id={community._id}
+                  >
+                    {community.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </BottomDrawerWrapper>
+
+        {/* created communities here */}
+        <BottomDrawerWrapper
+          isDrawerOpen={showCreatedCommunities}
+          setIsDrawerOpen={setShowCreatedCommunities}
           showClose={true}
         >
           <div className="flex flex-col justify-center items-center">
             <h1 className="font-bold text-lg mt-5">Created Communities</h1>
-            <div
-              className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen "
-              ref={dropdownRef}
-            >
+            <div className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
               {createdCommunities.map((community) => (
                 <div
                   key={community._id}

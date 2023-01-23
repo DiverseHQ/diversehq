@@ -21,7 +21,7 @@ const CreateTestLensHandle = () => {
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast()
 
-  const { notifyError, notifySuccess } = useNotify()
+  const { notifyError, notifySuccess, notifyInfo } = useNotify()
   const { hideModal } = usePopUpModal()
 
   const [loading, setLoading] = useState(false)
@@ -118,6 +118,7 @@ const CreateTestLensHandle = () => {
       ).createSetDefaultProfileTypedData
 
       console.log('data', data)
+      notifyInfo('Check your wallet to confirm, if you have not already')
       signTypedDataAndBroadcast(data.typedData, {
         id: data.id,
         type: 'setDefaultProfile'
