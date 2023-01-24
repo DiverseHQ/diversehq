@@ -14,7 +14,9 @@ const PostShareButton = ({ url, text }) => {
         text
       }}
     >
-      <IoIosShareAlt className="hover:cursor-pointer w-6 h-6" />
+      <div className="hover:bg-p-btn-hover rounded-md p-1">
+        <IoIosShareAlt className="hover:cursor-pointer w-6 h-6 " />
+      </div>
     </RWebShare>
   )
 }
