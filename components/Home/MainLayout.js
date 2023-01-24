@@ -7,8 +7,9 @@ import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
 import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 import NewLeftSidebar from './NewLeftSidebar'
+import { Box, LinearProgress } from '@mui/material'
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, isLoading }) => {
   const { isDesktop } = useDevice()
   return (
     <>
@@ -17,6 +18,9 @@ const MainLayout = ({ children }) => {
           {!isDesktop && (
             <>
               <NewMobileTopNav />
+              <Box sx={{ width: '100%', position: 'absolute' }}>
+                {isLoading && <LinearProgress />}
+              </Box>
               {/* <MobileTopNav /> */}
               <div className={'pb-16'}>
                 <ScrollToTopButton />
@@ -30,6 +34,11 @@ const MainLayout = ({ children }) => {
       {isDesktop && (
         <div className="relative min-h-screen bg-p-bg transition-all duration-500">
           <Navbar />
+
+          <Box sx={{ width: '100%', position: 'absolute' }}>
+            {isLoading && <LinearProgress />}
+          </Box>
+
           <div className="flex flex-row">
             <NewLeftSidebar />
             <div className="relative flex-1 min-h-screen text-p-text">
