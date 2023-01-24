@@ -3,26 +3,22 @@ import React, { useEffect, useState } from 'react'
 import Markup from '../Lexical/Markup'
 import { countLinesFromMarkdown } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
-import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
 const LensNotificationMentionCard = ({ notification }) => {
-  const router = useRouter()
   const [showMore, setShowMore] = useState(
-    (countLinesFromMarkdown(
+    countLinesFromMarkdown(
       notification?.mentionPublication?.metadata?.content
     ) > MAX_CONTENT_LINES ||
-      notification?.mentionPublication?.metadata?.content.length > 400) &&
-      router.pathname !== '/p/[id]'
+      notification?.mentionPublication?.metadata?.content.length > 400
   )
 
   useEffect(() => {
     setShowMore(
-      (countLinesFromMarkdown(
+      countLinesFromMarkdown(
         notification?.mentionPublication?.metadata?.content
       ) > MAX_CONTENT_LINES ||
-        notification?.mentionPublication?.metadata?.content.length > 400) &&
-        router.pathname !== '/p/[id]'
+        notification?.mentionPublication?.metadata?.content.length > 400
     )
   }, [notification?.mentionPublication])
   return (

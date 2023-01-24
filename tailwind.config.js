@@ -16,6 +16,7 @@ module.exports = {
         'p-h-bg': 'var(--background-primary-highlight)', // primary highlight color for most most importatn elements
         't-bg': 'var(--background-pop)', // backdrop for popups
         'p-btn': 'var(--accent-primary)', // primary button color
+        'p-btn-disabled': 'var(--accent-primary-disabled)', // use when primary button is disabled
         'p-btn-hover': 'var(--accent-hover)', // primary button hover color
         'p-btn-text': 'var(--btn-primary-text)', // primary button text color
         's-btn': 'var(--accent-secondary)', // secondary button color

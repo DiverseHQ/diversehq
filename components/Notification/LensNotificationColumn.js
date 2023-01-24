@@ -29,7 +29,9 @@ const LensNotificationColumn = () => {
           NotificationTypes.ReactionPost,
           NotificationTypes.ReactionComment,
           NotificationTypes.MentionPost,
-          NotificationTypes.MentionComment
+          NotificationTypes.MentionComment,
+          NotificationTypes.CollectedComment,
+          NotificationTypes.CollectedPost
         ]
       },
       reactionRequest: {

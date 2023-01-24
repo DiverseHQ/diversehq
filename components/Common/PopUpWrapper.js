@@ -38,7 +38,9 @@ const PopUpWrapper = ({
           <>
             {!loading ? (
               <button
-                className="text-p-btn-text bg-p-btn px-3 py-1 font-bold uppercase rounded-full text-base text-p-btn-text"
+                className={`text-p-btn-text ${
+                  isDisabled ? 'bg-p-btn-disabled' : 'bg-p-btn'
+                } px-3 py-1 font-bold uppercase rounded-full text-base text-p-btn-text`}
                 type="button"
                 onClick={onClick}
                 disabled={loading || isDisabled}
