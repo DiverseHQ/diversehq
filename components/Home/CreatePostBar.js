@@ -26,7 +26,7 @@ const CreatePostBar = () => {
   }
 
   return (
-    <div className="flex flex-row items-center bg-s-bg mt-10 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-p-border">
+    <div className="flex flex-row items-center bg-s-bg mt-10 mb-4 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-p-border">
       <div className="flex items-center justify-center rounded-full w-[44px] h-[44px]">
         {user?.profileImageUrl && (
           <img

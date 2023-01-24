@@ -41,7 +41,7 @@ const NewMobileTopNav = () => {
     <>
       <div
         id="mobile-top-navbar"
-        className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] backdrop-blur-lg bg-white/70"
+        className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] bg-white/70 dark:bg-black/70 backdrop-blur-lg"
         style={{
           transition: 'top 0.5s ease-in-out'
         }}

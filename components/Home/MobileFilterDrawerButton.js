@@ -76,14 +76,15 @@ const MobileFilterDrawerButton = () => {
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         showClose={true}
+        className="dark:bg-s-bg"
       >
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center text-p-text">
           <h1 className="font-bold text-lg mt-5">Choose your Feed</h1>
           <div className="font-medium  text-base border-b p-0.5 w-full flex flex-row mt-2  justify-center items-center space-x-20 ">
             <button
               className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
                 active === 'lens' && 'bg-p-bg'
-              }  hover:bg-p-btn-hover`}
+              } hover:bg-p-hover hover:text-p-hover-text`}
               onClick={() => {
                 router.push('/feed/lens')
                 setIsDrawerOpen(false)
@@ -99,7 +100,7 @@ const MobileFilterDrawerButton = () => {
             <button
               className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                 active === 'new' && 'bg-p-bg'
-              }  hover:bg-p-btn-hover`}
+              }  hover:bg-p-hover hover:text-p-hover-text`}
               onClick={() => {
                 router.push('/feed/new')
                 setIsDrawerOpen(false)
@@ -112,7 +113,7 @@ const MobileFilterDrawerButton = () => {
             <button
               className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
                 active === 'top' && 'bg-p-bg'
-              }  hover:bg-p-btn-hover`}
+              } hover:bg-p-hover hover:text-p-hover-text`}
               onClick={() => {
                 router.push('/feed/top')
                 setIsDrawerOpen(false)

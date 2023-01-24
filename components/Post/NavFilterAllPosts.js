@@ -74,7 +74,7 @@ const NavFilterAllPosts = () => {
   }
 
   return (
-    <div className="font-bold text-sm sm:text-base flex flex-row border-[1px]  border-p-border px-3 sm:px-6 bg-white dark:bg-s-bg mt-4 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center dark:text-p-text">
+    <div className="font-bold text-sm sm:text-base flex flex-row border-[1px]  border-p-border px-3 sm:px-6 bg-white dark:bg-s-bg py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center dark:text-p-text">
       <button
         className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
           active === 'lens' && 'bg-p-bg'

@@ -154,8 +154,8 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
             </div>
             <div>{profile.bio}</div>
             {isMobile ? (
-              <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px] dark:bg-p-bg">
-                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px]">
+              <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px]">
+                <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
                   <span className="font-bold">
                     {profile?.communities?.length}
                   </span>
@@ -229,11 +229,11 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
               {lensProfile?.id && (
-                <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mb-1 mt-2 sm:mt-6 py-1 sm:py-3 w-full sm:rounded-xl justify-start space-x-9 items-center">
+                <div className="font-bold text-sm sm:text-base flex flex-row  border-[1px] border-p-border px-3 sm:px-6 bg-white dark:bg-s-bg mb-1 mt-2 sm:mt-6 py-1 sm:py-3 w-full sm:rounded-xl justify-start space-x-9 items-center">
                   <button
                     className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                       !showLensPosts && 'bg-p-bg'
-                    }  hover:bg-p-btn-hover`}
+                    } hover:bg-p-hover hover:text-p-hover-text`}
                     onClick={() => {
                       setShowLensPosts(false)
                     }}
@@ -244,7 +244,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                   <button
                     className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                       showLensPosts && 'bg-p-bg'
-                    }  hover:bg-p-btn-hover`}
+                    } hover:bg-p-hover hover:text-p-hover-text`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
                       setShowLensPosts(true)
