@@ -18,7 +18,7 @@ const Home = () => {
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
-          <CreatePostBar />
+          {isDesktop && <CreatePostBar />}
           {isDesktop && <NavFilterAllPosts />}
           {/* latter make this a feed of posts from the user's default profile */}
           {/* {lensProfile &&

@@ -118,7 +118,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       )}
 
       <div
-        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg border gap-4 ${
+        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg gap-4 dark:text-p-text ${
           isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
         } `}
       >

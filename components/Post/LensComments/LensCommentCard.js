@@ -176,7 +176,10 @@ const LensCommentCard = ({ comment }) => {
       onAction: () => {},
       extraaInfo: {
         top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-        left: e.currentTarget.getBoundingClientRect().left + 'px'
+        right:
+          window.innerWidth -
+          e.currentTarget.getBoundingClientRect().right +
+          'px'
       }
     })
   }
@@ -207,29 +210,65 @@ const LensCommentCard = ({ comment }) => {
       {comment && (
         <div className="w-full">
           {/* top row */}
-          <div className="flex flex-row items-center">
-            <div className="flex flex-row items-center pr-2">
-              {/* commenting for now */}
-              {/* todo : ability to set lens profile image and fetch here */}
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-row items-center gap-2">
+              <div className="flex flex-row items-center">
+                {/* commenting for now */}
+                {/* todo : ability to set lens profile image and fetch here */}
 
-              <ImageWithPulsingLoader
-                src={
-                  comment?.profile?.picture?.original?.url?.startsWith('ipfs')
-                    ? `${LensInfuraEndpoint}${
-                        comment?.profile?.picture?.original?.url.split('//')[1]
-                      }`
-                    : '/gradient.jpg'
-                }
-                className="w-6 h-6 rounded-full mr-1"
+                <ImageWithPulsingLoader
+                  src={
+                    comment?.profile?.picture?.original?.url?.startsWith('ipfs')
+                      ? `${LensInfuraEndpoint}${
+                          comment?.profile?.picture?.original?.url.split(
+                            '//'
+                          )[1]
+                        }`
+                      : '/gradient.jpg'
+                  }
+                  className="w-6 h-6 rounded-full mr-1"
+                />
+
+                <Link href={`/u/${comment?.profile?.handle}`} passHref>
+                  <div className="hover:underline font-bold text-base">
+                    u/{comment?.profile?.handle}
+                  </div>
+                </Link>
+              </div>
+              <ReactTimeAgo
+                className="text-xs sm:text-sm text-s-text"
+                date={new Date(comment.createdAt)}
+                locale="en-US"
               />
-
-              <Link href={`/u/${comment?.profile?.handle}`} passHref>
-                <div className="hover:underline font-bold text-base">
-                  u/{comment?.profile?.handle}
-                </div>
-              </Link>
             </div>
-            <ReactTimeAgo date={new Date(comment.createdAt)} locale="en-US" />
+            {isAuthor && (
+              <>
+                <BsThreeDots
+                  className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
+                  onClick={showMoreOptions}
+                  title="More"
+                />
+                <BottomDrawerWrapper
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                >
+                  <MoreOptionsModal
+                    list={[
+                      {
+                        label: 'Delete Comment',
+                        onClick: async () => {
+                          await handleDeleteComment()
+                          setIsDrawerOpen(false)
+                        },
+                        icon: () => (
+                          <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                        )
+                      }
+                    ]}
+                  />
+                </BottomDrawerWrapper>
+              </>
+            )}
           </div>
 
           {/* padded content with line*/}
@@ -284,34 +323,6 @@ const LensCommentCard = ({ comment }) => {
                 >
                   Reply
                 </button>
-                {isAuthor && (
-                  <>
-                    <BsThreeDots
-                      className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
-                      onClick={showMoreOptions}
-                      title="More"
-                    />
-                    <BottomDrawerWrapper
-                      isDrawerOpen={isDrawerOpen}
-                      setIsDrawerOpen={setIsDrawerOpen}
-                    >
-                      <MoreOptionsModal
-                        list={[
-                          {
-                            label: 'Delete Comment',
-                            onClick: async () => {
-                              await handleDeleteComment()
-                              setIsDrawerOpen(false)
-                            },
-                            icon: () => (
-                              <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                            )
-                          }
-                        ]}
-                      />
-                    </BottomDrawerWrapper>
-                  </>
-                )}
               </div>
 
               {/* create comment if showCreateComment is true */}

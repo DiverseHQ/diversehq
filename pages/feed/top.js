@@ -18,7 +18,7 @@ const top = () => {
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
-          <CreatePostBar />
+          {isDesktop && <CreatePostBar />}
           {isDesktop && <NavFilterAllPosts />}
           <PostsColumn source="all" sortBy="top" data={null} />
         </div>

@@ -36,15 +36,21 @@ const MobileBottomNav = () => {
 
   return (
     <div className="fixed bottom-0 w-full py-2 flex flex-row justify-evenly items-center bg-p-bg shadow-top">
-      <AiOutlineHome className="w-7 h-7 " onClick={routeToHome} />
-      <MdOutlineExplore className="w-7 h-7 " onClick={routeToExplore} />
+      <AiOutlineHome className="w-7 h-7 cursor-pointer" onClick={routeToHome} />
+      <MdOutlineExplore
+        className="w-7 h-7 cursor-pointer"
+        onClick={routeToExplore}
+      />
       <AiFillPlusCircle
         className="w-10 h-10 text-p-btn"
         onClick={showCreatePostModal}
       />
-      <BsSearch className="w-6 h-6 " onClick={routeToSearch} />
+      <BsSearch className="w-6 h-6 cursor-pointer" onClick={routeToSearch} />
       <div className="relative">
-        <AiOutlineBell className="w-7 h-7 " onClick={routeToNotifications} />
+        <AiOutlineBell
+          className="w-7 h-7 cursor-pointer"
+          onClick={routeToNotifications}
+        />
         {/* {notificationsCount > 0 && (
           <div className="absolute top-0 left-0 px-1 text-xs text-p-btn-text bg-green-500 rounded-full">
             <span>{notificationsCount}</span>

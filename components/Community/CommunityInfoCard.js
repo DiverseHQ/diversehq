@@ -187,16 +187,20 @@ const CommunityInfoCard = ({ _community }) => {
   return (
     <>
       {community && (
-        <div className="relative shadow-lg z-0 bg-s-bg mb-6 text-p-text">
+        <div
+          className={`relative shadow-lg z-0 bg-s-bg mb-6 text-p-text border-[1px] border-p-border rounded-[20px] ${
+            router.pathname.startsWith('/c') ? 'mt-10' : ''
+          }`}
+        >
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
             <ImageWithPulsingLoader
-              className="h-20 sm:h-28 w-full object-cover"
+              className="h-20 sm:h-28 w-full object-cover rounded-t-[20px]"
               src={community.bannerImageUrl}
             />
           ) : (
             <ImageWithLoaderAndZoom
-              className="h-20 sm:h-28 w-full object-cover"
+              className="h-20 sm:h-28 w-full object-cover rounded-t-[20px]"
               src={community.bannerImageUrl}
             />
           )}
