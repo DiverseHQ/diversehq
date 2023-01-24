@@ -429,13 +429,15 @@ const LensPostCard = ({ post }) => {
               <JoinCommunityButton id={postInfo?.communityInfo?._id} />
               {isAuthor && (
                 <div className="relative">
-                  <div className="hover:bg-p-btn-hover rounded-md p-1">
+                  <button
+                    onClick={showMoreOptions}
+                    className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                  >
                     <RiMore2Fill
-                      className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
-                      onClick={showMoreOptions}
+                      className="w-4 h-4 sm:w-5 sm:h-5"
                       title="More"
                     />
-                  </div>
+                  </button>
                   <BottomDrawerWrapper
                     isDrawerOpen={isDrawerOpen}
                     setIsDrawerOpen={setIsDrawerOpen}
@@ -465,7 +467,10 @@ const LensPostCard = ({ post }) => {
           <div className="flex flex-row w-full">
             {!isMobile && (
               <div className="flex flex-col items-center ml-1.5 mt-1">
-                <div className="hover:bg-p-btn-hover rounded-md p-1">
+                <button
+                  onClick={handleUpvote}
+                  className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                >
                   <img
                     //  onClick={liked ? handleUnLike : handleLike}
                     src={
@@ -473,22 +478,23 @@ const LensPostCard = ({ post }) => {
                         ? '/UpvoteFilled.svg'
                         : '/Upvote.svg'
                     }
-                    onClick={handleUpvote}
-                    className="w-6 h-6 cursor-pointer"
+                    className="w-6 h-6"
                   />
-                </div>
+                </button>
                 <div className="font-bold leading-5">{voteCount}</div>
-                <div className="hover:bg-p-btn-hover rounded-md p-1">
+                <button
+                  onClick={handleDownvote}
+                  className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                >
                   <img
                     src={
                       reaction === ReactionTypes.Downvote
                         ? '/DownvoteFilled.svg'
                         : '/Downvote.svg'
                     }
-                    className="w-5 h-5 cursor-pointer"
-                    onClick={handleDownvote}
+                    className="w-5 h-5"
                   />
-                </div>
+                </button>
               </div>
             )}
 
@@ -591,67 +597,67 @@ const LensPostCard = ({ post }) => {
               </div>
 
               {/* bottom row */}
-              <div className="text-p-text flex flex-row items-center px-3 sm:px-6 py-1 justify-between sm:justify-start sm:space-x-28">
+              <div className="text-p-text flex flex-row items-center px-3 sm:px-4.5 py-1 justify-between sm:justify-start sm:space-x-28">
                 {isMobile && (
-                  <div className="flex flex-row items-center gap-x-2">
-                    <div className="hover:bg-p-btn-hover rounded-md p-1">
+                  <div className="flex flex-row items-center gap-x-1">
+                    <button
+                      onClick={handleUpvote}
+                      className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
+                    >
                       <img
                         src={
                           reaction === ReactionTypes.Upvote
                             ? '/UpvoteFilled.svg'
                             : '/Upvote.svg'
                         }
-                        onClick={handleUpvote}
-                        className="w-5 h-5 cursor-pointer"
+                        className="w-5 h-5"
                       />
-                    </div>
+                    </button>
                     <div className="font-bold">{voteCount}</div>
-                    <div className="hover:bg-p-btn-hover rounded-md p-1">
+                    <button
+                      onClick={handleDownvote}
+                      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                    >
                       <img
                         src={
                           reaction === ReactionTypes.Downvote
                             ? '/DownvoteFilled.svg'
                             : '/Downvote.svg'
                         }
-                        className="w-5 h-5 cursor-pointer"
-                        onClick={handleDownvote}
+                        className="w-5 h-5"
                       />
-                    </div>
+                    </button>
                   </div>
                 )}
-                <div className="hover:bg-p-btn-hover rounded-md p-1">
-                  {!router.pathname.startsWith('/p') ? (
-                    <Link
-                      href={`/p/${postInfo.id}`}
-                      className="flex flex-row items-center"
-                      passHref
-                    >
-                      {postInfo?.stats?.totalAmountOfComments === 0 && (
-                        <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                      )}
-                      {postInfo?.stats?.totalAmountOfComments > 0 && (
-                        <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                      )}
-                      {postInfo?.stats?.totalAmountOfComments}
-                    </Link>
-                  ) : (
-                    <div className="flex flex-row items-center">
-                      {postInfo?.stats?.totalAmountOfComments === 0 && (
-                        <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                      )}
-                      {postInfo?.stats?.totalAmountOfComments > 0 && (
-                        <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                      )}
-                      {postInfo?.stats?.totalAmountOfComments}
-                    </div>
-                  )}
-                </div>
-                <div className="hover:bg-p-btn-hover rounded-md p-1">
-                  <PostShareButton
-                    url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
-                    text={postInfo?.metadata?.name}
-                  />
-                </div>
+                {!router.pathname.startsWith('/p') ? (
+                  <Link
+                    href={`/p/${postInfo.id}`}
+                    className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1"
+                    passHref
+                  >
+                    {postInfo?.stats?.totalAmountOfComments === 0 && (
+                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                    )}
+                    {postInfo?.stats?.totalAmountOfComments > 0 && (
+                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                    )}
+                    {postInfo?.stats?.totalAmountOfComments}
+                  </Link>
+                ) : (
+                  <div className="flex flex-row items-center">
+                    {postInfo?.stats?.totalAmountOfComments === 0 && (
+                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                    )}
+                    {postInfo?.stats?.totalAmountOfComments > 0 && (
+                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                    )}
+                    {postInfo?.stats?.totalAmountOfComments}
+                  </div>
+                )}
+                <PostShareButton
+                  url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
+                  text={postInfo?.metadata?.name}
+                />
               </div>
             </div>
           </div>

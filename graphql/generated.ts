@@ -3888,6 +3888,13 @@ export type ChallengeQueryVariables = Exact<{
 
 export type ChallengeQuery = { __typename?: 'Query', challenge: { __typename?: 'AuthChallengeResult', text: string } };
 
+export type CreateCollectTypedDataMutationVariables = Exact<{
+  request: CreateCollectRequest;
+}>;
+
+
+export type CreateCollectTypedDataMutation = { __typename?: 'Mutation', createCollectTypedData: { __typename?: 'CreateCollectBroadcastItemResult', id: any, expiresAt: any, typedData: { __typename?: 'CreateCollectEIP712TypedData', types: { __typename?: 'CreateCollectEIP712TypedDataTypes', CollectWithSig: Array<{ __typename?: 'EIP712TypedDataField', name: string, type: string }> }, domain: { __typename?: 'EIP712TypedDataDomain', name: string, chainId: any, version: string, verifyingContract: any }, value: { __typename?: 'CreateCollectEIP712TypedDataValue', nonce: any, deadline: any, profileId: any, pubId: any, data: any } } } };
+
 export type CommentFeedQueryVariables = Exact<{
   request: PublicationsQueryRequest;
   reactionRequest?: InputMaybe<ReactionFieldResolverRequest>;
@@ -4943,6 +4950,44 @@ export const useChallengeQuery = <
     useQuery<ChallengeQuery, TError, TData>(
       ['Challenge', variables],
       fetchData<ChallengeQuery, ChallengeQueryVariables>(ChallengeDocument, variables),
+      options
+    );
+export const CreateCollectTypedDataDocument = `
+    mutation createCollectTypedData($request: CreateCollectRequest!) {
+  createCollectTypedData(request: $request) {
+    id
+    expiresAt
+    typedData {
+      types {
+        CollectWithSig {
+          name
+          type
+        }
+      }
+      domain {
+        name
+        chainId
+        version
+        verifyingContract
+      }
+      value {
+        nonce
+        deadline
+        profileId
+        pubId
+        data
+      }
+    }
+  }
+}
+    `;
+export const useCreateCollectTypedDataMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreateCollectTypedDataMutation, TError, CreateCollectTypedDataMutationVariables, TContext>) =>
+    useMutation<CreateCollectTypedDataMutation, TError, CreateCollectTypedDataMutationVariables, TContext>(
+      ['createCollectTypedData'],
+      (variables?: CreateCollectTypedDataMutationVariables) => fetchData<CreateCollectTypedDataMutation, CreateCollectTypedDataMutationVariables>(CreateCollectTypedDataDocument, variables)(),
       options
     );
 export const CommentFeedDocument = `

@@ -308,13 +308,12 @@ const PostCard = ({ _post, setPosts }) => {
           <JoinCommunityButton id={post.communityId} />
           {isAuthor && (
             <div className="relative">
-              <div className="hover:bg-p-btn-hover rounded-md p-1">
-                <RiMore2Fill
-                  className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
-                  onClick={showMoreOptions}
-                  title="More"
-                />
-              </div>
+              <button
+                className="hover:bg-p-btn-hover hover:cursor-pointer  rounded-md p-1"
+                onClick={showMoreOptions}
+              >
+                <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
+              </button>
               <BottomDrawerWrapper
                 isDrawerOpen={isDrawerOpen}
                 setIsDrawerOpen={setIsDrawerOpen}
@@ -350,27 +349,31 @@ const PostCard = ({ _post, setPosts }) => {
       <div className="flex flex-row w-full">
         {!isMobile && (
           <div className="flex flex-col items-center ml-1.5 mt-1">
-            <div className="hover:bg-p-btn-hover rounded-md p-1">
+            <button
+              onClick={handleUpvote}
+              className="hover:bg-p-btn-hover rounded-md p-1 hover:cursor-pointer"
+            >
               <img
-                onClick={handleUpvote}
                 src={
                   reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'
                 }
-                className="w-6 h-6 cursor-pointer"
+                className="w-6 h-6"
               />
-            </div>
+            </button>
             <div className="font-bold leading-5">{totalCount}</div>
-            <div className="hover:bg-p-btn-hover rounded-md p-1">
+            <button
+              onClick={handleDownvote}
+              className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+            >
               <img
-                onClick={handleDownvote}
                 src={
                   reaction === 'DOWNVOTE'
                     ? '/DownvoteFilled.svg'
                     : '/Downvote.svg'
                 }
-                className="w-5 h-5 cursor-pointer"
+                className="w-5 h-5"
               />
-            </div>
+            </button>
           </div>
         )}
 
@@ -458,8 +461,11 @@ const PostCard = ({ _post, setPosts }) => {
           {/* bottom row */}
           <div className="text-p-text  flex flex-row items-center px-3 sm:px-3.5 pt-1 justify-between sm:justify-start sm:space-x-28">
             {isMobile && (
-              <div className="flex flex-row items-center gap-x-2">
-                <div className="hover:bg-p-btn-hover rounded-md p-1">
+              <div className="flex flex-row items-center gap-x-1">
+                <button
+                  onClick={handleUpvote}
+                  className="hover:bg-p-btn-hover rounded-md p-1  cursor-pointer"
+                >
                   <img
                     //  onClick={liked ? handleUnLike : handleLike}
                     src={
@@ -467,58 +473,55 @@ const PostCard = ({ _post, setPosts }) => {
                         ? '/UpvoteFilled.svg'
                         : '/Upvote.svg'
                     }
-                    onClick={handleUpvote}
-                    className="w-5 h-5 cursor-pointer"
+                    className="w-5 h-5"
                   />
-                </div>
+                </button>
                 <div className="font-bold">{totalCount}</div>
-                <div className="hover:bg-p-btn-hover rounded-md p-1">
+                <button
+                  onClick={handleDownvote}
+                  className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                >
                   <img
                     src={
                       reaction === ReactionTypes.Downvote
                         ? '/DownvoteFilled.svg'
                         : '/Downvote.svg'
                     }
-                    className="w-5 h-5 cursor-pointer"
-                    onClick={handleDownvote}
+                    className="w-5 h-5"
                   />
-                </div>
+                </button>
               </div>
             )}
-            <div className="hover:bg-p-btn-hover rounded-md p-1">
-              {!router.pathname.startsWith('/p') ? (
-                <Link
-                  href={`/p/${post._id}`}
-                  className="flex flex-row items-center"
-                  passHref
-                >
-                  {post.comments?.length === 0 && (
-                    <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                  )}
-                  {post.comments?.length > 0 && (
-                    <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                  )}
-                  {post.comments?.length}
-                </Link>
-              ) : (
-                <div className="flex flex-row items-center">
-                  {post.comments?.length === 0 && (
-                    <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                  )}
-                  {post.comments?.length > 0 && (
-                    <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                  )}
-                  {post.comments?.length}
-                </div>
-              )}
-            </div>
+            {!router.pathname.startsWith('/p') ? (
+              <Link
+                href={`/p/${post._id}`}
+                className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1"
+                passHref
+              >
+                {post.comments?.length === 0 && (
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                )}
+                {post.comments?.length > 0 && (
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                )}
+                {post.comments?.length}
+              </Link>
+            ) : (
+              <div className="flex flex-row items-center">
+                {post.comments?.length === 0 && (
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                )}
+                {post.comments?.length > 0 && (
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                )}
+                {post.comments?.length}
+              </div>
+            )}
 
-            <div className="hover:bg-p-btn-hover rounded-md p-1">
-              <PostShareButton
-                url={`https://app.diversehq.xyz/p/${post?._id}`}
-                text={post?.title}
-              />
-            </div>
+            <PostShareButton
+              url={`https://app.diversehq.xyz/p/${post?._id}`}
+              text={post?.title}
+            />
           </div>
         </div>
       </div>

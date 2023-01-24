@@ -100,7 +100,7 @@ const PostsColumn = ({ source, sortBy, data }) => {
     if (hasMore && posts.length === 0) {
       getMorePosts()
     }
-  }, [data, hasMore, posts])
+  }, [data, source, sortBy, hasMore, posts])
 
   return (
     <>
