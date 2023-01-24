@@ -62,13 +62,13 @@ const ClickOption = () => {
         {
           label: 'View Profile',
           onClick: routeToUserProfile,
-          icon: () => <CgProfile className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+          icon: () => <CgProfile className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
         },
         {
           label: 'Disconnect',
           onClick: disconnectAndClear,
           icon: () => (
-            <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+            <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
           )
         }
       ]}

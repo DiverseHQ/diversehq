@@ -84,9 +84,9 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   return (
     <div>
       {profile && (
-        <div className="relative">
+        <div className="relative mt-10">
           <ImageWithLoaderAndZoom
-            className="h-28 w-full object-cover"
+            className="h-28 w-full object-cover rounded-t-[20px] border-t-[1px] border-x-[1px] border-p-border"
             src={
               profile.bannerImageUrl ? profile.bannerImageUrl : '/gradient.jpg'
             }
@@ -104,7 +104,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
             }
           />
 
-          <div className="flex flex-col px-3 sm:px-5 pb-6 bg-s-bg ">
+          <div className="flex flex-col px-3 sm:px-5 pb-6 bg-s-bg rounded-b-[20px] border-x-[1px] border-b-[1px] border-p-border">
             <div className="flex flex-row items-center self-end">
               {user &&
                 user?.walletAddress.toLowerCase() ===

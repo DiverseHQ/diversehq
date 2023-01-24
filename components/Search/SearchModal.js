@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { AiOutlineSearch } from 'react-icons/ai'
+import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
 import CommunitiesSearchModal from './CommunitiesSearchModal'
 import LensProfilesSearchModal from './LensProfilesSearchModal'
 
@@ -31,7 +31,7 @@ const SearchModal = () => {
     }
   }, [router])
   return (
-    <div className="relative flex flex-row items-center border-[1px] border-p-btn dark:border-0 p-1 rounded-[14px] bg-s-bg dark:bg-[#272729] w-[300px] lg:w-[400px] xl:aw-[450px] 2xl:w-[650px]  gap-2 md:gap-4">
+    <div className="relative flex flex-row items-center border-[1px] border-p-btn dark:border-0 p-1 rounded-[14px] bg-s-bg dark:bg-[#272729] w-[300px] lg:w-[400px] 2xl:w-[500px] gap-2 md:gap-4">
       <div className="text-p-text rounded-[12px] py-1 pl-2">
         <AiOutlineSearch className="w-[23px] h-[23px] text-p-text" />
       </div>
@@ -56,6 +56,17 @@ const SearchModal = () => {
           setLensProfiles={setLensProfiles}
         />
       </div>
+      {searchTerm !== '' && (
+        <div
+          className="text-p-text rounded-full py-1 px-1 mr-2 hover:bg-s-bg cursor-pointer"
+          onClick={() => {
+            setSearchTerm('')
+            inputRef.current.value = ''
+          }}
+        >
+          <AiOutlineClose className="w-[15px] h-[15px] text-p-text" />
+        </div>
+      )}
     </div>
   )
 }

@@ -21,11 +21,11 @@ const NotificationFilterNav = () => {
     }
   }, [pathname])
   return (
-    <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white sm:mt-10 mt-4 py-1 mb-2 sm:mb-4 sm:py-3 w-full sm:rounded-xl space-x-9 items-center">
+    <div className="font-bold text-sm sm:text-base flex flex-row  border-[1px] border-p-border px-3 sm:px-6 bg-white sm:mt-10 mt-4 py-1 mb-2 sm:mb-4 sm:py-3 w-full sm:rounded-xl space-x-9 items-center dark:bg-s-bg">
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'lens' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover relative`}
+        }  hover:bg-p-hover hover:text-p-hover-text relative`}
         onClick={() => {
           router.push('/notification/lens')
         }}
@@ -41,7 +41,7 @@ const NotificationFilterNav = () => {
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'offchain' && 'bg-p-bg'
-        }  hover:bg-p-btn-hover relative`}
+        }  hover:bg-p-hover hover:text-p-hover-text relative`}
         onClick={() => {
           setNotificationsCount(0)
           router.push('/notification/offchain')

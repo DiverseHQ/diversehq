@@ -154,12 +154,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
       type: modalType.customposition,
       onAction: () => {},
       extraaInfo: {
-        bottom:
-          window.innerHeight -
-          e.currentTarget.getBoundingClientRect().bottom -
-          100 +
-          'px',
-        left: e.currentTarget.getBoundingClientRect().left + 'px'
+        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
+        right:
+          window.innerWidth -
+          e.currentTarget.getBoundingClientRect().right +
+          'px'
       }
     })
   }
@@ -240,13 +239,48 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   ? comment.authorName
                   : comment.author.substring(0, 6) + '...'}
               </Link>
+              <div className="text-xs sm:text-sm text-s-text ml-2">
+                <ReactTimeAgo
+                  date={new Date(comment.updatedAt || comment.createdAt)}
+                  locale="en-US"
+                />
+              </div>
             </div>
-            <div className="text-xs sm:text-base">
-              <ReactTimeAgo
-                date={new Date(comment.updatedAt || comment.createdAt)}
-                locale="en-US"
-              />
-            </div>
+            {isAuthor && (
+              <>
+                <div className="relative">
+                  <BsThreeDots
+                    className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
+                    onClick={showMoreOptions}
+                    title="More"
+                  />
+                </div>
+
+                <BottomDrawerWrapper
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                >
+                  <MoreOptionsModal
+                    list={[
+                      {
+                        label: 'Edit Comment',
+                        onClick: handleEditComment,
+                        icon: () => (
+                          <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                        )
+                      },
+                      {
+                        label: 'Delete Comment',
+                        onClick: handleDeleteComment,
+                        icon: () => (
+                          <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                        )
+                      }
+                    ]}
+                  />
+                </BottomDrawerWrapper>
+              </>
+            )}
           </div>
 
           <div className="pl-8 sm:pl-10">
@@ -299,42 +333,6 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   onClick={handleDownvote}
                 />
               </div>
-
-              {isAuthor && (
-                <>
-                  <div className="relative">
-                    <BsThreeDots
-                      className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
-                      onClick={showMoreOptions}
-                      title="More"
-                    />
-                  </div>
-
-                  <BottomDrawerWrapper
-                    isDrawerOpen={isDrawerOpen}
-                    setIsDrawerOpen={setIsDrawerOpen}
-                  >
-                    <MoreOptionsModal
-                      list={[
-                        {
-                          label: 'Edit Comment',
-                          onClick: handleEditComment,
-                          icon: () => (
-                            <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                          )
-                        },
-                        {
-                          label: 'Delete Comment',
-                          onClick: handleDeleteComment,
-                          icon: () => (
-                            <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                          )
-                        }
-                      ]}
-                    />
-                  </BottomDrawerWrapper>
-                </>
-              )}
             </div>
           </div>
         </div>
