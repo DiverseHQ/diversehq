@@ -11,9 +11,10 @@ import { useProfile } from '../../Common/WalletContext'
 import LensPostsProfilePublicationsColumn from '../../Post/LensPostsProfilePublicationsColumn'
 import PostsColumn from '../../Post/PostsColumn'
 import EditProfile from '../EditProfile'
-import LensFollowButton from '../LensFollowButton'
 import useDevice from '../../Common/useDevice'
 import { GiBreakingChain } from 'react-icons/gi'
+import LensFollowButton from '../LensFollowButton'
+import { useProfileQuery } from '../../../graphql/generated'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -25,6 +26,23 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
   const [numberOfPosts, setNumberOfPosts] = useState(0)
   const { isMobile } = useDevice()
+
+  const { data } = useProfileQuery(
+    {
+      request: {
+        profileId: _lensProfile.id
+      }
+    },
+    {
+      enabled: !!_lensProfile
+    }
+  )
+
+  useEffect(() => {
+    if (data?.profile) {
+      setLensProfile(data.profile)
+    }
+  }, [data])
 
   useEffect(() => {
     console.log('profile', profile)

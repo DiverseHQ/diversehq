@@ -37,6 +37,7 @@ import ReactEmbedo from './embed/ReactEmbedo'
 import PostShareButton from './PostShareButton'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { RiMore2Fill } from 'react-icons/ri'
+import LensCollectButton from './Collect/LensCollectButton'
 
 /**
  * Sample post object
@@ -654,6 +655,13 @@ const LensPostCard = ({ post }) => {
                     {postInfo?.stats?.totalAmountOfComments}
                   </div>
                 )}
+                <LensCollectButton
+                  publicationId={postInfo?.id}
+                  totalCollects={postInfo?.stats?.totalAmountOfCollects}
+                  hasCollectedByMe={postInfo?.hasCollectedByMe}
+                  author={postInfo?.profile}
+                  collectModule={postInfo?.collectModule}
+                />
                 <PostShareButton
                   url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
                   text={postInfo?.metadata?.name}
