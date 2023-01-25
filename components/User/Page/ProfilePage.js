@@ -14,17 +14,35 @@ import EditProfile from '../EditProfile'
 import LensFollowButton from '../LensFollowButton'
 import useDevice from '../../Common/useDevice'
 import { GiBreakingChain } from 'react-icons/gi'
+import { HiCollection } from 'react-icons/hi'
+import LensCollectedPublicationsColumn from '../../Post/LensCollectedPublicationsColumn'
+import { useRouter } from 'next/router'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
   const [lensProfile, setLensProfile] = useState(_lensProfile)
-  const [showLensPosts, setShowLensPosts] = useState(false)
   const { notifyInfo } = useNotify()
   const { user } = useProfile()
   const { showModal } = usePopUpModal()
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
   const [numberOfPosts, setNumberOfPosts] = useState(0)
   const { isMobile } = useDevice()
+  const [active, setActive] = useState('lens')
+  const router = useRouter()
+  const { pathname } = router
+
+  useEffect(() => {
+    console.log('pathname', pathname)
+    if (pathname.endsWith('/lens')) {
+      setActive('lens')
+    } else if (pathname.endsWith('/offchain')) {
+      setActive('offchain')
+    } else if (pathname.endsWith('/collected')) {
+      setActive('collected')
+    } else {
+      setActive('lens')
+    }
+  }, [pathname])
 
   useEffect(() => {
     console.log('profile', profile)
@@ -232,22 +250,11 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 <div className="font-bold text-sm sm:text-base flex flex-row  border px-3 sm:px-6 bg-white mb-1 mt-2 sm:mt-6 py-1 sm:py-3 w-full sm:rounded-xl justify-start space-x-9 items-center">
                   <button
                     className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-                      !showLensPosts && 'bg-p-bg'
-                    }  hover:bg-p-btn-hover`}
-                    onClick={() => {
-                      setShowLensPosts(false)
-                    }}
-                  >
-                    <GiBreakingChain className="h-5 w-5" />
-                    <div>Off-chain</div>
-                  </button>
-                  <button
-                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-                      showLensPosts && 'bg-p-bg'
+                      active === 'lens' && 'bg-p-bg'
                     }  hover:bg-p-btn-hover`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
-                      setShowLensPosts(true)
+                      router.push(`/u/${profile?.walletAddress}/feed/lens`)
                     }}
                   >
                     <img
@@ -257,20 +264,48 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     />
                     <div>Lens</div>
                   </button>
+                  <button
+                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+                      active === 'offchain' && 'bg-p-bg'
+                    }  hover:bg-p-btn-hover`}
+                    onClick={() => {
+                      router.push(`/u/${profile?.walletAddress}/feed/offchain`)
+                    }}
+                  >
+                    <GiBreakingChain className="h-5 w-5" />
+                    <div>Off-chain</div>
+                  </button>
+                  <button
+                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+                      active === 'collected' && 'bg-p-bg'
+                    }  hover:bg-p-btn-hover`}
+                    disabled={!lensProfile?.id}
+                    onClick={() => {
+                      router.push(`/u/${profile?.walletAddress}/feed/collected`)
+                    }}
+                  >
+                    <HiCollection className="h-5 w-5" />
+                    <div>Collected</div>
+                  </button>
                 </div>
               )}
 
-              {profile.walletAddress && !showLensPosts && (
+              {profile.walletAddress && active === 'offchain' && (
                 <PostsColumn
                   source="user"
                   data={profile.walletAddress}
                   sortBy="new"
                 />
               )}
-              {showLensPosts && lensProfile?.id && (
-                <LensPostsProfilePublicationsColumn
-                  profileId={lensProfile?.id}
-                />
+              {profile.walletAddress &&
+                lensProfile?.id &&
+                active === 'lens' && (
+                  <LensPostsProfilePublicationsColumn
+                    profileId={lensProfile?.id}
+                  />
+                )}
+              {lensProfile?.id && active === 'collected' && (
+                <LensCollectedPublicationsColumn profileId={lensProfile?.id} walletAddress={profile?.walletAddress} />
               )}
             </div>
           </div>
