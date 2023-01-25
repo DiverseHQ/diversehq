@@ -185,7 +185,7 @@ const CreatePostPopup = () => {
     const createPostRequest = {
       profileId: lensProfile?.defaultProfile?.id,
       contentURI: `ipfs://${ipfsHash}`,
-      collectModule: { freeCollectModule: { followerOnly: true } },
+      collectModule: { freeCollectModule: { followerOnly: false } },
       referenceModule: {
         followerOnlyReferenceModule: false
       }
