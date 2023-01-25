@@ -9,9 +9,10 @@ import { AiOutlineHome } from 'react-icons/ai'
 import Link from 'next/link'
 import { DISCORD_INVITE_LINK, userRoles } from '../../utils/config'
 import { FaDiscord } from 'react-icons/fa'
+import { CgProfile } from 'react-icons/cg'
 
 const NewLeftSidebar = () => {
-  const { user } = useProfile()
+  const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
 
   const { notifyInfo } = useNotify()
@@ -91,6 +92,15 @@ const NewLeftSidebar = () => {
           <AiOutlineHome className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
           <span className="text-[16px] font-medium">Home</span>
         </Link>
+        {user && address && (
+          <Link
+            className="flex flex-row items-center hover:bg-p-hover hover:text-p-hover-text px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
+            href={`/u/${user.walletAddress}`}
+          >
+            <CgProfile className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+            <span className="text-[16px] font-medium">Profile</span>
+          </Link>
+        )}
         <a
           href={DISCORD_INVITE_LINK}
           target="_blank"
