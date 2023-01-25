@@ -110,6 +110,16 @@ function MyApp({ Component, pageProps }) {
           gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}');
           `}
       </Script>
+      <script
+        defer
+        data-domain="app.diversehq.xyz,lensverse.web"
+        src="https://plausible.io/js/script.js"
+      ></script>
+      <Script
+        defer
+        data-domain="app.diversehq.xyz,lensverse.web"
+        src="https://plausible.io/js/script.js"
+      ></Script>
       <DefaultSeo
         title="DiverseHQ"
         openGraph={{
