@@ -48,14 +48,25 @@ const Navbar = () => {
     }
   }, [pathname])
 
+  useEffect(() => {
+    const theme = window.localStorage.getItem('data-theme')
+    if (theme) {
+      document.body.classList.add(theme)
+      document.documentElement.setAttribute('data-theme', theme)
+      setTheme(theme)
+    }
+  }, [])
+
   const toggleDarkMode = () => {
     if (theme === 'light') {
       document.body.classList.add('dark')
       document.documentElement.setAttribute('data-theme', 'dark')
+      window.localStorage.setItem('data-theme', 'dark')
       setTheme('dark')
     } else {
       document.body.classList.remove('dark')
       document.documentElement.setAttribute('data-theme', 'light')
+      window.localStorage.setItem('data-theme', 'light')
       setTheme('light')
     }
   }

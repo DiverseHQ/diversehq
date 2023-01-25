@@ -193,7 +193,7 @@ const EditPostPopup = ({ post, setPost }) => {
           onChange={onChangeTitle}
           disabled={loading}
         />
-        <div className="relative">
+        <div className="relative text-p-text">
           {/* todo toolbar for rich text editor */}
           {/* <ToolbarPlugin /> */}
           <RichTextPlugin

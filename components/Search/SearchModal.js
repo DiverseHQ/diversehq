@@ -42,7 +42,7 @@ const SearchModal = () => {
         ref={inputRef}
         onChange={() => setSearchTerm(inputRef.current.value)}
       />
-      <div className="bg-s-bg rounded-2xl absolute w-full top-[50px] text-p-text">
+      <div className="bg-s-bg rounded-2xl absolute w-full top-[50px] text-p-text shadow-nav">
         <CommunitiesSearchModal
           searchTerm={searchTerm}
           inputRef={inputRef}
