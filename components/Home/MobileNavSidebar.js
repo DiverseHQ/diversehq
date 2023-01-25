@@ -25,7 +25,7 @@ import {
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { AiOutlineUsergroupAdd, AiOutlineClose } from 'react-icons/ai'
-import { FiMoon } from 'react-icons/fi'
+import { FiMoon, FiSun } from 'react-icons/fi'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -38,6 +38,8 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const createdCommunitiesButtonRef = useRef(null)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
+  const [theme, setTheme] = useState('light')
+
 
   const fetchAndSetCreatedCommunities = async () => {
     try {
@@ -57,6 +59,15 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     getJoinedCommunities()
   }, [user])
 
+  useEffect(() => {
+    const theme = window.localStorage.getItem('data-theme')
+    if (theme) {
+      document.body.classList.add(theme)
+      document.documentElement.setAttribute('data-theme', theme)
+      setTheme(theme)
+    }
+  }, [])
+
   const createCommunity = () => {
     // setShowOptions(!showOptions)
     if (!user) {
@@ -66,7 +77,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     showModal({
       component: <CreateCommunity />,
       type: modalType.normal,
-      onAction: () => {},
+      onAction: () => { },
       extraaInfo: {}
     })
   }
@@ -102,11 +113,24 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     }
   }
 
+  const toggleDarkMode = () => {
+    if (theme === 'light') {
+      document.body.classList.add('dark')
+      document.documentElement.setAttribute('data-theme', 'dark')
+      window.localStorage.setItem('data-theme', 'dark')
+      setTheme('dark')
+    } else {
+      document.body.classList.remove('dark')
+      document.documentElement.setAttribute('data-theme', 'light')
+      window.localStorage.setItem('data-theme', 'light')
+      setTheme('light')
+    }
+  }
+
   return (
     <div
-      className={`text-black fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${
-        isOpenSidebar ? 'z-50' : 'z-0'
-      }`}
+      className={`text-black fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${isOpenSidebar ? 'z-50' : 'z-0'
+        }`}
     >
       {/* backdrop */}
       {isOpenSidebar && (
@@ -119,9 +143,8 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       )}
 
       <div
-        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg gap-4 dark:text-p-text ${
-          isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
-        } `}
+        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg gap-4 dark:text-p-text ${isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
+          } `}
       >
         <div className="flex flex-row justify-between px-4 pt-4 gap-2">
           {user && address && (
@@ -155,12 +178,17 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </div>
           )}
           <div className="jutify-end flex flex-row items-start gap-2">
-            <button>
+            {theme === 'light' ? (
               <FiMoon
-                className="w-[22px] h-[22px] text-[#50555C] cursor-pointer"
-                // onClick={toggleDarkMode}
+                className="w-[25px] h-[25px] text-[#50555C] cursor-pointer"
+                onClick={toggleDarkMode}
               />
-            </button>
+            ) : (
+              <FiSun
+                className="w-[25px] h-[25px] text-p-text cursor-pointer"
+                onClick={toggleDarkMode}
+              />
+            )}
             <button onClick={() => setIsOpenSidebar(!isOpenSidebar)}>
               <AiOutlineClose className="w-[22px] h-[22px]" />
             </button>
@@ -263,7 +291,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           setIsDrawerOpen={setShowCreatedCommunities}
           showClose={true}
         >
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center ">
             <h1 className="font-bold text-lg mt-5">Created Communities</h1>
             <div className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
               {createdCommunities.map((community) => (
