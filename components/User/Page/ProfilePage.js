@@ -305,7 +305,9 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                   />
                 )}
               {lensProfile?.id && active === 'collected' && (
-                <LensCollectedPublicationsColumn profileId={lensProfile?.id} walletAddress={profile?.walletAddress} />
+                <LensCollectedPublicationsColumn
+                  walletAddress={lensProfile?.ownedBy}
+                />
               )}
             </div>
           </div>
