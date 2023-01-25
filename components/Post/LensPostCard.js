@@ -353,7 +353,7 @@ const LensPostCard = ({ post }) => {
                     />
                   </Link>
                   <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                    <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline">
+                    <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
                       {postInfo?.communityInfo?.name}
                     </div>
                   </Link>

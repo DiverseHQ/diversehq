@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
-import { IoIosClose } from 'react-icons/io'
+// import { IoIosClose } from 'react-icons/io'
 // import { IoIosHelpCircleOutline } from 'react-icons/io'
 // import { BsMoon } from 'react-icons/bs'
 // import { AiOutlineGift } from 'react-icons/ai'
@@ -24,7 +24,8 @@ import {
 } from '../../api/community'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import { AiOutlineUsergroupAdd } from 'react-icons/ai'
+import { AiOutlineUsergroupAdd, AiOutlineClose } from 'react-icons/ai'
+import { FiMoon } from 'react-icons/fi'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -153,9 +154,15 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               </div>
             </div>
           )}
-          <div className="jutify-end">
+          <div className="jutify-end flex flex-row items-start gap-2">
+            <button>
+              <FiMoon
+                className="w-[22px] h-[22px] text-[#50555C] cursor-pointer"
+                // onClick={toggleDarkMode}
+              />
+            </button>
             <button onClick={() => setIsOpenSidebar(!isOpenSidebar)}>
-              <IoIosClose className="w-[40px] h-[40px]" />
+              <AiOutlineClose className="w-[22px] h-[22px]" />
             </button>
           </div>
         </div>
