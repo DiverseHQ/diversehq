@@ -1,5 +1,7 @@
 import React from 'react'
 import { Drawer } from '@mui/material'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 const BottomDrawerWrapper = ({
   children,
@@ -7,6 +9,42 @@ const BottomDrawerWrapper = ({
   setIsDrawerOpen,
   showClose = true
 }) => {
+
+  const [theme, setTheme] = useState('light')
+
+
+  useEffect(() => {
+    const theme = window.localStorage.getItem('data-theme')
+    if (theme) {
+      document.body.classList.add(theme)
+      document.documentElement.setAttribute('data-theme', theme)
+      setTheme(theme)
+    }
+  }, [])
+
+  // const statusStyle = (status) => {
+  //   switch (status) {
+  //     case "dark":
+  //       return "#1A1A1B";
+  //       break;
+  //     case "light":
+  //       return "#FFFFFF";
+  //       break;
+  //   }
+  // };
+
+  // const textStyle = (status) => {
+  //   switch (status) {
+  //     case "light":
+  //       return "#1A1A1B";
+  //       break;
+  //     case "dark":
+  //       return "#FFFFFF";
+  //       break;
+  //   }
+  // };
+
+
   return (
     <Drawer
       anchor="bottom"
@@ -16,9 +54,13 @@ const BottomDrawerWrapper = ({
       }}
       sx={{
         '& .MuiDrawer-paper': {
-          borderRadius: '50px 50px 0px 0px'
-        }
+          borderRadius: '50px 50px 0px 0px',
+          bgcolor: theme === 'light' ? '#FFFFFF' : '#1A1A1B',
+          color: theme === 'light' ?
+            '#1A1A1B' : '#FFFFFF',
+        },
       }}
+
     >
       <div className="self-center mt-1 pb-4">
         <svg
@@ -34,19 +76,21 @@ const BottomDrawerWrapper = ({
       <div className="max-h-[350px] overflow-y-scroll overflow-x-hidden">
         {children}
       </div>
-      {showClose && (
-        <div className="px-4 w-full bg-s-bg mb-3 mt-1">
-          <button
-            onClick={() => {
-              setIsDrawerOpen(false)
-            }}
-            className="bg-p-bg rounded-full text-center flex font-bold text-p-text py-1 justify-center items-center text-p-text w-full text-xl "
-          >
-            Close
-          </button>
-        </div>
-      )}
-    </Drawer>
+      {
+        showClose && (
+          <div className="px-4 w-full bg-s-bg mb-3 mt-1">
+            <button
+              onClick={() => {
+                setIsDrawerOpen(false)
+              }}
+              className="bg-p-bg rounded-full text-center flex font-bold text-p-text py-1 justify-center items-center text-p-text w-full text-xl "
+            >
+              Close
+            </button>
+          </div>
+        )
+      }
+    </Drawer >
   )
 }
 
