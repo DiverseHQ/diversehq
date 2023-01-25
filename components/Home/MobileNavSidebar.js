@@ -181,23 +181,25 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </div>
           )}
           <div className="jutify-end flex flex-row items-start gap-2">
-            {theme === 'light' ? (
-              <FiMoon
-                className="w-[25px] h-[25px] text-[#50555C] cursor-pointer"
-                onClick={toggleDarkMode}
-              />
-            ) : (
-              <FiSun
-                className="w-[25px] h-[25px] text-p-text cursor-pointer"
-                onClick={toggleDarkMode}
-              />
-            )}
             <button onClick={() => setIsOpenSidebar(!isOpenSidebar)}>
-              <AiOutlineClose className="w-[22px] h-[22px]" />
+              <AiOutlineClose className="w-[25px] h-[25px]" />
             </button>
           </div>
         </div>
         <div className="flex flex-col px-4 bg-p-bg">
+          <button
+            className="flex flex-row items-center hover:font-semibold py-4 gap-3"
+            onClick={toggleDarkMode}
+          >
+            {theme === 'light' ? (
+              <FiMoon className="w-7 h-7 object-contain" />
+            ) : (
+              <FiSun className="w-7 h-7 object-contain" />
+            )}
+            <span className="text-p-text text-xl">
+              {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+            </span>
+          </button>
           <button
             className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
             onClick={() => {
