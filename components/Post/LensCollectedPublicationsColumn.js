@@ -2,70 +2,86 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
+import { FeedEventItemType, PublicationTypes, useCollectedPublicationQuery, useProfileFeedQuery, useUserProfileFeedQuery, useUserProfilesQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config'
 import LensPostCard from './LensPostCard'
 
-const LensCollectedPublicationsColumn = ({ walletAddress }) => {
+const LensCollectedPublicationsColumn = ({ profileId, walletAddress}) => {
   const [cursor, setCursor] = useState(null)
   const [posts, setPosts] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [nextCursor, setNextCursor] = useState(null)
   const { data: myLensProfile } = useLensUserContext()
 
-  const collectPublicationResult = usePublicationsQuery(
+  const { data: profileFeed } = useProfileFeedQuery(
     {
       request: {
-        collectedBy: walletAddress,
         cursor: cursor,
+        profileId: profileId,
         limit: LENS_POST_LIMIT,
-        publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror]
+        feedEventItemTypes: [FeedEventItemType.Post, FeedEventItemType.Mirror, FeedEventItemType.CollectPost ]
       },
       reactionRequest: {
-        profileId: myLensProfile?.defaultProfile?.id
+        profileId: profileId
       }
     },
     {
-      enabled: !!walletAddress
+      enabled: !!profileId
     }
   )
+  // const { data: profileFeed } = useUserProfileFeedQuery({
+  //     request: {
+  //       cursor: cursor,
+  //       profileId: profileId,
+  //       limit: LENS_POST_LIMIT,
+  //     feedEventItemTypes: [FeedEventItemType.Post, FeedEventItemType.Mirror, FeedEventItemType.COLLECT_POST]
+  //     },
+  //     reactionRequest: {
+  //       profileId: profileId
+  //     }
+  //   },
+  //   {
+  //     enabled: !!profileId
+  //   })
+  console.log({ profileFeed }, 'COLLECteD PUBLICATIONS')
 
-  useEffect(() => {
-    if (!collectPublicationResult?.data?.publications?.items) return
-    console.log(
-      'collected publications',
-      collectPublicationResult?.data?.publications?.items
-    )
-    handleUserPublications(collectPublicationResult?.data?.publications?.items)
-  }, [collectPublicationResult?.data?.publications?.pageInfo?.next])
+  // useEffect(() => {
+  //   if (!collectedPublications?.publications?.items) return
+  //   console.log(collectedPublications?.publications?.items, 'Collected ITEMS')
+  //   handleUserPublications()
+  // }, [collectedPublications?.publications?.pageInfo?.next])
 
-  const handleSetPosts = async (newPosts) => {
-    setPosts([...posts, ...newPosts])
-  }
+  // const handleSetPosts = async (newPosts) => {
+  //   console.log('newposts before', newPosts)
+  //   setPosts([...posts, ...newPosts])
+  // }
 
-  const handleUserPublications = async (newItems) => {
-    if (!newItems) return
-    if (newItems.length < LENS_POST_LIMIT) {
-      setHasMore(false)
-    }
-    if (collectPublicationResult?.data?.publications?.pageInfo?.next) {
-      setNextCursor(
-        collectPublicationResult?.data?.publications?.pageInfo?.next
-      )
-    }
-    await handleSetPosts(newItems)
-  }
+  // const handleUserPublications = async () => {
+  //   if (!collectedPublications?.publications?.items) return
+  //   if (
+  //     collectedPublications?.publications?.items.length <
+  //     LENS_POST_LIMIT
+  //   ) {
+  //     setHasMore(false)
+  //   }
+  //   if (collectedPublications?.publications?.pageInfo?.next) {
+  //     setNextCursor(
+  //       collectedPublications?.publications?.pageInfo?.next
+  //     )
+  //   }
+  //   await handleSetPosts(collectedPublications?.publications?.items)
+  // }
 
-  const getMorePosts = async () => {
-    if (nextCursor) {
-      setCursor(nextCursor)
-    }
-  }
+  // const getMorePosts = async () => {
+  //   if (nextCursor) {
+  //     setCursor(nextCursor)
+  //   }
+  // }
 
   return (
     <div>
-      <InfiniteScroll
+      {/* <InfiniteScroll
         dataLength={posts.length}
         next={getMorePosts}
         hasMore={hasMore}
@@ -100,7 +116,8 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
         {posts.map((post) => {
           return <LensPostCard key={post.id} post={post} />
         })}
-      </InfiniteScroll>
+      </InfiniteScroll> */}
+    hello world
     </div>
   )
 }
