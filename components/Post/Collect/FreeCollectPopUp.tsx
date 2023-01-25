@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { CollectModule, Profile } from '../../../graphql/generated'
+import { CollectModule, Profile, Publication } from '../../../graphql/generated'
 import PopUpWrapper from '../../Common/PopUpWrapper'
 import useCollectPublication from './useCollectPublication'
 import useLensFollowButton from '../../User/useLensFollowButton'
@@ -10,7 +10,7 @@ type Props = {
   setIsCollected: any
   setCollectCount: any
   collectModule: CollectModule
-  publicationId: string
+  publication: Publication
   author: Profile
 }
 
@@ -18,7 +18,7 @@ const FreeCollectPopUp = ({
   setIsCollected,
   setCollectCount,
   collectModule,
-  publicationId,
+  publication,
   author
 }: Props) => {
   const { collectPublication, isSuccess, loading } =
@@ -52,7 +52,7 @@ const FreeCollectPopUp = ({
       loading={loading}
       label="Collect"
       onClick={async () => {
-        await collectPublication(publicationId)
+        await collectPublication(publication.id)
       }}
     >
       {collectModule.__typename === 'FreeCollectModuleSettings' &&

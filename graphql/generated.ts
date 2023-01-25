@@ -3874,6 +3874,20 @@ export type AddReactionMutationVariables = Exact<{
 
 export type AddReactionMutation = { __typename?: 'Mutation', addReaction?: any | null };
 
+export type GenerateModuleCurrencyApprovalDataQueryVariables = Exact<{
+  request: GenerateModuleCurrencyApprovalDataRequest;
+}>;
+
+
+export type GenerateModuleCurrencyApprovalDataQuery = { __typename?: 'Query', generateModuleCurrencyApprovalData: { __typename?: 'GenerateModuleCurrencyApproval', to: any, from: any, data: any } };
+
+export type ApprovedModuleAllowanceAmountQueryVariables = Exact<{
+  request: ApprovedModuleAllowanceAmountRequest;
+}>;
+
+
+export type ApprovedModuleAllowanceAmountQuery = { __typename?: 'Query', approvedModuleAllowanceAmount: Array<{ __typename?: 'ApprovedAllowanceAmount', currency: any, module: string, contractAddress: any, allowance: string }> };
+
 export type BroadcastMutationVariables = Exact<{
   request: BroadcastRequest;
 }>;
@@ -4909,6 +4923,49 @@ export const useAddReactionMutation = <
     useMutation<AddReactionMutation, TError, AddReactionMutationVariables, TContext>(
       ['addReaction'],
       (variables?: AddReactionMutationVariables) => fetchData<AddReactionMutation, AddReactionMutationVariables>(AddReactionDocument, variables)(),
+      options
+    );
+export const GenerateModuleCurrencyApprovalDataDocument = `
+    query generateModuleCurrencyApprovalData($request: GenerateModuleCurrencyApprovalDataRequest!) {
+  generateModuleCurrencyApprovalData(request: $request) {
+    to
+    from
+    data
+  }
+}
+    `;
+export const useGenerateModuleCurrencyApprovalDataQuery = <
+      TData = GenerateModuleCurrencyApprovalDataQuery,
+      TError = unknown
+    >(
+      variables: GenerateModuleCurrencyApprovalDataQueryVariables,
+      options?: UseQueryOptions<GenerateModuleCurrencyApprovalDataQuery, TError, TData>
+    ) =>
+    useQuery<GenerateModuleCurrencyApprovalDataQuery, TError, TData>(
+      ['generateModuleCurrencyApprovalData', variables],
+      fetchData<GenerateModuleCurrencyApprovalDataQuery, GenerateModuleCurrencyApprovalDataQueryVariables>(GenerateModuleCurrencyApprovalDataDocument, variables),
+      options
+    );
+export const ApprovedModuleAllowanceAmountDocument = `
+    query approvedModuleAllowanceAmount($request: ApprovedModuleAllowanceAmountRequest!) {
+  approvedModuleAllowanceAmount(request: $request) {
+    currency
+    module
+    contractAddress
+    allowance
+  }
+}
+    `;
+export const useApprovedModuleAllowanceAmountQuery = <
+      TData = ApprovedModuleAllowanceAmountQuery,
+      TError = unknown
+    >(
+      variables: ApprovedModuleAllowanceAmountQueryVariables,
+      options?: UseQueryOptions<ApprovedModuleAllowanceAmountQuery, TError, TData>
+    ) =>
+    useQuery<ApprovedModuleAllowanceAmountQuery, TError, TData>(
+      ['approvedModuleAllowanceAmount', variables],
+      fetchData<ApprovedModuleAllowanceAmountQuery, ApprovedModuleAllowanceAmountQueryVariables>(ApprovedModuleAllowanceAmountDocument, variables),
       options
     );
 export const BroadcastDocument = `

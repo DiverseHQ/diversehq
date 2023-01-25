@@ -1,19 +1,29 @@
 import React from 'react'
 import { useState } from 'react'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
+import { CollectModule, Profile, Publication } from '../../../graphql/generated'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
+import FeeCollectPopUp from './FeeCollectPopUp'
 import FreeCollectPopUp from './FreeCollectPopUp'
 
+type Props = {
+  publication: Publication
+  totalCollects: number
+  hasCollectedByMe: boolean
+  author: Profile
+  collectModule: CollectModule
+}
+
 const LensCollectButton = ({
-  publicationId,
+  publication,
   totalCollects,
   hasCollectedByMe,
   author,
   collectModule
-}) => {
+}: Props) => {
   const [collectCount, setCollectCount] = useState(totalCollects)
   const [isCollected, setIsCollected] = useState(hasCollectedByMe)
-  const { showModal } = usePopUpModal()
+  const { showModal }: any = usePopUpModal()
 
   const handleCollectClick = async () => {
     console.log('handleCollectClick')
@@ -27,7 +37,23 @@ const LensCollectButton = ({
             setIsCollected={setIsCollected}
             setCollectCount={setCollectCount}
             collectModule={collectModule}
-            publicationId={publicationId}
+            publication={publication}
+            author={author}
+          />
+        ),
+        type: modalType.normal,
+        onAction: () => {},
+        extraaInfo: {}
+      })
+    }
+    if (collectModule.__typename === 'FeeCollectModuleSettings') {
+      showModal({
+        component: (
+          <FeeCollectPopUp
+            setIsCollected={setIsCollected}
+            setCollectCount={setCollectCount}
+            collectModule={collectModule}
+            publication={publication}
             author={author}
           />
         ),

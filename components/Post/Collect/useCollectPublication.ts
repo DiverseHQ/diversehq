@@ -14,7 +14,7 @@ const useCollectPublication = (collectModule: CollectModule) => {
   const { mutateAsync: createCollect } = useCreateCollectTypedDataMutation()
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast()
-  const { notifyError, notifySuccess }: any = useNotify()
+  const { notifyError }: any = useNotify()
   const [loading, setLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const handleFreeCollect = async (publicationId: string) => {
@@ -31,6 +31,7 @@ const useCollectPublication = (collectModule: CollectModule) => {
 
   const handleCollect = async (publicationId: string) => {
     setLoading(true)
+    console.log('Collecting', publicationId)
     const collectResult = (
       await createCollect({
         request: {
@@ -38,6 +39,7 @@ const useCollectPublication = (collectModule: CollectModule) => {
         }
       })
     ).createCollectTypedData
+    console.log('Collect Result', collectResult)
 
     signTypedDataAndBroadcast(collectResult.typedData, {
       id: collectResult.id,
@@ -49,7 +51,6 @@ const useCollectPublication = (collectModule: CollectModule) => {
       console.log('Successfully Collected', result)
       setIsSuccess(true)
       setLoading(false)
-      notifySuccess('Successfully Collected')
     }
   }, [type, result])
 
