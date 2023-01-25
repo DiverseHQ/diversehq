@@ -63,11 +63,13 @@ const Navbar = () => {
       document.documentElement.setAttribute('data-theme', 'dark')
       window.localStorage.setItem('data-theme', 'dark')
       setTheme('dark')
+      window.dispatchEvent(new Event('themeChange'))
     } else {
       document.body.classList.remove('dark')
       document.documentElement.setAttribute('data-theme', 'light')
       window.localStorage.setItem('data-theme', 'light')
       setTheme('light')
+      window.dispatchEvent(new Event('themeChange'))
     }
   }
 
