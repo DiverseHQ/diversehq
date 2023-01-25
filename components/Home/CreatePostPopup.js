@@ -6,6 +6,7 @@ import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
+import { BsCollection } from 'react-icons/bs'
 // import FormTextInput from '../Common/UI/FormTextInput'
 import {
   $convertToMarkdownString,
@@ -45,6 +46,7 @@ import FormTextInput from '../Common/UI/FormTextInput'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
+import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
@@ -68,6 +70,10 @@ const CreatePostPopup = () => {
   )
   const [editor] = useLexicalComposerContext()
   const { mutateAsync: addReaction } = useAddReactionMutation()
+  const [showCollectSettings, setShowCollectSettings] = useState(false)
+  const [collectSettings, setCollectSettings] = useState({
+    freeCollectModule: { followerOnly: false }
+  })
 
   useEffect(() => {
     return () => {
@@ -185,7 +191,7 @@ const CreatePostPopup = () => {
     const createPostRequest = {
       profileId: lensProfile?.defaultProfile?.id,
       contentURI: `ipfs://${ipfsHash}`,
-      collectModule: { freeCollectModule: { followerOnly: false } },
+      collectModule: collectSettings,
       referenceModule: {
         followerOnlyReferenceModule: false
       }
@@ -445,7 +451,18 @@ const CreatePostPopup = () => {
             </button>
           </div>
           <div className="flex flex-row items-center jusitify-center">
-            <img src="/lensLogo.svg" className="w-6" />
+            {isLensPost && (
+              <button
+                onClick={() => {
+                  setShowCollectSettings(!showCollectSettings)
+                }}
+                disabled={loading}
+                className="rounded-full hover:bg-p-btn-hover p-2 mr-6 cursor-pointer"
+              >
+                <BsCollection className="w-5 h-5" />
+              </button>
+            )}
+            <img src="/lensLogoWithoutText.svg" className="w-5" />
             <Switch
               checked={isLensPost}
               onChange={() => {
@@ -453,6 +470,7 @@ const CreatePostPopup = () => {
                   notifyInfo('You need to be logged in lens to do that')
                   return
                 }
+                if (isLensPost) setShowCollectSettings(false)
                 setIsLensPost(!isLensPost)
               }}
               disabled={loading}
@@ -463,77 +481,85 @@ const CreatePostPopup = () => {
 
         {showCommunityOptions && customOptions()}
         {/* <!-- Modal body --> */}
-        <div>
-          <FormTextInput
-            label="Title"
-            placeholder="gib me title"
-            maxLength={100}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            disabled={loading}
-          />
-          {/* Rich text editor */}
-          <div className="relative">
-            {/* todo toolbar for rich text editor */}
-            {/* <ToolbarPlugin /> */}
-            <RichTextPlugin
-              contentEditable={
-                <ContentEditable className="block min-h-[70px] overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px]" />
-              }
-              placeholder={
-                <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
-                  <div>{"What's this about...? (optional)"}</div>
-                </div>
-              }
+        {!showCollectSettings && (
+          <div>
+            <FormTextInput
+              label="Title"
+              placeholder="gib me title"
+              maxLength={100}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              disabled={loading}
             />
-            <OnChangePlugin
-              onChange={(editorState) => {
-                editorState.read(() => {
-                  const markdown = $convertToMarkdownString(TRANSFORMERS)
-                  setContent(markdown)
-                })
-              }}
-            />
-            <HistoryPlugin />
-            <HashtagPlugin />
-            <LexicalAutoLinkPlugin />
-            <ImagesPlugin
-              onPaste={async (files) => {
-                const file = files[0]
-                if (!file) return
-                setFile(file)
-                setImageValue(URL.createObjectURL(file))
-              }}
-            />
-            <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-          </div>
+            {/* Rich text editor */}
+            <div className="relative">
+              {/* todo toolbar for rich text editor */}
+              {/* <ToolbarPlugin /> */}
+              <RichTextPlugin
+                contentEditable={
+                  <ContentEditable className="block min-h-[70px] overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px]" />
+                }
+                placeholder={
+                  <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
+                    <div>{"What's this about...? (optional)"}</div>
+                  </div>
+                }
+              />
+              <OnChangePlugin
+                onChange={(editorState) => {
+                  editorState.read(() => {
+                    const markdown = $convertToMarkdownString(TRANSFORMERS)
+                    setContent(markdown)
+                  })
+                }}
+              />
+              <HistoryPlugin />
+              <HashtagPlugin />
+              <LexicalAutoLinkPlugin />
+              <ImagesPlugin
+                onPaste={async (files) => {
+                  const file = files[0]
+                  if (!file) return
+                  setFile(file)
+                  setImageValue(URL.createObjectURL(file))
+                }}
+              />
+              <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+            </div>
 
-          <div className="text-base leading-relaxed  m-4">
-            {file ? (
-              showAddedFile()
-            ) : (
-              <label htmlFor="upload-file">
-                <div className="h-32 text-s-text flex flex-col justify-center items-center border border-p-border  rounded-xl">
-                  <div>
-                    <AiOutlineCamera className="h-8 w-8" />
+            <div className="text-base leading-relaxed  m-4">
+              {file ? (
+                showAddedFile()
+              ) : (
+                <label htmlFor="upload-file">
+                  <div className="h-32 text-s-text flex flex-col justify-center items-center border border-p-border  rounded-xl">
+                    <div>
+                      <AiOutlineCamera className="h-8 w-8" />
+                    </div>
+                    <div>Add Image or Video</div>
+                    <div className="text-sm">
+                      (Leave Empty for only text post)
+                    </div>
                   </div>
-                  <div>Add Image or Video</div>
-                  <div className="text-sm">
-                    (Leave Empty for only text post)
-                  </div>
-                </div>
-              </label>
-            )}
+                </label>
+              )}
+            </div>
+            <input
+              type="file"
+              id="upload-file"
+              accept="image/*,video/*"
+              hidden
+              onChange={onImageChange}
+              disabled={loading}
+            />
           </div>
-          <input
-            type="file"
-            id="upload-file"
-            accept="image/*,video/*"
-            hidden
-            onChange={onImageChange}
-            disabled={loading}
+        )}
+        {showCollectSettings && (
+          <CollectSettingsModel
+            collectSettings={collectSettings}
+            setCollectSettings={setCollectSettings}
           />
-        </div>
+        )}
       </PopUpWrapper>
     )
   }

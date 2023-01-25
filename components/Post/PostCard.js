@@ -227,7 +227,7 @@ const PostCard = ({ _post, setPosts }) => {
                 />
               </Link>
               <Link href={`/c/${post.communityName}`}>
-                <div className="pl-2 font-bold text-xs sm:text-xl hover:cursor-pointer hover:underline text-p-text">
+                <div className="pl-2 font-bold text-xs sm:text-lg hover:cursor-pointer hover:underline text-p-text">
                   {post.communityName}
                 </div>
               </Link>

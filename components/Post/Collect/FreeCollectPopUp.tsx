@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { CollectModule, Profile } from '../../../graphql/generated'
+import { CollectModule, Profile, Publication } from '../../../graphql/generated'
 import PopUpWrapper from '../../Common/PopUpWrapper'
 import useCollectPublication from './useCollectPublication'
 import useLensFollowButton from '../../User/useLensFollowButton'
@@ -10,7 +10,7 @@ type Props = {
   setIsCollected: any
   setCollectCount: any
   collectModule: CollectModule
-  publicationId: string
+  publication: Publication
   author: Profile
 }
 
@@ -18,7 +18,7 @@ const FreeCollectPopUp = ({
   setIsCollected,
   setCollectCount,
   collectModule,
-  publicationId,
+  publication,
   author
 }: Props) => {
   const { collectPublication, isSuccess, loading } =
@@ -52,48 +52,50 @@ const FreeCollectPopUp = ({
       loading={loading}
       label="Collect"
       onClick={async () => {
-        await collectPublication(publicationId)
+        await collectPublication(publication.id)
       }}
     >
-      {collectModule.__typename === 'FreeCollectModuleSettings' &&
-        !collectModule.followerOnly && (
-          <div className="text-sm text-gray-500">Free collect for everyone</div>
-        )}
-      {collectModule.__typename === 'FreeCollectModuleSettings' &&
-        collectModule.followerOnly && (
-          <>
-            <div className="text-sm text-gray-500">
-              Free collect for those who follow {author.handle}
-            </div>
-            <div>
-              {isFollowedByMe ? (
-                <div className="text-sm text-gray-500">
-                  You are following {author.handle} and can collect for free
-                </div>
-              ) : (
-                <>
-                  <div className="text-sm text-gray-500">
-                    You are not following {author.handle}, follow to collect for
-                    free
+      <div className="px-4">
+        {collectModule.__typename === 'FreeCollectModuleSettings' &&
+          !collectModule.followerOnly && (
+            <div className="">Free collect for everyone</div>
+          )}
+        {collectModule.__typename === 'FreeCollectModuleSettings' &&
+          collectModule.followerOnly && (
+            <>
+              <div className="">
+                Free collect for those who follow {author.handle}
+              </div>
+              <div>
+                {isFollowedByMe ? (
+                  <div className="">
+                    You are following {author.handle} and can collect for free
                   </div>
+                ) : (
+                  <>
+                    <div className="">
+                      You are not following {author.handle}, follow to collect
+                      for free
+                    </div>
 
-                  <button
-                    onClick={() => {
-                      handleFollowProfile(author.id)
-                    }}
-                    className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
-                  >
-                    {followLoading
-                      ? 'Following'
-                      : author.isFollowing
-                      ? 'Follow back'
-                      : 'Follow'}
-                  </button>
-                </>
-              )}
-            </div>
-          </>
-        )}
+                    <button
+                      onClick={() => {
+                        handleFollowProfile(author.id)
+                      }}
+                      className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
+                    >
+                      {followLoading
+                        ? 'Following'
+                        : author.isFollowing
+                        ? 'Follow back'
+                        : 'Follow'}
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+      </div>
     </PopUpWrapper>
   )
 }
