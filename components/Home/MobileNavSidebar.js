@@ -40,7 +40,6 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
   const [theme, setTheme] = useState('light')
 
-
   const fetchAndSetCreatedCommunities = async () => {
     try {
       const communities = await getCreatedCommunitiesApi()
@@ -77,7 +76,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     showModal({
       component: <CreateCommunity />,
       type: modalType.normal,
-      onAction: () => { },
+      onAction: () => {},
       extraaInfo: {}
     })
   }
@@ -119,18 +118,21 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       document.documentElement.setAttribute('data-theme', 'dark')
       window.localStorage.setItem('data-theme', 'dark')
       setTheme('dark')
+      window.dispatchEvent(new Event('themeChange'))
     } else {
       document.body.classList.remove('dark')
       document.documentElement.setAttribute('data-theme', 'light')
       window.localStorage.setItem('data-theme', 'light')
       setTheme('light')
+      window.dispatchEvent(new Event('themeChange'))
     }
   }
 
   return (
     <div
-      className={`text-black fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${isOpenSidebar ? 'z-50' : 'z-0'
-        }`}
+      className={`text-black fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${
+        isOpenSidebar ? 'z-50' : 'z-0'
+      }`}
     >
       {/* backdrop */}
       {isOpenSidebar && (
@@ -143,8 +145,9 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       )}
 
       <div
-        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg gap-4 dark:text-p-text ${isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
-          } `}
+        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg gap-4 dark:text-p-text ${
+          isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
+        } `}
       >
         <div className="flex flex-row justify-between px-4 pt-4 gap-2">
           {user && address && (
@@ -178,23 +181,25 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </div>
           )}
           <div className="jutify-end flex flex-row items-start gap-2">
-            {theme === 'light' ? (
-              <FiMoon
-                className="w-[25px] h-[25px] text-[#50555C] cursor-pointer"
-                onClick={toggleDarkMode}
-              />
-            ) : (
-              <FiSun
-                className="w-[25px] h-[25px] text-p-text cursor-pointer"
-                onClick={toggleDarkMode}
-              />
-            )}
             <button onClick={() => setIsOpenSidebar(!isOpenSidebar)}>
-              <AiOutlineClose className="w-[22px] h-[22px]" />
+              <AiOutlineClose className="w-[25px] h-[25px]" />
             </button>
           </div>
         </div>
         <div className="flex flex-col px-4 bg-p-bg">
+          <button
+            className="flex flex-row items-center hover:font-semibold py-4 gap-3"
+            onClick={toggleDarkMode}
+          >
+            {theme === 'light' ? (
+              <FiMoon className="w-7 h-7 object-contain" />
+            ) : (
+              <FiSun className="w-7 h-7 object-contain" />
+            )}
+            <span className="text-p-text text-xl">
+              {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+            </span>
+          </button>
           <button
             className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
             onClick={() => {

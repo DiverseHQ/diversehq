@@ -66,8 +66,7 @@ const NewLeftSidebar = () => {
             <h2 className="font-semibold text-[18px] text-p-text">DiverseHQ</h2>
           </div>
           <p className="mb-2 -translate-y-4 text-p-text">
-            Your personal Reddit frontpage. Come here to check in with your
-            favorite communities.
+            Monetization and content reach is not just for famous few.
           </p>
           <button
             className="flex flex-row items-center justify-center w-full rounded-[10px] text-[16px] font-semibold text-p-btn-text bg-p-btn dark:bg-p-text dark:text-s-bg py-2 px-2 mb-3"
