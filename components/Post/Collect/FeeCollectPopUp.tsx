@@ -109,7 +109,7 @@ const FeeCollectPopUp = ({
       }}
     >
       {collectModule.followerOnly && !isFollowedByMe && (
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center text-p-text">
           <button
             onClick={() => {
               handleFollowProfile(author.id)
@@ -125,15 +125,15 @@ const FeeCollectPopUp = ({
           <div>{author.handle} to collect this post</div>
         </div>
       )}
-      {allowanceLoading && <div>loading allowance</div>}
+      {allowanceLoading && <div className="text-p-text">loading allowance</div>}
 
       {isAllowed && hasAmount ? (
         <>
-          <div className="m-4">
+          <div className="m-4 text-p-text">
             Balance : {parseFloat(balanceData?.formatted)} | Gifting:{' '}
             {collectModule?.amount?.value}
           </div>
-          <div className="m-4">You can collect this post</div>
+          <div className="m-4 text-p-text">You can collect this post</div>
         </>
       ) : (
         <>
@@ -145,7 +145,7 @@ const FeeCollectPopUp = ({
             />
           )}
           {!hasAmount && (
-            <div>
+            <div className="text-p-text">
               Balance : {parseFloat(balanceData?.formatted)} | Required:{' '}
               {collectModule?.amount?.value}
             </div>
