@@ -477,6 +477,12 @@ const CreatePostPopup = () => {
               }}
               disabled={loading}
               size="small"
+              sx={{
+                '& .MuiSwitch-track': {
+                  backgroundColor: 'grey',
+                  color: 'grey'
+                }
+              }}
             />
           </div>
         </div>
