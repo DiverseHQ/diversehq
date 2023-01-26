@@ -47,10 +47,12 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
+// import { useTheme } from '../Common/ThemeProvider'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
 const CreatePostPopup = () => {
+  // const { theme } = useTheme()
   const [title, setTitle] = useState('')
   const [file, setFile] = useState(null)
   const [content, setContent] = useState('')

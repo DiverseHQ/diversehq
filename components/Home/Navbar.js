@@ -13,6 +13,7 @@ import ClickOption from './ClickOption'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
 import Image from 'next/image'
+import { useTheme } from '../Common/ThemeProvider'
 // import LogoComponent from '../Common/UI/LogoComponent'
 
 // const NavbarButton = ({ btnText, link, isActive, props }) => {
@@ -30,18 +31,18 @@ import Image from 'next/image'
 // }
 
 const Navbar = () => {
-  const [theme, setTheme] = useState('light')
   const router = useRouter()
   const { pathname } = router
   const { user, address } = useProfile()
   const { showModal } = usePopUpModal()
+  const { theme, toggleTheme } = useTheme()
 
   const [active, setActive] = useState('home')
   const { notificationsCount, setNotificationsCount } = useNotificationsCount()
   const [showDot, setShowDot] = React.useState(true)
 
   useEffect(() => {
-    if (pathname.endsWith('/')) {
+    if (pathname === '/' || pathname.startsWith('/feed')) {
       setActive('home')
     } else if (pathname.endsWith('/explore')) {
       setActive('explore')
@@ -49,31 +50,6 @@ const Navbar = () => {
       setActive('none')
     }
   }, [pathname])
-
-  useEffect(() => {
-    const theme = window.localStorage.getItem('data-theme')
-    if (theme) {
-      document.body.classList.add(theme)
-      document.documentElement.setAttribute('data-theme', theme)
-      setTheme(theme)
-    }
-  }, [])
-
-  const toggleDarkMode = () => {
-    if (theme === 'light') {
-      document.body.classList.add('dark')
-      document.documentElement.setAttribute('data-theme', 'dark')
-      window.localStorage.setItem('data-theme', 'dark')
-      setTheme('dark')
-      window.dispatchEvent(new Event('themeChange'))
-    } else {
-      document.body.classList.remove('dark')
-      document.documentElement.setAttribute('data-theme', 'light')
-      window.localStorage.setItem('data-theme', 'light')
-      setTheme('light')
-      window.dispatchEvent(new Event('themeChange'))
-    }
-  }
 
   const routeToNotifications = () => {
     setNotificationsCount(0)
@@ -149,10 +125,10 @@ const Navbar = () => {
       </div>
       <div className="flex flex-row items-center gap-2">
         <button
-          className="flex flex-row items-center bg-transparent rounded-[20px] relative text-p-text"
+          className="flex flex-row items-center bg-transparent rounded-full relative text-p-text hover:bg-p-hover hover:text-p-hover-text p-1"
           onClick={routeToNotifications}
         >
-          <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain text-[#50555C] dark:text-p-text" />
+          <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
           {/* a green count dot */}
           {notificationsCount > 0 && (
             <div className="top-0 left-4 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full">
@@ -161,20 +137,19 @@ const Navbar = () => {
           )}
           {(notificationsCount === 0 || !notificationsCount) && showDot && (
             // a green circle
-            <div className="absolute top-0 left-4 w-[8px] h-[8px] bg-red-500 rounded-full" />
+            <div className="absolute top-1 left-4 w-[8px] h-[8px] bg-red-500 rounded-full" />
           )}
         </button>
-        {theme === 'light' ? (
-          <FiMoon
-            className="w-[25px] h-[25px] text-[#50555C] cursor-pointer"
-            onClick={toggleDarkMode}
-          />
-        ) : (
-          <FiSun
-            className="w-[25px] h-[25px] text-p-text cursor-pointer"
-            onClick={toggleDarkMode}
-          />
-        )}
+        <button
+          className="text-p-text hover:bg-p-hover hover:text-p-hover-text p-1 rounded-full"
+          onClick={toggleTheme}
+        >
+          {theme === 'light' ? (
+            <FiMoon className="w-[25px] h-[25px] cursor-pointer" />
+          ) : (
+            <FiSun className="w-[25px] h-[25px] cursor-pointer" />
+          )}
+        </button>
         {user && address && (
           <div
             className="flex flex-row rounded-full items-center justify-between hover:cursor-pointer h-[40px]"
