@@ -124,9 +124,9 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
         onClick={handleSubmit}
         loading={loading}
       >
-        <div>
+        <div className="text-p-text">
           <label htmlFor="communityBanner">
-            <div className="flex h-44 border-y border-p-border items-center justify-center">
+            <div className="flex h-44 border-y border-p-border items-center justify-center cursor-pointer">
               {/* eslint-disable-next-line */}
               {communityBanner && (
                 <img
@@ -146,7 +146,7 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
           <div
             className={`flex relative ${
               logoImage ? '' : 'border'
-            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
+            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10 cursor-pointer`}
           >
             {logoImage && (
               <label htmlFor="logoImage">
@@ -160,7 +160,7 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
             )}
             <div className="absolute">
               <label htmlFor="logoImage">
-                <div className="bg-p-bg rounded-full p-2">
+                <div className="bg-p-bg rounded-full p-2 cursor-pointer">
                   <AiOutlineCamera className="h-8 w-8 " />
                 </div>
               </label>
