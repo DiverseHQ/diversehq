@@ -287,7 +287,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             {editing ? (
               <div className="flex items-center justify-between">
                 <input
-                  className="mt-1 border-b-2 focus:outline-none text-base sm:text-lg sm:text-semibold w-[80%]"
+                  className="mt-1 border-b-2 focus:outline-none text-base sm:text-lg sm:text-semibold w-[80%] bg-transparent"
                   type="text"
                   placeholder={`${content}`}
                   value={`${content}`}

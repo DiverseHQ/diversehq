@@ -344,7 +344,7 @@ const CreatePostPopup = () => {
             }`}
             style={communityOptionsCoord}
           >
-            <div className="bg-white/50  backdrop-blur-lg rounded-2xl max-h-[450px] overflow-auto">
+            <div className="bg-white/50 dark:bg-black/50 backdrop-blur-lg rounded-2xl max-h-[450px] overflow-auto">
               <FilterListWithSearch
                 list={joinedCommunities}
                 type="community"

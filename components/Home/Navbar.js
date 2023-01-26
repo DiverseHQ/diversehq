@@ -45,6 +45,8 @@ const Navbar = () => {
       setActive('home')
     } else if (pathname.endsWith('/explore')) {
       setActive('explore')
+    } else {
+      setActive('none')
     }
   }, [pathname])
 

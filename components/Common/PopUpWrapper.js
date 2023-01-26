@@ -16,7 +16,7 @@ const PopUpWrapper = ({
   const { hideModal } = usePopUpModal()
   const { isDesktop } = useDevice()
   return (
-    <div className="bg-p-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden ">
+    <div className="bg-p-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden text-p-text">
       <div className="flex flex-row justify-between items-center pb-4 px-4">
         <div className="flex flex-row justify-center items-center">
           {isDesktop && (

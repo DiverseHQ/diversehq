@@ -140,9 +140,9 @@ const CreateCommunity = () => {
         label="CREATE"
         loading={loading}
       >
-        <div>
+        <div className="text-p-text">
           <label htmlFor="communityHeader">
-            <div className="flex h-44 border-y border-p-border items-center justify-center">
+            <div className="flex h-44 border-y border-p-border items-center justify-center cursor-pointer">
               {/* eslint-disable-next-line */}
               {headerValue && (
                 <img
@@ -170,7 +170,7 @@ const CreateCommunity = () => {
           <div
             className={`flex relative ${
               communityPfp ? '' : 'border'
-            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
+            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10 cursor-pointer`}
           >
             {communityPfp && (
               <label htmlFor="communityPfp">
@@ -186,7 +186,7 @@ const CreateCommunity = () => {
             )}
             <div className="absolute">
               <label htmlFor="communityPfp">
-                <div className="bg-p-bg rounded-full p-2">
+                <div className="bg-p-bg rounded-full p-2 cursor-pointer">
                   <AiOutlineCamera className="h-8 w-8 " />
                 </div>
               </label>
