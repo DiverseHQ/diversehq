@@ -280,10 +280,10 @@ const LensCreateComment = ({
             </div>
           </>
         ) : (
-          <div className="px-2 sm:px-5 w-full bg-s-bg py-3 fixed z-50 bottom-[50px]">
+          <div className="px-2 sm:px-5 w-full bg-s-bg py-3 fixed z-30 bottom-[50px]">
             <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4">
               <div className="flex flex-row gap-2 sm:gap-4 items-center w-full">
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row self-end mb-1.5">
                   <img
                     src={
                       user?.profileImageUrl
@@ -314,7 +314,7 @@ const LensCreateComment = ({
                   />
                 </div>
               </div>
-              <div className="flex flex-row items-center justify-center">
+              <div className="flex flex-row justify-center self-end mb-3">
                 {!loading && (
                   <FiSend
                     onClick={createComment}

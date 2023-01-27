@@ -430,7 +430,7 @@ const CreatePostPopup = () => {
         loading={loading}
         isDisabled={!communityId}
       >
-        <div className="flex flex-row items-center justify-between px-4">
+        <div className="flex flex-row items-center justify-between px-4 z-50">
           <div className="border border-p-border rounded-full text-p-text w-fit px-1">
             <button
               className="text-blue-500 p-1"
