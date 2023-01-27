@@ -24,9 +24,10 @@ import {
 } from '../../api/community'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import { AiOutlineUsergroupAdd, AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineUsergroupAdd, AiOutlineDisconnect } from 'react-icons/ai'
 import { FiMoon, FiSun } from 'react-icons/fi'
 import { useTheme } from '../Common/ThemeProvider'
+import { useLensUserContext } from '../../lib/LensUserContext'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -40,6 +41,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
   const { theme, toggleTheme } = useTheme()
+  const { data: myLensProfile } = useLensUserContext()
 
   const fetchAndSetCreatedCommunities = async () => {
     try {
@@ -121,11 +123,11 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       )}
 
       <div
-        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg gap-4 dark:text-p-text ${
+        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg dark:text-p-text rounded-r-[10px] ${
           isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
         } `}
       >
-        <div className="flex flex-row justify-between px-4 pt-4 gap-2">
+        <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-8">
           {user && address && (
             <div className="flex flex-col">
               <div className="flex flex-row gap-1">
@@ -137,45 +139,21 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                   {user?.name && (
                     <h3 className="font-semibold text-[18px]">{user.name}</h3>
                   )}
-                  <div
-                    className="text-sm flex flex-row items-center cursor-pointer"
-                    onClick={handleWalletAddressCopy}
-                  >
-                    <div className="">
-                      {stringToLength(user.walletAddress, 8)}
-                    </div>
-                    <FaRegCopy className="w-7 h-7 px-2" />
+                  <div className="flex flex-row gap-1 text-p-text">
+                    <span className="font-bold">
+                      {myLensProfile?.stats?.totalFollowers}
+                    </span>
+                    <span className="font-light">Followers</span>
                   </div>
                 </div>
               </div>
-              <div className="mt-4">
-                <LensLoginButton />
-              </div>
-              <div className="mt-2 text-red-400" onClick={disconnect}>
-                Disconnect
-              </div>
             </div>
           )}
-          <div className="jutify-end flex flex-row items-start gap-2">
-            <button onClick={() => setIsOpenSidebar(!isOpenSidebar)}>
-              <AiOutlineClose className="w-[25px] h-[25px]" />
-            </button>
-          </div>
+        </div>
+        <div className="bg-[#62F030] px-4 py-4">
+          <LensLoginButton />
         </div>
         <div className="flex flex-col px-4 bg-p-bg">
-          <button
-            className="flex flex-row items-center hover:font-semibold py-4 gap-3"
-            onClick={toggleTheme}
-          >
-            {theme === 'light' ? (
-              <FiMoon className="w-7 h-7 object-contain" />
-            ) : (
-              <FiSun className="w-7 h-7 object-contain" />
-            )}
-            <span className="text-p-text text-xl">
-              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-            </span>
-          </button>
           <button
             className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
             onClick={() => {
@@ -185,6 +163,17 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           >
             <MdOutlinePerson className="w-7 h-7 object-contain" />
             <span className="text-p-text text-xl">Profile</span>
+          </button>
+
+          <button
+            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
+            onClick={() => {
+              createCommunity()
+              setIsOpenSidebar(false)
+            }}
+          >
+            <MdOutlineCreateNewFolder className="w-7 h-7 object-contain" />
+            <span className="text-p-text text-xl">Create Community</span>
           </button>
 
           <button
@@ -206,15 +195,34 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           </button>
 
           <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
-            onClick={() => {
-              createCommunity()
-              setIsOpenSidebar(false)
-            }}
+            className="flex flex-row items-center hover:font-semibold py-4 gap-3"
+            onClick={toggleTheme}
           >
-            <MdOutlineCreateNewFolder className="w-7 h-7 object-contain" />
-            <span className="text-p-text text-xl">Create Community</span>
+            {theme === 'light' ? (
+              <FiMoon className="w-7 h-7 object-contain" />
+            ) : (
+              <FiSun className="w-7 h-7 object-contain" />
+            )}
+            <span className="text-p-text text-xl">
+              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+            </span>
           </button>
+          <div className="flex flex-row items-center hover:font-semibold py-4 gap-3">
+            <div className="flex flex-row gap-3" onClick={disconnect}>
+              <AiOutlineDisconnect className="w-7 h-7 object-contain text-red-400" />
+              <span className="text-xl text-red-400">Disconnect</span>
+            </div>
+            {user && address && (
+              <div
+                className="text-sm flex flex-row items-center cursor-pointer"
+                onClick={handleWalletAddressCopy}
+              >
+                <div className="">{stringToLength(user?.walletAddress, 8)}</div>
+                <FaRegCopy className="w-3 h-3" />
+              </div>
+            )}
+          </div>
+
           <a
             href={DISCORD_INVITE_LINK}
             target={'_blank'}
