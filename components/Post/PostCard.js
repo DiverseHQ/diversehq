@@ -542,7 +542,13 @@ const PostCard = ({ _post, setPosts }) => {
               )}
           </div>
           {/* bottom row */}
-          <div className="text-p-text  flex flex-row items-center px-3 sm:px-3.5 pt-1 justify-between sm:justify-start sm:space-x-28">
+          <div
+            className={`text-p-text  flex flex-row items-center px-3 sm:px-3.5 pt-1  justify-between sm:justify-start sm:space-x-28 ${
+              isMobile
+                ? 'border-b-[1px] border-[#eee] dark:border-p-border pb-2'
+                : ''
+            }`}
+          >
             {isMobile && (
               <div className="flex flex-row items-center gap-x-1">
                 <button
