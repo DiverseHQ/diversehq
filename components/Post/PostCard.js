@@ -352,7 +352,7 @@ const PostCard = ({ _post, setPosts }) => {
           {isAuthor && (
             <div className="relative">
               <button
-                className="hover:bg-p-btn-hover hover:cursor-pointer  rounded-md p-1"
+                className="hover:bg-p-hover hover:cursor-pointer  rounded-md p-1"
                 onClick={() => {
                   isMobile
                     ? showMoreOptions()

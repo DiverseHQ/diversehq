@@ -47,10 +47,12 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
+// import { useTheme } from '../Common/ThemeProvider'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
 const CreatePostPopup = () => {
+  // const { theme } = useTheme()
   const [title, setTitle] = useState('')
   const [file, setFile] = useState(null)
   const [content, setContent] = useState('')
@@ -497,7 +499,7 @@ const CreatePostPopup = () => {
               {/* <ToolbarPlugin /> */}
               <RichTextPlugin
                 contentEditable={
-                  <ContentEditable className="block min-h-[70px] overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px]" />
+                  <ContentEditable className="block min-h-[70px] text-p-text overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px]" />
                 }
                 placeholder={
                   <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">

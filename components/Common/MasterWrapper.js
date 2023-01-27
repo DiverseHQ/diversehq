@@ -1,5 +1,4 @@
 import React from 'react'
-import { ThemeProvider } from 'next-themes'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { NotifyProvider } from './NotifyContext'
@@ -8,6 +7,7 @@ import RainbowKitWrapper from './RainbowKitWrapper'
 import CustomPopUpModalProvider from './CustomPopUpProvider'
 import LensUserContextProvider from '../../lib/LensUserContext'
 import LexicalWrapper from './LexicalWrapper'
+import ThemeProvider from './ThemeProvider'
 
 const queryClient = new QueryClient()
 
@@ -18,7 +18,7 @@ const MasterWrapper = ({ children }) => {
         <QueryClientProvider client={queryClient}>
           <LensUserContextProvider>
             <WalletProvider>
-              <ThemeProvider defaultTheme="system">
+              <ThemeProvider>
                 <LexicalWrapper>
                   <CustomPopUpModalProvider>
                     {children}

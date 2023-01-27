@@ -54,7 +54,7 @@ const MobileFilterDrawerButton = () => {
     <div>
       <button
         onClick={() => setIsDrawerOpen(true)}
-        className="flex flex-row items-center justify-center bg-p-btn-hover p-1 rounded-md"
+        className="flex flex-row items-center justify-center bg-s-bg  p-1 rounded-md"
       >
         <svg
           width="22"

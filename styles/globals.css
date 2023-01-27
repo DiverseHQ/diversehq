@@ -155,22 +155,22 @@
 
 [data-theme='dark'] {
   --background: #030303;
-  --background-secondary: #1A1A1B;
-  --accent-primary: #9378D8;
+  --background-secondary: #1a1a1b;
+  --accent-primary: #9378d8;
   --accent-secondary: theme('colors.purple.600');
-  --accent-hover: theme('colors.purple.500');
+  --accent-hover: #343536;
 
-  --text-primary: #D7DADC;
+  --text-primary: #d7dadc;
   --text-secondary: #9197ae;
 
   --border-primary: #343536;
 
   --background-pop: #ffffff38;
 
-  --btn-primary-text: #D7DADC;
+  --btn-primary-text: #d7dadc;
 
-  --hover-primary: #D7DADC;
-  --hover-primary-text: #1A1A1B;
+  --hover-primary: #d7dadc;
+  --hover-primary-text: #1a1a1b;
 }
 
 .custom-zoom [data-rmiz-modal-overlay='visible'] {

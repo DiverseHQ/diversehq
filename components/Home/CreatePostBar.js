@@ -1,5 +1,6 @@
 import React from 'react'
 import { CiImageOn } from 'react-icons/ci'
+import { CgProfile } from 'react-icons/cg'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
 import CreatePostPopup from './CreatePostPopup'
@@ -28,6 +29,11 @@ const CreatePostBar = () => {
   return (
     <div className="flex flex-row items-center bg-s-bg mt-10 mb-4 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-p-border">
       <div className="flex items-center justify-center rounded-full w-[44px] h-[44px]">
+        {!user && (
+          <div>
+            <CgProfile className="w-[32px] h-[32px]" />
+          </div>
+        )}
         {user?.profileImageUrl && (
           <img
             src={user.profileImageUrl}

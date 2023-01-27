@@ -25,7 +25,8 @@ import {
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { AiOutlineUsergroupAdd, AiOutlineClose } from 'react-icons/ai'
-import { FiMoon } from 'react-icons/fi'
+import { FiMoon, FiSun } from 'react-icons/fi'
+import { useTheme } from '../Common/ThemeProvider'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -38,6 +39,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const createdCommunitiesButtonRef = useRef(null)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
+  const { theme, toggleTheme } = useTheme()
 
   const fetchAndSetCreatedCommunities = async () => {
     try {
@@ -155,18 +157,25 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </div>
           )}
           <div className="jutify-end flex flex-row items-start gap-2">
-            <button>
-              <FiMoon
-                className="w-[22px] h-[22px] text-[#50555C] cursor-pointer"
-                // onClick={toggleDarkMode}
-              />
-            </button>
             <button onClick={() => setIsOpenSidebar(!isOpenSidebar)}>
-              <AiOutlineClose className="w-[22px] h-[22px]" />
+              <AiOutlineClose className="w-[25px] h-[25px]" />
             </button>
           </div>
         </div>
         <div className="flex flex-col px-4 bg-p-bg">
+          <button
+            className="flex flex-row items-center hover:font-semibold py-4 gap-3"
+            onClick={toggleTheme}
+          >
+            {theme === 'light' ? (
+              <FiMoon className="w-7 h-7 object-contain" />
+            ) : (
+              <FiSun className="w-7 h-7 object-contain" />
+            )}
+            <span className="text-p-text text-xl">
+              {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+            </span>
+          </button>
           <button
             className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
             onClick={() => {
@@ -263,7 +272,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           setIsDrawerOpen={setShowCreatedCommunities}
           showClose={true}
         >
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center ">
             <h1 className="font-bold text-lg mt-5">Created Communities</h1>
             <div className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
               {createdCommunities.map((community) => (
