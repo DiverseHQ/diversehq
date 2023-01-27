@@ -633,24 +633,24 @@ const LensPostCard = ({ post }) => {
                 {!router.pathname.startsWith('/p') ? (
                   <Link
                     href={`/p/${postInfo.id}`}
-                    className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1"
+                    className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1"
                     passHref
                   >
                     {postInfo?.stats?.totalAmountOfComments === 0 && (
-                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      <FaRegComment className=" mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
-                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      <FaRegCommentDots className=" mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments}
                   </Link>
                 ) : (
-                  <div className="flex flex-row items-center">
+                  <div className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1">
                     {postInfo?.stats?.totalAmountOfComments === 0 && (
-                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      <FaRegComment className=" mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
-                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      <FaRegCommentDots className=" mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments}
                   </div>

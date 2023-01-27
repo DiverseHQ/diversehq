@@ -325,10 +325,10 @@ const CommunityInfoCard = ({ _community }) => {
                   <span className="font-semibold">{numberOfPosts}</span>
                   <span className="font-light">Posts</span>
                 </div>
-                <div className="flex flex-col items-center bg-s-h-bg dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                {/* <div className="flex flex-col items-center bg-s-h-bg dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
                   <span className="font-semibold">0</span>
                   <span className="font-light">Matic</span>
-                </div>
+                </div> */}
               </div>
             ) : (
               <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-xs md:text-[16px]">
@@ -343,10 +343,10 @@ const CommunityInfoCard = ({ _community }) => {
                   <span>Posts: </span>
                   <span className="font-semibold">{numberOfPosts}</span>
                 </div>
-                <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
+                {/* <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Matic transferred: </span>
                   <span className="font-semibold">0</span>
-                </div>
+                </div> */}
               </div>
             )}
 

@@ -403,10 +403,6 @@ const CreatePostPopup = () => {
     )
   }
 
-  useEffect(() => {
-    console.log(communityOptionsCoord)
-  }, [communityOptionsCoord])
-
   const showJoinedCommunities = (e) => {
     if (loading) return
     if (joinedCommunities?.length === 0) {
