@@ -173,7 +173,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <FiSun className="w-7 h-7 object-contain" />
             )}
             <span className="text-p-text text-xl">
-              {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
             </span>
           </button>
           <button
