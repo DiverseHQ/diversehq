@@ -38,6 +38,7 @@ import PostShareButton from './PostShareButton'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
+import OptionsWrapper from '../Common/OptionsWrapper'
 
 /**
  * Sample post object
@@ -165,6 +166,8 @@ const LensPostCard = ({ post }) => {
   }, [upvoteCount, downvoteCount])
 
   const { showModal, hideModal } = usePopUpModal()
+
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   //update stats if post is updated
   useEffect(() => {
@@ -301,37 +304,39 @@ const LensPostCard = ({ post }) => {
     }
   }
 
-  const showMoreOptions = async (e) => {
+  const showMoreOptions = async () => {
     if (!isAuthor) return
     if (isMobile) {
       // open the bottom drawer
       setIsDrawerOpen(true)
       return
     }
-    showModal({
-      component: (
-        <>
-          <MoreOptionsModal
-            list={[
-              {
-                label: 'Delete Post',
-                onClick: handleDeletePost,
-                icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-              }
-            ]}
-          />
-        </>
-      ),
-      type: modalType.customposition,
-      onAction: () => {},
-      extraaInfo: {
-        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-        right:
-          window.innerWidth -
-          e.currentTarget.getBoundingClientRect().right +
-          'px'
-      }
-    })
+    console.log('showing more options')
+    setShowOptionsModal(true)
+    // showModal({
+    //   component: (
+    //     <>
+    //       <MoreOptionsModal
+    //         list={[
+    //           {
+    //             label: 'Delete Post',
+    //             onClick: handleDeletePost,
+    //             icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+    //           }
+    //         ]}
+    //       />
+    //     </>
+    //   ),
+    //   type: modalType.customposition,
+    //   onAction: () => {},
+    //   extraaInfo: {
+    //     top: e.currentTarget.getBoundingClientRect().bottom + 'px',
+    //     right:
+    //       window.innerWidth -
+    //       e.currentTarget.getBoundingClientRect().right +
+    //       'px'
+    //   }
+    // })
   }
   return (
     <>
@@ -439,6 +444,25 @@ const LensPostCard = ({ post }) => {
                       title="More"
                     />
                   </button>
+                  {/* {showOptionsModal && ( */}
+                  <OptionsWrapper
+                    setShowOptionsModal={setShowOptionsModal}
+                    showOptionsModal={showOptionsModal}
+                  >
+                    <MoreOptionsModal
+                      className="z-50"
+                      list={[
+                        {
+                          label: 'Delete Post',
+                          onClick: handleDeletePost,
+                          icon: () => (
+                            <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                          )
+                        }
+                      ]}
+                    />
+                  </OptionsWrapper>
+                  {/* )} */}
                   <BottomDrawerWrapper
                     isDrawerOpen={isDrawerOpen}
                     setIsDrawerOpen={setIsDrawerOpen}
