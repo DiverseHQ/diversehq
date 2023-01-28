@@ -86,25 +86,6 @@ const PostCard = ({ _post, setPosts }) => {
 
   const [showDropdown, setShowDropdown] = useState(false)
 
-  // useEffect(() => {
-  //   const handleClick = (event) => {
-  //     // Check if the target element of the click is the dropdown element
-  //     // or a descendant of the dropdown element
-  //     if (!dropdownRef.current?.contains(event.target)) {
-  //       // Hide the dropdown
-  //       setShowDropdown(false)
-  //     }
-  //   }
-
-  //   // Add the event listener
-  //   document.addEventListener('click', handleClick)
-
-  //   // Remove the event listener when the component is unmounted
-  //   return () => {
-  //     document.removeEventListener('click', handleClick)
-  //   }
-  // }, [dropdownRef])
-
   useEffect(() => {
     console.log('post', post)
     setShowMore(

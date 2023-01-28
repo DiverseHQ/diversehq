@@ -30,12 +30,10 @@ import {
   unpinFromIpfsInfura
 } from '../../utils/utils'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import ReactEmbedo from './embed/ReactEmbedo'
 import PostShareButton from './PostShareButton'
-import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
 import OptionsWrapper from '../Common/OptionsWrapper'
@@ -160,14 +158,9 @@ const LensPostCard = ({ post }) => {
     post?.stats?.totalUpvotes - post?.stats?.totalDownvotes
   )
   const [postInfo, setPostInfo] = useState(post)
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
-
-  const { showModal, hideModal } = usePopUpModal()
-
-  const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   //update stats if post is updated
   useEffect(() => {
@@ -296,7 +289,6 @@ const LensPostCard = ({ post }) => {
           publicationId: post?.id
         }
       })
-      hideModal()
     } catch (error) {
       console.log(error)
     } finally {
@@ -304,40 +296,6 @@ const LensPostCard = ({ post }) => {
     }
   }
 
-  const showMoreOptions = async () => {
-    if (!isAuthor) return
-    if (isMobile) {
-      // open the bottom drawer
-      setIsDrawerOpen(true)
-      return
-    }
-    console.log('showing more options')
-    setShowOptionsModal(true)
-    // showModal({
-    //   component: (
-    //     <>
-    //       <MoreOptionsModal
-    //         list={[
-    //           {
-    //             label: 'Delete Post',
-    //             onClick: handleDeletePost,
-    //             icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-    //           }
-    //         ]}
-    //       />
-    //     </>
-    //   ),
-    //   type: modalType.customposition,
-    //   onAction: () => {},
-    //   extraaInfo: {
-    //     top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-    //     right:
-    //       window.innerWidth -
-    //       e.currentTarget.getBoundingClientRect().right +
-    //       'px'
-    //   }
-    // })
-  }
   return (
     <>
       {postInfo && (
@@ -434,21 +392,8 @@ const LensPostCard = ({ post }) => {
             <div className="sm:mr-5 flex flex-row items-center">
               <JoinCommunityButton id={postInfo?.communityInfo?._id} />
               {isAuthor && (
-                <div className="relative">
-                  <button
-                    onClick={showMoreOptions}
-                    className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-                  >
-                    <RiMore2Fill
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                      title="More"
-                    />
-                  </button>
-                  {/* {showOptionsModal && ( */}
-                  <OptionsWrapper
-                    setShowOptionsModal={setShowOptionsModal}
-                    showOptionsModal={showOptionsModal}
-                  >
+                <OptionsWrapper
+                  OptionPopUpModal={() => (
                     <MoreOptionsModal
                       className="z-50"
                       list={[
@@ -461,30 +406,16 @@ const LensPostCard = ({ post }) => {
                         }
                       ]}
                     />
-                  </OptionsWrapper>
-                  {/* )} */}
-                  <BottomDrawerWrapper
-                    isDrawerOpen={isDrawerOpen}
-                    setIsDrawerOpen={setIsDrawerOpen}
-                    showClose
-                    // height="235px"
-                  >
-                    <MoreOptionsModal
-                      list={[
-                        {
-                          label: 'Delete Post',
-                          onClick: async () => {
-                            await handleDeletePost()
-                            setIsDrawerOpen(false)
-                          },
-                          icon: () => (
-                            <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                          )
-                        }
-                      ]}
+                  )}
+                  position="left"
+                >
+                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                    <RiMore2Fill
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                      title="More"
                     />
-                  </BottomDrawerWrapper>
-                </div>
+                  </div>
+                </OptionsWrapper>
               )}
             </div>
           </div>

@@ -14,6 +14,7 @@ import LensCreateComment from './LensCreateComment'
 
 const CombinedCommentSection = ({ postId, postInfo }) => {
   const [comments, setComments] = useState([])
+  const [uniqueComments, setUniqueComments] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState(null)
   const [nextCursor, setNextCursor] = useState(null)
@@ -78,7 +79,13 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   }
 
   useEffect(() => {
-    console.log('comments', comments)
+    if (!comments || comments.length === 0) return
+    setUniqueComments(
+      comments.filter(
+        (comment, index, self) =>
+          index === self.findIndex((t) => t.id === comment.id)
+      )
+    )
   }, [comments])
 
   const getMorePosts = async () => {
@@ -132,9 +139,9 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
         }
         endMessage={<></>}
       >
-        {comments.length > 0 && (
+        {uniqueComments.length > 0 && (
           <div className="bg-s-bg sm:rounded-2xl my-3 px-3 sm:px-5 py-2">
-            {comments.map((comment, index) => {
+            {uniqueComments.map((comment, index) => {
               return <LensCommentCard key={index} comment={comment} />
             })}
           </div>

@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
+import { useState } from 'react'
 import { useCommentFeedQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import LensCommentCard from './LensCommentCard'
 
 const LensRepliedComments = ({ commentId, comments, setComments }) => {
+  const [uniqueComments, setUniqueComments] = useState([])
   const { data: lensProfile } = useLensUserContext()
   const { data } = useCommentFeedQuery(
     {
@@ -27,13 +29,21 @@ const LensRepliedComments = ({ commentId, comments, setComments }) => {
     const newComments = data?.publications?.items
     setComments(newComments)
   }
+  useEffect(() => {
+    setUniqueComments(
+      comments.filter(
+        (comment, index, self) =>
+          index === self.findIndex((t) => t.id === comment.id)
+      )
+    )
+  }, [comments])
   return (
     <>
-      {comments.length > 0 &&
-        comments.map((comment, index) => {
+      {uniqueComments.length > 0 &&
+        uniqueComments.map((comment, index) => {
           return <LensCommentCard key={index} comment={comment} />
         })}
-      {comments.length === 0 && <></>}
+      {uniqueComments.length === 0 && <></>}
     </>
   )
 }

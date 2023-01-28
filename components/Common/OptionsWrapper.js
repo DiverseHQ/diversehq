@@ -1,39 +1,69 @@
 import React from 'react'
+import { useState } from 'react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
+import BottomDrawerWrapper from './BottomDrawerWrapper'
+import useDevice from './useDevice'
 
-const OptionsWrapper = ({
-  children,
-  setShowOptionsModal,
-  showOptionsModal
-}) => {
+const OptionsWrapper = ({ children, OptionPopUpModal, position }) => {
+  const { isMobile } = useDevice()
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const popupRef = useRef(null)
 
-  useEffect(() => {
-    const handleClick = (event) => {
-      // Check if the target element of the click is the dropdown element
-      // or a descendant of the dropdown element
-      if (popupRef.current && !popupRef.current?.contains(event.target)) {
-        // Hide the dropdown
-        setShowOptionsModal(false)
-      }
+  const handleClick = (e) => {
+    if (
+      !!popupRef.current &&
+      (!e.target?.id || popupRef.current.id !== e.target.id) &&
+      !popupRef.current.contains(e.target)
+    ) {
+      setShowOptionsModal(false)
     }
-    // Add the event listener
-    document.addEventListener('click', handleClick)
+  }
 
-    // Remove the event listener when the component is unmounted
+  useEffect(() => {
+    document.addEventListener('click', handleClick)
     return () => {
       document.removeEventListener('click', handleClick)
     }
-  })
+  }, [popupRef])
+
+  const handleButtonClick = () => {
+    if (isMobile) {
+      setIsDrawerOpen(true)
+    } else {
+      setShowOptionsModal(true)
+    }
+  }
 
   return (
     <>
-      {showOptionsModal && (
-        <div ref={popupRef} className="absolute z-50">
-          {children}
-        </div>
-      )}
+      <button
+        className="relative w-full"
+        ref={popupRef}
+        onClick={handleButtonClick}
+        id="options-wrapper"
+      >
+        {children}
+        {showOptionsModal && (
+          <div
+            className={`absolute min-w-[150px] ${
+              position === 'left' ? 'top-[20px] right-[20px]' : ''
+            } ${position === 'right' ? 'top-[25px] left-0' : ''} ${
+              position === 'top' ? 'bottom-[25px] right-0' : ''
+            } ${position === 'bottom' ? 'top-[25px] right-0' : ''} z-20`}
+          >
+            <OptionPopUpModal />
+          </div>
+        )}
+      </button>
+      <BottomDrawerWrapper
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+        showClose
+      >
+        <OptionPopUpModal />
+      </BottomDrawerWrapper>
     </>
   )
 }
