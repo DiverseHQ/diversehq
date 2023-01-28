@@ -106,7 +106,6 @@ export const WalletProvider = ({ children }) => {
           }
         }
       } catch (error) {
-        disconnect()
         console.log('error from verfiying token', error)
       }
       console.log('useEffectCalled', useEffectCalled)

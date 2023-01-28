@@ -55,7 +55,7 @@ const FreeCollectPopUp = ({
         await collectPublication(publication.id)
       }}
     >
-      <div className="px-4">
+      <div className="px-4 text-p-text">
         {collectModule.__typename === 'FreeCollectModuleSettings' &&
           !collectModule.followerOnly && (
             <div className="">Free collect for everyone</div>

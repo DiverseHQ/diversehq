@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useSignTypedData } from 'wagmi'
 import useBroadcastSignatureForTx from './useBroadcastSignatureForTx'
 
-const useSignTypedDataAndBroadcast = () => {
+const useSignTypedDataAndBroadcast = (waitForTxIndex = true) => {
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState(null)
   const [result, setResult] = React.useState(null)
@@ -13,7 +13,7 @@ const useSignTypedDataAndBroadcast = () => {
 
   const signTypedDataResult = useSignTypedData(typedData || undefined)
 
-  const broadCastSignatureForTx = useBroadcastSignatureForTx()
+  const broadCastSignatureForTx = useBroadcastSignatureForTx(waitForTxIndex)
 
   const signTypedDataAndBroadcast = async (typedData, dataForSig) => {
     setLoading(true)

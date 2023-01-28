@@ -158,7 +158,7 @@
   --background-secondary: #1a1a1b;
   --accent-primary: #9378d8;
   --accent-secondary: theme('colors.purple.600');
-  --accent-hover: theme('colors.purple.500');
+  --accent-hover: #343536;
 
   --text-primary: #d7dadc;
   --text-secondary: #9197ae;

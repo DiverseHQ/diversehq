@@ -26,6 +26,7 @@ import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { AiOutlineUsergroupAdd, AiOutlineClose } from 'react-icons/ai'
 import { FiMoon, FiSun } from 'react-icons/fi'
+import { useTheme } from '../Common/ThemeProvider'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -38,7 +39,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const createdCommunitiesButtonRef = useRef(null)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
-  const [theme, setTheme] = useState('light')
+  const { theme, toggleTheme } = useTheme()
 
   const fetchAndSetCreatedCommunities = async () => {
     try {
@@ -57,15 +58,6 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     fetchAndSetCreatedCommunities()
     getJoinedCommunities()
   }, [user])
-
-  useEffect(() => {
-    const theme = window.localStorage.getItem('data-theme')
-    if (theme) {
-      document.body.classList.add(theme)
-      document.documentElement.setAttribute('data-theme', theme)
-      setTheme(theme)
-    }
-  }, [])
 
   const createCommunity = () => {
     // setShowOptions(!showOptions)
@@ -109,22 +101,6 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     } catch (error) {
       console.log('error', error)
       notifyError('Error getting joined communities')
-    }
-  }
-
-  const toggleDarkMode = () => {
-    if (theme === 'light') {
-      document.body.classList.add('dark')
-      document.documentElement.setAttribute('data-theme', 'dark')
-      window.localStorage.setItem('data-theme', 'dark')
-      setTheme('dark')
-      window.dispatchEvent(new Event('themeChange'))
-    } else {
-      document.body.classList.remove('dark')
-      document.documentElement.setAttribute('data-theme', 'light')
-      window.localStorage.setItem('data-theme', 'light')
-      setTheme('light')
-      window.dispatchEvent(new Event('themeChange'))
     }
   }
 
@@ -189,7 +165,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         <div className="flex flex-col px-4 bg-p-bg">
           <button
             className="flex flex-row items-center hover:font-semibold py-4 gap-3"
-            onClick={toggleDarkMode}
+            onClick={toggleTheme}
           >
             {theme === 'light' ? (
               <FiMoon className="w-7 h-7 object-contain" />
@@ -197,7 +173,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <FiSun className="w-7 h-7 object-contain" />
             )}
             <span className="text-p-text text-xl">
-              {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
             </span>
           </button>
           <button

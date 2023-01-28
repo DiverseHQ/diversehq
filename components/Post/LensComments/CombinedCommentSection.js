@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useCommentFeedQuery } from '../../../graphql/generated'
+import {
+  ReactionTypes,
+  useAddReactionMutation,
+  useCommentFeedQuery
+} from '../../../graphql/generated'
+import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { LENS_COMMENT_LIMIT } from '../../../utils/config'
+import { commentIdFromIndexedResult } from '../../../utils/utils'
 import LensCommentCard from './LensCommentCard'
 import LensCreateComment from './LensCreateComment'
 
 const CombinedCommentSection = ({ postId, postInfo }) => {
   const [comments, setComments] = useState([])
+  const [uniqueComments, setUniqueComments] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState(null)
   const [nextCursor, setNextCursor] = useState(null)
   const { data: lensProfile } = useLensUserContext()
+  const { mutateAsync: addReaction } = useAddReactionMutation()
 
   const { data } = useCommentFeedQuery(
     {
@@ -46,9 +54,39 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
     setComments([...comments, ...newComments])
   }
 
-  const addComment = (comment) => {
+  const addComment = async (tx, comment) => {
+    setComments([comment, ...comments])
+    const indexResult = await pollUntilIndexed(tx)
+
+    const commentId = commentIdFromIndexedResult(
+      lensProfile?.defaultProfile?.id,
+      indexResult
+    )
+
+    await addReaction({
+      request: {
+        profileId: lensProfile?.defaultProfile?.id,
+        publicationId: commentId,
+        reaction: ReactionTypes.Upvote
+      }
+    })
+    comment.id = commentId
+    // add comment id to comment
+    // remove previous comment
+    setComments(comments.filter((c) => c.tempId !== comment.tempId))
+    // add new comment
     setComments([comment, ...comments])
   }
+
+  useEffect(() => {
+    if (!comments || comments.length === 0) return
+    setUniqueComments(
+      comments.filter(
+        (comment, index, self) =>
+          index === self.findIndex((t) => t.id === comment.id)
+      )
+    )
+  }, [comments])
 
   const getMorePosts = async () => {
     if (nextCursor) {
@@ -101,9 +139,9 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
         }
         endMessage={<></>}
       >
-        {comments.length > 0 && (
+        {uniqueComments.length > 0 && (
           <div className="bg-s-bg sm:rounded-2xl my-3 px-3 sm:px-5 py-2">
-            {comments.map((comment, index) => {
+            {uniqueComments.map((comment, index) => {
               return <LensCommentCard key={index} comment={comment} />
             })}
           </div>

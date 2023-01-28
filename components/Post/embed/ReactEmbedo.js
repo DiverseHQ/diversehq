@@ -14,7 +14,9 @@ const AllowedEmbedoRegexList = [
   // eslint-disable-next-line
   /(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?([\w\-]*)?/g,
   // eslint-disable-next-line
-  /^http[s]*:\/\/[www.]*twitter(\.[a-z]+).*/i,
+  // only twitter tweets and not twitter profile
+  // eslint-disable-next-line
+  /^(http|https):\/\/twitter\.com\/(\w+)\/status\/(\d+)$/i,
   // eslint-disable-next-line
   /(http|https)?:\/\/(www\.)?instagram.com\/p\/[a-zA-Z0-9_\/\?\-\=]+/gi,
   // eslint-disable-next-line

@@ -154,9 +154,9 @@ const EditProfile = ({ user, showUserInfo }) => {
         onClick={handleSubmit}
         loading={loading}
       >
-        <div>
+        <div className="text-p-text">
           <label htmlFor="profileBanner">
-            <div className="flex h-40 border-y border-p-border items-center justify-center">
+            <div className="flex h-40 border-y border-p-border items-center justify-center cursor-pointer">
               {/* eslint-disable-next-line */}
               {profileBanner && (
                 <img
@@ -176,13 +176,13 @@ const EditProfile = ({ user, showUserInfo }) => {
           <div
             className={`flex relative ${
               profileImage ? '' : 'border'
-            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10`}
+            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10 cursor-pointer`}
           >
             {profileImage && (
               <label htmlFor="profileImage">
                 {' '}
                 <img
-                  className="rounded-full w-24 h-24"
+                  className="rounded-full w-24 h-24 cursor-pointer"
                   src={profileImage}
                   alt="PFP"
                 />
@@ -190,7 +190,7 @@ const EditProfile = ({ user, showUserInfo }) => {
             )}
             <div className="absolute">
               <label htmlFor="profileImage">
-                <div className="bg-p-bg rounded-full p-2">
+                <div className="bg-p-bg rounded-full p-2 cursor-pointer">
                   <AiOutlineCamera className="h-8 w-8 " />
                 </div>
               </label>

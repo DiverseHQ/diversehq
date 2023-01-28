@@ -7,6 +7,8 @@ import RainbowKitWrapper from './RainbowKitWrapper'
 import CustomPopUpModalProvider from './CustomPopUpProvider'
 import LensUserContextProvider from '../../lib/LensUserContext'
 import LexicalWrapper from './LexicalWrapper'
+import ThemeProvider from './ThemeProvider'
+import PostIndexingWrapper from '../Post/IndexingContext/PostIndexingWrapper'
 
 const queryClient = new QueryClient()
 
@@ -17,11 +19,15 @@ const MasterWrapper = ({ children }) => {
         <QueryClientProvider client={queryClient}>
           <LensUserContextProvider>
             <WalletProvider>
-              {/* <ThemeProvider defaultTheme="system"> */}
-              <LexicalWrapper>
-                <CustomPopUpModalProvider>{children}</CustomPopUpModalProvider>
-              </LexicalWrapper>
-              {/* </ThemeProvider> */}
+              <ThemeProvider>
+                <LexicalWrapper>
+                  <PostIndexingWrapper>
+                    <CustomPopUpModalProvider>
+                      {children}
+                    </CustomPopUpModalProvider>
+                  </PostIndexingWrapper>
+                </LexicalWrapper>
+              </ThemeProvider>
             </WalletProvider>
           </LensUserContextProvider>
         </QueryClientProvider>

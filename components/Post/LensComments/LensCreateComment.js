@@ -3,18 +3,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import {
   PublicationMainFocus,
   ReactionTypes,
-  useAddReactionMutation,
   useCreateCommentTypedDataMutation,
   useCreateCommentViaDispatcherMutation
 } from '../../../graphql/generated'
-import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
 import { LensInfuraEndpoint } from '../../../utils/config'
-import {
-  commentIdFromIndexedResult,
-  uploadToIpfsInfuraAndGetPath
-} from '../../../utils/utils'
+import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
@@ -28,13 +23,13 @@ const LensCreateComment = ({
   isReply = false
 }) => {
   const { error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
-  const { mutateAsync: addReaction } = useAddReactionMutation()
+    useSignTypedDataAndBroadcast(false)
 
   const { mutateAsync: createCommentWithSign } =
     useCreateCommentTypedDataMutation()
   const { mutateAsync: createCommentViaDispatcher } =
     useCreateCommentViaDispatcherMutation()
+  const [tempId, setTempId] = useState('')
 
   const { notifyError } = useNotify()
 
@@ -52,22 +47,9 @@ const LensCreateComment = ({
     setShowAtBottom(isMobile && !isReply)
   }, [isMobile, isReply])
 
-  const onSuccessCreateComment = async (result) => {
-    const commentId = commentIdFromIndexedResult(
-      lensProfile?.defaultProfile?.id,
-      result
-    )
-    await addReaction({
-      request: {
-        profileId: lensProfile?.defaultProfile?.id,
-        publicationId: commentId,
-        reaction: ReactionTypes.Upvote
-      }
-    })
-    setLoading(false)
-    //sending comment to feed without waiting for transaction to be indexed
-    addComment({
-      id: commentId,
+  const onSuccessCreateComment = async (tx, tempId) => {
+    const comment = {
+      tempId: tempId,
       profile: {
         picture: {
           original: {
@@ -86,7 +68,11 @@ const LensCreateComment = ({
         totalDownvotes: 0
       },
       reaction: ReactionTypes.Upvote
-    })
+    }
+    setLoading(false)
+    addComment(tx, comment)
+    commentRef.current.style.height = 'auto'
+    commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
     commentRef.current.value = ''
   }
 
@@ -96,10 +82,12 @@ const LensCreateComment = ({
     if (!content || content === '') return
     setLoading(true)
     try {
+      const metadata_id = uuidv4()
+      setTempId(tempId)
       const ipfsHash = await uploadToIpfsInfuraAndGetPath({
         version: '2.0.0',
         mainContentFocus: PublicationMainFocus.TextOnly,
-        metadata_id: uuidv4(),
+        metadata_id: metadata_id,
         description: content,
         locale: 'en-US',
         content: content,
@@ -124,68 +112,45 @@ const LensCreateComment = ({
         }
       }
 
-      await comment(createCommentRequest)
+      // await comment(createCommentRequest)
+      try {
+        if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+          const dispatcherResult = (
+            await createCommentViaDispatcher({
+              request: createCommentRequest
+            })
+          ).createCommentViaDispatcher
+          onSuccessCreateComment({ txId: dispatcherResult.txId }, metadata_id)
+        } else {
+          const commentTypedResult = (
+            await createCommentWithSign({
+              request: createCommentRequest
+            })
+          ).createCommentTypedData
+          console.log('commentTypedResult', commentTypedResult)
+          signTypedDataAndBroadcast(commentTypedResult.typedData, {
+            id: commentTypedResult.id,
+            type: 'createComment'
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      }
     } catch (error) {
       console.log('error', error)
       setLoading(false)
     }
   }
 
-  const comment = async (createCommentRequest) => {
-    try {
-      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
-        const dispatcherResult = (
-          await createCommentViaDispatcher({
-            request: createCommentRequest
-          })
-        ).createCommentViaDispatcher
-
-        console.log('dispatcherResult', dispatcherResult)
-        console.log(dispatcherResult)
-        console.log('index started ....')
-        const indexResult = await pollUntilIndexed({
-          txId: dispatcherResult.txId
-        })
-        console.log('index result', indexResult)
-        console.log('index ended ....')
-
-        //invalidate query to update feed
-        if (indexResult.indexed === true) {
-          onSuccessCreateComment(indexResult)
-          console.log('comment created successfully')
-        }
-      } else {
-        const commentTypedResult = (
-          await createCommentWithSign({
-            request: createCommentRequest
-          })
-        ).createCommentTypedData
-        console.log('commentTypedResult', commentTypedResult)
-        signTypedDataAndBroadcast(commentTypedResult.typedData, {
-          id: commentTypedResult.id,
-          type: 'createComment'
-        })
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   useEffect(() => {
     if (result && type === 'createComment') {
-      onSuccessCreateComment(result)
+      onSuccessCreateComment({ txHash: result.txHash }, tempId)
     }
   }, [result, type])
 
   useEffect(() => {
     if (error) {
       setLoading(false)
-      notifyError(error)
-    }
-  }, [error])
-
-  useEffect(() => {
-    if (error) {
       notifyError(error)
     }
   }, [error])
@@ -280,10 +245,10 @@ const LensCreateComment = ({
             </div>
           </>
         ) : (
-          <div className="px-2 sm:px-5 w-full bg-s-bg py-3 fixed z-50 bottom-[50px]">
+          <div className="px-2 sm:px-5 w-full bg-s-bg py-3 fixed z-30 bottom-[50px]">
             <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4">
               <div className="flex flex-row gap-2 sm:gap-4 items-center w-full">
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row self-end mb-1.5">
                   <img
                     src={
                       user?.profileImageUrl
@@ -314,7 +279,7 @@ const LensCreateComment = ({
                   />
                 </div>
               </div>
-              <div className="flex flex-row items-center justify-center">
+              <div className="flex flex-row justify-center self-end mb-3">
                 {!loading && (
                   <FiSend
                     onClick={createComment}

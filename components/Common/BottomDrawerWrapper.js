@@ -1,7 +1,6 @@
 import React from 'react'
 import { Drawer } from '@mui/material'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useTheme } from './ThemeProvider'
 
 const BottomDrawerWrapper = ({
   children,
@@ -9,47 +8,7 @@ const BottomDrawerWrapper = ({
   setIsDrawerOpen,
   showClose = true
 }) => {
-  const [theme, setTheme] = useState('light')
-
-  const themeChange = () => {
-    const theme = window.localStorage.getItem('data-theme')
-    if (theme) {
-      document.body.classList.add(theme)
-      document.documentElement.setAttribute('data-theme', theme)
-      setTheme(theme)
-    }
-  }
-
-  useEffect(() => {
-    themeChange()
-    window.addEventListener('themeChange', themeChange)
-    return () => {
-      window.removeEventListener('themeChange', themeChange)
-    }
-  }, [])
-
-  // const statusStyle = (status) => {
-  //   switch (status) {
-  //     case "dark":
-  //       return "#1A1A1B";
-  //       break;
-  //     case "light":
-  //       return "#FFFFFF";
-  //       break;
-  //   }
-  // };
-
-  // const textStyle = (status) => {
-  //   switch (status) {
-  //     case "light":
-  //       return "#1A1A1B";
-  //       break;
-  //     case "dark":
-  //       return "#FFFFFF";
-  //       break;
-  //   }
-  // };
-
+  const { theme } = useTheme()
   return (
     <Drawer
       anchor="bottom"
