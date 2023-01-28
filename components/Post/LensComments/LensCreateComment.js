@@ -71,9 +71,9 @@ const LensCreateComment = ({
     }
     setLoading(false)
     addComment(tx, comment)
+    commentRef.current.value = ''
     commentRef.current.style.height = 'auto'
     commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
-    commentRef.current.value = ''
   }
 
   const createComment = async () => {

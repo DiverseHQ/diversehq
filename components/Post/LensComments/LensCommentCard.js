@@ -20,10 +20,10 @@ import { useRouter } from 'next/router'
 import { HiOutlineTrash } from 'react-icons/hi'
 import useDevice from '../../Common/useDevice'
 import PopUpWrapper from '../../Common/PopUpWrapper'
-import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
+import OptionsWrapper from '../../Common/OptionsWrapper'
 TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
@@ -43,7 +43,6 @@ const LensCommentCard = ({ comment }) => {
   const [isAuthor, setIsAuthor] = useState(
     lensProfile?.defaultProfile?.id === comment?.profile?.id
   )
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { isMobile } = useDevice()
 
   const { showModal, hideModal } = usePopUpModal()
@@ -146,45 +145,6 @@ const LensCommentCard = ({ comment }) => {
       console.log(error)
     }
   }
-  const showMoreOptions = async (e) => {
-    if (!isAuthor) return
-
-    if (!comment?.id) {
-      notifyInfo('not indexed yet, come back later')
-      return
-    }
-    if (isMobile) {
-      // open the bottom drawer
-      setIsDrawerOpen(true)
-      return
-    }
-    showModal({
-      component: (
-        <>
-          <MoreOptionsModal
-            list={[
-              {
-                label: 'Delete Comment',
-                onClick: handleDeleteComment,
-                icon: () => (
-                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                )
-              }
-            ]}
-          />
-        </>
-      ),
-      type: modalType.customposition,
-      onAction: () => {},
-      extraaInfo: {
-        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-        right:
-          window.innerWidth -
-          e.currentTarget.getBoundingClientRect().right +
-          'px'
-      }
-    })
-  }
 
   const addComment = async (tx, comment) => {
     setComments([comment, ...comments])
@@ -267,34 +227,31 @@ const LensCommentCard = ({ comment }) => {
                 <div className="w-2 h-2 rounded-full bg-p-btn animate-pulse" />
               </div>
             )}
-            {isAuthor && comment.id && (
-              <>
-                <RiMore2Fill
-                  className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
-                  onClick={showMoreOptions}
-                  title="More"
-                />
-                <BottomDrawerWrapper
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
+            <div>
+              {isAuthor && comment.id && (
+                <OptionsWrapper
+                  OptionPopUpModal={() => (
+                    <MoreOptionsModal
+                      list={[
+                        {
+                          label: 'Delete Comment',
+                          onClick: handleDeleteComment,
+                          icon: () => (
+                            <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                          )
+                        }
+                      ]}
+                    />
+                  )}
+                  position="left"
                 >
-                  <MoreOptionsModal
-                    list={[
-                      {
-                        label: 'Delete Comment',
-                        onClick: async () => {
-                          await handleDeleteComment()
-                          setIsDrawerOpen(false)
-                        },
-                        icon: () => (
-                          <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                        )
-                      }
-                    ]}
+                  <RiMore2Fill
+                    className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
+                    title="More"
                   />
-                </BottomDrawerWrapper>
-              </>
-            )}
+                </OptionsWrapper>
+              )}
+            </div>
           </div>
 
           {/* padded content with line*/}
