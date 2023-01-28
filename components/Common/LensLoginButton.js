@@ -10,17 +10,14 @@ import { modalType, usePopUpModal } from './CustomPopUpProvider'
 import { useNotify } from './NotifyContext'
 import { useProfile } from './WalletContext'
 import ConnectWalletAndSignInButton from './ConnectWalletAndSignInButton'
+import { useRouter } from 'next/router'
 
 const LensLoginButton = () => {
-  const {
-    error,
-    isSignedIn,
-    hasProfile,
-    data: lensProfile
-  } = useLensUserContext()
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { user, address } = useProfile()
-  const { notifyError, notifyInfo, notifySuccess } = useNotify()
+  const { notifyInfo, notifySuccess } = useNotify()
   const { showModal } = usePopUpModal()
+  const router = useRouter()
 
   const queryClient = useQueryClient()
 
@@ -32,6 +29,7 @@ const LensLoginButton = () => {
 
   async function handleLogin() {
     await login()
+    router.reload()
     await queryClient.invalidateQueries({
       queryKey: ['lensUser', 'defaultProfile']
     })
@@ -73,6 +71,7 @@ const LensLoginButton = () => {
 
   const onSetDispatcherSuccess = async () => {
     notifySuccess('No more signing required for many actions')
+    router.reload()
     await queryClient.invalidateQueries({
       queryKey: ['lensUser']
     })
@@ -90,12 +89,6 @@ const LensLoginButton = () => {
     }
   }, [result, type])
 
-  useEffect(() => {
-    if (error) {
-      console.error(error)
-      notifyError('Something went wrong, while setting dispatcher')
-    }
-  }, [error])
   return (
     <div>
       {user && address && (
@@ -126,7 +119,7 @@ const LensLoginButton = () => {
                 )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
                 loading && (
-                  <div className="rounded-lg text-sm bg-[#62F030] px-2">
+                  <div className="rounded-lg text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
                     Enabling...
                   </div>
                 )}
@@ -135,7 +128,7 @@ const LensLoginButton = () => {
           {isSignedIn && !hasProfile && (
             <button
               onClick={handleCreateLensProfileAndMakeDefault}
-              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
+              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
             >
               Create Lens Handle
             </button>
@@ -143,7 +136,7 @@ const LensLoginButton = () => {
           {!isSignedIn && (
             <button
               onClick={handleLogin}
-              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
+              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
             >
               Lens Login
             </button>
