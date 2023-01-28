@@ -18,6 +18,10 @@ import { useProfileQuery } from '../../../graphql/generated'
 import { HiCollection } from 'react-icons/hi'
 import LensCollectedPublicationsColumn from '../../Post/LensCollectedPublicationsColumn'
 import { useRouter } from 'next/router'
+import { BiChevronDown, BiRepost } from 'react-icons/bi'
+import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
+import { BsCollection } from 'react-icons/bs'
+import { MdOutlineGroups } from 'react-icons/md'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -31,6 +35,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const [active, setActive] = useState('lens')
   const router = useRouter()
   const { pathname } = router
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   useEffect(() => {
     console.log('pathname', pathname)
@@ -117,14 +122,20 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     })
   }
 
+  console.log(lensProfile)
+
   return (
     <div>
       {profile && (
         <div className="w-full flex justify-center">
           <div className="w-full md:w-[650px]">
-            <div className="relative mt-10">
+            <div className={`relative ${!isMobile ? 'mt-10' : ''}`}>
               <ImageWithLoaderAndZoom
-                className="h-28 w-full object-cover rounded-t-[20px] border-t-[1px] border-x-[1px] border-p-border"
+                className={`h-28 w-full object-cover ${
+                  !isMobile
+                    ? 'rounded-t-[20px] border-t-[1px] border-x-[1px] border-p-border'
+                    : ''
+                }`}
                 src={
                   profile.bannerImageUrl
                     ? profile.bannerImageUrl
@@ -144,7 +155,13 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 }
               />
 
-              <div className="flex flex-col px-3 sm:px-5 pb-6 bg-s-bg rounded-b-[20px] border-x-[1px] border-b-[1px] border-p-border">
+              <div
+                className={`flex flex-col px-3 sm:px-5 pb-6 bg-s-bg ${
+                  !isMobile
+                    ? 'rounded-b-[20px] border-x-[1px] border-b-[1px] border-p-border'
+                    : ''
+                }`}
+              >
                 <div className="flex flex-row items-center self-end">
                   {user &&
                     user?.walletAddress.toLowerCase() ===
@@ -195,23 +212,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 <div>{profile.bio}</div>
                 {isMobile ? (
                   <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px]">
-                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-bold">
-                        {profile?.communities?.length}
-                      </span>
-                      <span className="">Joined</span>
-                    </div>
-                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-semibold">{numberOfPosts}</span>
-                      <span className="font-light">Posts</span>
-                    </div>
-                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-semibold">
-                        {profile?.communityCreationSpells}
-                      </span>
-                      <span className="font-light">Spells</span>
-                    </div>
-
                     {/* onchain lens data */}
                     {lensProfile && (
                       <>
@@ -221,6 +221,12 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                           </span>
                           <span className="font-light">Followers</span>
                         </div>
+                        <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
+                          <span className="font-bold">
+                            {lensProfile?.stats?.totalFollowing}
+                          </span>
+                          <span className="font-light">Following</span>
+                        </div>
                         <div className="flex flex-col items-center bg-[#62F030] py-1 px-2 sm:px-4 rounded-[10px] text-ap-text dark:bg-p-bg">
                           <span className="font-bold">
                             {lensProfile?.stats?.totalPosts}
@@ -229,6 +235,33 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                         </div>
                       </>
                     )}
+
+                    {/* <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
+                      <span className="font-semibold">{numberOfPosts}</span>
+                      <span className="font-light">Posts</span>
+                    </div> */}
+                    {/* <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
+                      <span className="font-bold">
+                        {profile?.communities?.length}
+                      </span>
+                      <span className="">Joined</span>
+                    </div>
+                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
+                      <span className="font-semibold">
+                        {profile?.communityCreationSpells}
+                      </span>
+                      <span className="font-light">Spells</span>
+                    </div> */}
+
+                    <div
+                      className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg cursor-pointer"
+                      onClick={() => setIsDrawerOpen(true)}
+                    >
+                      <span className="font-semibold">
+                        <BiChevronDown className="text-[18px]" />
+                      </span>
+                      <span className="font-light">More</span>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center">
@@ -267,10 +300,47 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 )}
               </div>
 
+              <BottomDrawerWrapper
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
+                showClose
+                // height="235px"
+              >
+                <div className="flex flex-col gap-4 mx-4 mb-4">
+                  <h3 className="font-bold text-[20px] self-center">
+                    {lensProfile?.handle
+                      ? `u/${lensProfile?.handle}`
+                      : profile?.name}
+                  </h3>
+                  <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
+                    <BiRepost />
+                    <span>Posts: {numberOfPosts}</span>
+                  </div>
+                  <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
+                    <BsCollection />
+                    <span>
+                      Collected Posts: {lensProfile?.stats?.totalCollects}
+                    </span>
+                  </div>
+                  <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
+                    <MdOutlineGroups />
+                    <span>
+                      Joined Communities: {profile?.communities?.length}
+                    </span>
+                  </div>
+                </div>
+              </BottomDrawerWrapper>
+
               {/* lens filter */}
 
               {lensProfile?.id && (
-                <div className="font-bold text-sm sm:text-base flex flex-row  border-[1px] border-p-border px-3 sm:px-6 bg-white dark:bg-s-bg mb-1 mt-2 sm:mt-6 py-1 sm:py-3 w-full sm:rounded-xl justify-start space-x-9 items-center">
+                <div
+                  className={`font-bold text-sm sm:text-base flex flex-row  px-3 sm:px-6 bg-white dark:bg-s-bg sm:rounded-xl mt-2 sm:mt-6 py-1 sm:py-3 w-full justify-start space-x-9 items-center ${
+                    !isMobile
+                      ? 'border-[1px] border-p-border'
+                      : 'mb-4 rounded-[10px]'
+                  }`}
+                >
                   <button
                     className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
                       active === 'lens' && 'bg-p-bg'
