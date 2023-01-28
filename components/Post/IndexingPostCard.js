@@ -123,7 +123,7 @@ const IndexingPostCard = ({ postInfo }) => {
             )}
             <div className="sm:mr-5 flex flex-row items-center">
               {/* pulsing dot */}
-              <div className="text-xs sm:text-sm">Indexing</div>
+              <div className="text-xs sm:text-sm">Confirming</div>
               <div className="w-2 h-2 rounded-full bg-p-btn animate-pulse" />
             </div>
           </div>
