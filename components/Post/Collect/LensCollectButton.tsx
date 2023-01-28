@@ -68,6 +68,7 @@ const LensCollectButton = ({
       disabled={isCollected || hasCollectedByMe}
       className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center"
       onClick={handleCollectClick}
+      title="Collect"
     >
       {isCollected || hasCollectedByMe ? (
         <BsCollectionFill className="w-5 h-5" />

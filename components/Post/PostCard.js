@@ -522,20 +522,32 @@ const PostCard = ({ _post, setPosts }) => {
                 passHref
               >
                 {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                  <FaRegComment
+                    className="hover:cursor-pointer mr-2 w-5 h-5 "
+                    title="Comment"
+                  />
                 )}
                 {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                  <FaRegCommentDots
+                    className="hover:cursor-pointer mr-2 w-5 h-5 "
+                    title="Comment"
+                  />
                 )}
                 {post.comments?.length}
               </Link>
             ) : (
               <div className="flex flex-row items-center">
                 {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                  <FaRegComment
+                    className="hover:cursor-pointer mr-2 w-5 h-5 "
+                    title="Comment"
+                  />
                 )}
                 {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                  <FaRegCommentDots
+                    className="hover:cursor-pointer mr-2 w-5 h-5 "
+                    title="Comment"
+                  />
                 )}
                 {post.comments?.length}
               </div>

@@ -105,7 +105,7 @@ const LensLoginButton = () => {
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
                 <Link
                   href={`/u/${lensProfile.defaultProfile.handle}`}
-                  className="mr-2 hover:cursor-pointer hover:underline"
+                  className="mr-2 hover:cursor-pointer hover:underline dark:text-s-bg text-[16px]"
                 >
                   u/{lensProfile.defaultProfile.handle}
                 </Link>
@@ -135,7 +135,7 @@ const LensLoginButton = () => {
           {isSignedIn && !hasProfile && (
             <button
               onClick={handleCreateLensProfileAndMakeDefault}
-              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
+              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
             >
               Create Lens Handle
             </button>
@@ -143,7 +143,7 @@ const LensLoginButton = () => {
           {!isSignedIn && (
             <button
               onClick={handleLogin}
-              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
+              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 md:px-6 lg:px-12"
             >
               Lens Login
             </button>
