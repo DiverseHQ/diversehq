@@ -14,7 +14,6 @@ import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import { LensInfuraEndpoint } from '../../../utils/config'
 import LensRepliedComments from './LensRepliesComments'
 import LensCreateComment from './LensCreateComment'
-import { BsThreeDots } from 'react-icons/bs'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import { useRouter } from 'next/router'
@@ -24,6 +23,7 @@ import PopUpWrapper from '../../Common/PopUpWrapper'
 import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { commentIdFromIndexedResult } from '../../../utils/utils'
+import { RiMore2Fill } from 'react-icons/ri'
 TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
@@ -269,8 +269,8 @@ const LensCommentCard = ({ comment }) => {
             )}
             {isAuthor && comment.id && (
               <>
-                <BsThreeDots
-                  className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
+                <RiMore2Fill
+                  className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
                   onClick={showMoreOptions}
                   title="More"
                 />

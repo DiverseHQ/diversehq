@@ -4,7 +4,6 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import { AiOutlineCheck } from 'react-icons/ai'
 
-import { BsThreeDots } from 'react-icons/bs'
 import {
   deleteComment,
   putEditComment,
@@ -24,6 +23,7 @@ import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import useDevice from '../Common/useDevice'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { RiMore2Fill } from 'react-icons/ri'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
@@ -249,8 +249,8 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             {isAuthor && (
               <>
                 <div className="relative">
-                  <BsThreeDots
-                    className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
+                  <RiMore2Fill
+                    className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
                     onClick={showMoreOptions}
                     title="More"
                   />
