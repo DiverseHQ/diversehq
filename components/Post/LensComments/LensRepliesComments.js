@@ -24,7 +24,6 @@ const LensRepliedComments = ({ commentId, comments, setComments }) => {
     handleRepliedComments()
   }, [data?.publications?.items])
   const handleRepliedComments = async () => {
-    console.log('comments data', data)
     const newComments = data?.publications?.items
     setComments(newComments)
   }

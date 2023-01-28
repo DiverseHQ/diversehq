@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useCommentFeedQuery } from '../../../graphql/generated'
+import {
+  ReactionTypes,
+  useAddReactionMutation,
+  useCommentFeedQuery
+} from '../../../graphql/generated'
+import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { LENS_COMMENT_LIMIT } from '../../../utils/config'
+import { commentIdFromIndexedResult } from '../../../utils/utils'
 import LensCommentCard from './LensCommentCard'
 import LensCreateComment from './LensCreateComment'
 
@@ -12,6 +18,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   const [cursor, setCursor] = useState(null)
   const [nextCursor, setNextCursor] = useState(null)
   const { data: lensProfile } = useLensUserContext()
+  const { mutateAsync: addReaction } = useAddReactionMutation()
 
   const { data } = useCommentFeedQuery(
     {
@@ -46,9 +53,33 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
     setComments([...comments, ...newComments])
   }
 
-  const addComment = (comment) => {
+  const addComment = async (tx, comment) => {
+    setComments([comment, ...comments])
+    const indexResult = await pollUntilIndexed(tx)
+
+    const commentId = commentIdFromIndexedResult(
+      lensProfile?.defaultProfile?.id,
+      indexResult
+    )
+
+    await addReaction({
+      request: {
+        profileId: lensProfile?.defaultProfile?.id,
+        publicationId: commentId,
+        reaction: ReactionTypes.Upvote
+      }
+    })
+    comment.id = commentId
+    // add comment id to comment
+    // remove previous comment
+    setComments(comments.filter((c) => c.tempId !== comment.tempId))
+    // add new comment
     setComments([comment, ...comments])
   }
+
+  useEffect(() => {
+    console.log('comments', comments)
+  }, [comments])
 
   const getMorePosts = async () => {
     if (nextCursor) {

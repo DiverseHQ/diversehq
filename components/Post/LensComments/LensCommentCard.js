@@ -22,6 +22,8 @@ import { HiOutlineTrash } from 'react-icons/hi'
 import useDevice from '../../Common/useDevice'
 import PopUpWrapper from '../../Common/PopUpWrapper'
 import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
+import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
+import { commentIdFromIndexedResult } from '../../../utils/utils'
 TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
@@ -184,17 +186,38 @@ const LensCommentCard = ({ comment }) => {
     })
   }
 
+  const addComment = async (tx, comment) => {
+    setComments([comment, ...comments])
+    setShowCreateComment(false)
+    hideModal()
+    const indexResult = await pollUntilIndexed(tx)
+    const commentId = commentIdFromIndexedResult(
+      lensProfile?.defaultProfile?.id,
+      indexResult
+    )
+
+    await addReaction({
+      request: {
+        profileId: lensProfile.defaultProfile.id,
+        publicationId: commentId,
+        reaction: ReactionTypes.Upvote
+      }
+    })
+    comment.id = commentId
+
+    // remove previous comment
+    setComments(comments.filter((c) => c.tempId !== comment.tempId))
+    // add new comment
+    setComments([comment, ...comments])
+  }
+
   const openReplyModal = async () => {
     showModal({
       component: (
         <PopUpWrapper title={'Reply'} label={'Reply'} loading={false}>
           <LensCreateComment
             postId={comment.id}
-            addComment={(comment) => {
-              setComments([comment, ...comments])
-              setShowCreateComment(false)
-              hideModal()
-            }}
+            addComment={addComment}
             isReply={true}
             replyCommentData={comment}
           />
@@ -212,36 +235,39 @@ const LensCommentCard = ({ comment }) => {
           {/* top row */}
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center gap-2">
-              <div className="flex flex-row items-center">
-                {/* commenting for now */}
-                {/* todo : ability to set lens profile image and fetch here */}
+              {/* commenting for now */}
+              {/* todo : ability to set lens profile image and fetch here */}
 
-                <ImageWithPulsingLoader
-                  src={
-                    comment?.profile?.picture?.original?.url?.startsWith('ipfs')
-                      ? `${LensInfuraEndpoint}${
-                          comment?.profile?.picture?.original?.url.split(
-                            '//'
-                          )[1]
-                        }`
-                      : '/gradient.jpg'
-                  }
-                  className="w-6 h-6 rounded-full mr-1"
-                />
+              <ImageWithPulsingLoader
+                src={
+                  comment?.profile?.picture?.original?.url?.startsWith('ipfs')
+                    ? `${LensInfuraEndpoint}${
+                        comment?.profile?.picture?.original?.url.split('//')[1]
+                      }`
+                    : '/gradient.jpg'
+                }
+                className="w-6 h-6 rounded-full mr-1"
+              />
 
-                <Link href={`/u/${comment?.profile?.handle}`} passHref>
-                  <div className="hover:underline font-bold text-base">
-                    u/{comment?.profile?.handle}
-                  </div>
-                </Link>
-              </div>
+              <Link href={`/u/${comment?.profile?.handle}`} passHref>
+                <div className="hover:underline font-bold text-base">
+                  u/{comment?.profile?.handle}
+                </div>
+              </Link>
               <ReactTimeAgo
                 className="text-xs sm:text-sm text-s-text"
                 date={new Date(comment.createdAt)}
                 locale="en-US"
               />
             </div>
-            {isAuthor && (
+            {!comment.id && (
+              <div className="sm:mr-5 flex flex-row items-center">
+                {/* pulsing dot */}
+                <div className="text-xs sm:text-sm">Indexing</div>
+                <div className="w-2 h-2 rounded-full bg-p-btn animate-pulse" />
+              </div>
+            )}
+            {isAuthor && comment.id && (
               <>
                 <BsThreeDots
                   className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
@@ -329,10 +355,7 @@ const LensCommentCard = ({ comment }) => {
               {showCreateComment && !isMobile && (
                 <LensCreateComment
                   postId={comment.id}
-                  addComment={(commnet) => {
-                    setComments([commnet, ...comments])
-                    setShowCreateComment(false)
-                  }}
+                  addComment={addComment}
                 />
               )}
 
