@@ -29,7 +29,6 @@ const LensLoginButton = () => {
 
   async function handleLogin() {
     await login()
-    router.reload()
     await queryClient.invalidateQueries({
       queryKey: ['lensUser', 'defaultProfile']
     })
