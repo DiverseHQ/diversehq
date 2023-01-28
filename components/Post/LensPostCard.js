@@ -643,20 +643,32 @@ const LensPostCard = ({ post }) => {
                     passHref
                   >
                     {postInfo?.stats?.totalAmountOfComments === 0 && (
-                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      <FaRegComment
+                        className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5"
+                        title="Comment"
+                      />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
-                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      <FaRegCommentDots
+                        className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5"
+                        title="Comment"
+                      />
                     )}
                     {postInfo?.stats?.totalAmountOfComments}
                   </Link>
                 ) : (
                   <div className="flex flex-row items-center">
                     {postInfo?.stats?.totalAmountOfComments === 0 && (
-                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      <FaRegComment
+                        className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5"
+                        title="Comment"
+                      />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
-                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
+                      <FaRegCommentDots
+                        className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5"
+                        title="Comment"
+                      />
                     )}
                     {postInfo?.stats?.totalAmountOfComments}
                   </div>
