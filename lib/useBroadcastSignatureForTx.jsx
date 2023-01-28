@@ -1,9 +1,8 @@
 import { useBroadcastMutation } from '../graphql/generated'
 import { pollUntilIndexed } from './indexer/has-transaction-been-indexed'
 
-const useBroadcastSignatureForTx = () => {
+const useBroadcastSignatureForTx = (waitForTxIndex = true) => {
   const { mutateAsync: broadCast } = useBroadcastMutation()
-
   // use broadcast for gasless transactions
   const broadCastSignatureForTx = async (signature, id) => {
     console.log('signature', signature)
@@ -23,6 +22,9 @@ const useBroadcastSignatureForTx = () => {
     if (!broadcastResult.txHash) {
       console.log('broadcastResult', broadcastResult)
       throw new Error('broadcastResult.txHash is undefined')
+    }
+    if (!waitForTxIndex) {
+      return broadcastResult
     }
     console.log('broadcastFunc poll until indexed start')
     const indexedResult = await pollUntilIndexed({

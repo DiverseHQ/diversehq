@@ -15,6 +15,8 @@ import {
 import LensPostCard from './LensPostCard'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useRouter } from 'next/router'
+import { usePostIndexing } from './IndexingContext/PostIndexingWrapper'
+import IndexingPostCard from './IndexingPostCard'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 
 const LensPostsExplorePublicationsColumn = () => {
@@ -25,6 +27,7 @@ const LensPostsExplorePublicationsColumn = () => {
   const [nextCursor, setNextCursor] = useState(null)
   const [communityIds, setCommunityIds] = useState(null)
   const { data: myLensProfile } = useLensUserContext()
+  const { posts: indexingPost } = usePostIndexing()
   const { data } = useExplorePublicationsQuery(
     {
       request: {
@@ -98,6 +101,12 @@ const LensPostsExplorePublicationsColumn = () => {
     setCommunityIds(allCommunitiesIds)
   }
 
+  useEffect(() => {
+    if (indexingPost.length > 0) {
+      window.scrollTo(0, 0)
+    }
+  }, [indexingPost])
+
   return (
     <div>
       <InfiniteScroll
@@ -132,6 +141,10 @@ const LensPostsExplorePublicationsColumn = () => {
         }
         endMessage={<></>}
       >
+        {indexingPost &&
+          indexingPost.map((post, index) => {
+            return <IndexingPostCard key={index} postInfo={post} />
+          })}
         {posts.map((post, index) => {
           return <LensPostCard key={index} post={post} />
         })}

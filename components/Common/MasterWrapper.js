@@ -8,6 +8,7 @@ import CustomPopUpModalProvider from './CustomPopUpProvider'
 import LensUserContextProvider from '../../lib/LensUserContext'
 import LexicalWrapper from './LexicalWrapper'
 import ThemeProvider from './ThemeProvider'
+import PostIndexingWrapper from '../Post/IndexingContext/PostIndexingWrapper'
 
 const queryClient = new QueryClient()
 
@@ -20,9 +21,11 @@ const MasterWrapper = ({ children }) => {
             <WalletProvider>
               <ThemeProvider>
                 <LexicalWrapper>
-                  <CustomPopUpModalProvider>
-                    {children}
-                  </CustomPopUpModalProvider>
+                  <PostIndexingWrapper>
+                    <CustomPopUpModalProvider>
+                      {children}
+                    </CustomPopUpModalProvider>
+                  </PostIndexingWrapper>
                 </LexicalWrapper>
               </ThemeProvider>
             </WalletProvider>
