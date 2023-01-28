@@ -139,11 +139,19 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                   {user?.name && (
                     <h3 className="font-semibold text-[18px]">{user.name}</h3>
                   )}
-                  <div className="flex flex-row gap-1 text-p-text">
-                    <span className="font-bold">
-                      {myLensProfile?.stats?.totalFollowers}
-                    </span>
-                    <span className="font-light">Followers</span>
+                  <div className="flex flex-row gap-4 text-p-text">
+                    <div className="">
+                      <span className="font-bold mr-1">
+                        {myLensProfile?.defaultProfile?.stats?.totalFollowers}
+                      </span>
+                      <span className="font-light">Followers</span>
+                    </div>
+                    <div className="">
+                      <span className="font-bold mr-1">
+                        {myLensProfile?.defaultProfile?.stats?.totalFollowing}
+                      </span>
+                      <span className="font-light">Following</span>
+                    </div>
                   </div>
                 </div>
               </div>
