@@ -19,6 +19,10 @@ import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImageWithLoaderAndZoom from '../Common/UI/ImageWithLoaderAndZoom'
+import OptionsWrapper from '../Common/OptionsWrapper'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import { RiMore2Fill } from 'react-icons/ri'
+import { IoIosShareAlt } from 'react-icons/io'
 
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
@@ -184,6 +188,18 @@ const CommunityInfoCard = ({ _community }) => {
   //   setCurrentLevel(calculateLevel(currentXP, levelThreshold))
   // }, [levelThreshold])
 
+  const shareCommunity = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
+        text: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/c/${community?.name}`
+      })
+    } else {
+      notifyInfo('Sharing is not supported on your device')
+    }
+  }
+
   return (
     <>
       {community && (
@@ -235,6 +251,28 @@ const CommunityInfoCard = ({ _community }) => {
               )}
             </div>
             <div className="flex justify-end gap-1 sm:gap-2 pt-2">
+              <OptionsWrapper
+                OptionPopUpModal={() => (
+                  <MoreOptionsModal
+                    className="z-50"
+                    list={[
+                      {
+                        label: 'Share',
+                        onClick: shareCommunity,
+                        icon: () => <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                      }
+                    ]}
+                  />
+                )}
+                position="left"
+              >
+                <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                  <RiMore2Fill
+                    className="w-4 h-4 sm:w-5 sm:h-5"
+                    title="Share"
+                  />
+                </div>
+              </OptionsWrapper>
               {isCreator && (
                 <button
                   className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
