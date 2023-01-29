@@ -97,7 +97,7 @@ const LensLoginButton = () => {
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
                 <Link
                   href={`/u/${lensProfile.defaultProfile.handle}`}
-                  className="mr-2 hover:cursor-pointer hover:underline dark:text-s-bg text-[16px]"
+                  className="mr-2 hover:cursor-pointer hover:underline text-[16px]"
                 >
                   u/{lensProfile.defaultProfile.handle}
                 </Link>
