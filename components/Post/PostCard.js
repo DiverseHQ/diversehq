@@ -397,35 +397,75 @@ const PostCard = ({ _post, setPosts }) => {
         {/* main content */}
         <div className="flex flex-col justify-between w-full min-h-[76px]">
           <div>
-            <div className="mb-2 px-3 sm:pl-3.5 ">
-              {post?.title?.length <= 60 && (
-                <div className="font-medium text-base sm:text-lg w-full break-words">
-                  {post?.title}
-                </div>
-              )}
-              {(post?.content || post?.title?.length > 60) && (
+            <div className="mb-2 px-3 sm:pl-3.5">
+              {!router.pathname.startsWith('/p') ? (
+                <Link href={`/p/${post._id}`} passHref>
+                  <>
+                    {post?.title?.length <= 60 && (
+                      <div className="font-medium text-base sm:text-lg w-full break-words">
+                        {post?.title}
+                      </div>
+                    )}
+                    {(post?.content || post?.title?.length > 60) && (
+                      <>
+                        <div
+                          className={`${
+                            showMore ? 'h-[150px]' : ''
+                          } sm:max-w-[550px]  overflow-hidden break-words`}
+                        >
+                          <Markup
+                            className={`${
+                              showMore ? 'line-clamp-5' : ''
+                            } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
+                          >
+                            {post?.content ? post?.content : post?.title}
+                          </Markup>
+                          {/* todo showmore for clamped text */}
+                        </div>
+                        {showMore && (
+                          <Link
+                            href={`/p/${post._id}`}
+                            className="text-blue-400 text-sm sm:text-base"
+                          >
+                            Show more
+                          </Link>
+                        )}
+                      </>
+                    )}
+                  </>
+                </Link>
+              ) : (
                 <>
-                  <div
-                    className={`${
-                      showMore ? 'h-[150px]' : ''
-                    } sm:max-w-[550px]  overflow-hidden break-words`}
-                  >
-                    <Markup
-                      className={`${
-                        showMore ? 'line-clamp-5' : ''
-                      } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
-                    >
-                      {post?.content ? post?.content : post?.title}
-                    </Markup>
-                    {/* todo showmore for clamped text */}
-                  </div>
-                  {showMore && (
-                    <Link
-                      href={`/p/${post._id}`}
-                      className="text-blue-400 text-sm sm:text-base"
-                    >
-                      Show more
-                    </Link>
+                  {post?.title?.length <= 60 && (
+                    <div className="font-medium text-base sm:text-lg w-full break-words">
+                      {post?.title}
+                    </div>
+                  )}
+                  {(post?.content || post?.title?.length > 60) && (
+                    <>
+                      <div
+                        className={`${
+                          showMore ? 'h-[150px]' : ''
+                        } sm:max-w-[550px]  overflow-hidden break-words`}
+                      >
+                        <Markup
+                          className={`${
+                            showMore ? 'line-clamp-5' : ''
+                          } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
+                        >
+                          {post?.content ? post?.content : post?.title}
+                        </Markup>
+                        {/* todo showmore for clamped text */}
+                      </div>
+                      {showMore && (
+                        <Link
+                          href={`/p/${post._id}`}
+                          className="text-blue-400 text-sm sm:text-base"
+                        >
+                          Show more
+                        </Link>
+                      )}
+                    </>
                   )}
                 </>
               )}
