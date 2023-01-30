@@ -13,6 +13,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const LensProfilesSearchModal = ({
   searchTerm,
+  setSearchTerm,
   inputRef,
   lensProfiles,
   setLensProfiles
@@ -50,6 +51,7 @@ const LensProfilesSearchModal = ({
               key={profile.id}
               onClick={() => {
                 inputRef.current.value = ''
+                setSearchTerm('')
                 handleProfileClicked(profile.handle)
               }}
             >

@@ -6,6 +6,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const CommunitiesSearchModal = ({
   searchTerm,
+  setSearchTerm,
   inputRef,
   communities,
   setCommunities
@@ -40,6 +41,7 @@ const CommunitiesSearchModal = ({
               key={community._id}
               onClick={() => {
                 inputRef.current.value = ''
+                setSearchTerm('')
                 handleCommunityClicked(community.name)
               }}
             >

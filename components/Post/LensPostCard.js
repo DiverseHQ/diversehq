@@ -458,33 +458,74 @@ const LensPostCard = ({ post }) => {
             <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
                 <div className="mb-2 px-3 sm:pl-3.5 ">
-                  {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
-                    <div className="font-medium text-base sm:text-lg w-full break-words">
-                      {postInfo?.metadata?.name}
-                    </div>
-                  )}
-                  {postInfo?.metadata?.name !== postInfo?.metadata?.content && (
-                    <div
-                      className={`${
-                        showMore ? 'h-[150px]' : ''
-                      } sm:max-w-[550px] overflow-hidden break-words`}
-                    >
-                      <Markup
-                        className={`${
-                          showMore ? 'line-clamp-5' : ''
-                        } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
-                      >
-                        {postInfo?.metadata?.content}
-                      </Markup>
-                    </div>
-                  )}
-                  {showMore && (
-                    <Link
-                      href={`/p/${postInfo?.id}`}
-                      className="text-blue-400 text-sm sm:text-base"
-                    >
-                      Show more
+                  {!router.pathname.startsWith('/p') ? (
+                    <Link href={`/p/${postInfo?.id}`} passHref>
+                      <>
+                        {postInfo?.metadata?.name !==
+                          'Created with DiverseHQ' && (
+                          <div className="font-medium text-base sm:text-lg w-full break-words">
+                            {postInfo?.metadata?.name}
+                          </div>
+                        )}
+                        {postInfo?.metadata?.name !==
+                          postInfo?.metadata?.content && (
+                          <div
+                            className={`${
+                              showMore ? 'h-[150px]' : ''
+                            } sm:max-w-[550px] overflow-hidden break-words`}
+                          >
+                            <Markup
+                              className={`${
+                                showMore ? 'line-clamp-5' : ''
+                              } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+                            >
+                              {postInfo?.metadata?.content}
+                            </Markup>
+                          </div>
+                        )}
+                        {showMore && (
+                          <Link
+                            href={`/p/${postInfo?.id}`}
+                            className="text-blue-400 text-sm sm:text-base"
+                          >
+                            Show more
+                          </Link>
+                        )}
+                      </>
                     </Link>
+                  ) : (
+                    <>
+                      {postInfo?.metadata?.name !==
+                        'Created with DiverseHQ' && (
+                        <div className="font-medium text-base sm:text-lg w-full break-words">
+                          {postInfo?.metadata?.name}
+                        </div>
+                      )}
+                      {postInfo?.metadata?.name !==
+                        postInfo?.metadata?.content && (
+                        <div
+                          className={`${
+                            showMore ? 'h-[150px]' : ''
+                          } sm:max-w-[550px] overflow-hidden break-words`}
+                        >
+                          <Markup
+                            className={`${
+                              showMore ? 'line-clamp-5' : ''
+                            } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+                          >
+                            {postInfo?.metadata?.content}
+                          </Markup>
+                        </div>
+                      )}
+                      {showMore && (
+                        <Link
+                          href={`/p/${postInfo?.id}`}
+                          className="text-blue-400 text-sm sm:text-base"
+                        >
+                          Show more
+                        </Link>
+                      )}
+                    </>
                   )}
                 </div>
                 {postInfo?.metadata?.media.length > 0 && (

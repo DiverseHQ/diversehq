@@ -48,12 +48,14 @@ const SearchModal = () => {
           inputRef={inputRef}
           communities={communities}
           setCommunities={setCommunities}
+          setSearchTerm={setSearchTerm}
         />
         <LensProfilesSearchModal
           searchTerm={searchTerm}
           inputRef={inputRef}
           lensProfiles={lensProfiles}
           setLensProfiles={setLensProfiles}
+          setSearchTerm={setSearchTerm}
         />
       </div>
       {searchTerm !== '' && (
