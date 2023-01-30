@@ -18,7 +18,7 @@ const BottomDrawerWrapper = ({
       }}
       sx={{
         '& .MuiDrawer-paper': {
-          borderRadius: '50px 50px 0px 0px',
+          borderRadius: '20px 20px 0px 0px',
           bgcolor: theme === 'light' ? '#FFFFFF' : '#1A1A1B',
           color: theme === 'light' ? '#1A1A1B' : '#FFFFFF'
         }
@@ -35,7 +35,7 @@ const BottomDrawerWrapper = ({
           <rect width="36" height="5" rx="2.5" fill="#B3B4F3" />
         </svg>
       </div>
-      <div className="max-h-[350px] overflow-y-scroll overflow-x-hidden">
+      <div className="max-h-[350px] overflow-y-auto overflow-x-hidden">
         {children}
       </div>
       {showClose && (
@@ -44,7 +44,7 @@ const BottomDrawerWrapper = ({
             onClick={() => {
               setIsDrawerOpen(false)
             }}
-            className="bg-p-bg rounded-full text-center flex font-bold text-p-text py-1 justify-center items-center text-p-text w-full text-xl "
+            className="bg-p-bg rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl "
           >
             Close
           </button>

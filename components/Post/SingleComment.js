@@ -4,7 +4,6 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import { AiOutlineCheck } from 'react-icons/ai'
 
-import { BsThreeDots } from 'react-icons/bs'
 import {
   deleteComment,
   putEditComment,
@@ -14,7 +13,6 @@ import {
 // import { getSinglePostInfo } from "../../api/post"
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 // import CommentDropdown from './CommentDropdown'
 import { ReactionTypes } from '../../graphql/generated'
 import Link from 'next/link'
@@ -22,8 +20,8 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
-import useDevice from '../Common/useDevice'
-import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { RiMore2Fill } from 'react-icons/ri'
+import OptionsWrapper from '../Common/OptionsWrapper'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
@@ -40,11 +38,8 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const { notifyInfo, notifyError, notifySuccess } = useNotify()
   const { user } = useProfile()
-  const { showModal, hideModal } = usePopUpModal()
 
   const [isAuthor, setIsAuthor] = useState(false)
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const { isMobile } = useDevice()
 
   // edit comment state
   const [editing, setEditing] = useState(false)
@@ -57,7 +52,6 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const handleEditComment = async () => {
     if (!comment) return
     setEditing(true)
-    hideModal()
     // showModal({
     //   component: <EditComment comment={comment} setComment={setComment} />,
     //   type: modalType.normal,
@@ -89,7 +83,6 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
     try {
       if (!user) {
         notifyInfo('You might want to connect your wallet first')
-        hideModal()
         return
       }
       const deletedId = await deleteComment(comment?._id)
@@ -100,68 +93,12 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
     } catch (error) {
       console.log(error)
       notifyError('Something went wrong')
-    } finally {
-      hideModal()
     }
   }
 
   const onCommentChange = useCallback((e) => {
     setContent(e.target.value)
   }, [])
-
-  const showMoreOptions = (e) => {
-    if (!isAuthor) {
-      notifyInfo('It may happen that some buttons are under construction.')
-      return
-    }
-    if (isMobile) {
-      // open the bottom drawer
-      setIsDrawerOpen(true)
-      return
-    }
-    // setShowOptions(!showOptions)
-    showModal({
-      component: (
-        // <CommentDropdown
-        //   handleEditComment={handleEditComment}
-        //   handleDeleteComment={handleDeleteComment}
-        // />
-        <>
-          <MoreOptionsModal
-            list={[
-              {
-                label: 'Edit Comment',
-                onClick: async () => {
-                  handleEditComment()
-                  setIsDrawerOpen(false)
-                },
-                icon: () => <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-              },
-              {
-                label: 'Delete Comment',
-                onClick: async () => {
-                  await handleDeleteComment
-                  setIsDrawerOpen(false)
-                },
-                icon: () => (
-                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                )
-              }
-            ]}
-          />
-        </>
-      ),
-      type: modalType.customposition,
-      onAction: () => {},
-      extraaInfo: {
-        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-        right:
-          window.innerWidth -
-          e.currentTarget.getBoundingClientRect().right +
-          'px'
-      }
-    })
-  }
   useEffect(() => {
     if (!user) return
     if (!comment?.upvotes || !comment?.downvotes) return
@@ -246,41 +183,38 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                 />
               </div>
             </div>
-            {isAuthor && (
-              <>
-                <div className="relative">
-                  <BsThreeDots
-                    className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
-                    onClick={showMoreOptions}
+            <div>
+              {isAuthor && (
+                <OptionsWrapper
+                  OptionPopUpModal={() => (
+                    <MoreOptionsModal
+                      list={[
+                        {
+                          label: 'Edit Comment',
+                          onClick: handleEditComment,
+                          icon: () => (
+                            <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                          )
+                        },
+                        {
+                          label: 'Delete Comment',
+                          onClick: handleDeleteComment,
+                          icon: () => (
+                            <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                          )
+                        }
+                      ]}
+                    />
+                  )}
+                  position="left"
+                >
+                  <RiMore2Fill
+                    className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
                     title="More"
                   />
-                </div>
-
-                <BottomDrawerWrapper
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                >
-                  <MoreOptionsModal
-                    list={[
-                      {
-                        label: 'Edit Comment',
-                        onClick: handleEditComment,
-                        icon: () => (
-                          <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                        )
-                      },
-                      {
-                        label: 'Delete Comment',
-                        onClick: handleDeleteComment,
-                        icon: () => (
-                          <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                        )
-                      }
-                    ]}
-                  />
-                </BottomDrawerWrapper>
-              </>
-            )}
+                </OptionsWrapper>
+              )}
+            </div>
           </div>
 
           <div className="pl-8 sm:pl-10">

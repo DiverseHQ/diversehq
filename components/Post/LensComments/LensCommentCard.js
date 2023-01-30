@@ -14,14 +14,16 @@ import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import { LensInfuraEndpoint } from '../../../utils/config'
 import LensRepliedComments from './LensRepliesComments'
 import LensCreateComment from './LensCreateComment'
-import { BsThreeDots } from 'react-icons/bs'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import { useRouter } from 'next/router'
 import { HiOutlineTrash } from 'react-icons/hi'
 import useDevice from '../../Common/useDevice'
 import PopUpWrapper from '../../Common/PopUpWrapper'
-import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
+import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
+import { commentIdFromIndexedResult } from '../../../utils/utils'
+import { RiMore2Fill } from 'react-icons/ri'
+import OptionsWrapper from '../../Common/OptionsWrapper'
 TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
@@ -41,7 +43,6 @@ const LensCommentCard = ({ comment }) => {
   const [isAuthor, setIsAuthor] = useState(
     lensProfile?.defaultProfile?.id === comment?.profile?.id
   )
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { isMobile } = useDevice()
 
   const { showModal, hideModal } = usePopUpModal()
@@ -144,44 +145,30 @@ const LensCommentCard = ({ comment }) => {
       console.log(error)
     }
   }
-  const showMoreOptions = async (e) => {
-    if (!isAuthor) return
 
-    if (!comment?.id) {
-      notifyInfo('not indexed yet, come back later')
-      return
-    }
-    if (isMobile) {
-      // open the bottom drawer
-      setIsDrawerOpen(true)
-      return
-    }
-    showModal({
-      component: (
-        <>
-          <MoreOptionsModal
-            list={[
-              {
-                label: 'Delete Comment',
-                onClick: handleDeleteComment,
-                icon: () => (
-                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                )
-              }
-            ]}
-          />
-        </>
-      ),
-      type: modalType.customposition,
-      onAction: () => {},
-      extraaInfo: {
-        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-        right:
-          window.innerWidth -
-          e.currentTarget.getBoundingClientRect().right +
-          'px'
+  const addComment = async (tx, comment) => {
+    setComments([comment, ...comments])
+    setShowCreateComment(false)
+    hideModal()
+    const indexResult = await pollUntilIndexed(tx)
+    const commentId = commentIdFromIndexedResult(
+      lensProfile?.defaultProfile?.id,
+      indexResult
+    )
+
+    await addReaction({
+      request: {
+        profileId: lensProfile.defaultProfile.id,
+        publicationId: commentId,
+        reaction: ReactionTypes.Upvote
       }
     })
+    comment.id = commentId
+
+    // remove previous comment
+    setComments(comments.filter((c) => c.tempId !== comment.tempId))
+    // add new comment
+    setComments([comment, ...comments])
   }
 
   const openReplyModal = async () => {
@@ -190,11 +177,7 @@ const LensCommentCard = ({ comment }) => {
         <PopUpWrapper title={'Reply'} label={'Reply'} loading={false}>
           <LensCreateComment
             postId={comment.id}
-            addComment={(comment) => {
-              setComments([comment, ...comments])
-              setShowCreateComment(false)
-              hideModal()
-            }}
+            addComment={addComment}
             isReply={true}
             replyCommentData={comment}
           />
@@ -212,63 +195,63 @@ const LensCommentCard = ({ comment }) => {
           {/* top row */}
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center gap-2">
-              <div className="flex flex-row items-center">
-                {/* commenting for now */}
-                {/* todo : ability to set lens profile image and fetch here */}
+              {/* commenting for now */}
+              {/* todo : ability to set lens profile image and fetch here */}
 
-                <ImageWithPulsingLoader
-                  src={
-                    comment?.profile?.picture?.original?.url?.startsWith('ipfs')
-                      ? `${LensInfuraEndpoint}${
-                          comment?.profile?.picture?.original?.url.split(
-                            '//'
-                          )[1]
-                        }`
-                      : '/gradient.jpg'
-                  }
-                  className="w-6 h-6 rounded-full mr-1"
-                />
+              <ImageWithPulsingLoader
+                src={
+                  comment?.profile?.picture?.original?.url?.startsWith('ipfs')
+                    ? `${LensInfuraEndpoint}${
+                        comment?.profile?.picture?.original?.url.split('//')[1]
+                      }`
+                    : '/gradient.jpg'
+                }
+                className="w-6 h-6 rounded-full mr-1"
+              />
 
-                <Link href={`/u/${comment?.profile?.handle}`} passHref>
-                  <div className="hover:underline font-bold text-base">
-                    u/{comment?.profile?.handle}
-                  </div>
-                </Link>
-              </div>
+              <Link href={`/u/${comment?.profile?.handle}`} passHref>
+                <div className="hover:underline font-bold text-base">
+                  u/{comment?.profile?.handle}
+                </div>
+              </Link>
               <ReactTimeAgo
                 className="text-xs sm:text-sm text-s-text"
                 date={new Date(comment.createdAt)}
                 locale="en-US"
               />
             </div>
-            {isAuthor && (
-              <>
-                <BsThreeDots
-                  className="hover:cursor-pointer w-4 h-4 sm:w-6 sm:h-6"
-                  onClick={showMoreOptions}
-                  title="More"
-                />
-                <BottomDrawerWrapper
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                >
-                  <MoreOptionsModal
-                    list={[
-                      {
-                        label: 'Delete Comment',
-                        onClick: async () => {
-                          await handleDeleteComment()
-                          setIsDrawerOpen(false)
-                        },
-                        icon: () => (
-                          <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                        )
-                      }
-                    ]}
-                  />
-                </BottomDrawerWrapper>
-              </>
+            {!comment.id && (
+              <div className="sm:mr-5 flex flex-row items-center">
+                {/* pulsing dot */}
+                <div className="text-xs sm:text-sm">Confirming</div>
+                <div className="w-2 h-2 rounded-full bg-p-btn animate-pulse" />
+              </div>
             )}
+            <div>
+              {isAuthor && comment.id && (
+                <OptionsWrapper
+                  OptionPopUpModal={() => (
+                    <MoreOptionsModal
+                      list={[
+                        {
+                          label: 'Delete Comment',
+                          onClick: handleDeleteComment,
+                          icon: () => (
+                            <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                          )
+                        }
+                      ]}
+                    />
+                  )}
+                  position="left"
+                >
+                  <RiMore2Fill
+                    className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
+                    title="More"
+                  />
+                </OptionsWrapper>
+              )}
+            </div>
           </div>
 
           {/* padded content with line*/}
@@ -329,10 +312,7 @@ const LensCommentCard = ({ comment }) => {
               {showCreateComment && !isMobile && (
                 <LensCreateComment
                   postId={comment.id}
-                  addComment={(commnet) => {
-                    setComments([commnet, ...comments])
-                    setShowCreateComment(false)
-                  }}
+                  addComment={addComment}
                 />
               )}
 

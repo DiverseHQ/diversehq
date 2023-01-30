@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { deletePost, putUpvoteOnPost, putDownvoteOnPost } from '../../api/post'
@@ -26,31 +26,10 @@ import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import ReactEmbedo from './embed/ReactEmbedo'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
-import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { RiMore2Fill } from 'react-icons/ri'
+import OptionsWrapper from '../Common/OptionsWrapper'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
-
-const MoreOptionsDropdown = ({ list }) => {
-  return (
-    <div className="flex flex-col sm:rounded-xl sm:shadow-md">
-      {list.map((item, index) => {
-        return (
-          <div
-            key={index}
-            className={`flex flex-row gap-1 p-2 rounded-md sm:rounded-xl cursor-pointer items-center text-[16px] hover:bg-p-hover hover:text-p-hover-text text-p-text ${
-              item.label.includes('Delete') && 'text-red-500 hover:text-red-500'
-            } ${item.className ? item.className : ''}}`}
-            onClick={item.onClick}
-          >
-            {item.icon && <item.icon />}
-            <span>{item.label}</span>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
 
 const PostCard = ({ _post, setPosts }) => {
   // const createdAt = new Date(post.createdAt)
@@ -66,7 +45,6 @@ const PostCard = ({ _post, setPosts }) => {
   )
   const [totalCount, setTotalCount] = useState(upvoteCount - downvoteCount)
   const { notifyInfo, notifyError } = useNotify()
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { isMobile } = useDevice()
 
   // to maintain the current author state
@@ -75,7 +53,6 @@ const PostCard = ({ _post, setPosts }) => {
   const { showModal, hideModal } = usePopUpModal()
 
   const router = useRouter()
-  const dropdownRef = useRef(null)
   const [showMore, setShowMore] = useState(
     (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES_FOR_POST ||
       post?.content?.length > 400 ||
@@ -83,27 +60,6 @@ const PostCard = ({ _post, setPosts }) => {
       post?.title?.length > 400) &&
       router.pathname !== '/p/[id]'
   )
-
-  const [showDropdown, setShowDropdown] = useState(false)
-
-  // useEffect(() => {
-  //   const handleClick = (event) => {
-  //     // Check if the target element of the click is the dropdown element
-  //     // or a descendant of the dropdown element
-  //     if (!dropdownRef.current?.contains(event.target)) {
-  //       // Hide the dropdown
-  //       setShowDropdown(false)
-  //     }
-  //   }
-
-  //   // Add the event listener
-  //   document.addEventListener('click', handleClick)
-
-  //   // Remove the event listener when the component is unmounted
-  //   return () => {
-  //     document.removeEventListener('click', handleClick)
-  //   }
-  // }, [dropdownRef])
 
   useEffect(() => {
     console.log('post', post)
@@ -210,50 +166,6 @@ const PostCard = ({ _post, setPosts }) => {
     })
   }
 
-  const showMoreOptions = (e) => {
-    if (!isAuthor) {
-      notifyInfo('It may happen that some buttons are under construction.')
-      return
-    }
-    if (isMobile) {
-      // open the bottom drawer
-      setIsDrawerOpen(true)
-      return
-    }
-    // setShowOptions(!showOptions)
-    showModal({
-      component: (
-        <>
-          <MoreOptionsModal
-            list={[
-              {
-                label: 'Edit Post',
-                onClick: showEditModal,
-                icon: () => <BiEdit className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-              },
-              {
-                label: 'Delete Post',
-                onClick: handleDeletePost,
-                icon: () => (
-                  <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                )
-              }
-            ]}
-          />
-        </>
-      ),
-      type: modalType.customposition,
-      onAction: () => {},
-      extraaInfo: {
-        top: e.currentTarget.getBoundingClientRect().bottom + 'px',
-        right:
-          window.innerWidth -
-          e.currentTarget.getBoundingClientRect().right +
-          'px'
-      }
-    })
-  }
-
   return (
     <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 sm:my-3 sm:rounded-2xl shadow-sm">
       {/* top row */}
@@ -349,7 +261,7 @@ const PostCard = ({ _post, setPosts }) => {
         )}
         <div className="sm:mr-5 flex flex-row items-center">
           <JoinCommunityButton id={post.communityId} />
-          {isAuthor && (
+          {/* {isAuthor && (
             <div className="relative">
               <button
                 className="hover:bg-p-hover hover:cursor-pointer  rounded-md p-1"
@@ -394,14 +306,6 @@ const PostCard = ({ _post, setPosts }) => {
                   className="flex flex-col bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-md sm:rounded-xl absolute top-[30px] right-[10px] z-30 overflow-y-auto overflow-x-hidden w-[160px] p-2"
                   ref={dropdownRef}
                 >
-                  {/* <div className="flex flex-row gap-1 p-2 hover:bg-p-hover hover:text-p-hover-text rounded-md sm:rounded-xl cursor-pointer">
-                    <BiEdit className="mr-1.5 w-6 h-6" />
-                    <span>Edit Post</span>
-                  </div>
-                  <div className="flex flex-row gap-1 p-2 hover:bg-p-hover hover:text-p-hover-text rounded-md sm:rounded-xl cursor-pointer">
-                    <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                    <span>Delete Post</span>
-                  </div> */}
                   <MoreOptionsDropdown
                     list={[
                       {
@@ -425,6 +329,36 @@ const PostCard = ({ _post, setPosts }) => {
                 </div>
               )}
             </div>
+          )} */}
+          {isAuthor && (
+            <OptionsWrapper
+              OptionPopUpModal={() => (
+                <MoreOptionsModal
+                  className="z-50"
+                  list={[
+                    {
+                      label: 'Edit Post',
+                      onClick: async () => {
+                        showEditModal()
+                      },
+                      icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
+                    },
+                    {
+                      label: 'Delete Post',
+                      onClick: async () => {
+                        await handleDeletePost()
+                      },
+                      icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                    }
+                  ]}
+                />
+              )}
+              position="left"
+            >
+              <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
+              </div>
+            </OptionsWrapper>
           )}
         </div>
       </div>

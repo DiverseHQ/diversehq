@@ -61,6 +61,7 @@ export const WalletProvider = ({ children }) => {
       setLoading(true)
       if (!address) return
       const userInfo = await getUserInfo(address)
+      console.log('userInfo', userInfo)
       if (userInfo && userInfo.role <= userRoles.WHITELISTED_USER) {
         setUser(userInfo)
       } else {
@@ -106,7 +107,6 @@ export const WalletProvider = ({ children }) => {
           }
         }
       } catch (error) {
-        disconnect()
         console.log('error from verfiying token', error)
       }
       console.log('useEffectCalled', useEffectCalled)

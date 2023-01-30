@@ -46,7 +46,6 @@ function MyApp({ Component, pageProps }) {
 
   // Add Component to retainedComponents if we haven't got it already
   if (isRetainableRoute && !retainedComponents.current[router.asPath]) {
-    console.log('adding component to retainedComponents', router.asPath)
     const MemoComponent = memo(Component)
     retainedComponents.current[router.asPath] = {
       component: <MemoComponent {...pageProps} />,
@@ -58,8 +57,6 @@ function MyApp({ Component, pageProps }) {
   const handleRouteChangeStart = () => {
     setIsLoading(true)
     if (isRetainableRoute) {
-      console.log('saving scroll pos', router.asPath)
-      console.log('window.scrollY', window.scrollY)
       retainedComponents.current[router.asPath].scrollPos = window.scrollY
     }
   }
@@ -81,10 +78,6 @@ function MyApp({ Component, pageProps }) {
   // Scroll to the saved position when we load a retained component
   useEffect(() => {
     if (isRetainableRoute && !isLoading) {
-      console.log(
-        'scrolling to',
-        retainedComponents.current[router.asPath].scrollPos
-      )
       window.scrollTo(0, retainedComponents.current[router.asPath].scrollPos)
     }
   }, [Component, pageProps, isLoading])

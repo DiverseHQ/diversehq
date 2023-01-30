@@ -84,11 +84,26 @@ const CollectSettingsModel = ({ setCollectSettings }) => {
           <Switch
             checked={followerOnly}
             onChange={() => setFollowerOnly(!followerOnly)}
+            sx={{
+              '& .MuiSwitch-track': {
+                backgroundColor: 'grey',
+                color: 'grey'
+              }
+            }}
           />
           <div>Only Followers can Collect</div>
         </div>
         <div className="flex flex-row items-center">
-          <Switch checked={monetize} onChange={() => setMonetize(!monetize)} />
+          <Switch
+            checked={monetize}
+            onChange={() => setMonetize(!monetize)}
+            sx={{
+              '& .MuiSwitch-track': {
+                backgroundColor: 'grey',
+                color: 'grey'
+              }
+            }}
+          />
           <div>Monetize</div>
         </div>
         {monetize && (

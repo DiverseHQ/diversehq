@@ -19,7 +19,6 @@ import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPl
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import {
-  postIdFromIndexedResult,
   uploadFileToFirebaseAndGetUrl,
   uploadFileToIpfsInfuraAndGetPath,
   uploadToIpfsInfuraAndGetPath
@@ -31,11 +30,8 @@ import { Switch } from '@mui/material'
 import { supportedMimeTypes } from '../../lib/interfaces/publication'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
-import { pollUntilIndexed } from '../../lib/indexer/has-transaction-been-indexed'
 import {
   PublicationMainFocus,
-  ReactionTypes,
-  useAddReactionMutation,
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
@@ -47,6 +43,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
+import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
@@ -71,12 +68,12 @@ const CreatePostPopup = () => {
     (isSignedIn && hasProfile) || false
   )
   const [editor] = useLexicalComposerContext()
-  const { mutateAsync: addReaction } = useAddReactionMutation()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
   const [collectSettings, setCollectSettings] = useState({
     freeCollectModule: { followerOnly: false }
   })
-
+  const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
+  const { addPost } = usePostIndexing()
   useEffect(() => {
     return () => {
       editor?.update(() => {
@@ -95,7 +92,7 @@ const CreatePostPopup = () => {
   const { mutateAsync: createPostViaSignedTx } =
     useCreatePostTypedDataMutation()
   const { error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
+    useSignTypedDataAndBroadcast(false)
 
   const closeModal = () => {
     setShowCommunity({ name: '', image: '' })
@@ -161,10 +158,11 @@ const CreatePostPopup = () => {
       mainContentFocus = PublicationMainFocus.TextOnly
     }
     //todo map to community id, so that can be identified by community
+    const metadataId = uuidv4()
     const metadata = {
       version: '2.0.0',
       mainContentFocus: mainContentFocus,
-      metadata_id: uuidv4(),
+      metadata_id: metadataId,
       description: 'Created with DiverseHQ',
       locale: 'en-US',
       content: content && content.trim() !== '' ? content : title,
@@ -198,34 +196,37 @@ const CreatePostPopup = () => {
         followerOnlyReferenceModule: false
       }
     }
-    await post(createPostRequest)
-  }
 
-  const onSuccessLensPost = async (result) => {
-    notifySuccess('Post has been created ...')
-    try {
-      console.log('result', result)
-      const postId = postIdFromIndexedResult(
-        lensProfile?.defaultProfile?.id,
-        result
-      )
-      console.log('postId', postId)
-      await addReaction({
-        request: {
-          profileId: lensProfile?.defaultProfile?.id,
-          publicationId: postId,
-          reaction: ReactionTypes.Upvote
-        }
-      })
-      router.push(`/p/${postId}`)
-    } catch (e) {
-      console.log('error adding reaction', e)
+    const postForIndexing = {
+      tempId: metadataId,
+      communityInfo: {
+        _id: communityId,
+        name: showCommunity.name,
+        image: showCommunity.image
+      },
+      createdAt: new Date().toISOString(),
+      hasCollectedByMe: false,
+      hidden: false,
+      isGated: false,
+      metadata: { ...metadata, media: [{ original: { url: url } }] },
+      profile: {
+        _id: lensProfile?.defaultProfile?.id,
+        handle: lensProfile?.defaultProfile?.handle,
+        ownedBy: lensProfile?.defaultProfile?.ownedBy
+      },
+      reaction: 'UPVOTE',
+      stats: {
+        totalUpvotes: 1,
+        totalAmountOfCollects: 0,
+        totalAmountOfComments: 0,
+        totalDownvotes: 0
+      }
     }
-    setLoading(false)
-    closeModal()
-  }
 
-  const post = async (createPostRequest) => {
+    setPostMetadataForIndexing(postForIndexing)
+
+    // dispatch or broadcast
+
     try {
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
         //gasless using dispatcher
@@ -235,17 +236,10 @@ const CreatePostPopup = () => {
           })
         ).createPostViaDispatcher
         console.log(dispatcherResult)
-        console.log('index started ....')
-        const indexResult = await pollUntilIndexed({
-          txId: dispatcherResult.txId
-        })
-        console.log('index result', indexResult)
-        console.log('index ended ....')
 
-        //invalidate query to update feed
-        if (indexResult.indexed === true) {
-          await onSuccessLensPost(indexResult)
-        }
+        setLoading(false)
+        hideModal()
+        addPost({ txId: dispatcherResult.txId }, postForIndexing)
       } else {
         //gasless using signed broadcast
         const postTypedResult = (
@@ -265,11 +259,14 @@ const CreatePostPopup = () => {
       notifyError('Error creating post, report to support')
       return
     }
+    // await post(createPostRequest)
   }
 
   useEffect(() => {
     if (result && type === 'createPost') {
-      onSuccessLensPost(result)
+      setLoading(false)
+      hideModal()
+      addPost({ txHash: result.txHash }, postMetadataForIndexing)
     }
   }, [result, type])
 
@@ -403,10 +400,6 @@ const CreatePostPopup = () => {
     )
   }
 
-  useEffect(() => {
-    console.log(communityOptionsCoord)
-  }, [communityOptionsCoord])
-
   const showJoinedCommunities = (e) => {
     if (loading) return
     if (joinedCommunities?.length === 0) {
@@ -477,6 +470,12 @@ const CreatePostPopup = () => {
               }}
               disabled={loading}
               size="small"
+              sx={{
+                '& .MuiSwitch-track': {
+                  backgroundColor: 'grey',
+                  color: 'grey'
+                }
+              }}
             />
           </div>
         </div>
