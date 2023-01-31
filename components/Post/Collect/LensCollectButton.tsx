@@ -3,9 +3,12 @@ import { useState } from 'react'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
 import { CollectModule, Profile, Publication } from '../../../graphql/generated'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
+import useDevice from '../../Common/useDevice'
 import FeeCollectPopUp from './FeeCollectPopUp'
 import FreeCollectPopUp from './FreeCollectPopUp'
-
+import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
+import FreeCollectDrawer from './FreeCollectDrawer'
+import FeeCollectDrawer from './FeeCollectDrawer'
 type Props = {
   publication: Publication
   totalCollects: number
@@ -24,12 +27,18 @@ const LensCollectButton = ({
   const [collectCount, setCollectCount] = useState(totalCollects)
   const [isCollected, setIsCollected] = useState(hasCollectedByMe)
   const { showModal }: any = usePopUpModal()
+  const { isMobile } = useDevice()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   const handleCollectClick = async () => {
     console.log('handleCollectClick')
     console.log('collectModule', collectModule)
     console.log('isCollected', isCollected)
     if (isCollected || !collectModule) return
+    if (isMobile) {
+      setIsDrawerOpen(true)
+      return
+    }
     if (collectModule.__typename === 'FreeCollectModuleSettings') {
       showModal({
         component: (
@@ -64,19 +73,48 @@ const LensCollectButton = ({
     }
   }
   return (
-    <button
-      disabled={isCollected || hasCollectedByMe}
-      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center"
-      onClick={handleCollectClick}
-      title="Collect"
-    >
-      {isCollected || hasCollectedByMe ? (
-        <BsCollectionFill className="w-5 h-5" />
-      ) : (
-        <BsCollection className="w-5 h-5" />
-      )}
-      <div className="ml-2">{collectCount}</div>
-    </button>
+    <>
+      <button
+        disabled={isCollected || hasCollectedByMe}
+        className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center"
+        onClick={handleCollectClick}
+        title="Collect"
+      >
+        {isCollected || hasCollectedByMe ? (
+          <BsCollectionFill className="w-5 h-5" />
+        ) : (
+          <BsCollection className="w-5 h-5" />
+        )}
+        <div className="ml-2">{collectCount}</div>
+      </button>
+
+      {collectModule?.__typename === 'FreeCollectModuleSettings' &&
+        isDrawerOpen && (
+          <FreeCollectDrawer
+            setIsCollected={setIsCollected}
+            isCollected={isCollected}
+            setCollectCount={setCollectCount}
+            collectModule={collectModule}
+            publication={publication}
+            author={author}
+            isDrawerOpen={isDrawerOpen}
+            setIsDrawerOpen={setIsDrawerOpen}
+          />
+        )}
+      {collectModule?.__typename === 'FeeCollectModuleSettings' &&
+        isDrawerOpen && (
+          <FeeCollectDrawer
+            isDrawerOpen={isDrawerOpen}
+            setIsDrawerOpen={setIsDrawerOpen}
+            setIsCollected={setIsCollected}
+            setCollectCount={setCollectCount}
+            collectModule={collectModule}
+            publication={publication}
+            author={author}
+            isCollected={isCollected}
+          />
+        )}
+    </>
   )
 }
 
