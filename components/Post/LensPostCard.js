@@ -463,8 +463,7 @@ const LensPostCard = ({ post }) => {
                   {!router.pathname.startsWith('/p') ? (
                     <Link href={`/p/${postInfo?.id}`} passHref>
                       <>
-                        {postInfo?.metadata?.name !==
-                          'Created with DiverseHQ' && (
+                        {postInfo?.metadata?.name && (
                           <div className="font-medium text-base sm:text-lg w-full break-words">
                             {postInfo?.metadata?.name}
                           </div>
@@ -481,7 +480,12 @@ const LensPostCard = ({ post }) => {
                                 showMore ? 'line-clamp-5' : ''
                               } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                             >
-                              {postInfo?.metadata?.content}
+                              {/* remove title text from content */}
+
+                              {postInfo?.metadata?.content?.replace(
+                                new RegExp(`^${postInfo?.metadata?.name}`),
+                                ''
+                              )}
                             </Markup>
                           </div>
                         )}

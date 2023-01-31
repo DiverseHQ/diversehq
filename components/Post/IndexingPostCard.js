@@ -78,7 +78,7 @@ const IndexingPostCard = ({ postInfo }) => {
 
             {isMobile && (
               <>
-                <div className="flex flex-row w-full items-center">
+                <div className="flex flex-row w-full items-center justify-between">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
                       src={

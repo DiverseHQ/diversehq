@@ -165,7 +165,7 @@ const CreatePostPopup = () => {
       metadata_id: metadataId,
       description: 'Created with DiverseHQ',
       locale: 'en-US',
-      content: content && content.trim() !== '' ? content : title,
+      content: title + '\n' + content.trim(),
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
       imageMimeType: mimeType.startsWith('image') ? mimeType : null,

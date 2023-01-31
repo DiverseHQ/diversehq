@@ -193,7 +193,7 @@ const LensCommentCard = ({ comment }) => {
       {comment && (
         <div className="w-full">
           {/* top row */}
-          <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center justify-between w-full">
             <div className="flex flex-row items-center gap-2">
               {/* commenting for now */}
               {/* todo : ability to set lens profile image and fetch here */}

@@ -24,7 +24,7 @@ const NotificationFilterDrawerButton = () => {
     }
   }, [pathname])
   return (
-    <div>
+    <div className="relative">
       <button
         onClick={() => setIsDrawerOpen(true)}
         className="flex flex-row items-center justify-center bg-p-btn-hover p-1 rounded-md"
@@ -45,7 +45,7 @@ const NotificationFilterDrawerButton = () => {
         </svg>
         <span className="pl-2">{active}</span>
         {notificationsCount > 0 && active === 'lens' && (
-          <div className="absolute left-0 top-0 leading-[4px] p-1 font-bold text-[8px] text-p-btn-text bg-red-500 rounded-full">
+          <div className="absolute right-0 top-0 leading-[4px] p-1 font-bold text-[8px] text-p-btn-text bg-red-500 rounded-full">
             <span>{notificationsCount}</span>
           </div>
         )}

@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera } from 'react-icons/ai'
 import FormTextArea from '../Common/UI/FormTextArea'
-import FormTextInput from '../Common/UI/FormTextInput'
 import {
   uploadFileToFirebaseAndGetUrl
   // uploadFileToIpfs
@@ -23,7 +22,6 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
   const [logoImage, setLogoImage] = useState(community?.logoImageUrl)
   const [communityBannerFile, setCommunityBannerFile] = useState(null)
   const [logoImageFile, setLogoImageFile] = useState(null)
-  const [name, setName] = useState(community?.name)
   const [description, setDescription] = useState(community?.description)
 
   const { notifyError, notifySuccess } = useNotify()
@@ -47,14 +45,13 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    if (!name || !description) {
+    if (!description) {
       setLoading(false)
       notifyError('Please fill all fields')
       return
     }
     try {
       const communityData = {
-        name,
         description,
         communityId: community._id
       }
@@ -94,9 +91,9 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
     }
   }
 
-  const onChangeName = useCallback((e) => {
-    setName(e.target.value)
-  }, [])
+  // const onChangeName = useCallback((e) => {
+  //   setName(e.target.value)
+  // }, [])
 
   const onChangeDescription = useCallback((e) => {
     setDescription(e.target.value)
@@ -167,13 +164,13 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
             </div>
           </div>
 
-          <FormTextInput
+          {/* <FormTextInput
             label="Community Name"
             placeholder="Your Community Name"
             value={name}
             onChange={onChangeName}
             required
-          />
+          /> */}
           <FormTextArea
             label="Description"
             placeholder="Show the world what your community is..."

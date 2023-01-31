@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
+import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 
-const VideoWithAutoPause = ({ ...props }) => {
+const VideoWithAutoPause = ({ src, ...props }) => {
   const videoRef = useRef(null)
 
   useEffect(() => {
@@ -37,7 +38,17 @@ const VideoWithAutoPause = ({ ...props }) => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
-  return <video ref={videoRef} {...props} />
+  return (
+    <video
+      src={
+        src.startsWith(LensInfuraEndpoint)
+          ? `${IMAGE_KIT_ENDPOINT}/${src}`
+          : src
+      }
+      ref={videoRef}
+      {...props}
+    />
+  )
 }
 
 export default VideoWithAutoPause
