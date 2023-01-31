@@ -12,9 +12,9 @@ const top = ({ community }) => {
       {community && <CommunityPageSeo community={community} />}
       {community && (
         <>
-          <CommunityInfoCard _community={community} />
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
+              <CommunityInfoCard _community={community} />
               <NavFilterCommunity name={community.name} />
               <PostsColumn
                 source="community"
