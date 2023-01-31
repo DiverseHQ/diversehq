@@ -19,18 +19,16 @@ const useLensFollowButton = (lensProfile) => {
   }, [lensProfile])
 
   const handleFollowProfile = async (profileId) => {
-    const followProfileResult = (
-      await proxyAction({
-        request: {
-          follow: {
-            freeFollow: {
-              profileId: profileId
-            }
+    await proxyAction({
+      request: {
+        follow: {
+          freeFollow: {
+            profileId: profileId
           }
         }
-      })
-    ).proxyAction
-    console.log('followProfileResult index start', followProfileResult)
+      }
+    })
+
     setIsFollowedByMe(true)
   }
 
@@ -44,7 +42,6 @@ const useLensFollowButton = (lensProfile) => {
           }
         })
       ).createUnfollowTypedData
-      console.log('unfollowProfileResult', unfollowProfileResult)
 
       signTypedDataAndBroadcast(unfollowProfileResult.typedData, {
         id: unfollowProfileResult.id,
@@ -56,7 +53,6 @@ const useLensFollowButton = (lensProfile) => {
   }
   useEffect(() => {
     if (type === 'unfollow' && result) {
-      console.log('Successfully unfollowed', result)
       setLoading(false)
     }
   }, [type, result])
@@ -74,8 +70,6 @@ const useLensFollowButton = (lensProfile) => {
       setIsFollowedByMe(false)
     }
   }, [isSignedTx, type])
-
-  console.log('lensProfile', lensProfile)
 
   return {
     isFollowedByMe,
