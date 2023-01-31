@@ -9,7 +9,7 @@ import {
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { usePopUpModal } from '../../Common/CustomPopUpProvider'
 import { useNotify } from '../../Common/NotifyContext'
-import PopUpWrapper from '../../Common/PopUpWrapper'
+// import PopUpWrapper from '../../Common/PopUpWrapper'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import AllowanceButton from './AllowanceButton'
 import useCollectPublication from './useCollectPublication'
@@ -87,27 +87,14 @@ const FeeCollectPopUp = ({
   }, [balanceData])
 
   return (
-    <PopUpWrapper
-      title={`Collect and Gift ${
+    <>
+      <h1>{`Collect and Gift ${
         publication.collectModule.__typename === 'FeeCollectModuleSettings' &&
         publication.collectModule.amount.value
       } ${
         publication.collectModule.__typename === 'FeeCollectModuleSettings' &&
         publication.collectModule.amount.asset.symbol
-      }`}
-      isDisabled={
-        //todo :  also check if the user has enough balance
-        loading ||
-        (collectModule.followerOnly && !isFollowedByMe) ||
-        !isAllowed ||
-        !hasAmount
-      }
-      loading={loading}
-      label="Collect"
-      onClick={async () => {
-        await collectPublication(publication.id)
-      }}
-    >
+      }`}</h1>
       {collectModule.followerOnly && !isFollowedByMe && (
         <div className="flex flex-row items-center text-p-text">
           <button
@@ -152,7 +139,20 @@ const FeeCollectPopUp = ({
           )}
         </>
       )}
-    </PopUpWrapper>
+      <button
+        onClick={async () => {
+          await collectPublication(publication.id)
+        }}
+        disabled={
+          loading ||
+          (collectModule.followerOnly && !isFollowedByMe) ||
+          !isAllowed ||
+          !hasAmount
+        }
+      >
+        Collect
+      </button>
+    </>
   )
 }
 

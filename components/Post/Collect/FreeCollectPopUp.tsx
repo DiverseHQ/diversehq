@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { CollectModule, Profile, Publication } from '../../../graphql/generated'
-import PopUpWrapper from '../../Common/PopUpWrapper'
 import useCollectPublication from './useCollectPublication'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import { usePopUpModal } from '../../Common/CustomPopUpProvider'
@@ -41,20 +40,7 @@ const FreeCollectPopUp = ({
     loading: followLoading
   } = useLensFollowButton(author)
   return (
-    <PopUpWrapper
-      title="Free Collect"
-      isDisabled={
-        loading ||
-        (collectModule.__typename === 'FreeCollectModuleSettings' &&
-          collectModule.followerOnly &&
-          !isFollowedByMe)
-      }
-      loading={loading}
-      label="Collect"
-      onClick={async () => {
-        await collectPublication(publication.id)
-      }}
-    >
+    <div className="w-[350px] flex flex-col justify-center items-center p-8 rounded-2xl">
       <div className="px-4 text-p-text">
         {collectModule.__typename === 'FreeCollectModuleSettings' &&
           !collectModule.followerOnly && (
@@ -96,7 +82,20 @@ const FreeCollectPopUp = ({
             </>
           )}
       </div>
-    </PopUpWrapper>
+      <button
+        onClick={async () => {
+          await collectPublication(publication.id)
+        }}
+        disabled={
+          loading ||
+          (collectModule.__typename === 'FreeCollectModuleSettings' &&
+            collectModule.followerOnly &&
+            !isFollowedByMe)
+        }
+      >
+        Collect
+      </button>
+    </div>
   )
 }
 

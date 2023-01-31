@@ -38,6 +38,14 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   useEffect(() => {
+    setProfile(_profile)
+  }, [_profile])
+
+  useEffect(() => {
+    setLensProfile(_lensProfile)
+  }, [_lensProfile])
+
+  useEffect(() => {
     console.log('pathname', pathname)
     if (pathname.endsWith('/lens')) {
       setActive('lens')
