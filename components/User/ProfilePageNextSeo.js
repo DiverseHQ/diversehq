@@ -1,12 +1,17 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
+import { stringToLength } from '../../utils/utils'
 
 const ProfilePageNextSeo = ({ profile, lensProfile }) => {
   return (
     <>
       {profile && (
         <NextSeo
-          title={`${profile.name} | ${lensProfile?.handle}`}
+          title={`${
+            profile.name
+              ? profile.name
+              : stringToLength(profile.walletAddress, 6)
+          } | ${lensProfile?.handle}`}
           description={profile.bio}
           openGraph={{
             title: `${profile.name} | ${lensProfile?.handle}`,

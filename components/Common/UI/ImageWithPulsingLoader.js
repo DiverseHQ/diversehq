@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 
-const ImageWithPulsingLoader = ({ loaderClassName, ...props }) => {
+const ImageWithPulsingLoader = ({ loaderClassName, src, ...props }) => {
   const [loading, setLoading] = useState(true)
   return (
     <>
@@ -13,6 +14,11 @@ const ImageWithPulsingLoader = ({ loaderClassName, ...props }) => {
       )}
       <img
         {...props}
+        src={
+          src.startsWith(LensInfuraEndpoint)
+            ? `${IMAGE_KIT_ENDPOINT}/${src}`
+            : `${src}`
+        }
         onLoad={() => setLoading(false)}
         className={`${props.className} ${loading ? 'hidden' : ''}`}
       />

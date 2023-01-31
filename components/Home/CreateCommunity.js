@@ -4,7 +4,6 @@ import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
 import { useNotify } from '../Common/NotifyContext'
 import { postCreateCommunity } from '../../api/community'
 import PopUpWrapper from '../Common/PopUpWrapper'
-import Image from 'next/image'
 import FormTextInput from '../Common/UI/FormTextInput'
 import FormTextArea from '../Common/UI/FormTextArea'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -175,10 +174,8 @@ const CreateCommunity = () => {
             {communityPfp && (
               <label htmlFor="communityPfp">
                 {' '}
-                <Image
-                  className="rounded-full object-cover"
-                  width={100}
-                  height={100}
+                <img
+                  className="rounded-full object-cover w-[100px] h-[100px]"
                   src={pfpValue}
                   alt="PFP"
                 />
@@ -200,7 +197,7 @@ const CreateCommunity = () => {
 
           <FormTextInput
             label="Name"
-            placeholder="Community Name"
+            placeholder="Community Name (Choose wisely, cannot edit later)"
             value={communityName}
             onChange={onChangeCommunityName}
             required

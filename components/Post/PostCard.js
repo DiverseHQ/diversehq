@@ -261,75 +261,6 @@ const PostCard = ({ _post, setPosts }) => {
         )}
         <div className="sm:mr-5 flex flex-row items-center">
           <JoinCommunityButton id={post.communityId} />
-          {/* {isAuthor && (
-            <div className="relative">
-              <button
-                className="hover:bg-p-hover hover:cursor-pointer  rounded-md p-1"
-                onClick={() => {
-                  isMobile
-                    ? showMoreOptions()
-                    : setShowDropdown((prev) => !prev)
-                }}
-              >
-                <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
-              </button>
-              <BottomDrawerWrapper
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
-                showClose
-                // height="235px"
-              >
-                <MoreOptionsModal
-                  list={[
-                    {
-                      label: 'Edit Post',
-                      onClick: async () => {
-                        showEditModal()
-                        setIsDrawerOpen(false)
-                      },
-                      icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
-                    },
-                    {
-                      label: 'Delete Post',
-                      onClick: async () => {
-                        await handleDeletePost()
-                        setIsDrawerOpen(false)
-                      },
-                      icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                    }
-                  ]}
-                />
-              </BottomDrawerWrapper>
-
-              {showDropdown && (
-                <div
-                  className="flex flex-col bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-md sm:rounded-xl absolute top-[30px] right-[10px] z-30 overflow-y-auto overflow-x-hidden w-[160px] p-2"
-                  ref={dropdownRef}
-                >
-                  <MoreOptionsDropdown
-                    list={[
-                      {
-                        label: 'Edit Post',
-                        onClick: async () => {
-                          showEditModal()
-                        },
-                        icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
-                      },
-                      {
-                        label: 'Delete Post',
-                        onClick: async () => {
-                          await handleDeletePost()
-                        },
-                        icon: () => (
-                          <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                        )
-                      }
-                    ]}
-                  />
-                </div>
-              )}
-            </div>
-          )} */}
           {isAuthor && (
             <OptionsWrapper
               OptionPopUpModal={() => (
@@ -369,6 +300,7 @@ const PostCard = ({ _post, setPosts }) => {
             <button
               onClick={handleUpvote}
               className="hover:bg-p-btn-hover rounded-md p-1 hover:cursor-pointer"
+              title="Upvote"
             >
               <img
                 src={
@@ -381,6 +313,7 @@ const PostCard = ({ _post, setPosts }) => {
             <button
               onClick={handleDownvote}
               className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+              title="Downvote"
             >
               <img
                 src={
@@ -397,35 +330,75 @@ const PostCard = ({ _post, setPosts }) => {
         {/* main content */}
         <div className="flex flex-col justify-between w-full min-h-[76px]">
           <div>
-            <div className="mb-2 px-3 sm:pl-3.5 ">
-              {post?.title?.length <= 60 && (
-                <div className="font-medium text-base sm:text-lg w-full break-words">
-                  {post?.title}
-                </div>
-              )}
-              {(post?.content || post?.title?.length > 60) && (
+            <div className="mb-2 px-3 sm:pl-3.5">
+              {!router.pathname.startsWith('/p') ? (
+                <Link href={`/p/${post._id}`} passHref>
+                  <>
+                    {post?.title?.length <= 60 && (
+                      <div className="font-medium text-base sm:text-lg w-full break-words">
+                        {post?.title}
+                      </div>
+                    )}
+                    {(post?.content || post?.title?.length > 60) && (
+                      <>
+                        <div
+                          className={`${
+                            showMore ? 'h-[150px]' : ''
+                          } sm:max-w-[550px]  overflow-hidden break-words`}
+                        >
+                          <Markup
+                            className={`${
+                              showMore ? 'line-clamp-5' : ''
+                            } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
+                          >
+                            {post?.content ? post?.content : post?.title}
+                          </Markup>
+                          {/* todo showmore for clamped text */}
+                        </div>
+                        {showMore && (
+                          <Link
+                            href={`/p/${post._id}`}
+                            className="text-blue-400 text-sm sm:text-base"
+                          >
+                            Show more
+                          </Link>
+                        )}
+                      </>
+                    )}
+                  </>
+                </Link>
+              ) : (
                 <>
-                  <div
-                    className={`${
-                      showMore ? 'h-[150px]' : ''
-                    } sm:max-w-[550px]  overflow-hidden break-words`}
-                  >
-                    <Markup
-                      className={`${
-                        showMore ? 'line-clamp-5' : ''
-                      } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
-                    >
-                      {post?.content ? post?.content : post?.title}
-                    </Markup>
-                    {/* todo showmore for clamped text */}
-                  </div>
-                  {showMore && (
-                    <Link
-                      href={`/p/${post._id}`}
-                      className="text-blue-400 text-sm sm:text-base"
-                    >
-                      Show more
-                    </Link>
+                  {post?.title?.length <= 60 && (
+                    <div className="font-medium text-base sm:text-lg w-full break-words">
+                      {post?.title}
+                    </div>
+                  )}
+                  {(post?.content || post?.title?.length > 60) && (
+                    <>
+                      <div
+                        className={`${
+                          showMore ? 'h-[150px]' : ''
+                        } sm:max-w-[550px]  overflow-hidden break-words`}
+                      >
+                        <Markup
+                          className={`${
+                            showMore ? 'line-clamp-5' : ''
+                          } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
+                        >
+                          {post?.content ? post?.content : post?.title}
+                        </Markup>
+                        {/* todo showmore for clamped text */}
+                      </div>
+                      {showMore && (
+                        <Link
+                          href={`/p/${post._id}`}
+                          className="text-blue-400 text-sm sm:text-base"
+                        >
+                          Show more
+                        </Link>
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -520,34 +493,23 @@ const PostCard = ({ _post, setPosts }) => {
                 href={`/p/${post._id}`}
                 className="flex flex-row items-center hover:bg-p-hover rounded-md p-1"
                 passHref
+                title="Comment"
               >
                 {post.comments?.length === 0 && (
-                  <FaRegComment
-                    className="hover:cursor-pointer mr-2 w-5 h-5 "
-                    title="Comment"
-                  />
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
                 )}
                 {post.comments?.length > 0 && (
-                  <FaRegCommentDots
-                    className="hover:cursor-pointer mr-2 w-5 h-5 "
-                    title="Comment"
-                  />
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
                 )}
                 {post.comments?.length}
               </Link>
             ) : (
-              <div className="flex flex-row items-center">
+              <div className="flex flex-row items-center" title="Comment">
                 {post.comments?.length === 0 && (
-                  <FaRegComment
-                    className="hover:cursor-pointer mr-2 w-5 h-5 "
-                    title="Comment"
-                  />
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
                 )}
                 {post.comments?.length > 0 && (
-                  <FaRegCommentDots
-                    className="hover:cursor-pointer mr-2 w-5 h-5 "
-                    title="Comment"
-                  />
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
                 )}
                 {post.comments?.length}
               </div>

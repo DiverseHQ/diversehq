@@ -11,12 +11,14 @@ import { useNotify } from './NotifyContext'
 import { useProfile } from './WalletContext'
 import ConnectWalletAndSignInButton from './ConnectWalletAndSignInButton'
 import { useRouter } from 'next/router'
+import useDevice from './useDevice'
 
 const LensLoginButton = () => {
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { user, address } = useProfile()
   const { notifyInfo, notifySuccess } = useNotify()
   const { showModal } = usePopUpModal()
+  const { isMobile } = useDevice()
   const router = useRouter()
 
   const queryClient = useQueryClient()
@@ -97,7 +99,11 @@ const LensLoginButton = () => {
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
                 <Link
                   href={`/u/${lensProfile.defaultProfile.handle}`}
-                  className="mr-2 hover:cursor-pointer hover:underline text-[16px]"
+                  className={`mr-2 hover:cursor-pointer hover:underline ${
+                    isMobile
+                      ? 'dark:text-s-bg hover:font-semibold'
+                      : 'dark:text-p-text'
+                  } text-[16px]`}
                 >
                   u/{lensProfile.defaultProfile.handle}
                 </Link>

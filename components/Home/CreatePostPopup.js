@@ -165,7 +165,7 @@ const CreatePostPopup = () => {
       metadata_id: metadataId,
       description: 'Created with DiverseHQ',
       locale: 'en-US',
-      content: content && content.trim() !== '' ? content : title,
+      content: title + '\n' + content.trim(),
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
       imageMimeType: mimeType.startsWith('image') ? mimeType : null,
@@ -498,7 +498,7 @@ const CreatePostPopup = () => {
               {/* <ToolbarPlugin /> */}
               <RichTextPlugin
                 contentEditable={
-                  <ContentEditable className="block min-h-[70px] text-p-text overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px]" />
+                  <ContentEditable className="block min-h-[70px] text-p-text overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px] outline-none" />
                 }
                 placeholder={
                   <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">

@@ -426,6 +426,7 @@ const LensPostCard = ({ post }) => {
                 <button
                   onClick={handleUpvote}
                   className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                  title="Upvote"
                 >
                   <img
                     //  onClick={liked ? handleUnLike : handleLike}
@@ -441,6 +442,7 @@ const LensPostCard = ({ post }) => {
                 <button
                   onClick={handleDownvote}
                   className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                  title="Downvote"
                 >
                   <img
                     src={
@@ -458,33 +460,78 @@ const LensPostCard = ({ post }) => {
             <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
                 <div className="mb-2 px-3 sm:pl-3.5 ">
-                  {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
-                    <div className="font-medium text-base sm:text-lg w-full break-words">
-                      {postInfo?.metadata?.name}
-                    </div>
-                  )}
-                  {postInfo?.metadata?.name !== postInfo?.metadata?.content && (
-                    <div
-                      className={`${
-                        showMore ? 'h-[150px]' : ''
-                      } sm:max-w-[550px] overflow-hidden break-words`}
-                    >
-                      <Markup
-                        className={`${
-                          showMore ? 'line-clamp-5' : ''
-                        } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
-                      >
-                        {postInfo?.metadata?.content}
-                      </Markup>
-                    </div>
-                  )}
-                  {showMore && (
-                    <Link
-                      href={`/p/${postInfo?.id}`}
-                      className="text-blue-400 text-sm sm:text-base"
-                    >
-                      Show more
+                  {!router.pathname.startsWith('/p') ? (
+                    <Link href={`/p/${postInfo?.id}`} passHref>
+                      <>
+                        {postInfo?.metadata?.name && (
+                          <div className="font-medium text-base sm:text-lg w-full break-words">
+                            {postInfo?.metadata?.name}
+                          </div>
+                        )}
+                        {postInfo?.metadata?.name !==
+                          postInfo?.metadata?.content && (
+                          <div
+                            className={`${
+                              showMore ? 'h-[150px]' : ''
+                            } sm:max-w-[550px] overflow-hidden break-words`}
+                          >
+                            <Markup
+                              className={`${
+                                showMore ? 'line-clamp-5' : ''
+                              } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+                            >
+                              {/* remove title text from content */}
+
+                              {postInfo?.metadata?.content?.replace(
+                                new RegExp(`^${postInfo?.metadata?.name}`),
+                                ''
+                              )}
+                            </Markup>
+                          </div>
+                        )}
+                        {showMore && (
+                          <Link
+                            href={`/p/${postInfo?.id}`}
+                            className="text-blue-400 text-sm sm:text-base"
+                          >
+                            Show more
+                          </Link>
+                        )}
+                      </>
                     </Link>
+                  ) : (
+                    <>
+                      {postInfo?.metadata?.name !==
+                        'Created with DiverseHQ' && (
+                        <div className="font-medium text-base sm:text-lg w-full break-words">
+                          {postInfo?.metadata?.name}
+                        </div>
+                      )}
+                      {postInfo?.metadata?.name !==
+                        postInfo?.metadata?.content && (
+                        <div
+                          className={`${
+                            showMore ? 'h-[150px]' : ''
+                          } sm:max-w-[550px] overflow-hidden break-words`}
+                        >
+                          <Markup
+                            className={`${
+                              showMore ? 'line-clamp-5' : ''
+                            } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+                          >
+                            {postInfo?.metadata?.content}
+                          </Markup>
+                        </div>
+                      )}
+                      {showMore && (
+                        <Link
+                          href={`/p/${postInfo?.id}`}
+                          className="text-blue-400 text-sm sm:text-base"
+                        >
+                          Show more
+                        </Link>
+                      )}
+                    </>
                   )}
                 </div>
                 {postInfo?.metadata?.media.length > 0 && (
@@ -596,34 +643,26 @@ const LensPostCard = ({ post }) => {
                     href={`/p/${postInfo.id}`}
                     className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1"
                     passHref
+                    title="Comment"
                   >
                     {postInfo?.stats?.totalAmountOfComments === 0 && (
-                      <FaRegComment
-                        className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5"
-                        title="Comment"
-                      />
+                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
-                      <FaRegCommentDots
-                        className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5"
-                        title="Comment"
-                      />
+                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments}
                   </Link>
                 ) : (
-                  <div className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1">
+                  <div
+                    title="Comment"
+                    className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1"
+                  >
                     {postInfo?.stats?.totalAmountOfComments === 0 && (
-                      <FaRegComment
-                        className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5"
-                        title="Comment"
-                      />
+                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
-                      <FaRegCommentDots
-                        className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5"
-                        title="Comment"
-                      />
+                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments}
                   </div>
