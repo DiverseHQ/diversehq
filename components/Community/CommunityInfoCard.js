@@ -17,11 +17,10 @@ import EditCommunity from './EditCommunity'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import ImageWithLoaderAndZoom from '../Common/UI/ImageWithLoaderAndZoom'
 import { BiChevronDown } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
+import ImgWithZoon from '../Common/UI/ImgWithZoon'
 
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
@@ -197,7 +196,7 @@ const CommunityInfoCard = ({ _community }) => {
         >
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
-            <ImageWithPulsingLoader
+            <ImgWithZoon
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile
                   ? 'rounded-t-[20px]'
@@ -208,7 +207,7 @@ const CommunityInfoCard = ({ _community }) => {
               src={community.bannerImageUrl}
             />
           ) : (
-            <ImageWithLoaderAndZoom
+            <ImgWithZoon
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile ? 'rounded-t-[20px]' : ''
               }`}
@@ -220,12 +219,12 @@ const CommunityInfoCard = ({ _community }) => {
               <div className="shrink-0 border-s-bg border-4 rounded-full sm:-translate-y-8 -translate-y-6">
                 {/* only enable the zoom on the community page not on any other page */}
                 {!router.pathname.startsWith('/c') ? (
-                  <ImageWithPulsingLoader
+                  <ImgWithZoon
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />
                 ) : (
-                  <ImageWithLoaderAndZoom
+                  <ImgWithZoon
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />

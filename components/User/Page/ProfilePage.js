@@ -6,7 +6,6 @@ import { getUserInfo } from '../../../api/user'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 import { useNotify } from '../../Common/NotifyContext'
-import ImageWithLoaderAndZoom from '../../Common/UI/ImageWithLoaderAndZoom'
 import { useProfile } from '../../Common/WalletContext'
 import LensPostsProfilePublicationsColumn from '../../Post/LensPostsProfilePublicationsColumn'
 import PostsColumn from '../../Post/PostsColumn'
@@ -22,6 +21,7 @@ import { BiChevronDown, BiRepost } from 'react-icons/bi'
 import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
 import { MdOutlineGroups } from 'react-icons/md'
+import ImgWithZoon from '../../Common/UI/ImgWithZoon'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -122,7 +122,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
         <div className="w-full flex justify-center">
           <div className="w-full md:w-[650px]">
             <div className={`relative ${!isMobile ? 'mt-10' : ''}`}>
-              <ImageWithLoaderAndZoom
+              <ImgWithZoon
                 className={`h-28 w-full object-cover ${
                   !isMobile
                     ? 'rounded-t-[20px] border-t-[1px] border-x-[1px] border-p-border'
@@ -135,8 +135,8 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 }
               />
 
-              <ImageWithLoaderAndZoom
-                className="absolute -top-10 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
+              <ImgWithZoon
+                className="absolute top-10 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
                 src={
                   profile?.profileImageUrl
                     ? profile?.profileImageUrl
