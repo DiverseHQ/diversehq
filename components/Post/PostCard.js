@@ -491,7 +491,7 @@ const PostCard = ({ _post, setPosts }) => {
             {!router.pathname.startsWith('/p') ? (
               <Link
                 href={`/p/${post._id}`}
-                className="flex flex-row items-center hover:bg-p-hover rounded-md p-1"
+                className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover"
                 passHref
                 title="Comment"
               >
@@ -504,7 +504,10 @@ const PostCard = ({ _post, setPosts }) => {
                 {post.comments?.length}
               </Link>
             ) : (
-              <div className="flex flex-row items-center" title="Comment">
+              <div
+                className="flex flex-row items-center hover:bg-p-btn-hover"
+                title="Comment"
+              >
                 {post.comments?.length === 0 && (
                   <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
                 )}
