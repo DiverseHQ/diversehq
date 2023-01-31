@@ -38,7 +38,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   useEffect(() => {
-    console.log('pathname', pathname)
     if (pathname.endsWith('/lens')) {
       setActive('lens')
     } else if (pathname.endsWith('/offchain')) {
@@ -68,8 +67,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   }, [data])
 
   useEffect(() => {
-    console.log('profile', profile)
-    console.log('lensProfile', lensProfile)
     if (_profile) {
       setProfile(_profile)
     }
@@ -80,9 +77,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
 
   const getNumberOfPosts = async (address) => {
     try {
-      console.log('getNumberOfPosts', address)
       const result = await getNumberOfPostsUsingUserAddress(address)
-      console.log('result', result)
       setNumberOfPosts(result.numberOfPosts)
     } catch (error) {
       console.log(error)
@@ -93,7 +88,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     try {
       if (!profile.walletAddress) return
       const userInfo = await getUserInfo(profile.walletAddress)
-      console.log(userInfo)
       setProfile(userInfo)
     } catch (error) {
       console.log(error)
@@ -121,8 +115,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
       extraaInfo: {}
     })
   }
-
-  console.log(lensProfile)
 
   return (
     <div>
@@ -235,23 +227,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                         </div>
                       </>
                     )}
-
-                    {/* <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-semibold">{numberOfPosts}</span>
-                      <span className="font-light">Posts</span>
-                    </div> */}
-                    {/* <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-bold">
-                        {profile?.communities?.length}
-                      </span>
-                      <span className="">Joined</span>
-                    </div>
-                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-semibold">
-                        {profile?.communityCreationSpells}
-                      </span>
-                      <span className="font-light">Spells</span>
-                    </div> */}
 
                     <div
                       className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg cursor-pointer"
