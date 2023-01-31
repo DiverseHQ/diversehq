@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { MdOutlinePersonAddAlt } from 'react-icons/md'
 import { useBalance } from 'wagmi'
 import {
   CollectModule,
@@ -90,7 +91,7 @@ const FeeCollectPopUp = ({
   }, [balanceData])
 
   return (
-    <>
+    <div className="lg:w-[350px] flex flex-col justify-center items-center p-8 rounded-2xl">
       <h1>{`Collect and Gift ${
         publication.collectModule.__typename === 'FeeCollectModuleSettings' &&
         publication.collectModule.amount.value
@@ -106,11 +107,13 @@ const FeeCollectPopUp = ({
             }}
             className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
           >
-            {followLoading
-              ? 'Following'
-              : author.isFollowing
-              ? 'Follow back'
-              : 'Follow'}
+            {followLoading ? (
+              'Following'
+            ) : author.isFollowing ? (
+              'Follow back'
+            ) : (
+              <MdOutlinePersonAddAlt className="w-5 h-5" />
+            )}
           </button>
           <div>{author.handle} to collect this post</div>
         </div>
@@ -119,11 +122,11 @@ const FeeCollectPopUp = ({
 
       {isAllowed && hasAmount ? (
         <>
-          <div className="m-4 text-p-text">
+          <div className="m-1 text-p-text">
             Balance : {parseFloat(balanceData?.formatted)} | Gifting:{' '}
             {collectModule?.amount?.value}
           </div>
-          <div className="m-4 text-p-text">You can collect this post</div>
+          <div className=" text-p-text">You can collect this post</div>
         </>
       ) : (
         <>
@@ -152,10 +155,11 @@ const FeeCollectPopUp = ({
           !isAllowed ||
           !hasAmount
         }
+        className="bg-p-btn text-p-btn-text rounded-full text-center flex font-semibold text-p-text py-1 px-2 justify-center items-center text-p-text m-1"
       >
         Collect
       </button>
-    </>
+    </div>
   )
 }
 

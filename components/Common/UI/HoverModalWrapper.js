@@ -33,13 +33,10 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
         {children}
         {showOptionsModal && (
           <div
-            className={`absolute ${
-              position === 'left' ? 'top-[10px] right-[20px]' : ''
-            } ${position === 'right' ? 'top-[25px] left-0' : ''} ${
-              position === 'top' ? 'bottom-[25px] right-0' : ''
-            } ${
-              position === 'bottom' ? 'top-[25px] right-0' : ''
-            } z-20 bg-s-bg shadow-lg`}
+            className={`absolute ${position === 'left' ? 'top-[10px] right-[20px]' : ''
+              } ${position === 'right' ? 'top-[25px] left-0' : ''} ${position === 'top' ? 'top-[-130px] left-[-120px] ' : ''
+              } ${position === 'bottom' ? 'top-[25px] right-0' : ''
+              } z-20 bg-s-bg shadow-lg rounded-lg border lg:max-h-[130px] lg:overflow-y-auto no-scrollbar`}
           >
             <HoverModal
               setIsDrawerOpen={setIsDrawerOpen}
