@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { CollectModule, Profile, Publication } from '../../../graphql/generated'
 import useCollectPublication from './useCollectPublication'
 import useLensFollowButton from '../../User/useLensFollowButton'
-import { usePopUpModal } from '../../Common/CustomPopUpProvider'
 import { useNotify } from '../../Common/NotifyContext'
 
 type Props = {
@@ -11,6 +10,8 @@ type Props = {
   collectModule: CollectModule
   publication: Publication
   author: Profile
+  setIsDrawerOpen: any
+  setShowOptionsModal: any
 }
 
 const FreeCollectPopUp = ({
@@ -18,19 +19,21 @@ const FreeCollectPopUp = ({
   setCollectCount,
   collectModule,
   publication,
-  author
+  author,
+  setIsDrawerOpen,
+  setShowOptionsModal
 }: Props) => {
   const { collectPublication, isSuccess, loading } =
     useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
-  const { hideModal }: any = usePopUpModal()
 
   useEffect(() => {
     if (!loading && isSuccess) {
       setIsCollected(true)
       setCollectCount((prev: number) => prev + 1)
       notifySuccess('Post has been collected, check your collection!')
-      hideModal()
+      setIsDrawerOpen(false)
+      setShowOptionsModal(false)
     }
   }, [loading, isSuccess])
 

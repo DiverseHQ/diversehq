@@ -7,7 +7,6 @@ import {
   useApprovedModuleAllowanceAmountQuery
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import { usePopUpModal } from '../../Common/CustomPopUpProvider'
 import { useNotify } from '../../Common/NotifyContext'
 // import PopUpWrapper from '../../Common/PopUpWrapper'
 import useLensFollowButton from '../../User/useLensFollowButton'
@@ -20,13 +19,17 @@ type Props = {
   collectModule: CollectModule
   publication: Publication
   author: Profile
+  setIsDrawerOpen: any
+  setShowOptionsModal: any
 }
 const FeeCollectPopUp = ({
   setIsCollected,
   setCollectCount,
   collectModule,
   publication,
-  author
+  author,
+  setIsDrawerOpen,
+  setShowOptionsModal
 }: Props) => {
   console.log('FeeCollectPopUp', collectModule)
   if (collectModule.__typename !== 'FeeCollectModuleSettings') return null
@@ -34,7 +37,6 @@ const FeeCollectPopUp = ({
   const { collectPublication, isSuccess, loading } =
     useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
-  const { hideModal }: any = usePopUpModal()
   const [isAllowed, setIsAllowed] = useState(true)
   const { data: allowanceData, isLoading: allowanceLoading } =
     useApprovedModuleAllowanceAmountQuery({
@@ -55,7 +57,8 @@ const FeeCollectPopUp = ({
       setIsCollected(true)
       setCollectCount((prev: number) => prev + 1)
       notifySuccess('Post has been collected, check your collection!')
-      hideModal()
+      setIsDrawerOpen(false)
+      setShowOptionsModal(false)
     }
   }, [loading, isSuccess])
 

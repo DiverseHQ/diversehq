@@ -2,12 +2,6 @@ import React from 'react'
 import { useState } from 'react'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
 import { CollectModule, Profile, Publication } from '../../../graphql/generated'
-// import { usePopUpModal } from '../../Common/CustomPopUpProvider'
-// import useDevice from '../../Common/useDevice'
-// import FeeCollectPopUp from './FeeCollectPopUp'
-// import FreeCollectPopUp from './FreeCollectPopUp'
-// import FreeCollectDrawer from './FreeCollectDrawer'
-// import FeeCollectDrawer from './FeeCollectDrawer'
 import HoverModalWrapper from '../../Common/UI/HoverModalWrapper'
 import FeeCollectPopUp from './FeeCollectPopUp'
 import FreeCollectPopUp from './FreeCollectPopUp'
@@ -28,58 +22,13 @@ const LensCollectButton = ({
 }: Props) => {
   const [collectCount, setCollectCount] = useState(totalCollects)
   const [isCollected, setIsCollected] = useState(hasCollectedByMe)
-  // const { showModal }: any = usePopUpModal()
-  // const { isMobile } = useDevice()
-  // const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  // const handleCollectClick = async () => {
-  //   console.log('handleCollectClick')
-  //   console.log('collectModule', collectModule)
-  //   console.log('isCollected', isCollected)
-  //   if (isCollected || !collectModule) return
-  //   if (isMobile) {
-  //     setIsDrawerOpen(true)
-  //     return
-  //   }
-  //   if (collectModule.__typename === 'FreeCollectModuleSettings') {
-  //     showModal({
-  //       component: (
-  //         <FreeCollectPopUp
-  //           setIsCollected={setIsCollected}
-  //           setCollectCount={setCollectCount}
-  //           collectModule={collectModule}
-  //           publication={publication}
-  //           author={author}
-  //         />
-  //       ),
-  //       type: modalType.normal,
-  //       onAction: () => {},
-  //       extraaInfo: {}
-  //     })
-  //   }
-  //   if (collectModule.__typename === 'FeeCollectModuleSettings') {
-  //     showModal({
-  //       component: (
-  //         <FeeCollectPopUp
-  //           setIsCollected={setIsCollected}
-  //           setCollectCount={setCollectCount}
-  //           collectModule={collectModule}
-  //           publication={publication}
-  //           author={author}
-  //         />
-  //       ),
-  //       type: modalType.normal,
-  //       onAction: () => {},
-  //       extraaInfo: {}
-  //     })
-  //   }
-  // }
   return (
     <>
       <HoverModalWrapper
         disabled={isCollected || hasCollectedByMe}
         position="top"
-        HoverModal={() => {
+        HoverModal={({ setIsDrawerOpen, setShowOptionsModal }) => {
           return (
             <>
               {collectModule?.__typename === 'FreeCollectModuleSettings' && (
@@ -89,17 +38,9 @@ const LensCollectButton = ({
                   collectModule={collectModule}
                   publication={publication}
                   author={author}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                  setShowOptionsModal={setShowOptionsModal}
                 />
-                // <FreeCollectDrawer
-                //   setIsCollected={setIsCollected}
-                //   isCollected={isCollected}
-                //   setCollectCount={setCollectCount}
-                //   collectModule={collectModule}
-                //   publication={publication}
-                //   author={author}
-                //   isDrawerOpen={isDrawerOpen}
-                //   setIsDrawerOpen={setIsDrawerOpen}
-                // />
               )}
               {collectModule?.__typename === 'FeeCollectModuleSettings' && (
                 <FeeCollectPopUp
@@ -108,17 +49,9 @@ const LensCollectButton = ({
                   publication={publication}
                   setCollectCount={setCollectCount}
                   setIsCollected={setIsCollected}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                  setShowOptionsModal={setShowOptionsModal}
                 />
-                // <FeeCollectDrawer
-                //   isDrawerOpen={isDrawerOpen}
-                //   setIsDrawerOpen={setIsDrawerOpen}
-                //   setIsCollected={setIsCollected}
-                //   setCollectCount={setCollectCount}
-                //   collectModule={collectModule}
-                //   publication={publication}
-                //   author={author}
-                //   isCollected={isCollected}
-                // />
               )}
             </>
           )

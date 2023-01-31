@@ -41,7 +41,10 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
               position === 'bottom' ? 'top-[25px] right-0' : ''
             } z-20 bg-s-bg shadow-lg`}
           >
-            <HoverModal />
+            <HoverModal
+              setIsDrawerOpen={setIsDrawerOpen}
+              setShowOptionsModal={setShowOptionsModal}
+            />
           </div>
         )}
       </button>
