@@ -37,21 +37,48 @@ const LensPostsCommunityPublicationsColumn = ({ communityInfo }) => {
       }
     },
     {
-      enabled: !!communityInfo?._id
+      enabled: !!communityInfo?._id,
+      keepPreviousData: false
     }
   )
 
   useEffect(() => {
-    if (!communityPublicationsResult?.data?.explorePublications?.items) return
+    console.log('communityInfo._id', communityInfo._id)
+    // setNextCursor(null)
+    setPosts([])
+    // console.log('communityInfo changed', communityInfo)
+    // if (!communityInfo?._id) return
+    // console.log('emptying posts')
+    // setCursor(null)
+    // setHasMore(true)
+    // communityPublicationsResult.refetch()
+  }, [communityInfo._id])
+
+  useEffect(() => {
+    // last post in the list
+    console.log('last post id', posts[posts.length - 1]?.metadata?.tags[0])
+  }, [posts])
+
+  useEffect(() => {
+    if (
+      !communityPublicationsResult?.data?.explorePublications?.items &&
+      posts.length === 0
+    )
+      return
+    console.log(
+      'communityPublicationsResult?.data?.explorePublications?.items[0].metadata.tags[0]',
+      communityPublicationsResult?.data?.explorePublications?.items[0].metadata
+        .tags[0]
+    )
     handleCommunityPublications()
   }, [communityPublicationsResult?.data?.explorePublications?.pageInfo?.next])
 
-  useEffect(() => {
-    console.log(
-      'communityPublicationsResult.data',
-      communityPublicationsResult.data
-    )
-  }, [communityPublicationsResult])
+  // useEffect(() => {
+  //   console.log(
+  //     'communityPublicationsResult.data',
+  //     communityPublicationsResult.data
+  //   )
+  // }, [communityPublicationsResult])
 
   const handleCommunityPublications = () => {
     console.log(
@@ -72,10 +99,18 @@ const LensPostsCommunityPublicationsColumn = ({ communityInfo }) => {
         communityPublicationsResult?.data?.explorePublications?.pageInfo?.next
       )
     }
-    setPosts([
-      ...posts,
-      ...communityPublicationsResult.data.explorePublications.items
-    ])
+    if (
+      posts[posts.length - 1]?.metadata?.tags[0] !==
+      communityPublicationsResult.data.explorePublications.items[0].metadata
+        .tags[0]
+    ) {
+      setPosts(communityPublicationsResult.data.explorePublications.items)
+    } else {
+      setPosts([
+        ...posts,
+        ...communityPublicationsResult.data.explorePublications.items
+      ])
+    }
   }
 
   const getMorePosts = async () => {
