@@ -26,7 +26,11 @@ module.exports = {
         'lens-text': 'var(--text-lens)', // lens text color
         'p-border': 'var(--border-primary)', // primary border color
         'p-hover': 'var(--hover-primary)', // primary hover color
-        'p-hover-text': 'var(--hover-primary-text)' // primary hover text color
+        'p-hover-text': 'var(--hover-primary-text)', // primary hover text color
+        'm-btn-bg': 'var(--main-btn-bg)', // main button background
+        'm-btn-text': 'var(--main-btn-text)', // main button text
+        'm-btn-hover-bg': 'var(--main-btn-hover-bg)', // main button hover background
+        'm-btn-hover-text': 'var(--main-btn-hover-text)' // main button hover text
       },
       boxShadow: {
         top: '0px -2px 5px 1px rgba(0, 0, 0, 0.1)',

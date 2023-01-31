@@ -183,11 +183,20 @@ const LensPostCard = ({ post }) => {
 
   const { mutateAsync: removePost } = useHidePublicationMutation()
 
+  const [loading, setLoading] = useState(false)
+
   const fetchCommunityInformationAndSetPost = async () => {
-    const communityId = post?.metadata?.tags?.[0]
-    if (!communityId) return
-    const communityInfo = await getCommunityInfoUsingId(communityId)
-    setPostInfo({ ...post, communityInfo })
+    try {
+      const communityId = post?.metadata?.tags?.[0]
+      if (!communityId) return
+      setLoading(true)
+      const communityInfo = await getCommunityInfoUsingId(communityId)
+      setPostInfo({ ...post, communityInfo })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -305,21 +314,29 @@ const LensPostCard = ({ post }) => {
             {!isMobile && (
               <>
                 <div className="flex flex-row w-full items-center">
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
-                    <ImageWithPulsingLoader
-                      src={
-                        postInfo?.communityInfo?.logoImageUrl
-                          ? postInfo?.communityInfo?.logoImageUrl
-                          : '/gradient.jpg'
-                      }
-                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
-                    />
-                  </Link>
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                    <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                      {postInfo?.communityInfo?.name}
-                    </div>
-                  </Link>
+                  {loading ? (
+                    <div className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
+                  ) : (
+                    <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
+                      <ImageWithPulsingLoader
+                        src={
+                          postInfo?.communityInfo?.logoImageUrl
+                            ? postInfo?.communityInfo?.logoImageUrl
+                            : '/gradient.jpg'
+                        }
+                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                      />
+                    </Link>
+                  )}
+                  {loading ? (
+                    <div className="pl-2 w-[150px] bg-gray-300 rounded-full animate-pulse" />
+                  ) : (
+                    <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                      <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
+                        {postInfo?.communityInfo?.name}
+                      </div>
+                    </Link>
+                  )}
 
                   <Link
                     href={`/u/${postInfo?.profile?.handle}`}

@@ -70,13 +70,13 @@ const NewLeftSidebar = () => {
             Monetization and content reach is not just for famous few.
           </p>
           <button
-            className="flex flex-row items-center justify-center w-full rounded-[10px] text-[16px] font-semibold text-p-btn-text bg-p-btn dark:bg-p-text dark:text-s-bg py-2 px-2 mb-3"
+            className="flex flex-row items-center justify-center w-full rounded-[10px] text-[16px] font-semibold text-m-btn-hover-text bg-m-btn-hover-bg py-2 px-2 mb-3"
             onClick={createPost}
           >
             Create Post
           </button>
           <button
-            className="flex flex-row items-center justify-center w-full px-2 py-2 rounded-[10px] border-[1px] border-p-btn dark:border-p-text text-p-btn dark:text-p-text text-[16px] font-semibold"
+            className="flex flex-row items-center justify-center w-full px-2 py-2 rounded-[10px] border-[1px] border-p-btn dark:border-p-text bg-m-btn-bg text-m-btn-text hover:bg-m-btn-hover-bg hover:text-m-btn-hover-text text-[16px] font-semibold transition-all duration-400"
             onClick={createCommunity}
           >
             Create Community
