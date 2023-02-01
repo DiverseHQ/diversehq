@@ -136,7 +136,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
               />
 
               <ImageWithLoaderAndZoom
-                className="absolute -top-10 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
+                className="absolute top-10 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
                 src={
                   profile?.profileImageUrl
                     ? profile?.profileImageUrl
