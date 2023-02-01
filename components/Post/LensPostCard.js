@@ -315,7 +315,7 @@ const LensPostCard = ({ post }) => {
               <>
                 <div className="flex flex-row w-full items-center">
                   {loading ? (
-                    <div className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
+                    <div className="animate-pulse rounded-full bg-p-bg lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
                   ) : (
                     <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                       <ImageWithPulsingLoader
@@ -329,7 +329,7 @@ const LensPostCard = ({ post }) => {
                     </Link>
                   )}
                   {loading ? (
-                    <div className="pl-2 w-[150px] bg-gray-300 rounded-full animate-pulse" />
+                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
                   ) : (
                     <Link href={`/c/${postInfo?.communityInfo?.name}`}>
                       <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
