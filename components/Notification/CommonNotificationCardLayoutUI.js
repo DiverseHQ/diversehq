@@ -7,14 +7,12 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 TimeAgo.addDefaultLocale(en)
 
-const CommonNotificationCardLayoutUI = ({ MainRow, Body, createdAt, icon }) => {
+const CommonNotificationCardLayoutUI = ({ MainRow, Body, createdAt, Icon }) => {
   return (
     <div className="flex flex-col px-2 w-full">
       <div className="flex flex-row items-start justify-between">
         <div className="flex flex-row gap-4 items-start">
-          <div className="pt-1.5 text-[16px]">
-            {icon?.name && <icon.name />}
-          </div>
+          <div className="pt-1.5 text-[16px]">{Icon && <Icon />}</div>
           <div className="flex flex-col">
             <MainRow />
             <Body />

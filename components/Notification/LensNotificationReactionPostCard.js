@@ -77,10 +77,13 @@ const LensNotificationReactionPostCard = ({ notification }) => {
           )}
         </div>
       )}
-      icon={{
-        name: () =>
-          notification?.reaction === 'UPVOTE' ? <GoArrowUp /> : <GoArrowDown />
-      }}
+      Icon={() =>
+        notification?.reaction === 'UPVOTE' ? (
+          <GoArrowUp className="w-6 h-6" />
+        ) : (
+          <GoArrowDown />
+        )
+      }
     />
   )
 }
