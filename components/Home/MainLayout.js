@@ -11,6 +11,11 @@ import { Box, LinearProgress } from '@mui/material'
 
 const MainLayout = ({ children, isLoading }) => {
   const { isDesktop } = useDevice()
+  // only show if mounted
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => setMounted(true), [])
+
+  if (!mounted) return null
   return (
     <>
       {!isDesktop && (

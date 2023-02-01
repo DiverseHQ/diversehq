@@ -67,7 +67,7 @@ const FeeCollectPopUp = ({
     isFollowedByMe,
     handleFollowProfile,
     loading: followLoading
-  } = useLensFollowButton(author)
+  } = useLensFollowButton({ profileId: author.id })
 
   const [hasAmount, setHasAmount] = useState(false)
 

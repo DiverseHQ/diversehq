@@ -7,7 +7,7 @@ const LensFollowButton = ({ lensProfile }) => {
     handleFollowProfile,
     handleUnfollowProfile,
     loading
-  } = useLensFollowButton(lensProfile)
+  } = useLensFollowButton({ profileId: lensProfile.id })
   return (
     <>
       {lensProfile && isFollowedByMe ? (

@@ -22,7 +22,7 @@ const FreeCollectDrawer = ({
     isFollowedByMe,
     handleFollowProfile,
     loading: followLoading
-  } = useLensFollowButton(author)
+  } = useLensFollowButton({ profileId: author.id })
 
   useEffect(() => {
     if (!loading && isSuccess) {

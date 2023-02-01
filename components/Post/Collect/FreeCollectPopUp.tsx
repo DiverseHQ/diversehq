@@ -26,7 +26,6 @@ const FreeCollectPopUp = ({
   const { collectPublication, isSuccess, loading } =
     useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
-
   useEffect(() => {
     if (!loading && isSuccess) {
       setIsCollected(true)
@@ -41,7 +40,7 @@ const FreeCollectPopUp = ({
     isFollowedByMe,
     handleFollowProfile,
     loading: followLoading
-  } = useLensFollowButton(author)
+  } = useLensFollowButton({ profileId: author.id })
   return (
     <div className="lg:w-[350px] flex flex-col justify-center items-center p-8 rounded-2xl">
       <div className="px-4 text-p-text">
@@ -64,11 +63,11 @@ const FreeCollectPopUp = ({
                       You are not following {author.handle}
                     </div>
                     <div className="flex flex-row items-center justify-center">
-                      <p>Follow</p>
                       <button
                         onClick={() => {
                           handleFollowProfile(author.id)
                         }}
+                        disabled={followLoading || isFollowedByMe}
                         className=" py-1 text-sm font-semibold mx-1"
                       >
                         {followLoading ? (
