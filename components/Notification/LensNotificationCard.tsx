@@ -12,7 +12,7 @@ const LensNotificationCard = ({
   notification: Notification
 }) => {
   return (
-    <div className="my-4 px-3 py-2 sm:p-3 sm:bg-s-bg sm:rounded-xl border-b sm:border-none shadow-sm w-full">
+    <div className="my-1 sm:my-4 px-3 py-2 sm:p-3 sm:bg-s-bg sm:rounded-xl border-b sm:border-none shadow-sm w-full">
       {notification?.__typename === 'NewCommentNotification' && (
         <LensNotificationCommentedPostCard notification={notification} />
       )}
