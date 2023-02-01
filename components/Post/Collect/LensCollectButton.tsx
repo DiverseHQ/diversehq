@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
+import { AiFillGift, AiOutlineGift } from 'react-icons/ai'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
 import { CollectModule, Profile, Publication } from '../../../graphql/generated'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
@@ -70,10 +71,23 @@ const LensCollectButton = ({
       onClick={handleCollectClick}
       title="Collect"
     >
-      {isCollected || hasCollectedByMe ? (
-        <BsCollectionFill className="w-5 h-5" />
-      ) : (
-        <BsCollection className="w-5 h-5" />
+      {collectModule.__typename === 'FreeCollectModuleSettings' && (
+        <>
+          {isCollected || hasCollectedByMe ? (
+            <BsCollectionFill className="w-5 h-5" />
+          ) : (
+            <BsCollection className="w-5 h-5" />
+          )}
+        </>
+      )}
+      {collectModule.__typename === 'FeeCollectModuleSettings' && (
+        <>
+          {isCollected || hasCollectedByMe ? (
+            <AiFillGift className="w-5 h-5" />
+          ) : (
+            <AiOutlineGift className="w-5 h-5" />
+          )}
+        </>
       )}
       <div className="ml-2">{collectCount}</div>
     </button>
