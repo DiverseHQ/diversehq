@@ -94,7 +94,7 @@ const NotificationPostCreated = ({ notification }) => {
           )}
         </>
       )}
-      icon={{ name: () => <IoCreateOutline /> }}
+      Icon={() => <IoCreateOutline />}
     />
   )
 }

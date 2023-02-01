@@ -6,7 +6,6 @@ import { getUserInfo } from '../../../api/user'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 import { useNotify } from '../../Common/NotifyContext'
-import ImageWithLoaderAndZoom from '../../Common/UI/ImageWithLoaderAndZoom'
 import { useProfile } from '../../Common/WalletContext'
 import LensPostsProfilePublicationsColumn from '../../Post/LensPostsProfilePublicationsColumn'
 import PostsColumn from '../../Post/PostsColumn'
@@ -22,6 +21,7 @@ import { BiChevronDown, BiRepost } from 'react-icons/bi'
 import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
 import { MdOutlineGroups } from 'react-icons/md'
+import ImgWithZoon from '../../Common/UI/ImgWithZoon'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -38,7 +38,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   useEffect(() => {
-    console.log('pathname', pathname)
     if (pathname.endsWith('/lens')) {
       setActive('lens')
     } else if (pathname.endsWith('/offchain')) {
@@ -68,8 +67,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   }, [data])
 
   useEffect(() => {
-    console.log('profile', profile)
-    console.log('lensProfile', lensProfile)
     if (_profile) {
       setProfile(_profile)
     }
@@ -80,9 +77,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
 
   const getNumberOfPosts = async (address) => {
     try {
-      console.log('getNumberOfPosts', address)
       const result = await getNumberOfPostsUsingUserAddress(address)
-      console.log('result', result)
       setNumberOfPosts(result.numberOfPosts)
     } catch (error) {
       console.log(error)
@@ -93,7 +88,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     try {
       if (!profile.walletAddress) return
       const userInfo = await getUserInfo(profile.walletAddress)
-      console.log(userInfo)
       setProfile(userInfo)
     } catch (error) {
       console.log(error)
@@ -122,15 +116,13 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     })
   }
 
-  console.log(lensProfile)
-
   return (
     <div>
       {profile && (
         <div className="w-full flex justify-center">
           <div className="w-full md:w-[650px]">
             <div className={`relative ${!isMobile ? 'mt-10' : ''}`}>
-              <ImageWithLoaderAndZoom
+              <ImgWithZoon
                 className={`h-28 w-full object-cover ${
                   !isMobile
                     ? 'rounded-t-[20px] border-t-[1px] border-x-[1px] border-p-border'
@@ -143,8 +135,8 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 }
               />
 
-              <ImageWithLoaderAndZoom
-                className="absolute -top-10 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
+              <ImgWithZoon
+                className="absolute top-[-30px] left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
                 src={
                   profile?.profileImageUrl
                     ? profile?.profileImageUrl
@@ -235,23 +227,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                         </div>
                       </>
                     )}
-
-                    {/* <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-semibold">{numberOfPosts}</span>
-                      <span className="font-light">Posts</span>
-                    </div> */}
-                    {/* <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-bold">
-                        {profile?.communities?.length}
-                      </span>
-                      <span className="">Joined</span>
-                    </div>
-                    <div className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg">
-                      <span className="font-semibold">
-                        {profile?.communityCreationSpells}
-                      </span>
-                      <span className="font-light">Spells</span>
-                    </div> */}
 
                     <div
                       className="flex flex-col items-center bg-s-h-bg py-1 px-2 sm:px-4 rounded-[10px] dark:bg-p-bg cursor-pointer"

@@ -87,7 +87,7 @@ const LensNotificationCollectCard = ({
         </>
       )}
       createdAt={notification.createdAt}
-      icon={{ name: () => <BsCollectionFill /> }}
+      Icon={() => <BsCollectionFill />}
     />
   )
 }

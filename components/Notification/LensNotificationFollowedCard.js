@@ -30,7 +30,7 @@ const LensNotificationFollowedCard = ({ notification }) => {
       )}
       createdAt={notification?.createdAt}
       Body={() => <></>}
-      icon={{ name: () => <SlUserFollow /> }}
+      Icon={() => <SlUserFollow />}
     />
   )
 }

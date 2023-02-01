@@ -89,7 +89,7 @@ const NotificationPostUpvote = ({ notification }) => {
           </>
         )}
         createdAt={notification?.createdAt}
-        icon={{ name: () => <GoArrowUp /> }}
+        Icon={() => <GoArrowUp className="w-4 h-4" />}
       />
     </>
   )

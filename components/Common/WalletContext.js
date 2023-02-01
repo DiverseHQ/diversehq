@@ -30,7 +30,6 @@ export const WalletProvider = ({ children }) => {
 
   useEffect(() => {
     if (signer && address) {
-      console.log('token', getLocalToken())
       if (getLocalToken()) {
         fetchWeb3Token(true)
       }
@@ -38,7 +37,6 @@ export const WalletProvider = ({ children }) => {
   }, [signer, address])
 
   const handleDisconnected = async () => {
-    console.log('disconnected triggered')
     setUser(null)
     setLoading(false)
     if (getLocalToken()) {
@@ -61,7 +59,6 @@ export const WalletProvider = ({ children }) => {
       setLoading(true)
       if (!address) return
       const userInfo = await getUserInfo(address)
-      console.log('userInfo', userInfo)
       if (userInfo && userInfo.role <= userRoles.WHITELISTED_USER) {
         setUser(userInfo)
       } else {
@@ -82,7 +79,6 @@ export const WalletProvider = ({ children }) => {
   }
 
   const fetchWeb3Token = async (useEffectCalled) => {
-    console.log('fetching web3 token')
     try {
       let existingTokenOnLocalStorage = null
       existingTokenOnLocalStorage = getLocalToken()
@@ -91,7 +87,6 @@ export const WalletProvider = ({ children }) => {
         //return if token is already in local storage and is not expired
         if (existingTokenOnLocalStorage) {
           const web3Token = Web3Token.verify(existingTokenOnLocalStorage)
-          console.log('web3Token', web3Token)
           if (web3Token.address.toLowerCase() !== address.toLowerCase()) {
             removeLocalToken()
             removeAccessTokenFromStorage()

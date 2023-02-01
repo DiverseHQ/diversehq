@@ -31,7 +31,7 @@ const LensNotificationCommentedPostCard = ({ notification }) => {
           {notification?.comment?.metadata?.content}
         </div>
       )}
-      icon={{ name: () => <BiCommentAdd /> }}
+      Icon={() => <BiCommentAdd />}
     />
   )
 }

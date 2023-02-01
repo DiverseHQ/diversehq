@@ -32,7 +32,7 @@ const NotificationCommentedPostCard = ({ notification }) => {
             {notification?.comment?.content}
           </div>
         )}
-        icon={{ name: () => <BiCommentAdd /> }}
+        Icon={() => <BiCommentAdd />}
       />
     </>
   )

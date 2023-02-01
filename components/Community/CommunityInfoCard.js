@@ -17,11 +17,10 @@ import EditCommunity from './EditCommunity'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import ImageWithLoaderAndZoom from '../Common/UI/ImageWithLoaderAndZoom'
 import { BiChevronDown } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
+import ImgWithZoon from '../Common/UI/ImgWithZoon'
 
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
@@ -80,7 +79,6 @@ const CommunityInfoCard = ({ _community }) => {
   // get the community information using it's id
   const getCommunityInformation = async () => {
     try {
-      console.log('community._id', community._id)
       const comm = await getCommunityInfoUsingId(community._id)
       fetchNumberOfPosts()
 
@@ -125,7 +123,6 @@ const CommunityInfoCard = ({ _community }) => {
   }
 
   const editCommunity = useCallback(() => {
-    console.log(community)
     if (!community) return
     showModal({
       component: (
@@ -174,13 +171,10 @@ const CommunityInfoCard = ({ _community }) => {
   }
 
   useEffect(() => {
-    console.log('currentXP', currentXP)
     calculateLevelAndThreshold(currentXP)
   }, [currentXP])
 
   useEffect(() => {
-    console.log('numberOfPosts', numberOfPosts)
-    console.log('community.members?.length', community?.members?.length)
     setCurrentXP(numberOfPosts * 10 + community?.members?.length * 25)
   }, [numberOfPosts, community])
 
@@ -202,7 +196,7 @@ const CommunityInfoCard = ({ _community }) => {
         >
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
-            <ImageWithPulsingLoader
+            <ImgWithZoon
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile
                   ? 'rounded-t-[20px]'
@@ -213,7 +207,7 @@ const CommunityInfoCard = ({ _community }) => {
               src={community.bannerImageUrl}
             />
           ) : (
-            <ImageWithLoaderAndZoom
+            <ImgWithZoon
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile ? 'rounded-t-[20px]' : ''
               }`}
@@ -225,12 +219,12 @@ const CommunityInfoCard = ({ _community }) => {
               <div className="shrink-0 border-s-bg border-4 rounded-full sm:-translate-y-8 -translate-y-6">
                 {/* only enable the zoom on the community page not on any other page */}
                 {!router.pathname.startsWith('/c') ? (
-                  <ImageWithPulsingLoader
+                  <ImgWithZoon
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />
                 ) : (
-                  <ImageWithLoaderAndZoom
+                  <ImgWithZoon
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />

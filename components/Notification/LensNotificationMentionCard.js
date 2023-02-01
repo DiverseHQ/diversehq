@@ -80,7 +80,7 @@ const LensNotificationMentionCard = ({ notification }) => {
           )}
         </>
       )}
-      icon={{ name: () => <GoMention /> }}
+      Icon={() => <GoMention />}
     />
   )
 }

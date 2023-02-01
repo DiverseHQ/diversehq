@@ -36,6 +36,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
   }, [profilePublicationsResult?.data?.publications?.pageInfo?.next])
 
   const handleSetPosts = async (newPosts) => {
+    if (newPosts.length === 0) return
     console.log('newposts before', newPosts)
     const communityIds = newPosts.map((post) => {
       if (post.metadata.tags.length === 0) return 'null'
@@ -47,7 +48,15 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
-    setPosts([...posts, ...newPosts])
+    if (
+      posts.length === 0 ||
+      posts[posts.length - 1].profile.id !== newPosts[0].profile.id
+    ) {
+      setHasMore(true)
+      setPosts(newPosts)
+    } else {
+      setPosts([...posts, ...newPosts])
+    }
   }
 
   const handleUserPublications = async () => {
@@ -107,6 +116,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         endMessage={<></>}
       >
         {posts.map((post) => {
+          if (!post) return null
           return <LensPostCard key={post.id} post={post} />
         })}
       </InfiniteScroll>
