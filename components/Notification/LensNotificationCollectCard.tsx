@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { BsCollectionFill } from 'react-icons/bs'
 import { Notification } from '../../graphql/generated'
 import { MAX_CONTENT_LINES } from '../../utils/config'
 import { countLinesFromMarkdown } from '../../utils/utils'
@@ -86,6 +87,7 @@ const LensNotificationCollectCard = ({
         </>
       )}
       createdAt={notification.createdAt}
+      icon={{ name: () => <BsCollectionFill /> }}
     />
   )
 }

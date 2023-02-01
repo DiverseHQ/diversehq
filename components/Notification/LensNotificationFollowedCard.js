@@ -2,6 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import LensFollowButton from '../User/LensFollowButton'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
+import { SlUserFollow } from 'react-icons/sl'
 
 const LensNotificationFollowedCard = ({ notification }) => {
   return (
@@ -29,6 +30,7 @@ const LensNotificationFollowedCard = ({ notification }) => {
       )}
       createdAt={notification?.createdAt}
       Body={() => <></>}
+      icon={{ name: () => <SlUserFollow /> }}
     />
   )
 }

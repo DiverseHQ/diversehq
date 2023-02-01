@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { BiCommentAdd } from 'react-icons/bi'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
 const LensNotificationCommentedPostCard = ({ notification }) => {
@@ -30,6 +31,7 @@ const LensNotificationCommentedPostCard = ({ notification }) => {
           {notification?.comment?.metadata?.content}
         </div>
       )}
+      icon={{ name: () => <BiCommentAdd /> }}
     />
   )
 }

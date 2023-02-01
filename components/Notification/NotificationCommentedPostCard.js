@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { BiCommentAdd } from 'react-icons/bi'
 import { stringToLength } from '../../utils/utils'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
@@ -31,6 +32,7 @@ const NotificationCommentedPostCard = ({ notification }) => {
             {notification?.comment?.content}
           </div>
         )}
+        icon={{ name: () => <BiCommentAdd /> }}
       />
     </>
   )

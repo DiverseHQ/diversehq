@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { GoArrowUp } from 'react-icons/go'
 import { stringToLength } from '../../utils/utils'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
@@ -30,6 +31,7 @@ const NotificationCommentUpvote = ({ notification }) => {
         </div>
       )}
       createdAt={notification?.createdAt}
+      icon={{ name: () => <GoArrowUp /> }}
     />
   )
 }

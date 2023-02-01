@@ -4,6 +4,7 @@ import Markup from '../Lexical/Markup'
 import { countLinesFromMarkdown } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
+import { GoMention } from 'react-icons/go'
 
 const LensNotificationMentionCard = ({ notification }) => {
   const [showMore, setShowMore] = useState(
@@ -79,6 +80,7 @@ const LensNotificationMentionCard = ({ notification }) => {
           )}
         </>
       )}
+      icon={{ name: () => <GoMention /> }}
     />
   )
 }
