@@ -57,6 +57,8 @@ const CreatePostPopup = () => {
   const { user, address } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
+  const [loadingJoinedCommunities, setLoadingJoinedCommunities] =
+    useState(false)
   const [imageValue, setImageValue] = useState(null)
   const [showCommunityOptions, setShowCommunityOptions] = useState(false)
   const [communityOptionsCoord, setCommunityOptionsCoord] = useState({
@@ -320,8 +322,10 @@ const CreatePostPopup = () => {
       notifyError('I think you are not logged in')
       return
     }
+    setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
     setJoinedCommunities(response)
+    setLoadingJoinedCommunities(false)
   }
 
   const customOptions = () => {
@@ -344,12 +348,29 @@ const CreatePostPopup = () => {
             style={communityOptionsCoord}
           >
             <div className="bg-white/50 dark:bg-black/50 backdrop-blur-lg rounded-2xl max-h-[450px] overflow-auto">
-              <FilterListWithSearch
-                list={joinedCommunities}
-                type="community"
-                filterParam="name"
-                handleSelect={handleSelect}
-              />
+              {loadingJoinedCommunities ? (
+                <div className="rounded-2xl">
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg dark:bg-s-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg dark:bg-s-bg w-32 h-4 ml-4" />
+                  </div>
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg dark:bg-s-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg dark:bg-s-bg w-32 h-4 ml-4" />
+                  </div>
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg dark:bg-s-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg dark:bg-s-bg w-32 h-4 ml-4" />
+                  </div>
+                </div>
+              ) : (
+                <FilterListWithSearch
+                  list={joinedCommunities}
+                  type="community"
+                  filterParam="name"
+                  handleSelect={handleSelect}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -402,7 +423,7 @@ const CreatePostPopup = () => {
 
   const showJoinedCommunities = (e) => {
     if (loading) return
-    if (joinedCommunities?.length === 0) {
+    if (joinedCommunities?.length === 0 && !loadingJoinedCommunities) {
       notifyInfo('Hey, you ! Yes you ! Join some communities first')
       return
     }
