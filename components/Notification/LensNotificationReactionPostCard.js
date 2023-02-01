@@ -5,7 +5,7 @@ import { countLinesFromMarkdown } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
 import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
-import { GoArrowDown, GoArrowUp } from 'react-icons/go'
+import { ImArrowUp, ImArrowDown } from 'react-icons/im'
 
 const LensNotificationReactionPostCard = ({ notification }) => {
   const router = useRouter()
@@ -78,11 +78,7 @@ const LensNotificationReactionPostCard = ({ notification }) => {
         </div>
       )}
       Icon={() =>
-        notification?.reaction === 'UPVOTE' ? (
-          <GoArrowUp className="w-6 h-6" />
-        ) : (
-          <GoArrowDown />
-        )
+        notification?.reaction === 'UPVOTE' ? <ImArrowUp /> : <ImArrowDown />
       }
     />
   )

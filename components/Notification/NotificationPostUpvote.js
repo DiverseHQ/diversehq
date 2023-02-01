@@ -6,7 +6,7 @@ import { countLinesFromMarkdown } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
 import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
-import { GoArrowUp } from 'react-icons/go'
+import { ImArrowUp } from 'react-icons/im'
 
 const NotificationPostUpvote = ({ notification }) => {
   const router = useRouter()
@@ -89,7 +89,7 @@ const NotificationPostUpvote = ({ notification }) => {
           </>
         )}
         createdAt={notification?.createdAt}
-        Icon={() => <GoArrowUp className="w-4 h-4" />}
+        Icon={() => <ImArrowUp />}
       />
     </>
   )
