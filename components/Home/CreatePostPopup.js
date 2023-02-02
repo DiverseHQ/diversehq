@@ -96,6 +96,22 @@ const CreatePostPopup = () => {
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
 
+  const recentCommunities =
+    JSON.parse(window.localStorage.getItem('recentCommunities')) || []
+  const [selectedCommunity, setSelectedCommunity] = useState(null)
+
+  const storeRecentCommunities = () => {
+    window.localStorage.setItem(
+      'recentCommunities',
+      JSON.stringify([
+        selectedCommunity,
+        ...recentCommunities.filter(
+          (community) => community?._id !== selectedCommunity?._id
+        )
+      ])
+    )
+  }
+
   const closeModal = () => {
     setShowCommunity({ name: '', image: '' })
     hideModal()
@@ -114,7 +130,7 @@ const CreatePostPopup = () => {
       setLoading(false)
       return
     }
-
+    storeRecentCommunities()
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {
         notifyError('File type not supported')
@@ -145,6 +161,19 @@ const CreatePostPopup = () => {
       }
       handleCreatePost(title, 'text')
     }
+
+    // setRecentCommunities((prev) => {
+    //   console.log(
+    //     'test',
+    //     prev.filter((community) => community?._id !== selectedCommunity?._id)
+    //   )
+    //   prev.filter((community) => community?._id !== selectedCommunity?._id)
+    //   return [selectedCommunity, ...prev]
+    // })
+    // window.localStorage.setItem(
+    //   'recentCommunities',
+    //   JSON.stringify(recentCommunities)
+    // )
   }
 
   const handleCreateLensPost = async (title, communityId, mimeType, url) => {
@@ -315,6 +344,7 @@ const CreatePostPopup = () => {
     setShowCommunityOptions(false)
     setCommunityId(id)
     setShowCommunity({ name, image: logoImageUrl })
+    setSelectedCommunity(community)
   }
 
   const getJoinedCommunities = async () => {
@@ -324,7 +354,12 @@ const CreatePostPopup = () => {
     }
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
-    setJoinedCommunities(response)
+    setJoinedCommunities([
+      ...recentCommunities,
+      ...response.filter(
+        (community) => !recentCommunities.some((c) => c?._id === community?._id)
+      )
+    ])
     setLoadingJoinedCommunities(false)
   }
 
