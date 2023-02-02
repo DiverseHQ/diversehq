@@ -15,7 +15,8 @@ const MainLayout = ({ children, isLoading }) => {
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
 
-  if (!mounted) return null
+  if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
+    return null
   return (
     <>
       {!isDesktop && (
