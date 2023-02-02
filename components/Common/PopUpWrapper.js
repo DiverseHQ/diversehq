@@ -37,7 +37,6 @@ const PopUpWrapper = ({
         </div>
         {onClick && (
           <>
-            P
             {!loading ? (
               <button
                 className={`text-p-btn-text ${
