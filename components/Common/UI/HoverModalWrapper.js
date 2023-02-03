@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import useDevice from '../useDevice'
 import BottomDrawerWrapper from '../BottomDrawerWrapper'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../NotifyContext'
+import Temp from '../../Post/Collect/Temp'
 const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
   const { isMobile } = useDevice()
   const [showOptionsModal, setShowOptionsModal] = useState(false)
@@ -25,17 +26,21 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
     }
   }
 
-  const handleClick = (e) => {
-    if (
-      !!popupRef.current &&
-      !isMobile &&
-      (!e.target?.id || popupRef.current.id !== e.target.id) &&
-      !popupRef.current.contains(e.target) &&
-      !isCollecting
-    ) {
-      setShowOptionsModal(false)
-    }
-  }
+  const handleClick = useCallback(
+    (e) => {
+      if (
+        !!popupRef.current &&
+        !isMobile &&
+        (!e.target?.id || popupRef.current.id !== e.target.id) &&
+        !popupRef.current.contains(e.target) &&
+        !isCollecting
+      ) {
+        console.log('clicked outside')
+        setShowOptionsModal(false)
+      }
+    },
+    [popupRef, isMobile, isCollecting]
+  )
 
   useEffect(() => {
     document.addEventListener('click', handleClick)
@@ -44,8 +49,11 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
     }
   }, [popupRef])
 
+  console.log('hover modal wrapper rendered')
+
   return (
     <>
+      <Temp text="HoverModalWrapper" />
       <button
         className="relative"
         onClick={handleButtonClick}
@@ -90,4 +98,4 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
   )
 }
 
-export default HoverModalWrapper
+export default memo(HoverModalWrapper)

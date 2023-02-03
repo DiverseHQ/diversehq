@@ -37,7 +37,6 @@ const FeeCollectPopUp = ({
   setShowOptionsModal,
   setIsCollecting
 }: Props) => {
-  console.log('FeeCollectPopUp', collectModule)
   if (collectModule.__typename !== 'FeeCollectModuleSettings') return null
   const { data: lensProfile } = useLensUserContext()
   const { collectPublication, isSuccess, loading } =
@@ -54,6 +53,8 @@ const FeeCollectPopUp = ({
       }
     })
   useEffect(() => {
+    if (allowanceLoading) return
+    if (!allowanceData) return
     setIsAllowed(
       allowanceData?.approvedModuleAllowanceAmount[0].allowance !== '0x00'
     )
@@ -157,53 +158,62 @@ const FeeCollectPopUp = ({
               ) : (
                 <>
                   {!isAllowed && (
-                    <div className="">
+                    <div className="space-x-2 flex flex-row justify-center items-center">
                       <AllowanceButton
                         module={allowanceData?.approvedModuleAllowanceAmount[0]}
                         allowed={isAllowed}
                         setAllowed={setIsAllowed}
                       />
+                      <div>to collect</div>
                     </div>
                   )}
                   {!hasAmount && isAllowed && (
                     <div className="text-p-text font-medium">
                       <p>
-                        Collect for {''}
-                        {collectModule?.amount?.value} {''} WMATIC
+                        Collect for {collectModule?.amount?.value} {''}{' '}
+                        {collectModule?.amount?.asset?.symbol}
                       </p>
-                      <p>Required: {collectModule?.amount?.value}</p>
+                      <span>
+                        In Wallet :{' '}
+                        {parseFloat(
+                          balanceData?.formatted ? balanceData?.formatted : '0'
+                        )}{' '}
+                        {collectModule?.amount?.asset?.symbol}
+                      </span>
                     </div>
                   )}
                 </>
               )}
             </div>
 
-            <button
-              onClick={async () => {
-                await collectPublication(publication.id)
-              }}
-              disabled={
-                loading ||
-                (collectModule.__typename === 'FeeCollectModuleSettings' &&
-                  collectModule.followerOnly &&
-                  !isFollowedByMe)
-              }
-              className={`bg-p-btn text-p-btn-text rounded-md py-1.5 px-4 text-center  flex font-semibold text-p-text justify-center items-center h-10 self-center ${
-                !isAllowed ? 'hidden' : ''
-              }`}
-            >
-              {loading ? (
-                <div className="flex flex-row justify-center items-center space-x-2">
-                  <CircularProgress size="18px" color="primary" />
-                  <p>Collecting</p>
-                </div>
-              ) : (
-                <div className="flex flex-row items-center space-x-2">
-                  <BsCollection className="w-5 h-5" />
-                  <p>Collect</p>
-                </div>
-              )}
-            </button>
+            {isAllowed && hasAmount && (
+              <button
+                onClick={async () => {
+                  await collectPublication(publication.id)
+                }}
+                disabled={
+                  loading ||
+                  (collectModule.__typename === 'FeeCollectModuleSettings' &&
+                    collectModule.followerOnly &&
+                    !isFollowedByMe)
+                }
+                className={`bg-p-btn text-p-btn-text rounded-md py-1.5 px-4 text-center  flex font-semibold text-p-text justify-center items-center h-10 self-center ${
+                  !isAllowed ? 'hidden' : ''
+                }`}
+              >
+                {loading ? (
+                  <div className="flex flex-row justify-center items-center space-x-2">
+                    <CircularProgress size="18px" color="primary" />
+                    <p>Collecting</p>
+                  </div>
+                ) : (
+                  <div className="flex flex-row items-center space-x-2">
+                    <BsCollection className="w-5 h-5" />
+                    <p>Collect</p>
+                  </div>
+                )}
+              </button>
+            )}
           </div>
           <div className="col-span-full row-span-full translate-y-1 bg-s-bg h-[4px] w-3 rounded self-end justify-self-center rounded-b-full border-b border-l border-r"></div>{' '}
         </div>
@@ -258,11 +268,14 @@ const FeeCollectPopUp = ({
               <>
                 {!isAllowed && (
                   <div className="mb-2">
-                    <AllowanceButton
-                      module={allowanceData?.approvedModuleAllowanceAmount[0]}
-                      allowed={isAllowed}
-                      setAllowed={setIsAllowed}
-                    />
+                    <div className="space-x-2 flex flex-row justify-center items-center">
+                      <AllowanceButton
+                        module={allowanceData?.approvedModuleAllowanceAmount[0]}
+                        allowed={isAllowed}
+                        setAllowed={setIsAllowed}
+                      />
+                      <div>to collect</div>
+                    </div>
                   </div>
                 )}
                 {!hasAmount && (
@@ -273,34 +286,36 @@ const FeeCollectPopUp = ({
                 )}
               </>
             )}
-            <div className="px-4 w-full bg-s-bg mb-1 mt-1">
-              <button
-                onClick={async () => {
-                  await collectPublication(publication.id)
-                }}
-                disabled={
-                  loading ||
-                  (collectModule.__typename === 'FeeCollectModuleSettings' &&
-                    collectModule.followerOnly &&
-                    !isFollowedByMe)
-                }
-                className={`bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl ${
-                  !isAllowed ? 'hidden' : ''
-                }`}
-              >
-                {loading ? (
-                  <div className="flex flex-row justify-center items-center space-x-2">
-                    <CircularProgress size="18px" color="primary" />
-                    <p>Collecting ...</p>
-                  </div>
-                ) : (
-                  <div className="flex flex-row items-center space-x-2">
-                    <BsCollection className="w-5 h-5" />
-                    <p>Collect</p>
-                  </div>
-                )}
-              </button>
-            </div>
+            {isAllowed && hasAmount && (
+              <div className="px-4 w-full bg-s-bg mb-1 mt-1">
+                <button
+                  onClick={async () => {
+                    await collectPublication(publication.id)
+                  }}
+                  disabled={
+                    loading ||
+                    (collectModule.__typename === 'FeeCollectModuleSettings' &&
+                      collectModule.followerOnly &&
+                      !isFollowedByMe)
+                  }
+                  className={`bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl ${
+                    !isAllowed ? 'hidden' : ''
+                  }`}
+                >
+                  {loading ? (
+                    <div className="flex flex-row justify-center items-center space-x-2">
+                      <CircularProgress size="18px" color="primary" />
+                      <p>Collecting ...</p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-row items-center space-x-2">
+                      <BsCollection className="w-5 h-5" />
+                      <p>Collect</p>
+                    </div>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         </>
       )}

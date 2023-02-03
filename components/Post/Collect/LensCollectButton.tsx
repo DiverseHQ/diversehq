@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { useState } from 'react'
 import { AiFillGift, AiOutlineGift } from 'react-icons/ai'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
@@ -89,4 +89,4 @@ const LensCollectButton = ({
   )
 }
 
-export default LensCollectButton
+export default memo(LensCollectButton)
