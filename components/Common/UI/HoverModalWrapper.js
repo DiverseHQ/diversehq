@@ -3,7 +3,6 @@ import useDevice from '../useDevice'
 import BottomDrawerWrapper from '../BottomDrawerWrapper'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../NotifyContext'
-import Temp from '../../Post/Collect/Temp'
 const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
   const { isMobile } = useDevice()
   const [showOptionsModal, setShowOptionsModal] = useState(false)
@@ -49,11 +48,8 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
     }
   }, [popupRef])
 
-  console.log('hover modal wrapper rendered')
-
   return (
     <>
-      <Temp text="HoverModalWrapper" />
       <button
         className="relative"
         onClick={handleButtonClick}

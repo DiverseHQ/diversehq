@@ -62,7 +62,6 @@ const PostCard = ({ _post, setPosts }) => {
   )
 
   useEffect(() => {
-    console.log('post', post)
     setShowMore(
       (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES_FOR_POST ||
         post?.content?.length > 400 ||
