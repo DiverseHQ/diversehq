@@ -157,7 +157,7 @@ const FeeCollectPopUp = ({
               ) : (
                 <>
                   {!isAllowed && (
-                    <div className="ml-28 my-5">
+                    <div className="">
                       <AllowanceButton
                         module={allowanceData?.approvedModuleAllowanceAmount[0]}
                         allowed={isAllowed}
