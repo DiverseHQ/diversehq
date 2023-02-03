@@ -1,5 +1,7 @@
+import { CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { MdOutlinePersonAddAlt } from 'react-icons/md'
+import { RiUserFollowLine } from 'react-icons/ri'
 import { useBalance } from 'wagmi'
 import { useApprovedModuleAllowanceAmountQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
@@ -67,7 +69,7 @@ const FeeCollectDrawer = ({
     if (
       balanceData &&
       parseFloat(balanceData?.formatted) <
-        parseFloat(collectModule?.amount?.value)
+      parseFloat(collectModule?.amount?.value)
     ) {
       setHasAmount(false)
     } else {
@@ -85,31 +87,38 @@ const FeeCollectDrawer = ({
       </div>
       <div>
         {collectModule.followerOnly && !isFollowedByMe && (
-          <div className="flex flex-row justify-center items-center text-p-text">
-            FOLLOW
+          <div className="flex flex-row  space-x-4">
             <button
               onClick={() => {
                 handleFollowProfile(author.id)
               }}
               className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
             >
-              {followLoading ? (
-                'Following'
+              {loading ? (
+                <div className="flex flex-row justify-center items-center space-x-2">
+                  <CircularProgress size="18px" color="primary" />
+                  <p>Follow</p>
+                </div>
               ) : author.isFollowing ? (
                 'Follow back'
               ) : (
-                <MdOutlinePersonAddAlt className="w-5 h-5" />
+                <div className="flex flex-row justify-center items-center space-x-1 ">
+                  <RiUserFollowLine /> <p>Follow</p>
+                </div>
               )}
             </button>
-            <div>{author.handle} to collect this post</div>
+            <p className="ml-1">To Collect the Post</p>
           </div>
         )}
         {allowanceLoading && (
-          <div className="text-p-text">loading allowance</div>
+          <div className="text-p-text flex flex-row Items-center">
+            <CircularProgress size="18px" color="primary" />
+            <p className='text-p-text '>Alllowance loading</p>
+          </div>
         )}
 
         {isAllowed && hasAmount ? (
-          <>
+          <div className='flex flex-col font-medium items-center'>
             <div className="m-4 text-p-text ">
               Balance : {parseFloat(balanceData?.formatted)} | Gifting:{' '}
               {collectModule?.amount?.value}
@@ -117,7 +126,7 @@ const FeeCollectDrawer = ({
             <div className="m-4 text-p-text align-center">
               You can collect this post
             </div>
-          </>
+          </div>
         ) : (
           <>
             {!isAllowed && (
@@ -128,7 +137,7 @@ const FeeCollectDrawer = ({
               />
             )}
             {!hasAmount && (
-              <div className="text-p-text">
+              <div className="text-p-text font-medium text-center justify-center mb-2">
                 Balance : {parseFloat(balanceData?.formatted)} | Required:{' '}
                 {collectModule?.amount?.value}
               </div>
@@ -149,7 +158,14 @@ const FeeCollectDrawer = ({
             }
             className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl"
           >
-            Collect
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <p>Collecting ...</p>
+              </div>
+            ) : (
+              <p>Collect</p>
+            )}
           </button>
         </div>
       </div>

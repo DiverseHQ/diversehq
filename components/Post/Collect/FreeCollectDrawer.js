@@ -4,15 +4,17 @@ import { useNotify } from '../../Common/NotifyContext'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import useCollectPublication from './useCollectPublication'
 import { MdOutlinePersonAddAlt } from 'react-icons/md'
+import { CircularProgress } from '@mui/material'
+import { RiUserFollowLine } from 'react-icons/ri'
 const FreeCollectDrawer = ({
-  isDrawerOpen,
   setIsDrawerOpen,
-  setIsCollected,
-  setCollectCount,
   collectModule,
-  publication,
+  setIsCollected,
+  isCollected,
   author,
-  isCollected
+  publication,
+  setCollectCount,
+  isDrawerOpen
 }) => {
   const { collectPublication, isSuccess, loading } =
     useCollectPublication(collectModule)
@@ -22,7 +24,7 @@ const FreeCollectDrawer = ({
     isFollowedByMe,
     handleFollowProfile,
     loading: followLoading
-  } = useLensFollowButton({ profileId: author.id })
+  } = useLensFollowButton(author)
 
   useEffect(() => {
     if (!loading && isSuccess) {
@@ -39,11 +41,11 @@ const FreeCollectDrawer = ({
         showClose
       >
         <div className=" flex items-center flex-col justify-center px-4 text-p-text">
-          {collectModule.__typename === 'FreeCollectModuleSettings' &&
+          {collectModule?.__typename === 'FreeCollectModuleSettings' &&
             !collectModule.followerOnly && (
               <div className="font-bold text-lg mt-3 mb-2">Free collect </div>
             )}
-          {collectModule.__typename === 'FreeCollectModuleSettings' &&
+          {collectModule?.__typename === 'FreeCollectModuleSettings' &&
             collectModule.followerOnly && (
               <>
                 <div className="font-bold text-lg mt-3 mb-2">Free Collect</div>
@@ -53,22 +55,27 @@ const FreeCollectDrawer = ({
                       You are following {author.handle} and can collect for free
                     </div>
                   ) : (
-                    <div className="flex justify-center items-center font-semibold mb-1">
-                      <p>Follow {author.handle}, to collect it for Free</p>
+                    <div className="flex flex-row items-center justify-center space-x-2 mb-2 font-medium" >
                       <button
                         onClick={() => {
                           handleFollowProfile(author.id)
                         }}
-                        className="ml-0.5 px-3"
+                        className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold "
                       >
-                        {followLoading ? (
-                          'Following'
+                        {loading ? (
+                          <div className="flex flex-row justify-center items-center space-x-2">
+                            <CircularProgress size="18px" color="primary" />
+                            <p>Follow</p>
+                          </div>
                         ) : author.isFollowing ? (
                           'Follow back'
                         ) : (
-                          <MdOutlinePersonAddAlt className="w-5 h-5" />
+                          <div className="flex flex-row justify-center items-center space-x-1 ">
+                            <RiUserFollowLine /> <p>Follow</p>
+                          </div>
                         )}
                       </button>
+                      <p>{author.handle}{' '}to Collect for Free</p>
                     </div>
                   )}
                 </div>

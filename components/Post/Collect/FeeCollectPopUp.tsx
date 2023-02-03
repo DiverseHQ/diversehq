@@ -1,6 +1,5 @@
 import { CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { MdOutlinePersonAddAlt } from 'react-icons/md'
 import { RiUserFollowLine } from 'react-icons/ri'
 import { useBalance } from 'wagmi'
 import {

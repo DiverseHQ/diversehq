@@ -111,7 +111,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
         <EditProfile user={user} showUserInfo={showUserInfoFromAddress} />
       ),
       type: modalType.normal,
-      onAction: () => {},
+      onAction: () => { },
       extraaInfo: {}
     })
   }
@@ -123,11 +123,10 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
           <div className="w-full md:w-[650px]">
             <div className={`relative ${!isMobile ? 'mt-10' : ''}`}>
               <ImgWithZoon
-                className={`h-28 w-full object-cover ${
-                  !isMobile
+                className={`h-28 w-full object-cover ${!isMobile
                     ? 'rounded-t-[20px] border-t-[1px] border-x-[1px] border-p-border'
                     : ''
-                }`}
+                  }`}
                 src={
                   profile.bannerImageUrl
                     ? profile.bannerImageUrl
@@ -148,16 +147,15 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
               />
 
               <div
-                className={`flex flex-col px-3 sm:px-5 pb-6 bg-s-bg ${
-                  !isMobile
+                className={`flex flex-col px-3 sm:px-5 pb-6 bg-s-bg ${!isMobile
                     ? 'rounded-b-[20px] border-x-[1px] border-b-[1px] border-p-border'
                     : ''
-                }`}
+                  }`}
               >
                 <div className="flex flex-row items-center self-end">
                   {user &&
                     user?.walletAddress.toLowerCase() ===
-                      profile.walletAddress.toLowerCase() && (
+                    profile.walletAddress.toLowerCase() && (
                       <div
                         className="text-base text-p-btn-text bg-p-btn px-2 mx-2 rounded-full cursor-pointer"
                         onClick={handleEditProfile}
@@ -195,7 +193,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     isSignedIn &&
                     myLensProfile &&
                     lensProfile.ownedBy?.toLowerCase() !==
-                      user?.walletAddress?.toLowerCase() && (
+                    user?.walletAddress?.toLowerCase() && (
                       <>
                         <LensFollowButton lensProfile={lensProfile} />
                       </>
@@ -279,7 +277,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 isDrawerOpen={isDrawerOpen}
                 setIsDrawerOpen={setIsDrawerOpen}
                 showClose
-                // height="235px"
+              // height="235px"
               >
                 <div className="flex flex-col gap-4 mx-4 mb-4">
                   <h3 className="font-bold text-[20px] self-center">
@@ -310,16 +308,14 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
 
               {lensProfile?.id && (
                 <div
-                  className={`font-bold text-sm sm:text-base flex flex-row  px-3 sm:px-6 bg-white dark:bg-s-bg sm:rounded-xl mt-2 sm:mt-6 py-1 sm:py-3 w-full justify-start space-x-9 items-center ${
-                    !isMobile
+                  className={`font-bold text-sm sm:text-base flex flex-row  px-3 sm:px-6 bg-white dark:bg-s-bg sm:rounded-xl mt-2 sm:mt-6 py-1 sm:py-3 w-full justify-start space-x-9 items-center ${!isMobile
                       ? 'border-[1px] border-p-border'
                       : 'mb-4 rounded-[10px]'
-                  }`}
+                    }`}
                 >
                   <button
-                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-                      active === 'lens' && 'bg-p-bg'
-                    } hover:bg-p-hover hover:text-p-hover-text`}
+                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${active === 'lens' && 'bg-p-bg'
+                      } hover:bg-p-hover hover:text-p-hover-text`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
                       router.push(`/u/${profile?.walletAddress}/feed/lens`)
@@ -333,9 +329,8 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     <div>Lens</div>
                   </button>
                   <button
-                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-                      active === 'offchain' && 'bg-p-bg'
-                    }  hover:bg-p-btn-hover`}
+                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${active === 'offchain' && 'bg-p-bg'
+                      }  hover:bg-p-btn-hover`}
                     onClick={() => {
                       router.push(`/u/${profile?.walletAddress}/feed/offchain`)
                     }}
@@ -344,9 +339,8 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     <div>Off-chain</div>
                   </button>
                   <button
-                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-                      active === 'collected' && 'bg-p-bg'
-                    }  hover:bg-p-btn-hover`}
+                    className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${active === 'collected' && 'bg-p-bg'
+                      }  hover:bg-p-btn-hover`}
                     disabled={!lensProfile?.id}
                     onClick={() => {
                       router.push(`/u/${profile?.walletAddress}/feed/collected`)

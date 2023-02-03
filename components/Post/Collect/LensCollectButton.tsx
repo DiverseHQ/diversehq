@@ -29,6 +29,11 @@ const LensCollectButton = ({
       <HoverModalWrapper
         disabled={isCollected || hasCollectedByMe}
         position="top"
+        collectModule={collectModule}
+        setIsCollected={setIsCollected}
+        setCollectCount={setCollectCount}
+        publication={publication}
+        author={author}
         HoverModal={({ setIsDrawerOpen, setShowOptionsModal }) => {
           return (
             <>
