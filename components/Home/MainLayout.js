@@ -9,7 +9,7 @@ import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 
 const MainLayout = ({ children, isLoading }) => {
-  const { isDesktop } = useDevice()
+  const { isMobile } = useDevice()
   // only show if mounted
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
@@ -18,25 +18,21 @@ const MainLayout = ({ children, isLoading }) => {
     return null
   return (
     <>
-      {!isDesktop && (
+      {isMobile && (
         <div className="text-p-text bg-p-bg min-h-screen transition-all duration-500">
-          {!isDesktop && (
-            <>
-              <NewMobileTopNav />
-              <Box sx={{ width: '100%', position: 'absolute' }}>
-                {isLoading && <LinearProgress />}
-              </Box>
-              {/* <MobileTopNav /> */}
-              <div className={'pb-16'}>
-                <ScrollToTopButton />
-                {children}
-              </div>
-              <MobileBottomNav />
-            </>
-          )}
+          <NewMobileTopNav />
+          <Box sx={{ width: '100%', position: 'absolute' }}>
+            {isLoading && <LinearProgress />}
+          </Box>
+          {/* <MobileTopNav /> */}
+          <div className={'pb-16'}>
+            <ScrollToTopButton />
+            {children}
+          </div>
+          <MobileBottomNav />
         </div>
       )}
-      {isDesktop && (
+      {!isMobile && (
         <div className="relative min-h-screen bg-p-bg transition-all duration-500">
           <Navbar />
 
