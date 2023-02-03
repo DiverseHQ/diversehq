@@ -47,7 +47,7 @@ const ConnectWalletAndSignInButton = ({
       {activeStatus === ActiveStatus.SIGN_IN && (
         <button
           className="bg-p-btn text-p-btn-text px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-bold"
-          onClick={fetchWeb3Token}
+          onClick={() => fetchWeb3Token(false)}
         >
           {SignInLabel}
         </button>

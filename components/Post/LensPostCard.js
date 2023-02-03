@@ -536,7 +536,10 @@ const LensPostCard = ({ post }) => {
                               showMore ? 'line-clamp-5' : ''
                             } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                           >
-                            {postInfo?.metadata?.content}
+                            {postInfo?.metadata?.content?.replace(
+                              new RegExp(`^${postInfo?.metadata?.name}`),
+                              ''
+                            )}
                           </Markup>
                         </div>
                       )}

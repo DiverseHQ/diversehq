@@ -1,5 +1,8 @@
 import { endpoint } from '../../auth-fetcher'
-import { setAccessTokenToStorage } from './helpers'
+import {
+  removeAccessTokenFromStorage,
+  setAccessTokenToStorage
+} from './helpers'
 
 export default async function refreshAccessToken(
   _refreshToken: string
@@ -32,6 +35,8 @@ export default async function refreshAccessToken(
   console.log(json)
   if (json.errors) {
     const { message } = json.errors[0] || 'Error..'
+    console.log('Error', message)
+    removeAccessTokenFromStorage()
     throw new Error(message)
   }
 

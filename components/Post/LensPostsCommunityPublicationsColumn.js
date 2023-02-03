@@ -43,21 +43,8 @@ const LensPostsCommunityPublicationsColumn = ({ communityInfo }) => {
   )
 
   useEffect(() => {
-    console.log('communityInfo._id', communityInfo._id)
-    // setNextCursor(null)
     setPosts([])
-    // console.log('communityInfo changed', communityInfo)
-    // if (!communityInfo?._id) return
-    // console.log('emptying posts')
-    // setCursor(null)
-    // setHasMore(true)
-    // communityPublicationsResult.refetch()
   }, [communityInfo._id])
-
-  useEffect(() => {
-    // last post in the list
-    console.log('last post id', posts[posts.length - 1]?.metadata?.tags[0])
-  }, [posts])
 
   useEffect(() => {
     if (
@@ -65,27 +52,22 @@ const LensPostsCommunityPublicationsColumn = ({ communityInfo }) => {
       posts.length === 0
     )
       return
-    console.log(
-      'communityPublicationsResult?.data?.explorePublications?.items[0].metadata.tags[0]',
-      communityPublicationsResult?.data?.explorePublications?.items[0].metadata
-        .tags[0]
-    )
+    if (
+      !communityPublicationsResult?.data?.explorePublications?.items.length > 0
+    ) {
+      setHasMore(false)
+      return
+    }
     handleCommunityPublications()
   }, [communityPublicationsResult?.data?.explorePublications?.pageInfo?.next])
 
-  // useEffect(() => {
-  //   console.log(
-  //     'communityPublicationsResult.data',
-  //     communityPublicationsResult.data
-  //   )
-  // }, [communityPublicationsResult])
-
   const handleCommunityPublications = () => {
-    console.log(
-      'explorePublications',
-      communityPublicationsResult?.data?.explorePublications?.items
-    )
-    if (!communityPublicationsResult?.data?.explorePublications?.items) return
+    if (
+      communityPublicationsResult?.data?.explorePublications?.items.length === 0
+    ) {
+      setHasMore(false)
+      return
+    }
     if (
       communityPublicationsResult?.data?.explorePublications?.items.length <
       LENS_POST_LIMIT
@@ -100,9 +82,10 @@ const LensPostsCommunityPublicationsColumn = ({ communityInfo }) => {
       )
     }
     if (
+      posts.length === 0 ||
       posts[posts.length - 1]?.metadata?.tags[0] !==
-      communityPublicationsResult.data.explorePublications.items[0].metadata
-        .tags[0]
+        communityPublicationsResult.data.explorePublications.items[0].metadata
+          .tags[0]
     ) {
       setPosts(communityPublicationsResult.data.explorePublications.items)
     } else {

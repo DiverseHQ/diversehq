@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react'
 import SearchModal from '../Search/SearchModal'
 import Link from 'next/link'
 import { FiMoon, FiSun } from 'react-icons/fi'
-// import { CgProfile } from 'react-icons/cg'
-
-// import Link from 'next/link'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useRouter } from 'next/router'
 import useNotificationsCount from '../Notification/useNotificationsCount'
@@ -14,21 +11,6 @@ import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
 import Image from 'next/image'
 import { useTheme } from '../Common/ThemeProvider'
-// import LogoComponent from '../Common/UI/LogoComponent'
-
-// const NavbarButton = ({ btnText, link, isActive, props }) => {
-//   return (
-//     <Link href={link}>
-//       <button
-//         className={`font-medium ${
-//           isActive && 'bg-[#D1D9FF]'
-//         } hover:bg-[#D1D9FF] cursor-pointer rounded-[8px] px-2 lg:px-3 py-1`}
-//       >
-//         {btnText}
-//       </button>
-//     </Link>
-//   )
-// }
 
 const Navbar = () => {
   const router = useRouter()
@@ -76,19 +58,11 @@ const Navbar = () => {
 
   return (
     <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-2.5 items-center shadow-md gap-2 sticky top-0 bg-p-bg dark:bg-s-bg">
-      {/* <div className="w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px]">
-        <LogoComponent />
-      </div>
-      <SearchModal />
-      <div className="w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] flex flex-row justify-end">
-        <LensLoginButton />
-      </div> */}
       <div className="flex flex-row items-center gap-4 lg:gap-5">
         <div>
           <Link
             className="flex flex-row justify-center items-center  h-fit w-fit"
             href={'/'}
-            passHref
           >
             <img
               src="/LogoV3TrimmedWithBG.png"
