@@ -107,8 +107,8 @@ const FeeCollectPopUp = ({
     <>
       {isDesktop ? (
         <div className="grid w-96 min-h-48  shadow-p-btn">
-          <div className="col-span-full row-span-full w-full h-[80px] flex flex-row   ">
-            <div className="flex flex-col items-center mt-2">
+          <div className="col-span-full row-span-full w-full h-[80px] flex flex-row justify-center space-x-6  ">
+            <div className="flex flex-col  justify-center items-center mt-2">
               {collectModule.followerOnly && !isFollowedByMe && (
                 <div className="flex flex-row  space-x-4">
                   <button
@@ -143,7 +143,7 @@ const FeeCollectPopUp = ({
 
               {isAllowed && hasAmount ? (
                 <>
-                  <div className="m-1 text-p-text font-medium mx-12">
+                  <div className="m-1 text-p-text font-medium ">
                     Collect for {collectModule?.amount?.value}{' '}
                     {collectModule.amount?.asset?.symbol} <br></br>
                     <span>
@@ -157,7 +157,7 @@ const FeeCollectPopUp = ({
               ) : (
                 <>
                   {!isAllowed && (
-                    <div className="ml-28 my-5	">
+                    <div className="ml-28 my-5">
                       <AllowanceButton
                         module={allowanceData?.approvedModuleAllowanceAmount[0]}
                         allowed={isAllowed}
@@ -165,11 +165,13 @@ const FeeCollectPopUp = ({
                       />
                     </div>
                   )}
-                  {!hasAmount && (
-                    <div className="text-p-text font-medium mx-12 ">
-                      Collect for {''}
-                      {collectModule?.amount?.value} {''} WMATIC <br />
-                      Required: {collectModule?.amount?.value}
+                  {!hasAmount && isAllowed && (
+                    <div className="text-p-text font-medium">
+                      <p>
+                        Collect for {''}
+                        {collectModule?.amount?.value} {''} WMATIC
+                      </p>
+                      <p>Required: {collectModule?.amount?.value}</p>
                     </div>
                   )}
                 </>
