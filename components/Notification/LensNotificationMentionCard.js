@@ -37,9 +37,9 @@ const LensNotificationMentionCard = ({ notification }) => {
           <span>mentioned you in a </span>
           <span className="hover:underline font-bold">
             <Link href={`/p/${notification?.mentionPublication?.id}`}>
-              {notification?.notificationId?.startsWith('mention_post-') &&
+              {notification?.notificationId?.startsWith('mention-post-') &&
                 'Post'}
-              {notification?.notificationId?.startsWith('mention_comment-') &&
+              {notification?.notificationId?.startsWith('mention-comment-') &&
                 'Comment'}
             </Link>
           </span>
