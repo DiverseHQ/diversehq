@@ -131,8 +131,14 @@ const FeeCollectPopUp = ({
               {isAllowed && hasAmount ? (
                 <>
                   <div className="m-1 text-p-text font-medium mx-12">
-                    Collect for {collectModule?.amount?.value} WMATIC <br></br>
-                    <span>Balance : {parseFloat(balanceData?.formatted)} </span>
+                    Collect for {collectModule?.amount?.value}{' '}
+                    {collectModule.amount?.asset?.symbol} <br></br>
+                    <span>
+                      Balance :{' '}
+                      {parseFloat(
+                        balanceData?.formatted ? balanceData?.formatted : '0'
+                      )}{' '}
+                    </span>
                   </div>
                 </>
               ) : (
