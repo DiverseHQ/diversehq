@@ -1,4 +1,6 @@
+import { CircularProgress } from '@mui/material'
 import React from 'react'
+import { BiPlus } from 'react-icons/bi'
 import { useSendTransaction, useWaitForTransaction } from 'wagmi'
 import { useGenerateModuleCurrencyApprovalDataQuery } from '../../../graphql/generated'
 
@@ -54,22 +56,32 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
     }
   }
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row items-center justify-center place-items-center space-x-1">
       <button
         onClick={handleAllowance}
-        className=""
+        className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
         disabled={waitLoading || transactionLoading}
       >
-        {!(waitLoading || transactionLoading) && 'Allow to collect'}
-        {waitLoading && 'Waiting for transaction'}
-        {transactionLoading && 'Sending transaction'}
+        {!(waitLoading || transactionLoading) && (
+          <div className="flex flex-row space-x-1">
+            <BiPlus className="w-5 h-5" />
+            <p>Allow</p>
+          </div>
+        )}
+        {waitLoading && (
+          <div className="flex flex-row space-x-1">
+            <CircularProgress size="18px" color="primary" />
+            <p>Waiting for Transaction</p>
+          </div>
+        )}
+        {transactionLoading && (
+          <div className="flex flex-row space-x-1">
+            <CircularProgress size="18px" color="primary" />
+            <p>Sending Transaction</p>
+          </div>
+        )}
       </button>
-      {/* <input
-        type={'number'}
-        value={value}
-        onChange={(e) => setValue(Number(e.target.value))}
-        placeholder={'Amount'}
-      /> */}
+      <p className="font-medium">To Collect</p>
     </div>
   )
 }

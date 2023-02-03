@@ -6,6 +6,7 @@ import { useNotify } from '../../Common/NotifyContext'
 import { CircularProgress } from '@mui/material'
 import { RiUserFollowLine } from 'react-icons/ri'
 import useDevice from '../../Common/useDevice'
+import { BsCollection } from 'react-icons/bs'
 type Props = {
   setIsCollected: any
   setCollectCount: any
@@ -23,7 +24,8 @@ const FreeCollectPopUp = ({
   publication,
   author,
   setIsDrawerOpen,
-  setShowOptionsModal
+  setShowOptionsModal,
+  setIsCollecting
 }: Props) => {
   const { collectPublication, isSuccess, loading } =
     useCollectPublication(collectModule)
@@ -36,8 +38,15 @@ const FreeCollectPopUp = ({
       setCollectCount((prev: number) => prev + 1)
       setIsDrawerOpen(false)
       setShowOptionsModal(false)
+      setIsCollecting(false)
     }
   }, [loading, isSuccess])
+
+  useEffect(() => {
+    if (loading) {
+      setIsCollecting(true)
+    }
+  }, [loading])
 
   const {
     isFollowedByMe,
@@ -129,7 +138,10 @@ const FreeCollectPopUp = ({
                   <div>Collect</div>
                 </div>
               ) : (
-                <div>Collect</div>
+                <div className="flex flex-row items-center space-x-2">
+                  <BsCollection className="w-5 h-5" />
+                  <p>Collect</p>
+                </div>
               )}
             </button>
             {/* </div> */}
@@ -148,7 +160,7 @@ const FreeCollectPopUp = ({
                 <div className="font-bold text-lg mt-3 mb-2">Free Collect</div>
                 <div>
                   {isFollowedByMe ? (
-                    <div className="font-semibold">
+                    <div className="font-semibold text-center mb-2">
                       You are following {author.handle} and can collect for free
                     </div>
                   ) : (
@@ -188,9 +200,12 @@ const FreeCollectPopUp = ({
                 collectModule.followerOnly &&
                 !isFollowedByMe)
             }
-            className="bg-p-btn text-p-btn-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
+            className="bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
           >
-            Collect
+            <div className="flex flex-row items-center space-x-2">
+              <BsCollection className="w-5 h-5" />
+              <p>Collect</p>
+            </div>
           </button>
         </div>
       )}

@@ -1,5 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { BsCollection } from 'react-icons/bs'
 import { RiUserFollowLine } from 'react-icons/ri'
 import { useBalance } from 'wagmi'
 import {
@@ -24,6 +25,7 @@ type Props = {
   author: Profile
   setIsDrawerOpen: any
   setShowOptionsModal: any
+  setIsCollecting: any
 }
 const FeeCollectPopUp = ({
   setIsCollected,
@@ -32,7 +34,8 @@ const FeeCollectPopUp = ({
   publication,
   author,
   setIsDrawerOpen,
-  setShowOptionsModal
+  setShowOptionsModal,
+  setIsCollecting
 }: Props) => {
   console.log('FeeCollectPopUp', collectModule)
   if (collectModule.__typename !== 'FeeCollectModuleSettings') return null
@@ -62,6 +65,7 @@ const FeeCollectPopUp = ({
       notifySuccess('Post has been collected, check your collection!')
       setIsDrawerOpen(false)
       setShowOptionsModal(false)
+      setIsCollecting(false)
     }
   }, [loading, isSuccess])
 
@@ -92,13 +96,19 @@ const FeeCollectPopUp = ({
     }
   }, [balanceData])
 
+  useEffect(() => {
+    if (loading) {
+      setIsCollecting(true)
+    }
+  }, [loading])
+
   const { isDesktop } = useDevice()
   return (
     <>
       {isDesktop ? (
         <div className="grid w-96 min-h-48  shadow-p-btn">
           <div className="col-span-full row-span-full w-full h-[80px] flex flex-row   ">
-            <div className="flex flex-col items-start mt-2">
+            <div className="flex flex-col items-center mt-2">
               {collectModule.followerOnly && !isFollowedByMe && (
                 <div className="flex flex-row  space-x-4">
                   <button
@@ -125,7 +135,10 @@ const FeeCollectPopUp = ({
               )}
 
               {allowanceLoading && (
-                <div className="text-p-text">loading allowance</div>
+                <div className="text-p-text flex flex-row space-x-1">
+                  <CircularProgress size="18px" color="primary" />
+                  <p>Loading Allowance</p>
+                </div>
               )}
 
               {isAllowed && hasAmount ? (
@@ -138,11 +151,13 @@ const FeeCollectPopUp = ({
               ) : (
                 <>
                   {!isAllowed && (
-                    <AllowanceButton
-                      module={allowanceData?.approvedModuleAllowanceAmount[0]}
-                      allowed={isAllowed}
-                      setAllowed={setIsAllowed}
-                    />
+                    <div className="ml-28 my-5	">
+                      <AllowanceButton
+                        module={allowanceData?.approvedModuleAllowanceAmount[0]}
+                        allowed={isAllowed}
+                        setAllowed={setIsAllowed}
+                      />
+                    </div>
                   )}
                   {!hasAmount && (
                     <div className="text-p-text font-medium mx-12 ">
@@ -165,7 +180,9 @@ const FeeCollectPopUp = ({
                   collectModule.followerOnly &&
                   !isFollowedByMe)
               }
-              className="bg-p-btn text-p-btn-text rounded-md py-1.5 px-4 text-center w-20 flex font-semibold text-p-text justify-center items-center h-10 self-center"
+              className={`bg-p-btn text-p-btn-text rounded-md py-1.5 px-4 text-center  flex font-semibold text-p-text justify-center items-center h-10 self-center ${
+                !isAllowed ? 'hidden' : ''
+              }`}
             >
               {loading ? (
                 <div className="flex flex-row justify-center items-center space-x-2">
@@ -173,7 +190,10 @@ const FeeCollectPopUp = ({
                   <p>Collecting</p>
                 </div>
               ) : (
-                <p>Collect</p>
+                <div className="flex flex-row items-center space-x-2">
+                  <BsCollection className="w-5 h-5" />
+                  <p>Collect</p>
+                </div>
               )}
             </button>
           </div>
@@ -217,23 +237,25 @@ const FeeCollectPopUp = ({
             )}
 
             {isAllowed && hasAmount ? (
-              <div className="flex flex-col font-medium items-center">
-                <div className="m-4 text-p-text ">
+              <div className="flex flex-col font-medium items-center m-4">
+                <div className=" text-p-text ">
                   Balance : {parseFloat(balanceData?.formatted)} | Gifting:{' '}
                   {collectModule?.amount?.value}
                 </div>
-                <div className="m-4 text-p-text align-center">
+                <div className=" text-p-text align-center">
                   You can collect this post
                 </div>
               </div>
             ) : (
               <>
                 {!isAllowed && (
-                  <AllowanceButton
-                    module={allowanceData?.approvedModuleAllowanceAmount[0]}
-                    allowed={isAllowed}
-                    setAllowed={setIsAllowed}
-                  />
+                  <div className="mb-2">
+                    <AllowanceButton
+                      module={allowanceData?.approvedModuleAllowanceAmount[0]}
+                      allowed={isAllowed}
+                      setAllowed={setIsAllowed}
+                    />
+                  </div>
                 )}
                 {!hasAmount && (
                   <div className="text-p-text font-medium text-center justify-center mb-2">
@@ -254,7 +276,9 @@ const FeeCollectPopUp = ({
                     collectModule.followerOnly &&
                     !isFollowedByMe)
                 }
-                className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl"
+                className={`bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl ${
+                  !isAllowed ? 'hidden' : ''
+                }`}
               >
                 {loading ? (
                   <div className="flex flex-row justify-center items-center space-x-2">
@@ -262,7 +286,10 @@ const FeeCollectPopUp = ({
                     <p>Collecting ...</p>
                   </div>
                 ) : (
-                  <p>Collect</p>
+                  <div className="flex flex-row items-center space-x-2">
+                    <BsCollection className="w-5 h-5" />
+                    <p>Collect</p>
+                  </div>
                 )}
               </button>
             </div>
