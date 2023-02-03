@@ -27,6 +27,8 @@ const useCollectPublication = (collectModule: CollectModule) => {
         }
       }
     })
+    setLoading(false)
+    setIsSuccess(true)
   }
 
   const handleCollect = async (publicationId: string) => {
@@ -70,12 +72,9 @@ const useCollectPublication = (collectModule: CollectModule) => {
           console.log('handle free collect')
           setLoading(true)
           await handleFreeCollect(publicationId)
-          setLoading(false)
-          setIsSuccess(true)
         } catch (e) {
           console.error(e)
           notifyError(e)
-        } finally {
           setLoading(false)
         }
       } else {

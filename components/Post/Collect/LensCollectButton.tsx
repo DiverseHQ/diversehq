@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState } from 'react'
 import { AiFillGift, AiOutlineGift } from 'react-icons/ai'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
@@ -23,10 +23,6 @@ const LensCollectButton = ({
 }: Props) => {
   const [collectCount, setCollectCount] = useState(totalCollects)
   const [isCollected, setIsCollected] = useState(hasCollectedByMe)
-
-  useEffect(() => {
-    console.log('isCollected', isCollected)
-  }, [isCollected])
   return (
     <>
       <HoverModalWrapper

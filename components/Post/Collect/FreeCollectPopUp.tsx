@@ -15,6 +15,7 @@ type Props = {
   author: Profile
   setIsDrawerOpen: any
   setShowOptionsModal: any
+  setIsCollecting: any
 }
 
 const FreeCollectPopUp = ({
@@ -31,9 +32,10 @@ const FreeCollectPopUp = ({
     useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
   useEffect(() => {
+    console.log('isSuccess', isSuccess)
+    console.log('loading', loading)
     if (!loading && isSuccess) {
-      console.log('--- post collected successfully ---')
-      notifySuccess('Post has been collected, check your collection!')
+      notifySuccess('Post has been collected, check your collections!')
       setIsCollected(true)
       setCollectCount((prev: number) => prev + 1)
       setIsDrawerOpen(false)
@@ -152,7 +154,7 @@ const FreeCollectPopUp = ({
         <div className=" flex items-center flex-col justify-center px-4 text-p-text">
           {collectModule?.__typename === 'FreeCollectModuleSettings' &&
             !collectModule.followerOnly && (
-              <div className="font-bold text-lg mt-3 mb-2">Free collect </div>
+              <div className="font-bold text-lg mt-3 mb-2">Free collect</div>
             )}
           {collectModule?.__typename === 'FreeCollectModuleSettings' &&
             collectModule.followerOnly && (
@@ -204,7 +206,7 @@ const FreeCollectPopUp = ({
           >
             <div className="flex flex-row items-center space-x-2">
               <BsCollection className="w-5 h-5" />
-              <p>Collect</p>
+              Collect
             </div>
           </button>
         </div>

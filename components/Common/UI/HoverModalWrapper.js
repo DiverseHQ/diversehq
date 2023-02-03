@@ -8,13 +8,13 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const popupRef = useRef(null)
-  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const { isSignedIn, hasProfile } = useLensUserContext()
   const [isCollecting, setIsCollecting] = useState(false)
   const { notifyInfo } = useNotify()
 
   const handleButtonClick = async () => {
     if (disabled) return
-    if (!isSignedIn) {
+    if (!isSignedIn || !hasProfile) {
       notifyInfo('Sign In with your Lens Handle')
       return
     }
@@ -30,18 +30,10 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
       !!popupRef.current &&
       !isMobile &&
       (!e.target?.id || popupRef.current.id !== e.target.id) &&
-      !popupRef.current.contains(e.target) && !isCollecting
+      !popupRef.current.contains(e.target) &&
+      !isCollecting
     ) {
       setShowOptionsModal(false)
-    }
-
-    if (
-      !!popupRef.current &&
-      isMobile &&
-      (!e.target?.id || popupRef.current.id !== e.target.id) &&
-      !popupRef.current.contains(e.target) && !isCollecting
-    ) {
-      setIsDrawerOpen(false)
     }
   }
 
@@ -66,15 +58,18 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
       >
         {showOptionsModal && (
           <div
-            className={`absolute ${position === 'left' ? 'top-[10px] right-[20px]' : ''
-              } ${position === 'right' ? 'top-[25px] left-0' : ''} ${position === 'top' ? ' -translate-x-44 -translate-y-20 ' : ''
-              } ${position === 'bottom' ? 'translate-x-44 translate-y-20' : ''
-              } z-20 bg-s-bg shadow-lg rounded-lg border `}
+            className={`absolute ${
+              position === 'left' ? 'top-[10px] right-[20px]' : ''
+            } ${position === 'right' ? 'top-[25px] left-0' : ''} ${
+              position === 'top' ? ' -translate-x-44 -translate-y-20 ' : ''
+            } ${
+              position === 'bottom' ? 'translate-x-44 translate-y-20' : ''
+            } z-20 bg-s-bg shadow-lg rounded-lg border `}
           >
             <HoverModal
               setIsDrawerOpen={setIsDrawerOpen}
               setShowOptionsModal={setShowOptionsModal}
-              setIsCollecting={(val) => setIsCollecting(val)}
+              setIsCollecting={setIsCollecting}
             />
           </div>
         )}
@@ -88,6 +83,7 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
         <HoverModal
           setIsDrawerOpen={setIsDrawerOpen}
           setShowOptionsModal={setShowOptionsModal}
+          setIsCollecting={setIsCollecting}
         />
       </BottomDrawerWrapper>
     </>
