@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { DISCORD_INVITE_LINK, userRoles } from '../../utils/config'
 import { FaDiscord } from 'react-icons/fa'
 import { CgProfile } from 'react-icons/cg'
+import { MdOutlineExplore } from 'react-icons/md'
 
 const NewLeftSidebar = () => {
   const { user, address } = useProfile()
@@ -90,6 +91,13 @@ const NewLeftSidebar = () => {
         >
           <AiOutlineHome className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
           <span className="text-[16px] font-medium">Home</span>
+        </Link>
+        <Link
+          className="flex flex-row items-center hover:bg-p-hover hover:text-p-hover-text px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
+          href={'/explore'}
+        >
+          <MdOutlineExplore className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+          <span className="text-[16px] font-medium">All Communities</span>
         </Link>
         {user && address && (
           <Link
