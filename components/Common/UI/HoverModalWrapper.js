@@ -1,28 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import useCollectPublication from '../../Post/Collect/useCollectPublication'
 import useDevice from '../useDevice'
-import FreeCollectDrawer from '../../Post/Collect/FreeCollectDrawer'
-import FeeCollectDrawer from '../../Post/Collect/FeeCollectDrawer'
-const HoverModalWrapper = ({
-  disabled,
-  children,
-  HoverModal,
-  position,
-  collectModule,
-  publication,
-  author,
-  isCollected,
-  setCollectCount,
-  setIsCollected
-}) => {
+import BottomDrawerWrapper from '../BottomDrawerWrapper'
+const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
   const { isMobile } = useDevice()
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const popupRef = useRef(null)
-  const { loading: collecting } = useCollectPublication(collectModule)
 
   const handleButtonClick = async () => {
-    if (collecting) return
     if (disabled) return
     if (isMobile) {
       setIsDrawerOpen(true)
@@ -78,33 +63,16 @@ const HoverModalWrapper = ({
         )}
         {children}
       </button>
-      <>
-        {isDrawerOpen &&
-          collectModule?.__typename === 'FreeCollectModuleSettings' && (
-            <FreeCollectDrawer
-              setIsDrawerOpen={setIsDrawerOpen}
-              isDrawerOpen={isDrawerOpen}
-              collectModule={collectModule}
-              setIsCollected={setIsCollected}
-              isCollected={isCollected}
-              author={author}
-              publication={publication}
-              setCollectCount={setCollectCount}
-            />
-          )}
-        {collectModule?.__typename === 'FeeCollectModuleSettings' && (
-          <FeeCollectDrawer
-            setIsDrawerOpen={setIsDrawerOpen}
-            isDrawerOpen={isDrawerOpen}
-            collectModule={collectModule}
-            setIsCollected={setIsCollected}
-            isCollected={isCollected}
-            author={author}
-            publication={publication}
-            setCollectCount={setCollectCount}
-          />
-        )}
-      </>
+      <BottomDrawerWrapper
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+        showClose
+      >
+        <HoverModal
+          setIsDrawerOpen={setIsDrawerOpen}
+          setShowOptionsModal={setShowOptionsModal}
+        />
+      </BottomDrawerWrapper>
     </>
   )
 }

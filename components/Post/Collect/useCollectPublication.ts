@@ -9,7 +9,7 @@ import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadc
 import { useNotify } from '../../Common/NotifyContext'
 
 const useCollectPublication = (collectModule: CollectModule) => {
-  const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
+  const { hasProfile, isSignedIn } = useLensUserContext()
   const { mutateAsync: proxyAction } = useProxyActionMutation()
   const { mutateAsync: createCollect } = useCreateCollectTypedDataMutation()
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -63,11 +63,14 @@ const useCollectPublication = (collectModule: CollectModule) => {
 
   const collectPublication = async (publicationId: string) => {
     try {
-      if (!hasProfile || !isSignedIn || !lensProfile) return
+      console.log('collectPublication', publicationId)
+      if (!hasProfile || !isSignedIn) return
       if (collectModule.__typename === 'FreeCollectModuleSettings') {
         try {
+          console.log('handle free collect')
           setLoading(true)
           await handleFreeCollect(publicationId)
+          setLoading(false)
           setIsSuccess(true)
         } catch (e) {
           console.error(e)
