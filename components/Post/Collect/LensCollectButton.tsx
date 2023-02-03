@@ -32,7 +32,11 @@ const LensCollectButton = ({
       <HoverModalWrapper
         disabled={isCollected || hasCollectedByMe}
         position="top"
-        HoverModal={({ setIsDrawerOpen, setShowOptionsModal }) => {
+        HoverModal={({
+          setIsDrawerOpen,
+          setShowOptionsModal,
+          setIsCollecting
+        }) => {
           return (
             <>
               {collectModule?.__typename === 'FreeCollectModuleSettings' && (
@@ -44,6 +48,7 @@ const LensCollectButton = ({
                   author={author}
                   setIsDrawerOpen={setIsDrawerOpen}
                   setShowOptionsModal={setShowOptionsModal}
+                  setIsCollecting={setIsCollecting}
                 />
               )}
               {collectModule?.__typename === 'FeeCollectModuleSettings' && (
@@ -55,6 +60,7 @@ const LensCollectButton = ({
                   setIsCollected={setIsCollected}
                   setIsDrawerOpen={setIsDrawerOpen}
                   setShowOptionsModal={setShowOptionsModal}
+                  setIsCollecting={setIsCollecting}
                 />
               )}
             </>
