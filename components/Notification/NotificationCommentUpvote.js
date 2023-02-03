@@ -32,6 +32,7 @@ const NotificationCommentUpvote = ({ notification }) => {
       )}
       createdAt={notification?.createdAt}
       Icon={() => <ImArrowUp />}
+      isRead={notification?.isRead}
     />
   )
 }

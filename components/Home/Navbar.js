@@ -20,8 +20,11 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme()
 
   const [active, setActive] = useState('home')
-  const { notificationsCount, setNotificationsCount } = useNotificationsCount()
-  const [showDot, setShowDot] = React.useState(true)
+  const {
+    notificationsCount,
+    lensNotificationsCount,
+    updateLensNotificationCount
+  } = useNotificationsCount()
 
   useEffect(() => {
     if (pathname === '/' || pathname.startsWith('/feed')) {
@@ -33,9 +36,8 @@ const Navbar = () => {
     }
   }, [pathname])
 
-  const routeToNotifications = () => {
-    setNotificationsCount(0)
-    setShowDot(false)
+  const routeToNotifications = async () => {
+    await updateLensNotificationCount()
     router.push('/notification')
   }
 
@@ -104,14 +106,10 @@ const Navbar = () => {
         >
           <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
           {/* a green count dot */}
-          {notificationsCount > 0 && (
+          {notificationsCount + lensNotificationsCount > 0 && (
             <div className="top-0 left-4 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full">
-              <span>{notificationsCount}</span>
+              <span>{notificationsCount + lensNotificationsCount}</span>
             </div>
-          )}
-          {(notificationsCount === 0 || !notificationsCount) && showDot && (
-            // a green circle
-            <div className="absolute top-1 left-4 w-[8px] h-[8px] bg-red-500 rounded-full" />
           )}
         </button>
         <button

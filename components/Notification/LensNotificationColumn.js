@@ -8,6 +8,7 @@ import { LENS_NOTIFICATION_LIMIT } from '../../utils/config'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import LensNotificationCard from './LensNotificationCard'
 import LensLoginButton from '../Common/LensLoginButton'
+import { useProfile } from '../Common/WalletContext'
 
 const LensNotificationColumn = () => {
   const [notifications, setNotifications] = useState([])
@@ -71,6 +72,14 @@ const LensNotificationColumn = () => {
     }
   }
 
+  const { user, refreshUserInfo } = useProfile()
+
+  useEffect(() => {
+    return async () => {
+      console.log('lensnotificationcolumn unmount')
+      await refreshUserInfo()
+    }
+  }, [])
   return (
     <>
       {lensProfile &&
@@ -163,6 +172,12 @@ const LensNotificationColumn = () => {
                   <LensNotificationCard
                     key={index}
                     notification={notification}
+                    isRead={
+                      notification.createdAt <
+                      (user.lastFetchedLensNotificationsTime
+                        ? user.lastFetchedLensNotificationsTime
+                        : new Date())
+                    }
                   />
                 )
               })}

@@ -4,7 +4,7 @@ import LensFollowButton from '../User/LensFollowButton'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { SlUserFollow } from 'react-icons/sl'
 
-const LensNotificationFollowedCard = ({ notification }) => {
+const LensNotificationFollowedCard = ({ notification, isRead }) => {
   return (
     <CommonNotificationCardLayoutUI
       MainRow={() => (
@@ -31,6 +31,7 @@ const LensNotificationFollowedCard = ({ notification }) => {
       createdAt={notification?.createdAt}
       Body={() => <></>}
       Icon={() => <SlUserFollow />}
+      isRead={isRead}
     />
   )
 }

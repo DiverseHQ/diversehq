@@ -7,27 +7,44 @@ import { Notification } from '../../graphql/generated'
 import LensNotificationCollectCard from './LensNotificationCollectCard'
 
 const LensNotificationCard = ({
-  notification
+  notification,
+  isRead
 }: {
   notification: Notification
+  isRead: boolean
 }) => {
   return (
     <div className="my-1 sm:my-4 px-3 py-2 sm:p-3 sm:bg-s-bg sm:rounded-xl border-b sm:border-none shadow-sm w-full">
       {notification?.__typename === 'NewCommentNotification' && (
-        <LensNotificationCommentedPostCard notification={notification} />
+        <LensNotificationCommentedPostCard
+          notification={notification}
+          isRead={isRead}
+        />
       )}
       {notification?.__typename === 'NewFollowerNotification' && (
-        <LensNotificationFollowedCard notification={notification} />
+        <LensNotificationFollowedCard
+          notification={notification}
+          isRead={isRead}
+        />
       )}
       {notification?.__typename === 'NewReactionNotification' && (
-        <LensNotificationReactionPostCard notification={notification} />
+        <LensNotificationReactionPostCard
+          notification={notification}
+          isRead={isRead}
+        />
       )}
 
       {notification?.__typename === 'NewMentionNotification' && (
-        <LensNotificationMentionCard notification={notification} />
+        <LensNotificationMentionCard
+          notification={notification}
+          isRead={isRead}
+        />
       )}
       {notification?.__typename === 'NewCollectNotification' && (
-        <LensNotificationCollectCard notification={notification} />
+        <LensNotificationCollectCard
+          notification={notification}
+          isRead={isRead}
+        />
       )}
     </div>
   )

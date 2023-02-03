@@ -69,3 +69,10 @@ export const getAllNotifications = async (limit, skips) => {
     }
   ).then((res) => res.json())
 }
+
+export const putUpdateLensNotificationDate = async () => {
+  return await fetch(`${apiEndpoint}/user/update-lens-notif-time`, {
+    method: 'PUT',
+    headers: getHeaders()
+  }).then((res) => res.json())
+}

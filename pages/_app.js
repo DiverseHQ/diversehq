@@ -1,16 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
-// import MobileBottomNav from '../components/Home/MobileBottomNav'
-// import MobileTopNav from '../components/Home/MobileTopNav'
-// eslint-disable-next-line no-unused-vars
-// import Nav from '../components/Home/Nav'
 import '../styles/globals.css'
 import MasterWrapper from '../components/Common/MasterWrapper'
-// import useDevice from '../components/Common/useDevice'
-// import Navbar from '../components/Home/Navbar'
-// import LeftSidebar from '../components/Home/LeftSidebar'
-// import RightSidebar from '../components/Home/RightSidebar'
-
-// import NewMobileTopNav from '../components/Home/NewMobileTopNav'
 import Script from 'next/script'
 import { DefaultSeo } from 'next-seo'
 import MainLayout from '../components/Home/MainLayout'
@@ -29,15 +19,6 @@ const ROUTES_TO_RETAIN = [
 ]
 
 function MyApp({ Component, pageProps }) {
-  // const [mounted, setMounted] = useState(false)
-  // // const { isDesktop } = useDevice()
-  // useEffect(() => setMounted(true), [])
-  // if (!mounted) return null
-  // const [isLoading, setIsLoading] = useState(true)
-  // const router = useRouter()
-  // useEffect(() => {
-  //   router.isReady && setIsLoading(false)
-  // }, [])
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const retainedComponents = useRef({})

@@ -1,6 +1,5 @@
 import React from 'react'
 import useDevice from '../Common/useDevice'
-// import LeftSidebar from './LeftSidebar'
 import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'

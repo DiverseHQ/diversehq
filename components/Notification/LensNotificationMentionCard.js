@@ -6,7 +6,7 @@ import { MAX_CONTENT_LINES } from '../../utils/config'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { GoMention } from 'react-icons/go'
 
-const LensNotificationMentionCard = ({ notification }) => {
+const LensNotificationMentionCard = ({ notification, isRead }) => {
   const [showMore, setShowMore] = useState(
     countLinesFromMarkdown(
       notification?.mentionPublication?.metadata?.content
@@ -81,6 +81,7 @@ const LensNotificationMentionCard = ({ notification }) => {
         </>
       )}
       Icon={() => <GoMention />}
+      isRead={isRead}
     />
   )
 }

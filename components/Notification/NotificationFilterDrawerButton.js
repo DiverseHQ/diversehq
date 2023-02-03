@@ -12,7 +12,8 @@ const NotificationFilterDrawerButton = () => {
   const router = useRouter()
   const { pathname } = router
   const [active, setActive] = useState('top')
-  const { notificationsCount, setNotificationsCount } = useNotificationsCount()
+  const { notificationsCount, updateNotificationCount } =
+    useNotificationsCount()
 
   useEffect(() => {
     if (pathname.endsWith('/lens')) {
@@ -73,9 +74,9 @@ const NotificationFilterDrawerButton = () => {
             },
             {
               label: 'Offchain',
-              onClick: () => {
+              onClick: async () => {
+                await updateNotificationCount()
                 router.push('/notification/offchain')
-                setNotificationsCount(0)
                 setIsDrawerOpen(false)
               },
               icon: () => (
