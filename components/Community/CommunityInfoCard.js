@@ -20,11 +20,13 @@ import useDevice from '../Common/useDevice'
 import { BiChevronDown } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
-import ImgWithZoon from '../Common/UI/ImgWithZoon'
+// import ImgWithZoon from '../Common/UI/ImgWithZoon'
 import { RiMore2Fill } from 'react-icons/ri'
 import { IoIosShareAlt } from 'react-icons/io'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import ImageWithLoaderAndZoom from '../Common/UI/ImageWithLoaderAndZoom'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
@@ -212,7 +214,7 @@ const CommunityInfoCard = ({ _community }) => {
         >
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
-            <ImgWithZoon
+            <ImageWithPulsingLoader
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile
                   ? 'rounded-t-[20px]'
@@ -223,7 +225,7 @@ const CommunityInfoCard = ({ _community }) => {
               src={community.bannerImageUrl}
             />
           ) : (
-            <ImgWithZoon
+            <ImageWithLoaderAndZoom
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile ? 'rounded-t-[20px]' : ''
               }`}
@@ -235,12 +237,12 @@ const CommunityInfoCard = ({ _community }) => {
               <div className="shrink-0 border-s-bg border-4 rounded-full sm:-translate-y-8 -translate-y-6">
                 {/* only enable the zoom on the community page not on any other page */}
                 {!router.pathname.startsWith('/c') ? (
-                  <ImgWithZoon
+                  <ImageWithPulsingLoader
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />
                 ) : (
-                  <ImgWithZoon
+                  <ImageWithLoaderAndZoom
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />
@@ -261,6 +263,20 @@ const CommunityInfoCard = ({ _community }) => {
               )}
             </div>
             <div className="flex justify-end gap-1 sm:gap-2 pt-2">
+              {isCreator && (
+                <button
+                  className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
+                  onClick={editCommunity}
+                >
+                  Edit
+                </button>
+              )}
+              <button
+                className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
+                onClick={isJoined ? leaveCommunity : joinCommunity}
+              >
+                {isJoined ? 'Leave' : 'Join'}
+              </button>
               <OptionsWrapper
                 OptionPopUpModal={() => (
                   <MoreOptionsModal
@@ -277,26 +293,9 @@ const CommunityInfoCard = ({ _community }) => {
                 position="left"
               >
                 <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <RiMore2Fill
-                    className="w-4 h-4 sm:w-5 sm:h-5"
-                    title="Share"
-                  />
+                  <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
                 </div>
               </OptionsWrapper>
-              {isCreator && (
-                <button
-                  className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
-                  onClick={editCommunity}
-                >
-                  Edit
-                </button>
-              )}
-              <button
-                className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
-                onClick={isJoined ? leaveCommunity : joinCommunity}
-              >
-                {isJoined ? 'Leave' : 'Join'}
-              </button>
             </div>
           </div>
 
