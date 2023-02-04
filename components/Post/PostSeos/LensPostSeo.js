@@ -1,6 +1,6 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import { LensInfuraEndpoint } from '../../../utils/config'
+import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 
 const LensPostSeo = ({ post }) => {
@@ -19,7 +19,7 @@ const LensPostSeo = ({ post }) => {
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [
                 {
-                  url: `${LensInfuraEndpoint}${
+                  url: `${IMAGE_KIT_ENDPOINT}?tr=w-1200,h-630,q-50/${LensInfuraEndpoint}${
                     post?.metadata?.media[0]?.original.url.split('//')[1]
                   }`,
                   alt: post?.metadata?.content
