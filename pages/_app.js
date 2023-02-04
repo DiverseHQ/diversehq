@@ -12,10 +12,10 @@ import { useRef } from 'react'
 
 const ROUTES_TO_RETAIN = [
   '/',
-  '/feed/lens',
-  '/feed/new',
-  '/feed/top',
-  '/feed/hot'
+  '/feed/all',
+  '/feed/foryou',
+  '/feed/offchain',
+  '/feed/top'
 ]
 
 function MyApp({ Component, pageProps }) {

@@ -1,7 +1,6 @@
 import React from 'react'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
-import { HiSparkles } from 'react-icons/hi'
-import { MdLeaderboard } from 'react-icons/md'
+import { MdLeaderboard, MdOutlineExplore } from 'react-icons/md'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useNotify } from '../Common/NotifyContext'
@@ -10,26 +9,29 @@ import { useProfile } from '../Common/WalletContext'
 import { useEffect } from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { stringToLength } from '../../utils/utils'
+import { CgCommunity } from 'react-icons/cg'
+import { GiBreakingChain } from 'react-icons/gi'
 
 const MobileFilterDrawerButton = () => {
   const { user } = useProfile()
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const { notifyError } = useNotify()
-  const [active, setActive] = useState('lens')
+  const [active, setActive] = useState('all')
   const router = useRouter()
   const { pathname } = router
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   useEffect(() => {
-    console.log('pathname', pathname)
-    if (pathname.endsWith('/new')) {
-      setActive('new')
+    if (pathname.endsWith('/offchain')) {
+      setActive('offchain')
     } else if (pathname.endsWith('/top')) {
       setActive('top')
-    } else if (pathname.endsWith('/hot')) {
-      setActive('hot')
-    } else if (pathname.endsWith('/lens')) {
-      setActive('lens')
+    } else if (pathname.endsWith('/all')) {
+      setActive('all')
+    } else if (pathname.endsWith('/foryou')) {
+      setActive('foryou')
+    } else {
+      setActive('all')
     }
   }, [pathname])
 
@@ -82,32 +84,28 @@ const MobileFilterDrawerButton = () => {
           <h1 className="font-bold text-lg mt-5">Choose your Feed</h1>
           <div className="font-medium  text-base border-b p-0.5 w-full flex flex-row mt-2  justify-center items-center space-x-20 ">
             <button
-              className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
-                active === 'lens' && 'bg-p-bg'
+              className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
+                active === 'all' && 'bg-p-bg'
               } hover:bg-p-hover hover:text-p-hover-text`}
               onClick={() => {
-                router.push('/feed/lens')
+                router.push('/feed/all')
                 setIsDrawerOpen(false)
               }}
             >
-              <img
-                src="/lensLogoWithoutText.svg"
-                className="h-5 w-5 "
-                alt="lens logo icon"
-              />
-              <div>Lens</div>
+              <MdOutlineExplore className="h-5 w-5" />
+              <div>All</div>
             </button>
             <button
               className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-                active === 'new' && 'bg-p-bg'
+                active === 'foryou' && 'bg-p-bg'
               }  hover:bg-p-hover hover:text-p-hover-text`}
               onClick={() => {
-                router.push('/feed/new')
+                router.push('/feed/foryou')
                 setIsDrawerOpen(false)
               }}
             >
-              <HiSparkles />
-              <div>New</div>
+              <CgCommunity className="h-6 w-6" />
+              <div>For You</div>
             </button>
 
             <button
@@ -121,6 +119,18 @@ const MobileFilterDrawerButton = () => {
             >
               <MdLeaderboard />
               <div>Top</div>
+            </button>
+            <button
+              className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
+                active === 'offchain' && 'bg-p-bg'
+              } hover:bg-p-hover hover:text-p-hover-text`}
+              onClick={() => {
+                router.push('/feed/offchain')
+                setIsDrawerOpen(false)
+              }}
+            >
+              <GiBreakingChain className="h-5 w-5" />
+              <div>Off-chain</div>
             </button>
           </div>
 

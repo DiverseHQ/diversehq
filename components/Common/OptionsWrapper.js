@@ -39,7 +39,7 @@ const OptionsWrapper = ({ children, OptionPopUpModal, position }) => {
   return (
     <>
       <button
-        className="relative w-full"
+        className="relative"
         ref={popupRef}
         onClick={handleButtonClick}
         id="options-wrapper"

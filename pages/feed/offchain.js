@@ -10,7 +10,7 @@ const newPage = () => {
   return (
     <>
       <NextSeo
-        title="Lens Feed / DiverseHQ"
+        title="OffChain Feed / DiverseHQ"
         description="Stay up to date with the freshest perspectives and stories from diverse communities on DiverseHQ."
         openGraph={{
           url: 'https://app.diversehq.xyz/feed/new'

@@ -8,6 +8,10 @@ const LensPostSeo = ({ post }) => {
   return (
     <NextSeo
       title={stringToLength(post?.metadata?.content, 60)}
+      twitter={{
+        cardType: 'summary_large_image',
+        handle: '@diversehq'
+      }}
       openGraph={{
         url: `https://app.diversehq.xyz/p/${post?.id}`,
         title: stringToLength(post?.metadata?.content, 60),

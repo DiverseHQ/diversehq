@@ -10,7 +10,7 @@ const top = () => {
   return (
     <>
       <NextSeo
-        title="Lens Feed / DiverseHQ"
+        title="Top Feed / DiverseHQ"
         description="Find the best and most popular content from diverse communities all in one place on DiverseHQ's top posts faeed."
         openGraph={{
           url: 'https://app.diversehq.xyz/feed/top'

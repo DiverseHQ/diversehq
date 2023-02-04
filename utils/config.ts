@@ -23,6 +23,13 @@ export const notificationTypes = {
   UPVOTE_COMMENT: 3
 }
 
+export const sortTypes = {
+  LASTEST: 'New',
+  TOP_TODAY: 'Top Today',
+  TOP_WEEK: 'Top This Week',
+  TOP_MONTH: 'Top This Month'
+}
+
 export const recommendedCommunitiesIds = [
   '63b068ca07a65dd65e5c6687', // Diverse HQ
   '63b1c8298bce8b3e7b295915', // Crypto
