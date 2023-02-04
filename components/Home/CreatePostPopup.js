@@ -354,8 +354,10 @@ const CreatePostPopup = () => {
     }
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
+    // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
     setJoinedCommunities([
       ...recentCommunities,
+      // removing the communities in the recentCommunities from the joinedCommunities using communityId
       ...response.filter(
         (community) => !recentCommunities.some((c) => c?._id === community?._id)
       )

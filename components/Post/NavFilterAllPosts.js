@@ -21,6 +21,8 @@ const NavFilterAllPosts = () => {
   const [fetchingJoinedCommunities, setFetchingJoinedCommunities] =
     useState(false)
   const { notifyError } = useNotify()
+  const recentCommunities =
+    JSON.parse(window.localStorage.getItem('recentCommunities')) || []
 
   useEffect(() => {
     if (pathname.endsWith('/new')) {
@@ -63,7 +65,15 @@ const NavFilterAllPosts = () => {
     try {
       setFetchingJoinedCommunities(true)
       const response = await getJoinedCommunitiesApi()
-      setJoinedCommunities(response)
+      // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
+      setJoinedCommunities([
+        ...recentCommunities,
+        // removing the communities in the recentCommunities from the joinedCommunities using communityId
+        ...response.filter(
+          (community) =>
+            !recentCommunities.some((c) => c?._id === community?._id)
+        )
+      ])
       setShowJoinedCommunities(!showJoinedCommunities)
     } catch (error) {
       console.log('error', error)
@@ -77,8 +87,10 @@ const NavFilterAllPosts = () => {
     <div className="font-bold text-sm sm:text-base flex flex-row border-[1px]  border-p-border px-3 sm:px-6 bg-white dark:bg-s-bg py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center dark:text-p-text">
       <button
         className={`text-lens-text flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
-          active === 'lens' && 'bg-p-bg'
-        }  hover:bg-p-hover hover:text-p-hover-text`}
+          active === 'lens'
+            ? 'bg-p-bg dark:bg-[#272729]'
+            : 'hover:bg-p-text hover:text-p-hover-text'
+        } `}
         onClick={() => {
           router.push('/feed/lens')
         }}
@@ -92,8 +104,10 @@ const NavFilterAllPosts = () => {
       </button>
       <button
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-          active === 'new' && 'bg-p-bg'
-        }  hover:bg-p-hover hover:text-p-hover-text`}
+          active === 'new'
+            ? 'bg-p-bg dark:bg-[#272729]'
+            : 'hover:bg-p-hover hover:text-p-hover-text'
+        }`}
         onClick={() => {
           router.push('/feed/new')
         }}
@@ -115,38 +129,43 @@ const NavFilterAllPosts = () => {
         >
           {showJoinedCommunities && (
             <>
-              <FilterListWithSearch
-                list={joinedCommunities}
-                type="community"
-                filterParam="name"
-                handleSelect={(community) => {
-                  router.push(`/c/${community?.name}`)
-                }}
-              />
-            </>
-          )}
-          {fetchingJoinedCommunities && (
-            <>
-              <div className="flex flex-row items-center justify-center p-2 m-2">
-                <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-              </div>
-              <div className="flex flex-row items-center justify-center p-2 m-2">
-                <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-              </div>
-              <div className="flex flex-row items-center justify-center p-2 m-2">
-                <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-              </div>
+              {fetchingJoinedCommunities ? (
+                <>
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+                  </div>
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+                  </div>
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <FilterListWithSearch
+                    list={joinedCommunities}
+                    type="community"
+                    filterParam="name"
+                    handleSelect={(community) => {
+                      router.push(`/c/${community?.name}`)
+                    }}
+                  />
+                </>
+              )}
             </>
           )}
         </div>
       </div>
       <button
         className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
-          active === 'top' && 'bg-p-bg'
-        }  hover:bg-p-hover hover:text-p-hover-text`}
+          active === 'top'
+            ? 'bg-p-bg dark:bg-[#272729]'
+            : 'hover:bg-p-hover hover:text-p-hover-text'
+        }`}
         onClick={() => {
           router.push('/feed/top')
         }}
