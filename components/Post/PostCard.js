@@ -405,16 +405,12 @@ const PostCard = ({ _post, setPosts }) => {
                 <Link href={`/p/${post?._id}`} passHref>
                   {/* eslint-disable-next-line */}
                   <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                    {/* <img
-                        src={post.postImageUrl}
-                        className="image-unselectable object-cover sm:rounded-xl w-full"
-                      /> */}
                     <ImageWithPulsingLoader
                       src={post.postImageUrl}
-                      className={`image-unselectable sm:rounded-xl object-contain w-full ${
+                      className={`image-unselectable sm:rounded-lg object-contain w-full ${
                         router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                       }`}
-                      loaderClassName="sm:rounded-xl w-full h-[300px]"
+                      loaderClassName="sm:rounded-lg w-full h-[300px]"
                     />
                   </div>
                 </Link>
@@ -427,7 +423,7 @@ const PostCard = ({ _post, setPosts }) => {
               <div className="sm:pl-5 sm:pr-6 sm:pb-1">
                 <VideoWithAutoPause
                   src={post.postVideoUrl}
-                  className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                  className={`image-unselectable object-contain sm:rounded-lg w-full ${
                     router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                   }`}
                   loop

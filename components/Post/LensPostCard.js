@@ -566,10 +566,10 @@ const LensPostCard = ({ post }) => {
                                   '//'
                                 )[1]
                               }`}
-                              className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                              className={`image-unselectable object-contain sm:rounded-lg w-full ${
                                 router.pathname.startsWith('/p')
                                   ? ''
-                                  : 'max-h-[500px]'
+                                  : 'max-h-[450px]'
                               }`}
                             />
                           </div>
@@ -596,8 +596,8 @@ const LensPostCard = ({ post }) => {
                           '//'
                         )[1]
                       }`}
-                      className={`image-unselectable object-contain sm:rounded-xl w-full ${
-                        router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
+                      className={`image-unselectable object-contain sm:rounded-lg w-full ${
+                        router.pathname.startsWith('/p') ? '' : 'max-h-[450px]'
                       }`}
                       loop
                       controls
@@ -612,7 +612,7 @@ const LensPostCard = ({ post }) => {
                   getURLsFromText(postInfo?.metadata?.content).length > 0 && (
                     <ReactEmbedo
                       url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
+                      className="w-full sm:w-[450px] sm:pl-5 sm:pr-6 sm:pb-1"
                     />
                   )}
               </div>
