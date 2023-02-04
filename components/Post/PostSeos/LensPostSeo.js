@@ -19,9 +19,9 @@ const LensPostSeo = ({ post }) => {
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [
                 {
-                  url: `${IMAGE_KIT_ENDPOINT}?tr=w-1200,h-630,q-50/${LensInfuraEndpoint}${
+                  url: `${IMAGE_KIT_ENDPOINT}/${LensInfuraEndpoint}${
                     post?.metadata?.media[0]?.original.url.split('//')[1]
-                  }`,
+                  }?tr=w-1200,h-630,q-50`,
                   alt: post?.metadata?.content
                 }
               ]
