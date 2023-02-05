@@ -23,7 +23,6 @@ import { memo } from 'react'
 
 const LensPostsExplorePublicationsColumn = () => {
   const router = useRouter()
-  const [posts, setPosts] = useState([])
   const { data: myLensProfile } = useLensUserContext()
   const { posts: indexingPost } = usePostIndexing()
   const [loading, setLoading] = useState(true)
@@ -33,7 +32,8 @@ const LensPostsExplorePublicationsColumn = () => {
     sortCriteria: PublicationSortCriteria.Latest,
     timestamp: null,
     hasMore: true,
-    nextCursor: null
+    nextCursor: null,
+    posts: []
   })
   const { data } = useExplorePublicationsQuery(
     {
@@ -65,7 +65,6 @@ const LensPostsExplorePublicationsColumn = () => {
     console.log('router.query.sort', router.query.sort)
     if (!router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria
-    setPosts([])
     setLoading(true)
     let timestamp = null
     let sortCriteria = PublicationSortCriteria.Latest
@@ -94,7 +93,8 @@ const LensPostsExplorePublicationsColumn = () => {
       sortCriteria,
       timestamp,
       hasMore: true,
-      nextCursor: null
+      nextCursor: null,
+      posts: []
     })
   }, [router.query])
 
@@ -122,7 +122,10 @@ const LensPostsExplorePublicationsColumn = () => {
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
-    setPosts([...posts, ...newPosts])
+    setExploreQueryRequestParams({
+      ...exploreQueryRequestParams,
+      posts: [...exploreQueryRequestParams.posts, ...newPosts]
+    })
   }
 
   const handleExplorePublications = async () => {
@@ -172,7 +175,7 @@ const LensPostsExplorePublicationsColumn = () => {
   return (
     <div>
       <InfiniteScroll
-        dataLength={posts.length}
+        dataLength={exploreQueryRequestParams.posts.length}
         next={getMorePosts}
         hasMore={exploreQueryRequestParams.hasMore}
         loader={
@@ -233,7 +236,7 @@ const LensPostsExplorePublicationsColumn = () => {
           indexingPost.map((post, index) => {
             return <IndexingPostCard key={index} postInfo={post} />
           })}
-        {posts.map((post, index) => {
+        {exploreQueryRequestParams.posts.map((post, index) => {
           return <LensPostCard key={index} post={post} />
         })}
       </InfiniteScroll>

@@ -13,7 +13,6 @@ import LensPostCard from '../Post/LensPostCard'
 
 const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   const router = useRouter()
-  const [posts, setPosts] = useState([])
   const { data: myLensProfile } = useLensUserContext()
   const [loading, setLoading] = useState(false)
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
@@ -22,7 +21,8 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
     sortCriteria: PublicationSortCriteria.Latest,
     timestamp: null,
     hasMore: true,
-    nextCursor: null
+    nextCursor: null,
+    posts: []
   })
 
   const { data } = useExplorePublicationsQuery(
@@ -55,7 +55,6 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
     console.log('router.query.sort', router.query.sort)
     if (!router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria
-    setPosts([])
     setLoading(true)
     let timestamp = null
     let sortCriteria = PublicationSortCriteria.Latest
@@ -86,7 +85,8 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
       sortCriteria,
       timestamp,
       hasMore: true,
-      nextCursor: null
+      nextCursor: null,
+      posts: []
     })
   }, [router.query])
 
@@ -116,7 +116,10 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
-    setPosts([...posts, ...newPosts])
+    setExploreQueryRequestParams({
+      ...exploreQueryRequestParams,
+      posts: [...exploreQueryRequestParams.posts, ...newPosts]
+    })
   }
 
   const handleExplorePublications = async () => {
@@ -145,7 +148,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   return (
     <div>
       <InfiniteScroll
-        dataLength={posts.length}
+        dataLength={exploreQueryRequestParams.posts.length}
         next={getMorePosts}
         hasMore={exploreQueryRequestParams.hasMore}
         loader={
@@ -176,7 +179,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
         }
         endMessage={<></>}
       >
-        {posts.length === 0 && (
+        {exploreQueryRequestParams.posts.length === 0 && (
           <>
             <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
               <div className="w-full flex flex-row items-center space-x-4 p-4">
@@ -202,7 +205,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
             </div>
           </>
         )}
-        {posts.map((post, index) => {
+        {exploreQueryRequestParams.posts.map((post, index) => {
           return <LensPostCard key={index} post={post} />
         })}
       </InfiniteScroll>
