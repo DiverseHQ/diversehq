@@ -21,7 +21,14 @@ const MainLayout = ({ children, isLoading }) => {
       {isMobile && (
         <div className="text-p-text bg-p-bg min-h-screen transition-all duration-500">
           <NewMobileTopNav />
-          <Box sx={{ width: '100%', position: 'absolute' }}>
+          <Box
+            sx={{
+              width: '100%',
+              position: 'fixed',
+              top: '50px',
+              zIndex: '100'
+            }}
+          >
             {isLoading && <LinearProgress />}
           </Box>
           {/* <MobileTopNav /> */}
@@ -36,7 +43,14 @@ const MainLayout = ({ children, isLoading }) => {
         <div className="relative min-h-screen bg-p-bg transition-all duration-500">
           <Navbar />
 
-          <Box sx={{ width: '100%', position: 'absolute' }}>
+          <Box
+            sx={{
+              width: '100%',
+              position: 'fixed',
+              top: '60px',
+              zIndex: '100'
+            }}
+          >
             {isLoading && <LinearProgress />}
           </Box>
 
