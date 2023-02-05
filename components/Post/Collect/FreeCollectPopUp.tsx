@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react'
-import { CollectModule, Profile, Publication } from '../../../graphql/generated'
+import {
+  CollectModule,
+  Profile,
+  Publication,
+  PublicationMainFocus
+} from '../../../graphql/generated'
 import useCollectPublication from './useCollectPublication'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import { useNotify } from '../../Common/NotifyContext'
@@ -7,6 +12,12 @@ import { CircularProgress } from '@mui/material'
 import { RiUserFollowLine } from 'react-icons/ri'
 import useDevice from '../../Common/useDevice'
 import { BsCollection } from 'react-icons/bs'
+import { useLensUserContext } from '../../../lib/LensUserContext'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import { LensInfuraEndpoint } from '../../../utils/config'
+import VideoWithAutoPause from '../../Common/UI/VideoWithAutoPause'
+import { getURLsFromText } from '../../../utils/utils'
+import ReactEmbedo from '../embed/ReactEmbedo'
 type Props = {
   setIsCollected: any
   setCollectCount: any
@@ -28,6 +39,8 @@ const FreeCollectPopUp = ({
   setShowOptionsModal,
   setIsCollecting
 }: Props) => {
+  console.log('--- FreeCollectPopUp ---', publication)
+  const { data: lensProfile } = useLensUserContext()
   const { collectPublication, isSuccess, loading } =
     useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
@@ -57,6 +70,13 @@ const FreeCollectPopUp = ({
   } = useLensFollowButton({ profileId: author.id })
 
   const { isDesktop } = useDevice()
+
+  const shortTitle = (title) => {
+    if (title.length > 20) {
+      return title.substring(0, 20) + '...'
+    }
+    return title
+  }
 
   return (
     <>
@@ -115,8 +135,9 @@ const FreeCollectPopUp = ({
                 )}
             </div>
             <button
-              onClick={async () => {
+              onClick={async (e) => {
                 console.log('--- collect button clicked ---')
+                e.stopPropagation()
                 await collectPublication(publication.id)
               }}
               disabled={
@@ -154,46 +175,102 @@ const FreeCollectPopUp = ({
         <div className=" flex items-center flex-col justify-center px-4 text-p-text">
           {collectModule?.__typename === 'FreeCollectModuleSettings' &&
             !collectModule.followerOnly && (
-              <div className="font-bold text-lg mt-3 mb-2">Free collect</div>
+              <div className="mb-2 self-start ">
+                <h1 className="font-medium text-lg ">
+                  Post By u/{publication.profile?.handle}
+                </h1>
+                <p className="font-normal text-sm">
+                  {shortTitle(publication.metadata?.name)}
+                </p>
+              </div>
             )}
+
           {collectModule?.__typename === 'FreeCollectModuleSettings' &&
             collectModule.followerOnly && (
               <>
-                <div className="font-bold text-lg mt-3 mb-2">Free Collect</div>
-                <div>
-                  {isFollowedByMe ? (
-                    <div className="font-semibold text-center mb-2">
-                      You are following {author.handle} and can collect for free
-                    </div>
-                  ) : (
-                    <div className="flex flex-row items-center justify-center space-x-2 mb-2 font-medium">
-                      <button
-                        onClick={() => {
-                          handleFollowProfile(author.id)
-                        }}
-                        className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold "
-                      >
-                        {followLoading ? (
-                          <div className="flex flex-row justify-center items-center space-x-2">
-                            <CircularProgress size="18px" color="primary" />
-                            <p>Follow</p>
-                          </div>
-                        ) : author.isFollowing ? (
-                          'Follow back'
-                        ) : (
-                          <div className="flex flex-row justify-center items-center space-x-1 ">
-                            <RiUserFollowLine /> <p>Follow</p>
-                          </div>
-                        )}
-                      </button>
-                      <p>{author.handle} to Collect for Free</p>
-                    </div>
-                  )}
+                <div className="mb-2 self-start ">
+                  <h1 className="font-medium text-lg ">
+                    Post By u/{publication.profile?.handle}
+                  </h1>
+                  <p className="font-normal text-sm">
+                    {shortTitle(publication.metadata?.name)}
+                  </p>
                 </div>
+
+                {!isFollowedByMe && (
+                  <div className="flex flex-row items-center self-start space-x-2 mb-2 font-medium">
+                    <button
+                      onClick={() => {
+                        handleFollowProfile(author.id)
+                      }}
+                      className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold "
+                    >
+                      {followLoading ? (
+                        <div className="flex flex-row self-start space-x-2">
+                          <CircularProgress size="18px" color="primary" />
+                          <p>Follow</p>
+                        </div>
+                      ) : author.isFollowing ? (
+                        'Follow back'
+                      ) : (
+                        <div className="flex flex-row justify-center items-center space-x-1 ">
+                          <RiUserFollowLine /> <p>Follow</p>
+                        </div>
+                      )}
+                    </button>
+                    <p>{author.handle} to Collect for Free</p>
+                  </div>
+                )}
               </>
             )}
+          {publication?.metadata?.media.length > 0 && (
+            <div className="w-full">
+              {publication?.metadata?.mainContentFocus ===
+                PublicationMainFocus.Image && (
+                <ImageWithPulsingLoader
+                  src={`${LensInfuraEndpoint}${
+                    publication?.metadata?.media[0]?.original.url.split('//')[1]
+                  }`}
+                  className={`rounded-xl w-full mb-1 max-h-[300px] ${
+                    collectModule.followerOnly && !isFollowedByMe
+                      ? 'hidden'
+                      : ''
+                  } `}
+                />
+              )}
+            </div>
+          )}
+          {publication?.metadata?.mainContentFocus ===
+            PublicationMainFocus.Video && (
+            <div className="w-full mb-1">
+              <VideoWithAutoPause
+                src={`${LensInfuraEndpoint}${
+                  publication?.metadata?.media[0]?.original.url.split('//')[1]
+                }`}
+                className={`image-unselectable object-contain rounded-xl w-full max-h-[300px] ${
+                  collectModule.followerOnly && !isFollowedByMe ? 'hidden' : ''
+                } `}
+                loop
+                controls
+                muted
+              />
+            </div>
+          )}
+          {publication?.metadata?.mainContentFocus !==
+            PublicationMainFocus.Image &&
+            publication?.metadata?.mainContentFocus !==
+              PublicationMainFocus.Video &&
+            getURLsFromText(publication?.metadata?.content).length > 0 && (
+              <ReactEmbedo
+                url={getURLsFromText(publication?.metadata?.content)[0]}
+                className={`w-full w-[300px] pb-1 ${
+                  collectModule.followerOnly && !isFollowedByMe ? 'hidden' : ''
+                } `}
+              />
+            )}
           <button
-            onClick={async () => {
+            onClick={async (e) => {
+              e.stopPropagation()
               await collectPublication(publication.id)
             }}
             disabled={
@@ -204,10 +281,17 @@ const FreeCollectPopUp = ({
             }
             className="bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
           >
-            <div className="flex flex-row items-center space-x-2">
-              <BsCollection className="w-5 h-5" />
-              Collect
-            </div>
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <div>Collect</div>
+              </div>
+            ) : (
+              <div className="flex flex-row items-center space-x-2">
+                <BsCollection className="w-5 h-5" />
+                <p>Collect</p>
+              </div>
+            )}
           </button>
         </div>
       )}

@@ -95,6 +95,7 @@ const useCollectPublication = (collectModule: CollectModule) => {
     } catch (e) {
       console.log("Couldn't collect publication")
       notifyError(e)
+      setError(e)
       setLoading(false)
     }
   }

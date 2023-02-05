@@ -54,6 +54,7 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
   return (
     <>
       <Temp text="HoverModalWrapper" />
+
       <button
         className="relative"
         onClick={handleButtonClick}
@@ -66,13 +67,10 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
       >
         {showOptionsModal && (
           <div
-            className={`absolute ${
-              position === 'left' ? 'top-[10px] right-[20px]' : ''
-            } ${position === 'right' ? 'top-[25px] left-0' : ''} ${
-              position === 'top' ? ' -translate-x-44 -translate-y-20 ' : ''
-            } ${
-              position === 'bottom' ? 'translate-x-44 translate-y-20' : ''
-            } z-20 bg-s-bg shadow-lg rounded-lg border `}
+            className={`absolute ${position === 'left' ? 'top-[10px] right-[20px]' : ''
+              } ${position === 'right' ? 'top-[25px] left-0' : ''} ${position === 'top' ? ' -translate-x-44 -translate-y-20 ' : ''
+              } ${position === 'bottom' ? 'translate-x-44 translate-y-20' : ''
+              } z-20 bg-s-bg shadow-lg rounded-lg border `}
           >
             <HoverModal
               setIsDrawerOpen={setIsDrawerOpen}

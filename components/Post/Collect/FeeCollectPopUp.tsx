@@ -1,4 +1,5 @@
 import { CircularProgress } from '@mui/material'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { BsCollection } from 'react-icons/bs'
 import { RiUserFollowLine } from 'react-icons/ri'
@@ -7,13 +8,19 @@ import {
   CollectModule,
   Profile,
   Publication,
+  PublicationMainFocus,
   useApprovedModuleAllowanceAmountQuery
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
+import { LensInfuraEndpoint } from '../../../utils/config'
+import { getURLsFromText } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import VideoWithAutoPause from '../../Common/UI/VideoWithAutoPause'
 import useDevice from '../../Common/useDevice'
 // import PopUpWrapper from '../../Common/PopUpWrapper'
 import useLensFollowButton from '../../User/useLensFollowButton'
+import ReactEmbedo from '../embed/ReactEmbedo'
 import AllowanceButton from './AllowanceButton'
 import useCollectPublication from './useCollectPublication'
 
@@ -39,8 +46,12 @@ const FeeCollectPopUp = ({
 }: Props) => {
   if (collectModule.__typename !== 'FeeCollectModuleSettings') return null
   const { data: lensProfile } = useLensUserContext()
-  const { collectPublication, isSuccess, loading } =
-    useCollectPublication(collectModule)
+  const {
+    collectPublication,
+    isSuccess,
+    loading,
+    error: collectError
+  } = useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
   const [isAllowed, setIsAllowed] = useState(true)
   const { data: allowanceData, isLoading: allowanceLoading } =
@@ -91,6 +102,11 @@ const FeeCollectPopUp = ({
       parseFloat(balanceData?.formatted) <
         parseFloat(collectModule?.amount?.value)
     ) {
+      console.log(balanceData?.formatted, '----- USERS BALANCE ')
+      console.log(
+        collectModule?.amount?.asset?.address,
+        '----- ASSET CONTRACT ADDRESS'
+      )
       setHasAmount(false)
     } else {
       setHasAmount(true)
@@ -104,6 +120,13 @@ const FeeCollectPopUp = ({
   }, [loading])
 
   const { isDesktop } = useDevice()
+
+  const shortTitle = (title) => {
+    if (title.length > 20) {
+      return title.substring(0, 20) + '...'
+    }
+    return title
+  }
   return (
     <>
       {isDesktop ? (
@@ -188,7 +211,8 @@ const FeeCollectPopUp = ({
 
             {isAllowed && hasAmount && (
               <button
-                onClick={async () => {
+                onClick={async (e) => {
+                  e.stopPropagation()
                   await collectPublication(publication.id)
                 }}
                 disabled={
@@ -219,50 +243,107 @@ const FeeCollectPopUp = ({
         </div>
       ) : (
         <>
-          <div className="font-bold text-lg mt-3 mb-2 flex items-center justify-center">
-            Collect
+          <div className="m-2 self-start ">
+            <h1 className="font-medium text-lg ">
+              Post By u/{publication.profile?.handle}
+            </h1>
+            <p className="font-normal text-sm">
+              {shortTitle(publication.metadata?.name)}
+            </p>
           </div>
-          <div>
+          <div className="flex items-center flex-col justify-center text-p-text">
             {collectModule.followerOnly && !isFollowedByMe && (
-              <div className="flex flex-row  space-x-4">
-                <button
-                  onClick={() => {
-                    handleFollowProfile(author.id)
-                  }}
-                  className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
-                >
-                  {followLoading ? (
-                    <div className="flex flex-row justify-center items-center space-x-2">
-                      <CircularProgress size="18px" color="primary" />
-                      <p>Follow</p>
-                    </div>
-                  ) : author.isFollowing ? (
-                    'Follow back'
-                  ) : (
-                    <div className="flex flex-row justify-center items-center space-x-1 ">
-                      <RiUserFollowLine /> <p>Follow</p>
-                    </div>
-                  )}
-                </button>
-                <p className="ml-1">To Collect the Post</p>
-              </div>
+              <>
+                <div className="flex flex-row  space-x-4">
+                  <button
+                    onClick={() => {
+                      handleFollowProfile(author.id)
+                    }}
+                    className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
+                  >
+                    {followLoading ? (
+                      <div className="flex flex-row justify-center items-center space-x-2">
+                        <CircularProgress size="18px" color="primary" />
+                        <p>Follow</p>
+                      </div>
+                    ) : author.isFollowing ? (
+                      'Follow back'
+                    ) : (
+                      <div className="flex flex-row justify-center items-center space-x-1 ">
+                        <RiUserFollowLine /> <p>Follow</p>
+                      </div>
+                    )}
+                  </button>
+                  <p className="ml-1">To Collect the Post</p>
+                </div>
+              </>
             )}
             {allowanceLoading && (
               <div className="text-p-text flex flex-row Items-center">
                 <CircularProgress size="18px" color="primary" />
-                <p className="text-p-text ">Alllowance loading</p>
+                <p className="text-p-text ">Allowance loading</p>
               </div>
             )}
 
+            {publication?.metadata?.media.length > 0 && (
+              <div className="w-full px-4">
+                {publication?.metadata?.mainContentFocus ===
+                  PublicationMainFocus.Image && (
+                  <ImageWithPulsingLoader
+                    src={`${LensInfuraEndpoint}${
+                      publication?.metadata?.media[0]?.original.url.split(
+                        '//'
+                      )[1]
+                    }`}
+                    className={`rounded-xl w-full mb-1 max-h-[300px] ${
+                      (collectModule.followerOnly && !isFollowedByMe) ||
+                      !isAllowed
+                        ? 'hidden'
+                        : ''
+                    } `}
+                  />
+                )}
+              </div>
+            )}
+            {publication?.metadata?.mainContentFocus ===
+              PublicationMainFocus.Video && (
+              <div className="w-full mb-1 px-4">
+                <VideoWithAutoPause
+                  src={`${LensInfuraEndpoint}${
+                    publication?.metadata?.media[0]?.original.url.split('//')[1]
+                  }`}
+                  className={`image-unselectable object-contain rounded-xl w-full max-h-[300px] ${
+                    (collectModule.followerOnly && !isFollowedByMe) ||
+                    !isAllowed
+                      ? 'hidden'
+                      : ''
+                  } `}
+                  loop
+                  controls
+                  muted
+                />
+              </div>
+            )}
+            {publication?.metadata?.mainContentFocus !==
+              PublicationMainFocus.Image &&
+              publication?.metadata?.mainContentFocus !==
+                PublicationMainFocus.Video &&
+              getURLsFromText(publication?.metadata?.content).length > 0 && (
+                <ReactEmbedo
+                  url={getURLsFromText(publication?.metadata?.content)[0]}
+                  className={`w-full pb-1 max-h-[300px] px-4 ${
+                    (collectModule.followerOnly && !isFollowedByMe) ||
+                    !isAllowed
+                      ? 'hidden'
+                      : ''
+                  } `}
+                />
+              )}
+
             {isAllowed && hasAmount ? (
-              <div className="flex flex-col font-medium items-center m-4">
-                <div className=" text-p-text ">
-                  Balance : {parseFloat(balanceData?.formatted)} | Gifting:{' '}
-                  {collectModule?.amount?.value}
-                </div>
-                <div className=" text-p-text align-center">
-                  You can collect this post
-                </div>
+              <div className="text-p-text text-medium font-semibold">
+                Balance : {parseFloat(balanceData?.formatted)} | Gifting:{' '}
+                {collectModule?.amount?.value}
               </div>
             ) : (
               <>
@@ -289,7 +370,8 @@ const FeeCollectPopUp = ({
             {isAllowed && hasAmount && (
               <div className="px-4 w-full bg-s-bg mb-1 mt-1">
                 <button
-                  onClick={async () => {
+                  onClick={async (e) => {
+                    e.stopPropagation()
                     await collectPublication(publication.id)
                   }}
                   disabled={
@@ -302,15 +384,19 @@ const FeeCollectPopUp = ({
                     !isAllowed ? 'hidden' : ''
                   }`}
                 >
+                  {/* { show circular progress when loading otherwise show the collect } */}
                   {loading ? (
                     <div className="flex flex-row justify-center items-center space-x-2">
                       <CircularProgress size="18px" color="primary" />
-                      <p>Collecting ...</p>
+                      <p>Collecting</p>
                     </div>
                   ) : (
                     <div className="flex flex-row items-center space-x-2">
                       <BsCollection className="w-5 h-5" />
-                      <p>Collect</p>
+                      <p>
+                        Collect for {parseFloat(collectModule?.amount?.value)}
+                        {''} {collectModule?.amount?.asset?.symbol}
+                      </p>
                     </div>
                   )}
                 </button>
