@@ -67,22 +67,22 @@ const LensCollectButton = ({
           {collectModule.__typename === 'FreeCollectModuleSettings' && (
             <>
               {isCollected || hasCollectedByMe ? (
-                <BsCollectionFill className="w-5 h-5" />
+                <BsCollectionFill className="w-4 h-4" />
               ) : (
-                <BsCollection className="w-5 h-5" />
+                <BsCollection className="w-4 h-4" />
               )}
             </>
           )}
           {collectModule.__typename === 'FeeCollectModuleSettings' && (
             <>
               {isCollected || hasCollectedByMe ? (
-                <AiFillGift className="w-5 h-5" />
+                <AiFillGift className="w-4 h-4" />
               ) : (
-                <AiOutlineGift className="w-5 h-5" />
+                <AiOutlineGift className="w-4 h-4" />
               )}
             </>
           )}
-          <div className="ml-2">{collectCount}</div>
+          <div className="ml-2 font-bold">{collectCount}</div>
         </div>
       </HoverModalWrapper>
     </>

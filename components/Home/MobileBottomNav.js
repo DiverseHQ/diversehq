@@ -1,10 +1,5 @@
 import { useRouter } from 'next/router'
-import React from 'react'
-import { AiFillPlusCircle, AiOutlineBell, AiOutlineHome } from 'react-icons/ai'
-import { MdOutlineExplore } from 'react-icons/md'
-import { BsSearch } from 'react-icons/bs'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import CreatePostPopup from './CreatePostPopup'
+import React, { useState, useEffect } from 'react'
 import useNotificationsCount from '../Notification/useNotificationsCount'
 const MobileBottomNav = () => {
   const {
