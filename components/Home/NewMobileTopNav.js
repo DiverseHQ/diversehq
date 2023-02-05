@@ -83,7 +83,7 @@ const NewMobileTopNav = () => {
                     className="w-[35px] h-[35px] rounded-full"
                   />
                   {(!isSignedIn || !hasProfile) && (
-                    <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full" />
+                    <div className="absolute top-0 left-0 w-3 h-3 bg-green-500 rounded-full" />
                   )}
                 </div>
               )}
@@ -94,7 +94,8 @@ const NewMobileTopNav = () => {
               >
                 {router.pathname.startsWith('/explore') && 'Explore'}
                 {router.pathname.startsWith('/notification') && 'Notifications'}
-                {(router.pathname.startsWith('/feed') ||
+                {(router.pathname.startsWith('/feed/all') ||
+                  router.pathname.startsWith('/feed/foryou') ||
                   router.pathname === '/') && (
                   <OptionsWrapper
                     OptionPopUpModal={() => (
@@ -153,13 +154,13 @@ const NewMobileTopNav = () => {
                     setIsDrawerOpen={setIsDrawerOpen}
                   >
                     <button
-                      className={` flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl bg-s-bg  hover:bg-p-hover hover:text-p-hover-text`}
+                      className={` flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full bg-s-bg  hover:bg-p-hover hover:text-p-hover-text`}
                     >
                       <div className="flex flex-row items-center justify-center space-x-1">
                         {sortType === sortTypes.LATEST ? (
-                          <HiOutlineSparkles className="h-5 w-5" />
+                          <HiOutlineSparkles className="h-4 w-4" />
                         ) : (
-                          <AiOutlineFire className="h-5 w-5" />
+                          <AiOutlineFire className="h-4 w-4" />
                         )}
                         <div>{sortType}</div>
                       </div>
