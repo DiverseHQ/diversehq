@@ -1,13 +1,14 @@
+import { CircularProgress } from '@mui/material'
 import React from 'react'
 import useLensFollowButton from './useLensFollowButton'
-
+import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri'
 const LensFollowButton = ({ lensProfile }) => {
   const {
     isFollowedByMe,
     handleFollowProfile,
     handleUnfollowProfile,
     loading
-  } = useLensFollowButton(lensProfile)
+  } = useLensFollowButton({ profileId: lensProfile.id })
   return (
     <>
       {lensProfile && isFollowedByMe ? (
@@ -17,7 +18,16 @@ const LensFollowButton = ({ lensProfile }) => {
           }}
           className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
         >
-          {loading ? 'Unfollowing' : 'Unfollow'}
+          {loading ? (
+            <div className="flex flex-row justify-center items-center space-x-2">
+              <CircularProgress size="18px" color="primary" />
+              <p>UnFollow</p>
+            </div>
+          ) : (
+            <div className="flex flex-row justify-center items-center space-x-1 ">
+              <RiUserUnfollowLine /> <p>UnFollow</p>
+            </div>
+          )}
         </button>
       ) : (
         <button
@@ -26,11 +36,18 @@ const LensFollowButton = ({ lensProfile }) => {
           }}
           className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
         >
-          {loading
-            ? 'Following'
-            : lensProfile.isFollowing
-            ? 'Follow back'
-            : 'Follow'}
+          {loading ? (
+            <div className="flex flex-row justify-center items-center space-x-2">
+              <CircularProgress size="18px" color="primary" />
+              <p>Follow</p>
+            </div>
+          ) : lensProfile.isFollowing ? (
+            'Follow back'
+          ) : (
+            <div className="flex flex-row justify-center items-center space-x-1 ">
+              <RiUserFollowLine /> <p>Follow</p>
+            </div>
+          )}
         </button>
       )}
     </>

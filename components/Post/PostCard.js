@@ -62,7 +62,6 @@ const PostCard = ({ _post, setPosts }) => {
   )
 
   useEffect(() => {
-    console.log('post', post)
     setShowMore(
       (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES_FOR_POST ||
         post?.content?.length > 400 ||
@@ -340,41 +339,39 @@ const PostCard = ({ _post, setPosts }) => {
           <div>
             <div className="mb-2 px-3 sm:pl-3.5">
               {!router.pathname.startsWith('/p') ? (
-                <Link href={`/p/${post._id}`} passHref>
-                  <>
-                    {post?.title?.length <= 60 && (
-                      <div className="font-medium text-base sm:text-lg w-full break-words">
-                        {post?.title}
-                      </div>
-                    )}
-                    {(post?.content || post?.title?.length > 60) && (
-                      <>
-                        <div
+                <>
+                  {post?.title?.length <= 60 && (
+                    <div className="font-medium text-base sm:text-lg w-full break-words">
+                      {post?.title}
+                    </div>
+                  )}
+                  {(post?.content || post?.title?.length > 60) && (
+                    <>
+                      <div
+                        className={`${
+                          showMore ? 'h-[150px]' : ''
+                        } sm:max-w-[550px]  overflow-hidden break-words`}
+                      >
+                        <Markup
                           className={`${
-                            showMore ? 'h-[150px]' : ''
-                          } sm:max-w-[550px]  overflow-hidden break-words`}
+                            showMore ? 'line-clamp-5' : ''
+                          } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
                         >
-                          <Markup
-                            className={`${
-                              showMore ? 'line-clamp-5' : ''
-                            } linkify line-clamp-2 whitespace-pre-wrap max-h-[10px] overflow-hide break-words text-sm sm:text-base`}
-                          >
-                            {post?.content ? post?.content : post?.title}
-                          </Markup>
-                          {/* todo showmore for clamped text */}
-                        </div>
-                        {showMore && (
-                          <Link
-                            href={`/p/${post._id}`}
-                            className="text-blue-400 text-sm sm:text-base"
-                          >
-                            Show more
-                          </Link>
-                        )}
-                      </>
-                    )}
-                  </>
-                </Link>
+                          {post?.content ? post?.content : post?.title}
+                        </Markup>
+                        {/* todo showmore for clamped text */}
+                      </div>
+                      {showMore && (
+                        <Link
+                          href={`/p/${post._id}`}
+                          className="text-blue-400 text-sm sm:text-base"
+                        >
+                          Show more
+                        </Link>
+                      )}
+                    </>
+                  )}
+                </>
               ) : (
                 <>
                   {post?.title?.length <= 60 && (
@@ -416,16 +413,12 @@ const PostCard = ({ _post, setPosts }) => {
                 <Link href={`/p/${post?._id}`} passHref>
                   {/* eslint-disable-next-line */}
                   <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                    {/* <img
-                        src={post.postImageUrl}
-                        className="image-unselectable object-cover sm:rounded-xl w-full"
-                      /> */}
                     <ImageWithPulsingLoader
                       src={post.postImageUrl}
-                      className={`image-unselectable sm:rounded-xl object-contain w-full ${
+                      className={`image-unselectable sm:rounded-lg object-contain w-full ${
                         router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                       }`}
-                      loaderClassName="sm:rounded-xl w-full h-[300px]"
+                      loaderClassName="sm:rounded-lg w-full h-[300px]"
                     />
                   </div>
                 </Link>
@@ -438,7 +431,7 @@ const PostCard = ({ _post, setPosts }) => {
               <div className="sm:pl-5 sm:pr-6 sm:pb-1">
                 <VideoWithAutoPause
                   src={post.postVideoUrl}
-                  className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                  className={`image-unselectable object-contain sm:rounded-lg w-full ${
                     router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                   }`}
                   loop

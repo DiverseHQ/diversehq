@@ -486,44 +486,42 @@ const LensPostCard = ({ post }) => {
               <div>
                 <div className="mb-2 px-3 sm:pl-3.5 ">
                   {!router.pathname.startsWith('/p') ? (
-                    <Link href={`/p/${postInfo?.id}`} passHref>
-                      <>
-                        {postInfo?.metadata?.name && (
-                          <div className="font-medium text-base sm:text-lg w-full break-words">
-                            {postInfo?.metadata?.name}
-                          </div>
-                        )}
-                        {postInfo?.metadata?.name !==
-                          postInfo?.metadata?.content && (
-                          <div
+                    <>
+                      {postInfo?.metadata?.name && (
+                        <div className="font-medium text-base sm:text-lg w-full break-words">
+                          {postInfo?.metadata?.name}
+                        </div>
+                      )}
+                      {postInfo?.metadata?.name !==
+                        postInfo?.metadata?.content && (
+                        <div
+                          className={`${
+                            showMore ? 'h-[150px]' : ''
+                          } sm:max-w-[550px] overflow-hidden break-words`}
+                        >
+                          <Markup
                             className={`${
-                              showMore ? 'h-[150px]' : ''
-                            } sm:max-w-[550px] overflow-hidden break-words`}
+                              showMore ? 'line-clamp-5' : ''
+                            } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                           >
-                            <Markup
-                              className={`${
-                                showMore ? 'line-clamp-5' : ''
-                              } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
-                            >
-                              {/* remove title text from content */}
+                            {/* remove title text from content */}
 
-                              {postInfo?.metadata?.content?.replace(
-                                new RegExp(`^${postInfo?.metadata?.name}`),
-                                ''
-                              )}
-                            </Markup>
-                          </div>
-                        )}
-                        {showMore && (
-                          <Link
-                            href={`/p/${postInfo?.id}`}
-                            className="text-blue-400 text-sm sm:text-base"
-                          >
-                            Show more
-                          </Link>
-                        )}
-                      </>
-                    </Link>
+                            {postInfo?.metadata?.content?.replace(
+                              new RegExp(`^${postInfo?.metadata?.name}`),
+                              ''
+                            )}
+                          </Markup>
+                        </div>
+                      )}
+                      {showMore && (
+                        <Link
+                          href={`/p/${postInfo?.id}`}
+                          className="text-blue-400 text-sm sm:text-base"
+                        >
+                          Show more
+                        </Link>
+                      )}
+                    </>
                   ) : (
                     <>
                       {postInfo?.metadata?.name !==
@@ -544,7 +542,10 @@ const LensPostCard = ({ post }) => {
                               showMore ? 'line-clamp-5' : ''
                             } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                           >
-                            {postInfo?.metadata?.content}
+                            {postInfo?.metadata?.content?.replace(
+                              new RegExp(`^${postInfo?.metadata?.name}`),
+                              ''
+                            )}
                           </Markup>
                         </div>
                       )}
@@ -573,10 +574,10 @@ const LensPostCard = ({ post }) => {
                                   '//'
                                 )[1]
                               }`}
-                              className={`image-unselectable object-contain sm:rounded-xl w-full ${
+                              className={`image-unselectable object-contain sm:rounded-lg w-full ${
                                 router.pathname.startsWith('/p')
                                   ? ''
-                                  : 'max-h-[500px]'
+                                  : 'max-h-[450px]'
                               }`}
                             />
                           </div>
@@ -603,8 +604,8 @@ const LensPostCard = ({ post }) => {
                           '//'
                         )[1]
                       }`}
-                      className={`image-unselectable object-contain sm:rounded-xl w-full ${
-                        router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
+                      className={`image-unselectable object-contain sm:rounded-lg w-full ${
+                        router.pathname.startsWith('/p') ? '' : 'max-h-[450px]'
                       }`}
                       loop
                       controls
@@ -619,7 +620,7 @@ const LensPostCard = ({ post }) => {
                   getURLsFromText(postInfo?.metadata?.content).length > 0 && (
                     <ReactEmbedo
                       url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
+                      className="w-full sm:w-[450px] sm:pl-5 sm:pr-6 sm:pb-1"
                     />
                   )}
               </div>

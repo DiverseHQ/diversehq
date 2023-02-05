@@ -11,7 +11,7 @@ const ProfilePageNextSeo = ({ profile, lensProfile }) => {
             profile.name
               ? profile.name
               : stringToLength(profile.walletAddress, 6)
-          } | ${lensProfile?.handle}`}
+          } ${lensProfile?.handle ? ' | ' + lensProfile?.handle : ''}`}
           description={profile.bio}
           openGraph={{
             title: `${profile.name} | ${lensProfile?.handle}`,

@@ -9,11 +9,16 @@ import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadc
 import { useNotify } from '../../Common/NotifyContext'
 
 const useCollectPublication = (collectModule: CollectModule) => {
-  const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
+  const { hasProfile, isSignedIn } = useLensUserContext()
   const { mutateAsync: proxyAction } = useProxyActionMutation()
   const { mutateAsync: createCollect } = useCreateCollectTypedDataMutation()
-  const { error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
+  const [error, setError] = useState<Error | null>(null)
+  const {
+    error: signInError,
+    result,
+    type,
+    signTypedDataAndBroadcast
+  } = useSignTypedDataAndBroadcast()
   const { notifyError }: any = useNotify()
   const [loading, setLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -27,25 +32,34 @@ const useCollectPublication = (collectModule: CollectModule) => {
         }
       }
     })
+    setLoading(false)
+    setIsSuccess(true)
   }
 
   const handleCollect = async (publicationId: string) => {
     setLoading(true)
-    console.log('Collecting', publicationId)
-    const collectResult = (
-      await createCollect({
-        request: {
-          publicationId: publicationId
-        }
-      })
-    ).createCollectTypedData
-    console.log('Collect Result', collectResult)
+    try {
+      console.log('Collecting', publicationId)
+      const collectResult = (
+        await createCollect({
+          request: {
+            publicationId: publicationId
+          }
+        })
+      ).createCollectTypedData
+      console.log('Collect Result', collectResult)
 
-    signTypedDataAndBroadcast(collectResult.typedData, {
-      id: collectResult.id,
-      type: 'collect'
-    })
+      signTypedDataAndBroadcast(collectResult.typedData, {
+        id: collectResult.id,
+        type: 'collect'
+      })
+    } catch (e) {
+      console.log(e)
+      setError(e)
+      setLoading(false)
+    }
   }
+
   useEffect(() => {
     if (type === 'collect' && result) {
       console.log('Successfully Collected', result)
@@ -55,35 +69,36 @@ const useCollectPublication = (collectModule: CollectModule) => {
   }, [type, result])
 
   useEffect(() => {
-    if (!error) return
-    console.error(error)
-    notifyError(error)
+    if (!signInError) return
+    console.log(signInError)
+    setError(signInError)
     setLoading(false)
-  }, [error])
+  }, [signInError])
 
   const collectPublication = async (publicationId: string) => {
     try {
-      if (!hasProfile || !isSignedIn || !lensProfile) return
+      console.log('collectPublication', publicationId)
+      if (!hasProfile || !isSignedIn) return
       if (collectModule.__typename === 'FreeCollectModuleSettings') {
         try {
+          console.log('handle free collect')
           setLoading(true)
           await handleFreeCollect(publicationId)
-          setIsSuccess(true)
         } catch (e) {
           console.error(e)
           notifyError(e)
-        } finally {
           setLoading(false)
         }
       } else {
         await handleCollect(publicationId)
       }
     } catch (e) {
-      console.error(e)
+      console.log("Couldn't collect publication")
       notifyError(e)
+      setLoading(false)
     }
   }
-  return { collectPublication, loading, isSuccess }
+  return { collectPublication, loading, isSuccess, error }
 }
 
 export default useCollectPublication

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import {
   useCreateUnfollowTypedDataMutation,
+  useProfileQuery,
   useProxyActionMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 
-const useLensFollowButton = (lensProfile) => {
+const useLensFollowButton = (request) => {
   const { mutateAsync: proxyAction } = useProxyActionMutation()
   const { mutateAsync: unFollow } = useCreateUnfollowTypedDataMutation()
   const { isSignedTx, error, result, type, signTypedDataAndBroadcast } =
@@ -13,10 +14,14 @@ const useLensFollowButton = (lensProfile) => {
   const [isFollowedByMe, setIsFollowedByMe] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const { data } = useProfileQuery({
+    request: request
+  })
+
   useEffect(() => {
-    if (!lensProfile) return
-    setIsFollowedByMe(lensProfile.isFollowedByMe)
-  }, [lensProfile])
+    if (!data?.profile) return
+    setIsFollowedByMe(!!data?.profile?.isFollowedByMe)
+  }, [data])
 
   const handleFollowProfile = async (profileId) => {
     await proxyAction({
@@ -48,6 +53,7 @@ const useLensFollowButton = (lensProfile) => {
         type: 'unfollow'
       })
     } catch (e) {
+      setLoading(false)
       console.log(e)
     }
   }

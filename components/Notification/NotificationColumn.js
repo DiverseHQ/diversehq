@@ -9,7 +9,7 @@ import useNotificationCount from './useNotificationsCount'
 const NotificationColumn = () => {
   const [notifications, setNotifications] = useState([])
   const [hasMore, setHasMore] = useState(true)
-  const { setNotificationsCount } = useNotificationCount()
+  const { updateNotificationCount } = useNotificationCount()
   const { user } = useProfile()
 
   const getMoreNotifications = async () => {
@@ -31,7 +31,7 @@ const NotificationColumn = () => {
 
   useEffect(() => {
     if (user) {
-      setNotificationsCount(0)
+      updateNotificationCount()
       getMoreNotifications()
     }
   }, [user])

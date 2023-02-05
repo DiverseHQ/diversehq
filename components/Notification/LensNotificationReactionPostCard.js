@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { ImArrowUp, ImArrowDown } from 'react-icons/im'
 
-const LensNotificationReactionPostCard = ({ notification }) => {
+const LensNotificationReactionPostCard = ({ notification, isRead }) => {
   const router = useRouter()
   const [showMore, setShowMore] = useState(
     (countLinesFromMarkdown(notification?.publication?.metadata?.content) >
@@ -80,6 +80,7 @@ const LensNotificationReactionPostCard = ({ notification }) => {
       Icon={() =>
         notification?.reaction === 'UPVOTE' ? <ImArrowUp /> : <ImArrowDown />
       }
+      isRead={isRead}
     />
   )
 }

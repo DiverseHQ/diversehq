@@ -266,7 +266,7 @@ const CreatePostPopup = () => {
             request: createPostRequest
           })
         ).createPostViaDispatcher
-        console.log(dispatcherResult)
+        console.log('dispatcherResult', dispatcherResult)
 
         setLoading(false)
         hideModal()
@@ -364,6 +364,10 @@ const CreatePostPopup = () => {
     ])
     setLoadingJoinedCommunities(false)
   }
+
+  useEffect(() => {
+    console.log('collectSettings', collectSettings)
+  }, [collectSettings])
 
   const customOptions = () => {
     return (

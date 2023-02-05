@@ -9,7 +9,8 @@ const NotificationFilterNav = () => {
   const router = useRouter()
   const { pathname } = router
   const [active, setActive] = useState('lens')
-  const { notificationsCount, setNotificationsCount } = useNotificationsCount()
+  const { notificationsCount, updateNotificationCount } =
+    useNotificationsCount()
 
   useEffect(() => {
     if (pathname.endsWith('/lens')) {
@@ -42,8 +43,8 @@ const NotificationFilterNav = () => {
         className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
           active === 'offchain' && 'bg-p-bg'
         }  hover:bg-p-hover hover:text-p-hover-text relative`}
-        onClick={() => {
-          setNotificationsCount(0)
+        onClick={async () => {
+          await updateNotificationCount()
           router.push('/notification/offchain')
         }}
       >

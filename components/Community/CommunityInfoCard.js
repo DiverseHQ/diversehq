@@ -20,7 +20,13 @@ import useDevice from '../Common/useDevice'
 import { BiChevronDown } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
-import ImgWithZoon from '../Common/UI/ImgWithZoon'
+// import ImgWithZoon from '../Common/UI/ImgWithZoon'
+import { RiMore2Fill } from 'react-icons/ri'
+import { IoIosShareAlt } from 'react-icons/io'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import OptionsWrapper from '../Common/OptionsWrapper'
+import ImageWithLoaderAndZoom from '../Common/UI/ImageWithLoaderAndZoom'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
@@ -182,6 +188,18 @@ const CommunityInfoCard = ({ _community }) => {
   //   setCurrentLevel(calculateLevel(currentXP, levelThreshold))
   // }, [levelThreshold])
 
+  const shareCommunity = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
+        text: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/c/${community?.name}`
+      })
+    } else {
+      notifyInfo('Sharing is not supported on your device')
+    }
+  }
+
   return (
     <>
       {community && (
@@ -196,7 +214,7 @@ const CommunityInfoCard = ({ _community }) => {
         >
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
-            <ImgWithZoon
+            <ImageWithPulsingLoader
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile
                   ? 'rounded-t-[20px]'
@@ -207,7 +225,7 @@ const CommunityInfoCard = ({ _community }) => {
               src={community.bannerImageUrl}
             />
           ) : (
-            <ImgWithZoon
+            <ImageWithLoaderAndZoom
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile ? 'rounded-t-[20px]' : ''
               }`}
@@ -219,12 +237,12 @@ const CommunityInfoCard = ({ _community }) => {
               <div className="shrink-0 border-s-bg border-4 rounded-full sm:-translate-y-8 -translate-y-6">
                 {/* only enable the zoom on the community page not on any other page */}
                 {!router.pathname.startsWith('/c') ? (
-                  <ImgWithZoon
+                  <ImageWithPulsingLoader
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />
                 ) : (
-                  <ImgWithZoon
+                  <ImageWithLoaderAndZoom
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />
@@ -259,6 +277,25 @@ const CommunityInfoCard = ({ _community }) => {
               >
                 {isJoined ? 'Leave' : 'Join'}
               </button>
+              <OptionsWrapper
+                OptionPopUpModal={() => (
+                  <MoreOptionsModal
+                    className="z-50"
+                    list={[
+                      {
+                        label: 'Share',
+                        onClick: shareCommunity,
+                        icon: () => <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                      }
+                    ]}
+                  />
+                )}
+                position="left"
+              >
+                <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                  <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
+                </div>
+              </OptionsWrapper>
             </div>
           </div>
 

@@ -33,6 +33,7 @@ const NotificationCommentedPostCard = ({ notification }) => {
           </div>
         )}
         Icon={() => <BiCommentAdd />}
+        isRead={notification?.isRead}
       />
     </>
   )

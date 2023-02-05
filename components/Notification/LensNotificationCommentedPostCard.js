@@ -3,7 +3,7 @@ import React from 'react'
 import { BiCommentAdd } from 'react-icons/bi'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
-const LensNotificationCommentedPostCard = ({ notification }) => {
+const LensNotificationCommentedPostCard = ({ notification, isRead }) => {
   console.log('notification', notification)
   return (
     <CommonNotificationCardLayoutUI
@@ -32,6 +32,7 @@ const LensNotificationCommentedPostCard = ({ notification }) => {
         </div>
       )}
       Icon={() => <BiCommentAdd />}
+      isRead={isRead}
     />
   )
 }

@@ -1,11 +1,18 @@
 import { useRouter } from 'next/router'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { AiFillPlusCircle, AiOutlineBell, AiOutlineHome } from 'react-icons/ai'
+import { MdOutlineExplore } from 'react-icons/md'
+import { BsSearch } from 'react-icons/bs'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import CreatePostPopup from './CreatePostPopup'
 import useNotificationsCount from '../Notification/useNotificationsCount'
 const MobileBottomNav = () => {
-  const [showDot, setShowDot] = useState(true)
+  const {
+    notificationsCount,
+    lensNotificationsCount,
+    updateLensNotificationCount
+  } = useNotificationsCount()
   const [active, setActive] = useState('home')
-
-  const { notificationsCount, setNotificationsCount } = useNotificationsCount()
   const router = useRouter()
   const { pathname } = router
 
@@ -15,9 +22,8 @@ const MobileBottomNav = () => {
   const routeToExplore = () => {
     router.push('/explore')
   }
-  const routeToNotifications = () => {
-    setShowDot(false)
-    setNotificationsCount(0)
+  const routeToNotifications = async () => {
+    await updateLensNotificationCount()
     router.push('/notification')
   }
 
@@ -80,14 +86,10 @@ const MobileBottomNav = () => {
           onClick={routeToNotifications}
           className="cursor-pointer"
         />
-        {notificationsCount > 0 && (
+        {notificationsCount + lensNotificationsCount > 0 && (
           <div className="absolute top-0 left-0.5 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full">
-            <span>{notificationsCount}</span>
+            <span>{notificationsCount + lensNotificationsCount}</span>
           </div>
-        )}
-        {(notificationsCount === 0 || !notificationsCount) && showDot && (
-          // a green circle
-          <div className="absolute top-0 left-0.5 w-[8px] h-[8px] bg-red-500 rounded-full" />
         )}
       </div>
     </div>

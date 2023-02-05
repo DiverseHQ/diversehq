@@ -1,6 +1,5 @@
 import React from 'react'
 import useDevice from '../Common/useDevice'
-// import LeftSidebar from './LeftSidebar'
 import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
@@ -16,7 +15,7 @@ import CreatePostButton from '../Common/UI/CreatePostButton'
 // import { useProfile } from '../Common/WalletContext'
 
 const MainLayout = ({ children, isLoading }) => {
-  const { isDesktop } = useDevice()
+  const { isMobile } = useDevice()
 
   // const [showMessages, setShowMessages] = useState(false)
 
@@ -127,9 +126,15 @@ const MainLayout = ({ children, isLoading }) => {
   //   messagesXMTP()
   // }, [])
 
+  // only show if mounted
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => setMounted(true), [])
+
+  if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
+    return null
   return (
     <>
-      {!isDesktop && (
+      {isMobile && (
         <div className="text-p-text bg-p-bg min-h-screen transition-all duration-500">
           <NewMobileTopNav />
           <Box sx={{ width: '100%', position: 'absolute' }}>
@@ -144,7 +149,7 @@ const MainLayout = ({ children, isLoading }) => {
           <MobileBottomNav />
         </div>
       )}
-      {isDesktop && (
+      {!isMobile && (
         <div className="relative min-h-screen bg-p-bg transition-all duration-500">
           <Navbar />
 

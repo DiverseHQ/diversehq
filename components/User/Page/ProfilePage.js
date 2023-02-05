@@ -52,13 +52,17 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const { data } = useProfileQuery(
     {
       request: {
-        profileId: _lensProfile.id
+        profileId: lensProfile?.id
       }
     },
     {
-      enabled: !!_lensProfile
+      enabled: !!lensProfile?.id
     }
   )
+
+  useEffect(() => {
+    console.log('lensProfile', lensProfile)
+  }, [lensProfile])
 
   useEffect(() => {
     if (data?.profile) {
@@ -71,6 +75,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
       setProfile(_profile)
     }
     if (_lensProfile) {
+      console.log('setLensProfile', _lensProfile)
       setLensProfile(_lensProfile)
     }
   }, [_profile, _lensProfile])
@@ -194,6 +199,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                   {hasProfile &&
                     isSignedIn &&
                     myLensProfile &&
+                    lensProfile &&
                     lensProfile.ownedBy?.toLowerCase() !==
                       user?.walletAddress?.toLowerCase() && (
                       <>
@@ -308,7 +314,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
 
               {/* lens filter */}
 
-              {lensProfile?.id && (
+              {
                 <div
                   className={`font-bold text-sm sm:text-base flex flex-row  px-3 sm:px-6 bg-white dark:bg-s-bg sm:rounded-xl mt-2 sm:mt-6 py-1 sm:py-3 w-full justify-start space-x-9 items-center ${
                     !isMobile
@@ -356,7 +362,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     <div>Collected</div>
                   </button>
                 </div>
-              )}
+              }
 
               {profile.walletAddress && active === 'offchain' && (
                 <PostsColumn

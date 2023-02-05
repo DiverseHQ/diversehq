@@ -8,11 +8,12 @@ import Markup from '../Lexical/Markup'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
 const LensNotificationCollectCard = ({
-  notification
+  notification,
+  isRead
 }: {
   notification: Notification
+  isRead: boolean
 }) => {
-  console.log('collect notification', notification)
   if (notification.__typename !== 'NewCollectNotification') return null
   const [showMore, setShowMore] = useState(
     countLinesFromMarkdown(
@@ -88,6 +89,7 @@ const LensNotificationCollectCard = ({
       )}
       createdAt={notification.createdAt}
       Icon={() => <BsCollectionFill />}
+      isRead={isRead}
     />
   )
 }

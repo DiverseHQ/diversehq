@@ -78,7 +78,7 @@ export const WalletProvider = ({ children }) => {
     }
   }
 
-  const fetchWeb3Token = async (useEffectCalled) => {
+  const fetchWeb3Token = async (useEffectCalled = false) => {
     try {
       let existingTokenOnLocalStorage = null
       existingTokenOnLocalStorage = getLocalToken()
@@ -105,7 +105,7 @@ export const WalletProvider = ({ children }) => {
         console.log('error from verfiying token', error)
       }
       console.log('useEffectCalled', useEffectCalled)
-      if (useEffectCalled === true) return
+      if (useEffectCalled) return
 
       if (!existingTokenOnLocalStorage) {
         console.log('no existing token on local storage')

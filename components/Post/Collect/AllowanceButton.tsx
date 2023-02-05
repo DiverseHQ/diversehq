@@ -1,4 +1,6 @@
-import React from 'react'
+import { CircularProgress } from '@mui/material'
+import React, { useState } from 'react'
+import { BiPlus } from 'react-icons/bi'
 import { useSendTransaction, useWaitForTransaction } from 'wagmi'
 import { useGenerateModuleCurrencyApprovalDataQuery } from '../../../graphql/generated'
 
@@ -7,8 +9,8 @@ import { useGenerateModuleCurrencyApprovalDataQuery } from '../../../graphql/gen
 // take number input to allow that much amount
 // make a separate ui for wallet balance, allowance balance, and collect balance
 const AllowanceButton = ({ module, allowed, setAllowed }) => {
+  console.log('Allowance button rendered')
   // const [value, setValue] = React.useState(0)
-  console.log('AllowanceButton', module)
   const generateModuleQuery = useGenerateModuleCurrencyApprovalDataQuery({
     request: {
       currency: module.currency,
@@ -16,6 +18,8 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
       collectModule: module.module
     }
   })
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const {
     data: txData,
@@ -25,6 +29,7 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
     request: {},
     mode: 'recklesslyUnprepared',
     onError: (e) => {
+      setIsLoading(false)
       console.log(e)
     }
   })
@@ -32,15 +37,19 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
   const { isLoading: waitLoading } = useWaitForTransaction({
     hash: txData?.hash,
     onSuccess: () => {
-      setAllowed(!allowed)
+      setIsLoading(false)
+      setAllowed(true)
     },
     onError: (e) => {
+      setIsLoading(false)
       console.log(e)
     }
   })
 
   const handleAllowance = async () => {
     try {
+      if (allowed) return
+      setIsLoading(true)
       const data = generateModuleQuery?.data?.generateModuleCurrencyApprovalData
       sendTransaction?.({
         recklesslySetUnpreparedRequest: {
@@ -54,23 +63,36 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
     }
   }
   return (
-    <div className="flex flex-row items-center">
-      <button
-        onClick={handleAllowance}
-        className=""
-        disabled={waitLoading || transactionLoading}
-      >
-        {!(waitLoading || transactionLoading) && 'Allow to collect'}
-        {waitLoading && 'Waiting for transaction'}
-        {transactionLoading && 'Sending transaction'}
-      </button>
-      {/* <input
-        type={'number'}
-        value={value}
-        onChange={(e) => setValue(Number(e.target.value))}
-        placeholder={'Amount'}
-      /> */}
-    </div>
+    <button
+      onClick={handleAllowance}
+      className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
+      disabled={waitLoading || transactionLoading}
+    >
+      {!(waitLoading || transactionLoading || isLoading) && (
+        <div className="flex flex-row space-x-1">
+          <BiPlus className="w-5 h-5" />
+          <p>Allow</p>
+        </div>
+      )}
+      {waitLoading && (
+        <div className="flex flex-row space-x-1">
+          <CircularProgress size="18px" color="primary" />
+          <p>Waiting for Transaction</p>
+        </div>
+      )}
+      {transactionLoading && (
+        <div className="flex flex-row space-x-1">
+          <CircularProgress size="18px" color="primary" />
+          <p>Sending Transaction</p>
+        </div>
+      )}
+      {!waitLoading && !transactionLoading && isLoading && (
+        <div className="flex flex-row space-x-1">
+          <CircularProgress size="18px" color="primary" />
+          <p>Waiting for confirmation</p>
+        </div>
+      )}
+    </button>
   )
 }
 

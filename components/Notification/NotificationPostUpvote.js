@@ -90,6 +90,7 @@ const NotificationPostUpvote = ({ notification }) => {
         )}
         createdAt={notification?.createdAt}
         Icon={() => <ImArrowUp />}
+        isRead={notification?.isRead}
       />
     </>
   )

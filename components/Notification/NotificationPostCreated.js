@@ -6,7 +6,7 @@ import { countLinesFromMarkdown } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
 import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
-import { IoCreateOutline } from 'react-icons/io'
+import { BsFilePlus } from 'react-icons/bs'
 
 const NotificationPostCreated = ({ notification }) => {
   const router = useRouter()
@@ -94,7 +94,8 @@ const NotificationPostCreated = ({ notification }) => {
           )}
         </>
       )}
-      Icon={() => <IoCreateOutline />}
+      Icon={() => <BsFilePlus />}
+      isRead={notification?.isRead}
     />
   )
 }

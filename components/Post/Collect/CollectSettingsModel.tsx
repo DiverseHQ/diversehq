@@ -47,11 +47,28 @@ const CurrencyOptions = [
   }
 ]
 
-const CollectSettingsModel = ({ setCollectSettings }) => {
-  const [followerOnly, setFollowerOnly] = useState(false)
-  const [monetize, setMonetize] = useState(false)
-  const [price, setPrice] = useState(0)
-  const [currency, setCurrency] = useState<string>()
+const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
+  let _followerOnly = false
+  if (collectSettings) {
+    if (collectSettings.feeCollectModule) {
+      _followerOnly = collectSettings.feeCollectModule.followerOnly
+    } else if (collectSettings.freeCollectModule) {
+      _followerOnly = collectSettings.freeCollectModule.followerOnly
+    }
+  }
+  const [followerOnly, setFollowerOnly] = useState(_followerOnly)
+  const [monetize, setMonetize] = useState(
+    collectSettings?.feeCollectModule ? true : false
+  )
+  const [price, setPrice] = useState(
+    collectSettings?.feeCollectModule?.amount?.value
+      ? Number(collectSettings?.feeCollectModule?.amount?.value)
+      : 0
+  )
+  const [currency, setCurrency] = useState<string>(
+    collectSettings?.feeCollectModule?.amount?.currency ||
+      '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e'
+  ) // default to USDC
   const { data: lensProfile } = useLensUserContext()
 
   useEffect(() => {
@@ -76,7 +93,7 @@ const CollectSettingsModel = ({ setCollectSettings }) => {
         }
       })
     }
-  }, [followerOnly, monetize, price, currency])
+  }, [followerOnly, monetize, price, currency, lensProfile])
   return (
     <div className="m-4 flex flex-col">
       <div className="flex flex-col gap-y-4">
