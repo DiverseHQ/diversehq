@@ -1,6 +1,6 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import { LensInfuraEndpoint } from '../../../utils/config'
+import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 
 const LensPostSeo = ({ post }) => {
@@ -8,6 +8,10 @@ const LensPostSeo = ({ post }) => {
   return (
     <NextSeo
       title={stringToLength(post?.metadata?.content, 60)}
+      twitter={{
+        cardType: 'summary_large_image',
+        handle: '@useDiverseHQ'
+      }}
       openGraph={{
         url: `https://app.diversehq.xyz/p/${post?.id}`,
         title: stringToLength(post?.metadata?.content, 60),
@@ -15,9 +19,9 @@ const LensPostSeo = ({ post }) => {
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [
                 {
-                  url: `${LensInfuraEndpoint}${
+                  url: `${IMAGE_KIT_ENDPOINT}/${LensInfuraEndpoint}${
                     post?.metadata?.media[0]?.original.url.split('//')[1]
-                  }`,
+                  }?tr=w-1200,h-630,q-50`,
                   alt: post?.metadata?.content
                 }
               ]

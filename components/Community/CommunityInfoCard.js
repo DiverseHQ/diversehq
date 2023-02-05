@@ -13,21 +13,18 @@ import {
   usePopUpModal
 } from '../../components/Common/CustomPopUpProvider'
 import EditCommunity from './EditCommunity'
-// import { dateToSince } from '../../utils/utils'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
 import { BiChevronDown } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
-// import ImgWithZoon from '../Common/UI/ImgWithZoon'
 import { RiMore2Fill } from 'react-icons/ri'
 import { IoIosShareAlt } from 'react-icons/io'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import OptionsWrapper from '../Common/OptionsWrapper'
-import ImageWithLoaderAndZoom from '../Common/UI/ImageWithLoaderAndZoom'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-
+import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()
@@ -44,6 +41,7 @@ const CommunityInfoCard = ({ _community }) => {
   const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   const [numberOfPosts, setNumberOfPosts] = useState(0)
 
@@ -225,7 +223,7 @@ const CommunityInfoCard = ({ _community }) => {
               src={community.bannerImageUrl}
             />
           ) : (
-            <ImageWithLoaderAndZoom
+            <ImageWithFullScreenZoom
               className={`h-20 sm:h-28 w-full object-cover ${
                 !isMobile ? 'rounded-t-[20px]' : ''
               }`}
@@ -242,7 +240,7 @@ const CommunityInfoCard = ({ _community }) => {
                     src={community.logoImageUrl}
                   />
                 ) : (
-                  <ImageWithLoaderAndZoom
+                  <ImageWithFullScreenZoom
                     className="rounded-full bg-s-bg w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover"
                     src={community.logoImageUrl}
                   />
@@ -291,6 +289,10 @@ const CommunityInfoCard = ({ _community }) => {
                   />
                 )}
                 position="left"
+                showOptionsModal={showOptionsModal}
+                setShowOptionsModal={setShowOptionsModal}
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
               >
                 <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                   <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />

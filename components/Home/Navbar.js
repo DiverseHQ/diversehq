@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SearchModal from '../Search/SearchModal'
 import Link from 'next/link'
 import { FiMoon, FiSun } from 'react-icons/fi'
@@ -11,6 +11,10 @@ import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
 import Image from 'next/image'
 import { useTheme } from '../Common/ThemeProvider'
+import { useNotify } from '../Common/NotifyContext'
+import { getJoinedCommunitiesApi } from '../../api/community'
+import { RiArrowDropDownLine } from 'react-icons/ri'
+import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 
 const Navbar = () => {
   const router = useRouter()
@@ -19,11 +23,19 @@ const Navbar = () => {
   const { showModal } = usePopUpModal()
   const { theme, toggleTheme } = useTheme()
 
+  const dropdownRef = useRef(null)
+  const [joinedCommunities, setJoinedCommunities] = useState([])
+  const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
+  const [fetchingJoinedCommunities, setFetchingJoinedCommunities] =
+    useState(false)
+  const { notifyError } = useNotify()
+
   const [active, setActive] = useState('home')
   const {
     notificationsCount,
     lensNotificationsCount,
-    updateLensNotificationCount
+    updateLensNotificationCount,
+    updateNotificationCount
   } = useNotificationsCount()
 
   useEffect(() => {
@@ -38,6 +50,7 @@ const Navbar = () => {
 
   const routeToNotifications = async () => {
     await updateLensNotificationCount()
+    updateNotificationCount()
     router.push('/notification')
   }
 
@@ -56,6 +69,43 @@ const Navbar = () => {
         left: e.currentTarget.getBoundingClientRect().left + 'px'
       }
     })
+  }
+
+  useEffect(() => {
+    const handleClick = (event) => {
+      // Check if the target element of the click is the dropdown element
+      // or a descendant of the dropdown element
+      if (!dropdownRef.current?.contains(event.target)) {
+        // Hide the dropdown
+        setShowJoinedCommunities(false)
+      }
+    }
+
+    // Add the event listener
+    document.addEventListener('click', handleClick)
+
+    // Remove the event listener when the component is unmounted
+    return () => {
+      document.removeEventListener('click', handleClick)
+    }
+  }, [dropdownRef])
+
+  const getJoinedCommunities = async () => {
+    if (!user?.walletAddress) {
+      notifyError('I think you are not logged in')
+      return
+    }
+    try {
+      setFetchingJoinedCommunities(true)
+      const response = await getJoinedCommunitiesApi()
+      setJoinedCommunities(response)
+      setShowJoinedCommunities(!showJoinedCommunities)
+    } catch (error) {
+      console.log('error', error)
+      notifyError('Error getting joined communities')
+    } finally {
+      setFetchingJoinedCommunities(false)
+    }
   }
 
   return (
@@ -97,6 +147,48 @@ const Navbar = () => {
               Explore
             </button>
           </Link>
+          <div className="flex flex-col text-p-text font-medium">
+            <button
+              className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-hover hover:text-p-hover-text`}
+              onClick={getJoinedCommunities}
+            >
+              <p>Your Communities</p>
+              <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
+            </button>
+            <div
+              className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-md sm:rounded-xl absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
+              ref={dropdownRef}
+            >
+              {showJoinedCommunities && (
+                <>
+                  <FilterListWithSearch
+                    list={joinedCommunities}
+                    type="community"
+                    filterParam="name"
+                    handleSelect={(community) => {
+                      router.push(`/c/${community?.name}`)
+                    }}
+                  />
+                </>
+              )}
+              {fetchingJoinedCommunities && (
+                <>
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+                  </div>
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+                  </div>
+                  <div className="flex flex-row items-center justify-center p-2 m-2">
+                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
+                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex flex-row items-center gap-2">
@@ -107,7 +199,7 @@ const Navbar = () => {
           <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
           {/* a green count dot */}
           {notificationsCount + lensNotificationsCount > 0 && (
-            <div className="top-0 left-4 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full">
+            <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg">
               <span>{notificationsCount + lensNotificationsCount}</span>
             </div>
           )}

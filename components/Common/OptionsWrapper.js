@@ -1,14 +1,19 @@
 import React from 'react'
-import { useState } from 'react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 import BottomDrawerWrapper from './BottomDrawerWrapper'
 import useDevice from './useDevice'
 
-const OptionsWrapper = ({ children, OptionPopUpModal, position }) => {
+const OptionsWrapper = ({
+  children,
+  OptionPopUpModal,
+  position,
+  showOptionsModal,
+  setShowOptionsModal,
+  isDrawerOpen,
+  setIsDrawerOpen
+}) => {
   const { isMobile } = useDevice()
-  const [showOptionsModal, setShowOptionsModal] = useState(false)
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const popupRef = useRef(null)
 
   const handleClick = (e) => {
@@ -39,7 +44,7 @@ const OptionsWrapper = ({ children, OptionPopUpModal, position }) => {
   return (
     <>
       <button
-        className="relative w-full"
+        className="relative"
         ref={popupRef}
         onClick={handleButtonClick}
         id="options-wrapper"

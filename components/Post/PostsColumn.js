@@ -62,12 +62,9 @@ const PostsColumn = ({ source, sortBy, data }) => {
 
   const handleGetMorePostsForAll = async () => {
     try {
+      console.log('hasMore', hasMore)
       if (!hasMore) return
-      if (
-        (sortBy === 'top' && router.pathname !== '/feed/top') ||
-        (sortBy === 'new' && router.pathname !== '/feed/new')
-      )
-        return
+      if (!router.pathname.startsWith('/feed/offchain')) return
       const fetchedPosts = await getAllPosts(POST_LIMIT, posts.length, sortBy)
       console.log('fetchedPosts', fetchedPosts)
       if (fetchedPosts.posts.length < POST_LIMIT) {

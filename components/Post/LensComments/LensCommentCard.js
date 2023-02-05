@@ -45,6 +45,9 @@ const LensCommentCard = ({ comment }) => {
   )
   const { isMobile } = useDevice()
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
+
   const { showModal, hideModal } = usePopUpModal()
 
   const { mutateAsync: deleteComment } = useHidePublicationMutation()
@@ -244,6 +247,10 @@ const LensCommentCard = ({ comment }) => {
                     />
                   )}
                   position="left"
+                  showOptionsModal={showOptionsModal}
+                  setShowOptionsModal={setShowOptionsModal}
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
                 >
                   <RiMore2Fill
                     className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"

@@ -1,32 +1,21 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import {
   PublicationSortCriteria,
   PublicationTypes,
   useExplorePublicationsQuery
 } from '../../graphql/generated'
-import { LENS_POST_LIMIT } from '../../utils/config.ts'
-import {
-  getAllCommunitiesIds,
-  postGetCommunityInfoUsingListOfIds
-} from '../../api/community'
-import LensPostCard from './LensPostCard'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import { useRouter } from 'next/router'
-import { usePostIndexing } from './IndexingContext/PostIndexingWrapper'
-import IndexingPostCard from './IndexingPostCard'
-import { sortTypes } from '../../utils/config'
-import { memo } from 'react'
-// import { useLensUserContext } from '../../lib/LensUserContext'
+import { LENS_POST_LIMIT, sortTypes } from '../../utils/config'
+import LensPostCard from '../Post/LensPostCard'
 
-const LensPostsExplorePublicationsColumn = () => {
+const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   const router = useRouter()
   const [posts, setPosts] = useState([])
   const { data: myLensProfile } = useLensUserContext()
-  const { posts: indexingPost } = usePostIndexing()
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
     communityIds: null,
     cursor: null,
@@ -35,13 +24,14 @@ const LensPostsExplorePublicationsColumn = () => {
     hasMore: true,
     nextCursor: null
   })
+
   const { data } = useExplorePublicationsQuery(
     {
       request: {
         metadata: {
           locale: 'en-US',
           tags: {
-            oneOf: exploreQueryRequestParams.communityIds
+            oneOf: communityIds
           }
         },
         cursor: exploreQueryRequestParams.cursor,
@@ -57,7 +47,7 @@ const LensPostsExplorePublicationsColumn = () => {
       }
     },
     {
-      enabled: exploreQueryRequestParams.communityIds !== null
+      enabled: !!communityIds
     }
   )
 
@@ -86,6 +76,8 @@ const LensPostsExplorePublicationsColumn = () => {
         timestamp = null
       }
       sortCriteria = PublicationSortCriteria.TopCollected
+
+      console.log('timestamp', timestamp)
       // timestamp is required for top collected sort criteria
     }
     setExploreQueryRequestParams({
@@ -100,9 +92,13 @@ const LensPostsExplorePublicationsColumn = () => {
 
   const getMorePosts = async () => {
     console.log('getMorePosts called')
+    console.log(
+      'exploreQueryRequestParams.nextCursor',
+      exploreQueryRequestParams.nextCursor
+    )
     if (
       exploreQueryRequestParams.nextCursor &&
-      (router.pathname === '/' || router.pathname === '/feed/all')
+      router.pathname.startsWith('/feed/foryou')
     ) {
       console.log('fetching more posts')
       setExploreQueryRequestParams({
@@ -112,9 +108,7 @@ const LensPostsExplorePublicationsColumn = () => {
       return
     }
   }
-
   const handleSetPosts = async (newPosts) => {
-    console.log('newPosts', newPosts)
     const communityIds = newPosts.map((post) => post.metadata.tags[0])
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
@@ -147,27 +141,6 @@ const LensPostsExplorePublicationsColumn = () => {
     if (loading) setLoading(false)
     handleExplorePublications()
   }, [data?.explorePublications?.pageInfo?.next])
-
-  useEffect(() => {
-    if (exploreQueryRequestParams.communityIds) return
-    getAndSetAllCommunitiesIds()
-  }, [])
-
-  const getAndSetAllCommunitiesIds = async () => {
-    let allCommunitiesIds = await getAllCommunitiesIds()
-    //tag ids out of object
-    allCommunitiesIds = allCommunitiesIds?.map((community) => community._id)
-    setExploreQueryRequestParams({
-      ...exploreQueryRequestParams,
-      communityIds: allCommunitiesIds
-    })
-  }
-
-  useEffect(() => {
-    if (indexingPost.length > 0) {
-      window.scrollTo(0, 0)
-    }
-  }, [indexingPost])
 
   return (
     <div>
@@ -203,7 +176,7 @@ const LensPostsExplorePublicationsColumn = () => {
         }
         endMessage={<></>}
       >
-        {(!exploreQueryRequestParams.communityIds || loading) && (
+        {posts.length === 0 && (
           <>
             <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
               <div className="w-full flex flex-row items-center space-x-4 p-4">
@@ -229,10 +202,6 @@ const LensPostsExplorePublicationsColumn = () => {
             </div>
           </>
         )}
-        {indexingPost &&
-          indexingPost.map((post, index) => {
-            return <IndexingPostCard key={index} postInfo={post} />
-          })}
         {posts.map((post, index) => {
           return <LensPostCard key={index} post={post} />
         })}
@@ -241,4 +210,4 @@ const LensPostsExplorePublicationsColumn = () => {
   )
 }
 
-export default memo(LensPostsExplorePublicationsColumn)
+export default LensPostJoinedCommunitiesPublications
