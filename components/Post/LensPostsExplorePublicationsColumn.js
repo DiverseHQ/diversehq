@@ -101,6 +101,10 @@ const LensPostsExplorePublicationsColumn = () => {
 
   const getMorePosts = async () => {
     console.log('getMorePosts called')
+    console.log(
+      'exploreQueryRequestParams.nextCursor',
+      exploreQueryRequestParams
+    )
     if (
       exploreQueryRequestParams.nextCursor &&
       (router.pathname === '/' || router.pathname === '/feed/all')
@@ -115,8 +119,17 @@ const LensPostsExplorePublicationsColumn = () => {
     }
   }
 
-  const handleSetPosts = async (newPosts) => {
-    console.log('newPosts', newPosts)
+  const handleExplorePublications = async () => {
+    let nextCursor = null
+    let hasMore = true
+    console.log('data?.explorePublications', data?.explorePublications)
+    if (data?.explorePublications?.pageInfo?.next) {
+      nextCursor = data.explorePublications.pageInfo.next
+    }
+    const newPosts = data.explorePublications.items
+    if (newPosts.length < LENS_POST_LIMIT) {
+      hasMore = false
+    }
     const communityIds = newPosts.map((post) => post.metadata.tags[0])
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
@@ -124,29 +137,15 @@ const LensPostsExplorePublicationsColumn = () => {
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
-    console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
-    setExploreQueryRequestParams({
-      ...exploreQueryRequestParams,
-      posts: [...exploreQueryRequestParams.posts, ...newPosts]
-    })
-  }
-
-  const handleExplorePublications = async () => {
-    let nextCursor = null
-    let hasMore = true
-    if (data?.explorePublications?.pageInfo?.next) {
-      nextCursor = data.explorePublications.pageInfo.next
-    }
-    if (data.explorePublications.items.length < LENS_POST_LIMIT) {
-      hasMore = false
-    }
+    console.log('nextCursor', nextCursor)
     console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       nextCursor,
-      hasMore
+      hasMore,
+      posts: [...exploreQueryRequestParams.posts, ...newPosts]
     })
-    await handleSetPosts(data.explorePublications.items)
+    // await handleSetPosts(data.explorePublications.items)
   }
 
   useEffect(() => {

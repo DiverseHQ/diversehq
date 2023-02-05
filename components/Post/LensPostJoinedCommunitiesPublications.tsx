@@ -108,7 +108,30 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
       return
     }
   }
-  const handleSetPosts = async (newPosts) => {
+  // const handleSetPosts = async (newPosts) => {
+  //   const communityIds = newPosts.map((post) => post.metadata.tags[0])
+  //   const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
+  //     communityIds
+  //   )
+  //   for (let i = 0; i < newPosts.length; i++) {
+  //     newPosts[i].communityInfo = communityInfoForPosts[i]
+  //   }
+  //   setExploreQueryRequestParams({
+  //     ...exploreQueryRequestParams,
+  //     posts: [...exploreQueryRequestParams.posts, ...newPosts]
+  //   })
+  // }
+
+  const handleExplorePublications = async () => {
+    let nextCursor = null
+    let hasMore = true
+    if (data?.explorePublications?.pageInfo?.next) {
+      nextCursor = data.explorePublications.pageInfo.next
+    }
+    const newPosts: any = data.explorePublications.items
+    if (newPosts.length < LENS_POST_LIMIT) {
+      hasMore = false
+    }
     const communityIds = newPosts.map((post) => post.metadata.tags[0])
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
@@ -118,25 +141,10 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
     }
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
+      nextCursor,
+      hasMore,
       posts: [...exploreQueryRequestParams.posts, ...newPosts]
     })
-  }
-
-  const handleExplorePublications = async () => {
-    let nextCursor = null
-    let hasMore = true
-    if (data?.explorePublications?.pageInfo?.next) {
-      nextCursor = data.explorePublications.pageInfo.next
-    }
-    if (data.explorePublications.items.length < LENS_POST_LIMIT) {
-      hasMore = false
-    }
-    setExploreQueryRequestParams({
-      ...exploreQueryRequestParams,
-      nextCursor,
-      hasMore
-    })
-    await handleSetPosts(data.explorePublications.items)
   }
 
   useEffect(() => {
