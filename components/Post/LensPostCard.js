@@ -480,9 +480,13 @@ const LensPostCard = ({ post }) => {
                   {!router.pathname.startsWith('/p') ? (
                     <>
                       {postInfo?.metadata?.name && (
-                        <div className="font-medium text-base sm:text-lg w-full break-words">
+                        <Markup
+                          className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                        >
+                          {/* remove title text from content */}
+
                           {postInfo?.metadata?.name}
-                        </div>
+                        </Markup>
                       )}
                       {postInfo?.metadata?.name !==
                         postInfo?.metadata?.content && (
@@ -496,12 +500,13 @@ const LensPostCard = ({ post }) => {
                               showMore ? 'line-clamp-5' : ''
                             } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                           >
-                            {/* remove title text from content */}
-
-                            {postInfo?.metadata?.content?.replace(
-                              new RegExp(`^${postInfo?.metadata?.name}`),
-                              ''
-                            )}
+                            {postInfo?.metadata?.content?.startsWith(
+                              postInfo?.metadata?.name
+                            )
+                              ? postInfo?.metadata?.content?.slice(
+                                  postInfo?.metadata?.name.length
+                                )
+                              : postInfo?.metadata?.content}
                           </Markup>
                         </div>
                       )}
@@ -516,11 +521,14 @@ const LensPostCard = ({ post }) => {
                     </>
                   ) : (
                     <>
-                      {postInfo?.metadata?.name !==
-                        'Created with DiverseHQ' && (
-                        <div className="font-medium text-base sm:text-lg w-full break-words">
+                      {postInfo?.metadata?.name && (
+                        <Markup
+                          className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                        >
+                          {/* remove title text from content */}
+
                           {postInfo?.metadata?.name}
-                        </div>
+                        </Markup>
                       )}
                       {postInfo?.metadata?.name !==
                         postInfo?.metadata?.content && (
@@ -534,10 +542,13 @@ const LensPostCard = ({ post }) => {
                               showMore ? 'line-clamp-5' : ''
                             } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                           >
-                            {postInfo?.metadata?.content?.replace(
-                              new RegExp(`^${postInfo?.metadata?.name}`),
-                              ''
-                            )}
+                            {postInfo?.metadata?.content?.startsWith(
+                              postInfo?.metadata?.name
+                            )
+                              ? postInfo?.metadata?.content?.slice(
+                                  postInfo?.metadata?.name.length
+                                )
+                              : postInfo?.metadata?.content}
                           </Markup>
                         </div>
                       )}
