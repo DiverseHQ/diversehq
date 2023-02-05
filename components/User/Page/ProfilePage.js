@@ -21,7 +21,7 @@ import { BiChevronDown, BiRepost } from 'react-icons/bi'
 import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
 import { MdOutlineGroups } from 'react-icons/md'
-import ImgWithZoon from '../../Common/UI/ImgWithZoon'
+import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -127,7 +127,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
         <div className="w-full flex justify-center">
           <div className="w-full md:w-[650px]">
             <div className={`relative ${!isMobile ? 'mt-10' : ''}`}>
-              <ImgWithZoon
+              <ImageWithFullScreenZoom
                 className={`h-28 w-full object-cover ${
                   !isMobile
                     ? 'rounded-t-[20px] border-t-[1px] border-x-[1px] border-p-border'
@@ -140,15 +140,12 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 }
               />
 
-              <ImgWithZoon
+              <ImageWithFullScreenZoom
                 className="absolute top-[-30px] left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20"
                 src={
                   profile?.profileImageUrl
                     ? profile?.profileImageUrl
                     : '/gradient.jpg'
-                }
-                loaderClassName={
-                  'absolute top-20 left-3 sm:left-5 border-s-bg border-4 rounded-full bg-s-bg w-20 h-20'
                 }
               />
 

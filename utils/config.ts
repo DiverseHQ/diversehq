@@ -1,4 +1,4 @@
-export const POST_LIMIT: number = 4
+export const POST_LIMIT: number = 10
 export const COMMENT_LIMIT: number = 10
 export const LENS_POST_LIMIT: number = 25
 export const LENS_COMMENT_LIMIT: number = 10
