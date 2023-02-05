@@ -41,6 +41,7 @@ const CommunityInfoCard = ({ _community }) => {
   const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   const [numberOfPosts, setNumberOfPosts] = useState(0)
 
@@ -288,6 +289,10 @@ const CommunityInfoCard = ({ _community }) => {
                   />
                 )}
                 position="left"
+                showOptionsModal={showOptionsModal}
+                setShowOptionsModal={setShowOptionsModal}
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
               >
                 <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                   <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />

@@ -2,9 +2,10 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { AiOutlineDown } from 'react-icons/ai'
+import { AiOutlineDown, AiOutlineFire } from 'react-icons/ai'
 import { CgCommunity } from 'react-icons/cg'
 import { GiBreakingChain } from 'react-icons/gi'
+import { HiOutlineSparkles } from 'react-icons/hi'
 import { MdOutlineExplore } from 'react-icons/md'
 import { sortTypes } from '../../utils/config'
 import OptionsWrapper from '../Common/OptionsWrapper'
@@ -14,7 +15,21 @@ const NavFilterAllPosts = () => {
   const router = useRouter()
   const { pathname } = router
   const [active, setActive] = useState('all')
-  const [sortType, setSortType] = useState(sortTypes.LASTEST)
+  const [sortType, setSortType] = useState(sortTypes.LATEST)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
+
+  useEffect(() => {
+    if (router.query.sort && sortType !== router.query.sort) {
+      setSortType(router.query.sort)
+    }
+  }, [router.query])
+
+  const addQueryParam = (key, value) => {
+    const query = new URLSearchParams(router.query)
+    query.set(key, value)
+    router.push({ query: query.toString() })
+  }
 
   useEffect(() => {
     if (pathname.endsWith('/offchain')) {
@@ -63,39 +78,76 @@ const NavFilterAllPosts = () => {
         <GiBreakingChain className="h-5 w-5" />
         <div>Off-chain</div>
       </button>
-      <OptionsWrapper
-        OptionPopUpModal={() => (
-          <MoreOptionsModal
-            className="z-50"
-            list={[
-              {
-                label: sortTypes.LASTEST,
-                onClick: () => {}
-              },
-              {
-                label: sortTypes.TOP_TODAY,
-                onClick: () => {}
-              },
-              {
-                label: sortTypes.TOP_WEEK,
-                onClick: () => {}
-              },
-              {
-                label: sortTypes.TOP_MONTH,
-                onClick: () => {}
-              }
-            ]}
-          />
-        )}
-        position="right"
-      >
-        <button
-          className={` flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl bg-p-bg  hover:bg-p-hover hover:text-p-hover-text`}
+      {!pathname.startsWith('/feed/offchain') && (
+        <OptionsWrapper
+          OptionPopUpModal={() => (
+            <MoreOptionsModal
+              className="z-50"
+              list={[
+                {
+                  label: sortTypes.LATEST,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.LATEST)
+                    setSortType(sortTypes.LATEST)
+                    setIsDrawerOpen(false)
+                    setShowOptionsModal(false)
+                  },
+                  icon: () => <HiOutlineSparkles className="h-5 w-5" />
+                },
+                {
+                  label: sortTypes.TOP_TODAY,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.TOP_TODAY)
+                    setSortType(sortTypes.TOP_TODAY)
+                    setIsDrawerOpen(false)
+                    setShowOptionsModal(false)
+                  },
+                  icon: () => <AiOutlineFire className="h-5 w-5" />
+                },
+                {
+                  label: sortTypes.TOP_WEEK,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.TOP_WEEK)
+                    setSortType(sortTypes.TOP_WEEK)
+                    setIsDrawerOpen(false)
+                    setShowOptionsModal(false)
+                  },
+                  icon: () => <AiOutlineFire className="h-5 w-5" />
+                },
+                {
+                  label: sortTypes.TOP_MONTH,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.TOP_MONTH)
+                    setSortType(sortTypes.TOP_MONTH)
+                    setIsDrawerOpen(false)
+                    setShowOptionsModal(false)
+                  },
+                  icon: () => <AiOutlineFire className="h-5 w-5" />
+                }
+              ]}
+            />
+          )}
+          position="right"
+          showOptionsModal={showOptionsModal}
+          setShowOptionsModal={setShowOptionsModal}
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
         >
-          <div>{sortType}</div>
-          <AiOutlineDown className="w-4 h-4" />
-        </button>
-      </OptionsWrapper>
+          <button
+            className={` flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl bg-p-bg  hover:bg-p-hover hover:text-p-hover-text`}
+          >
+            <div className="flex flex-row items-center justify-center space-x-1">
+              {sortType === sortTypes.LATEST ? (
+                <HiOutlineSparkles className="h-5 w-5" />
+              ) : (
+                <AiOutlineFire className="h-5 w-5" />
+              )}
+              <div>{sortType}</div>
+            </div>
+            <AiOutlineDown className="w-3 h-3" />
+          </button>
+        </OptionsWrapper>
+      )}
     </div>
   )
 }

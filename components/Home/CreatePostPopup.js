@@ -161,19 +161,6 @@ const CreatePostPopup = () => {
       }
       handleCreatePost(title, 'text')
     }
-
-    // setRecentCommunities((prev) => {
-    //   console.log(
-    //     'test',
-    //     prev.filter((community) => community?._id !== selectedCommunity?._id)
-    //   )
-    //   prev.filter((community) => community?._id !== selectedCommunity?._id)
-    //   return [selectedCommunity, ...prev]
-    // })
-    // window.localStorage.setItem(
-    //   'recentCommunities',
-    //   JSON.stringify(recentCommunities)
-    // )
   }
 
   const handleCreateLensPost = async (title, communityId, mimeType, url) => {
@@ -216,7 +203,6 @@ const CreatePostPopup = () => {
       tags: [communityId],
       appId: 'DiverseHQ'
     }
-    console.log('metadata', metadata)
     const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
     console.log('ipfsHash', ipfsHash)
     const createPostRequest = {
@@ -362,10 +348,6 @@ const CreatePostPopup = () => {
     ])
     setLoadingJoinedCommunities(false)
   }
-
-  useEffect(() => {
-    console.log('collectSettings', collectSettings)
-  }, [collectSettings])
 
   const customOptions = () => {
     return (

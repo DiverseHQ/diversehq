@@ -1,6 +1,6 @@
 import React from 'react'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
-import { MdLeaderboard, MdOutlineExplore } from 'react-icons/md'
+import { MdOutlineExplore } from 'react-icons/md'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useNotify } from '../Common/NotifyContext'
@@ -23,15 +23,13 @@ const MobileFilterDrawerButton = () => {
 
   useEffect(() => {
     if (pathname.endsWith('/offchain')) {
-      setActive('offchain')
-    } else if (pathname.endsWith('/top')) {
-      setActive('top')
+      setActive('Off chain')
     } else if (pathname.endsWith('/all')) {
-      setActive('all')
+      setActive('All')
     } else if (pathname.endsWith('/foryou')) {
-      setActive('foryou')
+      setActive('For You')
     } else {
-      setActive('all')
+      setActive('All')
     }
   }, [pathname])
 
@@ -82,7 +80,7 @@ const MobileFilterDrawerButton = () => {
       >
         <div className="flex flex-col justify-center items-center text-p-text">
           <h1 className="font-bold text-lg mt-5">Choose your Feed</h1>
-          <div className="font-medium  text-base border-b p-0.5 w-full flex flex-row mt-2  justify-center items-center space-x-20 ">
+          <div className="font-medium  text-base border-b p-0.5 w-full flex flex-row mt-2  justify-between px-4 items-center ">
             <button
               className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
                 active === 'all' && 'bg-p-bg'
@@ -108,18 +106,6 @@ const MobileFilterDrawerButton = () => {
               <div>For You</div>
             </button>
 
-            <button
-              className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
-                active === 'top' && 'bg-p-bg'
-              } hover:bg-p-hover hover:text-p-hover-text`}
-              onClick={() => {
-                router.push('/feed/top')
-                setIsDrawerOpen(false)
-              }}
-            >
-              <MdLeaderboard />
-              <div>Top</div>
-            </button>
             <button
               className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
                 active === 'offchain' && 'bg-p-bg'
@@ -168,36 +154,6 @@ const MobileFilterDrawerButton = () => {
                 })}
             </div>
           </div>
-
-          {/* <div className="flex flex-row overflow-x-auto w-screen no-scrollbar">
-            {showJoinedCommunities &&
-              joinedCommunities.map((community) => {
-                return (
-                  <div
-                    key={community?._id}
-                    className="flex flex-col items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn"
-                    id={community?._id}
-                    onClick={() => {
-                      router.push(`/c/${community.name}`)
-                    }}
-                  >
-                    <ImageWithPulsingLoader
-                      src={
-                        community.logoImageUrl
-                          ? community.logoImageUrl
-                          : '/gradient.jpg'
-                      }
-                      alt="community logo"
-                      className="rounded-full object-cover w-10 h-10"
-                    />
-
-                    <div className="text-p-text font-medium" id={community._id}>
-                      {community.name}
-                    </div>
-                  </div>
-                )
-              })}
-          </div> */}
         </div>
       </BottomDrawerWrapper>
     </div>

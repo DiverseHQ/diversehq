@@ -8,16 +8,22 @@ import {
   useExplorePublicationsQuery
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import { LENS_POST_LIMIT } from '../../utils/config'
+import { LENS_POST_LIMIT, sortTypes } from '../../utils/config'
 import LensPostCard from '../Post/LensPostCard'
 
 const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   const router = useRouter()
   const [posts, setPosts] = useState([])
-  const [hasMore, setHasMore] = useState(true)
-  const [cursor, setCursor] = useState(null)
-  const [nextCursor, setNextCursor] = useState(null)
   const { data: myLensProfile } = useLensUserContext()
+  const [loading, setLoading] = useState(false)
+  const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
+    communityIds: null,
+    cursor: null,
+    sortCriteria: PublicationSortCriteria.Latest,
+    timestamp: null,
+    hasMore: true,
+    nextCursor: null
+  })
 
   const { data } = useExplorePublicationsQuery(
     {
@@ -28,10 +34,11 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
             oneOf: communityIds
           }
         },
-        cursor: cursor,
+        cursor: exploreQueryRequestParams.cursor,
         publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror],
         limit: LENS_POST_LIMIT,
-        sortCriteria: PublicationSortCriteria.Latest
+        sortCriteria: exploreQueryRequestParams.sortCriteria,
+        timestamp: exploreQueryRequestParams.timestamp
       },
       reactionRequest: {
         profileId: myLensProfile?.defaultProfile?.id
@@ -43,10 +50,61 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
       enabled: !!communityIds
     }
   )
+
+  useEffect(() => {
+    console.log('router.query.sort', router.query.sort)
+    if (!router.query.sort) return
+    // empty posts array, reset cursor, and set sort criteria
+    setPosts([])
+    setLoading(true)
+    let timestamp = null
+    let sortCriteria = PublicationSortCriteria.Latest
+    if (router.query.sort === sortTypes.LATEST) {
+      timestamp = null
+      sortCriteria = PublicationSortCriteria.Latest
+    } else {
+      if (router.query.sort === sortTypes.TOP_TODAY) {
+        // set timestamp to 24 hours ago
+        timestamp = Date.now() - 86400000
+      } else if (router.query.sort === sortTypes.TOP_WEEK) {
+        // set timestamp to 7 days ago
+        timestamp = Date.now() - 604800000
+      } else if (router.query.sort === sortTypes.TOP_MONTH) {
+        // set timestamp to 30 days ago
+        timestamp = Date.now() - 2592000000
+      } else {
+        timestamp = null
+      }
+      sortCriteria = PublicationSortCriteria.TopCollected
+
+      console.log('timestamp', timestamp)
+      // timestamp is required for top collected sort criteria
+    }
+    setExploreQueryRequestParams({
+      ...exploreQueryRequestParams,
+      cursor: null,
+      sortCriteria,
+      timestamp,
+      hasMore: true,
+      nextCursor: null
+    })
+  }, [router.query])
+
   const getMorePosts = async () => {
-    if (nextCursor && router.pathname === '/foryou') {
+    console.log('getMorePosts called')
+    console.log(
+      'exploreQueryRequestParams.nextCursor',
+      exploreQueryRequestParams.nextCursor
+    )
+    if (
+      exploreQueryRequestParams.nextCursor &&
+      router.pathname.startsWith('/feed/foryou')
+    ) {
       console.log('fetching more posts')
-      setCursor(nextCursor)
+      setExploreQueryRequestParams({
+        ...exploreQueryRequestParams,
+        cursor: exploreQueryRequestParams.nextCursor
+      })
       return
     }
   }
@@ -62,17 +120,25 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   }
 
   const handleExplorePublications = async () => {
+    let nextCursor = null
+    let hasMore = true
     if (data?.explorePublications?.pageInfo?.next) {
-      setNextCursor(data?.explorePublications?.pageInfo?.next)
+      nextCursor = data.explorePublications.pageInfo.next
     }
     if (data.explorePublications.items.length < LENS_POST_LIMIT) {
-      setHasMore(false)
+      hasMore = false
     }
+    setExploreQueryRequestParams({
+      ...exploreQueryRequestParams,
+      nextCursor,
+      hasMore
+    })
     await handleSetPosts(data.explorePublications.items)
   }
 
   useEffect(() => {
     if (!data?.explorePublications?.items) return
+    if (loading) setLoading(false)
     handleExplorePublications()
   }, [data?.explorePublications?.pageInfo?.next])
 
@@ -81,7 +147,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
       <InfiniteScroll
         dataLength={posts.length}
         next={getMorePosts}
-        hasMore={hasMore}
+        hasMore={exploreQueryRequestParams.hasMore}
         loader={
           <>
             <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">

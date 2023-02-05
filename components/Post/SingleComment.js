@@ -41,6 +41,9 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
 
   const [isAuthor, setIsAuthor] = useState(false)
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
+
   // edit comment state
   const [editing, setEditing] = useState(false)
   const [content, setContent] = useState(comment?.content)
@@ -207,6 +210,10 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                     />
                   )}
                   position="left"
+                  showOptionsModal={showOptionsModal}
+                  setShowOptionsModal={setShowOptionsModal}
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
                 >
                   <RiMore2Fill
                     className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"

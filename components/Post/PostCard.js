@@ -52,6 +52,9 @@ const PostCard = ({ _post, setPosts }) => {
 
   const { showModal, hideModal } = usePopUpModal()
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
+
   const router = useRouter()
   const [showMore, setShowMore] = useState(
     (countLinesFromMarkdown(post?.content) > MAX_CONTENT_LINES_FOR_POST ||
@@ -284,6 +287,10 @@ const PostCard = ({ _post, setPosts }) => {
                 />
               )}
               position="left"
+              showOptionsModal={showOptionsModal}
+              setShowOptionsModal={setShowOptionsModal}
+              isDrawerOpen={isDrawerOpen}
+              setIsDrawerOpen={setIsDrawerOpen}
             >
               <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                 <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />

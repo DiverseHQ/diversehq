@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import MobileNavSidebar from './MobileNavSidebar'
 import ConnectWalletAndSignInButton from '../Common/ConnectWalletAndSignInButton'
@@ -10,6 +10,11 @@ import ExploreFilterDrawerButton from '../Explore/ExploreFilterDrawerButton'
 import NotificationFilterDrawerButton from '../Notification/NotificationFilterDrawerButton'
 import SearchModal from '../Search/SearchModal'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import { sortTypes } from '../../utils/config'
+import OptionsWrapper from '../Common/OptionsWrapper'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import { HiOutlineSparkles } from 'react-icons/hi'
+import { AiOutlineDown, AiOutlineFire } from 'react-icons/ai'
 // import BottomDrawer from './BottomDrawer'
 
 const NewMobileTopNav = () => {
@@ -17,27 +22,22 @@ const NewMobileTopNav = () => {
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
   const router = useRouter()
   const { hasProfile, isSignedIn } = useLensUserContext()
+  const [sortType, setSortType] = useState(sortTypes.LATEST)
+  // also can remove this.. ?
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  // let prevScrollpos = null
+  useEffect(() => {
+    if (router.query.sort && sortType !== router.query.sort) {
+      setSortType(router.query.sort)
+    }
+  }, [router.query])
 
-  // if (typeof window !== 'undefined') {
-  //   prevScrollpos = window.pageYOffset
-  //   window.onscroll = function () {
-  //     const mobileTopNavEl = document.getElementById('mobile-top-navbar')
-  //     if (!mobileTopNavEl) return
-  //     if (router.pathname !== '/' && !router.pathname.startsWith('/feed/')) {
-  //       mobileTopNavEl.style.top = '0'
-  //       return
-  //     }
-  //     const currentScrollPos = window.pageYOffset
-  //     if (prevScrollpos > currentScrollPos) {
-  //       mobileTopNavEl.style.top = '0'
-  //     } else {
-  //       mobileTopNavEl.style.top = '-100px'
-  //     }
-  //     prevScrollpos = currentScrollPos
-  //   }
-  // }
+  const addQueryParam = (key, value) => {
+    const query = new URLSearchParams(router.query)
+    query.set(key, value)
+    router.push({ query: query.toString() })
+  }
 
   return (
     <>
@@ -68,7 +68,7 @@ const NewMobileTopNav = () => {
           </div>
         ) : (
           <>
-            <div className="min-w-[60px]">
+            <div className="flex flex-row items-center justify-center space-x-4">
               {!user && (
                 <ConnectWalletAndSignInButton
                   connectWalletLabel="Connect"
@@ -87,17 +87,86 @@ const NewMobileTopNav = () => {
                   )}
                 </div>
               )}
-            </div>
-            <div>
               <span
                 className={`font-semibold text-[18px] ${
                   !user ? '-ml-[40px]' : ''
                 }`}
               >
-                {router.pathname === '/' && 'Home'}
                 {router.pathname.startsWith('/explore') && 'Explore'}
                 {router.pathname.startsWith('/notification') && 'Notifications'}
-                {router.pathname.startsWith('/feed') && 'Home'}
+                {(router.pathname.startsWith('/feed') ||
+                  router.pathname === '/') && (
+                  <OptionsWrapper
+                    OptionPopUpModal={() => (
+                      <MoreOptionsModal
+                        className="z-50"
+                        list={[
+                          {
+                            label: sortTypes.LATEST,
+                            onClick: () => {
+                              addQueryParam('sort', sortTypes.LATEST)
+                              setSortType(sortTypes.LATEST)
+                              setIsDrawerOpen(false)
+                              setShowOptionsModal(false)
+                            },
+                            icon: () => (
+                              <HiOutlineSparkles className="h-5 w-5" />
+                            )
+                          },
+                          {
+                            label: sortTypes.TOP_TODAY,
+                            onClick: () => {
+                              addQueryParam('sort', sortTypes.TOP_TODAY)
+                              setSortType(sortTypes.TOP_TODAY)
+                              setIsDrawerOpen(false)
+                              setShowOptionsModal(false)
+                            },
+                            icon: () => <AiOutlineFire className="h-5 w-5" />
+                          },
+                          {
+                            label: sortTypes.TOP_WEEK,
+                            onClick: () => {
+                              addQueryParam('sort', sortTypes.TOP_WEEK)
+                              setSortType(sortTypes.TOP_WEEK)
+                              setIsDrawerOpen(false)
+                              setShowOptionsModal(false)
+                            },
+                            icon: () => <AiOutlineFire className="h-5 w-5" />
+                          },
+                          {
+                            label: sortTypes.TOP_MONTH,
+                            onClick: () => {
+                              addQueryParam('sort', sortTypes.TOP_MONTH)
+                              setSortType(sortTypes.TOP_MONTH)
+                              setIsDrawerOpen(false)
+                              setShowOptionsModal(false)
+                            },
+                            icon: () => <AiOutlineFire className="h-5 w-5" />
+                          }
+                        ]}
+                      />
+                    )}
+                    position="right"
+                    showOptionsModal={showOptionsModal}
+                    setShowOptionsModal={setShowOptionsModal}
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                  >
+                    <button
+                      className={` flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl bg-s-bg  hover:bg-p-hover hover:text-p-hover-text`}
+                    >
+                      <div className="flex flex-row items-center justify-center space-x-1">
+                        {sortType === sortTypes.LATEST ? (
+                          <HiOutlineSparkles className="h-5 w-5" />
+                        ) : (
+                          <AiOutlineFire className="h-5 w-5" />
+                        )}
+                        <div>{sortType}</div>
+                      </div>
+                      <AiOutlineDown className="w-3 h-3" />
+                    </button>
+                  </OptionsWrapper>
+                )}
               </span>
             </div>
 
