@@ -26,8 +26,8 @@ const LensPostsExplorePublicationsColumn = () => {
   const { data: myLensProfile } = useLensUserContext()
   const { posts: indexingPost } = usePostIndexing()
   const [loading, setLoading] = useState(true)
+  const [communityIds, setCommunityIds] = useState(null)
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
-    communityIds: null,
     cursor: null,
     sortCriteria: PublicationSortCriteria.Latest,
     timestamp: null,
@@ -41,7 +41,7 @@ const LensPostsExplorePublicationsColumn = () => {
         metadata: {
           locale: 'en-US',
           tags: {
-            oneOf: exploreQueryRequestParams.communityIds
+            oneOf: communityIds
           }
         },
         cursor: exploreQueryRequestParams.cursor,
@@ -57,13 +57,13 @@ const LensPostsExplorePublicationsColumn = () => {
       }
     },
     {
-      enabled: exploreQueryRequestParams.communityIds !== null
+      enabled: !!communityIds
     }
   )
 
   useEffect(() => {
-    console.log('router.query.sort', router.query.sort)
-    if (!router.query.sort) return
+    console.log('router.query.sort', router?.query?.sort)
+    if (!router?.query?.sort) return
     // empty posts array, reset cursor, and set sort criteria
     setLoading(true)
     let timestamp = null
@@ -87,6 +87,7 @@ const LensPostsExplorePublicationsColumn = () => {
       sortCriteria = PublicationSortCriteria.TopCollected
       // timestamp is required for top collected sort criteria
     }
+    console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: null,
@@ -105,6 +106,7 @@ const LensPostsExplorePublicationsColumn = () => {
       (router.pathname === '/' || router.pathname === '/feed/all')
     ) {
       console.log('fetching more posts')
+      console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
       setExploreQueryRequestParams({
         ...exploreQueryRequestParams,
         cursor: exploreQueryRequestParams.nextCursor
@@ -122,6 +124,7 @@ const LensPostsExplorePublicationsColumn = () => {
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
+    console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       posts: [...exploreQueryRequestParams.posts, ...newPosts]
@@ -137,6 +140,7 @@ const LensPostsExplorePublicationsColumn = () => {
     if (data.explorePublications.items.length < LENS_POST_LIMIT) {
       hasMore = false
     }
+    console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       nextCursor,
@@ -160,10 +164,7 @@ const LensPostsExplorePublicationsColumn = () => {
     let allCommunitiesIds = await getAllCommunitiesIds()
     //tag ids out of object
     allCommunitiesIds = allCommunitiesIds?.map((community) => community._id)
-    setExploreQueryRequestParams({
-      ...exploreQueryRequestParams,
-      communityIds: allCommunitiesIds
-    })
+    setCommunityIds(allCommunitiesIds)
   }
 
   useEffect(() => {
@@ -206,7 +207,7 @@ const LensPostsExplorePublicationsColumn = () => {
         }
         endMessage={<></>}
       >
-        {(!exploreQueryRequestParams.communityIds || loading) && (
+        {(!communityIds || loading) && (
           <>
             <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
               <div className="w-full flex flex-row items-center space-x-4 p-4">
