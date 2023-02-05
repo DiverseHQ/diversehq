@@ -17,7 +17,9 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
         url: `https://app.diversehq.xyz/p/${post?.id}`,
         title: `${stringToLength(post?.metadata?.content, 40)} \n  ${
           post?.stats?.totalAmountOfCollects
-        } Collects | ${post?.stats?.totalUpvotes} Upvotes `,
+        } Collects | ${post?.stats?.totalUpvotes} Upvotes \n post by ${
+          post?.profile?.handle
+        }`,
         images:
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [
