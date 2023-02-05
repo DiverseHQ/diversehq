@@ -52,14 +52,14 @@ const NewMobileTopNav = () => {
         router.pathname.startsWith('/c/') ||
         router.pathname.startsWith('/search') ||
         router.pathname.startsWith('/u/') ? (
-          <div className="h-[32px] flex flex-row items-center gap-2 text-[18px]">
+          <div className="h-[32px] flex flex-row items-center gap-3 text-[18px]">
             <div className="flex items-center justify-center w-8 h-8 bg-p-btn-hover rounded-full">
               <BiArrowBack
                 onClick={() => router.back()}
                 className="w-6 h-6 rounded-full cursor-pointer bg-p-btn-hover"
               />
             </div>
-            <span className="font-semibold">
+            <span className="font-bold text-[20px]">
               {router.pathname.startsWith('/p/') && 'Post'}
               {router.pathname.startsWith('/c/') && 'Community'}
               {router.pathname.startsWith('/u/') && 'Profile'}
@@ -68,37 +68,36 @@ const NewMobileTopNav = () => {
           </div>
         ) : (
           <>
-            <div className="min-w-[60px]">
-              {!user && (
-                <ConnectWalletAndSignInButton
-                  connectWalletLabel="Connect"
-                  SignInLabel="Sign In"
-                />
-              )}
-              {user && (
-                <div className="relative">
-                  <ImageWithPulsingLoader
-                    src={user?.profileImageUrl}
-                    onClick={() => setIsOpenSidebar(true)}
-                    className="w-[35px] h-[35px] rounded-full"
+            <div className="flex flex-row gap-3 items-center">
+              <div className="w-full">
+                {!user && (
+                  <ConnectWalletAndSignInButton
+                    connectWalletLabel="Connect"
+                    SignInLabel="Sign In"
                   />
-                  {(!isSignedIn || !hasProfile) && (
-                    <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full" />
-                  )}
-                </div>
-              )}
-            </div>
-            <div>
-              <span
-                className={`font-semibold text-[18px] ${
-                  !user ? '-ml-[40px]' : ''
-                }`}
-              >
-                {router.pathname === '/' && 'Home'}
-                {router.pathname.startsWith('/explore') && 'Explore'}
-                {router.pathname.startsWith('/notification') && 'Notifications'}
-                {router.pathname.startsWith('/feed') && 'Home'}
-              </span>
+                )}
+                {user && (
+                  <div className="relative">
+                    <ImageWithPulsingLoader
+                      src={user?.profileImageUrl}
+                      onClick={() => setIsOpenSidebar(true)}
+                      className="w-[35px] h-[35px] rounded-full"
+                    />
+                    {(!isSignedIn || !hasProfile) && (
+                      <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full" />
+                    )}
+                  </div>
+                )}
+              </div>
+              <div>
+                <span className={`font-bold text-[20px]`}>
+                  {router.pathname === '/' && 'Home'}
+                  {router.pathname.startsWith('/explore') && 'Explore'}
+                  {router.pathname.startsWith('/notification') &&
+                    'Notifications'}
+                  {router.pathname.startsWith('/feed') && 'Home'}
+                </span>
+              </div>
             </div>
 
             {(router.pathname === '/' ||

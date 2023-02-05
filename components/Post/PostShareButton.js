@@ -1,6 +1,5 @@
 import React from 'react'
 import { RWebShare } from 'react-web-share'
-import { IoIosShareAlt } from 'react-icons/io'
 
 const PostShareButton = ({ url, text }) => {
   const link = url || window.location.href
@@ -14,8 +13,15 @@ const PostShareButton = ({ url, text }) => {
         text
       }}
     >
-      <div className="hover:bg-p-btn-hover rounded-md p-1" title="Share">
-        <IoIosShareAlt className="hover:cursor-pointer w-6 h-6 " />
+      <div
+        className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1"
+        title="Share"
+      >
+        <img
+          src="/share.svg"
+          alt="Share"
+          className="hover:cursor-pointer w-4 h-4 "
+        />
       </div>
     </RWebShare>
   )

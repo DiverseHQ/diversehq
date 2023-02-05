@@ -32,9 +32,9 @@ const ScrollToTopButton = ({ ...props }) => {
       {...props}
       className={`cursor-pointer text-[32px] md:text-[36px] text-p-btn bg-p-btn-text  rounded-full sticky z-40 ${
         router.pathname.startsWith('/p/')
-          ? 'top-[calc(100vh-160px)]'
-          : 'top-[calc(100vh-110px)]'
-      }  md:top-[calc(100vh-60px)] left-[calc(100vw-20px)] mr-[20px] ${
+          ? 'top-[calc(100vh-220px)]'
+          : 'top-[calc(100vh-160px)]'
+      }  md:top-[calc(100vh-60px)] left-[calc(100vw-50px)] md:left-[calc(100vw-20px)] md:mr-[20px] ${
         visible ? 'inline-block' : 'hidden'
       } ${props.className}`}
       onClick={scrollToTop}

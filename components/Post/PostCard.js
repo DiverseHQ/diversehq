@@ -7,7 +7,7 @@ import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
-import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
+// import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
 import { ReactionTypes } from '../../graphql/generated'
@@ -167,7 +167,15 @@ const PostCard = ({ _post, setPosts }) => {
   }
 
   return (
-    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 sm:my-3 sm:rounded-2xl shadow-sm">
+    <div
+      className={`sm:px-5 flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
+        isMobile
+          ? `border-b-[1px] border-[#eee] dark:border-p-border ${
+              router.pathname.startsWith('/p') ? 'mb-2' : ''
+            }`
+          : 'pb-2'
+      }`}
+    >
       {/* top row */}
       <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
         {!isMobile && (
@@ -321,7 +329,7 @@ const PostCard = ({ _post, setPosts }) => {
                     ? '/DownvoteFilled.svg'
                     : '/Downvote.svg'
                 }
-                className="w-5 h-5"
+                className="w-4 h-4"
               />
             </button>
           </div>
@@ -449,11 +457,21 @@ const PostCard = ({ _post, setPosts }) => {
               )}
           </div>
           {/* bottom row */}
+          {isMobile && router.pathname.startsWith('/p') && (
+            <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-1 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
+              <div className="flex flex-row gap-1">
+                <span className="font-bold">{totalCount}</span>
+                <span className="text-[#687684]">votes</span>
+              </div>
+              <div className="flex flex-row gap-1">
+                <span className="font-bold">{post.comments?.length}</span>
+                <span className="text-[#687684]">comments</span>
+              </div>
+            </div>
+          )}
           <div
-            className={`text-p-text  flex flex-row items-center px-3 sm:px-3.5 pt-1  justify-between sm:justify-start sm:space-x-28 ${
-              isMobile
-                ? 'border-b-[1px] border-[#eee] dark:border-p-border pb-1'
-                : ''
+            className={`text-p-text  flex flex-row items-center px-3 sm:px-3.5 pt-1 justify-between sm:justify-start sm:space-x-28 ${
+              isMobile ? 'pb-1' : ''
             }`}
           >
             {isMobile && (
@@ -466,10 +484,10 @@ const PostCard = ({ _post, setPosts }) => {
                     //  onClick={liked ? handleUnLike : handleLike}
                     src={
                       reaction === ReactionTypes.Upvote
-                        ? '/UpvoteFilled.svg'
-                        : '/Upvote.svg'
+                        ? '/upvoteGrayFilled.svg'
+                        : '/upvoteGray.svg'
                     }
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                   />
                 </button>
                 <div className="font-bold">{totalCount}</div>
@@ -480,10 +498,10 @@ const PostCard = ({ _post, setPosts }) => {
                   <img
                     src={
                       reaction === ReactionTypes.Downvote
-                        ? '/DownvoteFilled.svg'
-                        : '/Downvote.svg'
+                        ? '/downvoteGrayFilled.svg'
+                        : '/downvoteGray.svg'
                     }
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                   />
                 </button>
               </div>
@@ -491,29 +509,39 @@ const PostCard = ({ _post, setPosts }) => {
             {!router.pathname.startsWith('/p') ? (
               <Link
                 href={`/p/${post._id}`}
-                className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover"
+                className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-bold"
                 passHref
                 title="Comment"
               >
-                {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                {/* {post.comments?.length === 0 && (
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )}
                 {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                )}
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-4 h-4 " />
+                )} */}
+                <img
+                  src="/comment.svg"
+                  alt="Comment"
+                  className="w-4 h-4 mr-2"
+                />
                 {post.comments?.length}
               </Link>
             ) : (
               <div
-                className="flex flex-row items-center hover:bg-p-btn-hover"
+                className="flex flex-row items-center hover:bg-p-btn-hover font-bold"
                 title="Comment"
               >
-                {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+                {/* {post.comments?.length === 0 && (
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )}
                 {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                )}
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-4 h-4 " />
+                )} */}
+                <img
+                  src="/comment.svg"
+                  alt="Comment"
+                  className="w-4 h-4 mr-2"
+                />
                 {post.comments?.length}
               </div>
             )}

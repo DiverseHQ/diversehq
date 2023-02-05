@@ -10,7 +10,7 @@ import {
   useAddReactionMutation,
   useHidePublicationMutation
 } from '../../graphql/generated'
-import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
+// import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
 import {
   LensInfuraEndpoint,
@@ -308,7 +308,15 @@ const LensPostCard = ({ post }) => {
   return (
     <>
       {postInfo && (
-        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 sm:my-3 sm:rounded-2xl shadow-sm">
+        <div
+          className={`sm:px-5 flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
+            isMobile
+              ? `border-b-[1px] border-[#eee] dark:border-p-border ${
+                  router.pathname.startsWith('/p') ? 'mb-2' : ''
+                }`
+              : 'pb-2'
+          }`}
+        >
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
@@ -452,7 +460,7 @@ const LensPostCard = ({ post }) => {
                         ? '/UpvoteFilled.svg'
                         : '/Upvote.svg'
                     }
-                    className="w-6 h-6"
+                    className="w-4 h-4"
                   />
                 </button>
                 <div className="font-bold leading-5">{voteCount}</div>
@@ -467,7 +475,7 @@ const LensPostCard = ({ post }) => {
                         ? '/DownvoteFilled.svg'
                         : '/Downvote.svg'
                     }
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                   />
                 </button>
               </div>
@@ -617,11 +625,29 @@ const LensPostCard = ({ post }) => {
               </div>
 
               {/* bottom row */}
+              {isMobile && router.pathname.startsWith('/p') && (
+                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-1 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
+                  <div className="flex flex-row gap-1">
+                    <span className="font-bold">{voteCount}</span>
+                    <span className="text-[#687684]">votes</span>
+                  </div>
+                  <div className="flex flex-row gap-1">
+                    <span className="font-bold">
+                      {postInfo?.stats?.totalAmountOfComments}
+                    </span>
+                    <span className="text-[#687684]">comments</span>
+                  </div>
+                  <div className="flex flex-row gap-1">
+                    <span className="font-bold">
+                      {postInfo?.stats?.totalAmountOfCollects}
+                    </span>
+                    <span className="text-[#687684]">collects</span>
+                  </div>
+                </div>
+              )}
               <div
-                className={`text-p-text flex flex-row items-center px-3 sm:px-4.5 py-1 justify-between sm:justify-start sm:space-x-28 ${
-                  isMobile
-                    ? 'border-b-[1px] border-[#eee] dark:border-p-border pb-1'
-                    : ''
+                className={`text-p-text flex flex-row items-center px-3 sm:px-4.5 py-1 justify-between sm:justify-start sm:space-x-28  ${
+                  isMobile ? 'pb-1' : ''
                 }`}
               >
                 {isMobile && (
@@ -633,10 +659,10 @@ const LensPostCard = ({ post }) => {
                       <img
                         src={
                           reaction === ReactionTypes.Upvote
-                            ? '/UpvoteFilled.svg'
-                            : '/Upvote.svg'
+                            ? '/upvoteGrayFilled.svg'
+                            : '/upvoteGray.svg'
                         }
-                        className="w-5 h-5"
+                        className="w-4 h-4"
                       />
                     </button>
                     <div className="font-bold">{voteCount}</div>
@@ -647,10 +673,10 @@ const LensPostCard = ({ post }) => {
                       <img
                         src={
                           reaction === ReactionTypes.Downvote
-                            ? '/DownvoteFilled.svg'
-                            : '/Downvote.svg'
+                            ? '/downvoteGrayFilled.svg'
+                            : '/downvoteGray.svg'
                         }
-                        className="w-5 h-5"
+                        className="w-4 h-4"
                       />
                     </button>
                   </div>
@@ -658,29 +684,39 @@ const LensPostCard = ({ post }) => {
                 {!router.pathname.startsWith('/p') ? (
                   <Link
                     href={`/p/${postInfo.id}`}
-                    className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1"
+                    className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-bold"
                     passHref
                     title="Comment"
                   >
-                    {postInfo?.stats?.totalAmountOfComments === 0 && (
+                    {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                    )}
+                    )} */}
+                    <img
+                      src="/comment.svg"
+                      alt="Comment"
+                      className="w-4 h-4 mr-2"
+                    />
                     {postInfo?.stats?.totalAmountOfComments}
                   </Link>
                 ) : (
                   <div
                     title="Comment"
-                    className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1"
+                    className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1 font-bold"
                   >
-                    {postInfo?.stats?.totalAmountOfComments === 0 && (
+                    {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                    )}
+                    )} */}
+                    <img
+                      src="/comment.svg"
+                      alt="Comment"
+                      className="w-4 h-4 mr-2"
+                    />
                     {postInfo?.stats?.totalAmountOfComments}
                   </div>
                 )}

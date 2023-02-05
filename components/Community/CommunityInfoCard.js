@@ -373,12 +373,12 @@ const CommunityInfoCard = ({ _community }) => {
                 </h3>
                 <div className="flex flex-row gap-1 w-full">
                   <div className="flex flex-col w-full">
-                    <div className="relative bg-[#AA96E2] h-[35px] rounded-[10px] flex flex-row">
+                    <div className="relative bg-[#D7D7D7] h-[35px] rounded-[10px] flex flex-row">
                       <div className="flex z-10 self-center justify-self-center w-full justify-center text-white dark:text-p-text text-[14px]">
                         Level {currentLevel}
                       </div>
                       <div
-                        className="absolute h-full bg-[#6668FF] rounded-[10px] "
+                        className="absolute h-full bg-[#9378D8] rounded-[10px] "
                         style={{
                           width: `${calculateBarPercentage(
                             levelThreshold,
@@ -390,8 +390,12 @@ const CommunityInfoCard = ({ _community }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
-                  <AiOutlineFileAdd />
+                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                  <img
+                    src="/createdOnDate.svg"
+                    alt="created on date"
+                    className="w-5 h-5"
+                  />
                   <span>
                     Created{' '}
                     {new Date(community.createdAt)
@@ -401,9 +405,17 @@ const CommunityInfoCard = ({ _community }) => {
                       .join(' ')}
                   </span>
                 </div>
-                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
-                  <BsCollection />
+                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                  <BsCollection className='className="w-5 h-5"' />
                   <span>Matic transferred: 0</span>
+                </div>
+                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                  <img
+                    src="/createdByUser.svg"
+                    alt="created by user"
+                    className="w-5 h-5"
+                  />
+                  <span>Created by u/0</span>
                 </div>
               </div>
             </BottomDrawerWrapper>

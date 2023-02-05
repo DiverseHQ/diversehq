@@ -67,25 +67,25 @@ const LensCollectButton = ({
   return (
     <button
       disabled={isCollected || hasCollectedByMe}
-      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center"
+      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center font-bold"
       onClick={handleCollectClick}
       title="Collect"
     >
       {collectModule.__typename === 'FreeCollectModuleSettings' && (
         <>
           {isCollected || hasCollectedByMe ? (
-            <BsCollectionFill className="w-5 h-5" />
+            <BsCollectionFill className="w-4 h-4 text-[#687684]" />
           ) : (
-            <BsCollection className="w-5 h-5" />
+            <BsCollection className="w-4 h-4 text-[#687684]" />
           )}
         </>
       )}
       {collectModule.__typename === 'FeeCollectModuleSettings' && (
         <>
           {isCollected || hasCollectedByMe ? (
-            <AiFillGift className="w-5 h-5" />
+            <AiFillGift className="w-4 h-4 text-[#687684]" />
           ) : (
-            <AiOutlineGift className="w-5 h-5" />
+            <AiOutlineGift className="w-4 h-4 text-[#687684]" />
           )}
         </>
       )}
