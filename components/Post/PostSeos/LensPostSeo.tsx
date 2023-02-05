@@ -15,9 +15,9 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
       }}
       openGraph={{
         url: `https://app.diversehq.xyz/p/${post?.id}`,
-        title: `${stringToLength(post?.metadata?.content, 40)} \n ${
+        title: `${stringToLength(post?.metadata?.content, 40)} \n  ${
           post?.stats?.totalAmountOfCollects
-        } Collects ${post?.stats?.totalUpvotes} Upvotes`,
+        } Collects | ${post?.stats?.totalUpvotes} Upvotes `,
         images:
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [
