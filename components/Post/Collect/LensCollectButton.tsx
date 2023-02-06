@@ -2,8 +2,19 @@ import React, { memo } from 'react'
 import { useState } from 'react'
 import { AiFillGift, AiOutlineGift } from 'react-icons/ai'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
-import { CollectModule, Profile, Publication } from '../../../graphql/generated'
+import {
+  CollectModule,
+  Profile,
+  Publication,
+  PublicationMainFocus
+} from '../../../graphql/generated'
+import { LensInfuraEndpoint } from '../../../utils/config'
+import { getURLsFromText, stringToLength } from '../../../utils/utils'
 import HoverModalWrapper from '../../Common/UI/HoverModalWrapper'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import VideoWithAutoPause from '../../Common/UI/VideoWithAutoPause'
+import useDevice from '../../Common/useDevice'
+import ReactEmbedo from '../embed/ReactEmbedo'
 import FeeCollectPopUp from './FeeCollectPopUp'
 import FreeCollectPopUp from './FreeCollectPopUp'
 type Props = {
@@ -23,6 +34,7 @@ const LensCollectButton = ({
 }: Props) => {
   const [collectCount, setCollectCount] = useState(totalCollects)
   const [isCollected, setIsCollected] = useState(hasCollectedByMe)
+  const { isMobile } = useDevice()
   return (
     <>
       <HoverModalWrapper
@@ -35,6 +47,60 @@ const LensCollectButton = ({
         }) => {
           return (
             <>
+              {isMobile && (
+                <div className="flex items-center flex-col justify-center px-4 text-p-text">
+                  <div className="mb-2 self-start ">
+                    <h1 className="font-medium text-lg ">
+                      Post By u/{publication.profile?.handle}
+                    </h1>
+                    <p className="font-normal text-sm">
+                      {stringToLength(publication.metadata?.name, 20)}
+                    </p>
+                  </div>
+                  {publication?.metadata?.media.length > 0 && (
+                    <div className="w-full">
+                      {publication?.metadata?.mainContentFocus ===
+                        PublicationMainFocus.Image && (
+                        <ImageWithPulsingLoader
+                          src={`${LensInfuraEndpoint}${
+                            publication?.metadata?.media[0]?.original.url.split(
+                              '//'
+                            )[1]
+                          }`}
+                          className={`rounded-xl w-full mb-1 max-h-[250px]  object-cover`}
+                        />
+                      )}
+                    </div>
+                  )}
+                  {publication?.metadata?.mainContentFocus ===
+                    PublicationMainFocus.Video && (
+                    <div className="w-full mb-1">
+                      <VideoWithAutoPause
+                        src={`${LensInfuraEndpoint}${
+                          publication?.metadata?.media[0]?.original.url.split(
+                            '//'
+                          )[1]
+                        }`}
+                        className={`image-unselectable object-cover rounded-xl w-full max-h-[250px] `}
+                        loop
+                        controls
+                        muted
+                      />
+                    </div>
+                  )}
+                  {publication?.metadata?.mainContentFocus !==
+                    PublicationMainFocus.Image &&
+                    publication?.metadata?.mainContentFocus !==
+                      PublicationMainFocus.Video &&
+                    getURLsFromText(publication?.metadata?.content).length >
+                      0 && (
+                      <ReactEmbedo
+                        url={getURLsFromText(publication?.metadata?.content)[0]}
+                        className={`w-full h-[250px] pb-1`}
+                      />
+                    )}
+                </div>
+              )}
               {collectModule?.__typename === 'FreeCollectModuleSettings' && (
                 <FreeCollectPopUp
                   setIsCollected={setIsCollected}

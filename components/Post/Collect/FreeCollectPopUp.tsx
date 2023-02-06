@@ -1,10 +1,5 @@
 import React, { useEffect } from 'react'
-import {
-  CollectModule,
-  Profile,
-  Publication,
-  PublicationMainFocus
-} from '../../../graphql/generated'
+import { CollectModule, Profile, Publication } from '../../../graphql/generated'
 import useCollectPublication from './useCollectPublication'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import { useNotify } from '../../Common/NotifyContext'
@@ -12,11 +7,6 @@ import { CircularProgress } from '@mui/material'
 import { RiUserFollowLine } from 'react-icons/ri'
 import useDevice from '../../Common/useDevice'
 import { BsCollection } from 'react-icons/bs'
-import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
-import { LensInfuraEndpoint } from '../../../utils/config'
-import VideoWithAutoPause from '../../Common/UI/VideoWithAutoPause'
-import { getURLsFromText } from '../../../utils/utils'
-import ReactEmbedo from '../embed/ReactEmbedo'
 type Props = {
   setIsCollected: any
   setCollectCount: any
@@ -68,13 +58,6 @@ const FreeCollectPopUp = ({
   } = useLensFollowButton({ profileId: author.id })
 
   const { isDesktop } = useDevice()
-
-  const shortTitle = (title) => {
-    if (title.length > 20) {
-      return title.substring(0, 20) + '...'
-    }
-    return title
-  }
 
   return (
     <>
@@ -170,31 +153,11 @@ const FreeCollectPopUp = ({
           <div className="col-span-full row-span-full translate-y-1 bg-s-bg  h-[4px] w-3 rounded self-end justify-self-center rounded-b-full border-b border-l border-r"></div>
         </div>
       ) : (
-        <div className=" flex items-center flex-col justify-center px-4 text-p-text">
-          {collectModule?.__typename === 'FreeCollectModuleSettings' &&
-            !collectModule.followerOnly && (
-              <div className="mb-2 self-start ">
-                <h1 className="font-medium text-lg ">
-                  Post By u/{publication.profile?.handle}
-                </h1>
-                <p className="font-normal text-sm">
-                  {shortTitle(publication.metadata?.name)}
-                </p>
-              </div>
-            )}
-
+        // mobile
+        <div className="flex items-center flex-col justify-center px-4 text-p-text">
           {collectModule?.__typename === 'FreeCollectModuleSettings' &&
             collectModule.followerOnly && (
               <>
-                <div className="mb-2 self-start ">
-                  <h1 className="font-medium text-lg ">
-                    Post By u/{publication.profile?.handle}
-                  </h1>
-                  <p className="font-normal text-sm">
-                    {shortTitle(publication.metadata?.name)}
-                  </p>
-                </div>
-
                 {!isFollowedByMe && (
                   <div className="flex flex-row items-center self-start space-x-2 mb-2 font-medium">
                     <button
@@ -221,61 +184,7 @@ const FreeCollectPopUp = ({
                 )}
               </>
             )}
-          {publication?.metadata?.media.length > 0 && (
-            <div className="w-full">
-              {publication?.metadata?.mainContentFocus ===
-                PublicationMainFocus.Image && (
-                <ImageWithPulsingLoader
-                  src={`${LensInfuraEndpoint}${
-                    publication?.metadata?.media[0]?.original.url.split('//')[1]
-                  }`}
-                  className={`rounded-xl w-full mb-1 max-h-[300px] ${
-                    collectModule.__typename === 'FreeCollectModuleSettings' &&
-                    collectModule.followerOnly &&
-                    !isFollowedByMe
-                      ? 'hidden'
-                      : ''
-                  } `}
-                />
-              )}
-            </div>
-          )}
-          {publication?.metadata?.mainContentFocus ===
-            PublicationMainFocus.Video && (
-            <div className="w-full mb-1">
-              <VideoWithAutoPause
-                src={`${LensInfuraEndpoint}${
-                  publication?.metadata?.media[0]?.original.url.split('//')[1]
-                }`}
-                className={`image-unselectable object-contain rounded-xl w-full max-h-[300px] ${
-                  collectModule.__typename === 'FreeCollectModuleSettings' &&
-                  collectModule.followerOnly &&
-                  !isFollowedByMe
-                    ? 'hidden'
-                    : ''
-                } `}
-                loop
-                controls
-                muted
-              />
-            </div>
-          )}
-          {publication?.metadata?.mainContentFocus !==
-            PublicationMainFocus.Image &&
-            publication?.metadata?.mainContentFocus !==
-              PublicationMainFocus.Video &&
-            getURLsFromText(publication?.metadata?.content).length > 0 && (
-              <ReactEmbedo
-                url={getURLsFromText(publication?.metadata?.content)[0]}
-                className={`w-full w-[300px] pb-1 ${
-                  collectModule.__typename === 'FreeCollectModuleSettings' &&
-                  collectModule.followerOnly &&
-                  !isFollowedByMe
-                    ? 'hidden'
-                    : ''
-                } `}
-              />
-            )}
+
           <button
             onClick={async (e) => {
               e.stopPropagation()

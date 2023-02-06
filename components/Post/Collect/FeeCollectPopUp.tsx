@@ -7,19 +7,13 @@ import {
   CollectModule,
   Profile,
   Publication,
-  PublicationMainFocus,
   useApprovedModuleAllowanceAmountQuery
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import { LensInfuraEndpoint } from '../../../utils/config'
-import { getURLsFromText } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
-import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
-import VideoWithAutoPause from '../../Common/UI/VideoWithAutoPause'
 import useDevice from '../../Common/useDevice'
 // import PopUpWrapper from '../../Common/PopUpWrapper'
 import useLensFollowButton from '../../User/useLensFollowButton'
-import ReactEmbedo from '../embed/ReactEmbedo'
 import AllowanceButton from './AllowanceButton'
 import useCollectPublication from './useCollectPublication'
 
@@ -124,13 +118,6 @@ const FeeCollectPopUp = ({
   }, [loading])
 
   const { isDesktop } = useDevice()
-
-  const shortTitle = (title) => {
-    if (title.length > 20) {
-      return title.substring(0, 20) + '...'
-    }
-    return title
-  }
   return (
     <>
       {isDesktop ? (
@@ -201,7 +188,7 @@ const FeeCollectPopUp = ({
                         {collectModule?.amount?.asset?.symbol}
                       </p>
                       <span>
-                        In Wallet :{' '}
+                        You Have :{' '}
                         {parseFloat(
                           balanceData?.formatted ? balanceData?.formatted : '0'
                         )}{' '}
@@ -247,15 +234,11 @@ const FeeCollectPopUp = ({
         </div>
       ) : (
         <>
-          <div className="m-2 self-start ">
-            <h1 className="font-medium text-lg ">
-              Post By u/{publication.profile?.handle}
-            </h1>
-            <p className="font-normal text-sm">
-              {shortTitle(publication.metadata?.name)}
-            </p>
-          </div>
           <div className="flex items-center flex-col justify-center text-p-text">
+            <p>
+              Collect for {parseFloat(collectModule?.amount?.value)}
+              {''} {collectModule?.amount?.asset?.symbol}
+            </p>
             {collectModule.followerOnly && !isFollowedByMe && (
               <>
                 <div className="flex flex-row  space-x-4">
@@ -288,61 +271,6 @@ const FeeCollectPopUp = ({
                 <p className="text-p-text ">Allowance loading</p>
               </div>
             )}
-
-            {publication?.metadata?.media.length > 0 && (
-              <div className="w-full px-4">
-                {publication?.metadata?.mainContentFocus ===
-                  PublicationMainFocus.Image && (
-                  <ImageWithPulsingLoader
-                    src={`${LensInfuraEndpoint}${
-                      publication?.metadata?.media[0]?.original.url.split(
-                        '//'
-                      )[1]
-                    }`}
-                    className={`rounded-xl w-full mb-1 max-h-[300px] ${
-                      (collectModule.followerOnly && !isFollowedByMe) ||
-                      !isAllowed
-                        ? 'hidden'
-                        : ''
-                    } `}
-                  />
-                )}
-              </div>
-            )}
-            {publication?.metadata?.mainContentFocus ===
-              PublicationMainFocus.Video && (
-              <div className="w-full mb-1 px-4">
-                <VideoWithAutoPause
-                  src={`${LensInfuraEndpoint}${
-                    publication?.metadata?.media[0]?.original.url.split('//')[1]
-                  }`}
-                  className={`image-unselectable object-contain rounded-xl w-full max-h-[300px] ${
-                    (collectModule.followerOnly && !isFollowedByMe) ||
-                    !isAllowed
-                      ? 'hidden'
-                      : ''
-                  } `}
-                  loop
-                  controls
-                  muted
-                />
-              </div>
-            )}
-            {publication?.metadata?.mainContentFocus !==
-              PublicationMainFocus.Image &&
-              publication?.metadata?.mainContentFocus !==
-                PublicationMainFocus.Video &&
-              getURLsFromText(publication?.metadata?.content).length > 0 && (
-                <ReactEmbedo
-                  url={getURLsFromText(publication?.metadata?.content)[0]}
-                  className={`w-full pb-1 max-h-[300px] px-4 ${
-                    (collectModule.followerOnly && !isFollowedByMe) ||
-                    !isAllowed
-                      ? 'hidden'
-                      : ''
-                  } `}
-                />
-              )}
 
             {isAllowed && hasAmount ? (
               <div className="text-p-text text-medium font-semibold">
@@ -388,21 +316,13 @@ const FeeCollectPopUp = ({
                     !isAllowed ? 'hidden' : ''
                   }`}
                 >
-                  {/* { show circular progress when loading otherwise show the collect } */}
-                  {loading ? (
-                    <div className="flex flex-row justify-center items-center space-x-2">
+                  <div className='className="flex flex-row justify-center items-center space-x-2"'>
+                    {loading ? (
                       <CircularProgress size="18px" color="primary" />
-                      <p>Collecting</p>
-                    </div>
-                  ) : (
-                    <div className="flex flex-row items-center space-x-2">
-                      <BsCollection className="w-5 h-5" />
-                      <p>
-                        Collect for {parseFloat(collectModule?.amount?.value)}
-                        {''} {collectModule?.amount?.asset?.symbol}
-                      </p>
-                    </div>
-                  )}
+                    ) : (
+                      <div>Collect </div>
+                    )}
+                  </div>
                 </button>
               </div>
             )}

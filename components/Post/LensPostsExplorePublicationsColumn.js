@@ -105,6 +105,7 @@ const LensPostsExplorePublicationsColumn = () => {
       'exploreQueryRequestParams.nextCursor',
       exploreQueryRequestParams
     )
+    console.log('router.pathname', router.pathname)
     if (
       exploreQueryRequestParams.nextCursor &&
       (router.pathname === '/' || router.pathname === '/feed/all')
