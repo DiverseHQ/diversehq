@@ -19,6 +19,10 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
       notifyInfo('Sign In with your Lens Handle')
       return
     }
+    if (!isCollecting && showOptionsModal && !isMobile) {
+      setShowOptionsModal(false)
+      return
+    }
     if (isMobile) {
       setIsDrawerOpen(true)
     } else {
