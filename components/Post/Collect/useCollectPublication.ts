@@ -71,8 +71,8 @@ const useCollectPublication = (collectModule: CollectModule) => {
   useEffect(() => {
     if (!signInError) return
     console.log(signInError)
-    setError(signInError)
     setLoading(false)
+    setError(signInError)
   }, [signInError])
 
   const collectPublication = async (publicationId: string) => {
@@ -96,6 +96,7 @@ const useCollectPublication = (collectModule: CollectModule) => {
       console.log("Couldn't collect publication")
       notifyError(e)
       setLoading(false)
+      setError(e)
     }
   }
   return { collectPublication, loading, isSuccess, error }
