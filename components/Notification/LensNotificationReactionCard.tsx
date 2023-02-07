@@ -6,8 +6,14 @@ import { MAX_CONTENT_LINES } from '../../utils/config'
 import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { ImArrowUp, ImArrowDown } from 'react-icons/im'
+import { NewReactionNotification } from '../../graphql/generated'
+type Props = {
+  notification: NewReactionNotification
+  isRead: boolean
+}
 
-const LensNotificationReactionPostCard = ({ notification, isRead }) => {
+const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
+  console.log('notification reaction', notification)
   const router = useRouter()
   const [showMore, setShowMore] = useState(
     (countLinesFromMarkdown(notification?.publication?.metadata?.content) >
@@ -38,7 +44,14 @@ const LensNotificationReactionPostCard = ({ notification, isRead }) => {
             {notification?.reaction === 'DOWNVOTE' && ' downvoted your '}
           </span>
           <span className="hover:underline font-bold">
-            <Link href={`/p/${notification?.publication?.id}`}>Post</Link>
+            {notification.publication.__typename === 'Post' && (
+              <Link href={`/p/${notification?.publication?.id}`}>Post</Link>
+            )}
+            {notification.publication.__typename === 'Comment' && (
+              <Link href={`/p/${notification?.publication?.mainPost?.id}`}>
+                Comment
+              </Link>
+            )}
           </span>
         </div>
       )}
@@ -85,4 +98,4 @@ const LensNotificationReactionPostCard = ({ notification, isRead }) => {
   )
 }
 
-export default LensNotificationReactionPostCard
+export default LensNotificationReactionCard
