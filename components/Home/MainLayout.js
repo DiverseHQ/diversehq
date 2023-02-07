@@ -25,7 +25,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
     <>
       {mobile && (
         <div className="text-p-text bg-p-bg min-h-screen transition-all duration-500">
-          <NewMobileTopNav />
+          {mounted && <NewMobileTopNav />}
           <Box
             sx={{
               width: '100%',
