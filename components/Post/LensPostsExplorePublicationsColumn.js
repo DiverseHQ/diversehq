@@ -207,7 +207,10 @@ const LensPostsExplorePublicationsColumn = () => {
         }
         endMessage={<></>}
       >
-        {(!communityIds || loading) && (
+        {(!communityIds ||
+          loading ||
+          (exploreQueryRequestParams.posts.length === 0 &&
+            exploreQueryRequestParams.hasMore)) && (
           <>
             <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
               <div className="w-full flex flex-row items-center space-x-4 p-4">
