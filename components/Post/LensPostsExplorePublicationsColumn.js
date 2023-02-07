@@ -150,6 +150,7 @@ const LensPostsExplorePublicationsColumn = () => {
   }
 
   useEffect(() => {
+    if (router.pathname !== '/' && router.pathname !== '/feed/all') return
     if (!data?.explorePublications?.items) return
     if (loading) setLoading(false)
     handleExplorePublications()
