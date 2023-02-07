@@ -5,7 +5,6 @@ import { useNotify } from '../Common/NotifyContext'
 import { postCreateCommunity } from '../../api/community'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
-import FormTextArea from '../Common/UI/FormTextArea'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useRouter } from 'next/router'
 import {
@@ -201,13 +200,15 @@ const CreateCommunity = () => {
             value={communityName}
             onChange={onChangeCommunityName}
             required
+            maxLength={26}
           />
-          <FormTextArea
-            label="Description"
-            placeholder="Community Description"
+          <FormTextInput
+            label="Short Description"
+            placeholder="Show the world what your community is..."
             value={communityDescription}
             onChange={onChangeCommunityDescription}
             required
+            maxLength={200}
           />
           <input
             type="file"
