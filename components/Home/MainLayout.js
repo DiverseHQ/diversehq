@@ -9,6 +9,7 @@ import { Box, LinearProgress } from '@mui/material'
 import useDevice from '../Common/useDevice'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
+  console.log('isMobileView', isMobileView)
   const [mobile, setMobile] = useState(isMobileView)
   // only show if mounted
   const { isMobile } = useDevice()
@@ -70,16 +71,6 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
       )}
     </>
   )
-}
-
-MainLayout.getInitialProps = async ({ ctx }) => {
-  // check is isMobile
-  let isMobileView = (
-    ctx.req ? ctx.req.headers['user-agent'] : navigator.userAgent
-  ).match(
-    /(iPhone|iPod|iPad|Android|BlackBerry|BB10|IEMobile|Opera Mini|WPDesktop)/
-  )
-  return { isMobileView }
 }
 
 export default MainLayout
