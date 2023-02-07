@@ -46,7 +46,8 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
     }
   })
 
-  const handleAllowance = async () => {
+  const handleAllowance = async (e) => {
+    e.stopPropagation()
     try {
       if (allowed) return
       setIsLoading(true)
