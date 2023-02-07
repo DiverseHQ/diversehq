@@ -1,5 +1,4 @@
-import React from 'react'
-import useDevice from '../Common/useDevice'
+import React, { useState } from 'react'
 import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
@@ -7,18 +6,23 @@ import RightSidebar from './RightSidebar'
 import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
+import useDevice from '../Common/useDevice'
 
-const MainLayout = ({ children, isLoading }) => {
-  const { isMobile } = useDevice()
+const MainLayout = ({ children, isLoading, isMobileView }) => {
+  const [mobile, setMobile] = useState(isMobileView)
   // only show if mounted
+  const { isMobile } = useDevice()
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
-
+  React.useEffect(() => {
+    if (typeof isMobile === 'undefined' || isMobileView) return
+    setMobile(isMobile)
+  }, [isMobile])
   if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
     return null
   return (
     <>
-      {isMobile && (
+      {mobile && (
         <div className="text-p-text bg-p-bg min-h-screen transition-all duration-500">
           <NewMobileTopNav />
           <Box
@@ -39,7 +43,7 @@ const MainLayout = ({ children, isLoading }) => {
           <MobileBottomNav />
         </div>
       )}
-      {!isMobile && (
+      {!mobile && (
         <div className="relative min-h-screen bg-p-bg transition-all duration-500">
           <Navbar />
 
@@ -66,6 +70,16 @@ const MainLayout = ({ children, isLoading }) => {
       )}
     </>
   )
+}
+
+MainLayout.getInitialProps = async ({ ctx }) => {
+  // check is isMobile
+  let isMobileView = (
+    ctx.req ? ctx.req.headers['user-agent'] : navigator.userAgent
+  ).match(
+    /(iPhone|iPod|iPad|Android|BlackBerry|BB10|IEMobile|Opera Mini|WPDesktop)/
+  )
+  return { isMobileView }
 }
 
 export default MainLayout
