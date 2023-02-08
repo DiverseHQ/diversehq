@@ -9,7 +9,6 @@ import { useGenerateModuleCurrencyApprovalDataQuery } from '../../../graphql/gen
 // take number input to allow that much amount
 // make a separate ui for wallet balance, allowance balance, and collect balance
 const AllowanceButton = ({ module, allowed, setAllowed }) => {
-  console.log('Allowance button rendered')
   // const [value, setValue] = React.useState(0)
   const generateModuleQuery = useGenerateModuleCurrencyApprovalDataQuery({
     request: {

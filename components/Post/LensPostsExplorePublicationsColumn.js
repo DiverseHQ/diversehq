@@ -62,7 +62,6 @@ const LensPostsExplorePublicationsColumn = () => {
   )
 
   useEffect(() => {
-    console.log('router.query.sort', router?.query?.sort)
     if (!router?.query?.sort) return
     // empty posts array, reset cursor, and set sort criteria
     setLoading(true)
@@ -87,7 +86,6 @@ const LensPostsExplorePublicationsColumn = () => {
       sortCriteria = PublicationSortCriteria.TopCollected
       // timestamp is required for top collected sort criteria
     }
-    console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: null,
@@ -100,18 +98,10 @@ const LensPostsExplorePublicationsColumn = () => {
   }, [router.query])
 
   const getMorePosts = async () => {
-    console.log('getMorePosts called')
-    console.log(
-      'exploreQueryRequestParams.nextCursor',
-      exploreQueryRequestParams
-    )
-    console.log('router.pathname', router.pathname)
     if (
       exploreQueryRequestParams.nextCursor &&
       (router.pathname === '/' || router.pathname === '/feed/all')
     ) {
-      console.log('fetching more posts')
-      console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
       setExploreQueryRequestParams({
         ...exploreQueryRequestParams,
         cursor: exploreQueryRequestParams.nextCursor
@@ -123,7 +113,6 @@ const LensPostsExplorePublicationsColumn = () => {
   const handleExplorePublications = async () => {
     let nextCursor = null
     let hasMore = true
-    console.log('data?.explorePublications', data?.explorePublications)
     if (data?.explorePublications?.pageInfo?.next) {
       nextCursor = data.explorePublications.pageInfo.next
     }
@@ -138,8 +127,6 @@ const LensPostsExplorePublicationsColumn = () => {
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
-    console.log('nextCursor', nextCursor)
-    console.log('exploreQueryRequestParams here', exploreQueryRequestParams)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       nextCursor,

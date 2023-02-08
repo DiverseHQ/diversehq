@@ -14,7 +14,6 @@ import { useAccount } from 'wagmi'
 import FormTextInput from '../Common/UI/FormTextInput'
 
 const EditCommunity = ({ community, getCommunityInformation }) => {
-  console.log('communityTo be edited', community)
   const [loading, setLoading] = useState(false)
   const [communityBanner, setCommunityBanner] = useState(
     community?.bannerImageUrl
@@ -71,7 +70,6 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
         communityData.bannerFilePath = banner.path
       }
       const res = await putEditCommunity(communityData)
-      console.log(res)
       const resData = await res.json()
       if (res.status !== 200) {
         setLoading(false)

@@ -71,7 +71,6 @@ const useLensFollowButton = (request) => {
 
   useEffect(() => {
     if (isSignedTx && type === 'unfollow') {
-      console.log('isSignedTx', isSignedTx)
       setLoading(false)
       setIsFollowedByMe(false)
     }

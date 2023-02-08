@@ -27,7 +27,6 @@ import { $getRoot } from 'lexical'
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
 const EditPostPopup = ({ post, setPost }) => {
-  console.log('post', post)
   const [file, setFile] = useState(null)
   const [title, setTitle] = useState(post?.title)
   const [content, setContent] = useState(post?.content)
@@ -61,13 +60,10 @@ const EditPostPopup = ({ post, setPost }) => {
     if (!filePicked) return
     setFile(filePicked)
     const url = URL.createObjectURL(filePicked)
-    console.log('url', url)
     const type = filePicked.type.split('/')[0]
-    console.log('type', type)
     if (type === 'image') {
       setImageUrl(url)
     } else if (type === 'video') {
-      console.log('video', url)
       setVideoUrl(url)
     }
   }

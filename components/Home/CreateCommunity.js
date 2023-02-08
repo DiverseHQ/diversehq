@@ -72,9 +72,7 @@ const CreateCommunity = () => {
     }
     try {
       await postCreateCommunity(communityData).then(async (res) => {
-        console.log(res)
         const resData = await res.json()
-        console.log(resData)
         if (res.status !== 200) {
           const msg = resData.msg
           notifyError(msg)
@@ -94,14 +92,12 @@ const CreateCommunity = () => {
 
   const handleHeaderChange = (event) => {
     const filePicked = event.target.files[0]
-    console.log('filePicked', filePicked)
     if (!filePicked) return
     if (filePicked.size > 5000000) {
       notifyError('File size must be less than 5mb')
       return
     }
     setCommunityBanner(filePicked)
-    console.log('filePicked', filePicked)
     setHeaderValue(URL.createObjectURL(filePicked))
   }
 

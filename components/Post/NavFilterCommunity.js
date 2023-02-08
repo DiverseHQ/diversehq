@@ -12,7 +12,6 @@ const NavFilterCommunity = ({ name }) => {
   const { isMobile } = useDevice()
 
   useEffect(() => {
-    console.log('pathname', pathname)
     if (pathname.endsWith('/new')) {
       setActive('new')
     } else if (pathname.endsWith('/top')) {

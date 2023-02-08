@@ -25,16 +25,8 @@ export const pollUntilIndexed = async (
   // eslint-disable-next-line no-constant-condition
   while (true) {
     const response = await hasTxBeenIndexed(input)
-    console.log('pool until indexed: result', response)
 
     if (response.__typename === 'TransactionIndexedResult') {
-      console.log('pool until indexed: indexed', response.indexed)
-      console.log(
-        'pool until metadataStatus: metadataStatus',
-        response.metadataStatus
-      )
-
-      console.log(response.metadataStatus)
       if (response.metadataStatus) {
         if (response.metadataStatus.status === 'SUCCESS') {
           return response
@@ -48,12 +40,8 @@ export const pollUntilIndexed = async (
           return response
         }
       }
-
-      console.log(
-        'pool until indexed: sleep for 1500 milliseconds then try again'
-      )
       // sleep for a second before trying again
-      await sleep(2000)
+      await sleep(1000)
     } else {
       // it got reverted and failed!
       throw new Error(response.reason)

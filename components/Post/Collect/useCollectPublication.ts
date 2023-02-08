@@ -39,7 +39,6 @@ const useCollectPublication = (collectModule: CollectModule) => {
   const handleCollect = async (publicationId: string) => {
     setLoading(true)
     try {
-      console.log('Collecting', publicationId)
       const collectResult = (
         await createCollect({
           request: {
@@ -47,7 +46,6 @@ const useCollectPublication = (collectModule: CollectModule) => {
           }
         })
       ).createCollectTypedData
-      console.log('Collect Result', collectResult)
 
       signTypedDataAndBroadcast(collectResult.typedData, {
         id: collectResult.id,
@@ -62,7 +60,6 @@ const useCollectPublication = (collectModule: CollectModule) => {
 
   useEffect(() => {
     if (type === 'collect' && result) {
-      console.log('Successfully Collected', result)
       setIsSuccess(true)
       setLoading(false)
     }
@@ -77,11 +74,9 @@ const useCollectPublication = (collectModule: CollectModule) => {
 
   const collectPublication = async (publicationId: string) => {
     try {
-      console.log('collectPublication', publicationId)
       if (!hasProfile || !isSignedIn) return
       if (collectModule.__typename === 'FreeCollectModuleSettings') {
         try {
-          console.log('handle free collect')
           setLoading(true)
           await handleFreeCollect(publicationId)
         } catch (e) {

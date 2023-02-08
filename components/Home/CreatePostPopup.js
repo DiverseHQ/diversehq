@@ -204,7 +204,6 @@ const CreatePostPopup = () => {
       appId: 'DiverseHQ'
     }
     const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
-    console.log('ipfsHash', ipfsHash)
     const createPostRequest = {
       profileId: lensProfile?.defaultProfile?.id,
       contentURI: `ipfs://${ipfsHash}`,
@@ -252,7 +251,6 @@ const CreatePostPopup = () => {
             request: createPostRequest
           })
         ).createPostViaDispatcher
-        console.log('dispatcherResult', dispatcherResult)
 
         setLoading(false)
         hideModal()
@@ -264,7 +262,6 @@ const CreatePostPopup = () => {
             request: createPostRequest
           })
         ).createPostTypedData
-        console.log('postTypedResult', postTypedResult)
         signTypedDataAndBroadcast(postTypedResult.typedData, {
           id: postTypedResult.id,
           type: 'createPost'
@@ -316,7 +313,6 @@ const CreatePostPopup = () => {
       }
       closeModal()
       router.push(`/p/${respData._id}`)
-      console.log(respData)
       notifySuccess('Post created successfully')
     } catch (error) {
       console.log(error)

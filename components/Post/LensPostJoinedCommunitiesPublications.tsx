@@ -52,7 +52,6 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   )
 
   useEffect(() => {
-    console.log('router.query.sort', router.query.sort)
     if (!router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria
     setLoading(true)
@@ -76,7 +75,6 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
       }
       sortCriteria = PublicationSortCriteria.TopCollected
 
-      console.log('timestamp', timestamp)
       // timestamp is required for top collected sort criteria
     }
     setExploreQueryRequestParams({
@@ -91,16 +89,10 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   }, [router.query])
 
   const getMorePosts = async () => {
-    console.log('getMorePosts called')
-    console.log(
-      'exploreQueryRequestParams.nextCursor',
-      exploreQueryRequestParams.nextCursor
-    )
     if (
       exploreQueryRequestParams.nextCursor &&
       router.pathname.startsWith('/feed/foryou')
     ) {
-      console.log('fetching more posts')
       setExploreQueryRequestParams({
         ...exploreQueryRequestParams,
         cursor: exploreQueryRequestParams.nextCursor

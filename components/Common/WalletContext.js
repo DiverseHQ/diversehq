@@ -104,12 +104,7 @@ export const WalletProvider = ({ children }) => {
       } catch (error) {
         console.log('error from verfiying token', error)
       }
-      console.log('useEffectCalled', useEffectCalled)
       if (useEffectCalled) return
-
-      if (!existingTokenOnLocalStorage) {
-        console.log('no existing token on local storage')
-      }
 
       //if token is not in local storage or is expired, fetch a new one and save it to local storage and state
       if (!signer) {
@@ -132,7 +127,6 @@ export const WalletProvider = ({ children }) => {
           console.log(err.toString())
         }
       }, '7d')
-      console.log('signedToken', signedToken)
 
       setLocalToken(signedToken)
       await refreshUserInfo()

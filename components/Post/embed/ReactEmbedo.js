@@ -35,25 +35,6 @@ const AllowedEmbedoRegexList = [
 
 const ReactEmbedo = ({ url, ...props }) => {
   const embedoRef = useRef(null)
-  //   const [embeded, setEmbeded] = useState(false)
-  //   if (
-  //     typeof window !== 'undefined' &&
-  //     embedoRef?.current?.children.length === 0
-  //   ) {
-  //     console.log(
-  //       'embedoRef.current.children.length',
-  //       embedoRef.current.children.length
-  //     )
-  //     const embedo = new Embedo({
-  //       twitter: true,
-  //       pinterest: true,
-  //       reddit: true,
-  //       flickr: true
-  //     })
-  //     embedo.load(embedoRef.current, url, {
-  //       centerize: true
-  //     })
-  //   }
   const isEmbedable = (url) => {
     return AllowedEmbedoRegexList.some((regex) => regex.test(url))
   }
@@ -67,11 +48,6 @@ const ReactEmbedo = ({ url, ...props }) => {
       !sessionEmbededIds.has(embedoRef.current.id) &&
       isEmbedable(url)
     ) {
-      console.log(
-        'embedoRef.current.children.length',
-        embedoRef.current.children.length
-      )
-      console.log('embedoRef.current.id', embedoRef.current.id)
       sessionEmbededIds.add(embedoRef.current.id)
 
       const embedo = new Embedo({

@@ -31,20 +31,6 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
 
   const handleClick = useCallback(
     (e) => {
-      console.log('!popupRef.current', !!popupRef.current)
-      console.log('!isMobile', !isMobile)
-      console.log('!collecting', !isCollecting)
-      console.log(
-        '!!e.target?.id || popupRef.current...',
-        !e.target?.id || popupRef.current.id !== e.target.id
-      )
-      console.log(
-        !!popupRef.current &&
-          !isMobile &&
-          (!e.target?.id || popupRef.current.id !== e.target.id) &&
-          !popupRef.current.contains(e.target) &&
-          !isCollecting
-      )
       if (
         !!popupRef.current &&
         !isMobile &&

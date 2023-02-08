@@ -83,7 +83,6 @@ const EditProfile = ({ user, showUserInfo }) => {
             const hash = await uploadFileToIpfsInfuraAndGetPath(
               profileImageFile
             )
-            console.log('hash', hash)
 
             await createSetProfileImageUriViaDispatcher({
               request: {

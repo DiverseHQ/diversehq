@@ -9,7 +9,6 @@ import { Box, LinearProgress } from '@mui/material'
 import useDevice from '../Common/useDevice'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
-  console.log('isMobileView', isMobileView)
   const [mobile, setMobile] = useState(isMobileView)
   // only show if mounted
   const { isMobile } = useDevice()

@@ -19,7 +19,6 @@ const NotificationColumn = () => {
         NOTIFICATION_LIMIT,
         notifications.length
       )
-      console.log('fetchedNotifications', fetchedNotifications)
       if (fetchedNotifications.length < NOTIFICATION_LIMIT) {
         setHasMore(false)
       }

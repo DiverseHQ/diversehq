@@ -88,8 +88,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
         notifyInfo('You might want to connect your wallet first')
         return
       }
-      const deletedId = await deleteComment(comment?._id)
-      console.log('deletedId', deletedId)
+      await deleteComment(comment?._id)
       removeCommentIdFromComments(comment?._id)
       // const post = await getSinglePostInfo(comment?.postId)
       notifyInfo('Comment deleted successfully')
