@@ -47,7 +47,7 @@ const RightSidebar = () => {
 
   const fetchTopCommunities = async () => {
     try {
-      const communities = await getAllCommunities(6, 0, 'top')
+      const communities = await getAllCommunities(10, 0, 'top')
       if (communities.communities.length > 0) {
         setTopCommunities(communities.communities)
       }

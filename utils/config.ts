@@ -41,3 +41,4 @@ export const recommendedCommunitiesIds = [
 
 export const DISCORD_INVITE_LINK = 'https://discord.gg/x7jByQKpYF'
 export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/kopveel8c'
+export const XMTP_PREFIX = 'lens.dev/dm'
