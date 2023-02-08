@@ -36,9 +36,9 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
         !isMobile &&
         (!e.target?.id || popupRef.current.id !== e.target.id) &&
         !popupRef.current.contains(e.target) &&
-        !isCollecting
+        !isCollecting &&
+        showOptionsModal
       ) {
-        console.log('clicked outside')
         setShowOptionsModal(false)
       }
     },

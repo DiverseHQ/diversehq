@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera } from 'react-icons/ai'
-import FormTextArea from '../Common/UI/FormTextArea'
 import {
   uploadFileToFirebaseAndGetUrl
   // uploadFileToIpfs
@@ -12,6 +11,7 @@ import { putEditCommunity } from '../../api/community'
 import { useProfile } from '../Common/WalletContext'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
+import FormTextInput from '../Common/UI/FormTextInput'
 
 const EditCommunity = ({ community, getCommunityInformation }) => {
   console.log('communityTo be edited', community)
@@ -171,12 +171,13 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
             onChange={onChangeName}
             required
           /> */}
-          <FormTextArea
-            label="Description"
+          <FormTextInput
+            label="Short Description"
             placeholder="Show the world what your community is..."
             value={description}
             onChange={onChangeDescription}
             required
+            maxLength={200}
           />
           <input
             type="file"

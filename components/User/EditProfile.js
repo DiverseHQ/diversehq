@@ -12,7 +12,6 @@ import {
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useNotify } from '../Common/NotifyContext'
 import PopUpWrapper from '../Common/PopUpWrapper'
-import FormTextArea from '../Common/UI/FormTextArea'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { useProfile } from '../Common/WalletContext'
 
@@ -206,12 +205,13 @@ const EditProfile = ({ user, showUserInfo }) => {
               maxLength={20}
               required
             />
-            <FormTextArea
+            <FormTextInput
               label="Bio"
-              placeholder="Say something more about you..."
+              placeholder="Say a bit more about you..."
               value={bio}
               onChange={onChangeBio}
               required
+              maxLength={200}
             />
           </div>
           <input

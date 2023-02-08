@@ -14,7 +14,7 @@ const FormTextInput = ({ label, className, value, maxLength, ...props }) => {
             {...props}
           />
           {maxLength && (
-            <div>
+            <div className="pl-1">
               {value ? value?.length : 0}/{maxLength}
             </div>
           )}

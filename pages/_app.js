@@ -18,7 +18,7 @@ const ROUTES_TO_RETAIN = [
   '/feed/top'
 ]
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, isMobileView }) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const retainedComponents = useRef({})
@@ -108,7 +108,7 @@ function MyApp({ Component, pageProps }) {
         }}
       />
       <MasterWrapper>
-        <MainLayout isLoading={isLoading}>
+        <MainLayout isLoading={isLoading} isMobileView={isMobileView}>
           <>
             <div>
               {Object.entries(retainedComponents.current).map(([path, c]) => (
@@ -129,6 +129,19 @@ function MyApp({ Component, pageProps }) {
       </MasterWrapper>
     </>
   )
+}
+
+MyApp.getInitialProps = async ({ ctx }) => {
+  // check is isMobile
+  let isMobileView = (
+    ctx.req ? ctx.req.headers['user-agent'] : navigator.userAgent
+  ).match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i)
+
+  console.log('isMobileView initialprops', Boolean(isMobileView))
+  //Returning the isMobileView as a prop to the component for further use.
+  return {
+    isMobileView: Boolean(isMobileView)
+  }
 }
 
 export default MyApp

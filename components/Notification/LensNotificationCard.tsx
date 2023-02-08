@@ -1,10 +1,10 @@
 import React from 'react'
 import LensNotificationCommentedPostCard from './LensNotificationCommentedPostCard'
 import LensNotificationFollowedCard from './LensNotificationFollowedCard'
-import LensNotificationReactionPostCard from './LensNotificationReactionPostCard'
 import LensNotificationMentionCard from './LensNotificationMentionCard'
 import { Notification } from '../../graphql/generated'
 import LensNotificationCollectCard from './LensNotificationCollectCard'
+import LensNotificationReactionCard from './LensNotificationReactionCard'
 
 const LensNotificationCard = ({
   notification,
@@ -28,7 +28,7 @@ const LensNotificationCard = ({
         />
       )}
       {notification?.__typename === 'NewReactionNotification' && (
-        <LensNotificationReactionPostCard
+        <LensNotificationReactionCard
           notification={notification}
           isRead={isRead}
         />
