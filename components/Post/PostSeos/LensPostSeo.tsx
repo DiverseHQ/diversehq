@@ -5,7 +5,6 @@ import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 
 const LensPostSeo = ({ post }: { post: Publication }) => {
-  console.log('lensPostSEo post', post)
   return (
     <NextSeo
       title={stringToLength(post?.metadata?.content, 60)}

@@ -28,7 +28,6 @@ const FreeCollectPopUp = ({
   setShowOptionsModal,
   setIsCollecting
 }: Props) => {
-  console.log('--- FreeCollectPopUp ---', publication)
   const { collectPublication, isSuccess, loading } =
     useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
@@ -67,7 +66,7 @@ const FreeCollectPopUp = ({
             <div className="  ">
               {collectModule.__typename === 'FreeCollectModuleSettings' &&
                 !collectModule.followerOnly && (
-                  <div className="font-semibold">Free collect for everyone</div>
+                  <div className="font-semibold">Free collect for all</div>
                 )}
               {collectModule.__typename === 'FreeCollectModuleSettings' &&
                 collectModule.followerOnly && (
