@@ -31,13 +31,26 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
 
   const handleClick = useCallback(
     (e) => {
+      console.log('!popupRef.current', !!popupRef.current)
+      console.log('!isMobile', !isMobile)
+      console.log('!collecting', !isCollecting)
+      console.log(
+        '!!e.target?.id || popupRef.current...',
+        !e.target?.id || popupRef.current.id !== e.target.id
+      )
+      console.log(
+        !!popupRef.current &&
+          !isMobile &&
+          (!e.target?.id || popupRef.current.id !== e.target.id) &&
+          !popupRef.current.contains(e.target) &&
+          !isCollecting
+      )
       if (
         !!popupRef.current &&
         !isMobile &&
         (!e.target?.id || popupRef.current.id !== e.target.id) &&
         !popupRef.current.contains(e.target) &&
-        !isCollecting &&
-        showOptionsModal
+        !isCollecting
       ) {
         setShowOptionsModal(false)
       }
@@ -54,22 +67,23 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
 
   return (
     <>
-      <button
-        className="relative"
-        onClick={handleButtonClick}
-        onMouseEnter={() => {
-          if (disabled || isMobile) return
-          if (!isSignedIn) return
-          setShowOptionsModal(true)
-        }}
-        ref={popupRef}
-      >
+      <div className="relative w-fit h-fit" ref={popupRef}>
+        <button
+          onClick={handleButtonClick}
+          onMouseEnter={() => {
+            if (disabled || isMobile) return
+            if (!isSignedIn) return
+            setShowOptionsModal(true)
+          }}
+        >
+          {children}
+        </button>
         {showOptionsModal && (
           <div
             className={`absolute ${
-              position === 'left' ? 'top-[10px] right-[20px]' : ''
-            } ${position === 'right' ? 'top-[25px] left-0' : ''} ${
-              position === 'top' ? ' -translate-x-44 -translate-y-20 ' : ''
+              position === 'left' ? 'top-[200px] right-[20px]' : ''
+            } ${position === 'right' ? 'top-[0px] left-0' : ''} ${
+              position === 'top' ? ' -translate-x-44 bottom-[50px]' : ''
             } ${
               position === 'bottom' ? 'translate-x-44 translate-y-20' : ''
             } z-20 bg-s-bg shadow-lg rounded-lg border `}
@@ -81,8 +95,7 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
             />
           </div>
         )}
-        {children}
-      </button>
+      </div>
       <BottomDrawerWrapper
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
