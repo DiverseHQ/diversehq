@@ -216,7 +216,10 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </span>
           </button>
           <div className="flex flex-row items-center hover:font-semibold py-4 gap-3">
-            <div className="flex flex-row gap-3" onClick={disconnect}>
+            <div
+              className="flex flex-row gap-3 cursor-pointer"
+              onClick={disconnect}
+            >
               <AiOutlineDisconnect className="w-7 h-7 object-contain text-red-400" />
               <span className="text-xl text-red-400">Disconnect</span>
             </div>
