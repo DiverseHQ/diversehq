@@ -4,7 +4,6 @@ import { BiCommentAdd } from 'react-icons/bi'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
 const LensNotificationCommentedPostCard = ({ notification, isRead }) => {
-  console.log('notification', notification)
   return (
     <CommonNotificationCardLayoutUI
       MainRow={() => (

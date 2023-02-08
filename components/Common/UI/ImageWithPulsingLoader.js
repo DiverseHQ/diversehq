@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 
-const ImageWithPulsingLoader = ({ loaderClassName, src, ...props }) => {
+const ImageWithPulsingLoader = ({ loaderClassName = '', src, ...props }) => {
   const [loading, setLoading] = useState(true)
   return (
     <>

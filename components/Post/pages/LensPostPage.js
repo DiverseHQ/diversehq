@@ -24,7 +24,6 @@ const LensPostPage = ({ id, post }) => {
 
   useEffect(() => {
     if (!data?.publication) return
-    console.log('data.publication', data.publication)
     setPostInfo(data.publication)
   }, [data])
 

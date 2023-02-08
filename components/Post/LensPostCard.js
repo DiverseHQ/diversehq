@@ -173,12 +173,10 @@ const LensPostCard = ({ post }) => {
     try {
       if (post?.metadata?.media?.length > 0) {
         const medias = post?.metadata?.media
-        console.log('medias', medias)
         for (const media of medias) {
           if (media?.original?.url?.startsWith('ipfs://')) {
             try {
               const hash = media?.original?.url?.split('ipfs://')[1]
-              console.log('unpinninghash', hash)
               await unpinFromIpfsInfura(hash)
             } catch (error) {
               console.log(error)

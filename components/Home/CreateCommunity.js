@@ -5,7 +5,6 @@ import { useNotify } from '../Common/NotifyContext'
 import { postCreateCommunity } from '../../api/community'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
-import FormTextArea from '../Common/UI/FormTextArea'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useRouter } from 'next/router'
 import {
@@ -73,9 +72,7 @@ const CreateCommunity = () => {
     }
     try {
       await postCreateCommunity(communityData).then(async (res) => {
-        console.log(res)
         const resData = await res.json()
-        console.log(resData)
         if (res.status !== 200) {
           const msg = resData.msg
           notifyError(msg)
@@ -95,14 +92,12 @@ const CreateCommunity = () => {
 
   const handleHeaderChange = (event) => {
     const filePicked = event.target.files[0]
-    console.log('filePicked', filePicked)
     if (!filePicked) return
     if (filePicked.size > 5000000) {
       notifyError('File size must be less than 5mb')
       return
     }
     setCommunityBanner(filePicked)
-    console.log('filePicked', filePicked)
     setHeaderValue(URL.createObjectURL(filePicked))
   }
 
@@ -201,13 +196,15 @@ const CreateCommunity = () => {
             value={communityName}
             onChange={onChangeCommunityName}
             required
+            maxLength={26}
           />
-          <FormTextArea
-            label="Description"
-            placeholder="Community Description"
+          <FormTextInput
+            label="Short Description"
+            placeholder="Show the world what your community is..."
             value={communityDescription}
             onChange={onChangeCommunityDescription}
             required
+            maxLength={200}
           />
           <input
             type="file"

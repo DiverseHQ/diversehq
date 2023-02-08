@@ -18,7 +18,6 @@ const CommunitiesSearchModal = ({
       return
     }
     const res = await searchCommunityFromName(searchTerm)
-    console.log(res)
     setCommunities(res)
   }
 

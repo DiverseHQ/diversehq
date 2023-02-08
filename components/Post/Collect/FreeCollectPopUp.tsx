@@ -32,8 +32,6 @@ const FreeCollectPopUp = ({
     useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
   useEffect(() => {
-    console.log('isSuccess', isSuccess)
-    console.log('loading', loading)
     if (!loading && isSuccess) {
       notifySuccess('Post has been collected, check your collections!')
       setIsCollected(true)
@@ -66,7 +64,7 @@ const FreeCollectPopUp = ({
             <div className="  ">
               {collectModule.__typename === 'FreeCollectModuleSettings' &&
                 !collectModule.followerOnly && (
-                  <div className="font-semibold">Free collect for everyone</div>
+                  <div className="font-semibold">Free collect for all</div>
                 )}
               {collectModule.__typename === 'FreeCollectModuleSettings' &&
                 collectModule.followerOnly && (
@@ -115,8 +113,8 @@ const FreeCollectPopUp = ({
                 )}
             </div>
             <button
-              onClick={async () => {
-                console.log('--- collect button clicked ---')
+              onClick={async (e) => {
+                e.stopPropagation()
                 await collectPublication(publication.id)
               }}
               disabled={
@@ -151,49 +149,41 @@ const FreeCollectPopUp = ({
           <div className="col-span-full row-span-full translate-y-1 bg-s-bg  h-[4px] w-3 rounded self-end justify-self-center rounded-b-full border-b border-l border-r"></div>
         </div>
       ) : (
-        <div className=" flex items-center flex-col justify-center px-4 text-p-text">
-          {collectModule?.__typename === 'FreeCollectModuleSettings' &&
-            !collectModule.followerOnly && (
-              <div className="font-bold text-lg mt-3 mb-2">Free collect</div>
-            )}
+        // mobile
+        <div className="flex items-center flex-col justify-center px-4 text-p-text">
           {collectModule?.__typename === 'FreeCollectModuleSettings' &&
             collectModule.followerOnly && (
               <>
-                <div className="font-bold text-lg mt-3 mb-2">Free Collect</div>
-                <div>
-                  {isFollowedByMe ? (
-                    <div className="font-semibold text-center mb-2">
-                      You are following {author.handle} and can collect for free
-                    </div>
-                  ) : (
-                    <div className="flex flex-row items-center justify-center space-x-2 mb-2 font-medium">
-                      <button
-                        onClick={() => {
-                          handleFollowProfile(author.id)
-                        }}
-                        className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold "
-                      >
-                        {followLoading ? (
-                          <div className="flex flex-row justify-center items-center space-x-2">
-                            <CircularProgress size="18px" color="primary" />
-                            <p>Follow</p>
-                          </div>
-                        ) : author.isFollowing ? (
-                          'Follow back'
-                        ) : (
-                          <div className="flex flex-row justify-center items-center space-x-1 ">
-                            <RiUserFollowLine /> <p>Follow</p>
-                          </div>
-                        )}
-                      </button>
-                      <p>{author.handle} to Collect for Free</p>
-                    </div>
-                  )}
-                </div>
+                {!isFollowedByMe && (
+                  <div className="flex flex-row items-center self-start space-x-2 mb-2 font-medium">
+                    <button
+                      onClick={() => {
+                        handleFollowProfile(author.id)
+                      }}
+                      className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold "
+                    >
+                      {followLoading ? (
+                        <div className="flex flex-row self-start space-x-2">
+                          <CircularProgress size="18px" color="primary" />
+                          <p>Follow</p>
+                        </div>
+                      ) : author.isFollowing ? (
+                        'Follow back'
+                      ) : (
+                        <div className="flex flex-row justify-center items-center space-x-1 ">
+                          <RiUserFollowLine /> <p>Follow</p>
+                        </div>
+                      )}
+                    </button>
+                    <p>{author.handle} to Collect for Free</p>
+                  </div>
+                )}
               </>
             )}
+
           <button
-            onClick={async () => {
+            onClick={async (e) => {
+              e.stopPropagation()
               await collectPublication(publication.id)
             }}
             disabled={
@@ -204,10 +194,17 @@ const FreeCollectPopUp = ({
             }
             className="bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
           >
-            <div className="flex flex-row items-center space-x-2">
-              <BsCollection className="w-5 h-5" />
-              Collect
-            </div>
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <div>Collect</div>
+              </div>
+            ) : (
+              <div className="flex flex-row items-center space-x-2">
+                <BsCollection className="w-5 h-5" />
+                <p>Collect</p>
+              </div>
+            )}
           </button>
         </div>
       )}

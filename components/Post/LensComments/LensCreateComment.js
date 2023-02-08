@@ -99,9 +99,6 @@ const LensCreateComment = ({
         tags: [],
         appId: 'DiverseHQ'
       })
-
-      console.log('ipfsHash', ipfsHash)
-
       const createCommentRequest = {
         profileId: lensProfile?.defaultProfile?.id,
         publicationId: postId,
@@ -127,7 +124,6 @@ const LensCreateComment = ({
               request: createCommentRequest
             })
           ).createCommentTypedData
-          console.log('commentTypedResult', commentTypedResult)
           signTypedDataAndBroadcast(commentTypedResult.typedData, {
             id: commentTypedResult.id,
             type: 'createComment'

@@ -31,7 +31,6 @@ const PostsColumn = ({ source, sortBy, data }) => {
         posts.length,
         sortBy
       )
-      console.log('fetchedPosts', fetchedPosts)
       if (fetchedPosts.posts.length < POST_LIMIT) {
         setHasMore(false)
       }
@@ -50,7 +49,6 @@ const PostsColumn = ({ source, sortBy, data }) => {
         posts.length,
         sortBy
       )
-      console.log('fetchedPosts', fetchedPosts)
       if (fetchedPosts.posts.length < POST_LIMIT) {
         setHasMore(false)
       }
@@ -62,11 +60,9 @@ const PostsColumn = ({ source, sortBy, data }) => {
 
   const handleGetMorePostsForAll = async () => {
     try {
-      console.log('hasMore', hasMore)
       if (!hasMore) return
       if (!router.pathname.startsWith('/feed/offchain')) return
       const fetchedPosts = await getAllPosts(POST_LIMIT, posts.length, sortBy)
-      console.log('fetchedPosts', fetchedPosts)
       if (fetchedPosts.posts.length < POST_LIMIT) {
         setHasMore(false)
       }
@@ -77,7 +73,6 @@ const PostsColumn = ({ source, sortBy, data }) => {
   }
 
   const getMorePosts = async () => {
-    console.log('source', source)
     if (source === 'user') {
       await handleGetMorePostsForUser()
     } else if (source === 'community') {
@@ -88,7 +83,6 @@ const PostsColumn = ({ source, sortBy, data }) => {
   }
 
   useEffect(() => {
-    console.log('change data', data)
     setPosts([])
     setHasMore(true)
   }, [data])

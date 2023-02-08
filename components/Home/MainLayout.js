@@ -1,5 +1,4 @@
-import React from 'react'
-import useDevice from '../Common/useDevice'
+import React, { useState } from 'react'
 import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
@@ -13,8 +12,11 @@ import CreatePostButton from '../Common/UI/CreatePostButton'
 // import { Wallet } from 'ethers'
 // import { useSigner } from 'wagmi'
 // import { useProfile } from '../Common/WalletContext'
+import useDevice from '../Common/useDevice'
 
-const MainLayout = ({ children, isLoading }) => {
+const MainLayout = ({ children, isLoading, isMobileView }) => {
+  const [mobile, setMobile] = useState(isMobileView)
+  // only show if mounted
   const { isMobile } = useDevice()
 
   // const [showMessages, setShowMessages] = useState(false)
@@ -126,17 +128,19 @@ const MainLayout = ({ children, isLoading }) => {
   //   messagesXMTP()
   // }, [])
 
-  // only show if mounted
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
-
+  React.useEffect(() => {
+    if (typeof isMobile === 'undefined' || isMobileView) return
+    setMobile(isMobile)
+  }, [isMobile])
   if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
     return null
   return (
     <>
-      {isMobile && (
+      {mobile && (
         <div className="text-p-text bg-p-bg min-h-screen transition-all duration-500">
-          <NewMobileTopNav />
+          {mounted && <NewMobileTopNav />}
           <Box
             sx={{
               width: '100%',
@@ -156,7 +160,7 @@ const MainLayout = ({ children, isLoading }) => {
           <MobileBottomNav />
         </div>
       )}
-      {!isMobile && (
+      {!mobile && (
         <div className="relative min-h-screen bg-p-bg transition-all duration-500">
           <Navbar />
 
