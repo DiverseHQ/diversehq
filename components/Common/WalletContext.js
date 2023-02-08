@@ -59,7 +59,7 @@ export const WalletProvider = ({ children }) => {
       setLoading(true)
       if (!address) return
       const userInfo = await getUserInfo(address)
-      if (userInfo && userInfo.role <= userRoles.WHITELISTED_USER) {
+      if (userInfo && userInfo.role <= userRoles.NORMAL_USER) {
         setUser(userInfo)
       } else {
         notifyInfo(
