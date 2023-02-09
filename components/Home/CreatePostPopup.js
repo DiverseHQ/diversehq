@@ -44,6 +44,8 @@ import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
+import useDevice from '../Common/useDevice'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
@@ -88,6 +90,7 @@ const CreatePostPopup = () => {
   const router = useRouter()
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
+  const { isMobile } = useDevice()
 
   const { mutateAsync: createPostViaDispatcher } =
     useCreatePostViaDispatcherMutation()
@@ -99,6 +102,7 @@ const CreatePostPopup = () => {
   const recentCommunities =
     JSON.parse(window.localStorage.getItem('recentCommunities')) || []
   const [selectedCommunity, setSelectedCommunity] = useState(null)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   const storeRecentCommunities = () => {
     window.localStorage.setItem(
@@ -192,11 +196,11 @@ const CreatePostPopup = () => {
         mimeType === 'text'
           ? null
           : [
-              {
-                item: url,
-                type: mimeType
-              }
-            ],
+            {
+              item: url,
+              type: mimeType
+            }
+          ],
       animation_url:
         mimeType !== 'text' && !mimeType.startsWith('image') ? url : null,
       attributes: [],
@@ -361,11 +365,10 @@ const CreatePostPopup = () => {
           ></div>
 
           <div
-            className={`flex flex-col h-fit absolute z-10 ${
-              showCommunityOptions
+            className={`flex flex-col h-fit absolute z-10 ${showCommunityOptions
                 ? 'enter-fade-animation'
                 : 'exit-fade-animation '
-            }`}
+              }`}
             style={communityOptionsCoord}
           >
             <div className="bg-white/50 dark:bg-black/50 backdrop-blur-lg rounded-2xl max-h-[450px] overflow-auto">
@@ -491,7 +494,12 @@ const CreatePostPopup = () => {
             {isLensPost && (
               <button
                 onClick={() => {
-                  setShowCollectSettings(!showCollectSettings)
+                  if (!isMobile) {
+                    setShowCollectSettings(!showCollectSettings)
+                    return
+                  } else {
+                    setIsDrawerOpen(true)
+                  }
                 }}
                 disabled={loading}
                 className="rounded-full hover:bg-p-btn-hover p-2 mr-6 cursor-pointer"
@@ -597,11 +605,32 @@ const CreatePostPopup = () => {
             />
           </div>
         )}
-        {showCollectSettings && (
+        {showCollectSettings && !isMobile ? (
           <CollectSettingsModel
             collectSettings={collectSettings}
             setCollectSettings={setCollectSettings}
           />
+        ) : (
+          <BottomDrawerWrapper
+            isDrawerOpen={isDrawerOpen}
+            setIsDrawerOpen={setIsDrawerOpen}
+            showClose={false}
+          >
+            <CollectSettingsModel
+              collectSettings={collectSettings}
+              setCollectSettings={setCollectSettings}
+            />
+            <div className="px-4 w-full bg-s-bg mb-3 mt-1">
+              <button
+                onClick={() => {
+                  setIsDrawerOpen(false)
+                }}
+                className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl mb-6"
+              >
+                Save
+              </button>
+            </div>
+          </BottomDrawerWrapper>
         )}
       </PopUpWrapper>
     )

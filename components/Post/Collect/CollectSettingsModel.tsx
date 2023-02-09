@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Switch } from '@mui/material'
+import { MenuItem, Select, Switch } from '@mui/material'
 import { useLensUserContext } from '../../../lib/LensUserContext'
+import useDevice from '../../Common/useDevice'
 
 // change this later and fetch from https://docs.lens.xyz/docs/enabled-modules-currencies
 const CurrencyOptions = [
@@ -48,6 +49,7 @@ const CurrencyOptions = [
 ]
 
 const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
+  const { isMobile } = useDevice()
   let _followerOnly = false
   if (collectSettings) {
     if (collectSettings.feeCollectModule) {
@@ -96,8 +98,16 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   }, [followerOnly, monetize, price, currency, lensProfile])
   return (
     <div className="m-4 flex flex-col">
-      <div className="flex flex-col gap-y-4">
-        <div className="flex flex-row items-center">
+      <div className="flex flex-col gap-y-4 relative">
+        <h1
+          className={`self-center font-medium text-lg mb-2.5 ${
+            !isMobile ? 'hidden' : ''
+          }`}
+        >
+          Collect Setting
+        </h1>
+        <div className="flex flex-row items-center justify-between">
+          <p>Only Followers can Collect</p>
           <Switch
             checked={followerOnly}
             onChange={() => setFollowerOnly(!followerOnly)}
@@ -108,9 +118,9 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               }
             }}
           />
-          <div>Only Followers can Collect</div>
         </div>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center justify-between">
+          <p>Monetize</p>
           <Switch
             checked={monetize}
             onChange={() => setMonetize(!monetize)}
@@ -121,32 +131,32 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               }
             }}
           />
-          <div>Monetize</div>
         </div>
         {monetize && (
-          <div className="ml-[50px] flex flex-col gap-y-4">
-            <div className="flex flex-row items-center">
+          <div className="lg:ml-[50px] flex flex-row lg:flex-col flex-row lg:gap-y-4 space-x-10 lg:space-x-0">
+            <div className="flex flex-row items-center ">
               <div>Currency</div>
-              <select
+              <Select
                 onChange={(e) => {
                   setCurrency(e.target.value)
                 }}
-                className="bg-s-bg outline-none ml-2 px-2 py-1 rounded-md"
+                className={`bg-s-bg text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
+                value={currency}
               >
                 {CurrencyOptions.map((currency) => (
-                  <option key={currency.address} value={currency.address}>
+                  <MenuItem key={currency.address} value={currency.address}>
                     {currency.symbol}
-                  </option>
+                  </MenuItem>
                 ))}
-              </select>
+              </Select>
             </div>
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center ">
               <div>Price</div>
               <input
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(Number(e.target.value))}
-                className="bg-s-bg outline-none ml-2 px-2 py-1 rounded-md"
+                className="border w-14  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md "
               />
             </div>
           </div>
