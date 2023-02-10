@@ -30,7 +30,8 @@ const LensPostsCommunityPublicationsColumn = ({ communityInfo }) => {
         cursor: cursor,
         publicationTypes: [PublicationTypes.Post],
         limit: LENS_POST_LIMIT,
-        sortCriteria: PublicationSortCriteria.Latest
+        sortCriteria: PublicationSortCriteria.Latest,
+        noRandomize: true
       },
       reactionRequest: {
         profileId: myLensProfile?.defaultProfile?.id

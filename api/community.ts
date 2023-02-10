@@ -1,5 +1,5 @@
 import apiEndpoint from './ApiEndpoint'
-import { CommunityType } from '../utils/types'
+import { CommunityType } from '../types/community'
 import { getHeaders } from './apiHelper'
 
 export const getPostOfCommunity = async (

@@ -1,4 +1,3 @@
-import { Link } from '@mui/material'
 import React from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import useDevice from '../Common/useDevice'
@@ -20,6 +19,7 @@ import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
 import { FaRegComment } from 'react-icons/fa'
 import { BsCollection } from 'react-icons/bs'
 import { IoIosShareAlt } from 'react-icons/io'
+import Link from 'next/link'
 TimeAgo.addDefaultLocale(en)
 
 const IndexingPostCard = ({ postInfo }) => {
@@ -40,8 +40,8 @@ const IndexingPostCard = ({ postInfo }) => {
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
                       src={
-                        postInfo?.communityInfo?.logoImageUrl
-                          ? postInfo?.communityInfo?.logoImageUrl
+                        postInfo?.communityInfo?.image
+                          ? postInfo?.communityInfo?.image
                           : '/gradient.jpg'
                       }
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
@@ -82,8 +82,8 @@ const IndexingPostCard = ({ postInfo }) => {
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
                       src={
-                        postInfo?.communityInfo?.logoImageUrl
-                          ? postInfo?.communityInfo?.logoImageUrl
+                        postInfo?.communityInfo?.image
+                          ? postInfo?.communityInfo?.image
                           : '/gradient.jpg'
                       }
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
@@ -258,7 +258,7 @@ const IndexingPostCard = ({ postInfo }) => {
                   className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center"
                 >
                   <BsCollection className="w-5 h-5" />
-                  <div className="ml-2">1</div>
+                  <div className="ml-2">0</div>
                 </button>
                 <div className="hover:bg-p-btn-hover rounded-md p-1">
                   <IoIosShareAlt className="hover:cursor-pointer w-6 h-6 " />

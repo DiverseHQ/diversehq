@@ -43,8 +43,8 @@ const OptionsWrapper = ({
 
   return (
     <>
-      <button
-        className="relative"
+      <div
+        className="relative cursor-pointer"
         ref={popupRef}
         onClick={handleButtonClick}
         id="options-wrapper"
@@ -61,7 +61,7 @@ const OptionsWrapper = ({
             <OptionPopUpModal />
           </div>
         )}
-      </button>
+      </div>
       <BottomDrawerWrapper
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}

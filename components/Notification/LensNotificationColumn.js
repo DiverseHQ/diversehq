@@ -56,7 +56,6 @@ const LensNotificationColumn = () => {
   }, [data?.notifications?.pageInfo?.next])
 
   const handleNotifications = async () => {
-    console.log('data.notifications.items', data.notifications.items)
     if (data.notifications.items.length > 0) {
       setNotifications([...notifications, ...data.notifications.items])
     }
@@ -76,7 +75,6 @@ const LensNotificationColumn = () => {
 
   useEffect(() => {
     return async () => {
-      console.log('lensnotificationcolumn unmount')
       await refreshUserInfo()
     }
   }, [])

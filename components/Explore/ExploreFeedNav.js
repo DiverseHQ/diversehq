@@ -11,7 +11,6 @@ const ExploreFeedNav = () => {
   const [active, setActive] = useState('top')
 
   useEffect(() => {
-    console.log('pathname', pathname)
     if (pathname.endsWith('new')) {
       setActive('new')
     } else if (pathname.endsWith('top')) {

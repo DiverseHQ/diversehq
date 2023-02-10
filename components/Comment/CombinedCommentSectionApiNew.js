@@ -20,7 +20,6 @@ const CombinedCommentSectionApiNew = ({ postId, authorAddress }) => {
       )
       if (res.status !== 200) return
       const { comments: newComments } = await res.json()
-      console.log('newComments', newComments)
       if (newComments.length < COMMENT_LIMIT) {
         setHasMore(false)
       }
@@ -33,7 +32,6 @@ const CombinedCommentSectionApiNew = ({ postId, authorAddress }) => {
   }
 
   useEffect(() => {
-    console.log('change post', postId)
     setComments([])
     setHasMore(true)
   }, [postId])

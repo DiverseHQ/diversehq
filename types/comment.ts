@@ -9,12 +9,3 @@ export type CommentType = {
   _id?: string
   [key: string]: any
 }
-
-export type CommunityType = {
-  name: string
-  description?: string
-  bannerImageUrl?: string
-  logoImageUrl?: string
-  creator?: string
-  [key: string]: any
-}

@@ -18,6 +18,10 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
       notifyInfo('Sign In with your Lens Handle')
       return
     }
+    if (!isCollecting && showOptionsModal && !isMobile) {
+      setShowOptionsModal(false)
+      return
+    }
     if (isMobile) {
       setIsDrawerOpen(true)
     } else {
@@ -34,7 +38,6 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
         !popupRef.current.contains(e.target) &&
         !isCollecting
       ) {
-        console.log('clicked outside')
         setShowOptionsModal(false)
       }
     },
@@ -50,22 +53,23 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
 
   return (
     <>
-      <button
-        className="relative"
-        onClick={handleButtonClick}
-        onMouseEnter={() => {
-          if (disabled || isMobile) return
-          if (!isSignedIn) return
-          setShowOptionsModal(true)
-        }}
-        ref={popupRef}
-      >
+      <div className="relative w-fit h-fit" ref={popupRef}>
+        <button
+          onClick={handleButtonClick}
+          onMouseEnter={() => {
+            if (disabled || isMobile) return
+            if (!isSignedIn) return
+            setShowOptionsModal(true)
+          }}
+        >
+          {children}
+        </button>
         {showOptionsModal && (
           <div
             className={`absolute ${
-              position === 'left' ? 'top-[10px] right-[20px]' : ''
-            } ${position === 'right' ? 'top-[25px] left-0' : ''} ${
-              position === 'top' ? ' -translate-x-44 -translate-y-20 ' : ''
+              position === 'left' ? 'top-[200px] right-[20px]' : ''
+            } ${position === 'right' ? 'top-[0px] left-0' : ''} ${
+              position === 'top' ? ' -translate-x-44 bottom-[50px]' : ''
             } ${
               position === 'bottom' ? 'translate-x-44 translate-y-20' : ''
             } z-20 bg-s-bg shadow-lg rounded-lg border `}
@@ -77,8 +81,7 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
             />
           </div>
         )}
-        {children}
-      </button>
+      </div>
       <BottomDrawerWrapper
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}

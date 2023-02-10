@@ -10,8 +10,8 @@ default below 576px (portrait phones)
 const useDevice = () => {
   // eslint-disable-next-line
   const [windowHeight, windowWidth] = useWindowSize()
-  const isMobile = windowWidth < 768
-  const isDesktop = windowWidth >= 768
+  const isMobile = windowWidth < 950
+  const isDesktop = windowWidth >= 950
   return { isMobile, isDesktop }
 }
 

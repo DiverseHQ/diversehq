@@ -7,7 +7,6 @@ import {
 export default async function refreshAccessToken(
   _refreshToken: string
 ): Promise<string> {
-  console.log('refreshAccessToken', _refreshToken)
   if (!_refreshToken) return ''
   const res = await fetch(endpoint, {
     method: 'POST',
@@ -32,10 +31,8 @@ export default async function refreshAccessToken(
     })
   })
   const json = await res.json()
-  console.log(json)
   if (json.errors) {
     const { message } = json.errors[0] || 'Error..'
-    console.log('Error', message)
     removeAccessTokenFromStorage()
     throw new Error(message)
   }

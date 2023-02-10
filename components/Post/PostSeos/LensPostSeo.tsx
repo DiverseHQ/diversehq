@@ -1,10 +1,10 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
+import { Publication } from '../../../graphql/generated'
 import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 
-const LensPostSeo = ({ post }) => {
-  console.log('lensPostSEo post', post)
+const LensPostSeo = ({ post }: { post: Publication }) => {
   return (
     <NextSeo
       title={stringToLength(post?.metadata?.content, 60)}
@@ -14,7 +14,11 @@ const LensPostSeo = ({ post }) => {
       }}
       openGraph={{
         url: `https://app.diversehq.xyz/p/${post?.id}`,
-        title: stringToLength(post?.metadata?.content, 60),
+        title: `${stringToLength(post?.metadata?.content, 40)} \n | ${
+          post?.stats?.totalAmountOfCollects
+        } Collects | ${post?.stats?.totalUpvotes} Upvotes | \n by ${
+          post?.profile?.handle
+        }`,
         images:
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [

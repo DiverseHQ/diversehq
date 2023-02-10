@@ -12,12 +12,9 @@ const EditComment = ({ comment, setComment }) => {
   const { notifyError, notifySuccess } = useNotify()
   const { hideModal } = usePopUpModal()
 
-  console.log(comment)
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    console.log('Submitted')
     if (!content) {
       setLoading(false)
       notifyError('Please fill the field.')

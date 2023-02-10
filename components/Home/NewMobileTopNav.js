@@ -31,6 +31,9 @@ const NewMobileTopNav = () => {
     if (router.query.sort && sortType !== router.query.sort) {
       setSortType(router.query.sort)
     }
+    if (!router.query.sort) {
+      setSortType(sortTypes.LATEST)
+    }
   }, [router.query])
 
   const addQueryParam = (key, value) => {
@@ -83,15 +86,11 @@ const NewMobileTopNav = () => {
                     className="w-[35px] h-[35px] rounded-full"
                   />
                   {(!isSignedIn || !hasProfile) && (
-                    <div className="absolute top-0 left-0 w-3 h-3 bg-green-500 rounded-full" />
+                    <div className="absolute top-0 left-0 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                   )}
                 </div>
               )}
-              <span
-                className={`font-semibold text-[18px] ${
-                  !user ? '-ml-[40px]' : ''
-                }`}
-              >
+              <span className={`font-semibold text-[18px] `}>
                 {router.pathname.startsWith('/explore') && 'Explore'}
                 {router.pathname.startsWith('/notification') && 'Notifications'}
                 {(router.pathname.startsWith('/feed/all') ||

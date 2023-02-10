@@ -40,7 +40,6 @@ const CreateTestLensHandle = () => {
       ['uint256'],
       profileCreatedEventLog[1]
     )[0]
-    console.log('profile id', BigNumber.from(profileId).toHexString())
     return BigNumber.from(profileId).toHexString()
   }
 
@@ -85,17 +84,12 @@ const CreateTestLensHandle = () => {
         notifyError('Handle is already taken')
         return null
       }
-      console.log('create Profile: poll until indexed')
-      console.log('createProfileResult ', createProfileResult)
       const indexedResult = await pollUntilIndexed({
         txHash: createProfileResult.txHash
       })
-      console.log('indexedResult createPost', indexedResult)
 
       if (indexedResult) {
-        console.log('create profile: success')
         const profileId = await profileIdFromResponseResult(indexedResult)
-        console.log('profileId', profileId)
         return profileId
       }
     } catch (err) {
