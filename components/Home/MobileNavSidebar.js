@@ -41,7 +41,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
   const { theme, toggleTheme } = useTheme()
-  const { data: myLensProfile } = useLensUserContext()
+  const { data: myLensProfile, isSignedIn, hasProfile } = useLensUserContext()
 
   const fetchAndSetCreatedCommunities = async () => {
     try {
@@ -135,24 +135,26 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                   src={user?.profileImageUrl}
                   className="w-[55px] h-[55px] bg-[#333] rounded-full"
                 />
-                <div className="flex flex-col items-start ml-4">
+                <div className="flex flex-col justify-center items-start ml-4">
                   {user?.name && (
                     <h3 className="font-semibold text-[18px]">{user.name}</h3>
                   )}
-                  <div className="flex flex-row gap-4 text-p-text">
-                    <div className="">
-                      <span className="font-bold mr-1">
-                        {myLensProfile?.defaultProfile?.stats?.totalFollowers}
-                      </span>
-                      <span className="font-light">Followers</span>
+                  {isSignedIn && hasProfile && (
+                    <div className="flex flex-row gap-4 text-p-text">
+                      <div className="">
+                        <span className="font-bold mr-1">
+                          {myLensProfile?.defaultProfile?.stats?.totalFollowers}
+                        </span>
+                        <span className="font-light">Followers</span>
+                      </div>
+                      <div className="">
+                        <span className="font-bold mr-1">
+                          {myLensProfile?.defaultProfile?.stats?.totalFollowing}
+                        </span>
+                        <span className="font-light">Following</span>
+                      </div>
                     </div>
-                    <div className="">
-                      <span className="font-bold mr-1">
-                        {myLensProfile?.defaultProfile?.stats?.totalFollowing}
-                      </span>
-                      <span className="font-light">Following</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
