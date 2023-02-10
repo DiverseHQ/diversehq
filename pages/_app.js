@@ -13,16 +13,23 @@ import { useRef } from 'react'
 const ROUTES_TO_RETAIN = [
   '/',
   '/feed/all',
+  '/feed/all?sort=Latest',
+  '/feed/all?sort=Today',
+  '/feed/all?sort=Week',
+  '/feed/all?sort=Month',
   '/feed/foryou',
-  '/feed/offchain',
-  '/feed/top'
+  '/feed/foryou?sort=Latest',
+  '/feed/foryou?sort=Today',
+  '/feed/foryou?sort=Week',
+  '/feed/foryou?sort=Month',
+  '/feed/offchain'
 ]
 
 function MyApp({ Component, pageProps, isMobileView }) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const retainedComponents = useRef({})
-
+  console.log('router.asPath', router.asPath)
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
 
   // Add Component to retainedComponents if we haven't got it already
@@ -111,16 +118,19 @@ function MyApp({ Component, pageProps, isMobileView }) {
         <MainLayout isLoading={isLoading} isMobileView={isMobileView}>
           <>
             <div>
-              {Object.entries(retainedComponents.current).map(([path, c]) => (
-                <div
-                  key={path}
-                  style={{
-                    display: router.asPath === path ? 'block' : 'none'
-                  }}
-                >
-                  {c.component}
-                </div>
-              ))}
+              {Object.entries(retainedComponents.current).map(([path, c]) => {
+                console.log('path', path)
+                return (
+                  <div
+                    key={path}
+                    style={{
+                      display: router.asPath === path ? 'block' : 'none'
+                    }}
+                  >
+                    {c.component}
+                  </div>
+                )
+              })}
             </div>
 
             {!isRetainableRoute && <Component {...pageProps} />}

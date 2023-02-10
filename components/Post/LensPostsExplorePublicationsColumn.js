@@ -20,12 +20,11 @@ import IndexingPostCard from './IndexingPostCard'
 import { sortTypes } from '../../utils/config'
 import { memo } from 'react'
 // import { useLensUserContext } from '../../lib/LensUserContext'
-
+import useRouterLoading from '../Common/Hook/useRouterLoading'
 const LensPostsExplorePublicationsColumn = () => {
   const router = useRouter()
   const { data: myLensProfile } = useLensUserContext()
   const { posts: indexingPost } = usePostIndexing()
-  const [loading, setLoading] = useState(true)
   const [communityIds, setCommunityIds] = useState(null)
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
     cursor: null,
@@ -35,6 +34,7 @@ const LensPostsExplorePublicationsColumn = () => {
     nextCursor: null,
     posts: []
   })
+  const { loading: routeLoading } = useRouterLoading()
   const { data } = useExplorePublicationsQuery(
     {
       request: {
@@ -58,14 +58,16 @@ const LensPostsExplorePublicationsColumn = () => {
       }
     },
     {
-      enabled: !!communityIds
+      enabled:
+        !!communityIds &&
+        (router.pathname === '/' || router.pathname === '/feed/all') &&
+        !routeLoading
     }
   )
 
   useEffect(() => {
     if (!router?.query?.sort) return
     // empty posts array, reset cursor, and set sort criteria
-    setLoading(true)
     let timestamp = null
     let sortCriteria = PublicationSortCriteria.Latest
     if (router.query.sort === sortTypes.LATEST) {
@@ -87,6 +89,7 @@ const LensPostsExplorePublicationsColumn = () => {
       sortCriteria = PublicationSortCriteria.TopCollected
       // timestamp is required for top collected sort criteria
     }
+    if (exploreQueryRequestParams.sortCriteria === sortCriteria) return
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: null,
@@ -99,16 +102,13 @@ const LensPostsExplorePublicationsColumn = () => {
   }, [router.query])
 
   const getMorePosts = async () => {
-    if (
-      exploreQueryRequestParams.nextCursor &&
-      (router.pathname === '/' || router.pathname === '/feed/all')
-    ) {
-      setExploreQueryRequestParams({
-        ...exploreQueryRequestParams,
-        cursor: exploreQueryRequestParams.nextCursor
-      })
-      return
-    }
+    if (exploreQueryRequestParams.posts.length === 5) return
+    console.log('get more posts')
+    console.log('cursor', exploreQueryRequestParams.nextCursor)
+    setExploreQueryRequestParams({
+      ...exploreQueryRequestParams,
+      cursor: exploreQueryRequestParams.nextCursor
+    })
   }
 
   const handleExplorePublications = async () => {
@@ -140,7 +140,6 @@ const LensPostsExplorePublicationsColumn = () => {
   useEffect(() => {
     if (router.pathname !== '/' && router.pathname !== '/feed/all') return
     if (!data?.explorePublications?.items) return
-    if (loading) setLoading(false)
     handleExplorePublications()
   }, [data?.explorePublications?.pageInfo?.next])
 
@@ -165,9 +164,14 @@ const LensPostsExplorePublicationsColumn = () => {
   return (
     <div>
       <InfiniteScroll
+        scrollThreshold={0.8}
         dataLength={exploreQueryRequestParams.posts.length}
         next={getMorePosts}
-        hasMore={exploreQueryRequestParams.hasMore}
+        hasMore={
+          exploreQueryRequestParams.hasMore &&
+          !routeLoading &&
+          (router.pathname === '/' || router.pathname === '/feed/all')
+        }
         loader={
           <>
             <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
@@ -181,23 +185,11 @@ const LensPostsExplorePublicationsColumn = () => {
                 <div className="w-full rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
               </div>
             </div>
-            <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
-              <div className="w-full flex flex-row items-center space-x-4 p-4">
-                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full animate-pulse" />
-                <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-              </div>
-              <div className="w-full flex flex-row items-center space-x-4 sm:p-4 pr-4">
-                <div className="w-6 sm:w-[50px] h-4 " />
-                <div className="w-full mr-4 rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
-              </div>
-            </div>
           </>
         }
         endMessage={<></>}
       >
         {(!communityIds ||
-          loading ||
           (exploreQueryRequestParams.posts.length === 0 &&
             exploreQueryRequestParams.hasMore)) && (
           <>

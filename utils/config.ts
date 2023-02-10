@@ -1,6 +1,6 @@
 export const POST_LIMIT: number = 10
 export const COMMENT_LIMIT: number = 10
-export const LENS_POST_LIMIT: number = 15
+export const LENS_POST_LIMIT: number = 10
 export const LENS_COMMENT_LIMIT: number = 10
 export const LENS_NOTIFICATION_LIMIT: number = 10
 export const NOTIFICATION_LIMIT: number = 10
@@ -26,8 +26,8 @@ export const notificationTypes = {
 export const sortTypes = {
   LATEST: 'Latest',
   TOP_TODAY: 'Today',
-  TOP_WEEK: '7 Days',
-  TOP_MONTH: '30 Days'
+  TOP_WEEK: 'Week',
+  TOP_MONTH: 'Month'
 }
 
 export const recommendedCommunitiesIds = [

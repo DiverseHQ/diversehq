@@ -31,6 +31,9 @@ const NewMobileTopNav = () => {
     if (router.query.sort && sortType !== router.query.sort) {
       setSortType(router.query.sort)
     }
+    if (!router.query.sort) {
+      setSortType(sortTypes.LATEST)
+    }
   }, [router.query])
 
   const addQueryParam = (key, value) => {
