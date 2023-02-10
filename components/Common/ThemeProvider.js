@@ -4,6 +4,10 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { createContext } from 'react'
 export const ThemeContext = createContext({})
+import {
+  ThemeProvider as MUIThemeProvider,
+  createTheme
+} from '@mui/material/styles'
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('light')
 
@@ -20,6 +24,12 @@ const ThemeProvider = ({ children }) => {
       setTheme('light')
     }
   }
+
+  const MUITheme = createTheme({
+    palette: {
+      mode: theme,
+    }
+  })
   useEffect(() => {
     const theme = window.localStorage.getItem('data-theme')
     if (theme) {
@@ -30,7 +40,7 @@ const ThemeProvider = ({ children }) => {
   }, [])
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
+      <MUIThemeProvider theme={MUITheme}>{children}</MUIThemeProvider>
     </ThemeContext.Provider>
   )
 }
