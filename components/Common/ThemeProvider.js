@@ -8,6 +8,7 @@ import {
   ThemeProvider as MUIThemeProvider,
   createTheme
 } from '@mui/material/styles'
+// import MUITheme from './MUITheme'
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('light')
 
@@ -28,6 +29,35 @@ const ThemeProvider = ({ children }) => {
   const MUITheme = createTheme({
     palette: {
       mode: theme,
+      ...(theme === 'light'
+        ? {
+          primary: {
+            main: '#eef1ff'
+          },
+          secondary: {
+            main: '#1A1A1A'
+          },
+          text: {
+            primary: '#000000'
+          },
+          background: {
+            default: '#1A1A1A'
+          }
+        }
+        : {
+          primary: {
+            main: '#030303'
+          },
+          secondary: {
+            main: '#1a1a1b'
+          },
+          text: {
+            primary: '#d7dadc'
+          },
+          background: {
+            default: '#1a1a1b'
+          }
+        })
     }
   })
   useEffect(() => {
