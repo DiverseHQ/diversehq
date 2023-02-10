@@ -19,12 +19,14 @@ import useDevice from '../Common/useDevice'
 import { BiChevronDown } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
-import { RiMore2Fill } from 'react-icons/ri'
-import { IoIosShareAlt } from 'react-icons/io'
-import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import OptionsWrapper from '../Common/OptionsWrapper'
+// import { RiMore2Fill } from 'react-icons/ri'
+// import { IoIosShareAlt } from 'react-icons/io'
+// import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+// import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
+import { Tooltip } from '@mui/material'
+import { RWebShare } from 'react-web-share'
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()
@@ -41,7 +43,7 @@ const CommunityInfoCard = ({ _community }) => {
   const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [showOptionsModal, setShowOptionsModal] = useState(false)
+  // const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   const [numberOfPosts, setNumberOfPosts] = useState(0)
 
@@ -186,17 +188,17 @@ const CommunityInfoCard = ({ _community }) => {
   //   setCurrentLevel(calculateLevel(currentXP, levelThreshold))
   // }, [levelThreshold])
 
-  const shareCommunity = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
-        text: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/c/${community?.name}`
-      })
-    } else {
-      notifyInfo('Sharing is not supported on your device')
-    }
-  }
+  // const shareCommunity = () => {
+  //   if (navigator.share) {
+  //     navigator.share({
+  //       title: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
+  //       text: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
+  //       url: `${process.env.NEXT_PUBLIC_APP_URL}/c/${community?.name}`
+  //     })
+  //   } else {
+  //     notifyInfo('Sharing is not supported on your device')
+  //   }
+  // }
 
   return (
     <>
@@ -275,7 +277,7 @@ const CommunityInfoCard = ({ _community }) => {
               >
                 {isJoined ? 'Leave' : 'Join'}
               </button>
-              <OptionsWrapper
+              {/* <OptionsWrapper
                 OptionPopUpModal={() => (
                   <MoreOptionsModal
                     className="z-50"
@@ -294,10 +296,28 @@ const CommunityInfoCard = ({ _community }) => {
                 isDrawerOpen={isDrawerOpen}
                 setIsDrawerOpen={setIsDrawerOpen}
               >
-                <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
-                </div>
-              </OptionsWrapper>
+                <Tooltip title="More" arrow>
+                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                    <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                </Tooltip>
+              </OptionsWrapper> */}
+              <RWebShare
+                data={{
+                  url: window.location.href,
+                  title: 'Share this community'
+                }}
+              >
+                <Tooltip title="Share" arrow>
+                  <div className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1">
+                    <img
+                      src="/share.svg"
+                      alt="Share"
+                      className="hover:cursor-pointer w-4 h-4 "
+                    />
+                  </div>
+                </Tooltip>
+              </RWebShare>
             </div>
           </div>
 

@@ -28,6 +28,7 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import { Tooltip } from '@mui/material'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -300,9 +301,11 @@ const PostCard = ({ _post, setPosts }) => {
               isDrawerOpen={isDrawerOpen}
               setIsDrawerOpen={setIsDrawerOpen}
             >
-              <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
-              </div>
+              <Tooltip title="More" arrow>
+                <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                  <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+              </Tooltip>
             </OptionsWrapper>
           )}
         </div>
@@ -311,33 +314,35 @@ const PostCard = ({ _post, setPosts }) => {
       <div className="flex flex-row w-full">
         {!isMobile && (
           <div className="flex flex-col items-center ml-1.5 mt-1">
-            <button
-              onClick={handleUpvote}
-              className="hover:bg-p-btn-hover rounded-md p-1 hover:cursor-pointer"
-              title="Upvote"
-            >
-              <img
-                src={
-                  reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'
-                }
-                className="w-6 h-6"
-              />
-            </button>
+            <Tooltip title="Upvote" arrow placement="left">
+              <button
+                onClick={handleUpvote}
+                className="hover:bg-p-btn-hover rounded-md p-1 hover:cursor-pointer"
+              >
+                <img
+                  src={
+                    reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'
+                  }
+                  className="w-6 h-6"
+                />
+              </button>
+            </Tooltip>
             <div className="font-bold leading-5">{totalCount}</div>
-            <button
-              onClick={handleDownvote}
-              className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-              title="Downvote"
-            >
-              <img
-                src={
-                  reaction === 'DOWNVOTE'
-                    ? '/DownvoteFilled.svg'
-                    : '/Downvote.svg'
-                }
-                className="w-4 h-4"
-              />
-            </button>
+            <Tooltip title="Downvote" arrow placement="left">
+              <button
+                onClick={handleDownvote}
+                className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+              >
+                <img
+                  src={
+                    reaction === 'DOWNVOTE'
+                      ? '/DownvoteFilled.svg'
+                      : '/Downvote.svg'
+                  }
+                  className="w-4 h-4"
+                />
+              </button>
+            </Tooltip>
           </div>
         )}
 
@@ -507,43 +512,43 @@ const PostCard = ({ _post, setPosts }) => {
               </div>
             )}
             {!router.pathname.startsWith('/p') ? (
-              <Link
-                href={`/p/${post._id}`}
-                className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-bold"
-                passHref
-                title="Comment"
-              >
-                {/* {post.comments?.length === 0 && (
+              <Tooltip title="Comment" arrow>
+                <Link
+                  href={`/p/${post._id}`}
+                  className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-bold"
+                  passHref
+                >
+                  {/* {post.comments?.length === 0 && (
                   <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )}
                 {post.comments?.length > 0 && (
                   <FaRegCommentDots className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )} */}
-                <img
-                  src="/comment.svg"
-                  alt="Comment"
-                  className="w-4 h-4 mr-2"
-                />
-                {post.comments?.length}
-              </Link>
+                  <img
+                    src="/comment.svg"
+                    alt="Comment"
+                    className="w-4 h-4 mr-2"
+                  />
+                  {post.comments?.length}
+                </Link>
+              </Tooltip>
             ) : (
-              <div
-                className="flex flex-row items-center hover:bg-p-btn-hover font-bold"
-                title="Comment"
-              >
-                {/* {post.comments?.length === 0 && (
+              <Tooltip title="Comment" arrow>
+                <div className="flex flex-row items-center hover:bg-p-btn-hover font-bold">
+                  {/* {post.comments?.length === 0 && (
                   <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )}
                 {post.comments?.length > 0 && (
                   <FaRegCommentDots className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )} */}
-                <img
-                  src="/comment.svg"
-                  alt="Comment"
-                  className="w-4 h-4 mr-2"
-                />
-                {post.comments?.length}
-              </div>
+                  <img
+                    src="/comment.svg"
+                    alt="Comment"
+                    className="w-4 h-4 mr-2"
+                  />
+                  {post.comments?.length}
+                </div>
+              </Tooltip>
             )}
 
             <PostShareButton

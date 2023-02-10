@@ -37,6 +37,7 @@ import PostShareButton from './PostShareButton'
 import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import { Tooltip } from '@mui/material'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -330,12 +331,11 @@ const LensPostCard = ({ post }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                    <RiMore2Fill
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                      title="More"
-                    />
-                  </div>
+                  <Tooltip title="More" arrow>
+                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                  </Tooltip>
                 </OptionsWrapper>
               )}
             </div>
@@ -344,36 +344,38 @@ const LensPostCard = ({ post }) => {
           <div className="flex flex-row w-full">
             {!isMobile && (
               <div className="flex flex-col items-center ml-1.5 mt-1">
-                <button
-                  onClick={handleUpvote}
-                  className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-                  title="Upvote"
-                >
-                  <img
-                    //  onClick={liked ? handleUnLike : handleLike}
-                    src={
-                      reaction === ReactionTypes.Upvote
-                        ? '/UpvoteFilled.svg'
-                        : '/Upvote.svg'
-                    }
-                    className="w-4 h-4"
-                  />
-                </button>
+                <Tooltip title="Upvote" arrow placement="left">
+                  <button
+                    onClick={handleUpvote}
+                    className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                  >
+                    <img
+                      //  onClick={liked ? handleUnLike : handleLike}
+                      src={
+                        reaction === ReactionTypes.Upvote
+                          ? '/UpvoteFilled.svg'
+                          : '/Upvote.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
                 <div className="font-bold leading-5">{voteCount}</div>
-                <button
-                  onClick={handleDownvote}
-                  className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-                  title="Downvote"
-                >
-                  <img
-                    src={
-                      reaction === ReactionTypes.Downvote
-                        ? '/DownvoteFilled.svg'
-                        : '/Downvote.svg'
-                    }
-                    className="w-4 h-4"
-                  />
-                </button>
+                <Tooltip title="Downvote" arrow placement="left">
+                  <button
+                    onClick={handleDownvote}
+                    className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                  >
+                    <img
+                      src={
+                        reaction === ReactionTypes.Downvote
+                          ? '/DownvoteFilled.svg'
+                          : '/Downvote.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
               </div>
             )}
 
@@ -590,43 +592,43 @@ const LensPostCard = ({ post }) => {
                   </div>
                 )}
                 {!router.pathname.startsWith('/p') ? (
-                  <Link
-                    href={`/p/${postInfo.id}`}
-                    className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-bold"
-                    passHref
-                    title="Comment"
-                  >
-                    {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
+                  <Tooltip title="Comment" arrow>
+                    <Link
+                      href={`/p/${postInfo.id}`}
+                      className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-bold"
+                      passHref
+                    >
+                      {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )} */}
-                    <img
-                      src="/comment.svg"
-                      alt="Comment"
-                      className="w-4 h-4 mr-2"
-                    />
-                    {postInfo?.stats?.totalAmountOfComments}
-                  </Link>
+                      <img
+                        src="/comment.svg"
+                        alt="Comment"
+                        className="w-4 h-4 mr-2"
+                      />
+                      {postInfo?.stats?.totalAmountOfComments}
+                    </Link>
+                  </Tooltip>
                 ) : (
-                  <div
-                    title="Comment"
-                    className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1 font-bold"
-                  >
-                    {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
+                  <Tooltip title="Comment" arrow>
+                    <div className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1 font-bold">
+                      {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )} */}
-                    <img
-                      src="/comment.svg"
-                      alt="Comment"
-                      className="w-4 h-4 mr-2"
-                    />
-                    {postInfo?.stats?.totalAmountOfComments}
-                  </div>
+                      <img
+                        src="/comment.svg"
+                        alt="Comment"
+                        className="w-4 h-4 mr-2"
+                      />
+                      {postInfo?.stats?.totalAmountOfComments}
+                    </div>
+                  </Tooltip>
                 )}
                 <LensCollectButton
                   publication={post}

@@ -22,6 +22,7 @@ import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import { Tooltip } from '@mui/material'
 // import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
 TimeAgo.addDefaultLocale(en)
 
@@ -214,10 +215,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <RiMore2Fill
-                    className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
-                    title="More"
-                  />
+                  <Tooltip title="More" arrow>
+                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                  </Tooltip>
                 </OptionsWrapper>
               )}
             </div>
@@ -237,13 +239,14 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   }}
                   required
                 />
-                <div className="flex items-center">
-                  <AiOutlineCheck
-                    className="text-base sm:text-[24px] hover:cursor-pointer hover:text-[#66CD00]"
-                    title="Save"
-                    onClick={submitEdittedComment}
-                  />
-                </div>
+                <Tooltip title="Save" arrow>
+                  <div className="flex items-center hover:bg-p-btn-hover hover:text-[#66CD00] rounded-md p-1">
+                    <AiOutlineCheck
+                      className="text-base sm:text-[24px] cursor-pointer"
+                      onClick={submitEdittedComment}
+                    />
+                  </div>
+                </Tooltip>
               </div>
             ) : (
               <div className="mt-1">{comment.content}</div>
