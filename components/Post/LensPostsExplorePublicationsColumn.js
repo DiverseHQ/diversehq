@@ -164,7 +164,7 @@ const LensPostsExplorePublicationsColumn = () => {
   return (
     <div>
       <InfiniteScroll
-        scrollThreshold={0.8}
+        scrollThreshold={0.7}
         dataLength={exploreQueryRequestParams.posts.length}
         next={getMorePosts}
         hasMore={
