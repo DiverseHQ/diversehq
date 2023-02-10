@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSigner } from 'wagmi'
-// import { useXmtp, XmtpContext } from '../Common/XmtpProvider'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useProfile } from '../Common/WalletContext'
 import { useLensUserContext } from '../../lib/LensUserContext'

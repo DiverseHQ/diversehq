@@ -73,7 +73,13 @@ const LensNotificationCollectCard = ({
                   showMore ? 'line-clamp-5' : ''
                 } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
               >
-                {notification?.collectedPublication?.metadata?.content}
+                {notification?.collectedPublication?.metadata?.content?.startsWith(
+                  notification?.collectedPublication?.metadata?.name
+                )
+                  ? notification?.collectedPublication?.metadata?.content?.slice(
+                      notification?.collectedPublication?.metadata?.name?.length
+                    )
+                  : notification?.collectedPublication?.metadata?.content}
               </Markup>
             </div>
           )}

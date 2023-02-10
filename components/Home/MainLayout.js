@@ -6,7 +6,6 @@ import RightSidebar from './RightSidebar'
 import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
-import XmtpProvider from '../Common/XmtpProvider'
 import useDevice from '../Common/useDevice'
 import MainMsgModal from '../Messages/MainMsgModal'
 
@@ -67,9 +66,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               {children}
             </div>
             <RightSidebar />
-            <XmtpProvider>
-              <MainMsgModal />
-            </XmtpProvider>
+            <MainMsgModal />
           </div>
         </div>
       )}

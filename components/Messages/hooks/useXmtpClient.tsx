@@ -1,11 +1,11 @@
 import { Client } from '@xmtp/xmtp-js'
 import { useCallback, useEffect, useState } from 'react'
-import { useMessageStore } from '../../store/message'
+import { useMessageStore } from '../../../store/message'
 import { useSigner } from 'wagmi'
-import { useLensUserContext } from '../../lib/LensUserContext'
+import { useLensUserContext } from '../../../lib/LensUserContext'
+import { XMTP_ENV } from '../../../utils/config'
 
 const ENCODING = 'binary'
-const XMTP_ENV = 'dev'
 const buildLocalStorageKey = (walletAddress: string) =>
   `xmtp:${XMTP_ENV}:keys:${walletAddress}`
 

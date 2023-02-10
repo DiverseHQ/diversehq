@@ -1,4 +1,4 @@
-import { XMTP_PREFIX } from '../../utils/config'
+import { XMTP_PREFIX } from '../../../utils/config'
 
 const CONVERSATION_KEY_RE = /^(.*)\/lens\.dev\/dm\/(.*)-(.*)$/
 
@@ -18,9 +18,16 @@ export const parseConversationKey = (
   if (!matches || matches.length !== 4) {
     return null
   }
-
-  const [, peerAddress, memberA, memberB] = Array.from(matches)
-
+  console.log('matches', matches)
+  let [, peerAddress, memberA, memberB] = Array.from(matches)
+  console.log('peerAddress', peerAddress)
+  console.log('memberA', memberA)
+  console.log('memberB', memberB)
+  if (memberA.includes('-')) {
+    let temp = memberA
+    memberA = temp.split('-')[0]
+    memberB = temp.split('-')[1]
+  }
   return {
     peerAddress,
     members: [memberA, memberB],

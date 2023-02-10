@@ -38,7 +38,8 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
         publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror],
         limit: LENS_POST_LIMIT,
         sortCriteria: exploreQueryRequestParams.sortCriteria,
-        timestamp: exploreQueryRequestParams.timestamp
+        timestamp: exploreQueryRequestParams.timestamp,
+        noRandomize: true
       },
       reactionRequest: {
         profileId: myLensProfile?.defaultProfile?.id

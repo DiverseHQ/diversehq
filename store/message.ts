@@ -2,7 +2,7 @@ import type { Client, Conversation, DecodedMessage } from '@xmtp/xmtp-js'
 // import { toNanoString } from '@xmtp/xmtp-js'
 import create from 'zustand'
 // import { persist } from 'zustand/middleware'
-import getUniqueMessages from '../components/Messages/getUniqueMessages'
+import getUniqueMessages from '../components/Messages/lib/getUniqueMessages'
 import { Profile } from '../graphql/generated'
 
 // type TabValues = 'Following' | 'Requested'
@@ -25,6 +25,8 @@ interface MessageState {
   reset: () => void
   selectedProfileId: string
   setSelectedProfileId: (selectedProfileId: string) => void
+  conversationKey: string
+  setConversationKey: (conversationKey: string) => void
   //   selectedTab: TabValues
   //   setSelectedTab: (selectedTab: TabValues) => void
 }
@@ -86,6 +88,8 @@ export const useMessageStore = create<MessageState>((set) => ({
   selectedProfileId: '',
   setSelectedProfileId: (selectedProfileId) =>
     set(() => ({ selectedProfileId })),
+  conversationKey: '',
+  setConversationKey: (conversationKey) => set(() => ({ conversationKey })),
   //   selectedTab: 'Following',
   //   setSelectedTab: (selectedTab) => set(() => ({ selectedTab })),
   reset: () =>
