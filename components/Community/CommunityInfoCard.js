@@ -25,6 +25,7 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
+import { Tooltip } from '@mui/material'
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()
@@ -294,9 +295,11 @@ const CommunityInfoCard = ({ _community }) => {
                 isDrawerOpen={isDrawerOpen}
                 setIsDrawerOpen={setIsDrawerOpen}
               >
-                <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
-                </div>
+                <Tooltip title="More" arrow>
+                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                    <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                </Tooltip>
               </OptionsWrapper>
             </div>
           </div>

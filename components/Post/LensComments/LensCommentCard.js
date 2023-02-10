@@ -24,6 +24,7 @@ import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-inde
 import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
+import { Tooltip } from '@mui/material'
 TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
@@ -252,10 +253,11 @@ const LensCommentCard = ({ comment }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <RiMore2Fill
-                    className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
-                    title="More"
-                  />
+                  <Tooltip title="More" arrow>
+                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                  </Tooltip>
                 </OptionsWrapper>
               )}
             </div>

@@ -1,5 +1,6 @@
 import React from 'react'
 import { RWebShare } from 'react-web-share'
+import { Tooltip } from '@mui/material'
 
 const PostShareButton = ({ url, text }) => {
   const link = url || window.location.href
@@ -13,16 +14,15 @@ const PostShareButton = ({ url, text }) => {
         text
       }}
     >
-      <div
-        className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1"
-        title="Share"
-      >
-        <img
-          src="/share.svg"
-          alt="Share"
-          className="hover:cursor-pointer w-4 h-4 "
-        />
-      </div>
+      <Tooltip title="Share" arrow>
+        <div className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1">
+          <img
+            src="/share.svg"
+            alt="Share"
+            className="hover:cursor-pointer w-4 h-4 "
+          />
+        </div>
+      </Tooltip>
     </RWebShare>
   )
 }
