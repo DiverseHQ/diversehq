@@ -97,6 +97,7 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         showClose
+        position="bottom"
       >
         <HoverModal
           setIsDrawerOpen={setIsDrawerOpen}

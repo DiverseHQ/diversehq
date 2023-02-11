@@ -136,7 +136,7 @@ const CommunityInfoCard = ({ _community }) => {
         />
       ),
       type: modalType.normal,
-      onAction: () => {},
+      onAction: () => { },
       extraaInfo: {}
     })
   }, [community])
@@ -202,31 +202,27 @@ const CommunityInfoCard = ({ _community }) => {
     <>
       {community && (
         <div
-          className={`relative shadow-lg z-0 bg-s-bg mb-6 text-p-text ${
-            router.pathname.startsWith('/c') && !isMobile ? 'mt-10' : ''
-          } ${!isMobile ? 'border-[1px] border-p-border rounded-[20px]' : ''} ${
-            isMobile && router.pathname.startsWith('/explore')
+          className={`relative shadow-lg z-0 bg-s-bg mb-6 text-p-text ${router.pathname.startsWith('/c') && !isMobile ? 'mt-10' : ''
+            } ${!isMobile ? 'border-[1px] border-p-border rounded-[20px]' : ''} ${isMobile && router.pathname.startsWith('/explore')
               ? 'rounded-[20px] mx-2'
               : ''
-          }`}
+            }`}
         >
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
             <ImageWithPulsingLoader
-              className={`h-20 sm:h-28 w-full object-cover ${
-                !isMobile
-                  ? 'rounded-t-[20px]'
-                  : router.pathname.startsWith('/explore')
+              className={`h-20 sm:h-28 w-full object-cover ${!isMobile
+                ? 'rounded-t-[20px]'
+                : router.pathname.startsWith('/explore')
                   ? 'rounded-t-[20px]'
                   : ''
-              }`}
+                }`}
               src={community.bannerImageUrl}
             />
           ) : (
             <ImageWithFullScreenZoom
-              className={`h-20 sm:h-28 w-full object-cover ${
-                !isMobile ? 'rounded-t-[20px]' : ''
-              }`}
+              className={`h-20 sm:h-28 w-full object-cover ${!isMobile ? 'rounded-t-[20px]' : ''
+                }`}
               src={community.bannerImageUrl}
             />
           )}
@@ -404,7 +400,7 @@ const CommunityInfoCard = ({ _community }) => {
               isDrawerOpen={isDrawerOpen}
               setIsDrawerOpen={setIsDrawerOpen}
               showClose
-              // height="235px"
+              position="bottom"
             >
               <div className="flex flex-col gap-4 mx-4 mb-4">
                 <h3 className="font-bold text-[20px] self-center">

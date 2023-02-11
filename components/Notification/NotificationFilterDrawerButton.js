@@ -55,6 +55,7 @@ const NotificationFilterDrawerButton = () => {
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         showClose={true}
+        position="bottom"
       >
         <MoreOptionsModal
           list={[

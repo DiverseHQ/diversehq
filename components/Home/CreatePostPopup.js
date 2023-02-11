@@ -366,8 +366,8 @@ const CreatePostPopup = () => {
 
           <div
             className={`flex flex-col h-fit absolute z-10 ${showCommunityOptions
-                ? 'enter-fade-animation'
-                : 'exit-fade-animation '
+              ? 'enter-fade-animation'
+              : 'exit-fade-animation '
               }`}
             style={communityOptionsCoord}
           >
@@ -615,12 +615,13 @@ const CreatePostPopup = () => {
             isDrawerOpen={isDrawerOpen}
             setIsDrawerOpen={setIsDrawerOpen}
             showClose={false}
+            position="bottom"
           >
             <CollectSettingsModel
               collectSettings={collectSettings}
               setCollectSettings={setCollectSettings}
             />
-            <div className="px-4 w-full bg-s-bg mb-3 mt-1">
+            <div className="px-4 w-full mb-3 mt-1">
               <button
                 onClick={() => {
                   setIsDrawerOpen(false)

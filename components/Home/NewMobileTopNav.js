@@ -49,9 +49,9 @@ const NewMobileTopNav = () => {
         }}
       >
         {router.pathname.startsWith('/p/') ||
-        router.pathname.startsWith('/c/') ||
-        router.pathname.startsWith('/search') ||
-        router.pathname.startsWith('/u/') ? (
+          router.pathname.startsWith('/c/') ||
+          router.pathname.startsWith('/search') ||
+          router.pathname.startsWith('/u/') ? (
           <div className="h-[32px] flex flex-row items-center gap-2 text-[18px]">
             <div className="flex items-center justify-center w-8 h-8 bg-p-btn-hover rounded-full">
               <BiArrowBack
@@ -93,84 +93,84 @@ const NewMobileTopNav = () => {
                 {(router.pathname.startsWith('/feed/all') ||
                   router.pathname.startsWith('/feed/foryou') ||
                   router.pathname === '/') && (
-                  <OptionsWrapper
-                    OptionPopUpModal={() => (
-                      <MoreOptionsModal
-                        className="z-50"
-                        list={[
-                          {
-                            label: sortTypes.LATEST,
-                            onClick: () => {
-                              addQueryParam('sort', sortTypes.LATEST)
-                              setSortType(sortTypes.LATEST)
-                              setIsDrawerOpen(false)
-                              setShowOptionsModal(false)
+                    <OptionsWrapper
+                      OptionPopUpModal={() => (
+                        <MoreOptionsModal
+                          className="z-50"
+                          list={[
+                            {
+                              label: sortTypes.LATEST,
+                              onClick: () => {
+                                addQueryParam('sort', sortTypes.LATEST)
+                                setSortType(sortTypes.LATEST)
+                                setIsDrawerOpen(false)
+                                setShowOptionsModal(false)
+                              },
+                              icon: () => (
+                                <HiOutlineSparkles className="h-5 w-5" />
+                              )
                             },
-                            icon: () => (
-                              <HiOutlineSparkles className="h-5 w-5" />
-                            )
-                          },
-                          {
-                            label: sortTypes.TOP_TODAY,
-                            onClick: () => {
-                              addQueryParam('sort', sortTypes.TOP_TODAY)
-                              setSortType(sortTypes.TOP_TODAY)
-                              setIsDrawerOpen(false)
-                              setShowOptionsModal(false)
+                            {
+                              label: sortTypes.TOP_TODAY,
+                              onClick: () => {
+                                addQueryParam('sort', sortTypes.TOP_TODAY)
+                                setSortType(sortTypes.TOP_TODAY)
+                                setIsDrawerOpen(false)
+                                setShowOptionsModal(false)
+                              },
+                              icon: () => <AiOutlineFire className="h-5 w-5" />
                             },
-                            icon: () => <AiOutlineFire className="h-5 w-5" />
-                          },
-                          {
-                            label: sortTypes.TOP_WEEK,
-                            onClick: () => {
-                              addQueryParam('sort', sortTypes.TOP_WEEK)
-                              setSortType(sortTypes.TOP_WEEK)
-                              setIsDrawerOpen(false)
-                              setShowOptionsModal(false)
+                            {
+                              label: sortTypes.TOP_WEEK,
+                              onClick: () => {
+                                addQueryParam('sort', sortTypes.TOP_WEEK)
+                                setSortType(sortTypes.TOP_WEEK)
+                                setIsDrawerOpen(false)
+                                setShowOptionsModal(false)
+                              },
+                              icon: () => <AiOutlineFire className="h-5 w-5" />
                             },
-                            icon: () => <AiOutlineFire className="h-5 w-5" />
-                          },
-                          {
-                            label: sortTypes.TOP_MONTH,
-                            onClick: () => {
-                              addQueryParam('sort', sortTypes.TOP_MONTH)
-                              setSortType(sortTypes.TOP_MONTH)
-                              setIsDrawerOpen(false)
-                              setShowOptionsModal(false)
-                            },
-                            icon: () => <AiOutlineFire className="h-5 w-5" />
-                          }
-                        ]}
-                      />
-                    )}
-                    position="right"
-                    showOptionsModal={showOptionsModal}
-                    setShowOptionsModal={setShowOptionsModal}
-                    isDrawerOpen={isDrawerOpen}
-                    setIsDrawerOpen={setIsDrawerOpen}
-                  >
-                    <button
-                      className={` flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full bg-s-bg  hover:bg-p-hover hover:text-p-hover-text`}
+                            {
+                              label: sortTypes.TOP_MONTH,
+                              onClick: () => {
+                                addQueryParam('sort', sortTypes.TOP_MONTH)
+                                setSortType(sortTypes.TOP_MONTH)
+                                setIsDrawerOpen(false)
+                                setShowOptionsModal(false)
+                              },
+                              icon: () => <AiOutlineFire className="h-5 w-5" />
+                            }
+                          ]}
+                        />
+                      )}
+                      position="right"
+                      showOptionsModal={showOptionsModal}
+                      setShowOptionsModal={setShowOptionsModal}
+                      isDrawerOpen={isDrawerOpen}
+                      setIsDrawerOpen={setIsDrawerOpen}
                     >
-                      <div className="flex flex-row items-center justify-center space-x-1">
-                        {sortType === sortTypes.LATEST ? (
-                          <HiOutlineSparkles className="h-4 w-4" />
-                        ) : (
-                          <AiOutlineFire className="h-4 w-4" />
-                        )}
-                        <div>{sortType}</div>
-                      </div>
-                      <AiOutlineDown className="w-3 h-3" />
-                    </button>
-                  </OptionsWrapper>
-                )}
+                      <button
+                        className={` flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full bg-s-bg  hover:bg-p-hover hover:text-p-hover-text`}
+                      >
+                        <div className="flex flex-row items-center justify-center space-x-1">
+                          {sortType === sortTypes.LATEST ? (
+                            <HiOutlineSparkles className="h-4 w-4" />
+                          ) : (
+                            <AiOutlineFire className="h-4 w-4" />
+                          )}
+                          <div>{sortType}</div>
+                        </div>
+                        <AiOutlineDown className="w-3 h-3" />
+                      </button>
+                    </OptionsWrapper>
+                  )}
               </span>
             </div>
 
             {(router.pathname === '/' ||
               router.pathname.startsWith('/feed')) && (
-              <MobileFilterDrawerButton />
-            )}
+                <MobileFilterDrawerButton />
+              )}
             {router.pathname.startsWith('/explore') && (
               <ExploreFilterDrawerButton />
             )}
@@ -180,12 +180,10 @@ const NewMobileTopNav = () => {
           </>
         )}
       </div>
-      {isOpenSidebar && (
-        <MobileNavSidebar
-          isOpenSidebar={isOpenSidebar}
-          setIsOpenSidebar={setIsOpenSidebar}
-        />
-      )}
+      <MobileNavSidebar
+        isOpenSidebar={isOpenSidebar}
+        setIsOpenSidebar={setIsOpenSidebar}
+      />
     </>
   )
 }

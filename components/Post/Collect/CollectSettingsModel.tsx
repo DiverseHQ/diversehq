@@ -140,7 +140,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                 onChange={(e) => {
                   setCurrency(e.target.value)
                 }}
-                className={`bg-s-bg text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
+                className={` text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
                 value={currency}
               >
                 {CurrencyOptions.map((currency) => (

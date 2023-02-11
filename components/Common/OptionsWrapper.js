@@ -52,11 +52,9 @@ const OptionsWrapper = ({
         {children}
         {showOptionsModal && (
           <div
-            className={`absolute min-w-[150px] ${
-              position === 'left' ? 'top-[10px] right-[20px]' : ''
-            } ${position === 'right' ? 'top-[25px] left-0' : ''} ${
-              position === 'top' ? 'bottom-[25px] right-0' : ''
-            } ${position === 'bottom' ? 'top-[25px] right-0' : ''} z-20`}
+            className={`absolute min-w-[150px] ${position === 'left' ? 'top-[10px] right-[20px]' : ''
+              } ${position === 'right' ? 'top-[25px] left-0' : ''} ${position === 'top' ? 'bottom-[25px] right-0' : ''
+              } ${position === 'bottom' ? 'top-[25px] right-0' : ''} z-20`}
           >
             <OptionPopUpModal />
           </div>
@@ -66,6 +64,7 @@ const OptionsWrapper = ({
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         showClose
+        position="bottom"
       >
         <OptionPopUpModal />
       </BottomDrawerWrapper>

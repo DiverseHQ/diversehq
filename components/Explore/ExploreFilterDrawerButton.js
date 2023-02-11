@@ -48,6 +48,7 @@ const ExploreFilterDrawerButton = () => {
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         showClose={true}
+        position="bottom"
       >
         <MoreOptionsModal
           list={[

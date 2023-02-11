@@ -5,24 +5,31 @@ const BottomDrawerWrapper = ({
   children,
   isDrawerOpen,
   setIsDrawerOpen,
-  showClose = true
+  showClose = true,
+  position
 }) => {
-  // const { theme } = useTheme()
   return (
     <Drawer
-      anchor="bottom"
+      anchor={position}
       open={isDrawerOpen}
       onClose={() => {
         setIsDrawerOpen(false)
       }}
       sx={{
         '& .MuiDrawer-paper': {
-          borderRadius: '20px 20px 0px 0px',
+          borderRadius: position === 'bottom' && '20px 20px 0px 0px',
           backgroundColor: 'background'
+        },
+        '& .MuiDrawer-paperAnchorLeft': {
+          width: '80%'
         }
       }}
+      transitionDuration={200}
     >
-      <div className="self-center mt-1 pb-4">
+      <div
+        className={` ${position === 'bottom' ? 'self-center mt-1 pb-4' : 'hidden'
+          }`}
+      >
         <svg
           width="36"
           height="5"
