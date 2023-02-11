@@ -93,7 +93,7 @@ const LensLoginButton = () => {
   return (
     <div>
       {user && address && (
-        <div className="flex flex-col gap-4 text-p-text">
+        <div className="flex flex-col gap-4 text-p-text items-start">
           {isSignedIn && hasProfile && (
             <div className="flex flex-col items-start">
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
@@ -103,7 +103,7 @@ const LensLoginButton = () => {
                     isMobile
                       ? 'dark:text-s-bg hover:font-semibold'
                       : 'dark:text-p-text'
-                  } text-[16px]`}
+                  } text-[20px] md:text-[16px] p-2 md:p-0`}
                 >
                   u/{lensProfile.defaultProfile.handle}
                 </Link>
@@ -133,7 +133,7 @@ const LensLoginButton = () => {
           {isSignedIn && !hasProfile && (
             <button
               onClick={handleCreateLensProfileAndMakeDefault}
-              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
+              className="rounded-[20px] text-[20px] md:text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
             >
               Create Lens Handle
             </button>
@@ -141,7 +141,7 @@ const LensLoginButton = () => {
           {!isSignedIn && (
             <button
               onClick={handleLogin}
-              className="rounded-[20px] text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
+              className="rounded-[20px] text-[20px] md:text-[16px]        font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
             >
               Lens Login
             </button>

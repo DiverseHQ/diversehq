@@ -83,7 +83,7 @@ const NewMobileTopNav = () => {
                   <ImageWithPulsingLoader
                     src={user?.profileImageUrl}
                     onClick={() => setIsOpenSidebar(true)}
-                    className="w-[35px] h-[35px] rounded-full"
+                    className="w-[35px] h-[35px] rounded-full cursor-pointer"
                   />
                   {(!isSignedIn || !hasProfile) && (
                     <div className="absolute top-0 left-0 w-3 h-3 bg-green-500 rounded-full animate-pulse" />

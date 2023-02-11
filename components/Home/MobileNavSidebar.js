@@ -160,7 +160,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </div>
           )}
         </div>
-        <div className="bg-[#62F030] px-4 py-4">
+        <div className="bg-[#62F030] px-4 py-2 hover:font-semibold cursor-pointer">
           <LensLoginButton />
         </div>
         <div className="flex flex-col px-4 bg-p-bg">
