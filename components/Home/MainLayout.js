@@ -40,7 +40,6 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
           {/* <MobileTopNav /> */}
           <div className={'pb-16'}>
             <CreatePostButton />
-            <ScrollToTopButton />
             {children}
           </div>
           <MobileBottomNav />
