@@ -323,7 +323,7 @@ const PostCard = ({ _post, setPosts }) => {
                   src={
                     reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'
                   }
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                 />
               </button>
             </Tooltip>
@@ -339,7 +339,7 @@ const PostCard = ({ _post, setPosts }) => {
                       ? '/DownvoteFilled.svg'
                       : '/Downvote.svg'
                   }
-                  className="w-4 h-4"
+                  className="w-5 h-5"
                 />
               </button>
             </Tooltip>
@@ -463,59 +463,63 @@ const PostCard = ({ _post, setPosts }) => {
           </div>
           {/* bottom row */}
           {isMobile && router.pathname.startsWith('/p') && (
-            <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-1 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
-              <div className="flex flex-row gap-1">
-                <span className="font-bold">{totalCount}</span>
-                <span className="text-[#687684]">votes</span>
+            <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
+              <div className="flex flex-row gap-1 text-[#687684]">
+                <span className="font-medium">{totalCount}</span>
+                <span>upvotes</span>
               </div>
-              <div className="flex flex-row gap-1">
-                <span className="font-bold">{post.comments?.length}</span>
-                <span className="text-[#687684]">comments</span>
+              <div className="flex flex-row gap-1 text-[#687684]">
+                <span className="font-medium">{post.comments?.length}</span>
+                <span>comments</span>
               </div>
             </div>
           )}
           <div
-            className={`text-p-text  flex flex-row items-center px-3 sm:px-3.5 pt-1 justify-between sm:justify-start sm:space-x-28 ${
-              isMobile ? 'pb-1' : ''
+            className={`text-p-text  flex flex-row items-center justify-between sm:justify-start sm:space-x-28 ${
+              isMobile ? 'p-2' : 'px-3 sm:px-3.5 pt-1'
             }`}
           >
             {isMobile && (
               <div className="flex flex-row items-center gap-x-1">
-                <button
-                  onClick={handleUpvote}
-                  className="hover:bg-p-hover rounded-md p-1  cursor-pointer"
-                >
-                  <img
-                    //  onClick={liked ? handleUnLike : handleLike}
-                    src={
-                      reaction === ReactionTypes.Upvote
-                        ? '/upvoteGrayFilled.svg'
-                        : '/upvoteGray.svg'
-                    }
-                    className="w-4 h-4"
-                  />
-                </button>
-                <div className="font-bold">{totalCount}</div>
-                <button
-                  onClick={handleDownvote}
-                  className="hover:bg-p-hover rounded-md p-1 cursor-pointer"
-                >
-                  <img
-                    src={
-                      reaction === ReactionTypes.Downvote
-                        ? '/downvoteGrayFilled.svg'
-                        : '/downvoteGray.svg'
-                    }
-                    className="w-4 h-4"
-                  />
-                </button>
+                <Tooltip title="Upvote" arrow>
+                  <button
+                    onClick={handleUpvote}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
+                  >
+                    <img
+                      //  onClick={liked ? handleUnLike : handleLike}
+                      src={
+                        reaction === ReactionTypes.Upvote
+                          ? '/upvoteGrayFilled.svg'
+                          : '/upvoteGray.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
+                <div className="font-medium text-[#687684]">{totalCount}</div>
+                <Tooltip title="Downvote" arrow>
+                  <button
+                    onClick={handleDownvote}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
+                  >
+                    <img
+                      src={
+                        reaction === ReactionTypes.Downvote
+                          ? '/downvoteGrayFilled.svg'
+                          : '/downvoteGray.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
               </div>
             )}
             {!router.pathname.startsWith('/p') ? (
               <Tooltip title="Comment" arrow>
                 <Link
                   href={`/p/${post._id}`}
-                  className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-bold"
+                  className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-medium"
                   passHref
                 >
                   {/* {post.comments?.length === 0 && (
@@ -529,12 +533,14 @@ const PostCard = ({ _post, setPosts }) => {
                     alt="Comment"
                     className="w-4 h-4 mr-2"
                   />
-                  {post.comments?.length}
+                  <span className="text-[#687684]">
+                    {post.comments?.length}
+                  </span>
                 </Link>
               </Tooltip>
             ) : (
               <Tooltip title="Comment" arrow>
-                <div className="flex flex-row items-center hover:bg-p-btn-hover font-bold">
+                <div className="flex flex-row items-center hover:bg-p-btn-hover font-medium">
                   {/* {post.comments?.length === 0 && (
                   <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )}
@@ -546,7 +552,9 @@ const PostCard = ({ _post, setPosts }) => {
                     alt="Comment"
                     className="w-4 h-4 mr-2"
                   />
-                  {post.comments?.length}
+                  <span className="text-[#687684]">
+                    {post.comments?.length}
+                  </span>
                 </div>
               </Tooltip>
             )}
