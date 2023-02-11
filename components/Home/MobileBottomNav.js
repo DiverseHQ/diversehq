@@ -44,7 +44,7 @@ const MobileBottomNav = () => {
     <div className="fixed bottom-0 w-full py-2 flex flex-row justify-evenly items-center bg-p-bg shadow-top min-h-[56px]">
       <img
         src={`${
-          active === 'home' ? '/mobileNavHomeActive.svg' : '/mobileNavHome.svg'
+          active === 'home' ? '/mobileNavHomeFilled.svg' : '/mobileNavHome.svg'
         }`}
         alt="Home"
         onClick={routeToHome}
@@ -53,7 +53,7 @@ const MobileBottomNav = () => {
       <img
         src={`${
           active === 'explore'
-            ? '/mobileNavExploreActive.svg'
+            ? '/mobileNavExploreFilled.svg'
             : '/mobileNavExplore.svg'
         }`}
         alt="Explore"
@@ -74,7 +74,7 @@ const MobileBottomNav = () => {
         <img
           src={`${
             active === 'notification'
-              ? '/mobileNavNotificationActive.svg'
+              ? '/mobileNavNotificationFilled.svg'
               : '/mobileNavNotification.svg'
           }`}
           alt="Notification"
@@ -82,7 +82,7 @@ const MobileBottomNav = () => {
           className="cursor-pointer"
         />
         {notificationsCount + lensNotificationsCount > 0 && (
-          <div className="absolute top-0 left-0.5 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
+          <div className="absolute -top-1 left-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
             <span>{notificationsCount + lensNotificationsCount}</span>
           </div>
         )}
