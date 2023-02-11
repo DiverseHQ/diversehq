@@ -64,7 +64,7 @@ const useNotificationsCount = () => {
       setNotificationsCount(0)
       setLensNotificationsCount(0)
     }
-  }, [user?.walletaddress])
+  }, [user])
   return {
     notificationsCount,
     lensNotificationsCount,
