@@ -356,7 +356,7 @@ const LensPostCard = ({ post }) => {
                           ? '/UpvoteFilled.svg'
                           : '/Upvote.svg'
                       }
-                      className="w-4 h-4"
+                      className="w-5 h-5"
                     />
                   </button>
                 </Tooltip>
@@ -372,7 +372,7 @@ const LensPostCard = ({ post }) => {
                           ? '/DownvoteFilled.svg'
                           : '/Downvote.svg'
                       }
-                      className="w-4 h-4"
+                      className="w-5 h-5"
                     />
                   </button>
                 </Tooltip>
@@ -536,22 +536,22 @@ const LensPostCard = ({ post }) => {
 
               {/* bottom row */}
               {isMobile && router.pathname.startsWith('/p') && (
-                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-1 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
-                  <div className="flex flex-row gap-1">
-                    <span className="font-bold">{voteCount}</span>
-                    <span className="text-[#687684]">votes</span>
+                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
+                  <div className="flex flex-row gap-1 text-[#687684]">
+                    <span className="font-medium">{voteCount}</span>
+                    <span>upvotes</span>
                   </div>
-                  <div className="flex flex-row gap-1">
-                    <span className="font-bold">
+                  <div className="flex flex-row gap-1 text-[#687684]">
+                    <span className="font-medium">
                       {postInfo?.stats?.totalAmountOfComments}
                     </span>
-                    <span className="text-[#687684]">comments</span>
+                    <span>comments</span>
                   </div>
-                  <div className="flex flex-row gap-1">
-                    <span className="font-bold">
+                  <div className="flex flex-row gap-1 text-[#687684]">
+                    <span className="font-medium">
                       {postInfo?.stats?.totalAmountOfCollects}
                     </span>
-                    <span className="text-[#687684]">collects</span>
+                    <span>collects</span>
                   </div>
                 </div>
               )}
@@ -562,40 +562,46 @@ const LensPostCard = ({ post }) => {
               >
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-1">
-                    <button
-                      onClick={handleUpvote}
-                      className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
-                    >
-                      <img
-                        src={
-                          reaction === ReactionTypes.Upvote
-                            ? '/upvoteGrayFilled.svg'
-                            : '/upvoteGray.svg'
-                        }
-                        className="w-4 h-4"
-                      />
-                    </button>
-                    <div className="font-bold">{voteCount}</div>
-                    <button
-                      onClick={handleDownvote}
-                      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-                    >
-                      <img
-                        src={
-                          reaction === ReactionTypes.Downvote
-                            ? '/downvoteGrayFilled.svg'
-                            : '/downvoteGray.svg'
-                        }
-                        className="w-4 h-4"
-                      />
-                    </button>
+                    <Tooltip title="Upvote" arrow>
+                      <button
+                        onClick={handleUpvote}
+                        className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
+                      >
+                        <img
+                          src={
+                            reaction === ReactionTypes.Upvote
+                              ? '/upvoteGrayFilled.svg'
+                              : '/upvoteGray.svg'
+                          }
+                          className="w-4 h-4"
+                        />
+                      </button>
+                    </Tooltip>
+                    <div className="font-medium text-[#687684]">
+                      {voteCount}
+                    </div>
+                    <Tooltip title="Downvote" arrow>
+                      <button
+                        onClick={handleDownvote}
+                        className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                      >
+                        <img
+                          src={
+                            reaction === ReactionTypes.Downvote
+                              ? '/downvoteGrayFilled.svg'
+                              : '/downvoteGray.svg'
+                          }
+                          className="w-4 h-4"
+                        />
+                      </button>
+                    </Tooltip>
                   </div>
                 )}
                 {!router.pathname.startsWith('/p') ? (
                   <Tooltip title="Comment" arrow>
                     <Link
                       href={`/p/${postInfo.id}`}
-                      className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-bold"
+                      className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-medium"
                       passHref
                     >
                       {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
@@ -609,12 +615,14 @@ const LensPostCard = ({ post }) => {
                         alt="Comment"
                         className="w-4 h-4 mr-2"
                       />
-                      {postInfo?.stats?.totalAmountOfComments}
+                      <span className="text-[#687684]">
+                        {postInfo?.stats?.totalAmountOfComments}
+                      </span>
                     </Link>
                   </Tooltip>
                 ) : (
                   <Tooltip title="Comment" arrow>
-                    <div className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1 font-bold">
+                    <div className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1 font-medium">
                       {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
@@ -626,7 +634,9 @@ const LensPostCard = ({ post }) => {
                         alt="Comment"
                         className="w-4 h-4 mr-2"
                       />
-                      {postInfo?.stats?.totalAmountOfComments}
+                      <span className="text-[#687684]">
+                        {postInfo?.stats?.totalAmountOfComments}
+                      </span>
                     </div>
                   </Tooltip>
                 )}
