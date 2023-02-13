@@ -26,40 +26,6 @@ const ThemeProvider = ({ children }) => {
     }
   }
 
-  const MUITheme = createTheme({
-    palette: {
-      mode: theme,
-      ...(theme === 'light'
-        ? {
-            primary: {
-              main: '#eef1ff'
-            },
-            secondary: {
-              main: '#1A1A1A'
-            },
-            text: {
-              primary: '#000000'
-            },
-            background: {
-              default: '#1A1A1A'
-            }
-          }
-        : {
-            primary: {
-              main: '#030303'
-            },
-            secondary: {
-              main: '#1a1a1b'
-            },
-            text: {
-              primary: '#d7dadc'
-            },
-            background: {
-              default: '#1a1a1b'
-            }
-          })
-    }
-  })
   useEffect(() => {
     const theme = window.localStorage.getItem('data-theme')
     if (theme) {
@@ -70,7 +36,7 @@ const ThemeProvider = ({ children }) => {
   }, [])
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <MUIThemeProvider theme={MUITheme}>{children}</MUIThemeProvider>
+      {children}
     </ThemeContext.Provider>
   )
 }
