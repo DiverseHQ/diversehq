@@ -299,8 +299,10 @@ const LensCommentCard = ({ comment }) => {
                 </div>
                 <button
                   className={`${
-                    showCreateComment ? 'bg-gray-100' : ''
-                  } hover:bg-gray-100 px-1 rounded-md`}
+                    showCreateComment
+                      ? 'bg-p-btn-hover text-p-btn-hover-text'
+                      : ''
+                  } hover:bg-p-btn-hover px-2 py-0.5 rounded-md`}
                   onClick={() => {
                     if (!comment?.id) {
                       notifyInfo('not indexed yet, try again later')
