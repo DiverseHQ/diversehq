@@ -27,14 +27,22 @@ const NavFilterCommunity = ({ name }) => {
 
   return (
     <div
-      className={`font-bold text-sm sm:text-base flex flex-row ${
-        !isMobile ? 'border-[1px] border-p-border' : 'mb-4 rounded-[10px]'
-      } px-3 sm:px-6 bg-white dark:bg-s-bg sm:mt-10 py-1 sm:py-3 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-9 items-center`}
+      className={`font-bold text-sm sm:text-base flex flex-row px-3 sm:px-6 md:mt-10 py-2 md:py-3 w-full sm:rounded-xl justify-start space-x-5 md:space-x-9 items-center ${
+        isMobile
+          ? 'mb-4 rounded-[10px]'
+          : 'bg-white dark:bg-s-bg border-[1px] border-p-border'
+      }`}
     >
       <button
-        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-          active === 'lens' && 'bg-p-bg'
-        }  hover:bg-p-hover hover:text-p-hover-text`}
+        className={`flex p-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+          active === 'lens'
+            ? `${isMobile ? 'bg-s-bg' : 'bg-p-bg'}`
+            : `${
+                isMobile
+                  ? 'bg-p-hover text-p-hover-text'
+                  : 'hover:bg-p-hover hover:text-p-hover-text'
+              }`
+        }`}
         onClick={() => {
           router.push(`/c/${name}/feed/lens`)
         }}
@@ -43,9 +51,16 @@ const NavFilterCommunity = ({ name }) => {
         <div>Lens</div>
       </button>
       <button
-        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-          active === 'new' && 'bg-p-bg'
-        }  hover:bg-p-hover hover:text-p-hover-text`}
+        className={`flex p-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl
+        ${
+          active === 'new'
+            ? `${isMobile ? 'bg-s-bg' : 'bg-p-bg'}`
+            : `${
+                isMobile
+                  ? 'bg-p-hover text-p-hover-text'
+                  : 'hover:bg-p-hover hover:text-p-hover-text'
+              }`
+        }`}
         onClick={() => {
           router.push(`/c/${name}/feed/new`)
         }}
@@ -54,9 +69,15 @@ const NavFilterCommunity = ({ name }) => {
         <div>New</div>
       </button>
       <button
-        className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-          active === 'top' && 'bg-p-bg'
-        }  hover:bg-p-hover hover:text-p-hover-text`}
+        className={`flex p-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+          active === 'top'
+            ? `${isMobile ? 'bg-s-bg' : 'bg-p-bg'}`
+            : `${
+                isMobile
+                  ? 'bg-p-hover text-p-hover-text'
+                  : 'hover:bg-p-hover hover:text-p-hover-text'
+              }`
+        }`}
         onClick={() => {
           router.push(`/c/${name}/feed/top`)
         }}
