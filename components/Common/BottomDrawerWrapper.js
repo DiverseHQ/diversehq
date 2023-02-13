@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Drawer } from '@mui/material'
+import { useTheme } from '../Common/ThemeProvider'
 
 const BottomDrawerWrapper = ({
   children,
@@ -8,6 +9,7 @@ const BottomDrawerWrapper = ({
   showClose = true,
   position
 }) => {
+  const { theme } = useTheme()
   return (
     <Drawer
       anchor={position}
@@ -17,14 +19,18 @@ const BottomDrawerWrapper = ({
       }}
       sx={{
         '& .MuiDrawer-paper': {
-          borderRadius: position === 'bottom' && '20px 20px 0px 0px',
-          backgroundColor: 'background'
+          borderRadius:
+            (position === 'bottom' && '20px 20px 0px 0px') ||
+            (position === 'left' && '0px 10px 10px 0px'),
+          bgcolor: theme === 'dark' ? '#1a1a1b' : '#fff',
+          color: theme === 'dark' ? '#fff' : '#1a1a1b'
         },
         '& .MuiDrawer-paperAnchorLeft': {
           width: '80%'
         }
       }}
       transitionDuration={200}
+      bgcolor="custom"
     >
       <div
         className={` ${
