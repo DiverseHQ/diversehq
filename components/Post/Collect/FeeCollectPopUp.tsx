@@ -273,7 +273,7 @@ const FeeCollectPopUp = ({
             )}
 
             {isAllowed && hasAmount ? (
-              <div className="text-p-text text-medium font-semibold">
+              <div className="text-p-text text-medium font-semibold mb-2">
                 Balance : {parseFloat(balanceData?.formatted)} | Gifting:{' '}
                 {collectModule?.amount?.value}
               </div>
@@ -300,7 +300,7 @@ const FeeCollectPopUp = ({
               </>
             )}
             {isAllowed && hasAmount && (
-              <div className="px-4 w-full bg-s-bg mb-1 mt-1">
+              <div className="px-4 w-full  mb-1 mt-1">
                 <button
                   onClick={async (e) => {
                     e.stopPropagation()
@@ -318,9 +318,18 @@ const FeeCollectPopUp = ({
                 >
                   <div className='className="flex flex-row justify-center items-center space-x-2"'>
                     {loading ? (
-                      <CircularProgress size="18px" color="primary" />
+                      <div className="flex flex-row justify-center items-center space-x-2">
+                        <CircularProgress size="18px" color="primary" />
+                        <div>Collecting...</div>
+                      </div>
                     ) : (
-                      <div>Collect </div>
+                      <div className="flex flex-row items-center space-x-2">
+                        <BsCollection className="w-5 h-5" />
+                        <p>
+                          Collect For {parseFloat(collectModule?.amount?.value)}
+                          {''} {collectModule?.amount?.asset?.symbol}
+                        </p>
+                      </div>
                     )}
                   </div>
                 </button>
