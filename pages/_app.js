@@ -29,7 +29,6 @@ function MyApp({ Component, pageProps, isMobileView }) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const retainedComponents = useRef({})
-  console.log('router.asPath', router.asPath)
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
 
   // Add Component to retainedComponents if we haven't got it already
@@ -119,7 +118,6 @@ function MyApp({ Component, pageProps, isMobileView }) {
           <>
             <div>
               {Object.entries(retainedComponents.current).map(([path, c]) => {
-                console.log('path', path)
                 return (
                   <div
                     key={path}

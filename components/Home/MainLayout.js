@@ -7,7 +7,7 @@ import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import useDevice from '../Common/useDevice'
-// import MainMsgModal from '../Messages/MainMsgModal'
+import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
   const [mobile, setMobile] = useState(isMobileView)
@@ -66,7 +66,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               {children}
             </div>
             <RightSidebar />
-            {/* <MainMsgModal /> */}
+            <MainMsgModal />
           </div>
         </div>
       )}
