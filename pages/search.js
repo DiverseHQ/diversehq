@@ -27,6 +27,10 @@ const search = () => {
     fetchTopCommunities()
   }, [])
 
+  const recentCommunities = JSON.parse(
+    window.localStorage.getItem('recentCommunities')
+  )
+
   return (
     <>
       <NextSeo
@@ -36,13 +40,21 @@ const search = () => {
           url: 'https://app.diversehq.xyz/search'
         }}
       />
-      <div className="w-screen flex flex-col px-4 mt-10">
+      <div className="w-screen flex flex-col px-4 mt-6 gap-4">
         {/* <SearchModal /> */}
+        {recentCommunities.length > 0 && (
+          <div className="flex flex-col gap-2 md:gap-3">
+            <h3 className="text-[18px] font-medium mb-3">Recent Communities</h3>
+            {recentCommunities.map((community, i) => {
+              return (
+                <RightSideCommunityComponent key={i} community={community} />
+              )
+            })}
+          </div>
+        )}
         {topCommunities.length > 0 && (
-          <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
-            <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
-              Top Communities
-            </h3>
+          <div className="flex flex-col gap-2 md:gap-3">
+            <h3 className="text-[18px] font-medium">Top Communities</h3>
             {topCommunities.map((community, i) => {
               return (
                 <RightSideCommunityComponent key={i} community={community} />
