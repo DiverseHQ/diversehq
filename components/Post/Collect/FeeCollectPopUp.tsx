@@ -100,11 +100,6 @@ const FeeCollectPopUp = ({
       parseFloat(balanceData?.formatted) <
         parseFloat(collectModule?.amount?.value)
     ) {
-      console.log(balanceData?.formatted, '----- USERS BALANCE ')
-      console.log(
-        collectModule?.amount?.asset?.address,
-        '----- ASSET CONTRACT ADDRESS'
-      )
       setHasAmount(false)
     } else {
       setHasAmount(true)

@@ -7,9 +7,9 @@ import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import useDevice from '../Common/useDevice'
+import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
-  console.log('isMobileView', isMobileView)
   const [mobile, setMobile] = useState(isMobileView)
   // only show if mounted
   const { isMobile } = useDevice()
@@ -66,6 +66,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               {children}
             </div>
             <RightSidebar />
+            <MainMsgModal />
           </div>
         </div>
       )}

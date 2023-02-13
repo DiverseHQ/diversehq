@@ -1,5 +1,5 @@
 import apiEndpoint from './ApiEndpoint'
-import { CommentType } from '../utils/types'
+import { CommentType } from '../types/comment'
 import { getHeaders } from './apiHelper'
 
 export const postComment = async (

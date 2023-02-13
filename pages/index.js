@@ -11,7 +11,7 @@ const Home = () => {
     <>
       <NextSeo
         title="Home / DiverseHQ"
-        description="Building next Reddit, where anyone can grow their own audience."
+        description="Building next Reddit, where anyone can easily grow their audience."
         openGraph={{
           url: 'https://app.diversehq.xyz'
         }}

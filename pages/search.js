@@ -13,7 +13,6 @@ const search = () => {
   const fetchTopCommunities = async () => {
     try {
       const communities = await getAllCommunities(6, 0, 'top')
-      console.log('top communities', communities)
       if (communities.communities.length > 0) {
         setTopCommunities(communities.communities)
       }
@@ -27,22 +26,7 @@ const search = () => {
     if (topCommunities.length > 0) return
     fetchTopCommunities()
   }, [])
-  // const [recommendedCommunities, setRecommendedCommunities] = useState([])
-  // const fetchCommunitiesAndSetState = async (ids, setState) => {
-  //   try {
-  //     const communities = await postGetCommunityInfoUsingListOfIds(ids)
-  //     setState(communities)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  // useEffect(() => {
-  //   fetchCommunitiesAndSetState(
-  //     recommendedCommunitiesIds,
-  //     setRecommendedCommunities
-  //   )
-  // }, [])
-  console.log('search')
+
   return (
     <>
       <NextSeo

@@ -26,8 +26,8 @@ export const notificationTypes = {
 export const sortTypes = {
   LATEST: 'Latest',
   TOP_TODAY: 'Today',
-  TOP_WEEK: '7 Days',
-  TOP_MONTH: '30 Days'
+  TOP_WEEK: 'Week',
+  TOP_MONTH: 'Month'
 }
 
 export const recommendedCommunitiesIds = [
@@ -41,3 +41,8 @@ export const recommendedCommunitiesIds = [
 
 export const DISCORD_INVITE_LINK = 'https://discord.gg/x7jByQKpYF'
 export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/kopveel8c'
+
+export const XMTP_PREFIX = 'lens.dev/dm'
+export const XMTP_ENV = 'dev'
+export const MAX_PROFILES_PER_REQUEST = 50
+export const MESSAGE_PAGE_LIMIT = 30

@@ -66,7 +66,13 @@ const LensNotificationMentionCard = ({ notification, isRead }) => {
                   showMore ? 'line-clamp-5' : ''
                 } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
               >
-                {notification?.mentionPublication?.metadata?.content}
+                {notification?.mentionPublication?.metadata?.content?.startsWith(
+                  notification?.mentionPublication?.metadata?.name
+                )
+                  ? notification?.mentionPublication?.metadata?.content?.slice(
+                      notification?.mentionPublication?.metadata?.name.length
+                    )
+                  : notification?.mentionPublication?.metadata?.content}
               </Markup>
             </div>
           )}

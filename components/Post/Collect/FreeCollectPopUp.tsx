@@ -32,8 +32,6 @@ const FreeCollectPopUp = ({
     useCollectPublication(collectModule)
   const { notifySuccess }: any = useNotify()
   useEffect(() => {
-    console.log('isSuccess', isSuccess)
-    console.log('loading', loading)
     if (!loading && isSuccess) {
       notifySuccess('Post has been collected, check your collections!')
       setIsCollected(true)
@@ -116,7 +114,6 @@ const FreeCollectPopUp = ({
             </div>
             <button
               onClick={async (e) => {
-                console.log('--- collect button clicked ---')
                 e.stopPropagation()
                 await collectPublication(publication.id)
               }}

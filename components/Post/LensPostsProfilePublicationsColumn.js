@@ -37,7 +37,6 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
 
   const handleSetPosts = async (newPosts) => {
     if (newPosts.length === 0) return
-    console.log('newposts before', newPosts)
     const communityIds = newPosts.map((post) => {
       if (post.metadata.tags.length === 0) return 'null'
       return post.metadata.tags[0]

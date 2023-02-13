@@ -26,16 +26,6 @@ const useNotificationsCount = () => {
 
   useEffect(() => {
     if (data?.notifications?.items?.length > 0 && user) {
-      console.log(
-        'notification count',
-        data?.notifications?.items?.filter(
-          (notification) =>
-            notification.createdAt >
-            (user.lastFetchedLensNotificationsTime
-              ? user.lastFetchedLensNotificationsTime
-              : new Date())
-        ).length
-      )
       setLensNotificationsCount(
         data?.notifications?.items?.filter(
           (notification) =>
@@ -50,7 +40,6 @@ const useNotificationsCount = () => {
 
   const fetchAndSetNotificationCount = async () => {
     const { count } = await getUnReadNotificationsCount()
-    console.log('count', count)
     setNotificationsCount(count)
   }
 
@@ -62,17 +51,11 @@ const useNotificationsCount = () => {
     setLensNotificationsCount(0)
     //  update lens notification date time in db
     try {
-      console.log('updating lens notification date')
-      const newUser = await putUpdateLensNotificationDate()
-      console.log('newUser', newUser)
+      await putUpdateLensNotificationDate()
     } catch (error) {
       console.log('error', error)
     }
   }
-
-  useEffect(() => {
-    console.log('user', user)
-  }, [user])
 
   useEffect(() => {
     if (user) {
@@ -81,7 +64,7 @@ const useNotificationsCount = () => {
       setNotificationsCount(0)
       setLensNotificationsCount(0)
     }
-  }, [user?.walletaddress])
+  }, [user])
   return {
     notificationsCount,
     lensNotificationsCount,

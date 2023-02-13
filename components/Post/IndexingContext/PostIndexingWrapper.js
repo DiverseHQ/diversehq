@@ -37,14 +37,11 @@ const PostIndexingWrapper = ({ children }) => {
 
   const addPost = async (tx, post) => {
     router.push('/')
-    console.log('addPost', tx, post)
     // show for ui
     setPosts([post, ...posts])
 
     // indexing
-    console.log('index start...')
     const indexResult = await pollUntilIndexed(tx)
-    console.log('index end...', indexResult)
     await onSuccessIndex(indexResult)
 
     // remove from ui

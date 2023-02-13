@@ -43,7 +43,6 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   }, [data?.publications?.pageInfo?.next])
 
   const handleCommentsPublications = async () => {
-    console.log('comments data', data)
     if (data?.publications?.pageInfo?.next) {
       setNextCursor(data?.publications?.pageInfo?.next)
     }

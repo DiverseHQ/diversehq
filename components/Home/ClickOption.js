@@ -14,17 +14,6 @@ const ClickOption = () => {
   const { disconnect } = useDisconnect()
   const { hideModal } = usePopUpModal()
 
-  // useEffect(() => {
-  //   if (signer) {
-  //     const contract = new ethers.Contract(
-  //       DIVE_CONTRACT_ADDRESS_MUMBAI,
-  //       ABI,
-  //       signer
-  //     )
-  //     setDiveContract(contract)
-  //   }
-  // }, [signer])
-
   const routeToUserProfile = () => {
     if (user) {
       router.push(`/u/${user.walletAddress}`)
@@ -36,25 +25,6 @@ const ClickOption = () => {
     disconnect()
     hideModal()
   }
-
-  // const toggleTheme = () => {
-  //   setTheme(theme === 'dark' ? 'light' : 'dark')
-  // }
-
-  // const claimTokens = async () => {
-  //   const res = await diveContract.claimTokens(
-  //     DIVE_CONTRACT_ADDRESS_MUMBAI,
-  //     ethers.utils.parseEther(claimAmount.toString()),
-  //     { gasLimit: 3000000, gasPrice: 30000000000 }
-  //   )
-  //   const receipt = await res.wait()
-  //   if (receipt.status === 1) {
-  //     console.log('Tokens claimed: https://rinkeby.etherscan.io/tx/' + res.hash)
-  //     notifySuccess('Tokens Claimed Successfully')
-  //   } else {
-  //     notifyError('Tokens Claim Failed')
-  //   }
-  // }
 
   return (
     <MoreOptionsModal

@@ -30,7 +30,6 @@ const LensPostsProfileFeedColumn = ({ profileId }) => {
   )
 
   const hanldeProfileFeed = () => {
-    console.log('lensposts profileFeed', profileFeed.feed)
     if (profileFeed.feed?.pageInfo?.next) {
       setNextCursor(profileFeed.feed?.pageInfo?.next)
     }

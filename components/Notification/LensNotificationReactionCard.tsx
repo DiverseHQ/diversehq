@@ -13,7 +13,6 @@ type Props = {
 }
 
 const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
-  console.log('notification reaction', notification)
   const router = useRouter()
   const [showMore, setShowMore] = useState(
     (countLinesFromMarkdown(notification?.publication?.metadata?.content) >
@@ -76,7 +75,13 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
                   showMore ? 'line-clamp-5' : ''
                 } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
               >
-                {notification?.publication?.metadata?.content}
+                {notification?.publication?.metadata?.content?.startsWith(
+                  notification?.publication?.metadata?.name
+                )
+                  ? notification?.publication?.metadata?.content?.slice(
+                      notification?.publication?.metadata?.name?.length
+                    )
+                  : notification?.publication?.metadata?.content}
               </Markup>
             </div>
           )}

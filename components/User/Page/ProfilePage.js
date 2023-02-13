@@ -61,10 +61,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   )
 
   useEffect(() => {
-    console.log('lensProfile', lensProfile)
-  }, [lensProfile])
-
-  useEffect(() => {
     if (data?.profile) {
       setLensProfile(data.profile)
     }
@@ -75,7 +71,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
       setProfile(_profile)
     }
     if (_lensProfile) {
-      console.log('setLensProfile', _lensProfile)
       setLensProfile(_lensProfile)
     }
   }, [_profile, _lensProfile])

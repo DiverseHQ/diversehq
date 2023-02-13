@@ -33,10 +33,6 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
 
   useEffect(() => {
     if (!collectPublicationResult?.data?.publications?.items) return
-    console.log(
-      'collected publications',
-      collectPublicationResult?.data?.publications?.items
-    )
     handleUserPublications(collectPublicationResult?.data?.publications?.items)
   }, [collectPublicationResult?.data?.publications?.pageInfo?.next])
 

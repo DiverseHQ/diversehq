@@ -84,29 +84,14 @@ const refreshAuth = async (refreshToken) => {
       }
     }
   })
-  console.log('Refresh result', result)
   return result
 }
-// const refreshAuth = gql`
-//   mutation Refresh {
-//     refresh(request: {
-//       refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjB4YjE5QzI4OTBjZjk0N0FEM2YwYjdkN0U1QTlmZkJjZTM2ZDNmOWJkMiIsInJvbGUiOiJyZWZyZXNoIiwiaWF0IjoxNjQ1MTA0MjMxLCJleHAiOjE2NDUxOTA2MzF9.2Tdts-dLVWgTLXmah8cfzNx7sGLFtMBY7Z9VXcn2ZpE"
-//     }) {
-//       accessToken
-//       refreshToken
-//     }
-//   }
-// `
 
 export async function refreshAuthToken() {
   const token = JSON.parse(localStorage.getItem('STORAGE_KEY'))
-  console.log('LensToken', token)
   if (!token) return
   try {
-    console.log('token:', { token })
     const authData = await refreshAuth(token.refreshToken)
-
-    console.log('authData:', { authData })
     const { accessToken, refreshToken } = authData.data.refresh
     const exp = parseJwt(refreshToken).exp
 

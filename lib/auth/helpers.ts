@@ -48,8 +48,6 @@ export function setAccessTokenToStorage(
 
   const exp = parseJwt(accessToken).exp
 
-  console.log()
-
   if (!ls) {
     console.error(
       'Something went wrong finding local storage.  Could not set access token.'

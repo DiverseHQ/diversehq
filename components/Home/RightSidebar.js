@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   getAllCommunities,
   getCreatedCommunitiesApi
-  // postGetCommunityInfoUsingListOfIds
 } from '../../api/community'
-// import { recommendedCommunitiesIds } from '../../utils/config'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import RightSideCommunityComponent from './RightSideCommunityComponent'
@@ -34,16 +32,6 @@ const RightSidebar = () => {
 
   const [createdCommunities, setCreatedCommunities] = useState([])
   const [topCommunities, setTopCommunities] = useState([])
-  // const [recommendedCommunities, setRecommendedCommunities] = useState([])
-
-  // const fetchCommunitiesAndSetState = async (ids, setState) => {
-  //   try {
-  //     const communities = await postGetCommunityInfoUsingListOfIds(ids)
-  //     setState(communities)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
 
   const fetchAndSetCreatedCommunities = async () => {
     try {
@@ -59,7 +47,7 @@ const RightSidebar = () => {
 
   const fetchTopCommunities = async () => {
     try {
-      const communities = await getAllCommunities(6, 0, 'top')
+      const communities = await getAllCommunities(10, 0, 'top')
       if (communities.communities.length > 0) {
         setTopCommunities(communities.communities)
       }

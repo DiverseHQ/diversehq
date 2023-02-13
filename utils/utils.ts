@@ -42,7 +42,6 @@ export const uploadFileToFirebaseAndGetUrl = async (
   file: File,
   address: string
 ) => {
-  console.log('file', file)
   const newFile = new File([file], file.name.replace(/\s/g, '_'), {
     type: file.type
   })
@@ -55,10 +54,8 @@ export const uploadFileToFirebaseAndGetUrl = async (
 
   const uploadedToUrl = await uploadBytes(storageRef, newFile).then(
     async (snapshot) => {
-      console.log('Uploaded a blob or newFile!')
       //return newFile url
       const url = await getDownloadURL(snapshot.ref).then((url) => {
-        console.log('newFile available at', url)
         return url
       })
       return url
@@ -84,13 +81,11 @@ const client = create({
 
 export const uploadToIpfsInfura = async (data: PublicationMetadataV2Input) => {
   const result = await client.add(JSON.stringify(data))
-  console.log('upload result ipfs', result)
   return result
 }
 
 export const unpinFromIpfsInfura = async (hash: string) => {
   const result = await client.pin.rm(hash)
-  console.log('unpin result ipfs', result)
   return result
 }
 
@@ -98,13 +93,11 @@ export const uploadToIpfsInfuraAndGetPath = async (
   data: PublicationMetadataV2Input
 ) => {
   const result = await client.add(JSON.stringify(data))
-  console.log('upload result ipfs', result)
   return result.path
 }
 
 export const uploadFileToIpfsInfuraAndGetPath = async (file: File) => {
   const result = await client.add(file)
-  console.log('upload result ipfs', result)
   return result.path
 }
 

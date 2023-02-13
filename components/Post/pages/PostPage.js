@@ -1,51 +1,14 @@
-// import { NextSeo } from 'next-seo'
 import React, { useState } from 'react'
-// import { getSinglePostInfo } from '../../../api/post'
 import CombinedCommentSectionApiNew from '../../Comment/CombinedCommentSectionApiNew'
 import CombinedCommentSectionApiTop from '../../Comment/CombinedCommentSectionApiTop'
 import CommentFilterNav from '../../Comment/CommentFilterNav'
 import PostCard from '../PostCard'
 
 const PostPage = ({ post }) => {
-  // const [postInfo, setPostInfo] = React.useState(null)
-  // const [notFound, setNotFound] = React.useState(false)
   const [active, setActive] = useState('top')
-
-  // React.useEffect(() => {
-  //   if (id) fetchPostInformation()
-  // }, [id])
-
-  // const fetchPostInformation = async () => {
-  //   try {
-  //     const res = await getSinglePostInfo(id)
-  //     if (res.status !== 200) {
-  //       setNotFound(true)
-  //     }
-  //     const post = await res.json()
-  //     console.log(post)
-  //     setPostInfo(post)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
 
   return (
     <>
-      {/* <NextSeo
-        title={post?.title}
-        description={post?.description}
-        openGraph={{
-          title: post?.title,
-          description: post?.description,
-          url: `https://app.diversehq.xyz/p/${id}`,
-          images: [
-            {
-              url: post?.postImageUrl
-            }
-          ]
-        }}
-      /> */}
-
       <div className="w-full flex justify-center pb-[50px]">
         <div className="w-full md:w-[650px]">
           {!post && (
