@@ -31,33 +31,33 @@ const ThemeProvider = ({ children }) => {
       mode: theme,
       ...(theme === 'light'
         ? {
-          primary: {
-            main: '#eef1ff'
-          },
-          secondary: {
-            main: '#1A1A1A'
-          },
-          text: {
-            primary: '#000000'
-          },
-          background: {
-            default: '#1A1A1A'
+            primary: {
+              main: '#eef1ff'
+            },
+            secondary: {
+              main: '#1A1A1A'
+            },
+            text: {
+              primary: '#000000'
+            },
+            background: {
+              default: '#1A1A1A'
+            }
           }
-        }
         : {
-          primary: {
-            main: '#030303'
-          },
-          secondary: {
-            main: '#1a1a1b'
-          },
-          text: {
-            primary: '#d7dadc'
-          },
-          background: {
-            default: '#1a1a1b'
-          }
-        })
+            primary: {
+              main: '#030303'
+            },
+            secondary: {
+              main: '#1a1a1b'
+            },
+            text: {
+              primary: '#d7dadc'
+            },
+            background: {
+              default: '#1a1a1b'
+            }
+          })
     }
   })
   useEffect(() => {

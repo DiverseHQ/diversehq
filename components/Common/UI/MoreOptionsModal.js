@@ -8,9 +8,10 @@ const MoreOptionsModal = ({ list }) => {
           return (
             <div
               key={index}
-              className={`flex shrink-0 w-full space-x-2 items-center px-5 sm:px-2 py-1 text-xl sm:text-lg sm:rounded-lg my-1 hover:bg-p-hover hover:text-p-hover-text hover:cursor-pointer text-p-text ${item.label.includes('Delete') &&
+              className={`flex shrink-0 w-full space-x-2 items-center px-5 sm:px-2 py-1 text-xl sm:text-lg sm:rounded-lg my-1 hover:bg-p-hover hover:text-p-hover-text hover:cursor-pointer text-p-text ${
+                item.label.includes('Delete') &&
                 'text-red-500 hover:text-red-500'
-                } ${item.className ? item.className : ''}}`}
+              } ${item.className ? item.className : ''}}`}
               onClick={item.onClick}
             >
               {item.icon && <item.icon />}

@@ -72,8 +72,9 @@ const MobileFilterDrawerButton = () => {
           <h1 className="font-bold text-lg mt-5">Choose your Feed</h1>
           <div className="font-medium  text-base border-b p-0.5 w-full flex flex-row mt-2  justify-between px-4 items-center ">
             <button
-              className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${active === 'all' && 'bg-p-bg'
-                } hover:bg-p-hover hover:text-p-hover-text`}
+              className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
+                active === 'all' && 'bg-p-bg'
+              } hover:bg-p-hover hover:text-p-hover-text`}
               onClick={() => {
                 router.push('/feed/all')
                 setIsDrawerOpen(false)
@@ -83,8 +84,9 @@ const MobileFilterDrawerButton = () => {
               <div>All</div>
             </button>
             <button
-              className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${active === 'foryou' && 'bg-p-bg'
-                }  hover:bg-p-hover hover:text-p-hover-text`}
+              className={`flex p-1 sm:py-1 sm:px-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
+                active === 'foryou' && 'bg-p-bg'
+              }  hover:bg-p-hover hover:text-p-hover-text`}
               onClick={() => {
                 router.push('/feed/foryou')
                 setIsDrawerOpen(false)
@@ -95,8 +97,9 @@ const MobileFilterDrawerButton = () => {
             </button>
 
             <button
-              className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${active === 'offchain' && 'bg-p-bg'
-                } hover:bg-p-hover hover:text-p-hover-text`}
+              className={`flex items-center hover:cursor-pointer gap-2 p-1 sm:py-1 sm:px-2 rounded-md sm:rounded-xl ${
+                active === 'offchain' && 'bg-p-bg'
+              } hover:bg-p-hover hover:text-p-hover-text`}
               onClick={() => {
                 router.push('/feed/offchain')
                 setIsDrawerOpen(false)

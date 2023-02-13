@@ -27,8 +27,9 @@ const BottomDrawerWrapper = ({
       transitionDuration={200}
     >
       <div
-        className={` ${position === 'bottom' ? 'self-center mt-1 pb-4' : 'hidden'
-          }`}
+        className={` ${
+          position === 'bottom' ? 'self-center mt-1 pb-4' : 'hidden'
+        }`}
       >
         <svg
           width="36"

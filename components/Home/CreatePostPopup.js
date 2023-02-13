@@ -196,11 +196,11 @@ const CreatePostPopup = () => {
         mimeType === 'text'
           ? null
           : [
-            {
-              item: url,
-              type: mimeType
-            }
-          ],
+              {
+                item: url,
+                type: mimeType
+              }
+            ],
       animation_url:
         mimeType !== 'text' && !mimeType.startsWith('image') ? url : null,
       attributes: [],
@@ -361,10 +361,11 @@ const CreatePostPopup = () => {
           ></div>
 
           <div
-            className={`flex flex-col h-fit absolute z-10 ${showCommunityOptions
-              ? 'enter-fade-animation'
-              : 'exit-fade-animation '
-              }`}
+            className={`flex flex-col h-fit absolute z-10 ${
+              showCommunityOptions
+                ? 'enter-fade-animation'
+                : 'exit-fade-animation '
+            }`}
             style={communityOptionsCoord}
           >
             <div className="bg-white/50 dark:bg-black/50 backdrop-blur-lg rounded-2xl max-h-[450px] overflow-auto">
