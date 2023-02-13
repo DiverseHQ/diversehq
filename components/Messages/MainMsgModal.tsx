@@ -4,33 +4,44 @@ import LensLoginButton from '../Common/LensLoginButton'
 import { useProfile } from '../Common/WalletContext'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import AllConversations from './AllConversations'
-import { Drawer } from '@mui/material'
+import MessageHeader from './MessageHeader'
+import { useMessageStore } from '../../store/message'
+import useXmtpClient from './hooks/useXmtpClient'
 // import { UserType } from '../../types/user'
+
+const drawerBleeding = 56
 
 const MainMsgModal = () => {
   const { user }: any = useProfile()
   const { isSignedIn, hasProfile } = useLensUserContext()
   const { data: signer } = useSigner()
   const [open, setOpen] = useState(false)
+  const conversationKey = useMessageStore((state) => state.conversationKey)
+  const profile = useMessageStore((state) =>
+    state.messageProfiles.get(conversationKey)
+  )
+  const { client } = useXmtpClient()
   return (
-    <div className="p-4 bg-gray-300 fixed bottom-0 right-20">
-      <div onClick={() => setOpen(true)}>OPen</div>
-      <Drawer
-        anchor="bottom"
-        open={open}
-        onClose={() => setOpen(false)}
-        ModalProps={{
-          keepMounted: true
-        }}
-      >
-        <div className="top-[-200px] absolute">
-          <div>Hello i m under water</div>
-          {(!signer || !isSignedIn || !hasProfile || !user) && (
+    <div
+      className={`fixed ${
+        open ? 'bottom-0' : 'bottom-[-500px]'
+      } right-4 h-[550px] w-[450px] rounded-t-2xl border-[1px] border-p-btn duration-500 transition-all z-30`}
+    >
+      {/* header */}
+      <div className="bg-s-bg rounded-t-2xl flex flex-col h-full">
+        <MessageHeader profile={profile} open={open} setOpen={setOpen} />
+        {(!signer || !isSignedIn || !hasProfile || !user) && (
+          <div className="flex justify-center items-center h-full w-full">
             <LensLoginButton />
-          )}
-          {signer && isSignedIn && hasProfile && user && <AllConversations />}
-        </div>
-      </Drawer>
+          </div>
+        )}
+
+        {signer &&
+          isSignedIn &&
+          hasProfile &&
+          user &&
+          ((!open && client) || open) && <AllConversations />}
+      </div>
     </div>
   )
 }

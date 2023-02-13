@@ -47,27 +47,41 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
       {/* todo search profile and message */}
       <div>search</div>
       {/* profiles and preview message */}
-      {showAuthenticating && <div>authenticating</div>}
-      {showLoading && <div>loading</div>}
-      {profilesError && <div>profilesError</div>}
-      <div>
-        {sortedProfiles?.map(([key, profile]) => {
-          const message = messages.get(key)
-          if (!message) {
-            return null
-          }
+      {showAuthenticating && (
+        <div className="flex w-full h-full justify-center item-center">
+          Authenticating...
+        </div>
+      )}
+      {showLoading && (
+        <div className="flex w-full h-full justify-center item-center">
+          Loading...
+        </div>
+      )}
+      {profilesError && (
+        <div className="flex w-full h-full justify-center item-center">
+          Error loading messages
+        </div>
+      )}
+      {!showAuthenticating && !showLoading && !profilesError && (
+        <div className="flex flex-col">
+          {sortedProfiles?.map(([key, profile]) => {
+            const message = messages.get(key)
+            if (!message) {
+              return null
+            }
 
-          return (
-            <Preview
-              isSelected={key === selectedConversationKey}
-              key={key}
-              profile={profile}
-              conversationKey={key}
-              message={message}
-            />
-          )
-        })}
-      </div>
+            return (
+              <Preview
+                isSelected={key === selectedConversationKey}
+                key={key}
+                profile={profile}
+                conversationKey={key}
+                message={message}
+              />
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

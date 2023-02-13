@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useMessageStore } from '../../store/message'
+import Composer from './Composer'
 import useGetConversation from './hooks/useGetConversation'
 import useGetMessages from './hooks/useGetMessages'
 import useSendMessage from './hooks/useSendMessage'
@@ -49,28 +50,29 @@ const AllConversations = () => {
   const userNameForTitle = profile?.name ?? profile?.handle
   const title = userNameForTitle
   return (
-    <div className="flex flex-row gap-x-20">
+    <div className="flex flex-col h-full w-full">
       {/* conversations preview */}
-      {title && <div>{title}</div>}
-      <PreviewList selectedConversationKey={conversationKey} />
-      <div className="flex flex-col">
-        {showLoading && <div>Show Loading ... </div>}
-        {/* selected profile header */}
-        <div>
-          <div>Selected Profile {profile?.handle}</div>
+      {!profile && <PreviewList selectedConversationKey={conversationKey} />}
+
+      {/* selected profile messages */}
+      {profile && (
+        <div className="w-full h-[500px]">
+          <MessagesList
+            profile={profile}
+            fetchNextMessages={fetchNextMessages}
+            messages={messages ?? []}
+            currentProfile={currentProfile}
+            hasMore={hasMore}
+            missingXmtpAuth={missingXmtpAuth ?? false}
+          />
+          {/* composer */}
+          <Composer
+            sendMessage={sendMessage}
+            conversationKey={conversationKey}
+            disabledInput={missingXmtpAuth ?? false}
+          />
         </div>
-        {/* selected profile messages */}
-        <MessagesList
-          profile={profile}
-          fetchNextMessages={fetchNextMessages}
-          messages={messages ?? []}
-          currentProfile={currentProfile}
-          hasMore={hasMore}
-          missingXmtpAuth={missingXmtpAuth ?? false}
-        />
-      </div>
-      {/* composer */}
-      <div></div>
+      )}
     </div>
   )
 }
