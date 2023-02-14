@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import React, { memo } from 'react'
 import { useState } from 'react'
 import { AiFillGift, AiOutlineGift } from 'react-icons/ai'
@@ -129,27 +130,34 @@ const LensCollectButton = ({
           )
         }}
       >
-        <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center">
-          {collectModule.__typename === 'FreeCollectModuleSettings' && (
-            <>
-              {isCollected || hasCollectedByMe ? (
-                <BsCollectionFill className="w-5 h-5" />
-              ) : (
-                <BsCollection className="w-5 h-5" />
-              )}
-            </>
-          )}
-          {collectModule.__typename === 'FeeCollectModuleSettings' && (
-            <>
-              {isCollected || hasCollectedByMe ? (
-                <AiFillGift className="w-5 h-5" />
-              ) : (
-                <AiOutlineGift className="w-5 h-5" />
-              )}
-            </>
-          )}
-          <div className="ml-2">{collectCount}</div>
-        </div>
+        <Tooltip
+          title={isCollected || hasCollectedByMe ? 'Collected' : 'Collect'}
+          arrow
+        >
+          <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center">
+            {collectModule.__typename === 'FreeCollectModuleSettings' && (
+              <>
+                {isCollected || hasCollectedByMe ? (
+                  <BsCollectionFill className="w-4 h-4 text-[#687684]" />
+                ) : (
+                  <BsCollection className="w-4 h-4 text-[#687684]" />
+                )}
+              </>
+            )}
+            {collectModule.__typename === 'FeeCollectModuleSettings' && (
+              <>
+                {isCollected || hasCollectedByMe ? (
+                  <AiFillGift className="w-4 h-4 text-[#687684]" />
+                ) : (
+                  <AiOutlineGift className="w-4 h-4 text-[#687684]" />
+                )}
+              </>
+            )}
+            <div className="ml-2 font-medium text-[#687684]">
+              {collectCount}
+            </div>
+          </div>
+        </Tooltip>
       </HoverModalWrapper>
     </>
   )

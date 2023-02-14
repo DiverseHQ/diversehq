@@ -55,14 +55,14 @@ const NewMobileTopNav = () => {
         router.pathname.startsWith('/c/') ||
         router.pathname.startsWith('/search') ||
         router.pathname.startsWith('/u/') ? (
-          <div className="h-[32px] flex flex-row items-center gap-2 text-[18px]">
+          <div className="h-[32px] flex flex-row items-center gap-3 text-[18px]">
             <div className="flex items-center justify-center w-8 h-8 bg-p-btn-hover rounded-full">
               <BiArrowBack
                 onClick={() => router.back()}
                 className="w-6 h-6 rounded-full cursor-pointer bg-p-btn-hover"
               />
             </div>
-            <span className="font-semibold">
+            <span className="font-bold text-[20px]">
               {router.pathname.startsWith('/p/') && 'Post'}
               {router.pathname.startsWith('/c/') && 'Community'}
               {router.pathname.startsWith('/u/') && 'Profile'}
@@ -83,7 +83,7 @@ const NewMobileTopNav = () => {
                   <ImageWithPulsingLoader
                     src={user?.profileImageUrl}
                     onClick={() => setIsOpenSidebar(true)}
-                    className="w-[35px] h-[35px] rounded-full"
+                    className="w-[35px] h-[35px] rounded-full cursor-pointer"
                   />
                   {(!isSignedIn || !hasProfile) && (
                     <div className="absolute top-0 left-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />

@@ -19,6 +19,7 @@ import { HiOutlineTrash } from 'react-icons/hi'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import getStampFyiURL from '../User/lib/getStampFyiURL'
+import { Tooltip } from '@mui/material'
 
 const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [comment, setComment] = useState(commentInfo)
@@ -211,10 +212,11 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <RiMore2Fill
-                    className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
-                    title="More"
-                  />
+                  <Tooltip title="More" arrow>
+                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                  </Tooltip>
                 </OptionsWrapper>
               )}
             </div>
@@ -234,13 +236,14 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   }}
                   required
                 />
-                <div className="flex items-center">
-                  <AiOutlineCheck
-                    className="text-base sm:text-[24px] hover:cursor-pointer hover:text-[#66CD00]"
-                    title="Save"
-                    onClick={submitEdittedComment}
-                  />
-                </div>
+                <Tooltip title="Save" arrow>
+                  <div className="flex items-center hover:bg-p-btn-hover hover:text-[#66CD00] rounded-md p-1">
+                    <AiOutlineCheck
+                      className="text-base sm:text-[24px] cursor-pointer"
+                      onClick={submitEdittedComment}
+                    />
+                  </div>
+                </Tooltip>
               </div>
             ) : (
               <div className="mt-1">{comment.content}</div>
@@ -249,26 +252,38 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             <div className="flex flex-row items-end space-x-14">
               {/* upvote and downvote */}
               <div className="flex flex-row items-center gap-x-2 pt-2">
-                <img
-                  //  onClick={liked ? handleUnLike : handleLike}
-                  src={
-                    reaction === ReactionTypes.Upvote
-                      ? '/UpvoteFilled.svg'
-                      : '/Upvote.svg'
-                  }
-                  onClick={handleUpvote}
-                  className="w-5 h-5 cursor-pointer"
-                />
-                <div className="font-bold">{totalCount}</div>
-                <img
-                  src={
-                    reaction === ReactionTypes.Downvote
-                      ? '/DownvoteFilled.svg'
-                      : '/Downvote.svg'
-                  }
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={handleDownvote}
-                />
+                <Tooltip title="Upvote" arrow>
+                  <button
+                    onClick={handleUpvote}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
+                  >
+                    <img
+                      //  onClick={liked ? handleUnLike : handleLike}
+                      src={
+                        reaction === ReactionTypes.Upvote
+                          ? '/UpvoteFilled.svg'
+                          : '/upvoteGray.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
+                <div className="font-medium text-[#687684]">{totalCount}</div>
+                <Tooltip title="Downvote" arrow>
+                  <button
+                    onClick={handleDownvote}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
+                  >
+                    <img
+                      src={
+                        reaction === ReactionTypes.Downvote
+                          ? '/DownvoteFilled.svg'
+                          : '/downvoteGray.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
               </div>
             </div>
           </div>

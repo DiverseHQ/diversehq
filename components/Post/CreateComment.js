@@ -79,7 +79,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
             </div>
           </div>
         ) : (
-          <div className="px-3 sm:px-5 w-full bg-s-bg py-3 fixed z-30 bottom-[50px]">
+          <div className="px-3 sm:px-5 w-full bg-s-bg py-3 fixed z-30 bottom-0">
             <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4">
               <div className="flex flex-row gap-2 sm:gap-4 items-center w-full">
                 <div className="flex flex-row self-end mb-1.5">
@@ -115,7 +115,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
                 {!loading && (
                   <FiSend
                     onClick={createComment}
-                    className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
+                    className="w-5 h-5 sm:w-6 sm:h-6 text-p-text cursor-pointer"
                   />
                 )}
                 {loading && (

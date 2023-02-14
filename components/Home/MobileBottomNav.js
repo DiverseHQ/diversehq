@@ -1,65 +1,134 @@
 import { useRouter } from 'next/router'
-import React from 'react'
-import { AiFillPlusCircle, AiOutlineBell, AiOutlineHome } from 'react-icons/ai'
-import { MdOutlineExplore } from 'react-icons/md'
-import { BsSearch } from 'react-icons/bs'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import CreatePostPopup from './CreatePostPopup'
+import React, { useState, useEffect } from 'react'
 import useNotificationsCount from '../Notification/useNotificationsCount'
+
 const MobileBottomNav = () => {
   const {
     notificationsCount,
     lensNotificationsCount,
     updateLensNotificationCount
   } = useNotificationsCount()
-  const { showModal } = usePopUpModal()
+  const [active, setActive] = useState('home')
   const router = useRouter()
+  const { pathname } = router
+
   const routeToHome = () => {
     router.push('/')
   }
+
   const routeToExplore = () => {
     router.push('/explore')
   }
-  const routeToNotifications = async () => {
-    await updateLensNotificationCount()
-    router.push('/notification')
-  }
-  const showCreatePostModal = () => {
-    showModal({
-      component: <CreatePostPopup />,
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
+
   const routeToSearch = () => {
     router.push('/search')
   }
 
+  const routeToNotifications = async () => {
+    await updateLensNotificationCount()
+    router.push('/notification')
+  }
+
+  useEffect(() => {
+    if (pathname.startsWith('/explore')) {
+      setActive('explore')
+    } else if (pathname.startsWith('/search')) {
+      setActive('search')
+    } else if (pathname.startsWith('/notification')) {
+      setActive('notification')
+    } else if (router.pathname === '/') {
+      setActive('home')
+    } else {
+      setActive('none')
+    }
+  }, [pathname])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
   return (
-    <div className="fixed bottom-0 w-full py-2 flex flex-row justify-evenly items-center bg-p-bg shadow-top">
-      <AiOutlineHome className="w-7 h-7 cursor-pointer" onClick={routeToHome} />
-      <MdOutlineExplore
-        className="w-7 h-7 cursor-pointer"
-        onClick={routeToExplore}
-      />
-      <AiFillPlusCircle
-        className="w-10 h-10 text-p-btn"
-        onClick={showCreatePostModal}
-      />
-      <BsSearch className="w-6 h-6 cursor-pointer" onClick={routeToSearch} />
-      <div className="relative">
-        <AiOutlineBell
-          className="w-7 h-7 cursor-pointer"
-          onClick={routeToNotifications}
+    <div className="fixed bottom-0 w-full py-2 flex flex-row justify-evenly items-center bg-p-bg shadow-top min-h-[56px]">
+      <div
+        className="p-1.5 hover:bg-[#6668FF] rounded-full hover:bg-opacity-20 cursor-pointer"
+        onClick={() => {
+          if (router.pathname !== '/') {
+            routeToHome()
+            return
+          }
+          scrollToTop()
+        }}
+      >
+        <img
+          src={`${
+            active === 'home'
+              ? '/mobileNavHomeFilled.svg'
+              : '/mobileNavHome.svg'
+          }`}
+          alt="Home"
+          className="w-5.5 h-5.5"
         />
-        {/* {notificationsCount > 0 && (
-          <div className="absolute top-0 left-0 px-1 text-xs text-p-btn-text bg-green-500 rounded-full">
-            <span>{notificationsCount}</span>
-          </div>
-        )} */}
+      </div>
+      <div
+        className="p-1.5 hover:bg-[#6668FF] rounded-full hover:bg-opacity-20 cursor-pointer"
+        onClick={() => {
+          if (!router.pathname.startsWith('/explore')) {
+            routeToExplore()
+            return
+          }
+          scrollToTop()
+        }}
+      >
+        <img
+          src={`${
+            active === 'explore'
+              ? '/mobileNavExploreFilled.svg'
+              : '/mobileNavExplore.svg'
+          }`}
+          alt="Explore"
+          className="w-5.5 h-5.5"
+        />
+      </div>
+      <div
+        className="p-1.5 hover:bg-[#6668FF] rounded-full hover:bg-opacity-20 cursor-pointer"
+        onClick={routeToSearch}
+      >
+        <img
+          src={`${
+            active === 'search'
+              ? '/mobileNavSearchActive.svg'
+              : '/mobileNavSearch.svg'
+          }`}
+          alt="Search"
+          className="w-5.5 h-5.5"
+        />
+      </div>
+      <div
+        className="relative"
+        onClick={() => {
+          if (!router.pathname.startsWith('/notification')) {
+            routeToNotifications()
+            return
+          }
+          scrollToTop()
+        }}
+      >
+        <div className="p-1.5 hover:bg-[#6668FF] rounded-full hover:bg-opacity-20 cursor-pointer">
+          <img
+            src={`${
+              active === 'notification'
+                ? '/mobileNavNotificationFilled.svg'
+                : '/mobileNavNotification.svg'
+            }`}
+            alt="Notification"
+            className="w-[23px] h-[23px]"
+          />
+        </div>
         {Number(notificationsCount + lensNotificationsCount) > 0 && (
-          <div className="absolute top-0 left-0.5 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
+          <div className="absolute -top-0.5 left-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
             <span>{notificationsCount + lensNotificationsCount}</span>
           </div>
         )}

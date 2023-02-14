@@ -5,7 +5,7 @@ import { deletePost, putUpvoteOnPost, putDownvoteOnPost } from '../../api/post'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
-import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
+// import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
 import { ReactionTypes } from '../../graphql/generated'
@@ -25,6 +25,7 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import { Tooltip } from '@mui/material'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
 // import useDevice from '../Common/useDevice'
 
@@ -166,7 +167,15 @@ const PostCard = ({ _post, setPosts }) => {
   }
 
   return (
-    <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 sm:my-3 sm:rounded-2xl shadow-sm">
+    <div
+      className={`sm:px-5 flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
+        isMobile
+          ? `border-b-[1px] border-[#eee] dark:border-p-border ${
+              router.pathname.startsWith('/p') ? 'mb-2' : ''
+            }`
+          : 'pb-2'
+      }`}
+    >
       {/* top row */}
       <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
         {!isMobile && (
@@ -285,9 +294,11 @@ const PostCard = ({ _post, setPosts }) => {
               isDrawerOpen={isDrawerOpen}
               setIsDrawerOpen={setIsDrawerOpen}
             >
-              <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
-              </div>
+              <Tooltip title="More" arrow>
+                <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                  <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+              </Tooltip>
             </OptionsWrapper>
           )}
         </div>
@@ -296,33 +307,35 @@ const PostCard = ({ _post, setPosts }) => {
       <div className="flex flex-row w-full">
         {!isMobile && (
           <div className="flex flex-col items-center ml-1.5 mt-1">
-            <button
-              onClick={handleUpvote}
-              className="hover:bg-p-btn-hover rounded-md p-1 hover:cursor-pointer"
-              title="Upvote"
-            >
-              <img
-                src={
-                  reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'
-                }
-                className="w-6 h-6"
-              />
-            </button>
+            <Tooltip title="Upvote" arrow placement="left">
+              <button
+                onClick={handleUpvote}
+                className="hover:bg-p-btn-hover rounded-md p-1 hover:cursor-pointer"
+              >
+                <img
+                  src={
+                    reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'
+                  }
+                  className="w-5 h-5"
+                />
+              </button>
+            </Tooltip>
             <div className="font-bold leading-5">{totalCount}</div>
-            <button
-              onClick={handleDownvote}
-              className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-              title="Downvote"
-            >
-              <img
-                src={
-                  reaction === 'DOWNVOTE'
-                    ? '/DownvoteFilled.svg'
-                    : '/Downvote.svg'
-                }
-                className="w-5 h-5"
-              />
-            </button>
+            <Tooltip title="Downvote" arrow placement="left">
+              <button
+                onClick={handleDownvote}
+                className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+              >
+                <img
+                  src={
+                    reaction === 'DOWNVOTE'
+                      ? '/DownvoteFilled.svg'
+                      : '/Downvote.svg'
+                  }
+                  className="w-5 h-5"
+                />
+              </button>
+            </Tooltip>
           </div>
         )}
 
@@ -442,73 +455,101 @@ const PostCard = ({ _post, setPosts }) => {
               )}
           </div>
           {/* bottom row */}
+          {isMobile && router.pathname.startsWith('/p') && (
+            <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
+              <div className="flex flex-row gap-1 text-[#687684]">
+                <span className="font-medium">{totalCount}</span>
+                <span>upvotes</span>
+              </div>
+              <div className="flex flex-row gap-1 text-[#687684]">
+                <span className="font-medium">{post.comments?.length}</span>
+                <span>comments</span>
+              </div>
+            </div>
+          )}
           <div
-            className={`text-p-text  flex flex-row items-center px-3 sm:px-3.5 pt-1  justify-between sm:justify-start sm:space-x-28 ${
-              isMobile
-                ? 'border-b-[1px] border-[#eee] dark:border-p-border pb-1'
-                : ''
+            className={`text-p-text  flex flex-row items-center justify-between sm:justify-start sm:space-x-28 ${
+              isMobile ? 'p-2' : 'px-3 sm:px-3.5 pt-1'
             }`}
           >
             {isMobile && (
               <div className="flex flex-row items-center gap-x-1">
-                <button
-                  onClick={handleUpvote}
-                  className="hover:bg-p-hover rounded-md p-1  cursor-pointer"
-                >
-                  <img
-                    //  onClick={liked ? handleUnLike : handleLike}
-                    src={
-                      reaction === ReactionTypes.Upvote
-                        ? '/UpvoteFilled.svg'
-                        : '/Upvote.svg'
-                    }
-                    className="w-5 h-5"
-                  />
-                </button>
-                <div className="font-bold">{totalCount}</div>
-                <button
-                  onClick={handleDownvote}
-                  className="hover:bg-p-hover rounded-md p-1 cursor-pointer"
-                >
-                  <img
-                    src={
-                      reaction === ReactionTypes.Downvote
-                        ? '/DownvoteFilled.svg'
-                        : '/Downvote.svg'
-                    }
-                    className="w-5 h-5"
-                  />
-                </button>
+                <Tooltip title="Upvote" arrow>
+                  <button
+                    onClick={handleUpvote}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
+                  >
+                    <img
+                      //  onClick={liked ? handleUnLike : handleLike}
+                      src={
+                        reaction === ReactionTypes.Upvote
+                          ? '/UpvoteFilled.svg'
+                          : '/upvoteGray.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
+                <div className="font-medium text-[#687684]">{totalCount}</div>
+                <Tooltip title="Downvote" arrow>
+                  <button
+                    onClick={handleDownvote}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
+                  >
+                    <img
+                      src={
+                        reaction === ReactionTypes.Downvote
+                          ? '/DownvoteFilled.svg'
+                          : '/downvoteGray.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
               </div>
             )}
             {!router.pathname.startsWith('/p') ? (
-              <Link
-                href={`/p/${post._id}`}
-                className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover"
-                passHref
-                title="Comment"
-              >
-                {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+              <Tooltip title="Comment" arrow>
+                <Link
+                  href={`/p/${post._id}`}
+                  className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-medium"
+                  passHref
+                >
+                  {/* {post.comments?.length === 0 && (
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )}
                 {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                )}
-                {post.comments?.length}
-              </Link>
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-4 h-4 " />
+                )} */}
+                  <img
+                    src="/comment.svg"
+                    alt="Comment"
+                    className="w-4 h-4 mr-2"
+                  />
+                  <span className="text-[#687684]">
+                    {post.comments?.length}
+                  </span>
+                </Link>
+              </Tooltip>
             ) : (
-              <div
-                className="flex flex-row items-center hover:bg-p-btn-hover"
-                title="Comment"
-              >
-                {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 " />
+              <Tooltip title="Comment" arrow>
+                <div className="flex flex-row items-center hover:bg-p-btn-hover font-medium">
+                  {/* {post.comments?.length === 0 && (
+                  <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )}
                 {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 " />
-                )}
-                {post.comments?.length}
-              </div>
+                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-4 h-4 " />
+                )} */}
+                  <img
+                    src="/comment.svg"
+                    alt="Comment"
+                    className="w-4 h-4 mr-2"
+                  />
+                  <span className="text-[#687684]">
+                    {post.comments?.length}
+                  </span>
+                </div>
+              </Tooltip>
             )}
 
             <PostShareButton

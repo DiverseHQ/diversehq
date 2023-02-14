@@ -242,56 +242,54 @@ const LensCreateComment = ({
             </div>
           </>
         ) : (
-          <div className="px-2 sm:px-5 w-full bg-s-bg py-3 fixed z-30 bottom-[50px]">
-            <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4">
-              <div className="flex flex-row gap-2 sm:gap-4 items-center w-full">
-                <div className="flex flex-row self-end mb-1.5">
-                  <img
-                    src={
-                      user?.profileImageUrl
-                        ? user?.profileImageUrl
-                        : getStampFyiURL(user?.walletAddress)
-                    }
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
-                  />
-                </div>
-                <div className="flex-1">
-                  <textarea
-                    type="text"
-                    ref={commentRef}
-                    className={`border-none outline-none w-full text-base sm:text-[18px] py-1 px-4 sm:py-2 rounded-xl bg-p-bg font-medium ${
-                      loading ? 'text-s-text' : 'text-p-text'
-                    }`}
-                    placeholder="What do you think?"
-                    onKeyUp={(e) => {
-                      if (e.key === 'Enter') createComment()
-                    }}
-                    onInput={(e) => {
-                      e.target.style.height = 'auto'
-                      e.target.style.height = `${e.target.scrollHeight}px`
-                    }}
-                    disabled={loading}
-                    rows={1}
-                    style={{ resize: 'none' }}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-row justify-center self-end mb-3">
-                {!loading && (
-                  <FiSend
-                    onClick={createComment}
-                    className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
-                  />
-                )}
-                {loading && (
-                  <img
-                    src="/loading.svg"
-                    alt="loading"
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  />
-                )}
-              </div>
+          <div className="px-2 sm:px-5 w-full bg-s-bg pt-2 pb-1.5 fixed z-30 bottom-0 flex flex-row items-center">
+            {/* <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4"> */}
+            <div className="flex flex-row mr-2 mb-1.5 items-center self-end">
+              <img
+                src={
+                  user?.profileImageUrl
+                    ? user?.profileImageUrl
+                    : '/gradient.jpg'
+                }
+                className="w-[40px] h-[40px] rounded-full"
+              />
             </div>
+            <div className="flex-1 relative mr-2">
+              <textarea
+                type="text"
+                ref={commentRef}
+                className={`flex flex-row items-center border-none outline-none w-full text-base sm:text-[18px] py-2 px-4 sm:py-2 rounded-xl bg-p-bg font-medium ${
+                  loading ? 'text-s-text' : 'text-p-text'
+                }`}
+                placeholder="What do you think?"
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') createComment()
+                }}
+                onInput={(e) => {
+                  e.target.style.height = 'auto'
+                  e.target.style.height = `${e.target.scrollHeight}px`
+                }}
+                disabled={loading}
+                rows={1}
+                style={{ resize: 'none' }}
+              />
+            </div>
+            <div className="flex flex-row justify-center items-center self-end mb-3">
+              {!loading && (
+                <FiSend
+                  onClick={createComment}
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text cursor-pointer"
+                />
+              )}
+              {loading && (
+                <img
+                  src="/loading.svg"
+                  alt="loading"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
+                />
+              )}
+            </div>
+            {/* </div> */}
           </div>
         ))}
     </div>
