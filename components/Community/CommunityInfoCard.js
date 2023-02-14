@@ -16,17 +16,18 @@ import EditCommunity from './EditCommunity'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
-import { BiChevronDown } from 'react-icons/bi'
+import { BiChevronDown, BiEdit } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
-// import { RiMore2Fill } from 'react-icons/ri'
-// import { IoIosShareAlt } from 'react-icons/io'
-// import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-// import OptionsWrapper from '../Common/OptionsWrapper'
+import { RiMore2Fill } from 'react-icons/ri'
+import { IoIosShareAlt } from 'react-icons/io'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { Tooltip } from '@mui/material'
 import { RWebShare } from 'react-web-share'
+import { GiExitDoor } from 'react-icons/gi'
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()
@@ -43,7 +44,8 @@ const CommunityInfoCard = ({ _community }) => {
   const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  // const [showOptionsModal, setShowOptionsModal] = useState(false)
+  const [isExploreDrawerOpen, setIsExploreDrawerOpen] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   const [numberOfPosts, setNumberOfPosts] = useState(0)
 
@@ -188,17 +190,17 @@ const CommunityInfoCard = ({ _community }) => {
   //   setCurrentLevel(calculateLevel(currentXP, levelThreshold))
   // }, [levelThreshold])
 
-  // const shareCommunity = () => {
-  //   if (navigator.share) {
-  //     navigator.share({
-  //       title: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
-  //       text: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
-  //       url: `${process.env.NEXT_PUBLIC_APP_URL}/c/${community?.name}`
-  //     })
-  //   } else {
-  //     notifyInfo('Sharing is not supported on your device')
-  //   }
-  // }
+  const shareCommunity = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
+        text: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/c/${community?.name}`
+      })
+    } else {
+      notifyInfo('Sharing is not supported on your device')
+    }
+  }
 
   return (
     <>
@@ -262,7 +264,7 @@ const CommunityInfoCard = ({ _community }) => {
                 </div>
               )}
             </div>
-            <div className="flex justify-end gap-1 sm:gap-2 pt-2">
+            <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2">
               {isCreator && (
                 <button
                   className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
@@ -271,53 +273,88 @@ const CommunityInfoCard = ({ _community }) => {
                   Edit
                 </button>
               )}
-              <button
-                className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
-                onClick={isJoined ? leaveCommunity : joinCommunity}
-              >
-                {isJoined ? 'Leave' : 'Join'}
-              </button>
-              {/* <OptionsWrapper
+              {isJoined ? (
+                <button
+                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-s-bg text-p-btn border-[1px] border-p-btn cursor-auto`}
+                >
+                  Joined
+                </button>
+              ) : (
+                <button
+                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-p-btn text-p-btn-text`}
+                  onClick={joinCommunity}
+                >
+                  Join
+                </button>
+              )}
+              <OptionsWrapper
                 OptionPopUpModal={() => (
                   <MoreOptionsModal
                     className="z-50"
-                    list={[
-                      {
-                        label: 'Share',
-                        onClick: shareCommunity,
-                        icon: () => <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                      }
-                    ]}
+                    list={
+                      isJoined
+                        ? isCreator
+                          ? [
+                              {
+                                label: 'Edit',
+                                onClick: editCommunity,
+                                icon: <BiEdit className="mr-1.5 w-6 h-6" />
+                              },
+                              {
+                                label: 'Leave',
+                                onClick: leaveCommunity,
+                                icon: () => (
+                                  <GiExitDoor className="mr-1.5 w-6 h-6" />
+                                )
+                              },
+                              {
+                                label: 'Share',
+                                onClick: shareCommunity,
+                                icon: () => (
+                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                )
+                              }
+                            ]
+                          : [
+                              {
+                                label: 'Leave',
+                                onClick: leaveCommunity,
+                                icon: () => (
+                                  <GiExitDoor className="mr-1.5 w-6 h-6" />
+                                )
+                              },
+                              {
+                                label: 'Share',
+                                onClick: shareCommunity,
+                                icon: () => (
+                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                )
+                              }
+                            ]
+                        : [
+                            {
+                              label: 'Share',
+                              onClick: shareCommunity,
+                              icon: () => (
+                                <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                              )
+                            }
+                          ]
+                    }
                   />
                 )}
                 position="left"
                 showOptionsModal={showOptionsModal}
                 setShowOptionsModal={setShowOptionsModal}
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
+                isDrawerOpen={isExploreDrawerOpen}
+                setIsDrawerOpen={setIsExploreDrawerOpen}
               >
                 <Tooltip title="More" arrow>
                   <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                     <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                 </Tooltip>
-              </OptionsWrapper> */}
-              <RWebShare
-                data={{
-                  url: window.location.href,
-                  title: 'Share this community'
-                }}
-              >
-                <Tooltip title="Share" arrow>
-                  <div className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1">
-                    <img
-                      src="/share.svg"
-                      alt="Share"
-                      className="hover:cursor-pointer w-4 h-4 "
-                    />
-                  </div>
-                </Tooltip>
-              </RWebShare>
+              </OptionsWrapper>
             </div>
           </div>
 
