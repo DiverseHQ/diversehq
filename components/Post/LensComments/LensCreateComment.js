@@ -241,7 +241,7 @@ const LensCreateComment = ({
             </div>
           </>
         ) : (
-          <div className="px-2 sm:px-5 w-full bg-s-bg pt-2 pb-1.5 fixed z-30 bottom-[50px] flex flex-row items-center">
+          <div className="px-2 sm:px-5 w-full bg-s-bg pt-2 pb-1.5 fixed z-30 bottom-0 flex flex-row items-center">
             {/* <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4"> */}
             <div className="flex flex-row mr-2 mb-1.5 items-center self-end">
               <img
@@ -253,7 +253,7 @@ const LensCreateComment = ({
                 className="w-[40px] h-[40px] rounded-full"
               />
             </div>
-            <div className="flex-1 relative mr-4">
+            <div className="flex-1 relative mr-2">
               <textarea
                 type="text"
                 ref={commentRef}
@@ -273,11 +273,11 @@ const LensCreateComment = ({
                 style={{ resize: 'none' }}
               />
             </div>
-            <div className="flex flex-row justify-center items-center self-end mb-4">
+            <div className="flex flex-row justify-center items-center self-end mb-3">
               {!loading && (
                 <FiSend
                   onClick={createComment}
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text"
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text cursor-pointer"
                 />
               )}
               {loading && (

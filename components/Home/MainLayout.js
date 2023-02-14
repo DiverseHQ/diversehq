@@ -8,12 +8,14 @@ import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
 import useDevice from '../Common/useDevice'
+import { useRouter } from 'next/router'
 // import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
   const [mobile, setMobile] = useState(isMobileView)
   // only show if mounted
   const { isMobile } = useDevice()
+  const router = useRouter()
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
   React.useEffect(() => {
@@ -42,7 +44,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
             <CreatePostButton />
             {children}
           </div>
-          <MobileBottomNav />
+          {!router.pathname.startsWith('/p/') && <MobileBottomNav />}
         </div>
       )}
       {!mobile && (
