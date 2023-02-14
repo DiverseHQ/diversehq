@@ -490,7 +490,7 @@ const PostCard = ({ _post, setPosts }) => {
                       //  onClick={liked ? handleUnLike : handleLike}
                       src={
                         reaction === ReactionTypes.Upvote
-                          ? '/upvoteGrayFilled.svg'
+                          ? '/UpvoteFilled.svg'
                           : '/upvoteGray.svg'
                       }
                       className="w-4 h-4"
@@ -506,7 +506,7 @@ const PostCard = ({ _post, setPosts }) => {
                     <img
                       src={
                         reaction === ReactionTypes.Downvote
-                          ? '/downvoteGrayFilled.svg'
+                          ? '/DownvoteFilled.svg'
                           : '/downvoteGray.svg'
                       }
                       className="w-4 h-4"

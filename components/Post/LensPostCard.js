@@ -570,7 +570,7 @@ const LensPostCard = ({ post }) => {
                         <img
                           src={
                             reaction === ReactionTypes.Upvote
-                              ? '/upvoteGrayFilled.svg'
+                              ? '/UpvoteFilled.svg'
                               : '/upvoteGray.svg'
                           }
                           className="w-4 h-4"
@@ -588,7 +588,7 @@ const LensPostCard = ({ post }) => {
                         <img
                           src={
                             reaction === ReactionTypes.Downvote
-                              ? '/downvoteGrayFilled.svg'
+                              ? '/DownvoteFilled.svg'
                               : '/downvoteGray.svg'
                           }
                           className="w-4 h-4"
