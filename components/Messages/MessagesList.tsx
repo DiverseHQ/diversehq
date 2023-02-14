@@ -33,7 +33,7 @@ const MessageTile: FC<MessageTileProps> = ({
     >
       <div className="flex flex-col space-y-0.5">
         <div
-          className={`px-4 py-2 rounded-2xl ${
+          className={`px-4 py-2 max-w-[370px] rounded-2xl ${
             isSender
               ? 'text-p-btn-text bg-p-btn rounded-br-sm'
               : 'bg-p-hover rounded-bl-sm'
@@ -77,11 +77,17 @@ const MessagesList: FC<MessageListProps> = ({
   missingXmtpAuth
 }) => {
   let lastMessageDate: Date | undefined
+  React.useEffect(() => {
+    const scrollableDiv = document.getElementById('scrollableDiv')
+    if (scrollableDiv) {
+      scrollableDiv.scrollTop = scrollableDiv.scrollHeight
+    }
+  }, [messages])
   return (
-    <div id="scrollableDiv" className=" max-h-[440px] overflow-y-scroll">
-      <div>
+    <div id="scrollableDiv" className=" max-h-[440px] overflow-y-auto">
+      <div className="w-full px-7 text-center my-6">
         {missingXmtpAuth &&
-          `The person you are trying to contact with hasn't enabled dms yet, tell them to do so!`}
+          `The person you are trying to chat with hasn't enabled dms yet, tell them to do so!`}
       </div>
       <InfiniteScroll
         dataLength={messages.length}
@@ -89,9 +95,13 @@ const MessagesList: FC<MessageListProps> = ({
         className="flex flex-col-reverse"
         inverse
         endMessage={
-          <div className="w-full text-center mb-4">
-            Start of an amzing Conversation
-          </div>
+          <>
+            {!missingXmtpAuth && (
+              <div className="w-full text-center mb-4">
+                Start of an amazing Conversation
+              </div>
+            )}
+          </>
         }
         hasMore={hasMore}
         loader={<div>loading...</div>}
@@ -116,7 +126,7 @@ const MessagesList: FC<MessageListProps> = ({
                 message={msg}
               />
               {dateHasChanged ? (
-                <div className="w-full text-sm flex flex-row justify-center">
+                <div className="w-full text-sm flex flex-row justify-center my-2">
                   <div className="py-0.5 px-3 bg-p-bg rounded-md">
                     {formatDate(lastMessageDate)}
                   </div>

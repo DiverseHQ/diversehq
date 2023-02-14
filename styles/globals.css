@@ -152,6 +152,7 @@
 
   /* --border-primary: #c4c4c4; */
   --border-primary: #9378d8;
+  --border-secondary: #e2e2e2;
 
   --background-pop: #00000038;
 
@@ -182,6 +183,7 @@
   --text-secondary: #9197ae;
 
   --border-primary: #343536;
+  --border-secondary: #4e4e4e;
 
   --background-pop: #ffffff38;
 

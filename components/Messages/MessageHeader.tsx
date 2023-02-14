@@ -30,7 +30,7 @@ const MessageHeader = ({ profile, open, setOpen }) => {
         <div className="flex flex-row items-center space-x-2">
           {open && (
             <div
-              className="hover:bg-p-hover p-1.5 rounded-full flex justify-center items-center cursor-pointer"
+              className="hover:bg-p-btn-hover p-1.5 rounded-full flex justify-center items-center cursor-pointer"
               onClick={handleShowConversations}
             >
               <BiArrowBack className="w-5 h-5" />
@@ -45,7 +45,9 @@ const MessageHeader = ({ profile, open, setOpen }) => {
             {profile?.name && (
               <div className="font-semibold tracking-wide">{profile?.name}</div>
             )}
-            <div className="">{profile?.handle && `u/${profile?.handle}`}</div>
+            <div className={`${profile?.name ? 'text-s-text' : ''}`}>
+              {profile?.handle && `u/${profile?.handle}`}
+            </div>
           </div>
         </div>
       )}
@@ -57,7 +59,7 @@ const MessageHeader = ({ profile, open, setOpen }) => {
           <RiMailAddLine className="w-6 h-6" />
         </div> */}
         <div
-          className="hover:bg-p-hover p-1.5 rounded-full flex justify-center items-center cursor-pointer"
+          className="hover:bg-p-btn-hover p-1.5 rounded-full flex justify-center items-center cursor-pointer"
           onClick={() => {
             setOpen(!open)
           }}

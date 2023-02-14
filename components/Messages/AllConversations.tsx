@@ -44,13 +44,8 @@ const AllConversations = () => {
     return <></>
   }
 
-  const showLoading =
-    !missingXmtpAuth && (!profile || !currentProfile || !selectedConversation)
-
-  const userNameForTitle = profile?.name ?? profile?.handle
-  const title = userNameForTitle
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full text-p-text">
       {/* conversations preview */}
       {!profile && <PreviewList selectedConversationKey={conversationKey} />}
 

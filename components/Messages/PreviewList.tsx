@@ -6,6 +6,7 @@ import useMessagePreviews from './hooks/useMessagePreviews'
 import buildConversationId from './lib/buildConversationId'
 import { buildConversationKey } from './lib/conversationKey'
 import Preview from './Preview'
+import Search from './Search'
 
 interface Props {
   className?: string
@@ -45,7 +46,10 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
   return (
     <div className="flex flex-col">
       {/* todo search profile and message */}
-      <div>search</div>
+      <Search
+        placeholder="Search for someone to chat with..."
+        onProfileSelected={onProfileSelected}
+      />
       {/* profiles and preview message */}
       {showAuthenticating && (
         <div className="flex w-full h-full justify-center item-center">

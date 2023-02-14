@@ -40,11 +40,12 @@ const VideoWithAutoPause = ({ src, ...props }) => {
   }, [])
   return (
     <video
-      src={
-        src.startsWith(LensInfuraEndpoint)
-          ? `${IMAGE_KIT_ENDPOINT}/${src}`
-          : src
-      }
+      // src={
+      //   src.startsWith(LensInfuraEndpoint)
+      //     ? `${IMAGE_KIT_ENDPOINT}/${src}`
+      //     : src
+      // }
+      src={src}
       ref={videoRef}
       {...props}
     />

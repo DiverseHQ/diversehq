@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
-TimeAgo.addDefaultLocale(en)
 import Link from 'next/link'
 import {
   PublicationMainFocus,

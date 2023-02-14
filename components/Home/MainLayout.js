@@ -62,7 +62,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
           <div className="flex flex-row">
             <NewLeftSidebar />
             <div className="relative flex-1 min-h-screen text-p-text">
-              <ScrollToTopButton />
+              {/* <ScrollToTopButton /> */}
               {children}
             </div>
             <RightSidebar />

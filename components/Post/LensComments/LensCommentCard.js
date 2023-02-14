@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
 import {
   ReactionTypes,
@@ -24,7 +22,6 @@ import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-inde
 import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
-TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()

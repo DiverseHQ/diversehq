@@ -9,6 +9,9 @@ import { useRouter } from 'next/router'
 // import Loader from '../components/Loader'
 import { useRef } from 'react'
 // import { useRouter } from 'next/router'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en.json'
+TimeAgo.addDefaultLocale(en)
 
 const ROUTES_TO_RETAIN = [
   '/',

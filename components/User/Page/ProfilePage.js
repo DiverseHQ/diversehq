@@ -151,7 +151,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     : ''
                 }`}
               >
-                <div className="flex flex-row items-center self-end">
+                <div className="flex flex-row items-center self-end min-h-[50px]">
                   {user &&
                     user?.walletAddress.toLowerCase() ===
                       profile.walletAddress.toLowerCase() && (
@@ -162,7 +162,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                         Edit
                       </div>
                     )}
-                  <div
+                  {/* <div
                     className="self-end flex flex-row items-center my-3 px-2 py-1  cursor-pointer"
                     onClick={handleWalletAddressCopy}
                   >
@@ -170,7 +170,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                       {profile?.walletAddress?.substring(0, 6) + '...'}
                     </div>
                     <FaRegCopy className="w-8 h-8 px-2" />
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex flex-row items-center justify-between sm:justify-start sm:space-x-10">
                   <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">

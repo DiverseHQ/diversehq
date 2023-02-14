@@ -28,7 +28,7 @@ const MainMsgModal = () => {
       } right-4 h-[550px] w-[450px] rounded-t-2xl border-[1px] border-p-btn duration-500 transition-all z-30`}
     >
       {/* header */}
-      <div className="bg-s-bg rounded-t-2xl flex flex-col h-full">
+      <div className="bg-s-bg rounded-t-2xl flex flex-col h-full text-p-text shadow-2xl">
         <MessageHeader profile={profile} open={open} setOpen={setOpen} />
         {(!signer || !isSignedIn || !hasProfile || !user) && (
           <div className="flex justify-center items-center h-full w-full">

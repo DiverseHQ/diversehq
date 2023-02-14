@@ -1,4 +1,5 @@
 import { DecodedMessage } from '@xmtp/xmtp-js'
+// import dayjs from 'dayjs'
 import React, { FC } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import { Profile } from '../../graphql/generated'
@@ -35,7 +36,7 @@ const Preview: FC<Props> = ({
   }
   return (
     <div
-      className="cursor-pointer hover:bg-p-hover p-3 flex flex-row justify-between border-b border-grey-200"
+      className="cursor-pointer hover:bg-p-btn-hover p-3 flex flex-row justify-between border-b border-s-border"
       onClick={() => onConversationSelected(profile.id)}
     >
       <div className="flex flex-row items-center space-x-2">
@@ -45,15 +46,21 @@ const Preview: FC<Props> = ({
           alt={profile?.handle}
         />
         <div className="flex flex-col justify-center">
-          <div className="flex flex-row items-center">
-            {profile?.name} {profile?.handle && `u/${profile?.handle}`}
+          <div className="flex flex-row items-center space-x-2">
+            {profile?.name && <span className="text-md">{profile?.name}</span>}
+            <span className={`${profile?.name ? 'text-sm text-s-text' : ''}`}>
+              {profile?.handle && `u/${profile?.handle}`}
+            </span>
           </div>
           <div className="text-s-text">
             {address === message.senderAddress && 'You: '} {message.content}
           </div>
         </div>
       </div>
-      <div className="text-s-text">
+      <div className="text-s-text text-sm">
+        {/** day js time go in format of 3M, 3H, 3D */}
+        {/** dayjs with date and local time */}
+        {/* {dayjs(message.sent).format('DD/MM/YYYY hh:mm A')} */}
         <ReactTimeAgo date={message.sent} locale="en-US" />
       </div>
     </div>

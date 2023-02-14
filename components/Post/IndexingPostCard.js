@@ -3,8 +3,6 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import useDevice from '../Common/useDevice'
 
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
 
 import { PublicationMainFocus, ReactionTypes } from '../../graphql/generated'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
@@ -20,7 +18,6 @@ import { FaRegComment } from 'react-icons/fa'
 import { BsCollection } from 'react-icons/bs'
 import { IoIosShareAlt } from 'react-icons/io'
 import Link from 'next/link'
-TimeAgo.addDefaultLocale(en)
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
