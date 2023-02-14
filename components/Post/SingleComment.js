@@ -255,26 +255,38 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             <div className="flex flex-row items-end space-x-14">
               {/* upvote and downvote */}
               <div className="flex flex-row items-center gap-x-2 pt-2">
-                <img
-                  //  onClick={liked ? handleUnLike : handleLike}
-                  src={
-                    reaction === ReactionTypes.Upvote
-                      ? '/UpvoteFilled.svg'
-                      : '/Upvote.svg'
-                  }
-                  onClick={handleUpvote}
-                  className="w-5 h-5 cursor-pointer"
-                />
-                <div className="font-bold">{totalCount}</div>
-                <img
-                  src={
-                    reaction === ReactionTypes.Downvote
-                      ? '/DownvoteFilled.svg'
-                      : '/Downvote.svg'
-                  }
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={handleDownvote}
-                />
+                <Tooltip title="Upvote" arrow>
+                  <button
+                    onClick={handleUpvote}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
+                  >
+                    <img
+                      //  onClick={liked ? handleUnLike : handleLike}
+                      src={
+                        reaction === ReactionTypes.Upvote
+                          ? '/UpvoteFilled.svg'
+                          : '/upvoteGray.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
+                <div className="font-medium text-[#687684]">{totalCount}</div>
+                <Tooltip title="Downvote" arrow>
+                  <button
+                    onClick={handleDownvote}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
+                  >
+                    <img
+                      src={
+                        reaction === ReactionTypes.Downvote
+                          ? '/DownvoteFilled.svg'
+                          : '/downvoteGray.svg'
+                      }
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </Tooltip>
               </div>
             </div>
           </div>

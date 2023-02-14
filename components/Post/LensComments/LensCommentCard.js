@@ -274,28 +274,40 @@ const LensCommentCard = ({ comment }) => {
               <div className="mt-1">{comment?.metadata?.content}</div>
 
               {/* last row */}
-              <div className="flex flex-row items-center space-x-10 pb-2 pt-1">
+              <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
                 {/* upvote and downvote */}
                 <div className="flex flex-row items-center gap-x-2">
-                  <img
-                    src={
-                      reaction === ReactionTypes.Upvote
-                        ? '/UpvoteFilled.svg'
-                        : '/Upvote.svg'
-                    }
-                    onClick={handleUpvote}
-                    className="w-6 h-6 cursor-pointer hover:bg-gray-100 px-1 rounded-md"
-                  />
-                  <div className="font-bold">{voteCount}</div>
-                  <img
-                    src={
-                      reaction === ReactionTypes.Downvote
-                        ? '/DownvoteFilled.svg'
-                        : '/Downvote.svg'
-                    }
-                    className="w-6 h-6 cursor-pointer hover:bg-gray-100 px-1 rounded-md"
-                    onClick={handleDownvote}
-                  />
+                  <Tooltip title="Upvote" arrow>
+                    <button
+                      onClick={handleUpvote}
+                      className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
+                    >
+                      <img
+                        src={
+                          reaction === ReactionTypes.Upvote
+                            ? '/UpvoteFilled.svg'
+                            : '/upvoteGray.svg'
+                        }
+                        className="w-4 h-4"
+                      />
+                    </button>
+                  </Tooltip>
+                  <div className="font-medium text-[#687684]">{voteCount}</div>
+                  <Tooltip title="Downvote" arrow>
+                    <button
+                      onClick={handleDownvote}
+                      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                    >
+                      <img
+                        src={
+                          reaction === ReactionTypes.Downvote
+                            ? '/DownvoteFilled.svg'
+                            : '/downvoteGray.svg'
+                        }
+                        className="w-4 h-4"
+                      />
+                    </button>
+                  </Tooltip>
                 </div>
                 <button
                   className={`${
