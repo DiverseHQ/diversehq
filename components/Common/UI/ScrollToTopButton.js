@@ -34,7 +34,7 @@ const ScrollToTopButton = ({ ...props }) => {
         router.pathname.startsWith('/p/')
           ? 'top-[calc(100vh-160px)]'
           : 'top-[calc(100vh-110px)]'
-      }  md:top-[calc(100vh-60px)] left-[300px] mr-[20px] ${
+      }  md:top-[calc(100vh-60px)] left-[calc(100vw-20px)] mr-[20px] ${
         visible ? 'inline-block' : 'hidden'
       } ${props.className}`}
       onClick={scrollToTop}
