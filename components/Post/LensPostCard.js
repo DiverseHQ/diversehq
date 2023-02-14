@@ -208,7 +208,10 @@ const LensPostCard = ({ post }) => {
                   router.pathname.startsWith('/p') ? 'mb-2' : ''
                 }`
               : 'pb-2'
-          }`}
+          } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
+          onClick={() => {
+            router.push(`/p/${postInfo.id}`)
+          }}
         >
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
@@ -218,36 +221,45 @@ const LensPostCard = ({ post }) => {
                   {loading ? (
                     <div className="animate-pulse rounded-full bg-p-bg lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
                   ) : (
-                    <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
-                      <ImageWithPulsingLoader
-                        src={
-                          postInfo?.communityInfo?.logoImageUrl
-                            ? postInfo?.communityInfo?.logoImageUrl
-                            : '/gradient.jpg'
-                        }
-                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
-                      />
-                    </Link>
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <Link
+                        href={`/c/${postInfo?.communityInfo?.name}`}
+                        passHref
+                      >
+                        <ImageWithPulsingLoader
+                          src={
+                            postInfo?.communityInfo?.logoImageUrl
+                              ? postInfo?.communityInfo?.logoImageUrl
+                              : '/gradient.jpg'
+                          }
+                          className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                        />
+                      </Link>
+                    </span>
                   )}
                   {loading ? (
                     <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
                   ) : (
-                    <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                      <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                        {postInfo?.communityInfo?.name}
-                      </div>
-                    </Link>
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                        <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
+                          {postInfo?.communityInfo?.name}
+                        </div>
+                      </Link>
+                    </span>
                   )}
 
-                  <Link
-                    href={`/u/${postInfo?.profile?.handle}`}
-                    className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                  >
-                    <p className="pl-1.5 font-normal"> posted by</p>
-                    <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                      u/{postInfo?.profile?.handle}
-                    </div>
-                  </Link>
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <Link
+                      href={`/u/${postInfo?.profile?.handle}`}
+                      className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                    >
+                      <p className="pl-1.5 font-normal"> posted by</p>
+                      <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                        u/{postInfo?.profile?.handle}
+                      </div>
+                    </Link>
+                  </span>
                   <div>
                     {postInfo?.createdAt && (
                       <div className="text-xs sm:text-sm text-s-text ml-2">
@@ -265,33 +277,39 @@ const LensPostCard = ({ post }) => {
             {isMobile && (
               <>
                 <div className="flex flex-row w-full items-center">
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
-                    <ImageWithPulsingLoader
-                      src={
-                        postInfo?.communityInfo?.logoImageUrl
-                          ? postInfo?.communityInfo?.logoImageUrl
-                          : '/gradient.jpg'
-                      }
-                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
-                    />
-                  </Link>
-                  <div className="flex flex-col justify-center items-start text-p-text">
-                    <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                      <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
-                        {postInfo?.communityInfo?.name}
-                      </div>
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
+                      <ImageWithPulsingLoader
+                        src={
+                          postInfo?.communityInfo?.logoImageUrl
+                            ? postInfo?.communityInfo?.logoImageUrl
+                            : '/gradient.jpg'
+                        }
+                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                      />
                     </Link>
-                    <div className="flex flex-row items-center justify-start">
-                      <Link
-                        href={`/u/${postInfo?.profile?.handle}`}
-                        className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                        passHref
-                      >
-                        <p className="pl-1.5 font-normal"> posted by</p>
-                        <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                          u/{postInfo?.profile?.handle}
+                  </span>
+                  <div className="flex flex-col justify-center items-start text-p-text">
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                        <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
+                          {postInfo?.communityInfo?.name}
                         </div>
                       </Link>
+                    </span>
+                    <div className="flex flex-row items-center justify-start">
+                      <span onClick={(e) => e.stopPropagation()}>
+                        <Link
+                          href={`/u/${postInfo?.profile?.handle}`}
+                          className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                          passHref
+                        >
+                          <p className="pl-1.5 font-normal"> posted by</p>
+                          <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                            u/{postInfo?.profile?.handle}
+                          </div>
+                        </Link>
+                      </span>
                       <div>
                         {postInfo?.createdAt && (
                           <div className="text-xs sm:text-sm text-s-text ml-2">
@@ -346,7 +364,10 @@ const LensPostCard = ({ post }) => {
               <div className="flex flex-col items-center ml-1.5 mt-1">
                 <Tooltip title="Upvote" arrow placement="left">
                   <button
-                    onClick={handleUpvote}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleUpvote()
+                    }}
                     className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
                   >
                     <img
@@ -363,7 +384,10 @@ const LensPostCard = ({ post }) => {
                 <div className="font-bold leading-5">{voteCount}</div>
                 <Tooltip title="Downvote" arrow placement="left">
                   <button
-                    onClick={handleDownvote}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDownvote()
+                    }}
                     className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
                   >
                     <img
@@ -459,12 +483,14 @@ const LensPostCard = ({ post }) => {
                         </div>
                       )}
                       {showMore && (
-                        <Link
-                          href={`/p/${postInfo?.id}`}
-                          className="text-blue-400 text-sm sm:text-base"
-                        >
-                          Show more
-                        </Link>
+                        <span onClick={(e) => e.stopPropagation()}>
+                          <Link
+                            href={`/p/${postInfo?.id}`}
+                            className="text-blue-400 text-sm sm:text-base"
+                          >
+                            Show more
+                          </Link>
+                        </span>
                       )}
                     </>
                   )}
@@ -474,23 +500,25 @@ const LensPostCard = ({ post }) => {
                     {postInfo?.metadata?.mainContentFocus ===
                       PublicationMainFocus.Image &&
                       (!router.pathname.startsWith('/p') ? (
-                        <Link href={`/p/${postInfo?.id}`} passHref>
-                          {/* eslint-disable-next-line */}
-                          <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                            <ImageWithPulsingLoader
-                              src={`${LensInfuraEndpoint}${
-                                postInfo?.metadata?.media[0]?.original.url.split(
-                                  '//'
-                                )[1]
-                              }`}
-                              className={`image-unselectable object-contain sm:rounded-lg w-full ${
-                                router.pathname.startsWith('/p')
-                                  ? ''
-                                  : 'max-h-[450px]'
-                              }`}
-                            />
-                          </div>
-                        </Link>
+                        <span onClick={(e) => e.stopPropagation()}>
+                          <Link href={`/p/${postInfo?.id}`} passHref>
+                            {/* eslint-disable-next-line */}
+                            <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                              <ImageWithPulsingLoader
+                                src={`${LensInfuraEndpoint}${
+                                  postInfo?.metadata?.media[0]?.original.url.split(
+                                    '//'
+                                  )[1]
+                                }`}
+                                className={`image-unselectable object-contain sm:rounded-lg w-full ${
+                                  router.pathname.startsWith('/p')
+                                    ? ''
+                                    : 'max-h-[450px]'
+                                }`}
+                              />
+                            </div>
+                          </Link>
+                        </span>
                       ) : (
                         <div className="sm:pl-5  sm:pr-6 sm:pb-1">
                           <ImageWithFullScreenZoom
@@ -564,7 +592,10 @@ const LensPostCard = ({ post }) => {
                   <div className="flex flex-row items-center gap-x-1">
                     <Tooltip title="Upvote" arrow>
                       <button
-                        onClick={handleUpvote}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleUpvote()
+                        }}
                         className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
                       >
                         <img
@@ -582,7 +613,10 @@ const LensPostCard = ({ post }) => {
                     </div>
                     <Tooltip title="Downvote" arrow>
                       <button
-                        onClick={handleDownvote}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDownvote()
+                        }}
                         className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
                       >
                         <img
@@ -599,26 +633,28 @@ const LensPostCard = ({ post }) => {
                 )}
                 {!router.pathname.startsWith('/p') ? (
                   <Tooltip title="Comment" arrow>
-                    <Link
-                      href={`/p/${postInfo.id}`}
-                      className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-medium"
-                      passHref
-                    >
-                      {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <Link
+                        href={`/p/${postInfo.id}`}
+                        className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-medium"
+                        passHref
+                      >
+                        {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )} */}
-                      <img
-                        src="/comment.svg"
-                        alt="Comment"
-                        className="w-4 h-4 mr-2"
-                      />
-                      <span className="text-[#687684]">
-                        {postInfo?.stats?.totalAmountOfComments}
-                      </span>
-                    </Link>
+                        <img
+                          src="/comment.svg"
+                          alt="Comment"
+                          className="w-4 h-4 mr-2"
+                        />
+                        <span className="text-[#687684]">
+                          {postInfo?.stats?.totalAmountOfComments}
+                        </span>
+                      </Link>
+                    </span>
                   </Tooltip>
                 ) : (
                   <Tooltip title="Comment" arrow>
@@ -640,17 +676,21 @@ const LensPostCard = ({ post }) => {
                     </div>
                   </Tooltip>
                 )}
-                <LensCollectButton
-                  publication={post}
-                  totalCollects={postInfo?.stats?.totalAmountOfCollects}
-                  hasCollectedByMe={postInfo?.hasCollectedByMe}
-                  author={postInfo?.profile}
-                  collectModule={postInfo?.collectModule}
-                />
-                <PostShareButton
-                  url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
-                  text={postInfo?.metadata?.name}
-                />
+                <span onClick={(e) => e.stopPropagation()}>
+                  <LensCollectButton
+                    publication={post}
+                    totalCollects={postInfo?.stats?.totalAmountOfCollects}
+                    hasCollectedByMe={postInfo?.hasCollectedByMe}
+                    author={postInfo?.profile}
+                    collectModule={postInfo?.collectModule}
+                  />
+                </span>
+                <span onClick={(e) => e.stopPropagation()}>
+                  <PostShareButton
+                    url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
+                    text={postInfo?.metadata?.name}
+                  />
+                </span>
               </div>
             </div>
           </div>
