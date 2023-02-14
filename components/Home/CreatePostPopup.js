@@ -19,6 +19,7 @@ import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPl
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import {
+  unpinFromIpfsInfura,
   uploadFileToFirebaseAndGetUrl,
   uploadFileToIpfsInfuraAndGetPath,
   uploadToIpfsInfuraAndGetPath
@@ -26,7 +27,7 @@ import {
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import { Switch } from '@mui/material'
+import { CircularProgress, Switch } from '@mui/material'
 import { supportedMimeTypes } from '../../lib/interfaces/publication'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
@@ -46,8 +47,6 @@ import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
 import useDevice from '../Common/useDevice'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
-// import { useTheme } from '../Common/ThemeProvider'
-
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
 const CreatePostPopup = () => {
@@ -78,6 +77,8 @@ const CreatePostPopup = () => {
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
+  const [IPFSHash, setIPFSHash] = useState(null)
+  const [imageUpload, setImageUpload] = useState(false)
   useEffect(() => {
     return () => {
       editor?.update(() => {
@@ -116,8 +117,12 @@ const CreatePostPopup = () => {
     )
   }
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setShowCommunity({ name: '', image: '' })
+    if (IPFSHash) {
+      console.log('unpinning from ipfs')
+      await unpinFromIpfsInfura(IPFSHash)
+    }
     hideModal()
   }
 
@@ -150,8 +155,10 @@ const CreatePostPopup = () => {
 
       if (isLensPost) {
         // file should be less than 2mb
-        const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
-        const ipfsPath = `ipfs://${ipfsHash}`
+        if (!IPFSHash) {
+          await upLoadFile()
+        }
+        const ipfsPath = `ipfs://${IPFSHash}`
         handleCreateLensPost(title, communityId, file.type, ipfsPath)
         return
       }
@@ -404,10 +411,15 @@ const CreatePostPopup = () => {
     setFile(filePicked)
     setImageValue(URL.createObjectURL(filePicked))
   }
-  const removeImage = () => {
+  const removeImage = async () => {
     if (loading) return
     setFile(null)
     setImageValue(null)
+    if (IPFSHash) {
+      console.log('unpinning from ipfs')
+      await unpinFromIpfsInfura(IPFSHash)
+      setIPFSHash(null)
+    }
   }
 
   const showAddedFile = () => {
@@ -454,6 +466,48 @@ const CreatePostPopup = () => {
       left: e.currentTarget.getBoundingClientRect().left + 'px'
     })
   }
+
+  const upLoadFile = async () => {
+    try {
+      setImageUpload(true)
+      setLoading(true)
+      if (file) {
+        if (!supportedMimeTypes.includes(file.type)) {
+          notifyError('File type not supported')
+          setImageUpload(false)
+          setLoading(false)
+          return
+        }
+        // file size should be less than 8mb
+        if (file.size > 8000000) {
+          notifyError('File size should be less than 8mb')
+          setImageUpload(false)
+          setLoading(false)
+          return
+        }
+
+        if (isLensPost) {
+          // file should be less than 2mb
+          console.log('FILE IS UPLOADING To the IPFS')
+          const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+          setIPFSHash(ipfsHash)
+          setImageUpload(false)
+          setLoading(false)
+        }
+        setImageUpload(false)
+        setLoading(false)
+      }
+    } catch (e) {
+      console.log(e)
+      setImageUpload(false)
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!file) return
+    if (file && isLensPost && !IPFSHash) upLoadFile()
+  }, [file])
 
   const PopUpModal = () => {
     return (
@@ -592,6 +646,18 @@ const CreatePostPopup = () => {
                 </label>
               )}
             </div>
+            {imageUpload && (
+              <div className="m-2 flex flex-col border bg-blue-400 p-2 rounded-xl">
+                <div className="m-2 flex flex-row mx-2 items-center space-x-2">
+                  <p className="text-p-text font-semibold text-lg">Uploading</p>
+                  <CircularProgress size="18px" />
+                </div>
+                <p className="text-p-text ml-2 text-md">
+                  It will take a while to upload long videos. Make sure to keep
+                  your browser tab open to avoid upload interruption
+                </p>
+              </div>
+            )}
             <input
               type="file"
               id="upload-file"
