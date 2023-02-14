@@ -9,7 +9,11 @@ import { useMessageStore } from '../../store/message'
 import useXmtpClient from './hooks/useXmtpClient'
 // import { UserType } from '../../types/user'
 
-const MainMsgModal = () => {
+interface Props {
+  isMobile?: boolean
+}
+
+const MainMsgModal = ({ isMobile = false }: Props) => {
   const { user }: any = useProfile()
   const { isSignedIn, hasProfile } = useLensUserContext()
   const { data: signer } = useSigner()
@@ -23,8 +27,14 @@ const MainMsgModal = () => {
   return (
     <div
       className={`fixed ${
-        isOpen ? 'bottom-0' : 'bottom-[-500px]'
-      } right-4 h-[550px] w-[450px] rounded-t-2xl border-[1px] border-p-btn duration-500 transition-all z-30`}
+        isOpen
+          ? 'bottom-0'
+          : `${isMobile ? 'bottom-[-100vh]' : 'bottom-[-500px]'}`
+      } ${
+        isMobile
+          ? 'w-full h-full left-0 right-0'
+          : 'w-[450px] h-[550px] rounded-t-2xl shadow-2xl border-[1px] border-p-btn  right-4'
+      } duration-500 transition-all z-50 `}
     >
       {/* header */}
       <div className="bg-s-bg rounded-t-2xl flex flex-col h-full text-p-text shadow-2xl">

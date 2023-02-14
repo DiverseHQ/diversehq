@@ -84,7 +84,10 @@ const MessagesList: FC<MessageListProps> = ({
     }
   }, [messages])
   return (
-    <div id="scrollableDiv" className=" max-h-[440px] overflow-y-auto">
+    <div
+      id="scrollableDiv"
+      className="h-full  sm:pb-[0px] pb-[120px] sm:max-h-[440px]  overflow-y-auto"
+    >
       <div className="w-full px-7 text-center my-6">
         {missingXmtpAuth &&
           `The person you are trying to chat with hasn't enabled dms yet, tell them to do so!`}

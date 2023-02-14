@@ -51,7 +51,7 @@ const AllConversations = () => {
 
       {/* selected profile messages */}
       {profile && (
-        <div className="w-full h-[500px]">
+        <div className="w-full h-full">
           <MessagesList
             profile={profile}
             fetchNextMessages={fetchNextMessages}
