@@ -36,33 +36,31 @@ const useXmtpClient = (cacheOnly = false) => {
   const setClient = useMessageStore((state) => state.setClient)
   const [awaitingXmtpAuth, setAwaitingXmtpAuth] = useState<boolean>()
   const { data: signer, isLoading } = useSigner()
-
-  useEffect(() => {
-    const initXmtpClient = async () => {
-      if (signer && !client && lensProfile?.defaultProfile) {
-        let keys = loadKeys(await signer.getAddress())
-        if (!keys) {
-          if (cacheOnly) {
-            return
-          }
-          setAwaitingXmtpAuth(true)
-          keys = await Client.getKeys(signer, {
-            env: XMTP_ENV
-          })
-          storeKeys(await signer.getAddress(), keys)
+  const initXmtpClient = async () => {
+    if (signer && !client && lensProfile?.defaultProfile) {
+      let keys = loadKeys(await signer.getAddress())
+      if (!keys) {
+        if (cacheOnly) {
+          return
         }
-
-        const xmtp = await Client.create(null, {
-          env: XMTP_ENV,
-          privateKeyOverride: keys
+        setAwaitingXmtpAuth(true)
+        keys = await Client.getKeys(signer, {
+          env: XMTP_ENV
         })
-        setClient(xmtp)
-        setAwaitingXmtpAuth(false)
-      } else {
-        setAwaitingXmtpAuth(false)
+        storeKeys(await signer.getAddress(), keys)
       }
+
+      const xmtp = await Client.create(null, {
+        env: XMTP_ENV,
+        privateKeyOverride: keys
+      })
+      setClient(xmtp)
+      setAwaitingXmtpAuth(false)
+    } else {
+      setAwaitingXmtpAuth(false)
     }
-    initXmtpClient()
+  }
+  useEffect(() => {
     if (!signer || !lensProfile?.defaultProfile) {
       setClient(undefined)
     }
@@ -70,7 +68,8 @@ const useXmtpClient = (cacheOnly = false) => {
 
   return {
     client: client,
-    loading: isLoading || awaitingXmtpAuth
+    loading: isLoading || awaitingXmtpAuth,
+    initXmtpClient: initXmtpClient
   }
 }
 

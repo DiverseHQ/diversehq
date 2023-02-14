@@ -208,11 +208,7 @@ const LensPostCard = ({ post }) => {
                   ) : (
                     <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                       <ImageWithPulsingLoader
-                        src={
-                          postInfo?.communityInfo?.logoImageUrl
-                            ? postInfo?.communityInfo?.logoImageUrl
-                            : '/gradient.jpg'
-                        }
+                        src={postInfo?.communityInfo?.logoImageUrl}
                         className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                       />
                     </Link>
@@ -255,11 +251,7 @@ const LensPostCard = ({ post }) => {
                 <div className="flex flex-row w-full items-center">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
-                      src={
-                        postInfo?.communityInfo?.logoImageUrl
-                          ? postInfo?.communityInfo?.logoImageUrl
-                          : '/gradient.jpg'
-                      }
+                      src={postInfo?.communityInfo?.logoImageUrl}
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>

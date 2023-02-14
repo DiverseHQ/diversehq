@@ -11,7 +11,7 @@ const CommunitySelectDiv = ({ community, handleSelect }) => {
       }}
     >
       <ImageWithPulsingLoader
-        src={community.logoImageUrl ? community.logoImageUrl : '/gradient.jpg'}
+        src={community.logoImageUrl}
         alt="community logo"
         className="rounded-full object-cover w-9 h-9"
       />

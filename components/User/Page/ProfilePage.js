@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { FaRegCopy } from 'react-icons/fa'
+// import { FaRegCopy } from 'react-icons/fa'
 import { getNumberOfPostsUsingUserAddress } from '../../../api/post'
 import { getUserInfo } from '../../../api/user'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
-import { useNotify } from '../../Common/NotifyContext'
+// import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 import LensPostsProfilePublicationsColumn from '../../Post/LensPostsProfilePublicationsColumn'
 import PostsColumn from '../../Post/PostsColumn'
@@ -22,11 +22,18 @@ import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
 import { MdOutlineGroups } from 'react-icons/md'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
+import getStampFyiURL from '../lib/getStampFyiURL'
+import { CiMail } from 'react-icons/ci'
+import useXmtpClient from '../../Messages/hooks/useXmtpClient'
+import { CircularProgress } from '@mui/material'
+import { useMessageStore } from '../../../store/message'
+import { buildConversationKey } from '../../Messages/lib/conversationKey'
+import buildConversationId from '../../Messages/lib/buildConversationId'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
   const [lensProfile, setLensProfile] = useState(_lensProfile)
-  const { notifyInfo } = useNotify()
+  // const { notifyInfo } = useNotify()
   const { user } = useProfile()
   const { showModal } = usePopUpModal()
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
@@ -36,6 +43,15 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const router = useRouter()
   const { pathname } = router
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { client, initXmtpClient, loading } = useXmtpClient()
+  const setMessageProfiles = useMessageStore(
+    (state) => state.setMessageProfiles
+  )
+  const messageProfiles = useMessageStore((state) => state.messageProfiles)
+  const setConversationKey = useMessageStore(
+    (state) => state.setConversationKey
+  )
+  const setIsOpen = useMessageStore((state) => state.setIsOpen)
 
   useEffect(() => {
     if (pathname.endsWith('/lens')) {
@@ -49,14 +65,14 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     }
   }, [pathname])
 
-  const { data } = useProfileQuery(
+  const { data, refetch } = useProfileQuery(
     {
       request: {
-        profileId: lensProfile?.id
+        profileId: _lensProfile?.id
       }
     },
     {
-      enabled: !!lensProfile?.id
+      enabled: !!myLensProfile?.id
     }
   )
 
@@ -71,9 +87,9 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
       setProfile(_profile)
     }
     if (_lensProfile) {
-      setLensProfile(_lensProfile)
+      refetch()
     }
-  }, [_profile, _lensProfile])
+  }, [_profile._id, _lensProfile.id])
 
   const getNumberOfPosts = async (address) => {
     try {
@@ -100,10 +116,10 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     }
   }, [profile.walletAddress])
 
-  const handleWalletAddressCopy = () => {
-    navigator.clipboard.writeText(profile.walletAddress)
-    notifyInfo('Copied to clipboard')
-  }
+  // const handleWalletAddressCopy = () => {
+  //   navigator.clipboard.writeText(profile.walletAddress)
+  //   notifyInfo('Copied to clipboard')
+  // }
 
   const handleEditProfile = () => {
     showModal({
@@ -114,6 +130,22 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
       onAction: () => {},
       extraaInfo: {}
     })
+  }
+
+  const handleDmClick = async () => {
+    if (!client) {
+      await initXmtpClient()
+    }
+    const newMessagesProfile = new Map(messageProfiles)
+    const peerAddress = lensProfile?.ownedBy
+    const key = buildConversationKey(
+      peerAddress,
+      buildConversationId(myLensProfile?.defaultProfile?.id, lensProfile.id)
+    )
+    newMessagesProfile.set(key, lensProfile)
+    setMessageProfiles(newMessagesProfile)
+    setConversationKey(key)
+    setIsOpen(true)
   }
 
   return (
@@ -140,7 +172,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 src={
                   profile?.profileImageUrl
                     ? profile?.profileImageUrl
-                    : '/gradient.jpg'
+                    : getStampFyiURL(profile?.walletAddress)
                 }
               />
 
@@ -151,17 +183,33 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     : ''
                 }`}
               >
-                <div className="flex flex-row items-center self-end min-h-[50px]">
+                <div className="flex flex-row items-center self-end min-h-[50px] py-2">
                   {user &&
                     user?.walletAddress.toLowerCase() ===
                       profile.walletAddress.toLowerCase() && (
                       <div
-                        className="text-base text-p-btn-text bg-p-btn px-2 mx-2 rounded-full cursor-pointer"
+                        className="text-sm text-p-btn-text bg-p-btn px-2 py-1 mx-2 rounded-full cursor-pointer"
                         onClick={handleEditProfile}
                       >
                         Edit
                       </div>
                     )}
+                  {lensProfile &&
+                    isSignedIn &&
+                    hasProfile &&
+                    lensProfile?.isFollowedByMe && (
+                      <div
+                        className="p-1 rounded-xl cursor-pointer hover:bg-p-btn-hover flex flex-row items-center space-x-1"
+                        onClick={handleDmClick}
+                      >
+                        {!loading && <CiMail className="w-6 h-6" />}
+                        {loading && (
+                          <CircularProgress size="18px" color="primary" />
+                        )}
+                        <div>DM</div>
+                      </div>
+                    )}
+
                   {/* <div
                     className="self-end flex flex-row items-center my-3 px-2 py-1  cursor-pointer"
                     onClick={handleWalletAddressCopy}

@@ -36,11 +36,7 @@ const IndexingPostCard = ({ postInfo }) => {
                 <div className="flex flex-row w-full items-center">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
-                      src={
-                        postInfo?.communityInfo?.image
-                          ? postInfo?.communityInfo?.image
-                          : '/gradient.jpg'
-                      }
+                      src={postInfo?.communityInfo?.image}
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>
@@ -78,11 +74,7 @@ const IndexingPostCard = ({ postInfo }) => {
                 <div className="flex flex-row w-full items-center justify-between">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
-                      src={
-                        postInfo?.communityInfo?.image
-                          ? postInfo?.communityInfo?.image
-                          : '/gradient.jpg'
-                      }
+                      src={postInfo?.communityInfo?.image}
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>

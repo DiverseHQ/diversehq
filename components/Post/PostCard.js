@@ -174,9 +174,7 @@ const PostCard = ({ _post, setPosts }) => {
             <div className="flex flex-row w-full items-center pb-1">
               <Link href={`/c/${post.communityName}`} passHref>
                 <ImageWithPulsingLoader
-                  src={
-                    post.communityLogo ? post.communityLogo : '/gradient.jpg'
-                  }
+                  src={post.communityLogo}
                   className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                 />
               </Link>
@@ -217,9 +215,7 @@ const PostCard = ({ _post, setPosts }) => {
             <div className="flex flex-row w-full items-center">
               <Link href={`/c/${post.communityName}`} passHref>
                 <ImageWithPulsingLoader
-                  src={
-                    post.communityLogo ? post.communityLogo : '/gradient.jpg'
-                  }
+                  src={post.communityLogo}
                   className="object-cover rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
                 />
               </Link>

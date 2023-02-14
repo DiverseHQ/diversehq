@@ -9,13 +9,12 @@ import { useMessageStore } from '../../store/message'
 import useXmtpClient from './hooks/useXmtpClient'
 // import { UserType } from '../../types/user'
 
-const drawerBleeding = 56
-
 const MainMsgModal = () => {
   const { user }: any = useProfile()
   const { isSignedIn, hasProfile } = useLensUserContext()
   const { data: signer } = useSigner()
-  const [open, setOpen] = useState(false)
+  const isOpen = useMessageStore((state) => state.isOpen)
+  const setIsOpen = useMessageStore((state) => state.setIsOpen)
   const conversationKey = useMessageStore((state) => state.conversationKey)
   const profile = useMessageStore((state) =>
     state.messageProfiles.get(conversationKey)
@@ -24,12 +23,12 @@ const MainMsgModal = () => {
   return (
     <div
       className={`fixed ${
-        open ? 'bottom-0' : 'bottom-[-500px]'
+        isOpen ? 'bottom-0' : 'bottom-[-500px]'
       } right-4 h-[550px] w-[450px] rounded-t-2xl border-[1px] border-p-btn duration-500 transition-all z-30`}
     >
       {/* header */}
       <div className="bg-s-bg rounded-t-2xl flex flex-col h-full text-p-text shadow-2xl">
-        <MessageHeader profile={profile} open={open} setOpen={setOpen} />
+        <MessageHeader profile={profile} open={isOpen} setOpen={setIsOpen} />
         {(!signer || !isSignedIn || !hasProfile || !user) && (
           <div className="flex justify-center items-center h-full w-full">
             <LensLoginButton />
@@ -40,7 +39,7 @@ const MainMsgModal = () => {
           isSignedIn &&
           hasProfile &&
           user &&
-          ((!open && client) || open) && <AllConversations />}
+          ((!isOpen && client) || isOpen) && <AllConversations />}
       </div>
     </div>
   )

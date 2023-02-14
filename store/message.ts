@@ -27,6 +27,8 @@ interface MessageState {
   setSelectedProfileId: (selectedProfileId: string) => void
   conversationKey: string
   setConversationKey: (conversationKey: string) => void
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
   //   selectedTab: TabValues
   //   setSelectedTab: (selectedTab: TabValues) => void
 }
@@ -90,6 +92,8 @@ export const useMessageStore = create<MessageState>((set) => ({
     set(() => ({ selectedProfileId })),
   conversationKey: '',
   setConversationKey: (conversationKey) => set(() => ({ conversationKey })),
+  isOpen: false,
+  setIsOpen: (isOpen) => set(() => ({ isOpen })),
   //   selectedTab: 'Following',
   //   setSelectedTab: (selectedTab) => set(() => ({ selectedTab })),
   reset: () =>

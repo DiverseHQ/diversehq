@@ -22,6 +22,7 @@ import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-inde
 import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
+import getStampFyiURL from '../../User/lib/getStampFyiURL'
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()
@@ -204,7 +205,7 @@ const LensCommentCard = ({ comment }) => {
                     ? `${LensInfuraEndpoint}${
                         comment?.profile?.picture?.original?.url.split('//')[1]
                       }`
-                    : '/gradient.jpg'
+                    : getStampFyiURL(comment?.profile?.ownedBy)
                 }
                 className="w-6 h-6 rounded-full mr-1"
               />

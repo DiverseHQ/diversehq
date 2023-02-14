@@ -18,6 +18,7 @@ import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import getStampFyiURL from '../User/lib/getStampFyiURL'
 
 const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [comment, setComment] = useState(commentInfo)
@@ -159,7 +160,9 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             <div className="flex flex-row items-center">
               <ImageWithPulsingLoader
                 src={
-                  comment.authorAvatar ? comment.authorAvatar : '/gradient.jpg'
+                  comment.authorAvatar
+                    ? comment.authorAvatar
+                    : getStampFyiURL(comment?.author)
                 }
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
               />
