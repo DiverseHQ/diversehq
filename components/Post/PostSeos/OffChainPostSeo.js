@@ -1,5 +1,6 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
+import { IMAGE_KIT_ENDPOINT } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 
 const OffChainPostSeo = ({ post }) => {
@@ -11,7 +12,10 @@ const OffChainPostSeo = ({ post }) => {
         title: stringToLength(post?.title, 60),
         images: [
           {
-            url: post?.postImageUrl,
+            url: post?.postImageUrl.replace(
+              'https://firebasestorage.googleapis.com',
+              `${IMAGE_KIT_ENDPOINT}/tr:w-1200,h-630,q-50`
+            ),
             alt: post?.title
           }
         ],
