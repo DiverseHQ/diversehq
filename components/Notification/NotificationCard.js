@@ -9,7 +9,7 @@ const NotificationCard = ({ notification }) => {
   return (
     <div
       className={
-        'my-1 sm:my-4 px-3 py-2 sm:p-3 sm:bg-s-bg sm:rounded-xl border-b sm:border-none shadow-sm w-full'
+        'my-1 sm:my-4 px-3 py-2 sm:p-3 sm:bg-s-bg sm:rounded-xl border-b border-s-border sm:border-none sm:shadow-sm w-full'
       }
     >
       {notification.type === notificationTypes.COMMENT && (
