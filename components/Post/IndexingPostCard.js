@@ -128,7 +128,7 @@ const IndexingPostCard = ({ postInfo }) => {
                     //  onClick={liked ? handleUnLike : handleLike}
                     src={
                       postInfo.reaction === ReactionTypes.Upvote
-                        ? '/upvoteFilled.svg'
+                        ? '/UpvotedFilled.svg'
                         : '/upvoteGray.svg'
                     }
                     className="w-5 h-5"
@@ -202,7 +202,7 @@ const IndexingPostCard = ({ postInfo }) => {
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-1">
                     <button className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1">
-                      <img src={'/upvoteFilled.svg'} className="w-4 h-4" />
+                      <img src={'/UpvotedFilled.svg'} className="w-4 h-4" />
                     </button>
                     <div className="font-bold">1</div>
                     <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">

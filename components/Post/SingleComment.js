@@ -261,7 +261,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                       //  onClick={liked ? handleUnLike : handleLike}
                       src={
                         reaction === ReactionTypes.Upvote
-                          ? '/UpvoteFilled.svg'
+                          ? '/UpvotedFilled.svg'
                           : '/upvoteGray.svg'
                       }
                       className="w-4 h-4"
@@ -277,7 +277,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                     <img
                       src={
                         reaction === ReactionTypes.Downvote
-                          ? '/DownvoteFilled.svg'
+                          ? '/DownvotedFilled.svg'
                           : '/downvoteGray.svg'
                       }
                       className="w-4 h-4"

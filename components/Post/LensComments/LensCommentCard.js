@@ -298,7 +298,7 @@ const LensCommentCard = ({ comment }) => {
                       <img
                         src={
                           reaction === ReactionTypes.Upvote
-                            ? '/UpvoteFilled.svg'
+                            ? '/UpvotedFilled.svg'
                             : '/upvoteGray.svg'
                         }
                         className="w-4 h-4"
@@ -314,7 +314,7 @@ const LensCommentCard = ({ comment }) => {
                       <img
                         src={
                           reaction === ReactionTypes.Downvote
-                            ? '/DownvoteFilled.svg'
+                            ? '/DownvotedFilled.svg'
                             : '/downvoteGray.svg'
                         }
                         className="w-4 h-4"
