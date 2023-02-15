@@ -107,21 +107,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   }
 
   return (
-    <div
-      className={`text-black fixed top-0 left-0 right-0 bottom-0 w-full overflow-hidden ${
-        isOpenSidebar ? 'z-50' : 'z-0'
-      }`}
-    >
-      {/* backdrop */}
-      {isOpenSidebar && (
-        <div
-          className="absolute bg-black/60 top-0 right-0 left-0 bottom-0 w-full"
-          onClick={() => {
-            setIsOpenSidebar(false)
-          }}
-        />
-      )}
-
+    <>
       <BottomDrawerWrapper
         isDrawerOpen={isOpenSidebar}
         setIsDrawerOpen={setIsOpenSidebar}
@@ -339,7 +325,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           </div>
         </div>
       </BottomDrawerWrapper>
-    </div>
+    </>
   )
 }
 
