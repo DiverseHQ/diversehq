@@ -177,11 +177,17 @@ const IndexingPostCard = ({ postInfo }) => {
                       PublicationMainFocus.Image && (
                       <div className="sm:pl-5  sm:pr-6 sm:pb-1">
                         <ImageWithFullScreenZoom
-                          src={`${LensInfuraEndpoint}${
-                            postInfo?.metadata?.media[0]?.original.url.split(
-                              '//'
-                            )[1]
-                          }`}
+                          src={
+                            postInfo?.metadata?.media[0]?.original.url.startsWith(
+                              'ipfs://'
+                            )
+                              ? `${LensInfuraEndpoint}${
+                                  postInfo?.metadata?.media[0]?.original.url.split(
+                                    '//'
+                                  )[1]
+                                }`
+                              : postInfo?.metadata?.media[0]?.original.url
+                          }
                         />
                       </div>
                     )}

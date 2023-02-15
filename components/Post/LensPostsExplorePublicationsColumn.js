@@ -130,6 +130,7 @@ const LensPostsExplorePublicationsColumn = () => {
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
+    console.log('newPosts', newPosts)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       nextCursor,

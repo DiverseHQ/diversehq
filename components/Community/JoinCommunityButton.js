@@ -32,7 +32,7 @@ const JoinCommunityButton = ({ id }) => {
     <>
       {!joined && !loading && (
         <button
-          className="text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-1 h-fit w-fit rounded-md"
+          className="text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-1 h-fit w-fit rounded-full"
           onClick={(e) => {
             e.stopPropagation()
             handleJoin()

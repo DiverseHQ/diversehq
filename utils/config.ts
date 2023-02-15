@@ -47,3 +47,47 @@ export const XMTP_ENV = 'dev'
 export const MAX_PROFILES_PER_REQUEST = 50
 export const MESSAGE_PAGE_LIMIT = 30
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+
+/** For Publication */
+
+export const supportedMimeTypes: string[] = [
+  'image/gif',
+  'image/jpeg',
+  'image/png',
+  'image/tiff',
+  'image/x-ms-bmp',
+  'image/svg+xml',
+  'image/webp',
+  'video/webm',
+  'video/mp4',
+  'video/x-m4v',
+  'video/ogv',
+  'video/ogg',
+  'audio/wav',
+  'audio/mpeg',
+  'audio/ogg'
+]
+
+export const SUPPORTED_IMAGE_TYPE: string[] = [
+  'image/gif',
+  'image/jpeg',
+  'image/png',
+  'image/tiff',
+  'image/x-ms-bmp',
+  'image/svg+xml',
+  'image/webp'
+]
+
+export const SUPPORTED_VIDEO_TYPE: string[] = [
+  'video/webm',
+  'video/mp4',
+  'video/x-m4v',
+  'video/ogv',
+  'video/ogg'
+]
+
+export const SUPPORTED_AUDIO_TYPE: string[] = [
+  'audio/wav',
+  'audio/mpeg',
+  'audio/ogg'
+]

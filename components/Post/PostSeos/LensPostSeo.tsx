@@ -1,8 +1,10 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
 import { Publication } from '../../../graphql/generated'
-import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
+// import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
+import getIPFSLink from '../../User/lib/getIPFSLink'
+import imageProxy from '../../User/lib/imageProxy'
 
 const LensPostSeo = ({ post }: { post: Publication }) => {
   return (
@@ -23,10 +25,10 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [
                 {
-                  url: `${IMAGE_KIT_ENDPOINT}/${LensInfuraEndpoint}${
-                    post?.metadata?.media[0]?.original.url.split('//')[1]
-                  }?tr=w-1200,h-630,q-50`,
-                  alt: post?.metadata?.content
+                  url: imageProxy(
+                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    'w-1200,h-630,q-50'
+                  )
                 }
               ]
             : [],
@@ -34,13 +36,15 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
           post?.metadata?.mainContentFocus === 'VIDEO'
             ? [
                 {
-                  url: `${LensInfuraEndpoint}${
-                    post?.metadata?.media[0]?.original.url.split('//')[1]
-                  }`,
+                  url: imageProxy(
+                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    'w-1200,h-630,q-50'
+                  ),
                   alt: post?.metadata?.content,
-                  secureUrl: `${LensInfuraEndpoint}${
-                    post?.metadata?.media[0]?.original.url.split('//')[1]
-                  }`,
+                  secureUrl: imageProxy(
+                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    'w-1200,h-630,q-50'
+                  ),
                   type: post?.metadata?.media[0]?.original?.mimeType,
                   width: 450
                 }

@@ -35,6 +35,7 @@ import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import { Tooltip } from '@mui/material'
+import Attachment from './Attachment'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -207,6 +208,7 @@ const LensPostCard = ({ post }) => {
               : 'pb-2'
           } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
           onClick={() => {
+            if (router.pathname.startsWith('/p')) return
             router.push(`/p/${postInfo.id}`)
           }}
         >
@@ -493,70 +495,15 @@ const LensPostCard = ({ post }) => {
                   )}
                 </div>
                 {postInfo?.metadata?.media.length > 0 && (
-                  <>
-                    {postInfo?.metadata?.mainContentFocus ===
-                      PublicationMainFocus.Image &&
-                      (!router.pathname.startsWith('/p') ? (
-                        <span onClick={(e) => e.stopPropagation()}>
-                          <Link href={`/p/${postInfo?.id}`} passHref>
-                            {/* eslint-disable-next-line */}
-                            <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                              <ImageWithPulsingLoader
-                                src={`${LensInfuraEndpoint}${
-                                  postInfo?.metadata?.media[0]?.original.url.split(
-                                    '//'
-                                  )[1]
-                                }`}
-                                className={`image-unselectable object-contain sm:rounded-lg w-full ${
-                                  router.pathname.startsWith('/p')
-                                    ? ''
-                                    : 'max-h-[450px]'
-                                }`}
-                              />
-                            </div>
-                          </Link>
-                        </span>
-                      ) : (
-                        <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                          <ImageWithFullScreenZoom
-                            src={`${LensInfuraEndpoint}${
-                              postInfo?.metadata?.media[0]?.original.url.split(
-                                '//'
-                              )[1]
-                            }`}
-                          />
-                        </div>
-                      ))}
-                  </>
-                )}
-                {postInfo?.metadata?.mainContentFocus ===
-                  PublicationMainFocus.Video && (
-                  <div className="sm:pl-5 sm:pr-6 sm:pb-1">
-                    <VideoWithAutoPause
-                      src={`${LensInfuraEndpoint}${
-                        postInfo?.metadata?.media[0]?.original.url.split(
-                          '//'
-                        )[1]
-                      }`}
-                      className={`image-unselectable object-contain sm:rounded-lg w-full ${
+                  <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                    <Attachment
+                      publication={postInfo}
+                      className={`${
                         router.pathname.startsWith('/p') ? '' : 'max-h-[450px]'
                       }`}
-                      loop
-                      controls
-                      muted
                     />
                   </div>
                 )}
-                {postInfo?.metadata?.mainContentFocus !==
-                  PublicationMainFocus.Image &&
-                  postInfo?.metadata?.mainContentFocus !==
-                    PublicationMainFocus.Video &&
-                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
-                    <ReactEmbedo
-                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[450px] sm:pl-5 sm:pr-6 sm:pb-1"
-                    />
-                  )}
               </div>
 
               {/* bottom row */}

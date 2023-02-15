@@ -27,7 +27,7 @@ import {
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
 import { Switch } from '@mui/material'
-import { supportedMimeTypes } from '../../lib/interfaces/publication'
+
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import {
@@ -44,6 +44,7 @@ import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
+import { supportedMimeTypes } from '../../utils/config'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
@@ -145,10 +146,10 @@ const CreatePostPopup = () => {
       }
 
       if (isLensPost) {
-        // file should be less than 2mb
-        const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
-        const ipfsPath = `ipfs://${ipfsHash}`
-        handleCreateLensPost(title, communityId, file.type, ipfsPath)
+        const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
+        // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+        // const ipfsPath = `ipfs://${ipfsHash}`
+        handleCreateLensPost(title, communityId, file.type, postUrl)
         return
       }
 

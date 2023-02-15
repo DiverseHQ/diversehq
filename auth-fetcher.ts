@@ -65,9 +65,10 @@ export const fetchData = <TData, TVariables>(
       console.log(json.errors)
       const { message } = json.errors[0] || 'Error..'
       // @ts-ignore
-      if (typeof window !== 'undefined') {
-        window.location.reload()
-      }
+      // if (typeof window !== 'undefined') {
+      //   window.location.reload()
+      // }
+      console.log('message', message)
       // throw new Error(message)
     }
 

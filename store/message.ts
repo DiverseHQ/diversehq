@@ -1,6 +1,6 @@
 import type { Client, Conversation, DecodedMessage } from '@xmtp/xmtp-js'
 // import { toNanoString } from '@xmtp/xmtp-js'
-import create from 'zustand'
+import { create } from 'zustand'
 // import { persist } from 'zustand/middleware'
 import getUniqueMessages from '../components/Messages/lib/getUniqueMessages'
 import { Profile } from '../graphql/generated'
