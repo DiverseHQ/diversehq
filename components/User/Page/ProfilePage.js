@@ -151,55 +151,86 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     : ''
                 }`}
               >
-                <div className="flex flex-row items-center self-end">
-                  {user &&
-                    user?.walletAddress.toLowerCase() ===
-                      profile.walletAddress.toLowerCase() && (
-                      <div
-                        className="text-base text-p-btn-text bg-p-btn px-2 mx-2 rounded-full cursor-pointer"
-                        onClick={handleEditProfile}
-                      >
-                        Edit
+                <div className="ml-24 flex flex-row justify-end md:justify-between items-start">
+                  {!isMobile && (
+                    <div className="flex flex-row items-start justify-between sm:space-x-10 mt-1">
+                      <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
+                        {profile.name && <div>{profile.name}</div>}
+                        {!profile.name && profile.walletAddress && (
+                          <div>
+                            {profile.walletAddress.substring(0, 6) + '...'}
+                          </div>
+                        )}
+                        {lensProfile?.handle && (
+                          <Link
+                            href={`/u/${lensProfile?.handle}`}
+                            className="hover:underline cursor-pointer"
+                            passHref
+                          >
+                            u/{lensProfile?.handle}
+                          </Link>
+                        )}
+                        <div className="font-normal">{profile.bio}</div>
                       </div>
-                    )}
-                  <div
-                    className="self-end flex flex-row items-center my-3 px-2 py-1  cursor-pointer"
-                    onClick={handleWalletAddressCopy}
-                  >
-                    <div className="text-base sm:text-xl">
-                      {profile?.walletAddress?.substring(0, 6) + '...'}
                     </div>
-                    <FaRegCopy className="w-8 h-8 px-2" />
+                  )}
+
+                  <div className="flex flex-row items-start my-2 md:my-3 px-2 py-1">
+                    {hasProfile &&
+                      isSignedIn &&
+                      myLensProfile &&
+                      lensProfile &&
+                      lensProfile.ownedBy?.toLowerCase() !==
+                        user?.walletAddress?.toLowerCase() && (
+                        <div className="mx-2">
+                          <LensFollowButton lensProfile={lensProfile} />
+                        </div>
+                      )}
+                    {user &&
+                      user?.walletAddress.toLowerCase() ===
+                        profile.walletAddress.toLowerCase() && (
+                        <div
+                          className="text-base text-p-btn-text bg-p-btn px-3 py-0.5 mx-2 rounded-md cursor-pointer"
+                          onClick={handleEditProfile}
+                        >
+                          Edit
+                        </div>
+                      )}
+                    <div
+                      className="flex flex-row cursor-pointer"
+                      onClick={handleWalletAddressCopy}
+                    >
+                      <div className="text-base sm:text-xl">
+                        {profile?.walletAddress?.substring(0, 6) + '...'}
+                      </div>
+                      <FaRegCopy className="w-7 h-7 sm:w-8 sm:h-8 px-2" />
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-row items-center justify-between sm:justify-start sm:space-x-10">
-                  <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
-                    {profile.name && <div>{profile.name}</div>}
-                    {!profile.name && profile.walletAddress && (
-                      <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
-                    )}
-                    {lensProfile?.handle && (
-                      <Link
-                        href={`/u/${lensProfile?.handle}`}
-                        className="hover:underline cursor-pointer"
-                        passHref
-                      >
-                        u/{lensProfile?.handle}
-                      </Link>
-                    )}
-                  </div>
-                  {hasProfile &&
-                    isSignedIn &&
-                    myLensProfile &&
-                    lensProfile &&
-                    lensProfile.ownedBy?.toLowerCase() !==
-                      user?.walletAddress?.toLowerCase() && (
-                      <>
-                        <LensFollowButton lensProfile={lensProfile} />
-                      </>
-                    )}
-                </div>
-                <div>{profile.bio}</div>
+                {isMobile && (
+                  <>
+                    <div className="flex flex-row items-start justify-start space-x-10">
+                      <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
+                        {profile.name && <div>{profile.name}</div>}
+                        {!profile.name && profile.walletAddress && (
+                          <div>
+                            {profile.walletAddress.substring(0, 6) + '...'}
+                          </div>
+                        )}
+                        {lensProfile?.handle && (
+                          <Link
+                            href={`/u/${lensProfile?.handle}`}
+                            className="hover:underline cursor-pointer"
+                            passHref
+                          >
+                            u/{lensProfile?.handle}
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                    <div>{profile.bio}</div>
+                  </>
+                )}
                 {isMobile ? (
                   <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px]">
                     {/* onchain lens data */}
