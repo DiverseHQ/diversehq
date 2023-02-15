@@ -34,7 +34,7 @@ const BottomDrawerWrapper = ({
       }}
       transitionDuration={200}
       bgcolor="custom"
-      swipeAreaWidth={50}
+      swipeAreaWidth={position === 'left' ? 20 : 0}
     >
       <div
         className={` ${
