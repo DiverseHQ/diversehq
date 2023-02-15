@@ -37,7 +37,7 @@ const MainMsgModal = ({ isMobile = false }: Props) => {
       } duration-500 transition-all z-50 `}
     >
       {/* header */}
-      <div className="bg-s-bg rounded-t-2xl flex flex-col h-full text-p-text shadow-2xl">
+      <div className="bg-s-bg sm:rounded-t-2xl flex flex-col h-full text-p-text shadow-2xl">
         <MessageHeader profile={profile} open={isOpen} setOpen={setIsOpen} />
         {(!signer || !isSignedIn || !hasProfile || !user) && (
           <div className="flex justify-center items-center h-full w-full">
