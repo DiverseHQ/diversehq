@@ -29,6 +29,7 @@ const Home = () => {
           profileId={lensProfile?.defaultProfile?.id}
         />
       ) : ( */}
+
           <LensPostsExplorePublicationsColumn />
           {/* )} */}
         </div>

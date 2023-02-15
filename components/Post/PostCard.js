@@ -4,8 +4,6 @@ import { useNotify } from '../Common/NotifyContext'
 import { deletePost, putUpvoteOnPost, putDownvoteOnPost } from '../../api/post'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
@@ -17,7 +15,6 @@ import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import EditPostPopup from './EditPostPopup'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
-TimeAgo.addDefaultLocale(en)
 
 import Markup from '../Lexical/Markup'
 import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
@@ -186,9 +183,7 @@ const PostCard = ({ _post, setPosts }) => {
             <div className="flex flex-row w-full items-center pb-1">
               <Link href={`/c/${post.communityName}`} passHref>
                 <ImageWithPulsingLoader
-                  src={
-                    post.communityLogo ? post.communityLogo : '/gradient.jpg'
-                  }
+                  src={post.communityLogo}
                   className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                 />
               </Link>
@@ -229,9 +224,7 @@ const PostCard = ({ _post, setPosts }) => {
             <div className="flex flex-row w-full items-center">
               <Link href={`/c/${post.communityName}`} passHref>
                 <ImageWithPulsingLoader
-                  src={
-                    post.communityLogo ? post.communityLogo : '/gradient.jpg'
-                  }
+                  src={post.communityLogo}
                   className="object-cover rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
                 />
               </Link>
@@ -446,7 +439,6 @@ const PostCard = ({ _post, setPosts }) => {
                   className={`image-unselectable object-contain sm:rounded-lg w-full ${
                     router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                   }`}
-                  loop
                   controls
                   muted
                 />

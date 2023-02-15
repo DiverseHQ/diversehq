@@ -269,11 +269,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                   }}
                 >
                   <ImageWithPulsingLoader
-                    src={
-                      community.logoImageUrl
-                        ? community.logoImageUrl
-                        : '/gradient.jpg'
-                    }
+                    src={community.logoImageUrl}
                     alt="community logo"
                     className="rounded-full object-cover w-12 h-12"
                   />
@@ -310,11 +306,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                   }}
                 >
                   <ImageWithPulsingLoader
-                    src={
-                      community.logoImageUrl
-                        ? community.logoImageUrl
-                        : '/gradient.jpg'
-                    }
+                    src={community.logoImageUrl}
                     alt="community logo"
                     className="rounded-full object-cover w-12 h-12"
                   />

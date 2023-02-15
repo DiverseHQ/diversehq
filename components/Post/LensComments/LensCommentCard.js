@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
 import {
   ReactionTypes,
@@ -24,8 +22,8 @@ import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-inde
 import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
+import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import { Tooltip } from '@mui/material'
-TimeAgo.addDefaultLocale(en)
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()
@@ -208,7 +206,7 @@ const LensCommentCard = ({ comment }) => {
                     ? `${LensInfuraEndpoint}${
                         comment?.profile?.picture?.original?.url.split('//')[1]
                       }`
-                    : '/gradient.jpg'
+                    : getStampFyiURL(comment?.profile?.ownedBy)
                 }
                 className="w-6 h-6 rounded-full mr-1"
               />

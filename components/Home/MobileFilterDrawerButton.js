@@ -123,11 +123,7 @@ const MobileFilterDrawerButton = () => {
                       }}
                     >
                       <ImageWithPulsingLoader
-                        src={
-                          community.logoImageUrl
-                            ? community.logoImageUrl
-                            : '/gradient.jpg'
-                        }
+                        src={community.logoImageUrl}
                         alt="community logo"
                         className="rounded-full object-cover w-16 h-16"
                       />

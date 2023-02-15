@@ -15,6 +15,7 @@ import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
 import Link from 'next/link'
 import { FiSend } from 'react-icons/fi'
+import getStampFyiURL from '../../User/lib/getStampFyiURL'
 
 const LensCreateComment = ({
   postId,
@@ -172,7 +173,7 @@ const LensCreateComment = ({
                                 '//'
                               )[1]
                             }`
-                          : '/gradient.jpg'
+                          : getStampFyiURL(replyCommentData?.profile?.ownedBy)
                       }
                       className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                     />
@@ -201,7 +202,7 @@ const LensCreateComment = ({
                     src={
                       user?.profileImageUrl
                         ? user?.profileImageUrl
-                        : '/gradient.jpg'
+                        : getStampFyiURL(user?.walletAddress)
                     }
                     className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                   />

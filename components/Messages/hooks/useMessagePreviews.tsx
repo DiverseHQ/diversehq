@@ -36,7 +36,18 @@ const useMessagePreviews = () => {
   )
   const setPreviewMessage = useMessageStore((state) => state.setPreviewMessage)
 
-  const { client, loading: creatingXmtpClient } = useXmtpClient()
+  const {
+    client,
+    loading: creatingXmtpClient,
+    initXmtpClient
+  } = useXmtpClient()
+
+  useEffect(() => {
+    if (!client) {
+      initXmtpClient()
+    }
+  }, [client])
+
   const [messagesLoading, setMessagesLoading] = useState<boolean>(true)
   const [profilesLoading, setProfilesLoading] = useState<boolean>(false)
   const [profilesError, setProfilesError] = useState<Error | undefined>()
@@ -62,9 +73,9 @@ const useMessagePreviews = () => {
     console.log('profileids setting to query', profileIds)
     const toQuery = new Set(profileIds)
     // Don't both querying for already seen profiles
-    for (const profile of Array.from(messageProfiles.values())) {
-      toQuery.delete(profile.id)
-    }
+    // for (const profile of Array.from(messageProfiles.values())) {
+    //   toQuery.delete(profile.id)
+    // }
 
     if (!toQuery.size) {
       return

@@ -102,7 +102,18 @@ export const WalletProvider = ({ children }) => {
           }
         }
       } catch (error) {
-        console.log('error from verfiying token', error)
+        if (useEffectCalled) {
+          console.log('error from verfiying token', error)
+          if (getLocalToken()) {
+            removeLocalToken()
+          }
+          removeAccessTokenFromStorage()
+          await queryClient.invalidateQueries({
+            queryKey: ['lensUser', 'defaultProfile']
+          })
+          disconnect()
+        }
+        return
       }
       if (useEffectCalled) return
 

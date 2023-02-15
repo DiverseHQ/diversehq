@@ -20,6 +20,7 @@ import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import getStampFyiURL from '../User/lib/getStampFyiURL'
 
 const Nav = () => {
   const router = useRouter()
@@ -240,7 +241,7 @@ const Nav = () => {
               )}
               {user && !user.profileImageUrl && (
                 <Image
-                  src="/gradient.jpg"
+                  src={getStampFyiURL(user?.walletAddress)}
                   width="65"
                   height="65"
                   className="rounded-full"

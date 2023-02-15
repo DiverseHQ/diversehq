@@ -7,6 +7,7 @@ import CreatePostPopup from './CreatePostPopup'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType } from '../Common/CustomPopUpProvider'
 import Image from 'next/image'
+import getStampFyiURL from '../User/lib/getStampFyiURL'
 
 const CreatePostBar = () => {
   const { user } = useProfile()
@@ -42,7 +43,7 @@ const CreatePostBar = () => {
         )}
         {user && !user.profileImageUrl && (
           <Image
-            src="/gradient.jpg"
+            src={getStampFyiURL(user?.profileImageUrl)}
             width="44"
             height="44"
             className="rounded-full"

@@ -21,6 +21,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
     communityIds: null,
     cursor: null,
     sortCriteria: PublicationSortCriteria.Latest,
+    sortType: sortTypes.LATEST,
     timestamp: null,
     hasMore: true,
     nextCursor: null,
@@ -59,6 +60,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
 
   useEffect(() => {
     if (!router.query.sort) return
+    if (exploreQueryRequestParams.sortType === router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria
     let timestamp = null
     let sortCriteria = PublicationSortCriteria.Latest
@@ -82,10 +84,11 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
 
       // timestamp is required for top collected sort criteria
     }
-    if (exploreQueryRequestParams.sortCriteria === sortCriteria) return
+
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: null,
+      sortType: String(router.query.sort),
       sortCriteria,
       timestamp,
       hasMore: true,

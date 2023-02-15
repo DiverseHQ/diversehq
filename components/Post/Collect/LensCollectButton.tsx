@@ -15,6 +15,7 @@ import HoverModalWrapper from '../../Common/UI/HoverModalWrapper'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import VideoWithAutoPause from '../../Common/UI/VideoWithAutoPause'
 import useDevice from '../../Common/useDevice'
+import Attachment from '../Attachment'
 import ReactEmbedo from '../embed/ReactEmbedo'
 import FeeCollectPopUp from './FeeCollectPopUp'
 import FreeCollectPopUp from './FreeCollectPopUp'
@@ -58,48 +59,26 @@ const LensCollectButton = ({
                       {stringToLength(publication.metadata?.name, 20)}
                     </p>
                   </div>
-                  {publication?.metadata?.media.length > 0 && (
-                    <div className="w-full">
-                      {publication?.metadata?.mainContentFocus ===
-                        PublicationMainFocus.Image && (
-                        <ImageWithPulsingLoader
-                          src={`${LensInfuraEndpoint}${
-                            publication?.metadata?.media[0]?.original.url.split(
-                              '//'
-                            )[1]
-                          }`}
-                          className={`rounded-xl w-full mb-1 max-h-[250px]  object-cover`}
+                  <>
+                    {publication?.metadata?.media.length > 0 ? (
+                      <div className="w-full mb-1">
+                        <Attachment
+                          publication={publication}
+                          className="max-h-[250px]"
                         />
-                      )}
-                    </div>
-                  )}
-                  {publication?.metadata?.mainContentFocus ===
-                    PublicationMainFocus.Video && (
-                    <div className="w-full mb-1">
-                      <VideoWithAutoPause
-                        src={`${LensInfuraEndpoint}${
-                          publication?.metadata?.media[0]?.original.url.split(
-                            '//'
-                          )[1]
-                        }`}
-                        className={`image-unselectable object-cover rounded-xl w-full max-h-[250px] `}
-                        loop
-                        controls
-                        muted
-                      />
-                    </div>
-                  )}
-                  {publication?.metadata?.mainContentFocus !==
-                    PublicationMainFocus.Image &&
-                    publication?.metadata?.mainContentFocus !==
-                      PublicationMainFocus.Video &&
-                    getURLsFromText(publication?.metadata?.content).length >
-                      0 && (
-                      <ReactEmbedo
-                        url={getURLsFromText(publication?.metadata?.content)[0]}
-                        className={`w-full h-[250px] pb-1`}
-                      />
+                      </div>
+                    ) : (
+                      getURLsFromText(publication?.metadata?.content).length >
+                        0 && (
+                        <ReactEmbedo
+                          url={
+                            getURLsFromText(publication?.metadata?.content)[0]
+                          }
+                          className={`w-full h-[250px] pb-1`}
+                        />
+                      )
                     )}
+                  </>
                 </div>
               )}
               {collectModule?.__typename === 'FreeCollectModuleSettings' && (

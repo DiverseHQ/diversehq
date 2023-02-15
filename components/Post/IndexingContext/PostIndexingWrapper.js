@@ -41,8 +41,12 @@ const PostIndexingWrapper = ({ children }) => {
     setPosts([post, ...posts])
 
     // indexing
-    const indexResult = await pollUntilIndexed(tx)
-    await onSuccessIndex(indexResult)
+    try {
+      const indexResult = await pollUntilIndexed(tx)
+      await onSuccessIndex(indexResult)
+    } catch (err) {
+      console.log(err)
+    }
 
     // remove from ui
     setPosts(posts.filter((p) => p.tempId !== post.tempId))

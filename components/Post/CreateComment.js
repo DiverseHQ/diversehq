@@ -3,6 +3,7 @@ import { useProfile } from '../Common/WalletContext'
 import { postComment } from '../../api/comment'
 import { FiSend } from 'react-icons/fi'
 import useDevice from '../Common/useDevice'
+import getStampFyiURL from '../User/lib/getStampFyiURL'
 
 const CreateComment = ({ postId, setComments, authorAddress }) => {
   const { user } = useProfile()
@@ -39,7 +40,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
                   src={
                     user.profileImageUrl
                       ? user.profileImageUrl
-                      : '/gradient.jpg'
+                      : getStampFyiURL(user?.walletAddress)
                   }
                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                 />
@@ -86,7 +87,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
                     src={
                       user.profileImageUrl
                         ? user.profileImageUrl
-                        : '/gradient.jpg'
+                        : getStampFyiURL(user?.walletAddress)
                     }
                     className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                   />

@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
+import { HiOutlineMail } from 'react-icons/hi'
+import { useMessageStore } from '../../store/message'
 import useNotificationsCount from '../Notification/useNotificationsCount'
 
 const MobileBottomNav = () => {
@@ -10,6 +12,7 @@ const MobileBottomNav = () => {
   } = useNotificationsCount()
   const [active, setActive] = useState('home')
   const router = useRouter()
+  const setIsOpen = useMessageStore((state) => state.setIsOpen)
   const { pathname } = router
 
   const routeToHome = () => {
@@ -29,6 +32,8 @@ const MobileBottomNav = () => {
     router.push('/notification')
   }
 
+  const isOnHomeFeed = pathname === '/' || pathname.startsWith('/feed')
+
   useEffect(() => {
     if (pathname.startsWith('/explore')) {
       setActive('explore')
@@ -36,7 +41,7 @@ const MobileBottomNav = () => {
       setActive('search')
     } else if (pathname.startsWith('/notification')) {
       setActive('notification')
-    } else if (router.pathname === '/') {
+    } else if (isOnHomeFeed) {
       setActive('home')
     } else {
       setActive('none')
@@ -55,11 +60,12 @@ const MobileBottomNav = () => {
       <div
         className="p-1.5 hover:bg-[#6668FF] rounded-full hover:bg-opacity-20 cursor-pointer"
         onClick={() => {
-          if (router.pathname !== '/') {
+          if (isOnHomeFeed) {
+            scrollToTop()
+          } else {
             routeToHome()
             return
           }
-          scrollToTop()
         }}
       >
         <img
@@ -132,6 +138,16 @@ const MobileBottomNav = () => {
             <span>{notificationsCount + lensNotificationsCount}</span>
           </div>
         )}
+      </div>
+      <div
+        className="p-1.5 hover:bg-[#6668FF] rounded-full hover:bg-opacity-20 cursor-pointer"
+        onClick={() => setIsOpen(true)}
+      >
+        <img
+          src={`/msg.svg`}
+          alt="Notification"
+          className="w-[23px] h-[23px]"
+        />
       </div>
     </div>
   )

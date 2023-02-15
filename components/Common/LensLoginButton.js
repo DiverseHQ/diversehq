@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
-import { useQueryClient } from 'wagmi'
 import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated'
 import useLogin from '../../lib/auth/useLogin'
 import { useLensUserContext } from '../../lib/LensUserContext'
@@ -12,6 +11,7 @@ import { useProfile } from './WalletContext'
 import ConnectWalletAndSignInButton from './ConnectWalletAndSignInButton'
 import { useRouter } from 'next/router'
 import useDevice from './useDevice'
+import { useQueryClient } from '@tanstack/react-query'
 
 const LensLoginButton = () => {
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()

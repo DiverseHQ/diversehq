@@ -25,6 +25,7 @@ module.exports = {
         'ap-text': 'var(--text-anti-primary)', // anti primary text color (revert of primary color)
         'lens-text': 'var(--text-lens)', // lens text color
         'p-border': 'var(--border-primary)', // primary border color
+        's-border': 'var(--border-secondary)', // secondary border color
         'p-hover': 'var(--hover-primary)', // primary hover color
         'p-hover-text': 'var(--hover-primary-text)', // primary hover text color
         'm-btn-bg': 'var(--main-btn-bg)', // main button background

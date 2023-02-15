@@ -8,6 +8,7 @@ import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
 import useDevice from '../Common/useDevice'
+import MainMsgModal from '../Messages/MainMsgModal'
 import { useRouter } from 'next/router'
 // import MainMsgModal from '../Messages/MainMsgModal'
 
@@ -44,6 +45,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
             <CreatePostButton />
             {children}
           </div>
+          <MainMsgModal isMobile={true} />
           {!router.pathname.startsWith('/p/') && <MobileBottomNav />}
         </div>
       )}
@@ -65,28 +67,12 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
           <div className="flex flex-row">
             <NewLeftSidebar />
             <div className="relative flex-1 min-h-screen text-p-text">
-              <ScrollToTopButton />
+              {/* <ScrollToTopButton /> */}
               {children}
             </div>
             <RightSidebar />
-            {/* <MainMsgModal /> */}
+            <MainMsgModal />
           </div>
-
-          {/* <div
-            className="hidden lg:flex flex-col fixed z-50 bottom-0 right-0 drop-shadow-2xl flex flex-row justify-between bg-s-bg text-p-text py-2 px-6 rounded-t-[15px] w-[160px] md:w-[220px] lg:w-[320px] xl:w-[380px] cursor-pointer"
-            onClick={() => setShowMessages(true)}
-          >
-            <span className="font-semibold text-[22px]">Messages</span>
-          </div>
-          <BottomDrawerWrapper
-            isDrawerOpen={showMessages}
-            setIsDrawerOpen={setShowMessages}
-            showClose={false}
-          >
-            <div className="w-full" onClick={() => setShowMessages(false)}>
-              <span className="font-semibold text-[22px]">Hello</span>
-            </div>
-          </BottomDrawerWrapper> */}
         </div>
       )}
     </>

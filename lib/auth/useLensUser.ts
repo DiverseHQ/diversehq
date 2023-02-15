@@ -37,6 +37,6 @@ export default function useLensUser() {
   return {
     isSignedIn: !!address && !!localStorageQuery.data,
     hasProfile: !!lensProfileQuery.data?.defaultProfile,
-    ...lensProfileQuery
+    data: !!address && !!localStorageQuery.data ? lensProfileQuery.data : null
   }
 }

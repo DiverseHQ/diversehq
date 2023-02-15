@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
-TimeAgo.addDefaultLocale(en)
 import Link from 'next/link'
 import {
   PublicationMainFocus,
@@ -38,6 +35,7 @@ import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import { Tooltip } from '@mui/material'
+import Attachment from './Attachment'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -210,6 +208,7 @@ const LensPostCard = ({ post }) => {
               : 'pb-2'
           } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
           onClick={() => {
+            if (router.pathname.startsWith('/p')) return
             router.push(`/p/${postInfo.id}`)
           }}
         >
@@ -325,38 +324,40 @@ const LensPostCard = ({ post }) => {
                 </div>
               </>
             )}
-            <div className="sm:mr-5 flex flex-row items-center">
-              <JoinCommunityButton id={postInfo?.communityInfo?._id} />
-              {isAuthor && (
-                <OptionsWrapper
-                  OptionPopUpModal={() => (
-                    <MoreOptionsModal
-                      className="z-50"
-                      list={[
-                        {
-                          label: 'Delete Post',
-                          onClick: handleDeletePost,
-                          icon: () => (
-                            <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                          )
-                        }
-                      ]}
-                    />
-                  )}
-                  position="left"
-                  showOptionsModal={showOptionsModal}
-                  setShowOptionsModal={setShowOptionsModal}
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                >
-                  <Tooltip title="More" arrow>
-                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </div>
-                  </Tooltip>
-                </OptionsWrapper>
-              )}
-            </div>
+            <span onClick={(e) => e.stopPropagation()}>
+              <div className="sm:mr-5 flex flex-row items-center">
+                <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+                {isAuthor && (
+                  <OptionsWrapper
+                    OptionPopUpModal={() => (
+                      <MoreOptionsModal
+                        className="z-50"
+                        list={[
+                          {
+                            label: 'Delete Post',
+                            onClick: handleDeletePost,
+                            icon: () => (
+                              <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                            )
+                          }
+                        ]}
+                      />
+                    )}
+                    position="left"
+                    showOptionsModal={showOptionsModal}
+                    setShowOptionsModal={setShowOptionsModal}
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                  >
+                    <Tooltip title="More" arrow>
+                      <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                        <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </div>
+                    </Tooltip>
+                  </OptionsWrapper>
+                )}
+              </div>
+            </span>
           </div>
 
           <div className="flex flex-row w-full">
@@ -377,7 +378,7 @@ const LensPostCard = ({ post }) => {
                           ? '/UpvoteFilled.svg'
                           : '/Upvote.svg'
                       }
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                     />
                   </button>
                 </Tooltip>
@@ -496,70 +497,15 @@ const LensPostCard = ({ post }) => {
                   )}
                 </div>
                 {postInfo?.metadata?.media.length > 0 && (
-                  <>
-                    {postInfo?.metadata?.mainContentFocus ===
-                      PublicationMainFocus.Image &&
-                      (!router.pathname.startsWith('/p') ? (
-                        <span onClick={(e) => e.stopPropagation()}>
-                          <Link href={`/p/${postInfo?.id}`} passHref>
-                            {/* eslint-disable-next-line */}
-                            <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                              <ImageWithPulsingLoader
-                                src={`${LensInfuraEndpoint}${
-                                  postInfo?.metadata?.media[0]?.original.url.split(
-                                    '//'
-                                  )[1]
-                                }`}
-                                className={`image-unselectable object-contain sm:rounded-lg w-full ${
-                                  router.pathname.startsWith('/p')
-                                    ? ''
-                                    : 'max-h-[450px]'
-                                }`}
-                              />
-                            </div>
-                          </Link>
-                        </span>
-                      ) : (
-                        <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                          <ImageWithFullScreenZoom
-                            src={`${LensInfuraEndpoint}${
-                              postInfo?.metadata?.media[0]?.original.url.split(
-                                '//'
-                              )[1]
-                            }`}
-                          />
-                        </div>
-                      ))}
-                  </>
-                )}
-                {postInfo?.metadata?.mainContentFocus ===
-                  PublicationMainFocus.Video && (
-                  <div className="sm:pl-5 sm:pr-6 sm:pb-1">
-                    <VideoWithAutoPause
-                      src={`${LensInfuraEndpoint}${
-                        postInfo?.metadata?.media[0]?.original.url.split(
-                          '//'
-                        )[1]
-                      }`}
-                      className={`image-unselectable object-contain sm:rounded-lg w-full ${
+                  <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                    <Attachment
+                      publication={postInfo}
+                      className={`${
                         router.pathname.startsWith('/p') ? '' : 'max-h-[450px]'
                       }`}
-                      loop
-                      controls
-                      muted
                     />
                   </div>
                 )}
-                {postInfo?.metadata?.mainContentFocus !==
-                  PublicationMainFocus.Image &&
-                  postInfo?.metadata?.mainContentFocus !==
-                    PublicationMainFocus.Video &&
-                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
-                    <ReactEmbedo
-                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[450px] sm:pl-5 sm:pr-6 sm:pb-1"
-                    />
-                  )}
               </div>
 
               {/* bottom row */}

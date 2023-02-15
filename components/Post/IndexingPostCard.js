@@ -3,8 +3,6 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import useDevice from '../Common/useDevice'
 
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
 
 import { PublicationMainFocus, ReactionTypes } from '../../graphql/generated'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
@@ -20,7 +18,7 @@ import { FaRegComment } from 'react-icons/fa'
 import { BsCollection } from 'react-icons/bs'
 import { IoIosShareAlt } from 'react-icons/io'
 import Link from 'next/link'
-TimeAgo.addDefaultLocale(en)
+import Attachment from './Attachment'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
@@ -39,11 +37,7 @@ const IndexingPostCard = ({ postInfo }) => {
                 <div className="flex flex-row w-full items-center">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
-                      src={
-                        postInfo?.communityInfo?.image
-                          ? postInfo?.communityInfo?.image
-                          : '/gradient.jpg'
-                      }
+                      src={postInfo?.communityInfo?.image}
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>
@@ -81,11 +75,7 @@ const IndexingPostCard = ({ postInfo }) => {
                 <div className="flex flex-row w-full items-center justify-between">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
-                      src={
-                        postInfo?.communityInfo?.image
-                          ? postInfo?.communityInfo?.image
-                          : '/gradient.jpg'
-                      }
+                      src={postInfo?.communityInfo?.image}
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
                   </Link>
@@ -183,37 +173,8 @@ const IndexingPostCard = ({ postInfo }) => {
                   )}
                 </div>
                 {postInfo?.metadata?.media?.length > 0 && (
-                  <>
-                    {postInfo?.metadata?.mainContentFocus ===
-                      PublicationMainFocus.Image && (
-                      <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                        <ImageWithFullScreenZoom
-                          src={`${LensInfuraEndpoint}${
-                            postInfo?.metadata?.media[0]?.original.url.split(
-                              '//'
-                            )[1]
-                          }`}
-                        />
-                      </div>
-                    )}
-                  </>
-                )}
-                {postInfo?.metadata?.mainContentFocus ===
-                  PublicationMainFocus.Video && (
-                  <div className="sm:pl-5 sm:pr-6 sm:pb-1">
-                    <VideoWithAutoPause
-                      src={`${LensInfuraEndpoint}${
-                        postInfo?.metadata?.media[0]?.original.url.split(
-                          '//'
-                        )[1]
-                      }`}
-                      className={`image-unselectable object-contain sm:rounded-xl w-full
-                        max-h-[500px]
-                      `}
-                      loop
-                      controls
-                      muted
-                    />
+                  <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                    <Attachment publication={postInfo} />
                   </div>
                 )}
                 {postInfo?.metadata?.mainContentFocus !==

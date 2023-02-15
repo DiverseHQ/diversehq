@@ -9,27 +9,34 @@ import { useRouter } from 'next/router'
 // import Loader from '../components/Loader'
 import { useRef } from 'react'
 // import { useRouter } from 'next/router'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en.json'
+import { sortTypes } from '../utils/config'
+TimeAgo.addDefaultLocale(en)
 
 const ROUTES_TO_RETAIN = [
   '/',
+  `/?sort=${sortTypes.LATEST}`,
+  `/?sort=${sortTypes.TOP_TODAY}`,
+  `/?sort=${sortTypes.TOP_WEEK}`,
+  `/?sort=${sortTypes.TOP_MONTH}`,
   '/feed/all',
-  '/feed/all?sort=Latest',
-  '/feed/all?sort=Today',
-  '/feed/all?sort=Week',
-  '/feed/all?sort=Month',
-  '/feed/foryou',
-  '/feed/foryou?sort=Latest',
-  '/feed/foryou?sort=Today',
-  '/feed/foryou?sort=Week',
-  '/feed/foryou?sort=Month',
-  '/feed/offchain'
+  `/feed/all?sort=${sortTypes.LATEST}`,
+  `/feed/all?sort=${sortTypes.TOP_TODAY}`,
+  `/feed/all?sort=${sortTypes.TOP_WEEK}`,
+  `/feed/all?sort=${sortTypes.TOP_MONTH}`,
+  `/feed/foryou`,
+  `/feed/foryou?sort=${sortTypes.LATEST}`,
+  `/feed/foryou?sort=${sortTypes.TOP_TODAY}`,
+  `/feed/foryou?sort=${sortTypes.TOP_WEEK}`,
+  `/feed/foryou?sort=${sortTypes.TOP_MONTH}`,
+  `/feed/offchain`
 ]
 
 function MyApp({ Component, pageProps, isMobileView }) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const retainedComponents = useRef({})
-  console.log('router.asPath', router.asPath)
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
 
   // Add Component to retainedComponents if we haven't got it already
@@ -119,7 +126,6 @@ function MyApp({ Component, pageProps, isMobileView }) {
           <>
             <div>
               {Object.entries(retainedComponents.current).map(([path, c]) => {
-                console.log('path', path)
                 return (
                   <div
                     key={path}

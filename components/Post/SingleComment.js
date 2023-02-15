@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
 import { AiOutlineCheck } from 'react-icons/ai'
 
 import {
@@ -10,10 +8,8 @@ import {
   putUpvoteComment,
   putDownvoteComment
 } from '../../api/comment'
-// import { getSinglePostInfo } from "../../api/post"
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-// import CommentDropdown from './CommentDropdown'
 import { ReactionTypes } from '../../graphql/generated'
 import Link from 'next/link'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
@@ -22,9 +18,8 @@ import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import getStampFyiURL from '../User/lib/getStampFyiURL'
 import { Tooltip } from '@mui/material'
-// import { usePopUpModal } from '../../components/Common/CustomPopUpProvider'
-TimeAgo.addDefaultLocale(en)
 
 const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
   const [comment, setComment] = useState(commentInfo)
@@ -166,7 +161,9 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             <div className="flex flex-row items-center">
               <ImageWithPulsingLoader
                 src={
-                  comment.authorAvatar ? comment.authorAvatar : '/gradient.jpg'
+                  comment.authorAvatar
+                    ? comment.authorAvatar
+                    : getStampFyiURL(comment?.author)
                 }
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
               />

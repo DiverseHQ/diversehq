@@ -63,7 +63,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   const [price, setPrice] = useState(
     collectSettings?.feeCollectModule?.amount?.value
       ? Number(collectSettings?.feeCollectModule?.amount?.value)
-      : 0
+      : 0.01
   )
   const [currency, setCurrency] = useState<string>(
     collectSettings?.feeCollectModule?.amount?.currency ||
@@ -141,10 +141,11 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               </select>
             </div>
             <div className="flex flex-row items-center">
-              <div>Price</div>
+              <div>Price (min 0.01)</div>
               <input
                 type="number"
                 value={price}
+                min={0.01}
                 onChange={(e) => setPrice(Number(e.target.value))}
                 className="bg-s-bg outline-none ml-2 px-2 py-1 rounded-md"
               />

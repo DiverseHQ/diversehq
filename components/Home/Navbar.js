@@ -15,6 +15,7 @@ import { useNotify } from '../Common/NotifyContext'
 import { getJoinedCommunitiesApi } from '../../api/community'
 import { RiArrowDropDownLine } from 'react-icons/ri'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
+import getStampFyiURL from '../User/lib/getStampFyiURL'
 
 const Navbar = () => {
   const router = useRouter()
@@ -227,7 +228,7 @@ const Navbar = () => {
             )}
             {user && !user.profileImageUrl && (
               <Image
-                src="/gradient.jpg"
+                src={getStampFyiURL(user?.walletAddress)}
                 width="40"
                 height="40"
                 className="rounded-full"

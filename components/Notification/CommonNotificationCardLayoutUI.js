@@ -3,9 +3,6 @@ import React from 'react'
 //ReactimeAgo
 
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
-TimeAgo.addDefaultLocale(en)
 
 const CommonNotificationCardLayoutUI = ({
   MainRow,
