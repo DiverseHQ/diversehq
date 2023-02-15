@@ -200,7 +200,7 @@ const LensPostCard = ({ post }) => {
     <>
       {postInfo && (
         <div
-          className={`sm:px-5 flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
+          className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
             isMobile
               ? `border-b-[1px] border-[#eee] dark:border-p-border ${
                   router.pathname.startsWith('/p') ? 'mb-2' : ''
@@ -375,8 +375,8 @@ const LensPostCard = ({ post }) => {
                       //  onClick={liked ? handleUnLike : handleLike}
                       src={
                         reaction === ReactionTypes.Upvote
-                          ? '/UpvoteFilled.svg'
-                          : '/Upvote.svg'
+                          ? '/upvoteFilled.svg'
+                          : '/upvoteGray.svg'
                       }
                       className="w-6 h-6"
                     />
@@ -394,8 +394,8 @@ const LensPostCard = ({ post }) => {
                     <img
                       src={
                         reaction === ReactionTypes.Downvote
-                          ? '/DownvoteFilled.svg'
-                          : '/Downvote.svg'
+                          ? '/downvoteFilled.svg'
+                          : '/downvoteGray.svg'
                       }
                       className="w-5 h-5"
                     />
@@ -547,7 +547,7 @@ const LensPostCard = ({ post }) => {
                         <img
                           src={
                             reaction === ReactionTypes.Upvote
-                              ? '/UpvoteFilled.svg'
+                              ? '/upvoteFilled.svg'
                               : '/upvoteGray.svg'
                           }
                           className="w-4 h-4"
@@ -568,7 +568,7 @@ const LensPostCard = ({ post }) => {
                         <img
                           src={
                             reaction === ReactionTypes.Downvote
-                              ? '/DownvoteFilled.svg'
+                              ? '/downvoteFilled.svg'
                               : '/downvoteGray.svg'
                           }
                           className="w-4 h-4"
