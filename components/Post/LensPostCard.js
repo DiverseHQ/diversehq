@@ -200,7 +200,7 @@ const LensPostCard = ({ post }) => {
     <>
       {postInfo && (
         <div
-          className={`sm:px-5 flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
+          className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
             isMobile
               ? `border-b-[1px] border-[#eee] dark:border-p-border ${
                   router.pathname.startsWith('/p') ? 'mb-2' : ''
