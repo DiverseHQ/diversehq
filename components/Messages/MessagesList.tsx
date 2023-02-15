@@ -28,15 +28,15 @@ const MessageTile: FC<MessageTileProps> = ({
   return (
     <div
       className={`flex flex-row w-full px-2 py-1 ${
-        isSender ? ' justify-end ' : ' justify-start'
+        isSender
+          ? ' justify-end text-[#eeeeee]'
+          : 'text-[#000000] justify-start'
       } `}
     >
       <div className="flex flex-col space-y-0.5">
         <div
           className={`px-4 py-2 max-w-[370px] rounded-2xl ${
-            isSender
-              ? 'text-p-btn-text bg-p-btn rounded-br-sm'
-              : 'bg-p-hover rounded-bl-sm'
+            isSender ? ' bg-p-btn rounded-br-sm' : 'bg-p-hover rounded-bl-sm'
           }`}
         >
           <span>

@@ -5,6 +5,7 @@ import ReactTimeAgo from 'react-time-ago'
 import { Profile } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useMessageStore } from '../../store/message'
+import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import getAvatar from '../User/lib/getAvatar'
 
@@ -53,7 +54,8 @@ const Preview: FC<Props> = ({
             </span>
           </div>
           <div className="text-s-text">
-            {address === message.senderAddress && 'You: '} {message.content}
+            {address === message.senderAddress && 'You: '}{' '}
+            {stringToLength(message.content, 30)}
           </div>
         </div>
       </div>
