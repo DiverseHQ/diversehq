@@ -27,15 +27,8 @@ import {
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import {
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Switch
-} from '@mui/material'
-import { supportedMimeTypes } from '../../lib/interfaces/publication'
+import { Switch } from '@mui/material'
+
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import {
@@ -55,6 +48,9 @@ import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
 import useDevice from '../Common/useDevice'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { supportedMimeTypes } from '../../utils/config'
+// import { useTheme } from '../Common/ThemeProvider'
+
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 
 const CreatePostPopup = () => {
@@ -163,19 +159,29 @@ const CreatePostPopup = () => {
       }
 
       if (isLensPost) {
-        // file should be less than 2mb
-        if (!IPFSHash) {
-          await upLoadFile()
-        }
-        const ipfsPath = `ipfs://${IPFSHash}`
-        handleCreateLensPost(title, communityId, file.type, ipfsPath)
+        const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
+        // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+        // const ipfsPath = `ipfs://${ipfsHash}`
+        console.log('uploadedFile', uploadedFile)
+        handleCreateLensPost(
+          title,
+          communityId,
+          file.type,
+          uploadedFile.uploadedToUrl
+        )
         return
       }
 
-      const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
-      handleCreatePost(title, file.type, postUrl.uploadedToUrl, postUrl.path)
+      const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
+      handleCreatePost(
+        title,
+        file.type,
+        uploadedFile.uploadedToUrl,
+        uploadedFile.path
+      )
     } else {
       if (isLensPost) {
+        console.log('lenspost with media')
         handleCreateLensPost(title, communityId, 'text', null)
         return
       }
@@ -257,7 +263,10 @@ const CreatePostPopup = () => {
       hasCollectedByMe: false,
       hidden: false,
       isGated: false,
-      metadata: { ...metadata, media: [{ original: { url: url } }] },
+      metadata: {
+        ...metadata,
+        media: [{ original: { url: url, mimeType: mimeType } }]
+      },
       profile: {
         _id: lensProfile?.defaultProfile?.id,
         handle: lensProfile?.defaultProfile?.handle,
@@ -369,8 +378,10 @@ const CreatePostPopup = () => {
     }
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
+    // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
     setJoinedCommunities([
       ...recentCommunities,
+      // removing the communities in the recentCommunities from the joinedCommunities using communityId
       ...response.filter(
         (community) => !recentCommunities.some((c) => c?._id === community?._id)
       )

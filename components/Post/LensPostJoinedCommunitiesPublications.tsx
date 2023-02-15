@@ -11,6 +11,8 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT, sortTypes } from '../../utils/config'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import LensPostCard from '../Post/LensPostCard'
+import useDevice from '../Common/useDevice'
+import MobileLoader from '../Common/UI/MobileLoader'
 
 const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   const router = useRouter()
@@ -19,12 +21,14 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
     communityIds: null,
     cursor: null,
     sortCriteria: PublicationSortCriteria.Latest,
+    sortType: sortTypes.LATEST,
     timestamp: null,
     hasMore: true,
     nextCursor: null,
     posts: []
   })
   const { loading: routeLoading } = useRouterLoading()
+  const { isMobile } = useDevice()
 
   const { data } = useExplorePublicationsQuery(
     {
@@ -56,6 +60,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
 
   useEffect(() => {
     if (!router.query.sort) return
+    if (exploreQueryRequestParams.sortType === router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria
     let timestamp = null
     let sortCriteria = PublicationSortCriteria.Latest
@@ -79,10 +84,11 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
 
       // timestamp is required for top collected sort criteria
     }
-    if (exploreQueryRequestParams.sortCriteria === sortCriteria) return
+
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: null,
+      sortType: String(router.query.sort),
       sortCriteria,
       timestamp,
       hasMore: true,
@@ -142,19 +148,23 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
           router.pathname === '/feed/foryou'
         }
         loader={
-          <>
-            <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
-              <div className="w-full flex flex-row items-center space-x-4 p-4">
-                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full animate-pulse" />
-                <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+          isMobile ? (
+            <MobileLoader />
+          ) : (
+            <>
+              <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
+                <div className="w-full flex flex-row items-center space-x-4 p-4">
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full animate-pulse" />
+                  <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                  <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                </div>
+                <div className="w-full flex flex-row items-center space-x-4 sm:p-4 pr-4">
+                  <div className="w-6 sm:w-[50px] h-4 " />
+                  <div className="w-full mr-4 rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
+                </div>
               </div>
-              <div className="w-full flex flex-row items-center space-x-4 sm:p-4 pr-4">
-                <div className="w-6 sm:w-[50px] h-4 " />
-                <div className="w-full mr-4 rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
-              </div>
-            </div>
-          </>
+            </>
+          )
         }
         endMessage={<></>}
       >

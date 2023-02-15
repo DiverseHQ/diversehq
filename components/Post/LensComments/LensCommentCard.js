@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
 import Link from 'next/link'
 import {
   ReactionTypes,
@@ -24,7 +22,8 @@ import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-inde
 import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
-TimeAgo.addDefaultLocale(en)
+import getStampFyiURL from '../../User/lib/getStampFyiURL'
+import { Tooltip } from '@mui/material'
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()
@@ -207,7 +206,7 @@ const LensCommentCard = ({ comment }) => {
                     ? `${LensInfuraEndpoint}${
                         comment?.profile?.picture?.original?.url.split('//')[1]
                       }`
-                    : '/gradient.jpg'
+                    : getStampFyiURL(comment?.profile?.ownedBy)
                 }
                 className="w-6 h-6 rounded-full mr-1"
               />
@@ -252,10 +251,11 @@ const LensCommentCard = ({ comment }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <RiMore2Fill
-                    className="hover:cursor-pointer w-4 h-4 sm:w-5 sm:h-5"
-                    title="More"
-                  />
+                  <Tooltip title="More" arrow>
+                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                  </Tooltip>
                 </OptionsWrapper>
               )}
             </div>
@@ -272,33 +272,47 @@ const LensCommentCard = ({ comment }) => {
               <div className="mt-1">{comment?.metadata?.content}</div>
 
               {/* last row */}
-              <div className="flex flex-row items-center space-x-10 pb-2 pt-1">
+              <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
                 {/* upvote and downvote */}
                 <div className="flex flex-row items-center gap-x-2">
-                  <img
-                    src={
-                      reaction === ReactionTypes.Upvote
-                        ? '/UpvoteFilled.svg'
-                        : '/Upvote.svg'
-                    }
-                    onClick={handleUpvote}
-                    className="w-6 h-6 cursor-pointer hover:bg-gray-100 px-1 rounded-md"
-                  />
-                  <div className="font-bold">{voteCount}</div>
-                  <img
-                    src={
-                      reaction === ReactionTypes.Downvote
-                        ? '/DownvoteFilled.svg'
-                        : '/Downvote.svg'
-                    }
-                    className="w-6 h-6 cursor-pointer hover:bg-gray-100 px-1 rounded-md"
-                    onClick={handleDownvote}
-                  />
+                  <Tooltip title="Upvote" arrow>
+                    <button
+                      onClick={handleUpvote}
+                      className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
+                    >
+                      <img
+                        src={
+                          reaction === ReactionTypes.Upvote
+                            ? '/UpvoteFilled.svg'
+                            : '/upvoteGray.svg'
+                        }
+                        className="w-4 h-4"
+                      />
+                    </button>
+                  </Tooltip>
+                  <div className="font-medium text-[#687684]">{voteCount}</div>
+                  <Tooltip title="Downvote" arrow>
+                    <button
+                      onClick={handleDownvote}
+                      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                    >
+                      <img
+                        src={
+                          reaction === ReactionTypes.Downvote
+                            ? '/DownvoteFilled.svg'
+                            : '/downvoteGray.svg'
+                        }
+                        className="w-4 h-4"
+                      />
+                    </button>
+                  </Tooltip>
                 </div>
                 <button
                   className={`${
-                    showCreateComment ? 'bg-gray-100' : ''
-                  } hover:bg-gray-100 px-1 rounded-md`}
+                    showCreateComment
+                      ? 'bg-p-btn-hover text-p-btn-hover-text'
+                      : ''
+                  } hover:bg-p-btn-hover px-2 py-0.5 rounded-md`}
                   onClick={() => {
                     if (!comment?.id) {
                       notifyInfo('not indexed yet, try again later')

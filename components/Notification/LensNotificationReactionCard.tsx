@@ -43,10 +43,11 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
             {notification?.reaction === 'DOWNVOTE' && ' downvoted your '}
           </span>
           <span className="hover:underline font-bold">
-            {notification.publication.__typename === 'Post' && (
+            {notification.notificationId.startsWith('reaction-post') && (
               <Link href={`/p/${notification?.publication?.id}`}>Post</Link>
             )}
-            {notification.publication.__typename === 'Comment' && (
+            {notification.notificationId.startsWith('reaction_comment') && (
+              /** @ts-ignore */
               <Link href={`/p/${notification?.publication?.mainPost?.id}`}>
                 Comment
               </Link>

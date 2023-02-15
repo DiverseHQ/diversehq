@@ -12,9 +12,7 @@ const RightSideCommunityComponent = ({ community }) => {
       passHref
     >
       <ImageWithPulsingLoader
-        src={
-          community?.logoImageUrl ? community?.logoImageUrl : '/gradient.jpg'
-        }
+        src={community?.logoImageUrl}
         className="w-[40px] h-[40px] object-cover rounded-full"
       />
       <span>{community?.name}</span>

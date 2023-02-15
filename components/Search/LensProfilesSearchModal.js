@@ -10,6 +10,7 @@ import {
 } from '../../utils/config'
 import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import getStampFyiURL from '../User/lib/getStampFyiURL'
 
 const LensProfilesSearchModal = ({
   searchTerm,
@@ -64,7 +65,7 @@ const LensProfilesSearchModal = ({
                           ''
                         )}`
                       : profile?.picture?.original?.url
-                    : '/gradient.jpg'
+                    : getStampFyiURL(profile?.ownedBy)
                 }
                 className="w-10 h-10 mr-5 rounded-full object-cover"
               />

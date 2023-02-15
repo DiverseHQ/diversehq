@@ -3,6 +3,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { getAllNotifications } from '../../api/user'
 import { NOTIFICATION_LIMIT } from '../../utils/config'
 import LensLoginButton from '../Common/LensLoginButton'
+import MobileLoader from '../Common/UI/MobileLoader'
+import useDevice from '../Common/useDevice'
 import { useProfile } from '../Common/WalletContext'
 import NotificationCard from './NotificationCard'
 import useNotificationCount from './useNotificationsCount'
@@ -11,6 +13,7 @@ const NotificationColumn = () => {
   const [hasMore, setHasMore] = useState(true)
   const { updateNotificationCount } = useNotificationCount()
   const { user } = useProfile()
+  const { isMobile } = useDevice()
 
   const getMoreNotifications = async () => {
     try {
@@ -44,78 +47,82 @@ const NotificationColumn = () => {
             next={getMoreNotifications}
             hasMore={hasMore}
             loader={
-              <>
-                <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+              isMobile ? (
+                <MobileLoader />
+              ) : (
+                <>
+                  <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                  <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
                   </div>
-                </div>
-                <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                  <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                  <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
                   </div>
-                </div>
-                <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                  <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                  <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
                   </div>
-                </div>
-                <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                  <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
+                    <div className="w-full flex flex-row items-center space-x-4 p-2">
+                      <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                      <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                  </div>
-                </div>
-                <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                  </div>
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                  </div>
-                </div>
-                <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                  </div>
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                  </div>
-                </div>
-                <div className="w-full sm:rounded-xl  bg-gray-100 dark:bg-s-bg animate-pulse my-4 px-3 py-2 sm:p-3 border-b sm:border-none shadow-sm">
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                  </div>
-                  <div className="w-full flex flex-row items-center space-x-4 p-2">
-                    <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                    <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                  </div>
-                </div>
-              </>
+                </>
+              )
             }
             endMessage={<></>}
           >

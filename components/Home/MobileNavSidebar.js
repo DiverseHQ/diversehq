@@ -41,7 +41,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
   const { theme, toggleTheme } = useTheme()
-  const { data: myLensProfile } = useLensUserContext()
+  const { data: myLensProfile, isSignedIn, hasProfile } = useLensUserContext()
 
   const fetchAndSetCreatedCommunities = async () => {
     try {
@@ -115,7 +115,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       {/* backdrop */}
       {isOpenSidebar && (
         <div
-          className="absolute bg-black/20 top-0 right-0 left-0 bottom-0 w-full"
+          className="absolute bg-black/60 top-0 right-0 left-0 bottom-0 w-full"
           onClick={() => {
             setIsOpenSidebar(false)
           }}

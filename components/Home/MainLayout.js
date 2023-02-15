@@ -6,13 +6,17 @@ import RightSidebar from './RightSidebar'
 import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
+import CreatePostButton from '../Common/UI/CreatePostButton'
 import useDevice from '../Common/useDevice'
 import MainMsgModal from '../Messages/MainMsgModal'
+import { useRouter } from 'next/router'
+// import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
   const [mobile, setMobile] = useState(isMobileView)
   // only show if mounted
   const { isMobile } = useDevice()
+  const router = useRouter()
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
   React.useEffect(() => {
@@ -38,10 +42,11 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
           </Box>
           {/* <MobileTopNav /> */}
           <div className={'pb-16'}>
-            <ScrollToTopButton />
+            <CreatePostButton />
             {children}
           </div>
-          <MobileBottomNav />
+          <MainMsgModal isMobile={true} />
+          {!router.pathname.startsWith('/p/') && <MobileBottomNav />}
         </div>
       )}
       {!mobile && (
@@ -62,7 +67,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
           <div className="flex flex-row">
             <NewLeftSidebar />
             <div className="relative flex-1 min-h-screen text-p-text">
-              <ScrollToTopButton />
+              {/* <ScrollToTopButton /> */}
               {children}
             </div>
             <RightSidebar />

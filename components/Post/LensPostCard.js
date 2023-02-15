@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
-TimeAgo.addDefaultLocale(en)
 import Link from 'next/link'
 import {
   PublicationMainFocus,
@@ -10,7 +7,7 @@ import {
   useAddReactionMutation,
   useHidePublicationMutation
 } from '../../graphql/generated'
-import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
+// import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
 import {
   LensInfuraEndpoint,
@@ -37,6 +34,8 @@ import PostShareButton from './PostShareButton'
 import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import { Tooltip } from '@mui/material'
+import Attachment from './Attachment'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -52,7 +51,6 @@ const LensPostCard = ({ post }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const [postInfo, setPostInfo] = useState(post)
-  const [viewAdultContent, setViewAdultContent] = useState(false)
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
@@ -198,10 +196,25 @@ const LensPostCard = ({ post }) => {
     }
   }
 
+  const isBlur =
+    !router.pathname.startsWith('/p') && postInfo?.metadata?.contentWarning
+
   return (
     <>
       {postInfo && (
-        <div className="sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 sm:my-3 sm:rounded-2xl shadow-sm">
+        <div
+          className={`sm:px-5 flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
+            isMobile
+              ? `border-b-[1px] border-[#eee] dark:border-p-border ${
+                  router.pathname.startsWith('/p') ? 'mb-2' : ''
+                }`
+              : 'pb-2'
+          } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
+          onClick={() => {
+            if (router.pathname.startsWith('/p')) return
+            router.push(`/p/${postInfo.id}`)
+          }}
+        >
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
@@ -210,36 +223,45 @@ const LensPostCard = ({ post }) => {
                   {loading ? (
                     <div className="animate-pulse rounded-full bg-p-bg lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
                   ) : (
-                    <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
-                      <ImageWithPulsingLoader
-                        src={
-                          postInfo?.communityInfo?.logoImageUrl
-                            ? postInfo?.communityInfo?.logoImageUrl
-                            : '/gradient.jpg'
-                        }
-                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
-                      />
-                    </Link>
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <Link
+                        href={`/c/${postInfo?.communityInfo?.name}`}
+                        passHref
+                      >
+                        <ImageWithPulsingLoader
+                          src={
+                            postInfo?.communityInfo?.logoImageUrl
+                              ? postInfo?.communityInfo?.logoImageUrl
+                              : '/gradient.jpg'
+                          }
+                          className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                        />
+                      </Link>
+                    </span>
                   )}
                   {loading ? (
                     <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
                   ) : (
-                    <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                      <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                        {postInfo?.communityInfo?.name}
-                      </div>
-                    </Link>
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                        <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
+                          {postInfo?.communityInfo?.name}
+                        </div>
+                      </Link>
+                    </span>
                   )}
 
-                  <Link
-                    href={`/u/${postInfo?.profile?.handle}`}
-                    className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                  >
-                    <p className="pl-1.5 font-normal"> posted by</p>
-                    <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                      u/{postInfo?.profile?.handle}
-                    </div>
-                  </Link>
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <Link
+                      href={`/u/${postInfo?.profile?.handle}`}
+                      className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                    >
+                      <p className="pl-1.5 font-normal"> posted by</p>
+                      <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                        u/{postInfo?.profile?.handle}
+                      </div>
+                    </Link>
+                  </span>
                   <div>
                     {postInfo?.createdAt && (
                       <div className="text-xs sm:text-sm text-s-text ml-2">
@@ -257,33 +279,39 @@ const LensPostCard = ({ post }) => {
             {isMobile && (
               <>
                 <div className="flex flex-row w-full items-center">
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
-                    <ImageWithPulsingLoader
-                      src={
-                        postInfo?.communityInfo?.logoImageUrl
-                          ? postInfo?.communityInfo?.logoImageUrl
-                          : '/gradient.jpg'
-                      }
-                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
-                    />
-                  </Link>
-                  <div className="flex flex-col justify-center items-start text-p-text">
-                    <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                      <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
-                        {postInfo?.communityInfo?.name}
-                      </div>
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
+                      <ImageWithPulsingLoader
+                        src={
+                          postInfo?.communityInfo?.logoImageUrl
+                            ? postInfo?.communityInfo?.logoImageUrl
+                            : '/gradient.jpg'
+                        }
+                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                      />
                     </Link>
-                    <div className="flex flex-row items-center justify-start">
-                      <Link
-                        href={`/u/${postInfo?.profile?.handle}`}
-                        className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                        passHref
-                      >
-                        <p className="pl-1.5 font-normal"> posted by</p>
-                        <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                          u/{postInfo?.profile?.handle}
+                  </span>
+                  <div className="flex flex-col justify-center items-start text-p-text">
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                        <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
+                          {postInfo?.communityInfo?.name}
                         </div>
                       </Link>
+                    </span>
+                    <div className="flex flex-row items-center justify-start">
+                      <span onClick={(e) => e.stopPropagation()}>
+                        <Link
+                          href={`/u/${postInfo?.profile?.handle}`}
+                          className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                          passHref
+                        >
+                          <p className="pl-1.5 font-normal"> posted by</p>
+                          <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                            u/{postInfo?.profile?.handle}
+                          </div>
+                        </Link>
+                      </span>
                       <div>
                         {postInfo?.createdAt && (
                           <div className="text-xs sm:text-sm text-s-text ml-2">
@@ -299,74 +327,83 @@ const LensPostCard = ({ post }) => {
                 </div>
               </>
             )}
-            <div className="sm:mr-5 flex flex-row items-center">
-              <JoinCommunityButton id={postInfo?.communityInfo?._id} />
-              {isAuthor && (
-                <OptionsWrapper
-                  OptionPopUpModal={() => (
-                    <MoreOptionsModal
-                      className="z-50"
-                      list={[
-                        {
-                          label: 'Delete Post',
-                          onClick: handleDeletePost,
-                          icon: () => (
-                            <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                          )
-                        }
-                      ]}
-                    />
-                  )}
-                  position="left"
-                  showOptionsModal={showOptionsModal}
-                  setShowOptionsModal={setShowOptionsModal}
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                >
-                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                    <RiMore2Fill
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                      title="More"
-                    />
-                  </div>
-                </OptionsWrapper>
-              )}
-            </div>
+            <span onClick={(e) => e.stopPropagation()}>
+              <div className="sm:mr-5 flex flex-row items-center">
+                <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+                {isAuthor && (
+                  <OptionsWrapper
+                    OptionPopUpModal={() => (
+                      <MoreOptionsModal
+                        className="z-50"
+                        list={[
+                          {
+                            label: 'Delete Post',
+                            onClick: handleDeletePost,
+                            icon: () => (
+                              <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                            )
+                          }
+                        ]}
+                      />
+                    )}
+                    position="left"
+                    showOptionsModal={showOptionsModal}
+                    setShowOptionsModal={setShowOptionsModal}
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                  >
+                    <Tooltip title="More" arrow>
+                      <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                        <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </div>
+                    </Tooltip>
+                  </OptionsWrapper>
+                )}
+              </div>
+            </span>
           </div>
 
           <div className="flex flex-row w-full">
             {!isMobile && (
               <div className="flex flex-col items-center ml-1.5 mt-1">
-                <button
-                  onClick={handleUpvote}
-                  className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-                  title="Upvote"
-                >
-                  <img
-                    //  onClick={liked ? handleUnLike : handleLike}
-                    src={
-                      reaction === ReactionTypes.Upvote
-                        ? '/UpvoteFilled.svg'
-                        : '/Upvote.svg'
-                    }
-                    className="w-6 h-6"
-                  />
-                </button>
+                <Tooltip title="Upvote" arrow placement="left">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleUpvote()
+                    }}
+                    className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                  >
+                    <img
+                      //  onClick={liked ? handleUnLike : handleLike}
+                      src={
+                        reaction === ReactionTypes.Upvote
+                          ? '/UpvoteFilled.svg'
+                          : '/Upvote.svg'
+                      }
+                      className="w-6 h-6"
+                    />
+                  </button>
+                </Tooltip>
                 <div className="font-bold leading-5">{voteCount}</div>
-                <button
-                  onClick={handleDownvote}
-                  className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-                  title="Downvote"
-                >
-                  <img
-                    src={
-                      reaction === ReactionTypes.Downvote
-                        ? '/DownvoteFilled.svg'
-                        : '/Downvote.svg'
-                    }
-                    className="w-5 h-5"
-                  />
-                </button>
+                <Tooltip title="Downvote" arrow placement="left">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDownvote()
+                    }}
+                    className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                  >
+                    <img
+                      src={
+                        reaction === ReactionTypes.Downvote
+                          ? '/DownvoteFilled.svg'
+                          : '/Downvote.svg'
+                      }
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </Tooltip>
               </div>
             )}
 
@@ -395,7 +432,7 @@ const LensPostCard = ({ post }) => {
                                   'SENSITIVE'
                                 ? 'border-yellow-500 text-yellow-500'
                                 : 'border-blue-500 text-blue-500'
-                            } rounded-full px-2 py-0.5  text-xs sm:text-sm`}
+                            } rounded-full px-2 py-0.5 h-fit text-xs`}
                           >
                             {postInfo?.metadata?.contentWarning}
                           </div>
@@ -453,7 +490,7 @@ const LensPostCard = ({ post }) => {
                                   'SENSITIVE'
                                 ? 'border-yellow-500 text-yellow-500'
                                 : 'border-blue-500 text-blue-500'
-                            } rounded-full px-2 py-0.5  text-xs sm:text-sm`}
+                            } rounded-full px-2 py-0.5 h-fit text-xs `}
                           >
                             {postInfo?.metadata?.contentWarning}
                           </div>
@@ -482,211 +519,163 @@ const LensPostCard = ({ post }) => {
                         </div>
                       )}
                       {showMore && (
-                        <Link
-                          href={`/p/${postInfo?.id}`}
-                          className="text-blue-400 text-sm sm:text-base"
-                        >
-                          Show more
-                        </Link>
+                        <span onClick={(e) => e.stopPropagation()}>
+                          <Link
+                            href={`/p/${postInfo?.id}`}
+                            className="text-blue-400 text-sm sm:text-base"
+                          >
+                            Show more
+                          </Link>
+                        </span>
                       )}
                     </>
                   )}
                 </div>
                 {postInfo?.metadata?.media.length > 0 && (
-                  <>
-                    {postInfo?.metadata?.mainContentFocus ===
-                      PublicationMainFocus.Image &&
-                      (!router.pathname.startsWith('/p') ? (
-                        <Link href={`/p/${postInfo?.id}`} passHref>
-                          {/* eslint-disable-next-line */}
-                          <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                            <ImageWithPulsingLoader
-                              src={`${LensInfuraEndpoint}${
-                                postInfo?.metadata?.media[0]?.original.url.split(
-                                  '//'
-                                )[1]
-                              }`}
-                              className={`image-unselectable object-contain sm:rounded-lg w-full ${
-                                postInfo?.metadata?.contentWarning !== null &&
-                                'blur-2xl'
-                              } ${
-                                router.pathname.startsWith('/p')
-                                  ? ''
-                                  : 'max-h-[450px]'
-                              } `}
-                            />
-                          </div>
-                        </Link>
-                      ) : (
-                        <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                          <ImageWithFullScreenZoom
-                            src={`${LensInfuraEndpoint}${
-                              postInfo?.metadata?.media[0]?.original.url.split(
-                                '//'
-                              )[1]
-                            }`}
-                            className={`${
-                              postInfo?.metadata?.contentWarning !== null &&
-                              !viewAdultContent &&
-                              'blur-2xl'
-                            }`}
-                            viewAdultContent={viewAdultContent}
-                          />
-                          <div
-                            className={` ${
-                              !viewAdultContent
-                                ? 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col space-y-2'
-                                : 'hidden'
-                            } `}
-                          >
-                            <p className="text-p-text text-lg w-full">
-                              The following video has sensitive content and may
-                              inappropriate or offensive to some audiences.
-                              Viewer discretion is advised.
-                            </p>
-                            <button
-                              className="bg-p-btn text-p-btn-text px-2 sm:px-4 py-1.5 sm:py-2 rounded-md text-sm sm:text-base font-bold "
-                              onClick={() => setViewAdultContent(true)}
-                            >
-                              I understand and wish to continue
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                  </>
-                )}
-                {postInfo?.metadata?.mainContentFocus ===
-                  PublicationMainFocus.Video && (
-                  <div className="sm:pl-5 sm:pr-6 sm:pb-1">
-                    <VideoWithAutoPause
-                      src={`${LensInfuraEndpoint}${
-                        postInfo?.metadata?.media[0]?.original.url.split(
-                          '//'
-                        )[1]
-                      }`}
-                      className={`image-unselectable object-contain sm:rounded-lg w-full ${
+                  <div
+                    className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                      isBlur ? 'blur-xl' : ''
+                    }`}
+                  >
+                    <Attachment
+                      publication={postInfo}
+                      className={`${
                         router.pathname.startsWith('/p') ? '' : 'max-h-[450px]'
-                      } `}
-                      loop
-                      controls
-                      muted
-                      contentWarning={postInfo?.metadata?.contentWarning}
-                      viewAdultContent={viewAdultContent}
+                      }`}
                     />
-                    <div
-                      className={` ${
-                        !viewAdultContent &&
-                        postInfo?.metadata?.contentWarning !== null &&
-                        router.pathname.startsWith('/p')
-                          ? 'absolute z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[300px] flex flex-col justify-center space-y-2'
-                          : 'hidden'
-                      } `}
-                    >
-                      <p className="text-p-text text-lg w-full">
-                        The following video has sensitive content and may
-                        inappropriate or offensive to some audiences. Viewer
-                        discretion is advised.
-                      </p>
-                      <button
-                        className="bg-p-btn text-p-btn-text px-2 sm:px-4 py-1.5 sm:py-2 rounded-md text-sm sm:text-base font-bold "
-                        onClick={() => setViewAdultContent(true)}
-                      >
-                        I understand and wish to continue
-                      </button>
-                    </div>
                   </div>
                 )}
-                {postInfo?.metadata?.mainContentFocus !==
-                  PublicationMainFocus.Image &&
-                  postInfo?.metadata?.mainContentFocus !==
-                    PublicationMainFocus.Video &&
-                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
-                    <ReactEmbedo
-                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[450px] sm:pl-5 sm:pr-6 sm:pb-1"
-                    />
-                  )}
               </div>
 
               {/* bottom row */}
+              {isMobile && router.pathname.startsWith('/p') && (
+                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
+                  <div className="flex flex-row gap-1 text-[#687684]">
+                    <span className="font-medium">{voteCount}</span>
+                    <span>upvotes</span>
+                  </div>
+                  <div className="flex flex-row gap-1 text-[#687684]">
+                    <span className="font-medium">
+                      {postInfo?.stats?.totalAmountOfComments}
+                    </span>
+                    <span>comments</span>
+                  </div>
+                  <div className="flex flex-row gap-1 text-[#687684]">
+                    <span className="font-medium">
+                      {postInfo?.stats?.totalAmountOfCollects}
+                    </span>
+                    <span>collects</span>
+                  </div>
+                </div>
+              )}
               <div
-                className={`text-p-text flex flex-row items-center px-3 sm:px-4.5 py-1 justify-between sm:justify-start sm:space-x-28 ${
-                  isMobile
-                    ? 'border-b-[1px] border-[#eee] dark:border-p-border pb-1'
-                    : ''
+                className={`text-p-text flex flex-row items-center px-3 sm:px-4.5 py-1 justify-between sm:justify-start sm:space-x-28  ${
+                  isMobile ? 'pb-1' : ''
                 }`}
               >
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-1">
-                    <button
-                      onClick={handleUpvote}
-                      className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
-                    >
-                      <img
-                        src={
-                          reaction === ReactionTypes.Upvote
-                            ? '/UpvoteFilled.svg'
-                            : '/Upvote.svg'
-                        }
-                        className="w-5 h-5"
-                      />
-                    </button>
-                    <div className="font-bold">{voteCount}</div>
-                    <button
-                      onClick={handleDownvote}
-                      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
-                    >
-                      <img
-                        src={
-                          reaction === ReactionTypes.Downvote
-                            ? '/DownvoteFilled.svg'
-                            : '/Downvote.svg'
-                        }
-                        className="w-5 h-5"
-                      />
-                    </button>
+                    <Tooltip title="Upvote" arrow>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleUpvote()
+                        }}
+                        className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
+                      >
+                        <img
+                          src={
+                            reaction === ReactionTypes.Upvote
+                              ? '/UpvoteFilled.svg'
+                              : '/upvoteGray.svg'
+                          }
+                          className="w-4 h-4"
+                        />
+                      </button>
+                    </Tooltip>
+                    <div className="font-medium text-[#687684]">
+                      {voteCount}
+                    </div>
+                    <Tooltip title="Downvote" arrow>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDownvote()
+                        }}
+                        className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                      >
+                        <img
+                          src={
+                            reaction === ReactionTypes.Downvote
+                              ? '/DownvoteFilled.svg'
+                              : '/downvoteGray.svg'
+                          }
+                          className="w-4 h-4"
+                        />
+                      </button>
+                    </Tooltip>
                   </div>
                 )}
                 {!router.pathname.startsWith('/p') ? (
-                  <Link
-                    href={`/p/${postInfo.id}`}
-                    className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1"
-                    passHref
-                    title="Comment"
-                  >
-                    {postInfo?.stats?.totalAmountOfComments === 0 && (
+                  <Tooltip title="Comment" arrow>
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <Link
+                        href={`/p/${postInfo.id}`}
+                        className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-medium"
+                        passHref
+                      >
+                        {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                    )}
-                    {postInfo?.stats?.totalAmountOfComments}
-                  </Link>
+                    )} */}
+                        <img
+                          src="/comment.svg"
+                          alt="Comment"
+                          className="w-4 h-4 mr-2"
+                        />
+                        <span className="text-[#687684]">
+                          {postInfo?.stats?.totalAmountOfComments}
+                        </span>
+                      </Link>
+                    </span>
+                  </Tooltip>
                 ) : (
-                  <div
-                    title="Comment"
-                    className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1"
-                  >
-                    {postInfo?.stats?.totalAmountOfComments === 0 && (
+                  <Tooltip title="Comment" arrow>
+                    <div className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1 font-medium">
+                      {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                    )}
-                    {postInfo?.stats?.totalAmountOfComments}
-                  </div>
+                    )} */}
+                      <img
+                        src="/comment.svg"
+                        alt="Comment"
+                        className="w-4 h-4 mr-2"
+                      />
+                      <span className="text-[#687684]">
+                        {postInfo?.stats?.totalAmountOfComments}
+                      </span>
+                    </div>
+                  </Tooltip>
                 )}
-                <LensCollectButton
-                  publication={post}
-                  totalCollects={postInfo?.stats?.totalAmountOfCollects}
-                  hasCollectedByMe={postInfo?.hasCollectedByMe}
-                  author={postInfo?.profile}
-                  collectModule={postInfo?.collectModule}
-                />
-                <PostShareButton
-                  url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
-                  text={postInfo?.metadata?.name}
-                />
+                <span onClick={(e) => e.stopPropagation()}>
+                  <LensCollectButton
+                    publication={post}
+                    totalCollects={postInfo?.stats?.totalAmountOfCollects}
+                    hasCollectedByMe={postInfo?.hasCollectedByMe}
+                    author={postInfo?.profile}
+                    collectModule={postInfo?.collectModule}
+                  />
+                </span>
+                <span onClick={(e) => e.stopPropagation()}>
+                  <PostShareButton
+                    url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
+                    text={postInfo?.metadata?.name}
+                  />
+                </span>
               </div>
             </div>
           </div>

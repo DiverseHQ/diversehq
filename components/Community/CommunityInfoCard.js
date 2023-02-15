@@ -16,7 +16,7 @@ import EditCommunity from './EditCommunity'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
-import { BiChevronDown } from 'react-icons/bi'
+import { BiChevronDown, BiEdit } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { BsCollection } from 'react-icons/bs'
 import { RiMore2Fill } from 'react-icons/ri'
@@ -25,6 +25,9 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
+import { Tooltip } from '@mui/material'
+import { RWebShare } from 'react-web-share'
+import { GiExitDoor } from 'react-icons/gi'
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()
@@ -41,6 +44,7 @@ const CommunityInfoCard = ({ _community }) => {
   const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isExploreDrawerOpen, setIsExploreDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   const [numberOfPosts, setNumberOfPosts] = useState(0)
@@ -260,7 +264,7 @@ const CommunityInfoCard = ({ _community }) => {
                 </div>
               )}
             </div>
-            <div className="flex justify-end gap-1 sm:gap-2 pt-2">
+            <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2">
               {isCreator && (
                 <button
                   className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
@@ -269,34 +273,87 @@ const CommunityInfoCard = ({ _community }) => {
                   Edit
                 </button>
               )}
-              <button
-                className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
-                onClick={isJoined ? leaveCommunity : joinCommunity}
-              >
-                {isJoined ? 'Leave' : 'Join'}
-              </button>
+              {isJoined ? (
+                <button
+                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-s-bg text-p-btn border-[1px] border-p-btn cursor-auto`}
+                >
+                  Joined
+                </button>
+              ) : (
+                <button
+                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-p-btn text-p-btn-text`}
+                  onClick={joinCommunity}
+                >
+                  Join
+                </button>
+              )}
               <OptionsWrapper
                 OptionPopUpModal={() => (
                   <MoreOptionsModal
                     className="z-50"
-                    list={[
-                      {
-                        label: 'Share',
-                        onClick: shareCommunity,
-                        icon: () => <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                      }
-                    ]}
+                    list={
+                      isJoined
+                        ? isCreator
+                          ? [
+                              {
+                                label: 'Edit',
+                                onClick: editCommunity,
+                                icon: <BiEdit className="mr-1.5 w-6 h-6" />
+                              },
+                              {
+                                label: 'Leave',
+                                onClick: leaveCommunity,
+                                icon: () => (
+                                  <GiExitDoor className="mr-1.5 w-6 h-6" />
+                                )
+                              },
+                              {
+                                label: 'Share',
+                                onClick: shareCommunity,
+                                icon: () => (
+                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                )
+                              }
+                            ]
+                          : [
+                              {
+                                label: 'Leave',
+                                onClick: leaveCommunity,
+                                icon: () => (
+                                  <GiExitDoor className="mr-1.5 w-6 h-6" />
+                                )
+                              },
+                              {
+                                label: 'Share',
+                                onClick: shareCommunity,
+                                icon: () => (
+                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                )
+                              }
+                            ]
+                        : [
+                            {
+                              label: 'Share',
+                              onClick: shareCommunity,
+                              icon: () => (
+                                <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                              )
+                            }
+                          ]
+                    }
                   />
                 )}
                 position="left"
                 showOptionsModal={showOptionsModal}
                 setShowOptionsModal={setShowOptionsModal}
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
+                isDrawerOpen={isExploreDrawerOpen}
+                setIsDrawerOpen={setIsExploreDrawerOpen}
               >
-                <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" title="More" />
-                </div>
+                <Tooltip title="More" arrow>
+                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                    <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                </Tooltip>
               </OptionsWrapper>
             </div>
           </div>
@@ -412,12 +469,12 @@ const CommunityInfoCard = ({ _community }) => {
                 </h3>
                 <div className="flex flex-row gap-1 w-full">
                   <div className="flex flex-col w-full">
-                    <div className="relative bg-[#AA96E2] h-[35px] rounded-[10px] flex flex-row">
+                    <div className="relative bg-[#D7D7D7] h-[35px] rounded-[10px] flex flex-row">
                       <div className="flex z-10 self-center justify-self-center w-full justify-center text-white dark:text-p-text text-[14px]">
                         Level {currentLevel}
                       </div>
                       <div
-                        className="absolute h-full bg-[#6668FF] rounded-[10px] "
+                        className="absolute h-full bg-[#9378D8] rounded-[10px] "
                         style={{
                           width: `${calculateBarPercentage(
                             levelThreshold,
@@ -429,8 +486,12 @@ const CommunityInfoCard = ({ _community }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
-                  <AiOutlineFileAdd />
+                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                  <img
+                    src="/createdOnDate.svg"
+                    alt="created on date"
+                    className="w-5 h-5"
+                  />
                   <span>
                     Created{' '}
                     {new Date(community.createdAt)
@@ -440,9 +501,17 @@ const CommunityInfoCard = ({ _community }) => {
                       .join(' ')}
                   </span>
                 </div>
-                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
-                  <BsCollection />
+                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                  <BsCollection className='className="w-5 h-5"' />
                   <span>Matic transferred: 0</span>
+                </div>
+                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                  <img
+                    src="/createdByUser.svg"
+                    alt="created by user"
+                    className="w-5 h-5"
+                  />
+                  <span>Created by u/0</span>
                 </div>
               </div>
             </BottomDrawerWrapper>

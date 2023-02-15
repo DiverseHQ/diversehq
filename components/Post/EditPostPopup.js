@@ -7,7 +7,6 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import React, { useCallback, useEffect, useState } from 'react'
 import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
 import { putEditPost } from '../../api/post'
-import { supportedMimeTypes } from '../../lib/interfaces/publication'
 import { uploadFileToFirebaseAndGetUrl } from '../../utils/utils'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useNotify } from '../Common/NotifyContext'
@@ -23,6 +22,7 @@ import {
 } from '@lexical/markdown'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $getRoot } from 'lexical'
+import { supportedMimeTypes } from '../../utils/config'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
 

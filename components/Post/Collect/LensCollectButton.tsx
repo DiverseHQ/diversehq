@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import React, { memo } from 'react'
 import { useState } from 'react'
 import { AiFillGift, AiOutlineGift } from 'react-icons/ai'
@@ -14,6 +15,7 @@ import HoverModalWrapper from '../../Common/UI/HoverModalWrapper'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import VideoWithAutoPause from '../../Common/UI/VideoWithAutoPause'
 import useDevice from '../../Common/useDevice'
+import Attachment from '../Attachment'
 import ReactEmbedo from '../embed/ReactEmbedo'
 import FeeCollectPopUp from './FeeCollectPopUp'
 import FreeCollectPopUp from './FreeCollectPopUp'
@@ -57,48 +59,26 @@ const LensCollectButton = ({
                       {stringToLength(publication.metadata?.name, 20)}
                     </p>
                   </div>
-                  {publication?.metadata?.media.length > 0 && (
-                    <div className="w-full">
-                      {publication?.metadata?.mainContentFocus ===
-                        PublicationMainFocus.Image && (
-                        <ImageWithPulsingLoader
-                          src={`${LensInfuraEndpoint}${
-                            publication?.metadata?.media[0]?.original.url.split(
-                              '//'
-                            )[1]
-                          }`}
-                          className={`rounded-xl w-full mb-1 max-h-[250px]  object-cover`}
+                  <>
+                    {publication?.metadata?.media.length > 0 ? (
+                      <div className="w-full mb-1">
+                        <Attachment
+                          publication={publication}
+                          className="max-h-[250px]"
                         />
-                      )}
-                    </div>
-                  )}
-                  {publication?.metadata?.mainContentFocus ===
-                    PublicationMainFocus.Video && (
-                    <div className="w-full mb-1">
-                      <VideoWithAutoPause
-                        src={`${LensInfuraEndpoint}${
-                          publication?.metadata?.media[0]?.original.url.split(
-                            '//'
-                          )[1]
-                        }`}
-                        className={`image-unselectable object-cover rounded-xl w-full max-h-[250px] `}
-                        loop
-                        controls
-                        muted
-                      />
-                    </div>
-                  )}
-                  {publication?.metadata?.mainContentFocus !==
-                    PublicationMainFocus.Image &&
-                    publication?.metadata?.mainContentFocus !==
-                      PublicationMainFocus.Video &&
-                    getURLsFromText(publication?.metadata?.content).length >
-                      0 && (
-                      <ReactEmbedo
-                        url={getURLsFromText(publication?.metadata?.content)[0]}
-                        className={`w-full h-[250px] pb-1`}
-                      />
+                      </div>
+                    ) : (
+                      getURLsFromText(publication?.metadata?.content).length >
+                        0 && (
+                        <ReactEmbedo
+                          url={
+                            getURLsFromText(publication?.metadata?.content)[0]
+                          }
+                          className={`w-full h-[250px] pb-1`}
+                        />
+                      )
                     )}
+                  </>
                 </div>
               )}
               {collectModule?.__typename === 'FreeCollectModuleSettings' && (
@@ -129,27 +109,34 @@ const LensCollectButton = ({
           )
         }}
       >
-        <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center">
-          {collectModule.__typename === 'FreeCollectModuleSettings' && (
-            <>
-              {isCollected || hasCollectedByMe ? (
-                <BsCollectionFill className="w-5 h-5" />
-              ) : (
-                <BsCollection className="w-5 h-5" />
-              )}
-            </>
-          )}
-          {collectModule.__typename === 'FeeCollectModuleSettings' && (
-            <>
-              {isCollected || hasCollectedByMe ? (
-                <AiFillGift className="w-5 h-5" />
-              ) : (
-                <AiOutlineGift className="w-5 h-5" />
-              )}
-            </>
-          )}
-          <div className="ml-2">{collectCount}</div>
-        </div>
+        <Tooltip
+          title={isCollected || hasCollectedByMe ? 'Collected' : 'Collect'}
+          arrow
+        >
+          <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center">
+            {collectModule.__typename === 'FreeCollectModuleSettings' && (
+              <>
+                {isCollected || hasCollectedByMe ? (
+                  <BsCollectionFill className="w-4 h-4 text-[#687684]" />
+                ) : (
+                  <BsCollection className="w-4 h-4 text-[#687684]" />
+                )}
+              </>
+            )}
+            {collectModule.__typename === 'FeeCollectModuleSettings' && (
+              <>
+                {isCollected || hasCollectedByMe ? (
+                  <AiFillGift className="w-4 h-4 text-[#687684]" />
+                ) : (
+                  <AiOutlineGift className="w-4 h-4 text-[#687684]" />
+                )}
+              </>
+            )}
+            <div className="ml-2 font-medium text-[#687684]">
+              {collectCount}
+            </div>
+          </div>
+        </Tooltip>
       </HoverModalWrapper>
     </>
   )

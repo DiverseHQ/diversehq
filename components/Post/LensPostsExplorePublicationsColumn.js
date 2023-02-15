@@ -21,6 +21,8 @@ import { sortTypes } from '../../utils/config'
 import { memo } from 'react'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
+import useDevice from '../Common/useDevice'
+import MobileLoader from '../Common/UI/MobileLoader'
 const LensPostsExplorePublicationsColumn = () => {
   const router = useRouter()
   const { data: myLensProfile } = useLensUserContext()
@@ -29,11 +31,14 @@ const LensPostsExplorePublicationsColumn = () => {
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
     cursor: null,
     sortCriteria: PublicationSortCriteria.Latest,
+    sortType: sortTypes.LATEST,
     timestamp: null,
     hasMore: true,
     nextCursor: null,
     posts: []
   })
+
+  console.log('exploreQueryRequestParams', exploreQueryRequestParams)
   const { loading: routeLoading } = useRouterLoading()
   const { data } = useExplorePublicationsQuery(
     {
@@ -66,7 +71,13 @@ const LensPostsExplorePublicationsColumn = () => {
   )
 
   useEffect(() => {
+    console.log('router.query.sort', router.query.sort)
+    console.log(
+      'exploreQueryRequestParams.sortType',
+      exploreQueryRequestParams.sortType
+    )
     if (!router?.query?.sort) return
+    if (exploreQueryRequestParams.sortType === router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria
     let timestamp = null
     let sortCriteria = PublicationSortCriteria.Latest
@@ -89,11 +100,15 @@ const LensPostsExplorePublicationsColumn = () => {
       sortCriteria = PublicationSortCriteria.TopCollected
       // timestamp is required for top collected sort criteria
     }
-    if (exploreQueryRequestParams.sortCriteria === sortCriteria) return
+    console.log(
+      'exploreQueryRequestParms.posts',
+      exploreQueryRequestParams.posts
+    )
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: null,
-      sortCriteria,
+      sortCriteria: sortCriteria,
+      sortType: String(router.query.sort),
       timestamp,
       hasMore: true,
       nextCursor: null,
@@ -103,8 +118,6 @@ const LensPostsExplorePublicationsColumn = () => {
 
   const getMorePosts = async () => {
     if (exploreQueryRequestParams.posts.length === 5) return
-    console.log('get more posts')
-    console.log('cursor', exploreQueryRequestParams.nextCursor)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: exploreQueryRequestParams.nextCursor
@@ -161,6 +174,8 @@ const LensPostsExplorePublicationsColumn = () => {
     }
   }, [indexingPost])
 
+  const { isMobile } = useDevice()
+
   return (
     <div>
       <InfiniteScroll
@@ -173,22 +188,30 @@ const LensPostsExplorePublicationsColumn = () => {
           (router.pathname === '/' || router.pathname === '/feed/all')
         }
         loader={
-          <>
-            <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
-              <div className="w-full flex flex-row items-center space-x-4 p-4">
-                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full animate-pulse" />
-                <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+          isMobile ? (
+            <MobileLoader />
+          ) : (
+            <>
+              <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
+                <div className="w-full flex flex-row items-center space-x-4 p-4">
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full animate-pulse" />
+                  <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                  <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                </div>
+                <div className="w-full flex flex-row items-center space-x-4 sm:p-4 pr-4">
+                  <div className="w-6 sm:w-[50px] h-4" />
+                  <div className="w-full rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
+                </div>
               </div>
-              <div className="w-full flex flex-row items-center space-x-4 sm:p-4 pr-4">
-                <div className="w-6 sm:w-[50px] h-4" />
-                <div className="w-full rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
-              </div>
-            </div>
-          </>
+            </>
+          )
         }
         endMessage={<></>}
       >
+        {indexingPost &&
+          indexingPost.map((post, index) => {
+            return <IndexingPostCard key={index} postInfo={post} />
+          })}
         {(!communityIds ||
           (exploreQueryRequestParams.posts.length === 0 &&
             exploreQueryRequestParams.hasMore)) && (
@@ -204,23 +227,9 @@ const LensPostsExplorePublicationsColumn = () => {
                 <div className="w-full rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
               </div>
             </div>
-            <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
-              <div className="w-full flex flex-row items-center space-x-4 p-4">
-                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full animate-pulse" />
-                <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
-                <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
-              </div>
-              <div className="w-full flex flex-row items-center space-x-4 sm:p-4 pr-4">
-                <div className="w-6 sm:w-[50px] h-4 " />
-                <div className="w-full mr-4 rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
-              </div>
-            </div>
           </>
         )}
-        {indexingPost &&
-          indexingPost.map((post, index) => {
-            return <IndexingPostCard key={index} postInfo={post} />
-          })}
+
         {exploreQueryRequestParams.posts.map((post, index) => {
           return <LensPostCard key={index} post={post} />
         })}

@@ -39,21 +39,16 @@ const VideoWithAutoPause = ({ src, ...props }) => {
     }
   }, [])
   return (
-    <>
-      <video
-        src={
-          src.startsWith(LensInfuraEndpoint)
-            ? `${IMAGE_KIT_ENDPOINT}/${src}`
-            : src
-        }
-        ref={videoRef}
-        {...props}
-        className={`${
-          props.contentWarning !== null && !props.viewAdultContent && 'blur-2xl'
-        }`}
-        disabled={props.contentWarning !== null && !props.viewAdultContent}
-      />
-    </>
+    <video
+      // src={
+      //   src.startsWith(LensInfuraEndpoint)
+      //     ? `${IMAGE_KIT_ENDPOINT}/${src}`
+      //     : src
+      // }
+      src={src}
+      ref={videoRef}
+      {...props}
+    />
   )
 }
 
