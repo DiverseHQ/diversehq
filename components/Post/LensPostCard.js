@@ -378,7 +378,7 @@ const LensPostCard = ({ post }) => {
                           ? '/upvoteFilled.svg'
                           : '/upvoteGray.svg'
                       }
-                      className="w-6 h-6"
+                      className="w-5 h-5"
                     />
                   </button>
                 </Tooltip>
@@ -397,7 +397,7 @@ const LensPostCard = ({ post }) => {
                           ? '/downvoteFilled.svg'
                           : '/downvoteGray.svg'
                       }
-                      className="w-5 h-5"
+                      className="w-4 h-4"
                     />
                   </button>
                 </Tooltip>
