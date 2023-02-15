@@ -18,6 +18,7 @@ import { FaRegComment } from 'react-icons/fa'
 import { BsCollection } from 'react-icons/bs'
 import { IoIosShareAlt } from 'react-icons/io'
 import Link from 'next/link'
+import Attachment from './Attachment'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
@@ -172,43 +173,8 @@ const IndexingPostCard = ({ postInfo }) => {
                   )}
                 </div>
                 {postInfo?.metadata?.media?.length > 0 && (
-                  <>
-                    {postInfo?.metadata?.mainContentFocus ===
-                      PublicationMainFocus.Image && (
-                      <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                        <ImageWithFullScreenZoom
-                          src={
-                            postInfo?.metadata?.media[0]?.original.url.startsWith(
-                              'ipfs://'
-                            )
-                              ? `${LensInfuraEndpoint}${
-                                  postInfo?.metadata?.media[0]?.original.url.split(
-                                    '//'
-                                  )[1]
-                                }`
-                              : postInfo?.metadata?.media[0]?.original.url
-                          }
-                        />
-                      </div>
-                    )}
-                  </>
-                )}
-                {postInfo?.metadata?.mainContentFocus ===
-                  PublicationMainFocus.Video && (
-                  <div className="sm:pl-5 sm:pr-6 sm:pb-1">
-                    <VideoWithAutoPause
-                      src={`${LensInfuraEndpoint}${
-                        postInfo?.metadata?.media[0]?.original.url.split(
-                          '//'
-                        )[1]
-                      }`}
-                      className={`image-unselectable object-contain sm:rounded-xl w-full
-                        max-h-[500px]
-                      `}
-                      loop
-                      controls
-                      muted
-                    />
+                  <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                    <Attachment publication={postInfo} />
                   </div>
                 )}
                 {postInfo?.metadata?.mainContentFocus !==

@@ -146,17 +146,29 @@ const CreatePostPopup = () => {
       }
 
       if (isLensPost) {
-        const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
+        const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
         // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
         // const ipfsPath = `ipfs://${ipfsHash}`
-        handleCreateLensPost(title, communityId, file.type, postUrl)
+        console.log('uploadedFile', uploadedFile)
+        handleCreateLensPost(
+          title,
+          communityId,
+          file.type,
+          uploadedFile.uploadedToUrl
+        )
         return
       }
 
-      const postUrl = await uploadFileToFirebaseAndGetUrl(file, address)
-      handleCreatePost(title, file.type, postUrl.uploadedToUrl, postUrl.path)
+      const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
+      handleCreatePost(
+        title,
+        file.type,
+        uploadedFile.uploadedToUrl,
+        uploadedFile.path
+      )
     } else {
       if (isLensPost) {
+        console.log('lenspost with media')
         handleCreateLensPost(title, communityId, 'text', null)
         return
       }
@@ -225,7 +237,10 @@ const CreatePostPopup = () => {
       hasCollectedByMe: false,
       hidden: false,
       isGated: false,
-      metadata: { ...metadata, media: [{ original: { url: url } }] },
+      metadata: {
+        ...metadata,
+        media: [{ original: { url: url, mimeType: mimeType } }]
+      },
       profile: {
         _id: lensProfile?.defaultProfile?.id,
         handle: lensProfile?.defaultProfile?.handle,

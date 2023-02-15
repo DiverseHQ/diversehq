@@ -33,6 +33,7 @@ export const pollUntilIndexed = async (
         }
 
         if (response.metadataStatus.status === 'METADATA_VALIDATION_FAILED') {
+          console.log('response.metadataStatus', response.metadataStatus)
           throw new Error(response.metadataStatus.status)
         }
       } else {

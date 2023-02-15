@@ -324,38 +324,40 @@ const LensPostCard = ({ post }) => {
                 </div>
               </>
             )}
-            <div className="sm:mr-5 flex flex-row items-center">
-              <JoinCommunityButton id={postInfo?.communityInfo?._id} />
-              {isAuthor && (
-                <OptionsWrapper
-                  OptionPopUpModal={() => (
-                    <MoreOptionsModal
-                      className="z-50"
-                      list={[
-                        {
-                          label: 'Delete Post',
-                          onClick: handleDeletePost,
-                          icon: () => (
-                            <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                          )
-                        }
-                      ]}
-                    />
-                  )}
-                  position="left"
-                  showOptionsModal={showOptionsModal}
-                  setShowOptionsModal={setShowOptionsModal}
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                >
-                  <Tooltip title="More" arrow>
-                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </div>
-                  </Tooltip>
-                </OptionsWrapper>
-              )}
-            </div>
+            <span onClick={(e) => e.stopPropagation()}>
+              <div className="sm:mr-5 flex flex-row items-center">
+                <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+                {isAuthor && (
+                  <OptionsWrapper
+                    OptionPopUpModal={() => (
+                      <MoreOptionsModal
+                        className="z-50"
+                        list={[
+                          {
+                            label: 'Delete Post',
+                            onClick: handleDeletePost,
+                            icon: () => (
+                              <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                            )
+                          }
+                        ]}
+                      />
+                    )}
+                    position="left"
+                    showOptionsModal={showOptionsModal}
+                    setShowOptionsModal={setShowOptionsModal}
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                  >
+                    <Tooltip title="More" arrow>
+                      <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                        <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </div>
+                    </Tooltip>
+                  </OptionsWrapper>
+                )}
+              </div>
+            </span>
           </div>
 
           <div className="flex flex-row w-full">

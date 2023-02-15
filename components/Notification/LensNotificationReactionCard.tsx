@@ -13,7 +13,6 @@ type Props = {
 }
 
 const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
-  console.log('notification', notification)
   const router = useRouter()
   const [showMore, setShowMore] = useState(
     (countLinesFromMarkdown(notification?.publication?.metadata?.content) >
