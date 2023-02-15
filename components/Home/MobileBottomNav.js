@@ -32,6 +32,8 @@ const MobileBottomNav = () => {
     router.push('/notification')
   }
 
+  const isOnHomeFeed = pathname === '/' || pathname.startsWith('/feed')
+
   useEffect(() => {
     if (pathname.startsWith('/explore')) {
       setActive('explore')
@@ -39,7 +41,7 @@ const MobileBottomNav = () => {
       setActive('search')
     } else if (pathname.startsWith('/notification')) {
       setActive('notification')
-    } else if (router.pathname === '/') {
+    } else if (isOnHomeFeed) {
       setActive('home')
     } else {
       setActive('none')
@@ -58,11 +60,12 @@ const MobileBottomNav = () => {
       <div
         className="p-1.5 hover:bg-[#6668FF] rounded-full hover:bg-opacity-20 cursor-pointer"
         onClick={() => {
-          if (router.pathname !== '/') {
+          if (isOnHomeFeed) {
+            scrollToTop()
+          } else {
             routeToHome()
             return
           }
-          scrollToTop()
         }}
       >
         <img

@@ -21,7 +21,7 @@ const CreatePostButton = () => {
     <div
       className={`cursor-pointer text-[32px] md:text-[36px] bg-p-btn rounded-full fixed  ${
         router.pathname.startsWith('/p/') ? 'z-20' : 'z-40'
-      } top-[calc(100vh-110px)] left-[calc(100vw-50px)] inline-block`}
+      } bottom-[80px] left-[calc(100vw-50px)] inline-block`}
       onClick={showCreatePostModal}
     >
       <BsPlus className="text-p-btn-text" />
