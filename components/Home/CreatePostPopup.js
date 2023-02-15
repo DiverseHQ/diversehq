@@ -131,6 +131,17 @@ const CreatePostPopup = () => {
       setLoading(false)
       return
     }
+    if (isLensPost) {
+      console.log('collectSettings', collectSettings)
+      if (
+        collectSettings?.feeCollectModule &&
+        Number(collectSettings?.feeCollectModule?.amount?.value) < 0.01
+      ) {
+        notifyError(`Price should be atleast 0.01`)
+        setLoading(false)
+        return
+      }
+    }
     storeRecentCommunities()
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {
@@ -146,6 +157,8 @@ const CreatePostPopup = () => {
       }
 
       if (isLensPost) {
+        // eslint-disable-next-line
+
         const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
         // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
         // const ipfsPath = `ipfs://${ipfsHash}`
