@@ -57,7 +57,9 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   }
 
   const addComment = async (tx, comment) => {
-    setComments([comment, ...comments])
+    const prevComments = comments
+    const newCommentsFirstPhase = [comment, ...prevComments]
+    setComments(newCommentsFirstPhase)
     const indexResult = await pollUntilIndexed(tx)
 
     const commentId = commentIdFromIndexedResult(
@@ -72,12 +74,16 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
         reaction: ReactionTypes.Upvote
       }
     })
-    comment.id = commentId
+    const newCommentsSecondPhase = newCommentsFirstPhase.map((c) =>
+      c.tempId === comment.tempId ? { ...c, id: commentId } : c
+    )
+    // add id to that comment
+    setComments(newCommentsSecondPhase)
     // add comment id to comment
     // remove previous comment
-    setComments(comments.filter((c) => c.tempId !== comment.tempId))
+    // setComments(comments.filter((c) => c.tempId !== comment.tempId))
     // add new comment
-    setComments([comment, ...comments])
+    // setComments([comment, ...comments])
   }
 
   useEffect(() => {

@@ -588,7 +588,7 @@ const CreatePostPopup = () => {
             </button>
           </div>
           <div className="flex flex-row items-center jusitify-center">
-            <select
+            {/* <select
               onChange={(e) => {
                 e.preventDefault()
                 setFlair(e.target.value)
@@ -597,7 +597,7 @@ const CreatePostPopup = () => {
               value={flair}
             >
               <option
-                value=""
+                value={}
                 className="hidden flex flex-row space-x-1 items-center"
               >
                 Flair
@@ -606,7 +606,7 @@ const CreatePostPopup = () => {
               <option value="NSFW">NSFW</option>
               <option value="SENSITIVE">Sensitive</option>
               <option value="SPOILER">Spoiler</option>
-            </select>
+            </select> */}
             {isLensPost && (
               <button
                 onClick={() => {

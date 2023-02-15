@@ -19,7 +19,7 @@ const PostShareButton = ({ url, text }) => {
           <img
             src="/share.svg"
             alt="Share"
-            className="hover:cursor-pointer w-4 h-4 "
+            className="hover:cursor-pointer w-4 h-4 sm:w-[18px] sm:h-[18px] "
           />
         </div>
       </Tooltip>

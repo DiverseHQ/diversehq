@@ -19,6 +19,7 @@ import { BsCollection } from 'react-icons/bs'
 import { IoIosShareAlt } from 'react-icons/io'
 import Link from 'next/link'
 import Attachment from './Attachment'
+import { Tooltip } from '@mui/material'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
@@ -72,7 +73,7 @@ const IndexingPostCard = ({ postInfo }) => {
 
             {isMobile && (
               <>
-                <div className="flex flex-row w-full items-center justify-between">
+                <div className="flex flex-row w-full items-center">
                   <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
                     <ImageWithPulsingLoader
                       src={postInfo?.communityInfo?.image}
@@ -113,8 +114,9 @@ const IndexingPostCard = ({ postInfo }) => {
             )}
             <div className="sm:mr-5 flex flex-row items-center">
               {/* pulsing dot */}
-              <div className="text-xs sm:text-sm">Confirming</div>
-              <div className="w-2 h-2 rounded-full bg-p-btn animate-pulse" />
+              <Tooltip title="Indexing" arrow>
+                <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
+              </Tooltip>
             </div>
           </div>
 
@@ -126,15 +128,15 @@ const IndexingPostCard = ({ postInfo }) => {
                     //  onClick={liked ? handleUnLike : handleLike}
                     src={
                       postInfo.reaction === ReactionTypes.Upvote
-                        ? '/UpvoteFilled.svg'
-                        : '/Upvote.svg'
+                        ? '/upvoteFilled.svg'
+                        : '/upvoteGray.svg'
                     }
-                    className="w-6 h-6"
+                    className="w-5 h-5"
                   />
                 </button>
                 <div className="font-bold leading-5">1</div>
                 <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <img src={'/Downvote.svg'} className="w-5 h-5" />
+                  <img src={'/downvoteGray.svg'} className="w-4 h-4" />
                 </button>
               </div>
             )}
@@ -142,7 +144,7 @@ const IndexingPostCard = ({ postInfo }) => {
             {/* main content */}
             <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
-                <div className="mb-2 px-3 sm:pl-3.5 ">
+                <div className="mb-2 px-3 sm:pl-3.5">
                   {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
                     <div className="font-medium text-base sm:text-lg w-full break-words">
                       {postInfo?.metadata?.name}
@@ -200,29 +202,38 @@ const IndexingPostCard = ({ postInfo }) => {
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-1">
                     <button className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1">
-                      <img src={'/UpvoteFilled.svg'} className="w-5 h-5" />
+                      <img src={'/upvoteFilled.svg'} className="w-4 h-4" />
                     </button>
                     <div className="font-bold">1</div>
                     <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                      <img src={'/Downvote.svg'} className="w-5 h-5" />
+                      <img src={'/downvoteGray.svg'} className="w-4 h-4" />
                     </button>
                   </div>
                 )}
 
                 <div className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1">
-                  <FaRegComment className=" mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-
-                  {postInfo?.stats?.totalAmountOfComments}
+                  <img
+                    src="/comment.svg"
+                    alt="Comment"
+                    className="w-4 h-4 mr-2"
+                  />
+                  <span className="text-[#687684]">
+                    {postInfo?.stats?.totalAmountOfComments}
+                  </span>
                 </div>
                 <button
                   disabled={true}
-                  className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center"
+                  className="hover:bg-p-btn-hover text-[#687684] rounded-md p-1 cursor-pointer flex flex-row items-center"
                 >
-                  <BsCollection className="w-5 h-5" />
+                  <BsCollection className="w-4 h-4 " />
                   <div className="ml-2">0</div>
                 </button>
                 <div className="hover:bg-p-btn-hover rounded-md p-1">
-                  <IoIosShareAlt className="hover:cursor-pointer w-6 h-6 " />
+                  <img
+                    src="/share.svg"
+                    alt="Share"
+                    className="hover:cursor-pointer w-4 h-4 sm:w-[18px] sm:h-[18px] "
+                  />
                 </div>
               </div>
             </div>
