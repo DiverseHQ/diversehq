@@ -27,7 +27,7 @@ import {
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import { Switch } from '@mui/material'
+import { CircularProgress, Switch } from '@mui/material'
 
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
