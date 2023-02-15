@@ -9,7 +9,7 @@ const VideoWithAutoPause = ({ src, ...props }) => {
     let observer = new IntersectionObserver(
       ([entry]) => {
         // if the video is in the viewport, play it; otherwise, pause it
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && props.contentWarning === null) {
           videoRef.current.play()
         } else {
           videoRef.current.pause()
@@ -39,15 +39,21 @@ const VideoWithAutoPause = ({ src, ...props }) => {
     }
   }, [])
   return (
-    <video
-      src={
-        src.startsWith(LensInfuraEndpoint)
-          ? `${IMAGE_KIT_ENDPOINT}/${src}`
-          : src
-      }
-      ref={videoRef}
-      {...props}
-    />
+    <>
+      <video
+        src={
+          src.startsWith(LensInfuraEndpoint)
+            ? `${IMAGE_KIT_ENDPOINT}/${src}`
+            : src
+        }
+        ref={videoRef}
+        {...props}
+        className={`${
+          props.contentWarning !== null && !props.viewAdultContent && 'blur-2xl'
+        }`}
+        disabled={props.contentWarning !== null && !props.viewAdultContent}
+      />
+    </>
   )
 }
 

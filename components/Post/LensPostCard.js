@@ -52,6 +52,7 @@ const LensPostCard = ({ post }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const [postInfo, setPostInfo] = useState(post)
+  const [viewAdultContent, setViewAdultContent] = useState(false)
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
@@ -375,15 +376,31 @@ const LensPostCard = ({ post }) => {
                 <div className="mb-2 px-3 sm:pl-3.5 ">
                   {!router.pathname.startsWith('/p') ? (
                     <>
-                      {postInfo?.metadata?.name && (
-                        <Markup
-                          className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
-                        >
-                          {/* remove title text from content */}
+                      <div className="flex flex-row">
+                        {postInfo?.metadata?.name && (
+                          <Markup
+                            className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                          >
+                            {/* remove title text from content */}
 
-                          {postInfo?.metadata?.name}
-                        </Markup>
-                      )}
+                            {postInfo?.metadata?.name}
+                          </Markup>
+                        )}
+                        {postInfo?.metadata?.contentWarning !== null && (
+                          <div
+                            className={`border ${
+                              postInfo?.metadata?.contentWarning === 'NSFW'
+                                ? 'border-red-500 text-red-500'
+                                : postInfo?.metadata?.contentWarning ===
+                                  'SENSITIVE'
+                                ? 'border-yellow-500 text-yellow-500'
+                                : 'border-blue-500 text-blue-500'
+                            } rounded-full px-2 py-0.5  text-xs sm:text-sm`}
+                          >
+                            {postInfo?.metadata?.contentWarning}
+                          </div>
+                        )}
+                      </div>
                       {postInfo?.metadata?.name !==
                         postInfo?.metadata?.content && (
                         <div
@@ -417,15 +434,31 @@ const LensPostCard = ({ post }) => {
                     </>
                   ) : (
                     <>
-                      {postInfo?.metadata?.name && (
-                        <Markup
-                          className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
-                        >
-                          {/* remove title text from content */}
+                      <div className="flex flex-row">
+                        {postInfo?.metadata?.name && (
+                          <Markup
+                            className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                          >
+                            {/* remove title text from content */}
 
-                          {postInfo?.metadata?.name}
-                        </Markup>
-                      )}
+                            {postInfo?.metadata?.name}
+                          </Markup>
+                        )}
+                        {postInfo?.metadata?.contentWarning !== null && (
+                          <div
+                            className={`border ${
+                              postInfo?.metadata?.contentWarning === 'NSFW'
+                                ? 'border-red-500 text-red-500'
+                                : postInfo?.metadata?.contentWarning ===
+                                  'SENSITIVE'
+                                ? 'border-yellow-500 text-yellow-500'
+                                : 'border-blue-500 text-blue-500'
+                            } rounded-full px-2 py-0.5  text-xs sm:text-sm`}
+                          >
+                            {postInfo?.metadata?.contentWarning}
+                          </div>
+                        )}
+                      </div>
                       {postInfo?.metadata?.name !==
                         postInfo?.metadata?.content && (
                         <div
@@ -474,10 +507,13 @@ const LensPostCard = ({ post }) => {
                                 )[1]
                               }`}
                               className={`image-unselectable object-contain sm:rounded-lg w-full ${
+                                postInfo?.metadata?.contentWarning !== null &&
+                                'blur-2xl'
+                              } ${
                                 router.pathname.startsWith('/p')
                                   ? ''
                                   : 'max-h-[450px]'
-                              }`}
+                              } `}
                             />
                           </div>
                         </Link>
@@ -489,7 +525,32 @@ const LensPostCard = ({ post }) => {
                                 '//'
                               )[1]
                             }`}
+                            className={`${
+                              postInfo?.metadata?.contentWarning !== null &&
+                              !viewAdultContent &&
+                              'blur-2xl'
+                            }`}
+                            viewAdultContent={viewAdultContent}
                           />
+                          <div
+                            className={` ${
+                              !viewAdultContent
+                                ? 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col space-y-2'
+                                : 'hidden'
+                            } `}
+                          >
+                            <p className="text-p-text text-lg w-full">
+                              The following video has sensitive content and may
+                              inappropriate or offensive to some audiences.
+                              Viewer discretion is advised.
+                            </p>
+                            <button
+                              className="bg-p-btn text-p-btn-text px-2 sm:px-4 py-1.5 sm:py-2 rounded-md text-sm sm:text-base font-bold "
+                              onClick={() => setViewAdultContent(true)}
+                            >
+                              I understand and wish to continue
+                            </button>
+                          </div>
                         </div>
                       ))}
                   </>
@@ -505,11 +566,34 @@ const LensPostCard = ({ post }) => {
                       }`}
                       className={`image-unselectable object-contain sm:rounded-lg w-full ${
                         router.pathname.startsWith('/p') ? '' : 'max-h-[450px]'
-                      }`}
+                      } `}
                       loop
                       controls
                       muted
+                      contentWarning={postInfo?.metadata?.contentWarning}
+                      viewAdultContent={viewAdultContent}
                     />
+                    <div
+                      className={` ${
+                        !viewAdultContent &&
+                        postInfo?.metadata?.contentWarning !== null &&
+                        router.pathname.startsWith('/p')
+                          ? 'absolute z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[300px] flex flex-col justify-center space-y-2'
+                          : 'hidden'
+                      } `}
+                    >
+                      <p className="text-p-text text-lg w-full">
+                        The following video has sensitive content and may
+                        inappropriate or offensive to some audiences. Viewer
+                        discretion is advised.
+                      </p>
+                      <button
+                        className="bg-p-btn text-p-btn-text px-2 sm:px-4 py-1.5 sm:py-2 rounded-md text-sm sm:text-base font-bold "
+                        onClick={() => setViewAdultContent(true)}
+                      >
+                        I understand and wish to continue
+                      </button>
+                    </div>
                   </div>
                 )}
                 {postInfo?.metadata?.mainContentFocus !==

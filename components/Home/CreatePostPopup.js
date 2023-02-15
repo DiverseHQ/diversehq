@@ -27,14 +27,22 @@ import {
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import { CircularProgress, Switch } from '@mui/material'
+import {
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Switch
+} from '@mui/material'
 import { supportedMimeTypes } from '../../lib/interfaces/publication'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import {
   PublicationMainFocus,
   useCreatePostTypedDataMutation,
-  useCreatePostViaDispatcherMutation
+  useCreatePostViaDispatcherMutation,
+  PublicationContentWarning
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import ImagesPlugin from '../Lexical/ImagesPlugin'
@@ -92,6 +100,7 @@ const CreatePostPopup = () => {
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
   const { isMobile } = useDevice()
+  const [flair, setFlair] = useState(null)
 
   const { mutateAsync: createPostViaDispatcher } =
     useCreatePostViaDispatcherMutation()
@@ -176,6 +185,7 @@ const CreatePostPopup = () => {
 
   const handleCreateLensPost = async (title, communityId, mimeType, url) => {
     let mainContentFocus = null
+    let contentWarning = null
     //todo handle other file types and link content
     if (mimeType.startsWith('image')) {
       mainContentFocus = PublicationMainFocus.Image
@@ -186,12 +196,24 @@ const CreatePostPopup = () => {
     } else {
       mainContentFocus = PublicationMainFocus.TextOnly
     }
+
+    if (flair === 'SENSITIVE') {
+      contentWarning = PublicationContentWarning.Sensitive
+    } else if (flair === 'NSFW') {
+      contentWarning = PublicationContentWarning.Nsfw
+    } else if (flair === 'SPOILER') {
+      contentWarning = PublicationContentWarning.Spoiler
+    } else {
+      contentWarning = PublicationContentWarning.null
+    }
+
     //todo map to community id, so that can be identified by community
     const metadataId = uuidv4()
     const metadata = {
       version: '2.0.0',
       mainContentFocus: mainContentFocus,
       metadata_id: metadataId,
+      contentWarning: contentWarning,
       description: 'Created with DiverseHQ',
       locale: 'en-US',
       content: title + '\n' + content.trim(),
@@ -542,6 +564,25 @@ const CreatePostPopup = () => {
             </button>
           </div>
           <div className="flex flex-row items-center jusitify-center">
+            <select
+              onChange={(e) => {
+                e.preventDefault()
+                setFlair(e.target.value)
+              }}
+              className="bg-s-bg outline-none mr-2 px-1 py-1 rounded-md"
+              value={flair}
+            >
+              <option
+                value=""
+                className="hidden flex flex-row space-x-1 items-center"
+              >
+                Flair
+              </option>
+              <option value="">None</option>
+              <option value="NSFW">NSFW</option>
+              <option value="SENSITIVE">Sensitive</option>
+              <option value="SPOILER">Spoiler</option>
+            </select>
             {isLensPost && (
               <button
                 onClick={() => {
