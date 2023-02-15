@@ -145,6 +145,17 @@ const CreatePostPopup = () => {
       setLoading(false)
       return
     }
+    if (isLensPost) {
+      console.log('collectSettings', collectSettings)
+      if (
+        collectSettings?.feeCollectModule &&
+        Number(collectSettings?.feeCollectModule?.amount?.value) < 0.01
+      ) {
+        notifyError(`Price should be atleast 0.01`)
+        setLoading(false)
+        return
+      }
+    }
     storeRecentCommunities()
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {
@@ -160,6 +171,8 @@ const CreatePostPopup = () => {
       }
 
       if (isLensPost) {
+        // eslint-disable-next-line
+
         const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
         // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
         // const ipfsPath = `ipfs://${ipfsHash}`
@@ -590,7 +603,8 @@ const CreatePostPopup = () => {
             className={`flex flex-row items-center jusitify-center  ${
               showCollectSettings ? 'hidden' : ''
             }`}
-          >
+          ></div>
+          <div className="flex flex-row items-center jusitify-center">
             {/* <select
               onChange={(e) => {
                 e.preventDefault()
@@ -600,7 +614,7 @@ const CreatePostPopup = () => {
               value={flair}
             >
               <option
-                value=""
+                value={}
                 className="hidden flex flex-row space-x-1 items-center"
               >
                 Flair

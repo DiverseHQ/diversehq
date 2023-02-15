@@ -69,14 +69,14 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   const [price, setPrice] = useState(
     collectSettings?.feeCollectModule?.amount?.value
       ? Number(collectSettings?.feeCollectModule?.amount?.value)
-      : 0
+      : 0.01
   )
   const [currency, setCurrency] = useState<string>(
     collectSettings?.feeCollectModule?.amount?.currency ||
       '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e'
   ) // default to USDC
   const { data: lensProfile } = useLensUserContext()
-  const { theme } = useTheme()
+  const { theme }: any = useTheme()
 
   const MUITheme = createTheme({
     palette: {
@@ -163,11 +163,12 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                 </Select>
               </MUIThemeProvider>
             </div>
-            <div className="flex flex-row items-center ">
-              <div>Price</div>
+            <div className="flex flex-row items-center">
+              <div>Price (min 0.01)</div>
               <input
                 type="number"
                 value={price}
+                min={0.01}
                 onChange={(e) => setPrice(Number(e.target.value))}
                 className="border w-14  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md "
               />

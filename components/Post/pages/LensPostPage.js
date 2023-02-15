@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { usePublicationQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
@@ -30,9 +31,17 @@ const LensPostPage = ({ id, post }) => {
     setPostInfo(data.publication)
   }, [data])
 
+  const router = useRouter()
+
   return (
     <div className="w-full flex justify-center pb-[50px]">
-      <div className="w-full md:w-[650px]">
+      <div
+        className={`${
+          router.pathname.startsWith('/p')
+            ? 'w-full md:w-[50%] md:min-w-[650px]'
+            : 'w-full md:w-[650px]'
+        }`}
+      >
         {!post &&
           (isMobile ? (
             <MobileLoader />
@@ -52,7 +61,7 @@ const LensPostPage = ({ id, post }) => {
 
         {/* lens post card */}
         {postInfo && (
-          <div>
+          <div className="flex flex-row">
             <LensPostCard post={postInfo} />
           </div>
         )}

@@ -111,6 +111,19 @@
     background: transparent;
   }
 
+  .noSelect {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .noSelect:focus {
+    outline: none !important;
+  }
+
   /* Track */
   ::-webkit-scrollbar-track {
     background: transparent;
@@ -193,7 +206,7 @@
   --hover-primary-text: #1a1a1b;
 
   --main-btn-bg: #1a1a1b;
-  --main-btn-text: #d7dadc;
+  --main-btn-text: #ffffff;
   --main-btn-hover-bg: #d7dadc;
   --main-btn-hover-text: #1a1a1b;
 }

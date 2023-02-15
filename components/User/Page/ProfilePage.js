@@ -183,71 +183,94 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     : ''
                 }`}
               >
-                <div className="flex flex-row items-center self-end min-h-[50px] py-2">
-                  {user &&
-                    user?.walletAddress.toLowerCase() ===
-                      profile.walletAddress.toLowerCase() && (
-                      <div
-                        className="text-sm text-p-btn-text bg-p-btn px-2 py-1 mx-2 rounded-full cursor-pointer"
-                        onClick={handleEditProfile}
-                      >
-                        Edit
-                      </div>
-                    )}
-                  {lensProfile &&
-                    isSignedIn &&
-                    hasProfile &&
-                    lensProfile?.isFollowedByMe && (
-                      <div
-                        className="p-1 rounded-xl cursor-pointer hover:bg-p-btn-hover flex flex-row items-center space-x-1"
-                        onClick={handleDmClick}
-                      >
-                        {!loading && <CiMail className="w-6 h-6" />}
-                        {loading && (
-                          <CircularProgress size="18px" color="primary" />
+                <div className="ml-24 flex flex-row justify-end md:justify-between items-start">
+                  {!isMobile && (
+                    <div className="flex flex-row items-start justify-between sm:space-x-10 mt-1">
+                      <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
+                        {profile.name && <div>{profile.name}</div>}
+                        {!profile.name && profile.walletAddress && (
+                          <div>
+                            {profile.walletAddress.substring(0, 6) + '...'}
+                          </div>
                         )}
-                        <div>DM</div>
+                        {lensProfile?.handle && (
+                          <Link
+                            href={`/u/${lensProfile?.handle}`}
+                            className="hover:underline cursor-pointer"
+                            passHref
+                          >
+                            u/{lensProfile?.handle}
+                          </Link>
+                        )}
+                        <div className="font-normal">{profile.bio}</div>
                       </div>
-                    )}
-
-                  {/* <div
-                    className="self-end flex flex-row items-center my-3 px-2 py-1  cursor-pointer"
-                    onClick={handleWalletAddressCopy}
-                  >
-                    <div className="text-base sm:text-xl">
-                      {profile?.walletAddress?.substring(0, 6) + '...'}
                     </div>
-                    <FaRegCopy className="w-8 h-8 px-2" />
-                  </div> */}
-                </div>
-                <div className="flex flex-row items-center justify-between sm:justify-start sm:space-x-10">
-                  <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
-                    {profile.name && <div>{profile.name}</div>}
-                    {!profile.name && profile.walletAddress && (
-                      <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
-                    )}
-                    {lensProfile?.handle && (
-                      <Link
-                        href={`/u/${lensProfile?.handle}`}
-                        className="hover:underline cursor-pointer"
-                        passHref
-                      >
-                        u/{lensProfile?.handle}
-                      </Link>
-                    )}
+                  )}
+
+                  <div className="flex flex-row items-start my-2 md:my-3 px-2 py-1">
+                    {hasProfile &&
+                      isSignedIn &&
+                      myLensProfile &&
+                      lensProfile &&
+                      lensProfile.ownedBy?.toLowerCase() !==
+                        user?.walletAddress?.toLowerCase() && (
+                        <div className="mx-2">
+                          <LensFollowButton lensProfile={lensProfile} />
+                        </div>
+                      )}
+                    {user &&
+                      user?.walletAddress.toLowerCase() ===
+                        profile.walletAddress.toLowerCase() && (
+                        <div
+                          className="text-base text-p-btn-text bg-p-btn px-3 py-0.5 mx-2 rounded-md cursor-pointer"
+                          onClick={handleEditProfile}
+                        >
+                          Edit
+                        </div>
+                      )}
+                    {lensProfile &&
+                      isSignedIn &&
+                      hasProfile &&
+                      lensProfile.ownedBy !==
+                        myLensProfile?.defaultProfile.ownedBy &&
+                      lensProfile?.isFollowedByMe && (
+                        <div
+                          className="p-1 rounded-xl cursor-pointer hover:bg-p-btn-hover flex flex-row items-center space-x-1"
+                          onClick={handleDmClick}
+                        >
+                          {!loading && <CiMail className="w-6 h-6" />}
+                          {loading && (
+                            <CircularProgress size="18px" color="primary" />
+                          )}
+                          <div>DM</div>
+                        </div>
+                      )}
                   </div>
-                  {hasProfile &&
-                    isSignedIn &&
-                    myLensProfile &&
-                    lensProfile &&
-                    lensProfile.ownedBy?.toLowerCase() !==
-                      user?.walletAddress?.toLowerCase() && (
-                      <>
-                        <LensFollowButton lensProfile={lensProfile} />
-                      </>
-                    )}
                 </div>
-                <div>{profile.bio}</div>
+                {isMobile && (
+                  <>
+                    <div className="flex flex-row items-start justify-start space-x-10">
+                      <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
+                        {profile.name && <div>{profile.name}</div>}
+                        {!profile.name && profile.walletAddress && (
+                          <div>
+                            {profile.walletAddress.substring(0, 6) + '...'}
+                          </div>
+                        )}
+                        {lensProfile?.handle && (
+                          <Link
+                            href={`/u/${lensProfile?.handle}`}
+                            className="hover:underline cursor-pointer"
+                            passHref
+                          >
+                            u/{lensProfile?.handle}
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                    <div>{profile.bio}</div>
+                  </>
+                )}
                 {isMobile ? (
                   <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px]">
                     {/* onchain lens data */}
@@ -285,34 +308,50 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center">
-                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
+                  <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center text-[14px]">
+                    <div className="">
                       <span className="">Joined </span>
-                      <span className="font-bold">
+                      <span className="">Communities: </span>
+                      <span className="font-semibold">
                         {profile?.communities?.length}
                       </span>
-                      <span className=""> Communities</span>
                     </div>
-                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
-                      <span>Post : {numberOfPosts}</span>
+                    <div className="">
+                      {lensProfile ? (
+                        <span>
+                          Posts :{' '}
+                          <span className="font-semibold">
+                            {Number(
+                              numberOfPosts + lensProfile?.stats?.totalPosts
+                            )}
+                          </span>
+                        </span>
+                      ) : (
+                        <span>
+                          Posts:{' '}
+                          <span className="font-semibold">{numberOfPosts}</span>
+                        </span>
+                      )}
                     </div>
-                    <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
+                    {/* <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
                       <span>
                         Community Spells : {profile?.communityCreationSpells}
                       </span>
-                    </div>
+                    </div> */}
 
                     {/* onchain lens data */}
                     {lensProfile && (
                       <>
-                        <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
-                          <span>
-                            Followers: {lensProfile?.stats?.totalFollowers}
+                        <div className="">
+                          <span>Followers: </span>
+                          <span className="font-semibold">
+                            {lensProfile?.stats?.totalFollowers}
                           </span>
                         </div>
-                        <div className="bg-s-h-bg p-1 px-2 sm:px-4 rounded-full dark:bg-p-bg">
-                          <span>
-                            LensPosts : {lensProfile?.stats?.totalPosts}
+                        <div className="">
+                          <span>Following: </span>
+                          <span className="font-semibold">
+                            {lensProfile?.stats?.totalFollowing}
                           </span>
                         </div>
                       </>

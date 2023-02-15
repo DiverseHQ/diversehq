@@ -267,7 +267,7 @@ const CommunityInfoCard = ({ _community }) => {
             <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2">
               {isCreator && (
                 <button
-                  className="bg-p-btn rounded-full py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
+                  className="bg-p-btn rounded-md py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
                   onClick={editCommunity}
                 >
                   Edit
@@ -275,9 +275,11 @@ const CommunityInfoCard = ({ _community }) => {
               )}
               {isJoined ? (
                 <button
-                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-s-bg text-p-btn border-[1px] border-p-btn cursor-auto`}
+                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text w-[90px] transition-all ease-in-out  duration-600`}
+                  onClick={leaveCommunity}
                 >
-                  Joined
+                  <span className="group-hover/text:hidden">Joined</span>
+                  <span className="hidden group-hover/text:block">Leave</span>
                 </button>
               ) : (
                 <button
@@ -292,45 +294,21 @@ const CommunityInfoCard = ({ _community }) => {
                   <MoreOptionsModal
                     className="z-50"
                     list={
-                      isJoined
-                        ? isCreator
-                          ? [
-                              {
-                                label: 'Edit',
-                                onClick: editCommunity,
-                                icon: <BiEdit className="mr-1.5 w-6 h-6" />
-                              },
-                              {
-                                label: 'Leave',
-                                onClick: leaveCommunity,
-                                icon: () => (
-                                  <GiExitDoor className="mr-1.5 w-6 h-6" />
-                                )
-                              },
-                              {
-                                label: 'Share',
-                                onClick: shareCommunity,
-                                icon: () => (
-                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                )
-                              }
-                            ]
-                          : [
-                              {
-                                label: 'Leave',
-                                onClick: leaveCommunity,
-                                icon: () => (
-                                  <GiExitDoor className="mr-1.5 w-6 h-6" />
-                                )
-                              },
-                              {
-                                label: 'Share',
-                                onClick: shareCommunity,
-                                icon: () => (
-                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                )
-                              }
-                            ]
+                      isCreator && isJoined
+                        ? [
+                            {
+                              label: 'Edit',
+                              onClick: editCommunity,
+                              icon: <BiEdit className="mr-1.5 w-6 h-6" />
+                            },
+                            {
+                              label: 'Share',
+                              onClick: shareCommunity,
+                              icon: () => (
+                                <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                              )
+                            }
+                          ]
                         : [
                             {
                               label: 'Share',
