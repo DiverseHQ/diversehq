@@ -439,7 +439,6 @@ const PostCard = ({ _post, setPosts }) => {
                   className={`image-unselectable object-contain sm:rounded-lg w-full ${
                     router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                   }`}
-                  loop
                   controls
                   muted
                 />

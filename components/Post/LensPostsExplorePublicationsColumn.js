@@ -31,11 +31,14 @@ const LensPostsExplorePublicationsColumn = () => {
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
     cursor: null,
     sortCriteria: PublicationSortCriteria.Latest,
+    sortType: sortTypes.LATEST,
     timestamp: null,
     hasMore: true,
     nextCursor: null,
     posts: []
   })
+
+  console.log('exploreQueryRequestParams', exploreQueryRequestParams)
   const { loading: routeLoading } = useRouterLoading()
   const { data } = useExplorePublicationsQuery(
     {
@@ -68,7 +71,13 @@ const LensPostsExplorePublicationsColumn = () => {
   )
 
   useEffect(() => {
+    console.log('router.query.sort', router.query.sort)
+    console.log(
+      'exploreQueryRequestParams.sortType',
+      exploreQueryRequestParams.sortType
+    )
     if (!router?.query?.sort) return
+    if (exploreQueryRequestParams.sortType === router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria
     let timestamp = null
     let sortCriteria = PublicationSortCriteria.Latest
@@ -91,11 +100,15 @@ const LensPostsExplorePublicationsColumn = () => {
       sortCriteria = PublicationSortCriteria.TopCollected
       // timestamp is required for top collected sort criteria
     }
-    if (exploreQueryRequestParams.sortCriteria === sortCriteria) return
+    console.log(
+      'exploreQueryRequestParms.posts',
+      exploreQueryRequestParams.posts
+    )
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: null,
-      sortCriteria,
+      sortCriteria: sortCriteria,
+      sortType: String(router.query.sort),
       timestamp,
       hasMore: true,
       nextCursor: null,
@@ -105,8 +118,6 @@ const LensPostsExplorePublicationsColumn = () => {
 
   const getMorePosts = async () => {
     if (exploreQueryRequestParams.posts.length === 5) return
-    console.log('get more posts')
-    console.log('cursor', exploreQueryRequestParams.nextCursor)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: exploreQueryRequestParams.nextCursor
@@ -130,7 +141,6 @@ const LensPostsExplorePublicationsColumn = () => {
     for (let i = 0; i < newPosts.length; i++) {
       newPosts[i].communityInfo = communityInfoForPosts[i]
     }
-    console.log('newPosts', newPosts)
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       nextCursor,

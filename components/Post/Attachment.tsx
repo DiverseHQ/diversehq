@@ -39,7 +39,6 @@ const Attachment: FC<Props> = ({ publication, className }) => {
               <VideoWithAutoPause
                 src={imageProxy(url)}
                 className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                loop
                 controls
                 muted
                 poster={getCoverUrl}

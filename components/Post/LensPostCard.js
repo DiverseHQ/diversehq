@@ -378,7 +378,7 @@ const LensPostCard = ({ post }) => {
                           ? '/UpvoteFilled.svg'
                           : '/Upvote.svg'
                       }
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                     />
                   </button>
                 </Tooltip>
