@@ -375,8 +375,8 @@ const LensPostCard = ({ post }) => {
                       //  onClick={liked ? handleUnLike : handleLike}
                       src={
                         reaction === ReactionTypes.Upvote
-                          ? '/UpvoteFilled.svg'
-                          : '/Upvote.svg'
+                          ? '/upvoteFilled.svg'
+                          : '/upvoteGray.svg'
                       }
                       className="w-6 h-6"
                     />
@@ -394,8 +394,8 @@ const LensPostCard = ({ post }) => {
                     <img
                       src={
                         reaction === ReactionTypes.Downvote
-                          ? '/DownvoteFilled.svg'
-                          : '/Downvote.svg'
+                          ? '/downvoteFilled.svg'
+                          : '/downvoteGray.svg'
                       }
                       className="w-5 h-5"
                     />
@@ -547,7 +547,7 @@ const LensPostCard = ({ post }) => {
                         <img
                           src={
                             reaction === ReactionTypes.Upvote
-                              ? '/UpvoteFilled.svg'
+                              ? '/upvoteFilled.svg'
                               : '/upvoteGray.svg'
                           }
                           className="w-4 h-4"
@@ -568,7 +568,7 @@ const LensPostCard = ({ post }) => {
                         <img
                           src={
                             reaction === ReactionTypes.Downvote
-                              ? '/DownvoteFilled.svg'
+                              ? '/downvoteFilled.svg'
                               : '/downvoteGray.svg'
                           }
                           className="w-4 h-4"
