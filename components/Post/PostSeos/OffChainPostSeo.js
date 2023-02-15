@@ -10,21 +10,25 @@ const OffChainPostSeo = ({ post }) => {
       openGraph={{
         url: `https://app.diversehq.xyz/p/${post?._id}`,
         title: stringToLength(post?.title, 60),
-        images: [
-          {
-            url: post?.postImageUrl.replace(
-              'https://firebasestorage.googleapis.com',
-              `${IMAGE_KIT_ENDPOINT}/tr:w-1200,h-630,q-50`
-            ),
-            alt: post?.title
-          }
-        ],
-        videos: [
-          {
-            url: post?.postVideoUrl,
-            alt: post?.title
-          }
-        ]
+        images: post?.postImageUrl
+          ? [
+              {
+                url: post?.postImageUrl.replace(
+                  'https://firebasestorage.googleapis.com',
+                  `${IMAGE_KIT_ENDPOINT}/tr:w-1200,h-630,q-50`
+                ),
+                alt: post?.title
+              }
+            ]
+          : [],
+        videos: post?.postVideoUrl
+          ? [
+              {
+                url: post?.postVideoUrl,
+                alt: post?.title
+              }
+            ]
+          : []
       }}
     />
   )

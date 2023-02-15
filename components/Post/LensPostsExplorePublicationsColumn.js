@@ -38,7 +38,6 @@ const LensPostsExplorePublicationsColumn = () => {
     posts: []
   })
 
-  console.log('exploreQueryRequestParams', exploreQueryRequestParams)
   const { loading: routeLoading } = useRouterLoading()
   const { data } = useExplorePublicationsQuery(
     {
@@ -71,11 +70,6 @@ const LensPostsExplorePublicationsColumn = () => {
   )
 
   useEffect(() => {
-    console.log('router.query.sort', router.query.sort)
-    console.log(
-      'exploreQueryRequestParams.sortType',
-      exploreQueryRequestParams.sortType
-    )
     if (!router?.query?.sort) return
     if (exploreQueryRequestParams.sortType === router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria

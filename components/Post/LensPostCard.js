@@ -19,10 +19,11 @@ import useDevice from '../Common/useDevice'
 import { getCommunityInfoUsingId } from '../../api/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
-import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+// import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
 import {
   countLinesFromMarkdown,
+  deleteFirebaseStorageFile,
   getURLsFromText,
   unpinFromIpfsInfura
 } from '../../utils/utils'
@@ -180,6 +181,12 @@ const LensPostCard = ({ post }) => {
             } catch (error) {
               console.log(error)
             }
+          } else if (
+            media?.original?.url?.startsWith(
+              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com'
+            )
+          ) {
+            await deleteFirebaseStorageFile(media?.original?.url)
           }
         }
       }
@@ -531,7 +538,7 @@ const LensPostCard = ({ post }) => {
                     </>
                   )}
                 </div>
-                {postInfo?.metadata?.media.length > 0 && (
+                {postInfo?.metadata?.media.length > 0 ? (
                   <div
                     className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
                       isBlur ? 'blur-xl' : ''
@@ -544,6 +551,13 @@ const LensPostCard = ({ post }) => {
                       }`}
                     />
                   </div>
+                ) : (
+                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
+                    <ReactEmbedo
+                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
+                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
+                    />
+                  )
                 )}
               </div>
 

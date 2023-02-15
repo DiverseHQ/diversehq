@@ -19,9 +19,8 @@ import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPl
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import {
-  unpinFromIpfsInfura,
+  deleteFirebaseStorageFile,
   uploadFileToFirebaseAndGetUrl,
-  uploadFileToIpfsInfuraAndGetPath,
   uploadToIpfsInfuraAndGetPath
   // uploadFileToIpfs
 } from '../../utils/utils'
@@ -82,7 +81,7 @@ const CreatePostPopup = () => {
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
-  const [IPFSHash, setIPFSHash] = useState(null)
+  // const [IPFSHash, setIPFSHash] = useState(null)
   const [imageUpload, setImageUpload] = useState(false)
   useEffect(() => {
     return () => {
@@ -98,6 +97,7 @@ const CreatePostPopup = () => {
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
   const { isMobile } = useDevice()
   const [flair, setFlair] = useState(null)
+  const [firebaseUrl, setFirebaseUrl] = useState(null)
 
   const { mutateAsync: createPostViaDispatcher } =
     useCreatePostViaDispatcherMutation()
@@ -125,10 +125,6 @@ const CreatePostPopup = () => {
 
   const closeModal = async () => {
     setShowCommunity({ name: '', image: '' })
-    if (IPFSHash) {
-      console.log('unpinning from ipfs')
-      await unpinFromIpfsInfura(IPFSHash)
-    }
     hideModal()
   }
 
@@ -173,16 +169,13 @@ const CreatePostPopup = () => {
       if (isLensPost) {
         // eslint-disable-next-line
 
-        const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
+        // const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
         // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
         // const ipfsPath = `ipfs://${ipfsHash}`
-        console.log('uploadedFile', uploadedFile)
-        handleCreateLensPost(
-          title,
-          communityId,
-          file.type,
-          uploadedFile.uploadedToUrl
-        )
+        if (!firebaseUrl) {
+          return
+        }
+        handleCreateLensPost(title, communityId, file.type, firebaseUrl)
         return
       }
 
@@ -462,10 +455,9 @@ const CreatePostPopup = () => {
     if (loading) return
     setFile(null)
     setImageValue(null)
-    if (IPFSHash) {
-      console.log('unpinning from ipfs')
-      await unpinFromIpfsInfura(IPFSHash)
-      setIPFSHash(null)
+    if (firebaseUrl) {
+      await deleteFirebaseStorageFile(firebaseUrl)
+      setFirebaseUrl(null)
     }
   }
 
@@ -492,10 +484,17 @@ const CreatePostPopup = () => {
               muted
             ></video>
           )}
-          <AiOutlineClose
-            onClick={removeImage}
-            className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
-          />
+          {imageUpload ? (
+            <CircularProgress
+              size="30px"
+              className="primary absolute z-10 top-2 right-2"
+            />
+          ) : (
+            <AiOutlineClose
+              onClick={removeImage}
+              className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
+            />
+          )}
         </div>
       </div>
     )
@@ -517,43 +516,38 @@ const CreatePostPopup = () => {
   const upLoadFile = async () => {
     try {
       setImageUpload(true)
-      setLoading(true)
       if (file) {
         if (!supportedMimeTypes.includes(file.type)) {
           notifyError('File type not supported')
           setImageUpload(false)
-          setLoading(false)
           return
         }
         // file size should be less than 8mb
         if (file.size > 8000000) {
           notifyError('File size should be less than 8mb')
           setImageUpload(false)
-          setLoading(false)
           return
         }
 
         if (isLensPost) {
           // file should be less than 2mb
-          console.log('FILE IS UPLOADING To the IPFS')
-          const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
-          setIPFSHash(ipfsHash)
+          const fileObj = await uploadFileToFirebaseAndGetUrl(file, address)
+          setFirebaseUrl(fileObj.uploadedToUrl)
+          // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+          // setIPFSHash(ipfsHash)
           setImageUpload(false)
-          setLoading(false)
         }
         setImageUpload(false)
-        setLoading(false)
       }
     } catch (e) {
       console.log(e)
       setImageUpload(false)
-      setLoading(false)
     }
   }
 
   useEffect(() => {
     if (!file) return
-    if (file && isLensPost && !IPFSHash) upLoadFile()
+    if (file && isLensPost && !firebaseUrl) upLoadFile()
   }, [file])
 
   const PopUpModal = () => {
@@ -564,7 +558,7 @@ const CreatePostPopup = () => {
         onClick={handleSubmit}
         label="POST"
         loading={loading}
-        isDisabled={!communityId}
+        isDisabled={!communityId || title.length === 0 || imageUpload}
       >
         <div className="flex flex-row items-center justify-between px-4 z-50">
           {showCollectSettings ? (
@@ -727,18 +721,6 @@ const CreatePostPopup = () => {
                 </label>
               )}
             </div>
-            {imageUpload && (
-              <div className="m-2 flex flex-col border bg-blue-400 p-2 rounded-xl">
-                <div className="m-2 flex flex-row mx-2 items-center space-x-2">
-                  <p className="text-p-text font-semibold text-lg">Uploading</p>
-                  <CircularProgress size="18px" />
-                </div>
-                <p className="text-p-text ml-2 text-md">
-                  It will take a while to upload long videos. Make sure to keep
-                  your browser tab open to avoid upload interruption
-                </p>
-              </div>
-            )}
             <input
               type="file"
               id="upload-file"
