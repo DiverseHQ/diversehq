@@ -3,7 +3,7 @@ import React from 'react'
 const MoreOptionsModal = ({ list }) => {
   return (
     <>
-      <div className="flex flex-col sm:rounded-xl p-1 sm:shadow-md min-w-[200px]">
+      <div className="flex flex-col bg-s-bg sm:rounded-xl p-1 sm:shadow-md min-w-[200px]">
         {list.map((item, index) => {
           return (
             <div

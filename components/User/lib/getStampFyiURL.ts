@@ -4,6 +4,7 @@
  * @returns cdn.stamp.fyi url
  */
 const getStampFyiURL = (address: string) => {
+  if (!address) return ''
   return `https://cdn.stamp.fyi/avatar/eth:${address.toLowerCase()}?s=250`
 }
 

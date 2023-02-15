@@ -19,16 +19,16 @@ const PopUpWrapper = ({
     <div className="bg-p-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden text-p-text z-40">
       <div className="flex flex-row justify-between items-center pb-4 px-4">
         <div className="flex flex-row justify-center items-center">
-          <div className="w-8 h-8 text-p-text hover:text-s-bg hover:bg-p-hover flex justify-center items-center rounded-full">
+          <div className="w-8 h-8 text-p-text hover:bg-p-btn-hover flex justify-center  cursor-pointer items-center rounded-full">
             {isDesktop && (
               <AiOutlineClose
-                className="w-5 h-5  items-center cursor-pointer"
+                className="w-5 h-5  items-center"
                 onClick={() => hideModal()}
               />
             )}
             {!isDesktop && (
               <BiArrowBack
-                className="w-6 h-6 items-center cursor-pointer"
+                className="w-6 h-6 items-center"
                 onClick={() => hideModal()}
               />
             )}
