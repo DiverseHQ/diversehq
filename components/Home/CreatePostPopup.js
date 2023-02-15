@@ -572,7 +572,7 @@ const CreatePostPopup = () => {
               className="flex flex-row space-x-1 items-center justify-center"
               onClick={() => setShowCollectSettings(false)}
             >
-              <IoIosArrowBack className="w-6 h-6" />
+              <IoIosArrowBack className="w-6 h-6 hover:bg-p-btn-hover" />
               <p className="text-p-text ml-4 text-xl">Back</p>
             </button>
           ) : (
@@ -603,8 +603,7 @@ const CreatePostPopup = () => {
             className={`flex flex-row items-center jusitify-center  ${
               showCollectSettings ? 'hidden' : ''
             }`}
-          ></div>
-          <div className="flex flex-row items-center jusitify-center">
+          >
             {/* <select
               onChange={(e) => {
                 e.preventDefault()
