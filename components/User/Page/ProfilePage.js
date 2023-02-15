@@ -206,7 +206,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                         {loading && (
                           <CircularProgress size="18px" color="primary" />
                         )}
-                        <div>DM</div>
                       </div>
                     )}
 
