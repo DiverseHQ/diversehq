@@ -495,15 +495,15 @@ const CommunityInfoCard = ({ _community }) => {
             </BottomDrawerWrapper>
 
             {!isMobile && (
-              <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-[14px]">
+              <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-xs md:text-[16px]">
                 {/* stats UI for desktop */}
-                <div className="">
+                <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Members: </span>
                   <span className="font-semibold">
                     {community.members?.length}
                   </span>
                 </div>
-                <div className="">
+                <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Posts: </span>
                   <span className="font-semibold">{numberOfPosts}</span>
                 </div>
