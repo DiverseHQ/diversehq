@@ -8,7 +8,9 @@ import { IMAGE_KIT_ENDPOINT } from '../../../utils/config'
  */
 
 const imageProxy = (url: string, tr: string = ''): string => {
-  return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,${tr}/${url}`
+  // for now, returning the original url
+  return url
+  // return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,${tr}/${url}`
 }
 
 export default imageProxy
