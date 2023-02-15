@@ -580,7 +580,7 @@ const CreatePostPopup = () => {
                 e.preventDefault()
                 setFlair(e.target.value)
               }}
-              className="bg-s-bg outline-none mr-2 px-1 py-1 rounded-md"
+              className="bg-p-bg border border-p-border outline-none mr-2 px-1 py-1 rounded-md text-p-text"
               value={flair}
             >
               <option

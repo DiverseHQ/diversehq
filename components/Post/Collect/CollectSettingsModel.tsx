@@ -144,7 +144,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
           />
         </div>
         {monetize && (
-          <div className="lg:ml-[50px] flex flex-row lg:flex-col flex-row lg:gap-y-4 space-x-10 lg:space-x-0">
+          <div className=" flex flex-row  flex-row lg:gap-y-4 space-x-10 lg:space-x-32">
             <div className="flex flex-row items-center ">
               <div>Currency</div>
               <MUIThemeProvider theme={MUITheme}>
