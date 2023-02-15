@@ -65,6 +65,7 @@ const MobileFilterDrawerButton = () => {
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         showClose={true}
+        position="bottom"
         className="dark:bg-s-bg"
       >
         <div className="flex flex-col justify-center items-center text-p-text">

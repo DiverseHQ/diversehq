@@ -24,12 +24,7 @@ const PopUpWrapper = ({
             onClick={() => hideModal()}
           >
             {isDesktop && <AiOutlineClose className="w-5 h-5  items-center" />}
-            {!isDesktop && (
-              <BiArrowBack
-                className="w-6 h-6 items-center"
-                onClick={() => hideModal()}
-              />
-            )}
+            {!isDesktop && <BiArrowBack className="w-6 h-6 items-center" />}
           </div>
           <div className="text-p-text ml-4 text-xl">{title}</div>
         </div>

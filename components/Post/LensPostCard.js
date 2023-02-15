@@ -196,6 +196,9 @@ const LensPostCard = ({ post }) => {
     }
   }
 
+  const isBlur =
+    !router.pathname.startsWith('/p') && postInfo?.metadata?.contentWarning
+
   return (
     <>
       {postInfo && (
@@ -410,15 +413,31 @@ const LensPostCard = ({ post }) => {
                 <div className="mb-2 px-3 sm:pl-3.5 ">
                   {!router.pathname.startsWith('/p') ? (
                     <>
-                      {postInfo?.metadata?.name && (
-                        <Markup
-                          className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
-                        >
-                          {/* remove title text from content */}
+                      <div className="flex flex-row">
+                        {postInfo?.metadata?.name && (
+                          <Markup
+                            className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                          >
+                            {/* remove title text from content */}
 
-                          {postInfo?.metadata?.name}
-                        </Markup>
-                      )}
+                            {postInfo?.metadata?.name}
+                          </Markup>
+                        )}
+                        {postInfo?.metadata?.contentWarning !== null && (
+                          <div
+                            className={`border ${
+                              postInfo?.metadata?.contentWarning === 'NSFW'
+                                ? 'border-red-500 text-red-500'
+                                : postInfo?.metadata?.contentWarning ===
+                                  'SENSITIVE'
+                                ? 'border-yellow-500 text-yellow-500'
+                                : 'border-blue-500 text-blue-500'
+                            } rounded-full px-2 py-0.5 h-fit text-xs`}
+                          >
+                            {postInfo?.metadata?.contentWarning}
+                          </div>
+                        )}
+                      </div>
                       {postInfo?.metadata?.name !==
                         postInfo?.metadata?.content && (
                         <div
@@ -452,15 +471,31 @@ const LensPostCard = ({ post }) => {
                     </>
                   ) : (
                     <>
-                      {postInfo?.metadata?.name && (
-                        <Markup
-                          className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
-                        >
-                          {/* remove title text from content */}
+                      <div className="flex flex-row">
+                        {postInfo?.metadata?.name && (
+                          <Markup
+                            className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                          >
+                            {/* remove title text from content */}
 
-                          {postInfo?.metadata?.name}
-                        </Markup>
-                      )}
+                            {postInfo?.metadata?.name}
+                          </Markup>
+                        )}
+                        {postInfo?.metadata?.contentWarning !== null && (
+                          <div
+                            className={`border ${
+                              postInfo?.metadata?.contentWarning === 'NSFW'
+                                ? 'border-red-500 text-red-500'
+                                : postInfo?.metadata?.contentWarning ===
+                                  'SENSITIVE'
+                                ? 'border-yellow-500 text-yellow-500'
+                                : 'border-blue-500 text-blue-500'
+                            } rounded-full px-2 py-0.5 h-fit text-xs `}
+                          >
+                            {postInfo?.metadata?.contentWarning}
+                          </div>
+                        )}
+                      </div>
                       {postInfo?.metadata?.name !==
                         postInfo?.metadata?.content && (
                         <div
@@ -497,7 +532,11 @@ const LensPostCard = ({ post }) => {
                   )}
                 </div>
                 {postInfo?.metadata?.media.length > 0 && (
-                  <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                  <div
+                    className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                      isBlur ? 'blur-xl' : ''
+                    }`}
+                  >
                     <Attachment
                       publication={postInfo}
                       className={`${

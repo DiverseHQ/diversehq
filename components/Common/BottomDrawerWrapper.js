@@ -1,30 +1,42 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Drawer } from '@mui/material'
-import { useTheme } from './ThemeProvider'
+import { useTheme } from '../Common/ThemeProvider'
 
 const BottomDrawerWrapper = ({
   children,
   isDrawerOpen,
   setIsDrawerOpen,
-  showClose = true
+  showClose = true,
+  position
 }) => {
   const { theme } = useTheme()
   return (
     <Drawer
-      anchor="bottom"
+      anchor={position}
       open={isDrawerOpen}
       onClose={() => {
         setIsDrawerOpen(false)
       }}
       sx={{
         '& .MuiDrawer-paper': {
-          borderRadius: '20px 20px 0px 0px',
-          bgcolor: theme === 'light' ? '#FFFFFF' : '#1A1A1B',
-          color: theme === 'light' ? '#1A1A1B' : '#FFFFFF'
+          borderRadius:
+            (position === 'bottom' && '20px 20px 0px 0px') ||
+            (position === 'left' && '0px 10px 10px 0px'),
+          bgcolor: theme === 'dark' ? '#1a1a1b' : '#fff',
+          color: theme === 'dark' ? '#fff' : '#1a1a1b'
+        },
+        '& .MuiDrawer-paperAnchorLeft': {
+          width: '80%'
         }
       }}
+      transitionDuration={200}
+      bgcolor="custom"
     >
-      <div className="self-center mt-1 pb-4">
+      <div
+        className={` ${
+          position === 'bottom' ? 'self-center mt-1 pb-4' : 'hidden'
+        }`}
+      >
         <svg
           width="36"
           height="5"
@@ -37,7 +49,7 @@ const BottomDrawerWrapper = ({
       </div>
       <div className="max-h-[500px] ">{children}</div>
       {showClose && (
-        <div className="px-4 w-full bg-s-bg mb-3 mt-1">
+        <div className="px-4 w-full  mb-3 mt-1">
           <button
             onClick={() => {
               setIsDrawerOpen(false)

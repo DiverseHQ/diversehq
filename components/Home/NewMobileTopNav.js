@@ -183,12 +183,10 @@ const NewMobileTopNav = () => {
           </>
         )}
       </div>
-      {isOpenSidebar && (
-        <MobileNavSidebar
-          isOpenSidebar={isOpenSidebar}
-          setIsOpenSidebar={setIsOpenSidebar}
-        />
-      )}
+      <MobileNavSidebar
+        isOpenSidebar={isOpenSidebar}
+        setIsOpenSidebar={setIsOpenSidebar}
+      />
     </>
   )
 }

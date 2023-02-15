@@ -197,12 +197,12 @@ const FreeCollectPopUp = ({
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
                 <CircularProgress size="18px" color="primary" />
-                <div>Collect</div>
+                <div>Collecting</div>
               </div>
             ) : (
               <div className="flex flex-row items-center space-x-2">
                 <BsCollection className="w-5 h-5" />
-                <p>Collect</p>
+                <p>Collect For Free</p>
               </div>
             )}
           </button>

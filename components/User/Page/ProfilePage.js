@@ -364,7 +364,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                 isDrawerOpen={isDrawerOpen}
                 setIsDrawerOpen={setIsDrawerOpen}
                 showClose
-                // height="235px"
+                position="bottom"
               >
                 <div className="flex flex-col gap-4 mx-4 mb-4">
                   <h3 className="font-bold text-[20px] self-center">

@@ -122,24 +122,24 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         />
       )}
 
-      <div
-        className={` flex flex-col absolute transition ease-in-out w-[80%] h-full duration-3000 bg-p-bg dark:text-p-text rounded-r-[10px] ${
-          isOpenSidebar ? 'top-0 ' : 'top-[-490px]'
-        } `}
+      <BottomDrawerWrapper
+        isDrawerOpen={isOpenSidebar}
+        setIsDrawerOpen={setIsOpenSidebar}
+        position="left"
       >
-        <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-8">
-          {user && address && (
-            <div className="flex flex-col">
-              <div className="flex flex-row gap-1">
-                <img
-                  src={user?.profileImageUrl}
-                  className="w-[55px] h-[55px] bg-[#333] rounded-full"
-                />
-                <div className="flex flex-col justify-center items-start ml-4">
-                  {user?.name && (
-                    <h3 className="font-semibold text-[18px]">{user.name}</h3>
-                  )}
-                  {isSignedIn && hasProfile && (
+        <div className="flex flex-col absolute transition ease-in-out h-full bg-p-bg dark:text-p-text w-full">
+          <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-8">
+            {user && address && (
+              <div className="flex flex-col">
+                <div className="flex flex-row gap-1">
+                  <img
+                    src={user?.profileImageUrl}
+                    className="w-[55px] h-[55px] bg-[#333] rounded-full"
+                  />
+                  <div className="flex flex-col items-start ml-4">
+                    {user?.name && (
+                      <h3 className="font-semibold text-[18px]">{user.name}</h3>
+                    )}
                     <div className="flex flex-row gap-4 text-p-text">
                       <div className="">
                         <span className="font-bold mr-1">
@@ -154,175 +154,191 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                         <span className="font-light">Following</span>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-        <div className="bg-[#62F030] px-4 py-2 hover:font-semibold cursor-pointer">
-          <LensLoginButton />
-        </div>
-        <div className="flex flex-col px-4 bg-p-bg">
-          <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
-            onClick={() => {
-              routeToProfile()
-              setIsOpenSidebar(false)
-            }}
-          >
-            <MdOutlinePerson className="w-7 h-7 object-contain" />
-            <span className="text-p-text text-xl">Profile</span>
-          </button>
-
-          <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
-            onClick={() => {
-              createCommunity()
-              setIsOpenSidebar(false)
-            }}
-          >
-            <MdOutlineCreateNewFolder className="w-7 h-7 object-contain" />
-            <span className="text-p-text text-xl">Create Community</span>
-          </button>
-
-          <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
-            onClick={() => setShowCreatedCommunities(true)}
-            ref={createdCommunitiesButtonRef}
-          >
-            <AiOutlineUsergroupAdd className="w-7 h-7 object-contain" />
-            <span className="text-p-text text-xl">Created Communities</span>
-          </button>
-
-          <button
-            className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
-            onClick={() => setShowJoinedCommunities(true)}
-            ref={createdCommunitiesButtonRef}
-          >
-            <MdOutlineGroups className="w-7 h-7 object-contain" />
-            <span className="text-p-text text-xl">Joined Communities</span>
-          </button>
-
-          <button
-            className="flex flex-row items-center hover:font-semibold py-4 gap-3"
-            onClick={toggleTheme}
-          >
-            {theme === 'light' ? (
-              <FiMoon className="w-7 h-7 object-contain" />
-            ) : (
-              <FiSun className="w-7 h-7 object-contain" />
             )}
-            <span className="text-p-text text-xl">
-              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-            </span>
-          </button>
-          <div className="flex flex-row items-center hover:font-semibold py-4 gap-3">
-            <div
-              className="flex flex-row gap-3 cursor-pointer"
-              onClick={async () => {
-                disconnect()
+          </div>
+          <div className="bg-[#62F030] px-4 py-4">
+            <LensLoginButton />
+          </div>
+          <div className="flex flex-col px-4 bg-p-bg">
+            <button
+              className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
+              onClick={() => {
+                routeToProfile()
                 setIsOpenSidebar(false)
               }}
             >
-              <AiOutlineDisconnect className="w-7 h-7 object-contain text-red-400" />
-              <span className="text-xl text-red-400">Disconnect</span>
-            </div>
-            {user && address && (
+              <MdOutlinePerson className="w-7 h-7 object-contain" />
+              <span className="text-p-text text-xl">Profile</span>
+            </button>
+
+            <button
+              className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
+              onClick={() => {
+                createCommunity()
+                setIsOpenSidebar(false)
+              }}
+            >
+              <MdOutlineCreateNewFolder className="w-7 h-7 object-contain" />
+              <span className="text-p-text text-xl">Create Community</span>
+            </button>
+
+            <button
+              className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
+              onClick={() => {
+                setShowCreatedCommunities(true)
+              }}
+              ref={createdCommunitiesButtonRef}
+            >
+              <AiOutlineUsergroupAdd className="w-7 h-7 object-contain" />
+              <span className="text-p-text text-xl">Created Communities</span>
+            </button>
+
+            <button
+              className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
+              onClick={() => setShowJoinedCommunities(true)}
+              ref={createdCommunitiesButtonRef}
+            >
+              <MdOutlineGroups className="w-7 h-7 object-contain" />
+              <span className="text-p-text text-xl">Joined Communities</span>
+            </button>
+
+            <button
+              className="flex flex-row items-center hover:font-semibold py-4 gap-3"
+              onClick={toggleTheme}
+            >
+              {theme === 'light' ? (
+                <FiMoon className="w-7 h-7 object-contain" />
+              ) : (
+                <FiSun className="w-7 h-7 object-contain" />
+              )}
+              <span className="text-p-text text-xl">
+                {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+              </span>
+            </button>
+            <div className="flex flex-row items-center hover:font-semibold py-4 gap-3">
               <div
-                className="text-sm flex flex-row items-center cursor-pointer"
-                onClick={handleWalletAddressCopy}
+                className="flex flex-row gap-3"
+                onClick={async () => {
+                  disconnect()
+                  setIsOpenSidebar(false)
+                }}
               >
-                <div className="">{stringToLength(user?.walletAddress, 8)}</div>
-                <FaRegCopy className="w-3 h-3" />
+                <AiOutlineDisconnect className="w-7 h-7 object-contain text-red-400" />
+                <span className="text-xl text-red-400">Disconnect</span>
               </div>
-            )}
-          </div>
+              {user && address && (
+                <div
+                  className="text-sm flex flex-row items-center cursor-pointer"
+                  onClick={handleWalletAddressCopy}
+                >
+                  <div className="">
+                    {stringToLength(user?.walletAddress, 8)}
+                  </div>
+                  <FaRegCopy className="w-3 h-3" />
+                </div>
+              )}
+            </div>
 
-          <a
-            href={DISCORD_INVITE_LINK}
-            target={'_blank'}
-            rel="noreferrer"
-            className="flex flex-row items-center gap-3 py-4  hover:font-semibold"
-          >
-            <FaDiscord className="w-7 h-7" />
-            <span className="text-p-text text-xl">Discord</span>
-          </a>
+            <a
+              href={DISCORD_INVITE_LINK}
+              target={'_blank'}
+              rel="noreferrer"
+              className="flex flex-row items-center gap-3 py-4  hover:font-semibold"
+            >
+              <FaDiscord className="w-7 h-7" />
+              <span className="text-p-text text-xl">Discord</span>
+            </a>
+          </div>
         </div>
+      </BottomDrawerWrapper>
 
-        {/* joined communities here */}
-        <BottomDrawerWrapper
-          isDrawerOpen={showJoinedCommunities}
-          setIsDrawerOpen={setShowJoinedCommunities}
-        >
-          <div className="flex flex-col justify-center items-center">
-            <h1 className="font-bold text-lg mt-5">Joined Communities</h1>
-            <div className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
-              {joinedCommunities.map((community) => (
+      {/* joined communities here */}
+
+      <BottomDrawerWrapper
+        isDrawerOpen={showJoinedCommunities}
+        setIsDrawerOpen={setShowJoinedCommunities}
+        position="bottom"
+      >
+        <div className="flex flex-col justify-center items-center">
+          <h1 className="font-bold text-lg mt-5">Joined Communities</h1>
+          <div className="rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
+            {joinedCommunities.map((community) => (
+              <div
+                key={community._id}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn-hover mx-4"
+                id={community._id}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    community.logoImageUrl
+                      ? community.logoImageUrl
+                      : '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
                 <div
-                  key={community._id}
-                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn-hover mx-4"
+                  className="text-p-text ml-4 text-lg font-semibold"
                   id={community._id}
-                  onClick={() => {
-                    router.push(`/c/${community.name}`)
-                    setIsOpenSidebar(false)
-                  }}
                 >
-                  <ImageWithPulsingLoader
-                    src={community.logoImageUrl}
-                    alt="community logo"
-                    className="rounded-full object-cover w-12 h-12"
-                  />
-
-                  <div
-                    className="text-p-text ml-4 text-lg font-semibold"
-                    id={community._id}
-                  >
-                    {community.name}
-                  </div>
+                  {community.name}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        </BottomDrawerWrapper>
+        </div>
+      </BottomDrawerWrapper>
 
-        {/* created communities here */}
-        <BottomDrawerWrapper
-          isDrawerOpen={showCreatedCommunities}
-          setIsDrawerOpen={setShowCreatedCommunities}
-          showClose={true}
-        >
-          <div className="flex flex-col justify-center items-center ">
-            <h1 className="font-bold text-lg mt-5">Created Communities</h1>
-            <div className="bg-s-bg rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
-              {createdCommunities.map((community) => (
+      {/* created communities here */}
+
+      <BottomDrawerWrapper
+        isDrawerOpen={showCreatedCommunities}
+        setIsDrawerOpen={setShowCreatedCommunities}
+        showClose={true}
+        position="bottom"
+      >
+        <div className="flex flex-col justify-center items-center ">
+          <h1 className="font-bold text-lg mt-5">Created Communities</h1>
+          <div className=" rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
+            {createdCommunities.map((community) => (
+              <div
+                key={community._id}
+                className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn-hover mx-4"
+                id={community._id}
+                onClick={() => {
+                  router.push(`/c/${community.name}`)
+                  setIsOpenSidebar(false)
+                }}
+              >
+                <ImageWithPulsingLoader
+                  src={
+                    community.logoImageUrl
+                      ? community.logoImageUrl
+                      : '/gradient.jpg'
+                  }
+                  alt="community logo"
+                  className="rounded-full object-cover w-12 h-12"
+                />
+
                 <div
-                  key={community._id}
-                  className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn-hover mx-4"
+                  className="text-p-text ml-4 text-lg font-semibold"
                   id={community._id}
-                  onClick={() => {
-                    router.push(`/c/${community.name}`)
-                    setIsOpenSidebar(false)
-                  }}
                 >
-                  <ImageWithPulsingLoader
-                    src={community.logoImageUrl}
-                    alt="community logo"
-                    className="rounded-full object-cover w-12 h-12"
-                  />
-
-                  <div
-                    className="text-p-text ml-4 text-lg font-semibold"
-                    id={community._id}
-                  >
-                    {community.name}
-                  </div>
+                  {community.name}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        </BottomDrawerWrapper>
-      </div>
+        </div>
+      </BottomDrawerWrapper>
     </div>
   )
 }
