@@ -29,7 +29,7 @@ const MessageTile: FC<MessageTileProps> = ({
     <div
       className={`flex flex-row w-full px-2 py-1 ${
         isSender
-          ? ' justify-end text-[#eeeeee]'
+          ? ' justify-end text-[#ffffff]'
           : 'text-[#000000] justify-start'
       } `}
     >
