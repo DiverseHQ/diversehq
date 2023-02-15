@@ -49,6 +49,7 @@ import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
 import useDevice from '../Common/useDevice'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { supportedMimeTypes } from '../../utils/config'
+import { IoIosArrowBack } from 'react-icons/io'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
@@ -553,29 +554,44 @@ const CreatePostPopup = () => {
         isDisabled={!communityId}
       >
         <div className="flex flex-row items-center justify-between px-4 z-50">
-          <div className="border border-p-border rounded-full text-p-text w-fit px-1">
+          {showCollectSettings ? (
             <button
-              className="text-blue-500 p-1"
-              onClick={showJoinedCommunities}
+              className="flex flex-row space-x-1 items-center justify-center"
+              onClick={() => setShowCollectSettings(false)}
             >
-              {showCommunity.name ? (
-                <div className="flex justify-center items-center">
-                  <img
-                    src={showCommunity.image}
-                    className="rounded-full w-9 h-9"
-                  />
-                  <h1 className="ml-2">{showCommunity.name}</h1>
-                </div>
-              ) : (
-                <div className="flex flex-row items-center justify-center">
-                  <div>Choose Community</div>
-                  <AiOutlineDown className="w-4 h-4 mx-1" />
-                </div>
-              )}
+              <IoIosArrowBack className="w-6 h-6" />
+              <p className="text-p-text ml-4 text-xl">Back</p>
             </button>
-          </div>
-          <div className="flex flex-row items-center jusitify-center">
-            <select
+          ) : (
+            <div className="border border-p-border rounded-full text-p-text w-fit px-1">
+              <button
+                className="text-blue-500 p-1"
+                onClick={showJoinedCommunities}
+              >
+                {showCommunity.name ? (
+                  <div className="flex justify-center items-center">
+                    <img
+                      src={showCommunity.image}
+                      className="rounded-full w-9 h-9"
+                    />
+                    <h1 className="ml-2">{showCommunity.name}</h1>
+                  </div>
+                ) : (
+                  <div className="flex flex-row items-center justify-center">
+                    <div>Choose Community</div>
+                    <AiOutlineDown className="w-4 h-4 mx-1" />
+                  </div>
+                )}
+              </button>
+            </div>
+          )}
+
+          <div
+            className={`flex flex-row items-center jusitify-center  ${
+              showCollectSettings ? 'hidden' : ''
+            }`}
+          >
+            {/* <select
               onChange={(e) => {
                 e.preventDefault()
                 setFlair(e.target.value)
@@ -593,7 +609,7 @@ const CreatePostPopup = () => {
               <option value="NSFW">NSFW</option>
               <option value="SENSITIVE">Sensitive</option>
               <option value="SPOILER">Spoiler</option>
-            </select>
+            </select> */}
             {isLensPost && (
               <button
                 onClick={() => {
