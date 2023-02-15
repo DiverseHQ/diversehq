@@ -56,7 +56,7 @@ const MobileBottomNav = () => {
   }
 
   return (
-    <div className="fixed bottom-0 w-full py-2 flex flex-row justify-evenly items-center bg-p-bg shadow-top min-h-[56px]">
+    <div className="fixed bottom-0 w-full py-2 flex flex-row justify-evenly items-center bg-s-bg border-t-[0.5px] border-s-border min-h-[56px]">
       <div
         className="p-1.5 hover:bg-[#6668FF] rounded-full hover:bg-opacity-20 cursor-pointer"
         onClick={() => {

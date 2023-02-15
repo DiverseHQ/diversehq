@@ -34,7 +34,7 @@ module.exports = {
         'm-btn-hover-text': 'var(--main-btn-hover-text)' // main button hover text
       },
       boxShadow: {
-        top: '0px -2px 5px 1px rgba(0, 0, 0, 0.1)',
+        top: '0px -2px 1px 1px rgba(0, 0, 0, 0.1)',
         nav: '0px 4px 4px rgba(0, 0, 0, 0.25)'
       }
     }
