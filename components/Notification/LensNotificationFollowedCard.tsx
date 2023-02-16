@@ -3,8 +3,15 @@ import React from 'react'
 import LensFollowButton from '../User/LensFollowButton'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { SlUserFollow } from 'react-icons/sl'
+import { NewFollowerNotification } from '../../graphql/generated'
 
-const LensNotificationFollowedCard = ({ notification, isRead }) => {
+interface Props {
+  notification: NewFollowerNotification
+  isRead: boolean
+}
+
+const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
+  if (!notification?.wallet?.defaultProfile) return <></>
   return (
     <CommonNotificationCardLayoutUI
       MainRow={() => (

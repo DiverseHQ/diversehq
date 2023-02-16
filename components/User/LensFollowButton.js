@@ -3,12 +3,13 @@ import React from 'react'
 import useLensFollowButton from './useLensFollowButton'
 import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri'
 const LensFollowButton = ({ lensProfile }) => {
+  if (!lensProfile) return <></>
   const {
     isFollowedByMe,
     handleFollowProfile,
     handleUnfollowProfile,
     loading
-  } = useLensFollowButton({ profileId: lensProfile.id })
+  } = useLensFollowButton({ profileId: lensProfile?.id })
   return (
     <>
       {lensProfile && isFollowedByMe ? (
