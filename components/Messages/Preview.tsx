@@ -59,7 +59,7 @@ const Preview: FC<Props> = ({
           </div>
         </div>
       </div>
-      <div className="text-s-text text-sm">
+      <div className="text-s-text text-xs shrink-0">
         {/** day js time go in format of 3M, 3H, 3D */}
         {/** dayjs with date and local time */}
         {/* {dayjs(message.sent).format('DD/MM/YYYY hh:mm A')} */}
