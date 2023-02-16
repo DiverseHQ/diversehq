@@ -11,6 +11,7 @@ import { DISCORD_INVITE_LINK, userRoles } from '../../utils/config'
 import { FaDiscord } from 'react-icons/fa'
 import { CgProfile } from 'react-icons/cg'
 import { BiGroup } from 'react-icons/bi'
+import { useRouter } from 'next/router'
 
 const NewLeftSidebar = () => {
   const { user, address } = useProfile()
@@ -52,8 +53,14 @@ const NewLeftSidebar = () => {
     })
   }
 
+  const router = useRouter()
+
   return (
-    <div className="relative flex flex-col items-start sticky top-[64px] right-0 h-[calc(100vh-62px)] py-8 pl-4 md:pl-6 lg:pl-10 xl:pl-12 pr-2 md:pr-2 lg:pr-4 xl:pr-6 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] gap-4">
+    <div
+      className={`relative ${
+        router.pathname.startsWith('/p') ? 'hidden' : 'flex flex-col'
+      }  items-start sticky top-[64px] right-0 h-[calc(100vh-62px)] py-8 pl-4 md:pl-6 lg:pl-10 xl:pl-12 pr-2 md:pr-2 lg:pr-4 xl:pr-6 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] gap-4`}
+    >
       <div className="flex flex-col rounded-[15px] relative">
         <img src="/diverseBanner.png" className="h-[80px]" />
         <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">

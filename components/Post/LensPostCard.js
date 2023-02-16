@@ -39,7 +39,7 @@ import Attachment from './Attachment'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
-const LensPostCard = ({ post }) => {
+const LensPostCard = ({ post, loading }) => {
   const { isMobile } = useDevice()
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(post?.reaction)
@@ -75,29 +75,6 @@ const LensPostCard = ({ post }) => {
   }, [post, lensProfile])
 
   const { mutateAsync: removePost } = useHidePublicationMutation()
-
-  const [loading, setLoading] = useState(false)
-
-  const fetchCommunityInformationAndSetPost = async () => {
-    try {
-      const communityId = post?.metadata?.tags?.[0]
-      if (!communityId) return
-      setLoading(true)
-      const communityInfo = await getCommunityInfoUsingId(communityId)
-      setPostInfo({ ...post, communityInfo })
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    if (!postInfo) return
-    if (!postInfo?.communityInfo) {
-      fetchCommunityInformationAndSetPost()
-    }
-  }, [postInfo])
 
   const handleUpvote = async () => {
     if (reaction === ReactionTypes.Upvote) return
