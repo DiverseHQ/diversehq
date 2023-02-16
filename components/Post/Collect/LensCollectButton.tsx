@@ -48,7 +48,7 @@ const LensCollectButton = ({
           setIsCollecting
         }) => {
           return (
-            <>
+            <div className="w-full">
               {isMobile && (
                 <div className="flex items-center flex-col justify-center px-4 text-p-text">
                   <div className="mb-2 self-start ">
@@ -105,7 +105,7 @@ const LensCollectButton = ({
                   setIsCollecting={setIsCollecting}
                 />
               )}
-            </>
+            </div>
           )
         }}
       >

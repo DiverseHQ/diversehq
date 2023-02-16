@@ -65,31 +65,18 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
   return (
     <button
       onClick={handleAllowance}
-      className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
+      className="bg-p-btn text-p-btn-text px-2 py-1 text-base font-semibold rounded-md"
       disabled={waitLoading || transactionLoading}
     >
-      {!(waitLoading || transactionLoading || isLoading) && (
-        <div className="flex flex-row space-x-1">
+      {!(waitLoading || transactionLoading || isLoading) ? (
+        <div className="flex flex-row items-center space-x-1">
           <BiPlus className="w-5 h-5" />
           <p>Allow</p>
         </div>
-      )}
-      {waitLoading && (
-        <div className="flex flex-row space-x-1">
+      ) : (
+        <div className="flex flex-row items-center space-x-1">
           <CircularProgress size="18px" color="primary" />
-          <p>Waiting for Transaction</p>
-        </div>
-      )}
-      {transactionLoading && (
-        <div className="flex flex-row space-x-1">
-          <CircularProgress size="18px" color="primary" />
-          <p>Sending Transaction</p>
-        </div>
-      )}
-      {!waitLoading && !transactionLoading && isLoading && (
-        <div className="flex flex-row space-x-1">
-          <CircularProgress size="18px" color="primary" />
-          <p>Waiting for confirmation</p>
+          <p>Allowing..</p>
         </div>
       )}
     </button>
