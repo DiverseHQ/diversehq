@@ -265,14 +265,6 @@ const CommunityInfoCard = ({ _community }) => {
               )}
             </div>
             <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2">
-              {isCreator && (
-                <button
-                  className="bg-p-btn rounded-md py-1 px-2 sm:px-4 self-end text-p-btn-text text-sm sm:text-[14px] font-semibold text-p-btn-text"
-                  onClick={editCommunity}
-                >
-                  Edit
-                </button>
-              )}
               {isJoined ? (
                 <button
                   className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text w-[90px] transition-all ease-in-out  duration-600`}
@@ -299,7 +291,7 @@ const CommunityInfoCard = ({ _community }) => {
                             {
                               label: 'Edit',
                               onClick: editCommunity,
-                              icon: <BiEdit className="mr-1.5 w-6 h-6" />
+                              icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
                             },
                             {
                               label: 'Share',
@@ -439,7 +431,7 @@ const CommunityInfoCard = ({ _community }) => {
               isDrawerOpen={isDrawerOpen}
               setIsDrawerOpen={setIsDrawerOpen}
               showClose
-              // height="235px"
+              position="bottom"
             >
               <div className="flex flex-col gap-4 mx-4 mb-4">
                 <h3 className="font-bold text-[20px] self-center">

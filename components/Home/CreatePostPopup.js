@@ -19,21 +19,22 @@ import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPl
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import {
+  deleteFirebaseStorageFile,
   uploadFileToFirebaseAndGetUrl,
-  uploadFileToIpfsInfuraAndGetPath,
   uploadToIpfsInfuraAndGetPath
   // uploadFileToIpfs
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import { Switch } from '@mui/material'
+import { CircularProgress, Switch } from '@mui/material'
 
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import {
   PublicationMainFocus,
   useCreatePostTypedDataMutation,
-  useCreatePostViaDispatcherMutation
+  useCreatePostViaDispatcherMutation,
+  PublicationContentWarning
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import ImagesPlugin from '../Lexical/ImagesPlugin'
@@ -44,7 +45,10 @@ import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
+import useDevice from '../Common/useDevice'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { supportedMimeTypes } from '../../utils/config'
+import { IoIosArrowBack } from 'react-icons/io'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
@@ -77,6 +81,8 @@ const CreatePostPopup = () => {
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
+  // const [IPFSHash, setIPFSHash] = useState(null)
+  const [imageUpload, setImageUpload] = useState(false)
   useEffect(() => {
     return () => {
       editor?.update(() => {
@@ -89,6 +95,9 @@ const CreatePostPopup = () => {
   const router = useRouter()
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
+  const { isMobile } = useDevice()
+  const [flair, setFlair] = useState(null)
+  const [firebaseUrl, setFirebaseUrl] = useState(null)
 
   const { mutateAsync: createPostViaDispatcher } =
     useCreatePostViaDispatcherMutation()
@@ -100,6 +109,7 @@ const CreatePostPopup = () => {
   const recentCommunities =
     JSON.parse(window.localStorage.getItem('recentCommunities')) || []
   const [selectedCommunity, setSelectedCommunity] = useState(null)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   const storeRecentCommunities = () => {
     window.localStorage.setItem(
@@ -113,7 +123,7 @@ const CreatePostPopup = () => {
     )
   }
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setShowCommunity({ name: '', image: '' })
     hideModal()
   }
@@ -159,16 +169,13 @@ const CreatePostPopup = () => {
       if (isLensPost) {
         // eslint-disable-next-line
 
-        const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
+        // const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
         // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
         // const ipfsPath = `ipfs://${ipfsHash}`
-        console.log('uploadedFile', uploadedFile)
-        handleCreateLensPost(
-          title,
-          communityId,
-          file.type,
-          uploadedFile.uploadedToUrl
-        )
+        if (!firebaseUrl) {
+          return
+        }
+        handleCreateLensPost(title, communityId, file.type, firebaseUrl)
         return
       }
 
@@ -191,6 +198,7 @@ const CreatePostPopup = () => {
 
   const handleCreateLensPost = async (title, communityId, mimeType, url) => {
     let mainContentFocus = null
+    let contentWarning = null
     //todo handle other file types and link content
     if (mimeType.startsWith('image')) {
       mainContentFocus = PublicationMainFocus.Image
@@ -201,12 +209,24 @@ const CreatePostPopup = () => {
     } else {
       mainContentFocus = PublicationMainFocus.TextOnly
     }
+
+    if (flair === 'SENSITIVE') {
+      contentWarning = PublicationContentWarning.Sensitive
+    } else if (flair === 'NSFW') {
+      contentWarning = PublicationContentWarning.Nsfw
+    } else if (flair === 'SPOILER') {
+      contentWarning = PublicationContentWarning.Spoiler
+    } else {
+      contentWarning = PublicationContentWarning.null
+    }
+
     //todo map to community id, so that can be identified by community
     const metadataId = uuidv4()
     const metadata = {
       version: '2.0.0',
       mainContentFocus: mainContentFocus,
       metadata_id: metadataId,
+      contentWarning: contentWarning,
       description: 'Created with DiverseHQ',
       locale: 'en-US',
       content: title + '\n' + content.trim(),
@@ -431,10 +451,14 @@ const CreatePostPopup = () => {
     setFile(filePicked)
     setImageValue(URL.createObjectURL(filePicked))
   }
-  const removeImage = () => {
+  const removeImage = async () => {
     if (loading) return
     setFile(null)
     setImageValue(null)
+    if (firebaseUrl) {
+      await deleteFirebaseStorageFile(firebaseUrl)
+      setFirebaseUrl(null)
+    }
   }
 
   const showAddedFile = () => {
@@ -460,10 +484,17 @@ const CreatePostPopup = () => {
               muted
             ></video>
           )}
-          <AiOutlineClose
-            onClick={removeImage}
-            className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
-          />
+          {imageUpload ? (
+            <CircularProgress
+              size="30px"
+              className="primary absolute z-10 top-2 right-2"
+            />
+          ) : (
+            <AiOutlineClose
+              onClick={removeImage}
+              className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
+            />
+          )}
         </div>
       </div>
     )
@@ -482,6 +513,43 @@ const CreatePostPopup = () => {
     })
   }
 
+  const upLoadFile = async () => {
+    try {
+      setImageUpload(true)
+      if (file) {
+        if (!supportedMimeTypes.includes(file.type)) {
+          notifyError('File type not supported')
+          setImageUpload(false)
+          return
+        }
+        // file size should be less than 8mb
+        if (file.size > 8000000) {
+          notifyError('File size should be less than 8mb')
+          setImageUpload(false)
+          return
+        }
+
+        if (isLensPost) {
+          // file should be less than 2mb
+          const fileObj = await uploadFileToFirebaseAndGetUrl(file, address)
+          setFirebaseUrl(fileObj.uploadedToUrl)
+          // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+          // setIPFSHash(ipfsHash)
+          setImageUpload(false)
+        }
+        setImageUpload(false)
+      }
+    } catch (e) {
+      console.log(e)
+      setImageUpload(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!file) return
+    if (file && isLensPost && !firebaseUrl) upLoadFile()
+  }, [file])
+
   const PopUpModal = () => {
     return (
       // simple modal
@@ -490,35 +558,74 @@ const CreatePostPopup = () => {
         onClick={handleSubmit}
         label="POST"
         loading={loading}
-        isDisabled={!communityId}
+        isDisabled={!communityId || title.length === 0 || imageUpload}
       >
         <div className="flex flex-row items-center justify-between px-4 z-50">
-          <div className="border border-p-border rounded-full text-p-text w-fit px-1">
+          {showCollectSettings ? (
             <button
-              className="text-blue-500 p-1"
-              onClick={showJoinedCommunities}
+              className="flex flex-row space-x-1 items-center justify-center"
+              onClick={() => setShowCollectSettings(false)}
             >
-              {showCommunity.name ? (
-                <div className="flex justify-center items-center">
-                  <img
-                    src={showCommunity.image}
-                    className="rounded-full w-9 h-9"
-                  />
-                  <h1 className="ml-2">{showCommunity.name}</h1>
-                </div>
-              ) : (
-                <div className="flex flex-row items-center justify-center">
-                  <div>Choose Community</div>
-                  <AiOutlineDown className="w-4 h-4 mx-1" />
-                </div>
-              )}
+              <IoIosArrowBack className="w-6 h-6 hover:bg-p-btn-hover" />
+              <p className="text-p-text ml-4 text-xl">Back</p>
             </button>
-          </div>
-          <div className="flex flex-row items-center jusitify-center">
+          ) : (
+            <div className="border border-p-border rounded-full text-p-text w-fit px-1">
+              <button
+                className="text-blue-500 p-1"
+                onClick={showJoinedCommunities}
+              >
+                {showCommunity.name ? (
+                  <div className="flex justify-center items-center">
+                    <img
+                      src={showCommunity.image}
+                      className="rounded-full w-9 h-9"
+                    />
+                    <h1 className="ml-2">{showCommunity.name}</h1>
+                  </div>
+                ) : (
+                  <div className="flex flex-row items-center justify-center">
+                    <div>Choose Community</div>
+                    <AiOutlineDown className="w-4 h-4 mx-1" />
+                  </div>
+                )}
+              </button>
+            </div>
+          )}
+
+          <div
+            className={`flex flex-row items-center jusitify-center  ${
+              showCollectSettings ? 'hidden' : ''
+            }`}
+          >
+            {/* <select
+              onChange={(e) => {
+                e.preventDefault()
+                setFlair(e.target.value)
+              }}
+              className="bg-p-bg border border-p-border outline-none mr-2 px-1 py-1 rounded-md text-p-text"
+              value={flair}
+            >
+              <option
+                value={}
+                className="hidden flex flex-row space-x-1 items-center"
+              >
+                Flair
+              </option>
+              <option value="">None</option>
+              <option value="NSFW">NSFW</option>
+              <option value="SENSITIVE">Sensitive</option>
+              <option value="SPOILER">Spoiler</option>
+            </select> */}
             {isLensPost && (
               <button
                 onClick={() => {
-                  setShowCollectSettings(!showCollectSettings)
+                  if (!isMobile) {
+                    setShowCollectSettings(!showCollectSettings)
+                    return
+                  } else {
+                    setIsDrawerOpen(true)
+                  }
                 }}
                 disabled={loading}
                 className="rounded-full hover:bg-p-btn-hover p-2 mr-6 cursor-pointer"
@@ -624,11 +731,33 @@ const CreatePostPopup = () => {
             />
           </div>
         )}
-        {showCollectSettings && (
+        {showCollectSettings && !isMobile ? (
           <CollectSettingsModel
             collectSettings={collectSettings}
             setCollectSettings={setCollectSettings}
           />
+        ) : (
+          <BottomDrawerWrapper
+            isDrawerOpen={isDrawerOpen}
+            setIsDrawerOpen={setIsDrawerOpen}
+            showClose={false}
+            position="bottom"
+          >
+            <CollectSettingsModel
+              collectSettings={collectSettings}
+              setCollectSettings={setCollectSettings}
+            />
+            <div className="px-4 w-full mb-3 mt-1">
+              <button
+                onClick={() => {
+                  setIsDrawerOpen(false)
+                }}
+                className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl mb-6"
+              >
+                Save
+              </button>
+            </div>
+          </BottomDrawerWrapper>
         )}
       </PopUpWrapper>
     )

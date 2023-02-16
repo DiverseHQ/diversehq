@@ -8,7 +8,11 @@ import {
   useExplorePublicationsQuery
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import { LENS_POST_LIMIT, sortTypes } from '../../utils/config'
+import {
+  LENS_INFINITE_SCROLL_THRESHOLD,
+  LENS_POST_LIMIT,
+  sortTypes
+} from '../../utils/config'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import LensPostCard from '../Post/LensPostCard'
 import useDevice from '../Common/useDevice'
@@ -139,7 +143,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   return (
     <div>
       <InfiniteScroll
-        scrollThreshold={0.7}
+        scrollThreshold={LENS_INFINITE_SCROLL_THRESHOLD}
         dataLength={exploreQueryRequestParams.posts.length}
         next={getMorePosts}
         hasMore={

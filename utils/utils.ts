@@ -1,6 +1,11 @@
 import { Web3Storage } from 'web3.storage'
 import { storage } from './firebase'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes
+} from 'firebase/storage'
 import { create } from 'ipfs-http-client'
 import { PublicationMetadataV2Input } from '../graphql/generated'
 import { BigNumber, utils } from 'ethers'
@@ -148,6 +153,19 @@ export const postIdFromIndexedResult = (
 }
 
 export const getURLsFromText = (text: string) => {
+  if (!text) return []
   const urlRegex = /(((https?:\/\/)|(www\.))\S+)/g
   return text.match(urlRegex) ?? []
+}
+
+export const deleteFirebaseStorageFile = async (url: string) => {
+  await deleteObject(ref(storage, url))
+    .then(() => {
+      // File deleted successfully
+      console.log('File deleted successfully')
+    })
+    .catch((error) => {
+      console.log(error)
+      // Uh-oh, an error occurred!
+    })
 }

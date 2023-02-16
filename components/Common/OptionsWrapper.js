@@ -66,6 +66,7 @@ const OptionsWrapper = ({
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         showClose
+        position="bottom"
       >
         <OptionPopUpModal />
       </BottomDrawerWrapper>

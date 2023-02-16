@@ -36,6 +36,13 @@ const LensCommentCard = ({ comment }) => {
   const [downvoteCount, setDownvoteCount] = useState(
     comment?.stats?.totalDownvotes ? comment?.stats?.totalDownvotes : 0
   )
+
+  useEffect(() => {
+    if (!comment?.stats) return
+    setUpvoteCount(comment?.stats?.totalUpvotes)
+    setDownvoteCount(comment?.stats?.totalDownvotes)
+  }, [comment.stats])
+
   const [voteCount, setVoteCount] = useState(upvoteCount - downvoteCount)
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
@@ -55,7 +62,12 @@ const LensCommentCard = ({ comment }) => {
     if (!comment || !lensProfile) return
     setIsAuthor(lensProfile?.defaultProfile?.id === comment?.profile?.id)
   }, [comment, lensProfile])
+
   const [comments, setComments] = useState([])
+
+  useEffect(() => {
+    setComments([])
+  }, [comment?.id])
 
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
@@ -149,7 +161,9 @@ const LensCommentCard = ({ comment }) => {
   }
 
   const addComment = async (tx, comment) => {
-    setComments([comment, ...comments])
+    const prevComments = comments
+    const newCommentsFirstPhase = [comment, ...prevComments]
+    setComments(newCommentsFirstPhase)
     setShowCreateComment(false)
     hideModal()
     const indexResult = await pollUntilIndexed(tx)
@@ -165,12 +179,12 @@ const LensCommentCard = ({ comment }) => {
         reaction: ReactionTypes.Upvote
       }
     })
-    comment.id = commentId
 
-    // remove previous comment
-    setComments(comments.filter((c) => c.tempId !== comment.tempId))
-    // add new comment
-    setComments([comment, ...comments])
+    const newCommentsSecondPhase = newCommentsFirstPhase.map((c) =>
+      c.tempId === comment.tempId ? { ...c, id: commentId } : c
+    )
+    // add id to that comment
+    setComments(newCommentsSecondPhase)
   }
 
   const openReplyModal = async () => {
@@ -225,12 +239,13 @@ const LensCommentCard = ({ comment }) => {
             {!comment.id && (
               <div className="sm:mr-5 flex flex-row items-center">
                 {/* pulsing dot */}
-                <div className="text-xs sm:text-sm">Confirming</div>
-                <div className="w-2 h-2 rounded-full bg-p-btn animate-pulse" />
+                <Tooltip title="Indexing" arrow>
+                  <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
+                </Tooltip>
               </div>
             )}
-            <div>
-              {isAuthor && comment.id && (
+            {isAuthor && comment.id && (
+              <div>
                 <OptionsWrapper
                   OptionPopUpModal={() => (
                     <MoreOptionsModal
@@ -257,8 +272,8 @@ const LensCommentCard = ({ comment }) => {
                     </div>
                   </Tooltip>
                 </OptionsWrapper>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* padded content with line*/}
@@ -283,7 +298,7 @@ const LensCommentCard = ({ comment }) => {
                       <img
                         src={
                           reaction === ReactionTypes.Upvote
-                            ? '/UpvoteFilled.svg'
+                            ? '/UpvotedFilled.svg'
                             : '/upvoteGray.svg'
                         }
                         className="w-4 h-4"
@@ -299,7 +314,7 @@ const LensCommentCard = ({ comment }) => {
                       <img
                         src={
                           reaction === ReactionTypes.Downvote
-                            ? '/DownvoteFilled.svg'
+                            ? '/DownvotedFilled.svg'
                             : '/downvoteGray.svg'
                         }
                         className="w-4 h-4"
@@ -338,13 +353,15 @@ const LensCommentCard = ({ comment }) => {
               )}
 
               {/* replies */}
-              <div className="w-full">
-                <LensRepliedComments
-                  commentId={comment.id}
-                  comments={comments}
-                  setComments={setComments}
-                />
-              </div>
+              {comment?.id && (
+                <div className="w-full">
+                  <LensRepliedComments
+                    commentId={comment.id}
+                    comments={comments}
+                    setComments={setComments}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

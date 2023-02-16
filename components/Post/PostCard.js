@@ -314,7 +314,7 @@ const PostCard = ({ _post, setPosts }) => {
               >
                 <img
                   src={
-                    reaction === 'UPVOTE' ? '/UpvoteFilled.svg' : '/Upvote.svg'
+                    reaction === 'UPVOTE' ? '/UpvotedFilled.svg' : '/Upvote.svg'
                   }
                   className="w-5 h-5"
                 />
@@ -329,8 +329,8 @@ const PostCard = ({ _post, setPosts }) => {
                 <img
                   src={
                     reaction === 'DOWNVOTE'
-                      ? '/DownvoteFilled.svg'
-                      : '/Downvote.svg'
+                      ? '/DownvotedFilled.svg'
+                      : '/downvoteGray.svg'
                   }
                   className="w-5 h-5"
                 />
@@ -482,7 +482,7 @@ const PostCard = ({ _post, setPosts }) => {
                       //  onClick={liked ? handleUnLike : handleLike}
                       src={
                         reaction === ReactionTypes.Upvote
-                          ? '/UpvoteFilled.svg'
+                          ? '/UpvotedFilled.svg'
                           : '/upvoteGray.svg'
                       }
                       className="w-4 h-4"
@@ -498,7 +498,7 @@ const PostCard = ({ _post, setPosts }) => {
                     <img
                       src={
                         reaction === ReactionTypes.Downvote
-                          ? '/DownvoteFilled.svg'
+                          ? '/DownvotedFilled.svg'
                           : '/downvoteGray.svg'
                       }
                       className="w-4 h-4"

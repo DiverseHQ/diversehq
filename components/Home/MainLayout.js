@@ -35,7 +35,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               width: '100%',
               position: 'fixed',
               top: '50px',
-              zIndex: '100'
+              zIndex: '49'
             }}
           >
             {isLoading && <LinearProgress />}

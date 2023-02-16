@@ -17,7 +17,7 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import { useRouter } from 'next/router'
 import { usePostIndexing } from './IndexingContext/PostIndexingWrapper'
 import IndexingPostCard from './IndexingPostCard'
-import { sortTypes } from '../../utils/config'
+import { LENS_INFINITE_SCROLL_THRESHOLD, sortTypes } from '../../utils/config'
 import { memo } from 'react'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
@@ -38,7 +38,6 @@ const LensPostsExplorePublicationsColumn = () => {
     posts: []
   })
 
-  console.log('exploreQueryRequestParams', exploreQueryRequestParams)
   const { loading: routeLoading } = useRouterLoading()
   const { data } = useExplorePublicationsQuery(
     {
@@ -71,11 +70,6 @@ const LensPostsExplorePublicationsColumn = () => {
   )
 
   useEffect(() => {
-    console.log('router.query.sort', router.query.sort)
-    console.log(
-      'exploreQueryRequestParams.sortType',
-      exploreQueryRequestParams.sortType
-    )
     if (!router?.query?.sort) return
     if (exploreQueryRequestParams.sortType === router.query.sort) return
     // empty posts array, reset cursor, and set sort criteria
@@ -179,7 +173,7 @@ const LensPostsExplorePublicationsColumn = () => {
   return (
     <div>
       <InfiniteScroll
-        scrollThreshold={0.7}
+        scrollThreshold={LENS_INFINITE_SCROLL_THRESHOLD}
         dataLength={exploreQueryRequestParams.posts.length}
         next={getMorePosts}
         hasMore={

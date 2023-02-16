@@ -47,7 +47,7 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
     <div className="flex flex-col">
       {/* todo search profile and message */}
       <Search
-        placeholder="Search for someone to chat with..."
+        placeholder="Search someone to chat with..."
         onProfileSelected={onProfileSelected}
       />
       {/* profiles and preview message */}

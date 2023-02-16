@@ -19,10 +19,11 @@ import useDevice from '../Common/useDevice'
 import { getCommunityInfoUsingId } from '../../api/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
-import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+// import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
 import {
   countLinesFromMarkdown,
+  deleteFirebaseStorageFile,
   getURLsFromText,
   unpinFromIpfsInfura
 } from '../../utils/utils'
@@ -157,6 +158,12 @@ const LensPostCard = ({ post, loading }) => {
             } catch (error) {
               console.log(error)
             }
+          } else if (
+            media?.original?.url?.startsWith(
+              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com'
+            )
+          ) {
+            await deleteFirebaseStorageFile(media?.original?.url)
           }
         }
       }
@@ -172,6 +179,9 @@ const LensPostCard = ({ post, loading }) => {
       router.reload()
     }
   }
+
+  const isBlur =
+    !router.pathname.startsWith('/p') && postInfo?.metadata?.contentWarning
 
   return (
     <>
@@ -352,10 +362,10 @@ const LensPostCard = ({ post, loading }) => {
                       //  onClick={liked ? handleUnLike : handleLike}
                       src={
                         reaction === ReactionTypes.Upvote
-                          ? '/upvoteFilled.svg'
+                          ? '/UpvotedFilled.svg'
                           : '/upvoteGray.svg'
                       }
-                      className="w-6 h-6"
+                      className="w-5 h-5"
                     />
                   </button>
                 </Tooltip>
@@ -371,10 +381,10 @@ const LensPostCard = ({ post, loading }) => {
                     <img
                       src={
                         reaction === ReactionTypes.Downvote
-                          ? '/downvoteFilled.svg'
+                          ? '/DownvotedFilled.svg'
                           : '/downvoteGray.svg'
                       }
-                      className="w-5 h-5"
+                      className="w-4 h-4"
                     />
                   </button>
                 </Tooltip>
@@ -387,15 +397,31 @@ const LensPostCard = ({ post, loading }) => {
                 <div className="mb-2 px-3 sm:pl-3.5 ">
                   {!router.pathname.startsWith('/p') ? (
                     <>
-                      {postInfo?.metadata?.name && (
-                        <Markup
-                          className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
-                        >
-                          {/* remove title text from content */}
+                      <div className="flex flex-row">
+                        {postInfo?.metadata?.name && (
+                          <Markup
+                            className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                          >
+                            {/* remove title text from content */}
 
-                          {postInfo?.metadata?.name}
-                        </Markup>
-                      )}
+                            {postInfo?.metadata?.name}
+                          </Markup>
+                        )}
+                        {postInfo?.metadata?.contentWarning !== null && (
+                          <div
+                            className={`border ${
+                              postInfo?.metadata?.contentWarning === 'NSFW'
+                                ? 'border-red-500 text-red-500'
+                                : postInfo?.metadata?.contentWarning ===
+                                  'SENSITIVE'
+                                ? 'border-yellow-500 text-yellow-500'
+                                : 'border-blue-500 text-blue-500'
+                            } rounded-full px-2 py-0.5 h-fit text-xs`}
+                          >
+                            {postInfo?.metadata?.contentWarning}
+                          </div>
+                        )}
+                      </div>
                       {postInfo?.metadata?.name !==
                         postInfo?.metadata?.content && (
                         <div
@@ -429,15 +455,31 @@ const LensPostCard = ({ post, loading }) => {
                     </>
                   ) : (
                     <>
-                      {postInfo?.metadata?.name && (
-                        <Markup
-                          className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
-                        >
-                          {/* remove title text from content */}
+                      <div className="flex flex-row">
+                        {postInfo?.metadata?.name && (
+                          <Markup
+                            className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                          >
+                            {/* remove title text from content */}
 
-                          {postInfo?.metadata?.name}
-                        </Markup>
-                      )}
+                            {postInfo?.metadata?.name}
+                          </Markup>
+                        )}
+                        {postInfo?.metadata?.contentWarning !== null && (
+                          <div
+                            className={`border ${
+                              postInfo?.metadata?.contentWarning === 'NSFW'
+                                ? 'border-red-500 text-red-500'
+                                : postInfo?.metadata?.contentWarning ===
+                                  'SENSITIVE'
+                                ? 'border-yellow-500 text-yellow-500'
+                                : 'border-blue-500 text-blue-500'
+                            } rounded-full px-2 py-0.5 h-fit text-xs `}
+                          >
+                            {postInfo?.metadata?.contentWarning}
+                          </div>
+                        )}
+                      </div>
                       {postInfo?.metadata?.name !==
                         postInfo?.metadata?.content && (
                         <div
@@ -473,8 +515,12 @@ const LensPostCard = ({ post, loading }) => {
                     </>
                   )}
                 </div>
-                {postInfo?.metadata?.media.length > 0 && (
-                  <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                {postInfo?.metadata?.media.length > 0 ? (
+                  <div
+                    className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                      isBlur ? 'blur-xl' : ''
+                    }`}
+                  >
                     <Attachment
                       publication={postInfo}
                       className={`${
@@ -482,6 +528,13 @@ const LensPostCard = ({ post, loading }) => {
                       }`}
                     />
                   </div>
+                ) : (
+                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
+                    <ReactEmbedo
+                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
+                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
+                    />
+                  )
                 )}
               </div>
 
@@ -524,7 +577,7 @@ const LensPostCard = ({ post, loading }) => {
                         <img
                           src={
                             reaction === ReactionTypes.Upvote
-                              ? '/upvoteFilled.svg'
+                              ? '/UpvotedFilled.svg'
                               : '/upvoteGray.svg'
                           }
                           className="w-4 h-4"
@@ -545,7 +598,7 @@ const LensPostCard = ({ post, loading }) => {
                         <img
                           src={
                             reaction === ReactionTypes.Downvote
-                              ? '/downvoteFilled.svg'
+                              ? '/DownvotedFilled.svg'
                               : '/downvoteGray.svg'
                           }
                           className="w-4 h-4"

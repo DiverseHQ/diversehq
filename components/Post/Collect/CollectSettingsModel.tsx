@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Switch } from '@mui/material'
+import { FormControl, MenuItem, Select, Switch } from '@mui/material'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-
+import useDevice from '../../Common/useDevice'
+import {
+  ThemeProvider as MUIThemeProvider,
+  createTheme
+} from '@mui/material/styles'
+import { useTheme } from '../../Common/ThemeProvider'
 // change this later and fetch from https://docs.lens.xyz/docs/enabled-modules-currencies
 const CurrencyOptions = [
   {
@@ -48,6 +53,7 @@ const CurrencyOptions = [
 ]
 
 const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
+  const { isMobile } = useDevice()
   let _followerOnly = false
   if (collectSettings) {
     if (collectSettings.feeCollectModule) {
@@ -70,6 +76,13 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
       '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e'
   ) // default to USDC
   const { data: lensProfile } = useLensUserContext()
+  const { theme }: any = useTheme()
+
+  const MUITheme = createTheme({
+    palette: {
+      mode: theme
+    }
+  })
 
   useEffect(() => {
     if (monetize) {
@@ -96,8 +109,16 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   }, [followerOnly, monetize, price, currency, lensProfile])
   return (
     <div className="m-4 flex flex-col">
-      <div className="flex flex-col gap-y-4">
-        <div className="flex flex-row items-center">
+      <div className="flex flex-col gap-y-4 relative">
+        <h1
+          className={`self-center font-medium text-lg mb-2.5 ${
+            !isMobile ? 'hidden' : ''
+          }`}
+        >
+          Collect Setting
+        </h1>
+        <div className="flex flex-row items-center justify-between">
+          <p>Only Followers can Collect</p>
           <Switch
             checked={followerOnly}
             onChange={() => setFollowerOnly(!followerOnly)}
@@ -108,9 +129,9 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               }
             }}
           />
-          <div>Only Followers can Collect</div>
         </div>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center justify-between">
+          <p>Monetize</p>
           <Switch
             checked={monetize}
             onChange={() => setMonetize(!monetize)}
@@ -121,24 +142,26 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               }
             }}
           />
-          <div>Monetize</div>
         </div>
         {monetize && (
-          <div className="ml-[50px] flex flex-col gap-y-4">
-            <div className="flex flex-row items-center">
+          <div className=" flex flex-row  flex-row lg:gap-y-4 space-x-10 lg:space-x-32">
+            <div className="flex flex-row items-center ">
               <div>Currency</div>
-              <select
-                onChange={(e) => {
-                  setCurrency(e.target.value)
-                }}
-                className="bg-s-bg outline-none ml-2 px-2 py-1 rounded-md"
-              >
-                {CurrencyOptions.map((currency) => (
-                  <option key={currency.address} value={currency.address}>
-                    {currency.symbol}
-                  </option>
-                ))}
-              </select>
+              <MUIThemeProvider theme={MUITheme}>
+                <Select
+                  onChange={(e) => {
+                    setCurrency(e.target.value)
+                  }}
+                  className={` text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
+                  value={currency}
+                >
+                  {CurrencyOptions.map((currency) => (
+                    <MenuItem key={currency.address} value={currency.address}>
+                      {currency.symbol}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </MUIThemeProvider>
             </div>
             <div className="flex flex-row items-center">
               <div>Price (min 0.01)</div>
@@ -147,7 +170,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                 value={price}
                 min={0.01}
                 onChange={(e) => setPrice(Number(e.target.value))}
-                className="bg-s-bg outline-none ml-2 px-2 py-1 rounded-md"
+                className="border w-14  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md "
               />
             </div>
           </div>
