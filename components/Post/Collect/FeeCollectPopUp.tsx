@@ -116,16 +116,19 @@ const FeeCollectPopUp = ({
   return (
     <>
       {isDesktop ? (
-        <div className="grid w-96 min-h-48  shadow-p-btn">
-          <div className="col-span-full row-span-full w-full h-[80px] flex flex-row justify-center space-x-6  ">
+        <div className="flex flex-col w-80  max-w-96">
+          <div className="w-fit   px-1 h-full flex flex-row items-center justify-center space-x-6  border border-p-border rounded-xl  shadow-sm shadow-p-border">
             <div className="flex flex-col  justify-center items-center mt-2">
               {collectModule.followerOnly && !isFollowedByMe && (
-                <div className="flex flex-row  space-x-4">
+                <div className="flex flex-row items-center justify-center space-x-6 ">
+                  <p className="font-medium text-base ml-3.5">
+                    Follow to Collect
+                  </p>
                   <button
                     onClick={() => {
                       handleFollowProfile(author.id)
                     }}
-                    className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold"
+                    className="bg-p-btn text-p-btn-text rounded-md px-4 py-1 text-sm font-semibold"
                   >
                     {followLoading ? (
                       <div className="flex flex-row justify-center items-center space-x-2">
@@ -140,7 +143,6 @@ const FeeCollectPopUp = ({
                       </div>
                     )}
                   </button>
-                  <p className="ml-1">To Collect the Post</p>
                 </div>
               )}
 
@@ -153,37 +155,42 @@ const FeeCollectPopUp = ({
 
               {isAllowed && hasAmount ? (
                 <>
-                  <div className="m-1 text-p-text font-medium ">
-                    Collect for {collectModule?.amount?.value}{' '}
-                    {collectModule.amount?.asset?.symbol} <br></br>
-                    <span>
-                      Balance :{' '}
+                  <div className="m-1">
+                    <p className="text-p-text font-medium text-base">
+                      Collect for {''} {collectModule?.amount?.value}{' '}
+                      {collectModule.amount?.asset?.symbol} <br></br>
+                    </p>
+                    <p className="text-p-text font-medium text-base">
+                      Balance:{' '}
                       {parseFloat(
                         balanceData?.formatted ? balanceData?.formatted : '0'
                       )}{' '}
-                    </span>
+                    </p>
                   </div>
                 </>
               ) : (
                 <>
                   {!isAllowed && (
-                    <div className="space-x-2 flex flex-row justify-center items-center">
+                    <div className="space-x-6 flex flex-row justify-center items-center  ">
+                      <p className="text-base font-medium ml-3.5">
+                        {' '}
+                        Allow to collect
+                      </p>
                       <AllowanceButton
                         module={allowanceData?.approvedModuleAllowanceAmount[0]}
                         allowed={isAllowed}
                         setAllowed={setIsAllowed}
                       />
-                      <div>to collect</div>
                     </div>
                   )}
                   {!hasAmount && isAllowed && (
-                    <div className="text-p-text font-medium">
+                    <div className="text-p-text font-medium text-base">
                       <p>
-                        Collect for {collectModule?.amount?.value} {''}{' '}
+                        Price: {''} {collectModule?.amount?.value} {''}{' '}
                         {collectModule?.amount?.asset?.symbol}
                       </p>
                       <span>
-                        You Have :{' '}
+                        Balance :{' '}
                         {parseFloat(
                           balanceData?.formatted ? balanceData?.formatted : '0'
                         )}{' '}
@@ -208,7 +215,9 @@ const FeeCollectPopUp = ({
                     !isFollowedByMe)
                 }
                 className={`bg-p-btn text-p-btn-text rounded-md py-1.5 px-4 text-center  flex font-semibold text-p-text justify-center items-center h-10 self-center ${
-                  !isAllowed ? 'hidden' : ''
+                  !isAllowed || (collectModule.followerOnly && !isFollowedByMe)
+                    ? 'hidden'
+                    : ''
                 }`}
               >
                 {loading ? (
@@ -225,7 +234,7 @@ const FeeCollectPopUp = ({
               </button>
             )}
           </div>
-          <div className="col-span-full row-span-full translate-y-1 bg-s-bg h-[4px] w-3 rounded self-end justify-self-center rounded-b-full border-b border-l border-r"></div>{' '}
+          <div className="self-center bg-s-bg  shadow-sm shadow-p-border border-p-border  h-[6px] w-[14px] rounded rounded-b-full border-b border-l border-r translate-y-1.5"></div>
         </div>
       ) : (
         <>
