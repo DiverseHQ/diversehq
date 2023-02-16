@@ -53,10 +53,10 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
 
   return (
     <>
-      <div className="relative " ref={popupRef}>
+      <div className="w-full" ref={popupRef}>
         {showOptionsModal && (
           <div
-            className={`absolute  ${
+            className={`absolute w-fit  ${
               position === 'left' ? 'top-[200px] right-[20px]' : ''
             } ${position === 'right' ? 'top-[0px] left-0' : ''} ${
               position === 'top'
@@ -64,7 +64,7 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
                 : ''
             } ${
               position === 'bottom' ? 'translate-x-44 translate-y-20' : ''
-            } z-20 bg-s-bg shadow-lg rounded-lg border `}
+            } z-20 `}
           >
             <HoverModal
               setIsDrawerOpen={setIsDrawerOpen}
