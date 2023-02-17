@@ -294,7 +294,7 @@ const LensPostCard = ({ post }) => {
                             ? postInfo?.communityInfo?.logoImageUrl
                             : '/gradient.jpg'
                         }
-                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                        className="rounded-full h-10 w-10 object-cover"
                       />
                     </Link>
                   </span>

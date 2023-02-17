@@ -225,7 +225,7 @@ const PostCard = ({ _post, setPosts }) => {
               <Link href={`/c/${post.communityName}`} passHref>
                 <ImageWithPulsingLoader
                   src={post.communityLogo}
-                  className="object-cover rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]"
+                  className="object-cover rounded-full h-10 w-10"
                 />
               </Link>
               <div className="flex flex-col justify-center items-start text-p-text">
