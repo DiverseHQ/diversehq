@@ -124,6 +124,23 @@
     outline: none !important;
   }
 
+  input,
+  textarea,
+  button,
+  select,
+  a,
+  div,
+  p,
+  span {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
   /* Track */
   ::-webkit-scrollbar-track {
     background: transparent;
@@ -155,7 +172,8 @@
   --accent-primary-disabled: #9c93ad;
   --accent-secondary: theme('colors.purple.600');
   /* --accent-hover: theme('colors.purple.500'); */
-  --accent-hover: #eee;
+  --accent-hover: #d2daff;
+  --accent-hover-secondary: #e4e4e4;
 
   --text-primary: #000000;
   --text-secondary: #687684;
@@ -176,7 +194,7 @@
   /* --color-primary: #9378d8; */
 
   --btn-primary-text: #ffffff;
-  --hover-primary: #eee;
+  --hover-primary: #d1d9ff;
   --hover-primary-text: #000;
 
   --main-btn-bg: #ffffff;
@@ -190,7 +208,8 @@
   --background-secondary: #1a1a1b;
   --accent-primary: #9378d8;
   --accent-secondary: theme('colors.purple.600');
-  --accent-hover: #343536;
+  --accent-hover: #272729;
+  --accent-hover-secondary: #272729;
 
   --text-primary: #d7dadc;
   --text-secondary: #9197ae;

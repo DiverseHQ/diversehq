@@ -8,10 +8,8 @@ const VideoWithAutoPause = ({ src, ...props }) => {
     // create an IntersectionObserver instance
     let observer = new IntersectionObserver(
       ([entry]) => {
-        // if the video is in the viewport, play it; otherwise, pause it
-        if (entry.isIntersecting && props.contentWarning === null) {
-          videoRef.current.play()
-        } else {
+        // if the video is not in the viewport pause it
+        if (!entry.isIntersecting) {
           videoRef.current.pause()
         }
       },

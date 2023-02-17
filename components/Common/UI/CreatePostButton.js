@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import React from 'react'
-import { BsPlus } from 'react-icons/bs'
 import CreatePostPopup from '../../Home/CreatePostPopup'
 import { modalType, usePopUpModal } from '../CustomPopUpProvider'
+import { HiPencil } from 'react-icons/hi'
 
 const CreatePostButton = () => {
   const { showModal } = usePopUpModal()
@@ -19,12 +19,12 @@ const CreatePostButton = () => {
 
   return (
     <div
-      className={`cursor-pointer text-[32px] md:text-[36px] bg-p-btn rounded-full fixed  ${
+      className={`cursor-pointer bg-p-btn p-3 rounded-full fixed  ${
         router.pathname.startsWith('/p/') ? 'z-20' : 'z-40'
-      } bottom-[80px] left-[calc(100vw-50px)] inline-block`}
+      } bottom-[70px] right-[10px] inline-block`}
       onClick={showCreatePostModal}
     >
-      <BsPlus className="text-p-btn-text" />
+      <HiPencil className="text-p-btn-text w-7 h-7" />
     </div>
   )
 }

@@ -12,7 +12,7 @@ const useCollectPublication = (collectModule: CollectModule) => {
   const { hasProfile, isSignedIn } = useLensUserContext()
   const { mutateAsync: proxyAction } = useProxyActionMutation()
   const { mutateAsync: createCollect } = useCreateCollectTypedDataMutation()
-  const [error, setError] = useState<Error | null>(null)
+  const [error, setError] = useState<string>(null)
   const {
     error: signInError,
     result,
@@ -39,21 +39,27 @@ const useCollectPublication = (collectModule: CollectModule) => {
   const handleCollect = async (publicationId: string) => {
     setLoading(true)
     try {
-      const collectResult = (
-        await createCollect({
-          request: {
-            publicationId: publicationId
-          }
-        })
-      ).createCollectTypedData
-
-      signTypedDataAndBroadcast(collectResult.typedData, {
-        id: collectResult.id,
-        type: 'collect'
+      const collectResult = await createCollect({
+        request: {
+          publicationId: publicationId
+        }
       })
+
+      if (!collectResult) {
+        setError('Error collecting publication, try again latter')
+        setLoading(false)
+      }
+
+      signTypedDataAndBroadcast(
+        collectResult.createCollectTypedData.typedData,
+        {
+          id: collectResult.createCollectTypedData.id,
+          type: 'collect'
+        }
+      )
     } catch (e) {
+      setError('Error collecting publication, try again latter')
       console.log(e)
-      setError(e)
       setLoading(false)
     }
   }
@@ -69,7 +75,7 @@ const useCollectPublication = (collectModule: CollectModule) => {
     if (!signInError) return
     console.log(signInError)
     setLoading(false)
-    setError(signInError)
+    setError('Sign in failed, try again later')
   }, [signInError])
 
   const collectPublication = async (publicationId: string) => {

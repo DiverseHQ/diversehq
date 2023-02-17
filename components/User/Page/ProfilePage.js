@@ -29,6 +29,7 @@ import { CircularProgress } from '@mui/material'
 import { useMessageStore } from '../../../store/message'
 import { buildConversationKey } from '../../Messages/lib/conversationKey'
 import buildConversationId from '../../Messages/lib/buildConversationId'
+import useLensFollowButton from '../useLensFollowButton'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -52,6 +53,10 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     (state) => state.setConversationKey
   )
   const setIsOpen = useMessageStore((state) => state.setIsOpen)
+
+  const { FollowButton, isFollowedByMe } = useLensFollowButton({
+    profileId: lensProfile?.id
+  })
 
   useEffect(() => {
     if (pathname.endsWith('/lens')) {
@@ -215,7 +220,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                       lensProfile.ownedBy?.toLowerCase() !==
                         user?.walletAddress?.toLowerCase() && (
                         <div className="mx-2">
-                          <LensFollowButton lensProfile={lensProfile} />
+                          <FollowButton />
                         </div>
                       )}
                     {user &&
@@ -233,7 +238,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                       hasProfile &&
                       lensProfile.ownedBy !==
                         myLensProfile?.defaultProfile.ownedBy &&
-                      lensProfile?.isFollowedByMe && (
+                      isFollowedByMe && (
                         <div
                           className="p-1 rounded-xl cursor-pointer hover:bg-p-btn-hover flex flex-row items-center space-x-1"
                           onClick={handleDmClick}
@@ -242,7 +247,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                           {loading && (
                             <CircularProgress size="18px" color="primary" />
                           )}
-                          <div>DM</div>
                         </div>
                       )}
                   </div>

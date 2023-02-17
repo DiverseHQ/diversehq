@@ -1,4 +1,6 @@
+import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri'
 import {
   useCreateUnfollowTypedDataMutation,
   useProfileQuery,
@@ -62,8 +64,6 @@ const useLensFollowButton = (request) => {
         id: unfollowProfileResult.id,
         type: 'unfollow'
       })
-      notifySuccess('Unfollowed Successfully')
-      setLoading(false)
     } catch (e) {
       setLoading(false)
       notifyError('You are not Following this Profile')
@@ -86,15 +86,63 @@ const useLensFollowButton = (request) => {
     if (isSignedTx && type === 'unfollow') {
       setLoading(false)
       setIsFollowedByMe(false)
+      notifySuccess('Unfollowed Successfully')
     }
   }, [isSignedTx, type])
+
+  const FollowButton = () => {
+    return (
+      <>
+        {data?.profile && isFollowedByMe ? (
+          <button
+            onClick={() => {
+              handleUnfollowProfile(request.profileId)
+            }}
+            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+          >
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <p>UnFollow</p>
+              </div>
+            ) : (
+              <div className="flex flex-row justify-center items-center space-x-1 ">
+                <RiUserUnfollowLine /> <p>UnFollow</p>
+              </div>
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              handleFollowProfile(request.profileId)
+            }}
+            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+          >
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <p>Follow</p>
+              </div>
+            ) : data?.profile.isFollowing ? (
+              'Follow back'
+            ) : (
+              <div className="flex flex-row justify-center items-center space-x-1 ">
+                <RiUserFollowLine /> <p>Follow</p>
+              </div>
+            )}
+          </button>
+        )}
+      </>
+    )
+  }
 
   return {
     isFollowedByMe,
     setIsFollowedByMe,
     handleFollowProfile,
     handleUnfollowProfile,
-    loading
+    loading,
+    FollowButton
   }
 }
 

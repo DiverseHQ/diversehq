@@ -20,7 +20,7 @@ const PopUpWrapper = ({
       <div className="flex flex-row justify-between items-center pb-4 px-4">
         <div className="flex flex-row justify-center items-center">
           <div
-            className="cursor-pointer w-8 h-8 text-p-text  hover:bg-p-btn-hover flex justify-center items-center rounded-full"
+            className="cursor-pointer w-8 h-8 text-p-text  hover:bg-p-btn-hover hover:duration-300 flex justify-center items-center rounded-full"
             onClick={() => hideModal()}
           >
             {isDesktop && <AiOutlineClose className="w-5 h-5  items-center" />}
