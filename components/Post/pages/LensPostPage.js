@@ -17,6 +17,7 @@ import LensFollowButton from '../../User/LensFollowButton'
 import CombinedCommentSection from '../LensComments/CombinedCommentSection'
 import LensPostCard from '../LensPostCard'
 import { IoMdClose } from 'react-icons/io'
+import useLensFollowButton from '../../User/useLensFollowButton'
 
 const LensPostPage = ({ id, post }) => {
   const [postInfo, setPostInfo] = useState(post)
@@ -36,6 +37,11 @@ const LensPostPage = ({ id, post }) => {
       enabled: !!id && !!lensProfile?.defaultProfile?.id
     }
   )
+  const [userLensProfile, setUserLensProfile] = useState({})
+  const [profile, setProfile] = useState({})
+  const { FollowButton } = useLensFollowButton({
+    profileId: userLensProfile?.id
+  })
 
   useEffect(() => {
     if (!data?.publication) return
@@ -109,9 +115,6 @@ const LensPostPage = ({ id, post }) => {
       numberOfPosts * 10 + postInfo?.communityInfo?.members?.length * 25
     )
   }, [numberOfPosts, postInfo?.communityInfo])
-
-  const [userLensProfile, setUserLensProfile] = useState({})
-  const [profile, setProfile] = useState({})
 
   console.log('profile', profile)
   console.log('userlensProfile', userLensProfile)
@@ -315,7 +318,7 @@ const LensPostPage = ({ id, post }) => {
                   </span>
                 </span>
               </div>
-              <LensFollowButton lensProfile={userLensProfile} />
+              <FollowButton />
             </div>
           </div>
         </div>
