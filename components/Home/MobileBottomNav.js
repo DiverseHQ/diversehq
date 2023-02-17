@@ -58,7 +58,7 @@ const MobileBottomNav = () => {
   return (
     <div className="fixed bottom-0 w-full flex flex-row justify-evenly items-center bg-s-bg border-t-[0.5px] border-s-border">
       <div
-        className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+        className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={() => {
           if (isOnHomeFeed) {
             scrollToTop()
@@ -79,7 +79,7 @@ const MobileBottomNav = () => {
         />
       </div>
       <div
-        className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+        className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={() => {
           if (!router.pathname.startsWith('/explore')) {
             routeToExplore()
@@ -99,7 +99,7 @@ const MobileBottomNav = () => {
         />
       </div>
       <div
-        className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+        className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={routeToSearch}
       >
         <img
@@ -122,7 +122,7 @@ const MobileBottomNav = () => {
           scrollToTop()
         }}
       >
-        <div className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer">
+        <div className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer">
           <img
             src={`${
               active === 'notification'
@@ -140,7 +140,7 @@ const MobileBottomNav = () => {
         )}
       </div>
       <div
-        className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+        className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
         <img
