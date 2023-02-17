@@ -82,7 +82,6 @@ function MyApp({ Component, pageProps, isMobileView }) {
       <Head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
-        <meta name="theme-color" content="#9378d8" />
         <meta name="twitter:creator" content="@useDiverseHQ" />
       </Head>
 

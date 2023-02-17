@@ -120,13 +120,15 @@ export const putEditCommunity = async (communityData: CommunityType) => {
 }
 
 export const searchCommunityFromName = async (
-  name: string
+  name: string,
+  limit: number
 ): Promise<CommunityType[]> => {
   try {
     return await fetch(
       `${apiEndpoint}/community/search?` +
         new URLSearchParams({
-          name
+          name,
+          limit: limit.toString()
         })
     ).then((res) => res.json())
   } catch (error) {

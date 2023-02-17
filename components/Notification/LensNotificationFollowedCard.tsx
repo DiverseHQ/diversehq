@@ -3,8 +3,18 @@ import React from 'react'
 import LensFollowButton from '../User/LensFollowButton'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { SlUserFollow } from 'react-icons/sl'
+import { NewFollowerNotification } from '../../graphql/generated'
+import useLensFollowButton from '../User/useLensFollowButton'
 
-const LensNotificationFollowedCard = ({ notification, isRead }) => {
+interface Props {
+  notification: NewFollowerNotification
+  isRead: boolean
+}
+
+const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
+  const { FollowButton } = useLensFollowButton({
+    profileId: notification?.wallet?.defaultProfile?.id
+  })
   return (
     <CommonNotificationCardLayoutUI
       MainRow={() => (
@@ -22,9 +32,7 @@ const LensNotificationFollowedCard = ({ notification, isRead }) => {
             followed you
           </div>
           {!notification?.wallet?.defaultProfile?.isFollowedByMe && (
-            <LensFollowButton
-              lensProfile={notification?.wallet?.defaultProfile}
-            />
+            <FollowButton />
           )}
         </div>
       )}

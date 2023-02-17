@@ -48,7 +48,7 @@ const LensProfilesSearchModal = ({
           <div className="m-2 p-2 text-base font-bold">Profiles</div>
           {lensProfiles.map((profile) => (
             <div
-              className="hover:underline hover:bg-p-hover hover:text-p-hover-text m-2 flex flex-row p-2  items-center rounded-[25px] cursor-pointer"
+              className="hover:bg-p-btn-hover m-2 flex flex-row p-2  items-center rounded-xl cursor-pointer"
               key={profile.id}
               onClick={() => {
                 inputRef.current.value = ''
@@ -71,7 +71,7 @@ const LensProfilesSearchModal = ({
               />
               <div className="flex flex-col text-sm">
                 <div>{stringToLength(profile.name, 20)}</div>
-                <div className="underline-offset-4 ">u/{profile.handle}</div>
+                <div className="text-s-text">u/{profile.handle}</div>
               </div>
             </div>
           ))}

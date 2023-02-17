@@ -112,7 +112,7 @@ const LensLoginButton = () => {
                 !loading && (
                   <button
                     onClick={handleEnableDispatcher}
-                    className="flex flex-col items-center rounded-lg text-sm bg-[#62F030] px-2"
+                    className="flex flex-col items-center rounded-xl text-sm bg-[#62F030] px-2"
                   >
                     <div>
                       <span>u/{lensProfile?.defaultProfile?.handle}</span>
@@ -124,7 +124,7 @@ const LensLoginButton = () => {
                 )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
                 loading && (
-                  <div className="rounded-lg text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
+                  <div className="rounded-xl text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
                     Enabling...
                   </div>
                 )}
@@ -133,7 +133,7 @@ const LensLoginButton = () => {
           {isSignedIn && !hasProfile && (
             <button
               onClick={handleCreateLensProfileAndMakeDefault}
-              className="rounded-[20px] text-[20px] md:text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
+              className="rounded-xl text-[20px] md:text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
             >
               Create Lens Handle
             </button>
@@ -141,9 +141,11 @@ const LensLoginButton = () => {
           {!isSignedIn && (
             <button
               onClick={handleLogin}
-              className="rounded-[20px] text-[20px] md:text-[16px]        font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
+              className="rounded-xl text-[20px] space-x-3 md:text-[16px] flex flex-row items-center font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-4 sm:px-6 "
             >
-              Lens Login
+              <img src={'/lensLogoWithoutText.svg'} className="w-6 h-6" />
+
+              <span>Login</span>
             </button>
           )}
         </div>

@@ -60,23 +60,13 @@ const LensCollectButton = ({
                     </p>
                   </div>
                   <>
-                    {publication?.metadata?.media.length > 0 ? (
+                    {publication?.metadata?.media.length > 0 && (
                       <div className="w-full mb-1">
                         <Attachment
                           publication={publication}
-                          className="max-h-[250px]"
+                          className="max-h-[250px] rounded-xl"
                         />
                       </div>
-                    ) : (
-                      getURLsFromText(publication?.metadata?.content).length >
-                        0 && (
-                        <ReactEmbedo
-                          url={
-                            getURLsFromText(publication?.metadata?.content)[0]
-                          }
-                          className={`w-full h-[250px] pb-1`}
-                        />
-                      )
                     )}
                   </>
                 </div>
@@ -113,7 +103,7 @@ const LensCollectButton = ({
           title={isCollected || hasCollectedByMe ? 'Collected' : 'Collect'}
           arrow
         >
-          <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer flex flex-row items-center">
+          <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer flex flex-row items-center">
             {collectModule.__typename === 'FreeCollectModuleSettings' && (
               <>
                 {isCollected || hasCollectedByMe ? (

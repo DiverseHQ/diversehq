@@ -110,7 +110,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-2.5 items-center shadow-md gap-2 sticky top-0 bg-p-bg dark:bg-s-bg">
+    <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-2.5 items-center shadow-sm gap-2 sticky top-0 bg-p-bg dark:bg-s-bg">
       <div className="flex flex-row items-center gap-4 lg:gap-5">
         <div>
           <Link
@@ -129,10 +129,8 @@ const Navbar = () => {
           <Link href={'/'}>
             <button
               className={`font-medium ${
-                active === 'home' && 'bg-[#D1D9FF] dark:bg-[#272729]'
-              } ${
-                theme === 'dark' ? 'hover:bg-[#272729]' : 'hover:bg-[#D1D9FF]'
-              } cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
+                active === 'home' && 'bg-p-btn-hover'
+              } hover:bg-p-btn-hover  cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
             >
               Home
             </button>
@@ -140,20 +138,18 @@ const Navbar = () => {
           <Link href={'/explore'}>
             <button
               className={`font-medium ${
-                active === 'explore' && 'bg-[#D1D9FF] dark:bg-[#272729]'
-              } ${
-                theme === 'dark' ? 'hover:bg-[#272729]' : 'hover:bg-[#D1D9FF]'
-              } cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
+                active === 'explore' && 'bg-p-btn-hover'
+              } hover:bg-p-btn-hover cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
             >
               Explore
             </button>
           </Link>
           <div className="flex flex-col text-p-text font-medium">
             <button
-              className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-hover hover:text-p-hover-text`}
+              className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-btn-hover`}
               onClick={getJoinedCommunities}
             >
-              <p>Your Communities</p>
+              <p>Joined</p>
               <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
             </button>
             <div
@@ -167,6 +163,7 @@ const Navbar = () => {
                     type="community"
                     filterParam="name"
                     handleSelect={(community) => {
+                      setShowJoinedCommunities(false)
                       router.push(`/c/${community?.name}`)
                     }}
                   />

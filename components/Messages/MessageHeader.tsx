@@ -38,7 +38,7 @@ const MessageHeader = ({ profile, open, setOpen }) => {
           )}
           <ImageWithPulsingLoader
             src={getAvatar(profile)}
-            className="w-8 h-8 rounded-full"
+            className="w-8 h-8 rounded-full object-cover"
             alt={profile?.handle}
           />
           <div className="flex flex-col text-sm leading-4">

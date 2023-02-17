@@ -3,13 +3,15 @@ import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
-import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
+// import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
 import useDevice from '../Common/useDevice'
 import MainMsgModal from '../Messages/MainMsgModal'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
+import { useTheme } from '../Common/ThemeProvider'
 // import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
@@ -25,16 +27,25 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   }, [isMobile])
   if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
     return null
+
+  const { theme } = useTheme()
   return (
     <>
+      <Head>
+        <meta
+          name="theme-color"
+          content={`${theme === 'dark' ? '#1a1a1b' : '#ffffff'}`}
+        />
+      </Head>
+
       {mobile && (
-        <div className="text-p-text bg-p-bg min-h-screen transition-all duration-500">
+        <div className="text-p-text bg-p-bg min-h-screen noSelect">
           {mounted && <NewMobileTopNav />}
           <Box
             sx={{
               width: '100%',
               position: 'fixed',
-              top: '50px',
+              top: '0px',
               zIndex: '49'
             }}
           >
@@ -50,14 +61,14 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
         </div>
       )}
       {!mobile && (
-        <div className="relative min-h-screen bg-p-bg transition-all duration-500">
+        <div className="relative min-h-screen bg-p-bg">
           <Navbar />
 
           <Box
             sx={{
               width: '100%',
               position: 'fixed',
-              top: '60px',
+              top: '0px',
               zIndex: '100'
             }}
           >
