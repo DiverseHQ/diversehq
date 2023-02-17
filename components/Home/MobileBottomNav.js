@@ -134,8 +134,9 @@ const MobileBottomNav = () => {
           />
         </div>
         {Number(notificationsCount + lensNotificationsCount) > 0 && (
-          <div className="absolute -top-0.5 left-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
+          <div className="absolute top-2 right-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
             <span>{notificationsCount + lensNotificationsCount}</span>
+            {/* <span>10</span> */}
           </div>
         )}
       </div>
