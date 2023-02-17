@@ -34,7 +34,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
             sx={{
               width: '100%',
               position: 'fixed',
-              top: '50px',
+              top: '0px',
               zIndex: '49'
             }}
           >
@@ -57,7 +57,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
             sx={{
               width: '100%',
               position: 'fixed',
-              top: '60px',
+              top: '0px',
               zIndex: '100'
             }}
           >

@@ -155,7 +155,7 @@
   --accent-primary-disabled: #9c93ad;
   --accent-secondary: theme('colors.purple.600');
   /* --accent-hover: theme('colors.purple.500'); */
-  --accent-hover: #eee;
+  --accent-hover: #d1d9ff;
 
   --text-primary: #000000;
   --text-secondary: #687684;
@@ -176,7 +176,7 @@
   /* --color-primary: #9378d8; */
 
   --btn-primary-text: #ffffff;
-  --hover-primary: #eee;
+  --hover-primary: #d1d9ff;
   --hover-primary-text: #000;
 
   --main-btn-bg: #ffffff;
@@ -190,7 +190,7 @@
   --background-secondary: #1a1a1b;
   --accent-primary: #9378d8;
   --accent-secondary: theme('colors.purple.600');
-  --accent-hover: #343536;
+  --accent-hover: #272729;
 
   --text-primary: #d7dadc;
   --text-secondary: #9197ae;
