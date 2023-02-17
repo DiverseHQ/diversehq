@@ -254,14 +254,14 @@ const FeeCollectPopUp = ({
                     className="bg-p-btn rounded-full text-center flex font-semibold text-p-btn-text py-1 justify-center items-center text-p-text w-full text-xl"
                   >
                     {followLoading ? (
-                      <div className="flex flex-row justify-center items-center space-x-2">
+                      <div className="flex flex-row justify-center items-center space-x-2 text-p-btn-text">
                         <CircularProgress size="18px" color="primary" />
                         <p>Following..</p>
                       </div>
                     ) : author.isFollowing ? (
                       'Follow back'
                     ) : (
-                      <div className="flex flex-row justify-center items-center space-x-2 ">
+                      <div className="flex flex-row justify-center items-center space-x-2 text-p-btn-text">
                         <RiUserFollowLine /> <p>Follow {author.handle}</p>
                       </div>
                     )}
@@ -338,12 +338,12 @@ const FeeCollectPopUp = ({
                 >
                   <div className='className="flex flex-row justify-center items-center space-x-2"'>
                     {loading ? (
-                      <div className="flex flex-row justify-center text-p-btn-text items-center space-x-2">
+                      <div className="flex flex-row justify-center text-p-btn-text items-center space-x-2 text-p-btn-text">
                         <CircularProgress size="18px" color="primary" />
                         <div>Collecting...</div>
                       </div>
                     ) : (
-                      <div className="flex flex-row items-center space-x-2 text-p-btn-text">
+                      <div className="flex flex-row items-center space-x-2 text-p-btn-text text-p-btn-text">
                         <BsCollection className="w-5 h-5" />
                         <p>
                           Collect For {parseFloat(collectModule?.amount?.value)}

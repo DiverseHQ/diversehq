@@ -160,12 +160,12 @@ const FreeCollectPopUp = ({
                       className="bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
                     >
                       {followLoading ? (
-                        <div className="flex flex-row self-start space-x-2">
+                        <div className="flex flex-row self-start space-x-2 text-p-btn-text">
                           <CircularProgress size="18px" color="primary" />
                           <p>Follow</p>
                         </div>
                       ) : (
-                        <div className="flex flex-row justify-center items-center space-x-1 ">
+                        <div className="flex flex-row justify-center items-center space-x-1 text-p-btn-text">
                           <RiUserFollowLine /> <p>Follow {author.handle}</p>
                         </div>
                       )}
@@ -191,7 +191,7 @@ const FreeCollectPopUp = ({
             }`}
           >
             {loading ? (
-              <div className="flex flex-row justify-center items-center space-x-2">
+              <div className="flex flex-row justify-center items-center space-x-2 text-p-btn-text">
                 <CircularProgress size="18px" color="primary" />
                 <div>Collecting</div>
               </div>
