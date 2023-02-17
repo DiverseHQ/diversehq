@@ -49,7 +49,7 @@ const PostIndexingWrapper = ({ children }) => {
     }
 
     // remove from ui
-    // setPosts(posts.filter((p) => p.tempId !== post.tempId))
+    setPosts(posts.filter((p) => p.tempId !== post.tempId))
   }
   return (
     <PostIndexingContext.Provider value={{ posts, addPost }}>

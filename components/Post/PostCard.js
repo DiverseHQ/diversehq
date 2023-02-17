@@ -420,7 +420,7 @@ const PostCard = ({ _post, setPosts }) => {
                   <div className="sm:pl-5  sm:pr-6 sm:pb-1">
                     <ImageWithPulsingLoader
                       src={post.postImageUrl}
-                      className={`image-unselectable sm:rounded-lg object-contain w-full ${
+                      className={`image-unselectable sm:rounded-lg object-cover w-full ${
                         router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
                       }`}
                       loaderClassName="sm:rounded-lg w-full h-[300px]"

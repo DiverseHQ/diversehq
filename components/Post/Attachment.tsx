@@ -48,7 +48,7 @@ const Attachment: FC<Props> = ({ publication, className }) => {
             ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
               <ImageWithPulsingLoader
                 src={url}
-                className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
                 alt={publication?.metadata?.content}
               />
             ) : (
