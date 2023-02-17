@@ -15,7 +15,7 @@ const PostShareButton = ({ url, text }) => {
       }}
     >
       <Tooltip title="Share" arrow>
-        <div className="flex flex-row items-center hover:bg-p-btn-hover rounded-md p-1">
+        <div className="flex flex-row items-center hover:bg-s-hover rounded-md p-1">
           <img
             src="/share.svg"
             alt="Share"

@@ -360,7 +360,7 @@ const LensPostCard = ({ post }) => {
                     setIsDrawerOpen={setIsDrawerOpen}
                   >
                     <Tooltip title="More" arrow>
-                      <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                      <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
                         <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </Tooltip>
@@ -379,7 +379,7 @@ const LensPostCard = ({ post }) => {
                       e.stopPropagation()
                       handleUpvote()
                     }}
-                    className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                    className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
                   >
                     <img
                       //  onClick={liked ? handleUnLike : handleLike}
@@ -399,7 +399,7 @@ const LensPostCard = ({ post }) => {
                       e.stopPropagation()
                       handleDownvote()
                     }}
-                    className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                    className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
                   >
                     <img
                       src={
@@ -595,7 +595,7 @@ const LensPostCard = ({ post }) => {
                           e.stopPropagation()
                           handleUpvote()
                         }}
-                        className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
+                        className="hover:bg-s-hover cursor-pointer rounded-md p-1"
                       >
                         <img
                           src={
@@ -616,7 +616,7 @@ const LensPostCard = ({ post }) => {
                           e.stopPropagation()
                           handleDownvote()
                         }}
-                        className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                        className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
                       >
                         <img
                           src={
@@ -635,7 +635,7 @@ const LensPostCard = ({ post }) => {
                     <span onClick={(e) => e.stopPropagation()}>
                       <Link
                         href={`/p/${postInfo.id}`}
-                        className="flex flex-row items-center cursor-pointer hover:bg-p-btn-hover rounded-md p-1 font-medium"
+                        className="flex flex-row items-center cursor-pointer hover:bg-s-hover rounded-md p-1 font-medium"
                         passHref
                       >
                         {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
@@ -657,7 +657,7 @@ const LensPostCard = ({ post }) => {
                   </Tooltip>
                 ) : (
                   <Tooltip title="Comment" arrow>
-                    <div className="flex flex-row items-center cursor-pointer  hover:bg-p-btn-hover rounded-md p-1 font-medium">
+                    <div className="flex flex-row items-center cursor-pointer  hover:bg-s-hover rounded-md p-1 font-medium">
                       {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}

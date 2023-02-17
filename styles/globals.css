@@ -155,7 +155,8 @@
   --accent-primary-disabled: #9c93ad;
   --accent-secondary: theme('colors.purple.600');
   /* --accent-hover: theme('colors.purple.500'); */
-  --accent-hover: #d1d9ff;
+  --accent-hover: #d2daff;
+  --accent-hover-secondary: #e4e4e4;
 
   --text-primary: #000000;
   --text-secondary: #687684;
@@ -191,6 +192,7 @@
   --accent-primary: #9378d8;
   --accent-secondary: theme('colors.purple.600');
   --accent-hover: #272729;
+  --accent-hover-secondary: #272729;
 
   --text-primary: #d7dadc;
   --text-secondary: #9197ae;
