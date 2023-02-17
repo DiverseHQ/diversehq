@@ -170,7 +170,9 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                 value={price}
                 min={0.01}
                 onChange={(e) => setPrice(Number(e.target.value))}
-                className="border w-20  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md "
+                className={`border  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md ${
+                  !isMobile ? 'w-20' : 'w-16'
+                } `}
               />
             </div>
           </div>
