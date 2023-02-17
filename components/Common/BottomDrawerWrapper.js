@@ -51,7 +51,7 @@ const BottomDrawerWrapper = ({
           <rect width="36" height="5" rx="2.5" fill="#B3B4F3" />
         </svg>
       </div>
-      <div className="max-h-[500px] ">{children}</div>
+      <div className="max-h-[500px]">{children}</div>
       {showClose && (
         <div className="px-4 w-full  mb-3 mt-1">
           <button

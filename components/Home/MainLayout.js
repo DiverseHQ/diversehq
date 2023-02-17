@@ -3,7 +3,7 @@ import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
-import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
+// import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
 import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
@@ -61,7 +61,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
         </div>
       )}
       {!mobile && (
-        <div className="relative min-h-screen bg-p-bg transition-all duration-500">
+        <div className="relative min-h-screen bg-p-bg">
           <Navbar />
 
           <Box
