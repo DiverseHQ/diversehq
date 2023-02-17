@@ -10,49 +10,53 @@ const LensFollowButton = ({ lensProfile }) => {
     handleUnfollowProfile,
     loading
   } = useLensFollowButton({ profileId: lensProfile?.id })
-  return (
-    <>
-      {lensProfile && isFollowedByMe ? (
-        <button
-          onClick={() => {
-            handleUnfollowProfile(lensProfile.id)
-          }}
-          className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
-        >
-          {loading ? (
-            <div className="flex flex-row justify-center items-center space-x-2">
-              <CircularProgress size="18px" color="primary" />
-              <p>UnFollow</p>
-            </div>
-          ) : (
-            <div className="flex flex-row justify-center items-center space-x-1 ">
-              <RiUserUnfollowLine /> <p>UnFollow</p>
-            </div>
-          )}
-        </button>
-      ) : (
-        <button
-          onClick={() => {
-            handleFollowProfile(lensProfile.id)
-          }}
-          className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
-        >
-          {loading ? (
-            <div className="flex flex-row justify-center items-center space-x-2">
-              <CircularProgress size="18px" color="primary" />
-              <p>Follow</p>
-            </div>
-          ) : lensProfile.isFollowing ? (
-            'Follow back'
-          ) : (
-            <div className="flex flex-row justify-center items-center space-x-1 ">
-              <RiUserFollowLine /> <p>Follow</p>
-            </div>
-          )}
-        </button>
-      )}
-    </>
-  )
+  return {
+    isFollowedByMe,
+    loading,
+    FollowButton: () => (
+      <>
+        {lensProfile && isFollowedByMe ? (
+          <button
+            onClick={() => {
+              handleUnfollowProfile(lensProfile.id)
+            }}
+            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+          >
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <p>UnFollow</p>
+              </div>
+            ) : (
+              <div className="flex flex-row justify-center items-center space-x-1 ">
+                <RiUserUnfollowLine /> <p>UnFollow</p>
+              </div>
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              handleFollowProfile(lensProfile.id)
+            }}
+            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+          >
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <p>Follow</p>
+              </div>
+            ) : lensProfile.isFollowing ? (
+              'Follow back'
+            ) : (
+              <div className="flex flex-row justify-center items-center space-x-1 ">
+                <RiUserFollowLine /> <p>Follow</p>
+              </div>
+            )}
+          </button>
+        )}
+      </>
+    )
+  }
 }
 
 export default LensFollowButton

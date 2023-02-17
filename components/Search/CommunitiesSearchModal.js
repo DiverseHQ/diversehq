@@ -17,7 +17,7 @@ const CommunitiesSearchModal = ({
       setCommunities([])
       return
     }
-    const res = await searchCommunityFromName(searchTerm)
+    const res = await searchCommunityFromName(searchTerm, 5)
     setCommunities(res)
   }
 
