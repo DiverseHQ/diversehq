@@ -11,6 +11,14 @@ import { useTheme } from '../../Common/ThemeProvider'
 const CurrencyOptions = [
   {
     chainId: 80001,
+    address: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
+    symbol: 'WMATIC',
+    name: 'Wrapped Matic',
+    decimals: 18,
+    logoURI: 'https://polygonscan.com/token/images/wMatic_32.png'
+  },
+  {
+    chainId: 80001,
     address: '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e',
     symbol: 'USDC',
     name: 'USD Coin',
@@ -33,14 +41,6 @@ const CurrencyOptions = [
     name: 'Wrapped Ether',
     decimals: 18,
     logoURI: 'https://polygonscan.com/token/images/wETH_32.png'
-  },
-  {
-    chainId: 80001,
-    address: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
-    symbol: 'WMATIC',
-    name: 'Wrapped Matic',
-    decimals: 18,
-    logoURI: 'https://polygonscan.com/token/images/wMatic_32.png'
   },
   {
     chainId: 80001,
@@ -73,8 +73,8 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   )
   const [currency, setCurrency] = useState<string>(
     collectSettings?.feeCollectModule?.amount?.currency ||
-      '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e'
-  ) // default to USDC
+      '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889'
+  ) // default to WMATIC
   const { data: lensProfile } = useLensUserContext()
   const { theme }: any = useTheme()
 
@@ -170,7 +170,9 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                 value={price}
                 min={0.01}
                 onChange={(e) => setPrice(Number(e.target.value))}
-                className="border w-14  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md "
+                className={`border  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md ${
+                  !isMobile ? 'w-20' : 'w-16'
+                } `}
               />
             </div>
           </div>

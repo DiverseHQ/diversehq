@@ -56,10 +56,10 @@ const NewMobileTopNav = () => {
         router.pathname.startsWith('/search') ||
         router.pathname.startsWith('/u/') ? (
           <div className="h-[32px] flex flex-row items-center gap-3 text-[18px]">
-            <div className="flex items-center justify-center w-8 h-8 bg-p-btn-hover rounded-full">
+            <div className="flex items-center justify-center w-8 h-8 hover:bg-p-btn-hover rounded-full">
               <BiArrowBack
                 onClick={() => router.back()}
-                className="w-6 h-6 rounded-full cursor-pointer bg-p-btn-hover"
+                className="w-6 h-6 rounded-full cursor-pointer"
               />
             </div>
             <span className="font-bold text-[20px]">

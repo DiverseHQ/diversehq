@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Drawer, SwipeableDrawer } from '@mui/material'
+import { Drawer } from '@mui/material'
 import { useTheme } from '../Common/ThemeProvider'
 
 const BottomDrawerWrapper = ({
@@ -11,14 +11,11 @@ const BottomDrawerWrapper = ({
 }) => {
   const { theme } = useTheme()
   return (
-    <SwipeableDrawer
+    <Drawer
       anchor={position}
       open={isDrawerOpen}
       onClose={() => {
         setIsDrawerOpen(false)
-      }}
-      onOpen={() => {
-        setIsDrawerOpen(true)
       }}
       sx={{
         '& .MuiDrawer-paper': {
@@ -34,7 +31,6 @@ const BottomDrawerWrapper = ({
       }}
       transitionDuration={200}
       bgcolor="custom"
-      swipeAreaWidth={0}
     >
       <div
         className={` ${
@@ -51,7 +47,7 @@ const BottomDrawerWrapper = ({
           <rect width="36" height="5" rx="2.5" fill="#B3B4F3" />
         </svg>
       </div>
-      <div className="max-h-[500px] ">{children}</div>
+      <div className="max-h-[500px]">{children}</div>
       {showClose && (
         <div className="px-4 w-full  mb-3 mt-1">
           <button
@@ -64,7 +60,7 @@ const BottomDrawerWrapper = ({
           </button>
         </div>
       )}
-    </SwipeableDrawer>
+    </Drawer>
   )
 }
 

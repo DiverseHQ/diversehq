@@ -1,10 +1,13 @@
+import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri'
 import {
   useCreateUnfollowTypedDataMutation,
   useProfileQuery,
   useProxyActionMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
+import { useNotify } from '../Common/NotifyContext'
 
 const useLensFollowButton = (request) => {
   const { mutateAsync: proxyAction } = useProxyActionMutation()
@@ -13,6 +16,7 @@ const useLensFollowButton = (request) => {
     useSignTypedDataAndBroadcast()
   const [isFollowedByMe, setIsFollowedByMe] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { notifySuccess, notifyError } = useNotify()
 
   const { data } = useProfileQuery({
     request: request
@@ -24,17 +28,25 @@ const useLensFollowButton = (request) => {
   }, [data])
 
   const handleFollowProfile = async (profileId) => {
-    await proxyAction({
-      request: {
-        follow: {
-          freeFollow: {
-            profileId: profileId
+    try {
+      setLoading(true)
+      await proxyAction({
+        request: {
+          follow: {
+            freeFollow: {
+              profileId: profileId
+            }
           }
         }
-      }
-    })
-
-    setIsFollowedByMe(true)
+      })
+      setIsFollowedByMe(true)
+      notifySuccess('Followed Successfully')
+      setLoading(false)
+    } catch (e) {
+      console.log(e)
+      setLoading(false)
+      notifyError('Error Following the Profile')
+    }
   }
 
   const handleUnfollowProfile = async (profileId) => {
@@ -54,6 +66,7 @@ const useLensFollowButton = (request) => {
       })
     } catch (e) {
       setLoading(false)
+      notifyError('You are not Following this Profile')
       console.log(e)
     }
   }
@@ -73,15 +86,63 @@ const useLensFollowButton = (request) => {
     if (isSignedTx && type === 'unfollow') {
       setLoading(false)
       setIsFollowedByMe(false)
+      notifySuccess('Unfollowed Successfully')
     }
   }, [isSignedTx, type])
+
+  const FollowButton = () => {
+    return (
+      <>
+        {data?.profile && isFollowedByMe ? (
+          <button
+            onClick={() => {
+              handleUnfollowProfile(request.profileId)
+            }}
+            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+          >
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <p>UnFollow</p>
+              </div>
+            ) : (
+              <div className="flex flex-row justify-center items-center space-x-1 ">
+                <RiUserUnfollowLine /> <p>UnFollow</p>
+              </div>
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              handleFollowProfile(request.profileId)
+            }}
+            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+          >
+            {loading ? (
+              <div className="flex flex-row justify-center items-center space-x-2">
+                <CircularProgress size="18px" color="primary" />
+                <p>Follow</p>
+              </div>
+            ) : data?.profile.isFollowing ? (
+              'Follow back'
+            ) : (
+              <div className="flex flex-row justify-center items-center space-x-1 ">
+                <RiUserFollowLine /> <p>Follow</p>
+              </div>
+            )}
+          </button>
+        )}
+      </>
+    )
+  }
 
   return {
     isFollowedByMe,
     setIsFollowedByMe,
     handleFollowProfile,
     handleUnfollowProfile,
-    loading
+    loading,
+    FollowButton
   }
 }
 

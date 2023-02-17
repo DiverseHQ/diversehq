@@ -91,16 +91,16 @@ const NewLeftSidebar = () => {
           </button>
         </div>
       </div>
-      <div className="bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border">
+      <div className="bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border space-y-2 p-2">
         <Link
-          className="flex flex-row items-center hover:bg-p-hover hover:text-p-hover-text px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
+          className="flex flex-row items-center hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
           href={'/'}
         >
           <AiOutlineHome className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
           <span className="text-[16px] font-medium">Home</span>
         </Link>
         <Link
-          className="flex flex-row items-center hover:bg-p-hover hover:text-p-hover-text px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
+          className="flex flex-row items-center hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
           href={'/explore'}
         >
           <BiGroup className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
@@ -108,7 +108,7 @@ const NewLeftSidebar = () => {
         </Link>
         {user && address && (
           <Link
-            className="flex flex-row items-center hover:bg-p-hover hover:text-p-hover-text px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
+            className="flex flex-row items-center hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
             href={`/u/${user.walletAddress}`}
           >
             <CgProfile className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
@@ -119,7 +119,7 @@ const NewLeftSidebar = () => {
           href={DISCORD_INVITE_LINK}
           target="_blank"
           rel="noreferrer"
-          className="flex flex-row items-center bg-transparent hover:bg-p-hover hover:text-p-hover-text px-4 py-3 rounded-[15px] gap-1 md:gap-2 relative w-full text-p-text"
+          className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2 relative w-full text-p-text"
         >
           <FaDiscord className="w-[24px] h-[24px] object-contain" />
           <span className="text-[16px] font-medium">Discord</span>

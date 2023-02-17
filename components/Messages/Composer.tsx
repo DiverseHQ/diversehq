@@ -52,7 +52,7 @@ const Composer: FC<Props> = ({
   }, [message])
   return (
     <div className="w-full px-2 py-2 bg-s-bg absolute bottom-0">
-      <div className="flex flex-row bg-[#EDE7FF] justify-between px-4 dark:bg-s-bg h-fit w-full rounded-xl">
+      <div className="flex flex-row bg-[#EDE7FF] dark:bg-[#272729]  justify-between px-4  h-fit w-full rounded-xl">
         <textarea
           ref={inputRef}
           placeholder="Type a message..."
@@ -60,7 +60,7 @@ const Composer: FC<Props> = ({
           disabled={disabledInput || sending}
           onKeyDown={handleKeyDown}
           onChange={(event) => setMessage(event.target.value)}
-          className="p-2 bg-[#EDE7FF] dark:bg-s-bg rounded-l-xl w-full focus:outline-none"
+          className="p-2 bg-[#EDE7FF] dark:bg-[#272729] rounded-l-xl w-full focus:outline-none"
           style={{ resize: 'none' }}
           rows={1}
         />

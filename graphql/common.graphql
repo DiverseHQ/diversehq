@@ -355,9 +355,14 @@ fragment CollectModuleFields on CollectModule {
   }
   ... on FeeCollectModuleSettings {
     type
+    referralFee
+    contractAddress
+    followerOnly
     amount {
       asset {
-        ...Erc20Fields
+        symbol
+        decimals
+        address
       }
       value
     }

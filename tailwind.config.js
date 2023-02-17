@@ -28,6 +28,7 @@ module.exports = {
         's-border': 'var(--border-secondary)', // secondary border color
         'p-hover': 'var(--hover-primary)', // primary hover color
         'p-hover-text': 'var(--hover-primary-text)', // primary hover text color
+        's-hover': 'var(--accent-hover-secondary)', // secondary hover color
         'm-btn-bg': 'var(--main-btn-bg)', // main button background
         'm-btn-text': 'var(--main-btn-text)', // main button text
         'm-btn-hover-bg': 'var(--main-btn-hover-bg)', // main button hover background

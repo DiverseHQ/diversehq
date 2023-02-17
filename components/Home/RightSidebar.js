@@ -8,16 +8,17 @@ import { useProfile } from '../Common/WalletContext'
 import RightSideCommunityComponent from './RightSideCommunityComponent'
 import { HiOutlineSparkles } from 'react-icons/hi'
 import { useRouter } from 'next/router'
+import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 
-const CommunitiesDiv = ({ text, communitiesList }) => {
+const CommunitiesDiv = ({ text, communitiesList, Icon }) => {
   /*
     text is the heading text
     communitiesList is the list of communities to map over
   */
   return (
-    <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6 bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border py-1">
+    <div className="flex flex-col mb-4 md:mb-6 bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border space-y-3 p-2">
       <div className="flex flex-row gap-1 xl:gap-2 items-center text-p-text px-3">
-        <HiOutlineSparkles className="w-[20px] h-[20px]" />
+        <Icon />
         <h3 className="text-[18px] font-medium">{text}</h3>
       </div>
       {communitiesList?.map((community, i) => {
@@ -85,8 +86,11 @@ const RightSidebar = () => {
     >
       {user && createdCommunities?.length > 0 && (
         <CommunitiesDiv
-          text="Created Communities"
+          text={`Created ${
+            createdCommunities.length > 1 ? 'Communities' : 'Community'
+          }`}
           communitiesList={createdCommunities}
+          Icon={() => <AiOutlineUsergroupAdd className="w-[20px] h-[20px]" />}
         />
       )}
       {/* <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
@@ -111,6 +115,7 @@ const RightSidebar = () => {
         <CommunitiesDiv
           text="Top Communities"
           communitiesList={topCommunities}
+          Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
         />
       )}
     </div>

@@ -113,55 +113,83 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         setIsDrawerOpen={setIsOpenSidebar}
         position="left"
       >
-        <div className="flex flex-col absolute transition ease-in-out h-full bg-p-bg dark:text-p-text w-full">
-          <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-8">
+        <div className="flex flex-col absolute transition ease-in-out h-full bg-s-bg dark:text-p-text w-full">
+          <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-2">
             {user && address && (
               <div className="flex flex-col">
                 <div className="flex flex-row gap-1">
                   <img
                     src={user?.profileImageUrl}
                     className="w-[55px] h-[55px] bg-[#333] rounded-full"
+                    onClick={() => {
+                      setIsOpenSidebar(false)
+                      routeToProfile()
+                    }}
                   />
-                  <div className="flex flex-col items-start ml-4">
-                    {user?.name && (
-                      <h3 className="font-semibold text-[18px]">{user.name}</h3>
+                  <div className="flex flex-col items-start justify-center ml-4">
+                    {/* <div className="flex flex-row items-start"> */}
+                    {!isSignedIn || !hasProfile ? (
+                      <>
+                        {user?.name ? (
+                          <div className="font-semibold">{user.name}</div>
+                        ) : (
+                          <h3 className="font-semibold">
+                            {stringToLength(user.walletAddress, 20)}
+                          </h3>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {myLensProfile?.defaultProfile?.name && (
+                          <div className="font-semibold">
+                            {myLensProfile?.defaultProfile?.name}
+                          </div>
+                        )}
+                        <div className="font-semibold">
+                          u/
+                          {stringToLength(
+                            myLensProfile?.defaultProfile?.handle,
+                            20
+                          )}
+                        </div>
+                      </>
                     )}
-                    <div className="flex flex-row gap-4 text-p-text">
-                      <div className="">
-                        <span className="font-bold mr-1">
-                          {myLensProfile?.defaultProfile?.stats?.totalFollowers}
-                        </span>
-                        <span className="font-light">Followers</span>
+                    {/* </div> */}
+                    {isSignedIn && hasProfile && (
+                      <div className="flex flex-row gap-4 text-p-text">
+                        <div className="">
+                          <span className="font-bold mr-1">
+                            {
+                              myLensProfile?.defaultProfile?.stats
+                                ?.totalFollowers
+                            }
+                          </span>
+                          <span className="font-light">Followers</span>
+                        </div>
+                        <div className="">
+                          <span className="font-bold mr-1">
+                            {
+                              myLensProfile?.defaultProfile?.stats
+                                ?.totalFollowing
+                            }
+                          </span>
+                          <span className="font-light">Following</span>
+                        </div>
                       </div>
-                      <div className="">
-                        <span className="font-bold mr-1">
-                          {myLensProfile?.defaultProfile?.stats?.totalFollowing}
-                        </span>
-                        <span className="font-light">Following</span>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
             )}
           </div>
-          <div className="bg-[#62F030] px-4 py-4">
-            <LensLoginButton />
-          </div>
-          <div className="flex flex-col px-4 bg-p-bg">
+          {(!isSignedIn || !hasProfile) && (
+            <div className="px-4">
+              <LensLoginButton />
+            </div>
+          )}
+          <div className="flex flex-col px-4">
             <button
-              className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
-              onClick={() => {
-                routeToProfile()
-                setIsOpenSidebar(false)
-              }}
-            >
-              <MdOutlinePerson className="w-7 h-7 object-contain" />
-              <span className="text-p-text text-xl">Profile</span>
-            </button>
-
-            <button
-              className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
+              className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
                 createCommunity()
                 setIsOpenSidebar(false)
@@ -172,7 +200,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </button>
 
             <button
-              className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
+              className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
                 setShowCreatedCommunities(true)
               }}
@@ -183,7 +211,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </button>
 
             <button
-              className="flex flex-row items-center  hover:font-semibold py-4 gap-3"
+              className="flex flex-row items-center   py-4 gap-4"
               onClick={() => setShowJoinedCommunities(true)}
               ref={createdCommunitiesButtonRef}
             >
@@ -191,8 +219,9 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <span className="text-p-text text-xl">Joined Communities</span>
             </button>
 
+            <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
             <button
-              className="flex flex-row items-center hover:font-semibold py-4 gap-3"
+              className="flex flex-row items-center  py-4 gap-4"
               onClick={toggleTheme}
             >
               {theme === 'light' ? (
@@ -204,9 +233,9 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                 {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
               </span>
             </button>
-            <div className="flex flex-row items-center hover:font-semibold py-4 gap-3">
+            <div className="flex flex-row items-center  py-4 gap-4">
               <div
-                className="flex flex-row gap-3"
+                className="flex flex-row gap-4"
                 onClick={async () => {
                   disconnect()
                   setIsOpenSidebar(false)
@@ -227,12 +256,12 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                 </div>
               )}
             </div>
-
+            <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
             <a
               href={DISCORD_INVITE_LINK}
               target={'_blank'}
               rel="noreferrer"
-              className="flex flex-row items-center gap-3 py-4  hover:font-semibold"
+              className="flex flex-row items-center gap-4 py-4  "
             >
               <FaDiscord className="w-7 h-7" />
               <span className="text-p-text text-xl">Discord</span>
