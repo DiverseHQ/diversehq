@@ -5,6 +5,7 @@ import {
   useProxyActionMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
+import { useNotify } from '../Common/NotifyContext'
 
 const useLensFollowButton = (request) => {
   const { mutateAsync: proxyAction } = useProxyActionMutation()
@@ -13,6 +14,7 @@ const useLensFollowButton = (request) => {
     useSignTypedDataAndBroadcast()
   const [isFollowedByMe, setIsFollowedByMe] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { notifySuccess, notifyError } = useNotify()
 
   const { data } = useProfileQuery({
     request: request
@@ -24,17 +26,25 @@ const useLensFollowButton = (request) => {
   }, [data])
 
   const handleFollowProfile = async (profileId) => {
-    await proxyAction({
-      request: {
-        follow: {
-          freeFollow: {
-            profileId: profileId
+    try {
+      setLoading(true)
+      await proxyAction({
+        request: {
+          follow: {
+            freeFollow: {
+              profileId: profileId
+            }
           }
         }
-      }
-    })
-
-    setIsFollowedByMe(true)
+      })
+      setIsFollowedByMe(true)
+      notifySuccess('Followed Successfully')
+      setLoading(false)
+    } catch (e) {
+      console.log(e)
+      setLoading(false)
+      notifyError('Error Following the Profile')
+    }
   }
 
   const handleUnfollowProfile = async (profileId) => {
@@ -52,8 +62,11 @@ const useLensFollowButton = (request) => {
         id: unfollowProfileResult.id,
         type: 'unfollow'
       })
+      notifySuccess('Unfollowed Successfully')
+      setLoading(false)
     } catch (e) {
       setLoading(false)
+      notifyError('You are not Following this Profile')
       console.log(e)
     }
   }

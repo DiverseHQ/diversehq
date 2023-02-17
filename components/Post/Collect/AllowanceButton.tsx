@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useSendTransaction, useWaitForTransaction } from 'wagmi'
 import { useGenerateModuleCurrencyApprovalDataQuery } from '../../../graphql/generated'
+import useDevice from '../../Common/useDevice'
 
 // todo : make a allowance button component
 // todo: addd a revoke button
@@ -19,6 +20,7 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
   })
 
   const [isLoading, setIsLoading] = useState(false)
+  const { isMobile } = useDevice()
 
   const {
     data: txData,
@@ -65,13 +67,17 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
   return (
     <button
       onClick={handleAllowance}
-      className="bg-p-btn text-p-btn-text px-2 py-1 text-base font-semibold rounded-md"
+      className={`${
+        isMobile
+          ? 'bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl text-p-btn-text'
+          : 'bg-p-btn text-p-btn-text px-2 py-1 text-base font-semibold rounded-md'
+      }`}
       disabled={waitLoading || transactionLoading}
     >
       {!(waitLoading || transactionLoading || isLoading) ? (
-        <div className="flex flex-row items-center space-x-1">
-          <BiPlus className="w-5 h-5" />
-          <p>Allow</p>
+        <div className="flex flex-row items-center space-x-1 ">
+          <BiPlus className={` ${isMobile ? 'w-6 h-6' : 'w-5 h-5'} `} />
+          <p>{isMobile ? 'Allow to Collect' : 'Allow'}</p>
         </div>
       ) : (
         <div className="flex flex-row items-center space-x-1">

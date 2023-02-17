@@ -96,7 +96,7 @@ const FreeCollectPopUp = ({
                             'Follow back'
                           ) : (
                             <div className="flex flex-row justify-center items-center space-x-1 ">
-                              <RiUserFollowLine /> <p>Follow</p>
+                              <RiUserFollowLine /> <p>Follow {author.handle}</p>
                             </div>
                           )}
                         </button>
@@ -151,27 +151,25 @@ const FreeCollectPopUp = ({
             collectModule.followerOnly && (
               <>
                 {!isFollowedByMe && (
-                  <div className="flex flex-row items-center self-start space-x-2 mb-2 font-medium">
+                  <div className="flex flex-col items-center self-start space-x-2 mb-2 font-medium w-full">
+                    <p>Follow {author.handle} to Collect for Free</p>
                     <button
                       onClick={() => {
                         handleFollowProfile(author.id)
                       }}
-                      className="bg-p-btn text-p-btn-text rounded-full px-4 py-1 text-sm font-semibold "
+                      className="bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
                     >
                       {followLoading ? (
                         <div className="flex flex-row self-start space-x-2">
                           <CircularProgress size="18px" color="primary" />
                           <p>Follow</p>
                         </div>
-                      ) : author.isFollowing ? (
-                        'Follow back'
                       ) : (
                         <div className="flex flex-row justify-center items-center space-x-1 ">
-                          <RiUserFollowLine /> <p>Follow</p>
+                          <RiUserFollowLine /> <p>Follow {author.handle}</p>
                         </div>
                       )}
                     </button>
-                    <p>{author.handle} to Collect for Free</p>
                   </div>
                 )}
               </>
@@ -188,7 +186,9 @@ const FreeCollectPopUp = ({
                 collectModule.followerOnly &&
                 !isFollowedByMe)
             }
-            className="bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
+            className={`bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1 ${
+              collectModule.followerOnly && !isFollowedByMe && 'hidden'
+            }`}
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
@@ -196,7 +196,7 @@ const FreeCollectPopUp = ({
                 <div>Collecting</div>
               </div>
             ) : (
-              <div className="flex flex-row items-center space-x-2">
+              <div className="flex flex-row items-center space-x-2 text-p-btn-text">
                 <BsCollection className="w-5 h-5" />
                 <p>Collect For Free</p>
               </div>
