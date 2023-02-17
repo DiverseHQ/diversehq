@@ -98,7 +98,7 @@ const useLensFollowButton = (request) => {
             onClick={() => {
               handleUnfollowProfile(request.profileId)
             }}
-            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold w-full"
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
@@ -116,14 +116,14 @@ const useLensFollowButton = (request) => {
             onClick={() => {
               handleFollowProfile(request.profileId)
             }}
-            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold w-full"
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
                 <CircularProgress size="18px" color="primary" />
                 <p>Follow</p>
               </div>
-            ) : data?.profile.isFollowing ? (
+            ) : data?.profile?.isFollowing ? (
               'Follow back'
             ) : (
               <div className="flex flex-row justify-center items-center space-x-1 ">
