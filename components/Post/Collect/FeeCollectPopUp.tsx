@@ -116,7 +116,7 @@ const FeeCollectPopUp = ({
   return (
     <>
       {isDesktop ? (
-        <div className="w-fit bg-s-bg shadow-lg rounded-lg px-3 h-full flex flex-row items-center justify-center space-x-6  border border-p-border rounded-xl  shadow-sm shadow-p-border">
+        <div className="w-fit py-1 bg-s-bg shadow-lg rounded-lg px-3 h-full flex flex-row items-center justify-center space-x-6  border border-p-border rounded-xl  shadow-sm shadow-p-border">
           <div className="flex flex-col  justify-center items-center mt-2">
             {collectModule.followerOnly && !isFollowedByMe && (
               <div className="flex flex-row items-center justify-center space-x-6 ">
@@ -160,7 +160,7 @@ const FeeCollectPopUp = ({
                     {collectModule.amount?.asset?.symbol} <br></br>
                   </p>
                   <p className="text-p-text font-medium text-base">
-                    Balance:{' '}
+                    In Wallet:{' '}
                     {parseFloat(
                       balanceData?.formatted ? balanceData?.formatted : '0'
                     )}{' '}
@@ -183,13 +183,13 @@ const FeeCollectPopUp = ({
                   </div>
                 )}
                 {!hasAmount && isAllowed && (
-                  <div className="text-p-text font-medium text-base">
+                  <div className="text-p-text font-medium text-base py-1 px-2 px-3.5">
                     <p>
-                      Price: {''} {collectModule?.amount?.value} {''}{' '}
+                      Collect for {''} {collectModule?.amount?.value} {''}{' '}
                       {collectModule?.amount?.asset?.symbol}
                     </p>
                     <span>
-                      Balance :{' '}
+                      In Wallet :{' '}
                       {parseFloat(
                         balanceData?.formatted ? balanceData?.formatted : '0'
                       )}{' '}

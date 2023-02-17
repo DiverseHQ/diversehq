@@ -59,7 +59,7 @@ const FreeCollectPopUp = ({
   return (
     <>
       {isDesktop ? (
-        <div className="py-4  bg-s-bg shadow-lg rounded-lg px-4 flex flex-row w-fit items-center justify-center space-x-6 rounded-xl border border-p-border">
+        <div className="py-4  bg-s-bg shadow-sm shadow-p-border rounded-lg px-4 flex flex-row w-fit items-center justify-center space-x-6 rounded-xl border border-p-border">
           <div className="shrink-0">
             {collectModule.__typename === 'FreeCollectModuleSettings' &&
               !collectModule.followerOnly && (
