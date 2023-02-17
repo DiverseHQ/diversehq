@@ -313,7 +313,9 @@ const LensPostCard = ({ post, loading }) => {
             )}
             <span onClick={(e) => e.stopPropagation()}>
               <div className="sm:mr-5 flex flex-row items-center">
-                <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+                {!router.pathname.startsWith('/p/') && (
+                  <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+                )}
                 {isAuthor && (
                   <OptionsWrapper
                     OptionPopUpModal={() => (

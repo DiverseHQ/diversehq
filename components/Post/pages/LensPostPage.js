@@ -1,14 +1,22 @@
 import { Link } from '@mui/material'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getCommunityInfoUsingId } from '../../../api/community'
+import { getNumberOfPostsInCommunity } from '../../../api/post'
+import { getUserFromAddressOrName, getUserInfo } from '../../../api/user'
 import { usePublicationQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
+import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info'
+import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import useDevice from '../../Common/useDevice'
+import JoinCommunityButton from '../../Community/JoinCommunityButton'
+import LensFollowButton from '../../User/LensFollowButton'
 import CombinedCommentSection from '../LensComments/CombinedCommentSection'
 import LensPostCard from '../LensPostCard'
+import { IoMdClose } from 'react-icons/io'
 
 const LensPostPage = ({ id, post }) => {
   const [postInfo, setPostInfo] = useState(post)
@@ -36,7 +44,14 @@ const LensPostPage = ({ id, post }) => {
 
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [numberOfPosts, setNumberOfPosts] = useState(0)
+  const [levelThreshold, setLevelThreshold] = useState(250)
+  const [currentLevel, setCurrentLevel] = useState(0)
+  const [currentXP, setCurrentXP] = useState(
+    numberOfPosts * 10 + postInfo?.communityInfo?.members?.length * 25
+  )
 
+  // fetches the communityInfo and sets the feild in the postInfo object
   const fetchCommunityInformationAndSetPost = async () => {
     try {
       const communityId = postInfo?.metadata?.tags?.[0]
@@ -51,12 +66,74 @@ const LensPostPage = ({ id, post }) => {
     }
   }
 
+  const calculateBarPercentage = (currentXP, threshold) => {
+    const percentage = Math.round((threshold * 100) / currentXP)
+    return percentage
+  }
+
+  const fetchNumberOfPosts = async () => {
+    const result = await getNumberOfPostsInCommunity(
+      postInfo?.communityInfo?._id
+    )
+    setNumberOfPosts(result.numberOfPosts)
+  }
+
+  // 1lvl = 250xp
+  // 1post = 10xp
+  // 1member = 25xp
+  const calculateLevelAndThreshold = () => {
+    const lvl = Math.floor(currentXP / 250)
+    setCurrentLevel(lvl)
+    const threshold = 250 * (lvl + 1)
+    setLevelThreshold(threshold)
+  }
+
+  // fetch the new communityInfo every time post changes
   useEffect(() => {
     if (!postInfo) return
     if (!postInfo?.communityInfo) {
       fetchCommunityInformationAndSetPost()
     }
+    if (postInfo?.communityInfo) {
+      fetchNumberOfPosts()
+      getUserProfileAndLensProfile(postInfo?.profile?.handle)
+    }
   }, [postInfo])
+
+  useEffect(() => {
+    calculateLevelAndThreshold(currentXP)
+  }, [currentXP])
+
+  useEffect(() => {
+    setCurrentXP(
+      numberOfPosts * 10 + postInfo?.communityInfo?.members?.length * 25
+    )
+  }, [numberOfPosts, postInfo?.communityInfo])
+
+  const [userLensProfile, setUserLensProfile] = useState({})
+  const [profile, setProfile] = useState({})
+
+  console.log('profile', profile)
+  console.log('userlensProfile', userLensProfile)
+
+  const getUserProfileAndLensProfile = async (id) => {
+    try {
+      const lensProfileRes = await getLensProfileInfo({
+        handle: id
+      })
+      if (lensProfileRes.profile) {
+        setUserLensProfile(lensProfileRes.profile)
+      }
+      if (lensProfileRes.profile.ownedBy) {
+        const userInfo = await getUserInfo(lensProfileRes.profile.ownedBy)
+        if (userInfo) {
+          setProfile(userInfo)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="w-full flex justify-center pb-[50px]">
@@ -93,45 +170,153 @@ const LensPostPage = ({ id, post }) => {
         <CombinedCommentSection postId={id} postInfo={postInfo} />
       </div>
       {router.pathname.startsWith('/p/') && !isMobile && (
-        <div className="flex flex-col sticky top-[64px] h-[calc(100vh-64px)] rounded-[15px] w-[300px] ml-4 mt-3">
-          <ImageWithFullScreenZoom
-            src={postInfo?.communityInfo?.bannerImageUrl}
-            className="h-[80px] rounded-t-[15px] w-full"
-          />
-          <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
-            <div className="flex flex-row gap-2 justify-start">
-              <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
-                {loading ? (
-                  <div className="animate-pulse rounded-full bg-p-bg lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
-                ) : (
+        <div className="flex flex-col sticky top-[64px] h-[calc(100vh-64px)] overflow-scroll no-scrollbar">
+          <div className="flex flex-row items-center ml-4 mt-3 justify-end">
+            <div
+              className="flex hover:bg-p-btn-hover rounded-md p-1 cursor-pointer items-center gap-2"
+              onClick={() => router.back()}
+            >
+              <IoMdClose className="w-6 h-6" />
+              <span className="text-[18px]">Close</span>
+            </div>
+          </div>
+          <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3">
+            <ImageWithFullScreenZoom
+              src={postInfo?.communityInfo?.bannerImageUrl}
+              className="h-[80px] rounded-t-[15px] w-full object-cover"
+            />
+            <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
+              <div className="flex flex-row gap-2 justify-start">
+                <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
+                  {loading ? (
+                    <div className="animate-pulse rounded-full bg-p-bg lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
+                  ) : (
+                    <ImageWithFullScreenZoom
+                      src={
+                        postInfo?.communityInfo?.logoImageUrl
+                          ? postInfo?.communityInfo?.logoImageUrl
+                          : '/gradient.jpg'
+                      }
+                      className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
+                    />
+                  )}
+                </div>
+                <div
+                  onClick={() => {
+                    if (postInfo?.communityInfo?.name)
+                      router.push(`/c/${postInfo?.communityInfo?.name}`)
+                  }}
+                >
+                  {loading ? (
+                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
+                  ) : (
+                    <h2 className="font-bold text-p-text text-[20px]  hover:underline cursor-pointer truncate">
+                      {postInfo?.communityInfo?.name}
+                    </h2>
+                  )}
+                </div>
+              </div>
+              <div className="-translate-y-2 mb-2">
+                <div className="flex flex-row gap-1 items-center w-[80%] mb-1">
+                  <div className="text-[12px] md:text-[14px] items-center">
+                    {`Lvl${currentLevel}`}
+                  </div>
+                  <div className="flex flex-col w-full items-end">
+                    <div className="text-[10px] text-[#bbb]">{`${currentXP}/${levelThreshold}`}</div>
+                    <div className="relative bg-[#AA96E2] h-[3px] w-full">
+                      <div
+                        className="absolute h-full bg-[#6668FF]"
+                        style={{
+                          width: `${calculateBarPercentage(
+                            levelThreshold,
+                            currentXP
+                          )}%`,
+                          maxWidth: '100%'
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                {/* createdat */}
+                <div className="flex flex-row gap-0.5 items-center text-xs md:text-[14px] text-[#aaa]">
+                  <AiOutlineFileAdd />
+                  <span>
+                    Created{' '}
+                    {new Date(postInfo?.communityInfo?.createdAt)
+                      .toDateString()
+                      .split(' ')
+                      .slice(1)
+                      .join(' ')}
+                  </span>
+                </div>
+              </div>
+              <p className="mb-2 text-p-text">
+                {postInfo?.communityInfo?.description}
+              </p>
+              <div className="mb-2 text-p-text">
+                <span>Members: </span>
+                <span className="font-semibold">
+                  {postInfo?.communityInfo?.members?.length}
+                </span>
+              </div>
+              <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+            </div>
+          </div>
+          <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3">
+            <ImageWithFullScreenZoom
+              src={profile?.bannerImageUrl}
+              className="h-[80px] rounded-t-[15px] w-full object-cover"
+            />
+            <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
+              <div className="flex flex-row gap-2 justify-start">
+                <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
                   <ImageWithFullScreenZoom
                     src={
-                      postInfo?.communityInfo?.logoImageUrl
-                        ? postInfo?.communityInfo?.logoImageUrl
+                      profile?.profileImageUrl
+                        ? profile?.profileImageUrl
                         : '/gradient.jpg'
                     }
                     className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
                   />
-                )}
-              </div>
-              <div
-                onClick={() => {
-                  if (postInfo?.communityInfo?.name)
-                    router.push(`/c/${postInfo?.communityInfo?.name}`)
-                }}
-              >
-                {loading ? (
-                  <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                ) : (
-                  <h2 className="font-bold text-p-text text-[20px]  hover:underline cursor-pointer truncate">
-                    {postInfo?.communityInfo?.name}
+                </div>
+                <div>
+                  <h2
+                    className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate"
+                    onClick={() => {
+                      if (profile?.walletAddress)
+                        router.push(`/u/${profile?.walletAddress}`)
+                    }}
+                  >
+                    {profile?.name}
                   </h2>
-                )}
+                  <h2
+                    className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate mb-3"
+                    onClick={() => {
+                      if (postInfo?.profile?.handle)
+                        router.push(`/u/${postInfo?.profile?.handle}`)
+                    }}
+                  >
+                    {postInfo?.profile?.handle}
+                  </h2>
+                </div>
               </div>
+              <p className="-translate-y-2 text-p-text">{profile?.bio}</p>
+              <div className="mb-2 text-p-text flex flex-row gap-2">
+                <span>
+                  Followers:{' '}
+                  <span className="font-semibold">
+                    {userLensProfile?.stats?.totalFollowers}
+                  </span>
+                </span>
+                <span>
+                  Following:{' '}
+                  <span className="font-semibold">
+                    {userLensProfile?.stats?.totalFollowing}
+                  </span>
+                </span>
+              </div>
+              <LensFollowButton lensProfile={userLensProfile} />
             </div>
-            <p className="mb-2 -translate-y-4 text-p-text">
-              {postInfo?.communityInfo?.description}
-            </p>
           </div>
         </div>
       )}

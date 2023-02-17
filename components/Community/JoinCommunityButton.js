@@ -1,10 +1,13 @@
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { putJoinCommunity } from '../../api/community'
+import { putJoinCommunity, putLeaveCommunity } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
+import useDevice from '../Common/useDevice'
 import { useProfile } from '../Common/WalletContext'
 
 const JoinCommunityButton = ({ id }) => {
   const [loading, setLoading] = useState(false)
+  // const [leavingLoading, setLoading] = us
   const [joined, setJoined] = useState(true)
   const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
@@ -12,6 +15,8 @@ const JoinCommunityButton = ({ id }) => {
     if (!user || !id) return
     setJoined(user.communities.includes(id))
   }, [user, id])
+
+  const router = useRouter()
 
   const handleJoin = async () => {
     if (!user) {
@@ -28,11 +33,35 @@ const JoinCommunityButton = ({ id }) => {
       setLoading(false)
     }
   }
+
+  const handleLeave = async () => {
+    if (!user) {
+      notifyInfo('You might want to connect your wallet first')
+      return
+    }
+    try {
+      setLoading(true)
+      await putLeaveCommunity(id)
+      notifyInfo('Left 😢')
+      await refreshUserInfo()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const { isMobile } = useDevice()
+
   return (
     <>
       {!joined && !loading && (
         <button
-          className="text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-1 h-fit w-fit rounded-full"
+          className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 rounded-md ${
+            router.pathname.startsWith('/p') && !isMobile
+              ? 'w-full'
+              : 'w-[75px]'
+          } ${isMobile ? 'w-[65px] py-1' : 'py-0.5'}`}
           onClick={(e) => {
             e.stopPropagation()
             handleJoin()
@@ -42,12 +71,34 @@ const JoinCommunityButton = ({ id }) => {
           Join
         </button>
       )}
+      {joined && !loading && (
+        <button
+          className={`text-xs sm:text-base px-2 sm:px-3 rounded-md ${
+            router.pathname.startsWith('/p') && !isMobile
+              ? 'w-full'
+              : 'w-[75px]'
+          } ${
+            isMobile ? 'w-[65px] py-1' : 'py-0.5'
+          } group/text transition-all ease-in-out duration-600 bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text transition-all ease-in-out duration-600`}
+          onClick={(e) => {
+            e.stopPropagation()
+            handleLeave()
+          }}
+        >
+          <span className="group-hover/text:hidden">Joined</span>
+          <span className="hidden group-hover/text:block">Leave</span>
+        </button>
+      )}
       {loading && (
         <button
-          className="text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-1 h-fit w-fit rounded-full"
+          className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-0.5 rounded-md ${
+            router.pathname.startsWith('/p') && !isMobile
+              ? 'w-full'
+              : 'w-[75px]'
+          } ${isMobile ? 'w-[65px] py-1' : 'py-0.5'}`}
           disabled={loading}
         >
-          Joining...
+          {joined ? 'Leaving...' : 'Joining...'}
         </button>
       )}
       {joined && !loading && <></>}

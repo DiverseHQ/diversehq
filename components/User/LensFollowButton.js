@@ -16,7 +16,7 @@ const LensFollowButton = ({ lensProfile }) => {
           onClick={() => {
             handleUnfollowProfile(lensProfile.id)
           }}
-          className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+          className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold w-full"
         >
           {loading ? (
             <div className="flex flex-row justify-center items-center space-x-2">
@@ -34,7 +34,7 @@ const LensFollowButton = ({ lensProfile }) => {
           onClick={() => {
             handleFollowProfile(lensProfile.id)
           }}
-          className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold"
+          className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold w-full"
         >
           {loading ? (
             <div className="flex flex-row justify-center items-center space-x-2">
