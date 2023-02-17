@@ -128,7 +128,10 @@
   textarea,
   button,
   select,
-  a {
+  a,
+  div,
+  p,
+  span {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
