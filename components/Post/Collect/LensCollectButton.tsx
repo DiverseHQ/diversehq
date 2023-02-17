@@ -60,23 +60,13 @@ const LensCollectButton = ({
                     </p>
                   </div>
                   <>
-                    {publication?.metadata?.media.length > 0 ? (
+                    {publication?.metadata?.media.length > 0 && (
                       <div className="w-full mb-1">
                         <Attachment
                           publication={publication}
                           className="max-h-[250px] rounded-xl"
                         />
                       </div>
-                    ) : (
-                      getURLsFromText(publication?.metadata?.content).length >
-                        0 && (
-                        <ReactEmbedo
-                          url={
-                            getURLsFromText(publication?.metadata?.content)[0]
-                          }
-                          className={`w-full h-[250px] pb-1`}
-                        />
-                      )
                     )}
                   </>
                 </div>
