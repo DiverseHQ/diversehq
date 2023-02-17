@@ -64,8 +64,6 @@ const useLensFollowButton = (request) => {
         id: unfollowProfileResult.id,
         type: 'unfollow'
       })
-      notifySuccess('Unfollowed Successfully')
-      setLoading(false)
     } catch (e) {
       setLoading(false)
       notifyError('You are not Following this Profile')
@@ -88,6 +86,7 @@ const useLensFollowButton = (request) => {
     if (isSignedTx && type === 'unfollow') {
       setLoading(false)
       setIsFollowedByMe(false)
+      notifySuccess('Unfollowed Successfully')
     }
   }, [isSignedTx, type])
 
