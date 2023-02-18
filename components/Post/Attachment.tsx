@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 import { Publication } from '../../graphql/generated'
 import {
@@ -5,6 +6,7 @@ import {
   SUPPORTED_IMAGE_TYPE,
   SUPPORTED_VIDEO_TYPE
 } from '../../utils/config'
+import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import getIPFSLink from '../User/lib/getIPFSLink'
@@ -18,6 +20,7 @@ interface Props {
 
 const Attachment: FC<Props> = ({ publication, className, showAll = false }) => {
   const medias = publication?.metadata?.media
+  const router = useRouter()
   const getCoverUrl = () => {
     return (
       publication?.metadata?.cover?.original.url || publication?.metadata?.image
@@ -47,11 +50,19 @@ const Attachment: FC<Props> = ({ publication, className, showAll = false }) => {
         ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
           <audio src={url} className={`${className}`} loop controls muted />
         ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
-          <ImageWithPulsingLoader
-            src={url}
-            className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
-            alt={publication?.metadata?.content}
-          />
+          router.pathname.startsWith('/p/') ? (
+            <ImageWithFullScreenZoom
+              src={url}
+              className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
+              alt={publication?.metadata?.content}
+            />
+          ) : (
+            <ImageWithPulsingLoader
+              src={url}
+              className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
+              alt={publication?.metadata?.content}
+            />
+          )
         ) : (
           <></>
         )}
@@ -81,11 +92,19 @@ const Attachment: FC<Props> = ({ publication, className, showAll = false }) => {
             ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
               <audio src={url} className={`${className}`} loop controls muted />
             ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
-              <ImageWithPulsingLoader
-                src={url}
-                className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
-                alt={publication?.metadata?.content}
-              />
+              router.pathname.startsWith('/p/') ? (
+                <ImageWithFullScreenZoom
+                  src={url}
+                  className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
+                  alt={publication?.metadata?.content}
+                />
+              ) : (
+                <ImageWithPulsingLoader
+                  src={url}
+                  className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
+                  alt={publication?.metadata?.content}
+                />
+              )
             ) : (
               <></>
             )}
