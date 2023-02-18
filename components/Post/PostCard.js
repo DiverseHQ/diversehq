@@ -281,7 +281,10 @@ const PostCard = ({ _post, setPosts }) => {
         )}
         <span onClick={(e) => e.stopPropagation()}>
           <div className="sm:mr-5 flex flex-row items-center">
-            <JoinCommunityButton id={post.communityId} />
+            {!router.pathname.startsWith('/p') &&
+              !router.pathname.startsWith('/c') && (
+                <JoinCommunityButton id={post.communityId} />
+              )}
             {isAuthor && (
               <OptionsWrapper
                 OptionPopUpModal={() => (
