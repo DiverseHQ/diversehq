@@ -188,22 +188,38 @@ const LensCommentCard = ({ comment }) => {
   }
 
   const openReplyModal = async () => {
-    showModal({
-      component: (
-        <PopUpWrapper title={'Reply'} label={'Reply'} loading={false}>
-          <LensCreateComment
-            postId={comment.id}
-            addComment={addComment}
-            isReply={true}
-            replyCommentData={comment}
-          />
-        </PopUpWrapper>
-      ),
-      type: modalType.fullscreen,
-      onAction: () => {},
-      extraaInfo: {}
-    })
+    if (!isSignedIn || !hasProfile) {
+      notifyInfo('How about loging in lens, first?')
+      return
+    }
+
+    // showModal({
+    //   component: (
+    //     <PopUpWrapper title={'Reply'} label={'Reply'} loading={false}>
+    //       <LensCreateComment
+    //         postId={comment.id}
+    //         addComment={addComment}
+    //         isReply={true}
+    //         replyCommentData={comment}
+    //       />
+    //     </PopUpWrapper>
+    //   ),
+    //   type: modalType.fullscreen,
+    //   onAction: () => {},
+    //   extraaInfo: {}
+    // })
   }
+  const [isMobileReply, setIsMobileReply] = useState(false)
+
+  const handleMobileReply = async () => {
+    if (!isSignedIn || !hasProfile) {
+      notifyInfo('How about loging in lens, first?')
+      return
+    }
+
+    setIsMobileReply((prev) => !prev)
+  }
+
   return (
     <>
       {comment && (
@@ -334,7 +350,7 @@ const LensCommentCard = ({ comment }) => {
                       return
                     }
                     if (isMobile) {
-                      openReplyModal()
+                      handleMobileReply()
                     } else {
                       setShowCreateComment(!showCreateComment)
                     }
@@ -349,6 +365,16 @@ const LensCommentCard = ({ comment }) => {
                 <LensCreateComment
                   postId={comment.id}
                   addComment={addComment}
+                />
+              )}
+
+              {/* create comment if isMobileReply is true */}
+              {isMobileReply && isMobile && (
+                <LensCreateComment
+                  postId={comment.id}
+                  addComment={addComment}
+                  isMobileReply={isMobileReply}
+                  replyCommentData={comment}
                 />
               )}
 

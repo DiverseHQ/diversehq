@@ -21,7 +21,8 @@ const LensCreateComment = ({
   postId,
   addComment,
   replyCommentData,
-  isReply = false
+  isReply = false,
+  isMobileReply
 }) => {
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
@@ -195,6 +196,7 @@ const LensCreateComment = ({
                 </div>
               </div>
             )}
+            {/* Desktop create comment */}
             <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
               <div className="flex flex-row justify-between items-center w-full">
                 <div className="flex flex-row items-center">
@@ -242,55 +244,110 @@ const LensCreateComment = ({
             </div>
           </>
         ) : (
-          <div className="px-2 sm:px-5 w-full bg-s-bg pt-2 pb-1.5 fixed z-30 bottom-0 flex flex-row items-center">
-            {/* <div className="flex flex-row justify-between items-center w-full gap-2 sm:gap-4"> */}
-            <div className="flex flex-row mr-2 mb-1.5 items-center self-end">
-              <img
-                src={
-                  user?.profileImageUrl
-                    ? user?.profileImageUrl
-                    : '/gradient.jpg'
-                }
-                className="w-[40px] h-[40px] rounded-full"
-              />
-            </div>
-            <div className="flex-1 relative mr-2">
-              <textarea
-                type="text"
-                ref={commentRef}
-                className={`flex flex-row items-center border-none outline-none w-full text-base sm:text-[18px] py-2 px-4 sm:py-2 rounded-xl bg-p-bg font-medium ${
-                  loading ? 'text-s-text' : 'text-p-text'
-                }`}
-                placeholder="What do you think?"
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') createComment()
-                }}
-                onInput={(e) => {
-                  e.target.style.height = 'auto'
-                  e.target.style.height = `${e.target.scrollHeight}px`
-                }}
-                disabled={loading}
-                rows={1}
-                style={{ resize: 'none' }}
-              />
-            </div>
-            <div className="flex flex-row justify-center items-center self-end mb-3">
-              {!loading && (
-                <FiSend
-                  onClick={createComment}
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-p-text cursor-pointer"
-                />
-              )}
-              {loading && (
-                <img
-                  src="/loading.svg"
-                  alt="loading"
-                  className="w-5 h-5 sm:w-6 sm:h-6"
-                />
-              )}
-            </div>
-            {/* </div> */}
-          </div>
+          <>
+            {isMobileReply ? (
+              <>
+                <div className="px-2 sm:px-5 w-full bg-p-bg pt-2 pb-1.5 flex flex-row justify-between items-center fixed z-30 bottom-[60px] left-0">
+                  <div className="flex flex-row gap-3 sm:gap-4">
+                    <div className="flex flex-col items-center justify-center">
+                      <div>
+                        <img
+                          src={
+                            replyCommentData?.profile?.picture?.original?.url?.startsWith(
+                              'ipfs'
+                            )
+                              ? `${LensInfuraEndpoint}${
+                                  replyCommentData?.profile?.picture?.original?.url.split(
+                                    '//'
+                                  )[1]
+                                }`
+                              : getStampFyiURL(
+                                  replyCommentData?.profile?.ownedBy
+                                )
+                          }
+                          className="w-8 h-8 rounded-full"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <Link
+                        href={`/u/${replyCommentData?.profile?.handle}`}
+                        passHref
+                      >
+                        <div className="text-base">
+                          Replying to{' '}
+                          <span className="hover:underline font-bold">
+                            u/{replyCommentData?.profile?.handle}
+                          </span>
+                        </div>
+                      </Link>
+                      <div className="text-[14px]">
+                        {replyCommentData?.metadata?.content}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="">
+                    <button
+                      disabled={loading}
+                      onClick={createComment}
+                      className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-[15px] text-sm"
+                    >
+                      {loading ? 'Sending...' : 'Send'}
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="px-2 sm:px-5 w-full bg-s-bg pt-2 pb-1.5 fixed z-30 bottom-0 flex flex-row items-center">
+                <div className="flex flex-row mr-2 mb-1.5 items-center self-end">
+                  <img
+                    src={
+                      user?.profileImageUrl
+                        ? user?.profileImageUrl
+                        : '/gradient.jpg'
+                    }
+                    className="w-[40px] h-[40px] rounded-full"
+                  />
+                </div>
+                <div className="flex-1 relative mr-2">
+                  <textarea
+                    type="text"
+                    ref={commentRef}
+                    className={`flex flex-row items-center border-none outline-none w-full text-base sm:text-[18px] py-2 px-4 sm:py-2 rounded-xl bg-p-bg font-medium ${
+                      loading ? 'text-s-text' : 'text-p-text'
+                    }`}
+                    placeholder="What do you think?"
+                    onKeyUp={(e) => {
+                      if (e.key === 'Enter') createComment()
+                    }}
+                    onInput={(e) => {
+                      e.target.style.height = 'auto'
+                      e.target.style.height = `${e.target.scrollHeight}px`
+                    }}
+                    disabled={loading}
+                    rows={1}
+                    style={{ resize: 'none' }}
+                  />
+                </div>
+                <div className="flex flex-row justify-center items-center self-end mb-3">
+                  {!loading && (
+                    <FiSend
+                      onClick={createComment}
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-p-text cursor-pointer"
+                    />
+                  )}
+                  {loading && (
+                    <img
+                      src="/loading.svg"
+                      alt="loading"
+                      className="w-5 h-5 sm:w-6 sm:h-6"
+                    />
+                  )}
+                </div>
+                {/* </div> */}
+              </div>
+            )}
+          </>
         ))}
     </div>
   )
