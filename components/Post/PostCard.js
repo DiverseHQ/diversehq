@@ -174,7 +174,7 @@ const PostCard = ({ _post, setPosts }) => {
               router.pathname.startsWith('/p') ? 'mb-2' : ''
             }`
           : 'pb-2'
-      }`}
+      } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
       onClick={() => {
         if (router.pathname.startsWith('/p')) return
         router.push(`/p/${post._id}`)
@@ -463,7 +463,10 @@ const PostCard = ({ _post, setPosts }) => {
                 </span>
               ) : (
                 <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                  <ImageWithFullScreenZoom src={post.postImageUrl} />
+                  <ImageWithFullScreenZoom
+                    src={post.postImageUrl}
+                    className="object-cover w-full"
+                  />
                 </div>
               ))}
             {post?.postVideoUrl && (
