@@ -168,43 +168,53 @@ const PostCard = ({ _post, setPosts }) => {
 
   return (
     <div
-      className={`sm:px-5 flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
+      className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
         isMobile
           ? `border-b-[1px] border-[#eee] dark:border-p-border ${
               router.pathname.startsWith('/p') ? 'mb-2' : ''
             }`
           : 'pb-2'
       }`}
+      onClick={() => {
+        if (router.pathname.startsWith('/p')) return
+        router.push(`/p/${post._id}`)
+      }}
     >
       {/* top row */}
       <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
         {!isMobile && (
           <>
             <div className="flex flex-row w-full items-center pb-1">
-              <Link href={`/c/${post.communityName}`} passHref>
-                <ImageWithPulsingLoader
-                  src={post.communityLogo}
-                  className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
-                />
-              </Link>
-              <Link href={`/c/${post.communityName}`}>
-                <div className="pl-2 font-bold text-xs sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                  {post.communityName}
-                </div>
-              </Link>
+              <span onClick={(e) => e.stopPropagation()}>
+                <Link href={`/c/${post.communityName}`} passHref>
+                  <ImageWithPulsingLoader
+                    src={post.communityLogo}
+                    className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                  />
+                </Link>
+              </span>
+              <span onClick={(e) => e.stopPropagation()}>
+                <Link href={`/c/${post.communityName}`}>
+                  <div className="pl-2 font-bold text-xs sm:text-lg hover:cursor-pointer hover:underline text-p-text">
+                    {post.communityName}
+                  </div>
+                </Link>
+              </span>
 
-              <Link
-                href={`/u/${post.author}`}
-                className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-              >
-                <p className="pl-1.5"> posted by</p>
-                <div className="pl-1.5 hover:cursor-pointer hover:underline">
-                  u/
-                  {post.authorName
-                    ? post.authorName
-                    : post.author?.slice(0, 6) + '...'}
-                </div>
-              </Link>
+              <span onClick={(e) => e.stopPropagation()}>
+                <Link
+                  href={`/u/${post.author}`}
+                  className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                >
+                  <p className="pl-1.5"> posted by</p>
+                  <div className="pl-1.5 hover:cursor-pointer hover:underline">
+                    u/
+                    {post.authorName
+                      ? post.authorName
+                      : post.author?.slice(0, 6) + '...'}
+                  </div>
+                </Link>
+              </span>
               <div>
                 {post.createdAt && (
                   <div className="text-xs sm:text-sm text-s-text ml-2">
@@ -222,32 +232,38 @@ const PostCard = ({ _post, setPosts }) => {
         {isMobile && (
           <>
             <div className="flex flex-row w-full items-center">
-              <Link href={`/c/${post.communityName}`} passHref>
-                <ImageWithPulsingLoader
-                  src={post.communityLogo}
-                  className="object-cover rounded-full h-10 w-10"
-                />
-              </Link>
-              <div className="flex flex-col justify-center items-start text-p-text">
+              <span onClick={(e) => e.stopPropagation()}>
                 <Link href={`/c/${post.communityName}`} passHref>
-                  <div className="pl-2 font-bold text-base sm:text-xl hover:cursor-pointer hover:underline">
-                    {post.communityName}
-                  </div>
+                  <ImageWithPulsingLoader
+                    src={post.communityLogo}
+                    className="object-cover rounded-full h-10 w-10"
+                  />
                 </Link>
-                <div className="flex flex-row items-center justify-start">
-                  <Link
-                    href={`/u/${post.author}`}
-                    className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                    passHref
-                  >
-                    <p className="pl-1.5"> posted by</p>
-                    <div className="pl-1.5 hover:cursor-pointer hover:underline">
-                      u/
-                      {post.authorName
-                        ? post.authorName
-                        : post.author?.slice(0, 6) + '...'}
+              </span>
+              <div className="flex flex-col justify-center items-start text-p-text">
+                <span onClick={(e) => e.stopPropagation()}>
+                  <Link href={`/c/${post.communityName}`} passHref>
+                    <div className="pl-2 font-bold text-base sm:text-xl hover:cursor-pointer hover:underline">
+                      {post.communityName}
                     </div>
                   </Link>
+                </span>
+                <div className="flex flex-row items-center justify-start">
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <Link
+                      href={`/u/${post.author}`}
+                      className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                      passHref
+                    >
+                      <p className="pl-1.5"> posted by</p>
+                      <div className="pl-1.5 hover:cursor-pointer hover:underline">
+                        u/
+                        {post.authorName
+                          ? post.authorName
+                          : post.author?.slice(0, 6) + '...'}
+                      </div>
+                    </Link>
+                  </span>
                   <div>
                     {post.createdAt && (
                       <div className="text-xs sm:text-sm text-s-text ml-2">
@@ -263,45 +279,49 @@ const PostCard = ({ _post, setPosts }) => {
             </div>
           </>
         )}
-        <div className="sm:mr-5 flex flex-row items-center">
-          <JoinCommunityButton id={post.communityId} />
-          {isAuthor && (
-            <OptionsWrapper
-              OptionPopUpModal={() => (
-                <MoreOptionsModal
-                  className="z-50"
-                  list={[
-                    {
-                      label: 'Edit Post',
-                      onClick: async () => {
-                        showEditModal()
+        <span onClick={(e) => e.stopPropagation()}>
+          <div className="sm:mr-5 flex flex-row items-center">
+            <JoinCommunityButton id={post.communityId} />
+            {isAuthor && (
+              <OptionsWrapper
+                OptionPopUpModal={() => (
+                  <MoreOptionsModal
+                    className="z-50"
+                    list={[
+                      {
+                        label: 'Edit Post',
+                        onClick: async () => {
+                          showEditModal()
+                        },
+                        icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
                       },
-                      icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
-                    },
-                    {
-                      label: 'Delete Post',
-                      onClick: async () => {
-                        await handleDeletePost()
-                      },
-                      icon: () => <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                    }
-                  ]}
-                />
-              )}
-              position="left"
-              showOptionsModal={showOptionsModal}
-              setShowOptionsModal={setShowOptionsModal}
-              isDrawerOpen={isDrawerOpen}
-              setIsDrawerOpen={setIsDrawerOpen}
-            >
-              <Tooltip title="More" arrow>
-                <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-              </Tooltip>
-            </OptionsWrapper>
-          )}
-        </div>
+                      {
+                        label: 'Delete Post',
+                        onClick: async () => {
+                          await handleDeletePost()
+                        },
+                        icon: () => (
+                          <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                        )
+                      }
+                    ]}
+                  />
+                )}
+                position="left"
+                showOptionsModal={showOptionsModal}
+                setShowOptionsModal={setShowOptionsModal}
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
+              >
+                <Tooltip title="More" arrow>
+                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                    <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                </Tooltip>
+              </OptionsWrapper>
+            )}
+          </div>
+        </span>
       </div>
 
       <div className="flex flex-row w-full">
@@ -309,7 +329,10 @@ const PostCard = ({ _post, setPosts }) => {
           <div className="flex flex-col items-center ml-1.5 mt-1">
             <Tooltip title="Upvote" arrow placement="left">
               <button
-                onClick={handleUpvote}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleUpvote()
+                }}
                 className="hover:bg-p-btn-hover rounded-md p-1 hover:cursor-pointer"
               >
                 <img
@@ -323,7 +346,10 @@ const PostCard = ({ _post, setPosts }) => {
             <div className="font-bold leading-5">{totalCount}</div>
             <Tooltip title="Downvote" arrow placement="left">
               <button
-                onClick={handleDownvote}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDownvote()
+                }}
                 className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
               >
                 <img
@@ -367,12 +393,14 @@ const PostCard = ({ _post, setPosts }) => {
                         {/* todo showmore for clamped text */}
                       </div>
                       {showMore && (
-                        <Link
-                          href={`/p/${post._id}`}
-                          className="text-blue-400 text-sm sm:text-base"
-                        >
-                          Show more
-                        </Link>
+                        <span onClick={(e) => e.stopPropagation()}>
+                          <Link
+                            href={`/p/${post._id}`}
+                            className="text-blue-400 text-sm sm:text-base"
+                          >
+                            Show more
+                          </Link>
+                        </span>
                       )}
                     </>
                   )}
@@ -401,12 +429,14 @@ const PostCard = ({ _post, setPosts }) => {
                         {/* todo showmore for clamped text */}
                       </div>
                       {showMore && (
-                        <Link
-                          href={`/p/${post._id}`}
-                          className="text-blue-400 text-sm sm:text-base"
-                        >
-                          Show more
-                        </Link>
+                        <span onClick={(e) => e.stopPropagation()}>
+                          <Link
+                            href={`/p/${post._id}`}
+                            className="text-blue-400 text-sm sm:text-base"
+                          >
+                            Show more
+                          </Link>
+                        </span>
                       )}
                     </>
                   )}
@@ -415,18 +445,22 @@ const PostCard = ({ _post, setPosts }) => {
             </div>
             {post?.postImageUrl &&
               (!router.pathname.startsWith('/p') ? (
-                <Link href={`/p/${post?._id}`} passHref>
-                  {/* eslint-disable-next-line */}
-                  <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                    <ImageWithPulsingLoader
-                      src={post.postImageUrl}
-                      className={`image-unselectable sm:rounded-lg object-cover w-full ${
-                        router.pathname.startsWith('/p') ? '' : 'max-h-[500px]'
-                      }`}
-                      loaderClassName="sm:rounded-lg w-full h-[300px]"
-                    />
-                  </div>
-                </Link>
+                <span onClick={(e) => e.stopPropagation()}>
+                  <Link href={`/p/${post?._id}`} passHref>
+                    {/* eslint-disable-next-line */}
+                    <div className="sm:pl-5  sm:pr-6 sm:pb-1">
+                      <ImageWithPulsingLoader
+                        src={post.postImageUrl}
+                        className={`image-unselectable sm:rounded-lg object-cover w-full ${
+                          router.pathname.startsWith('/p')
+                            ? ''
+                            : 'max-h-[500px]'
+                        }`}
+                        loaderClassName="sm:rounded-lg w-full h-[300px]"
+                      />
+                    </div>
+                  </Link>
+                </span>
               ) : (
                 <div className="sm:pl-5  sm:pr-6 sm:pb-1">
                   <ImageWithFullScreenZoom src={post.postImageUrl} />
@@ -475,7 +509,10 @@ const PostCard = ({ _post, setPosts }) => {
               <div className="flex flex-row items-center gap-x-1">
                 <Tooltip title="Upvote" arrow>
                   <button
-                    onClick={handleUpvote}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleUpvote()
+                    }}
                     className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
                   >
                     <img
@@ -492,7 +529,10 @@ const PostCard = ({ _post, setPosts }) => {
                 <div className="font-medium text-[#687684]">{totalCount}</div>
                 <Tooltip title="Downvote" arrow>
                   <button
-                    onClick={handleDownvote}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDownvote()
+                    }}
                     className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
                   >
                     <img
@@ -509,26 +549,28 @@ const PostCard = ({ _post, setPosts }) => {
             )}
             {!router.pathname.startsWith('/p') ? (
               <Tooltip title="Comment" arrow>
-                <Link
-                  href={`/p/${post._id}`}
-                  className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-medium"
-                  passHref
-                >
-                  {/* {post.comments?.length === 0 && (
+                <span onClick={(e) => e.stopPropagation()}>
+                  <Link
+                    href={`/p/${post._id}`}
+                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-medium"
+                    passHref
+                  >
+                    {/* {post.comments?.length === 0 && (
                   <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )}
                 {post.comments?.length > 0 && (
                   <FaRegCommentDots className="hover:cursor-pointer mr-2 w-4 h-4 " />
                 )} */}
-                  <img
-                    src="/comment.svg"
-                    alt="Comment"
-                    className="w-4 h-4 mr-2"
-                  />
-                  <span className="text-[#687684]">
-                    {post.comments?.length}
-                  </span>
-                </Link>
+                    <img
+                      src="/comment.svg"
+                      alt="Comment"
+                      className="w-4 h-4 mr-2"
+                    />
+                    <span className="text-[#687684]">
+                      {post.comments?.length}
+                    </span>
+                  </Link>
+                </span>
               </Tooltip>
             ) : (
               <Tooltip title="Comment" arrow>
@@ -550,11 +592,12 @@ const PostCard = ({ _post, setPosts }) => {
                 </div>
               </Tooltip>
             )}
-
-            <PostShareButton
-              url={`https://app.diversehq.xyz/p/${post?._id}`}
-              text={post?.title}
-            />
+            <span onClick={(e) => e.stopPropagation()}>
+              <PostShareButton
+                url={`https://app.diversehq.xyz/p/${post?._id}`}
+                text={post?.title}
+              />
+            </span>
           </div>
         </div>
       </div>
