@@ -153,7 +153,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
   useEffect(() => {
     if (postInfo) return
     setFocused(!!currentReplyComment)
-    commentRef?.current?.focus()
+    if (currentReplyComment) commentRef?.current?.focus()
   }, [currentReplyComment])
 
   if (!hasProfile || !isSignedIn || !lensProfile?.defaultProfile?.id) {
