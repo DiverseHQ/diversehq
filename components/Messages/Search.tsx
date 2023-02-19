@@ -39,7 +39,7 @@ const Search = ({
   }
   return (
     <div className={`w-full ${className}`}>
-      <div className="w-full flex flex-row items-center bg-p-bg space-x-2 px-4">
+      <div className="w-full flex flex-row items-center bg-s-hover space-x-2 px-4">
         {searchText === '' && (
           <AiOutlineSearch className="text-s-text w-5 h-5" />
         )}
@@ -50,7 +50,7 @@ const Search = ({
           />
         )}
         <input
-          className="w-full ml-2 focus:outline-none p-2 bg-p-bg"
+          className="w-full ml-2 focus:outline-none p-2 bg-s-hover"
           placeholder={placeholder}
           value={searchText}
           onChange={handleSearch}
