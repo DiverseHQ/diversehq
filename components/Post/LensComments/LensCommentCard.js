@@ -12,12 +12,9 @@ import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import { LensInfuraEndpoint } from '../../../utils/config'
 import LensRepliedComments from './LensRepliesComments'
 import LensCreateComment from './LensCreateComment'
-import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import { useRouter } from 'next/router'
 import { HiOutlineTrash } from 'react-icons/hi'
-import useDevice from '../../Common/useDevice'
-import PopUpWrapper from '../../Common/PopUpWrapper'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
@@ -28,7 +25,6 @@ import { useCommentStore } from '../../../store/comment'
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()
-  const [showCreateComment, setShowCreateComment] = useState(false)
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
   const [upvoteCount, setUpvoteCount] = useState(
@@ -50,7 +46,6 @@ const LensCommentCard = ({ comment }) => {
   const [isAuthor, setIsAuthor] = useState(
     lensProfile?.defaultProfile?.id === comment?.profile?.id
   )
-  const { isMobile } = useDevice()
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
@@ -164,7 +159,7 @@ const LensCommentCard = ({ comment }) => {
     const prevComments = comments
     const newCommentsFirstPhase = [comment, ...prevComments]
     setComments(newCommentsFirstPhase)
-    setShowCreateComment(false)
+    setCurrentReplyComment(null)
     const indexResult = await pollUntilIndexed(tx)
     const commentId = commentIdFromIndexedResult(
       lensProfile?.defaultProfile?.id,

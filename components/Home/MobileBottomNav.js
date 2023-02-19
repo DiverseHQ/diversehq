@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
-import { HiOutlineMail } from 'react-icons/hi'
 import { useMessageStore } from '../../store/message'
 import useNotificationsCount from '../Notification/useNotificationsCount'
 

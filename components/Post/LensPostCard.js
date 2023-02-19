@@ -2,21 +2,16 @@ import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
 import {
-  PublicationMainFocus,
   ReactionTypes,
   useAddReactionMutation,
   useHidePublicationMutation
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
-import {
-  LensInfuraEndpoint,
-  MAX_CONTENT_LINES_FOR_POST
-} from '../../utils/config'
+import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
-import { getCommunityInfoUsingId } from '../../api/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 // import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
@@ -27,7 +22,6 @@ import {
   getURLsFromText,
   unpinFromIpfsInfura
 } from '../../utils/utils'
-import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import ReactEmbedo from './embed/ReactEmbedo'

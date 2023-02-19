@@ -33,8 +33,7 @@ import { uuidv4 } from '@firebase/util'
 import {
   PublicationMainFocus,
   useCreatePostTypedDataMutation,
-  useCreatePostViaDispatcherMutation,
-  PublicationContentWarning
+  useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import ImagesPlugin from '../Lexical/ImagesPlugin'
@@ -96,7 +95,7 @@ const CreatePostPopup = () => {
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
   const { isMobile } = useDevice()
-  const [flair, setFlair] = useState(null)
+  // const [flair, setFlair] = useState(null)
   const [firebaseUrl, setFirebaseUrl] = useState(null)
 
   const { mutateAsync: createPostViaDispatcher } =
@@ -210,15 +209,15 @@ const CreatePostPopup = () => {
       mainContentFocus = PublicationMainFocus.TextOnly
     }
 
-    if (flair === 'SENSITIVE') {
-      contentWarning = PublicationContentWarning.Sensitive
-    } else if (flair === 'NSFW') {
-      contentWarning = PublicationContentWarning.Nsfw
-    } else if (flair === 'SPOILER') {
-      contentWarning = PublicationContentWarning.Spoiler
-    } else {
-      contentWarning = PublicationContentWarning.null
-    }
+    // if (flair === 'SENSITIVE') {
+    //   contentWarning = PublicationContentWarning.Sensitive
+    // } else if (flair === 'NSFW') {
+    //   contentWarning = PublicationContentWarning.Nsfw
+    // } else if (flair === 'SPOILER') {
+    //   contentWarning = PublicationContentWarning.Spoiler
+    // } else {
+    //   contentWarning = PublicationContentWarning.null
+    // }
 
     //todo map to community id, so that can be identified by community
     const metadataId = uuidv4()

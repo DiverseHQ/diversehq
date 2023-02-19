@@ -15,7 +15,7 @@ const ReplyMobileInfo = ({
   toAvatarUrl,
   toHandle,
   toContent
-}) => {
+}: Props) => {
   return (
     <div className="px-2 sm:px-5 w-full bg-s-bg pb-2 flex flex-row justify-between items-center">
       <div className="flex flex-row w-full space-x-4 items-center">

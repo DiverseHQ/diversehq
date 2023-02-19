@@ -18,11 +18,7 @@ interface MessageTileProps {
   currentProfile?: Profile | null
 }
 
-const MessageTile: FC<MessageTileProps> = ({
-  message,
-  profile,
-  currentProfile
-}) => {
+const MessageTile: FC<MessageTileProps> = ({ message, currentProfile }) => {
   const address = currentProfile?.ownedBy
   const isSender = address.toLowerCase() === message.senderAddress.toLowerCase()
   return (

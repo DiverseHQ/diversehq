@@ -13,15 +13,10 @@ interface Props {
   profile: Profile
   message: DecodedMessage
   conversationKey: string
-  isSelected: boolean
+  isSelected?: boolean
 }
 
-const Preview: FC<Props> = ({
-  profile,
-  message,
-  conversationKey,
-  isSelected
-}) => {
+const Preview: FC<Props> = ({ profile, message, conversationKey }) => {
   const setConversationKey = useMessageStore(
     (state) => state.setConversationKey
   )

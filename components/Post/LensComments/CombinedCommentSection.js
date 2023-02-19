@@ -14,8 +14,6 @@ import LensCreateComment from './LensCreateComment'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import useDevice from '../../Common/useDevice'
 
-import { useCommentStore } from '../../../store/comment'
-
 const CombinedCommentSection = ({ postId, postInfo }) => {
   const [comments, setComments] = useState([])
   const [uniqueComments, setUniqueComments] = useState([])

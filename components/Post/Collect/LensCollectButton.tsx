@@ -3,20 +3,11 @@ import React, { memo } from 'react'
 import { useState } from 'react'
 import { AiFillGift, AiOutlineGift } from 'react-icons/ai'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
-import {
-  CollectModule,
-  Profile,
-  Publication,
-  PublicationMainFocus
-} from '../../../graphql/generated'
-import { LensInfuraEndpoint } from '../../../utils/config'
-import { getURLsFromText, stringToLength } from '../../../utils/utils'
+import { CollectModule, Profile, Publication } from '../../../graphql/generated'
+import { stringToLength } from '../../../utils/utils'
 import HoverModalWrapper from '../../Common/UI/HoverModalWrapper'
-import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
-import VideoWithAutoPause from '../../Common/UI/VideoWithAutoPause'
 import useDevice from '../../Common/useDevice'
 import Attachment from '../Attachment'
-import ReactEmbedo from '../embed/ReactEmbedo'
 import FeeCollectPopUp from './FeeCollectPopUp'
 import FreeCollectPopUp from './FreeCollectPopUp'
 type Props = {

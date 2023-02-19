@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSigner } from 'wagmi'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useProfile } from '../Common/WalletContext'

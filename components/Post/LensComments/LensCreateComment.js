@@ -8,22 +8,15 @@ import {
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
-import { LensInfuraEndpoint } from '../../../utils/config'
-import {
-  stringToLength,
-  uploadToIpfsInfuraAndGetPath
-} from '../../../utils/utils'
+import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
-import Link from 'next/link'
 import { FiSend } from 'react-icons/fi'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import getAvatar from '../../../components/User/lib/getAvatar'
-import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import { useCommentStore } from '../../../store/comment'
 import ReplyMobileInfo from './ReplyMobileInfo'
-import { CustomPopUpModalContext } from '../../Common/CustomPopUpProvider'
 const LensCreateComment = ({ postId, addComment, postInfo }) => {
   const [focused, setFocused] = useState(false)
   const { error, result, type, signTypedDataAndBroadcast } =
