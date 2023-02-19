@@ -14,6 +14,8 @@ import LensCreateComment from './LensCreateComment'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import useDevice from '../../Common/useDevice'
 
+import { useCommentStore } from '../../../store/comment'
+
 const CombinedCommentSection = ({ postId, postInfo }) => {
   const [comments, setComments] = useState([])
   const [uniqueComments, setUniqueComments] = useState([])
@@ -102,14 +104,15 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
       return
     }
   }
+
   return (
     <div>
       {/* create commentd */}
       {postInfo && (
         <LensCreateComment
           postId={postId}
-          authorAddress={postInfo.profile}
           addComment={addComment}
+          postInfo={postInfo}
           // setComments={setComments}
         />
       )}
@@ -124,7 +127,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
             <MobileLoader />
           ) : (
             <>
-              <div className="w-full sm:rounded-2xl bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
+              <div className="w-full sm:rounded-2xl bg-gray-100 dark:bg-s-bg animate-pulse sm:my-3">
                 <div className="w-full flex flex-row items-center space-x-4 p-4">
                   <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full animate-pulse" />
                   <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
@@ -135,7 +138,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
                   <div className="w-full rounded-2xl bg-gray-300 dark:bg-p-bg h-[40px] sm:h-[60px]" />
                 </div>
               </div>
-              <div className="w-full sm:rounded-2xl bg-gray-100 dark:bg-s-bg animate-pulse my-3 sm:my-6">
+              <div className="w-full sm:rounded-2xl bg-gray-100 dark:bg-s-bg animate-pulse sm:my-3">
                 <div className="w-full flex flex-row items-center space-x-4 p-4">
                   <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full animate-pulse" />
                   <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
@@ -152,7 +155,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
         endMessage={<></>}
       >
         {uniqueComments.length > 0 && (
-          <div className="bg-s-bg sm:rounded-2xl my-3 px-3 sm:px-5 py-2">
+          <div className="bg-s-bg sm:rounded-2xl px-3 sm:px-5 py-4 sm:my-3">
             {uniqueComments.map((comment, index) => {
               return <LensCommentCard key={index} comment={comment} />
             })}

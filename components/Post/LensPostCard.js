@@ -189,9 +189,7 @@ const LensPostCard = ({ post, loading }) => {
         <div
           className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
             isMobile
-              ? `border-b-[1px] border-[#eee] dark:border-p-border ${
-                  router.pathname.startsWith('/p') ? 'mb-2' : ''
-                }`
+              ? `border-b-[1px] border-[#eee] dark:border-p-border`
               : 'pb-2'
           } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
           onClick={() => {
@@ -493,7 +491,7 @@ const LensPostCard = ({ post, loading }) => {
                           <Markup
                             className={`${
                               showMore ? 'line-clamp-5' : ''
-                            } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+                            } linkify whitespace-pre-wrap break-words text sm:text-base`}
                           >
                             {postInfo?.metadata?.content?.startsWith(
                               postInfo?.metadata?.name
@@ -543,7 +541,7 @@ const LensPostCard = ({ post, loading }) => {
 
               {/* bottom row */}
               {isMobile && router.pathname.startsWith('/p') && (
-                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
+                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-t-[1px] border-b-[1px] border-[#eee] dark:border-p-border gap-6">
                   <div className="flex flex-row gap-1 text-[#687684]">
                     <span className="font-medium">{voteCount}</span>
                     <span>upvotes</span>

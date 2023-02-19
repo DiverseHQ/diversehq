@@ -340,7 +340,9 @@ const PostCard = ({ _post, setPosts }) => {
               >
                 <img
                   src={
-                    reaction === 'UPVOTE' ? '/UpvotedFilled.svg' : '/Upvote.svg'
+                    reaction === 'UPVOTE'
+                      ? '/UpvotedFilled.svg'
+                      : '/upvoteGray.svg'
                   }
                   className="w-5 h-5"
                 />
@@ -361,7 +363,7 @@ const PostCard = ({ _post, setPosts }) => {
                       ? '/DownvotedFilled.svg'
                       : '/downvoteGray.svg'
                   }
-                  className="w-5 h-5"
+                  className="w-4 h-4"
                 />
               </button>
             </Tooltip>

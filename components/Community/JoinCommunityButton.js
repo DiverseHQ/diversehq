@@ -79,7 +79,7 @@ const JoinCommunityButton = ({ id }) => {
               : 'w-[75px]'
           } ${
             isMobile ? 'w-[65px] py-1' : 'py-0.5'
-          } group/text transition-all ease-in-out duration-600 bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text transition-all ease-in-out duration-600`}
+          } transition-all ease-in-out duration-600 bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text transition-all ease-in-out duration-600`}
           onClick={(e) => {
             e.stopPropagation()
             handleLeave()
