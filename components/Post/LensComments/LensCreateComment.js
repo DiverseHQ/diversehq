@@ -150,13 +150,13 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
     }
   }, [error])
 
-  if (!hasProfile || !isSignedIn || !lensProfile?.defaultProfile?.id) {
-    return <></>
-  }
-
   useEffect(() => {
     setFocused(!!currentReplyComment)
   }, [currentReplyComment])
+
+  if (!hasProfile || !isSignedIn || !lensProfile?.defaultProfile?.id) {
+    return <></>
+  }
 
   return (
     <div>

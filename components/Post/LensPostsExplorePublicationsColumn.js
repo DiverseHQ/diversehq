@@ -111,7 +111,7 @@ const LensPostsExplorePublicationsColumn = () => {
   }, [router.query])
 
   const getMorePosts = async () => {
-    if (exploreQueryRequestParams.posts.length === 5) return
+    if (exploreQueryRequestParams.posts.length === 0) return
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: exploreQueryRequestParams.nextCursor
@@ -163,6 +163,7 @@ const LensPostsExplorePublicationsColumn = () => {
   }
 
   useEffect(() => {
+    if (!indexingPost) return
     if (indexingPost.length > 0) {
       window.scrollTo(0, 0)
     }
@@ -174,7 +175,7 @@ const LensPostsExplorePublicationsColumn = () => {
     <div>
       <InfiniteScroll
         scrollThreshold={LENS_INFINITE_SCROLL_THRESHOLD}
-        dataLength={exploreQueryRequestParams.posts.length}
+        dataLength={exploreQueryRequestParams?.posts?.length || 0}
         next={getMorePosts}
         hasMore={
           exploreQueryRequestParams.hasMore &&

@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getCommunityInfoUsingId } from '../../../api/community'
-import { getNumberOfPostsInCommunity } from '../../../api/post'
 import { getUserInfo } from '../../../api/user'
 import { usePublicationQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
@@ -15,6 +14,8 @@ import CombinedCommentSection from '../LensComments/CombinedCommentSection'
 import LensPostCard from '../LensPostCard'
 import { IoMdClose } from 'react-icons/io'
 import useLensFollowButton from '../../User/useLensFollowButton'
+import { xpPerMember } from '../../../utils/config'
+import { getLevelAndThresholdXP } from '../../../lib/helpers'
 
 const LensPostPage = ({ id, post }) => {
   const [postInfo, setPostInfo] = useState(post)
@@ -40,6 +41,10 @@ const LensPostPage = ({ id, post }) => {
     profileId: userLensProfile?.id
   })
 
+  const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
+    postInfo?.communityInfo?.members.length * xpPerMember || 0
+  )
+
   useEffect(() => {
     if (!data?.publication) return
     setPostInfo(data.publication)
@@ -47,12 +52,6 @@ const LensPostPage = ({ id, post }) => {
 
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [numberOfPosts, setNumberOfPosts] = useState(0)
-  const [levelThreshold, setLevelThreshold] = useState(250)
-  const [currentLevel, setCurrentLevel] = useState(0)
-  const [currentXP, setCurrentXP] = useState(
-    numberOfPosts * 10 + postInfo?.communityInfo?.members?.length * 25
-  )
 
   // fetches the communityInfo and sets the feild in the postInfo object
   const fetchCommunityInformationAndSetPost = async () => {
@@ -74,44 +73,16 @@ const LensPostPage = ({ id, post }) => {
     return percentage
   }
 
-  const fetchNumberOfPosts = async () => {
-    const result = await getNumberOfPostsInCommunity(
-      postInfo?.communityInfo?._id
-    )
-    setNumberOfPosts(result.numberOfPosts)
-  }
-
-  // 1lvl = 250xp
-  // 1post = 10xp
-  // 1member = 25xp
-  const calculateLevelAndThreshold = () => {
-    const lvl = Math.floor(currentXP / 250)
-    setCurrentLevel(lvl)
-    const threshold = 250 * (lvl + 1)
-    setLevelThreshold(threshold)
-  }
-
   // fetch the new communityInfo every time post changes
   useEffect(() => {
     if (!postInfo) return
     if (!postInfo?.communityInfo) {
       fetchCommunityInformationAndSetPost()
     }
-    if (postInfo?.communityInfo) {
-      fetchNumberOfPosts()
+    if (postInfo?.profile?.handle) {
       getUserProfileAndLensProfile(postInfo?.profile?.handle)
     }
   }, [postInfo])
-
-  useEffect(() => {
-    calculateLevelAndThreshold(currentXP)
-  }, [currentXP])
-
-  useEffect(() => {
-    setCurrentXP(
-      numberOfPosts * 10 + postInfo?.communityInfo?.members?.length * 25
-    )
-  }, [numberOfPosts, postInfo?.communityInfo])
 
   const getUserProfileAndLensProfile = async (id) => {
     try {
@@ -216,16 +187,16 @@ const LensPostPage = ({ id, post }) => {
               <div className="-translate-y-2 mb-2">
                 <div className="flex flex-row gap-1 items-center w-[80%] mb-1">
                   <div className="text-[12px] md:text-[14px] items-center">
-                    {`Lvl${currentLevel}`}
+                    {`Lvl${level}`}
                   </div>
                   <div className="flex flex-col w-full items-end">
-                    <div className="text-[10px] text-[#bbb]">{`${currentXP}/${levelThreshold}`}</div>
-                    <div className="relative bg-[#AA96E2] h-[3px] w-full">
+                    <div className="text-[10px] text-[#bbb]">{`${currentXP}/${thresholdXP}`}</div>
+                    <div className="relative bg-[#AA96E2] rounded-full h-2.5 w-full">
                       <div
-                        className="absolute h-full bg-[#6668FF]"
+                        className="absolute h-full bg-[#6668FF] rounded-full transition-all duration-500 ease-in-out"
                         style={{
                           width: `${calculateBarPercentage(
-                            levelThreshold,
+                            thresholdXP,
                             currentXP
                           )}%`,
                           maxWidth: '100%'
