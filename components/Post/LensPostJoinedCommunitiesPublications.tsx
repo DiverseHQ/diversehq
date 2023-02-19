@@ -197,7 +197,7 @@ const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
             </>
           )}
         {exploreQueryRequestParams.posts.map((post, index) => {
-          return <LensPostCard key={index} post={post} />
+          return <LensPostCard key={index} post={post} loading={false} />
         })}
       </InfiniteScroll>
     </div>

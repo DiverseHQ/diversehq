@@ -133,10 +133,10 @@ const LensPostCard = ({ post, loading }) => {
 
   useEffect(() => {
     setShowMore(
-      (countLinesFromMarkdown(postInfo?.metadata?.content) >
+      countLinesFromMarkdown(postInfo?.metadata?.content) >
         MAX_CONTENT_LINES_FOR_POST ||
-        postInfo?.metadata?.content?.length > 400) &&
-        router.pathname !== '/p/[id]'
+        (postInfo?.metadata?.content?.length > 400 &&
+          router.pathname !== '/p/[id]')
     )
   }, [postInfo])
 
