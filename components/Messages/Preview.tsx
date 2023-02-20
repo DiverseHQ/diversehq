@@ -32,7 +32,7 @@ const Preview: FC<Props> = ({ profile, message, conversationKey }) => {
   }
   return (
     <div
-      className="cursor-pointer hover:bg-p-btn-hover p-3 flex flex-row justify-between border-b border-s-border"
+      className="cursor-pointer hover:bg-s-hover p-3 flex flex-row justify-between border-b border-s-border"
       onClick={() => onConversationSelected(profile.id)}
     >
       <div className="flex flex-row items-center space-x-2">

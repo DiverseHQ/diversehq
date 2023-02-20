@@ -92,3 +92,8 @@ export const SUPPORTED_AUDIO_TYPE: string[] = [
   'audio/mpeg',
   'audio/ogg'
 ]
+
+// XP and Level configs
+export const baseXP = 200
+export const xpMultiplier = 4
+export const xpPerMember = 10

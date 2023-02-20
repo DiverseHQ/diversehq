@@ -14,7 +14,7 @@ import {
 } from '../../components/Common/CustomPopUpProvider'
 import EditCommunity from './EditCommunity'
 import { AiOutlineFileAdd } from 'react-icons/ai'
-import { getNumberOfPostsInCommunity } from '../../api/post'
+// import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
 import { BiChevronDown, BiEdit } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
@@ -26,12 +26,18 @@ import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { Tooltip } from '@mui/material'
+import { getLevelAndThresholdXP } from '../../lib/helpers'
+import { xpPerMember } from '../../utils/config'
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
   const router = useRouter()
+
+  const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
+    community?.members?.length * xpPerMember || 0
+  )
 
   useEffect(() => {
     if (community) {
@@ -44,15 +50,13 @@ const CommunityInfoCard = ({ _community }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isExploreDrawerOpen, setIsExploreDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
-
-  const [numberOfPosts, setNumberOfPosts] = useState(0)
-
+  // const [numberOfPosts, setNumberOfPosts] = useState(0)
   const name = community?.name
 
-  const fetchNumberOfPosts = async () => {
-    const result = await getNumberOfPostsInCommunity(community._id)
-    setNumberOfPosts(result.numberOfPosts)
-  }
+  // const fetchNumberOfPosts = async () => {
+  //   const result = await getNumberOfPostsInCommunity(community._id)
+  //   setNumberOfPosts(result.numberOfPosts)
+  // }
 
   const fetchCommunityInformation = useCallback(async () => {
     try {
@@ -67,11 +71,11 @@ const CommunityInfoCard = ({ _community }) => {
     }
   }, [community?._id])
 
-  useEffect(() => {
-    if (community?._id) {
-      fetchNumberOfPosts()
-    }
-  }, [community])
+  // useEffect(() => {
+  //   if (community?._id) {
+  //     fetchNumberOfPosts()
+  //   }
+  // }, [community])
 
   useEffect(() => {
     if (!user || !community) return
@@ -86,9 +90,9 @@ const CommunityInfoCard = ({ _community }) => {
   const getCommunityInformation = async () => {
     try {
       const comm = await getCommunityInfoUsingId(community._id)
-      fetchNumberOfPosts()
+      // fetchNumberOfPosts()
 
-      setCommunity({ ...comm, numberOfPosts })
+      setCommunity({ ...comm })
     } catch (error) {
       console.log(error)
     }
@@ -149,44 +153,6 @@ const CommunityInfoCard = ({ _community }) => {
     const percentage = Math.round((threshold * 100) / currentXP)
     return percentage
   }
-
-  // const calculateLevel = (currentXP, levelThreshold) => {
-  //   let currentLevel = 0
-  //   while (currentXP >= levelThreshold) {
-  //     setCurrentLevel((prev) => prev + 1)
-  //     currentXP -= levelThreshold
-  //     setLevelThreshold((prev) => prev * 1.5) // Increase the threshold for each subsequent level
-  //   }
-  //   return currentLevel
-  // }
-
-  const [currentXP, setCurrentXP] = useState(
-    numberOfPosts * 10 + community?.members?.length * 25
-  )
-  const [levelThreshold, setLevelThreshold] = useState(250)
-  const [currentLevel, setCurrentLevel] = useState(0)
-
-  // 1lvl = 250xp
-  // 1post = 10xp
-  // 1member = 25xp
-  const calculateLevelAndThreshold = () => {
-    const lvl = Math.floor(currentXP / 250)
-    setCurrentLevel(lvl)
-    const threshold = 250 * (lvl + 1)
-    setLevelThreshold(threshold)
-  }
-
-  useEffect(() => {
-    calculateLevelAndThreshold(currentXP)
-  }, [currentXP])
-
-  useEffect(() => {
-    setCurrentXP(numberOfPosts * 10 + community?.members?.length * 25)
-  }, [numberOfPosts, community])
-
-  // useEffect(() => {
-  //   setCurrentLevel(calculateLevel(currentXP, levelThreshold))
-  // }, [levelThreshold])
 
   const shareCommunity = () => {
     if (navigator.share) {
@@ -357,18 +323,18 @@ const CommunityInfoCard = ({ _community }) => {
                   <div className="flex flex-row px-5 gap-1 items-center">
                     <img src={'/levelDropIcon.svg'} className="w-4 h-4" />
                     <div className="text-[12px] md:text-[14px] items-center">
-                      {`Lvl${currentLevel}`}
+                      {`Lvl${level}`}
                     </div>
                     <div className="flex flex-col w-[100px] items-end">
                       <div className="text-[10px] text-[#bbb]">
-                        {currentXP}/{levelThreshold}
+                        {currentXP}/{thresholdXP}
                       </div>
                       <div className="relative bg-[#AA96E2] h-[3px] w-full">
                         <div
                           className="absolute h-full bg-[#6668FF] w-[0%]"
                           style={{
                             width: `${calculateBarPercentage(
-                              levelThreshold,
+                              thresholdXP,
                               currentXP
                             )}%`,
                             maxWidth: '100%'
@@ -405,10 +371,10 @@ const CommunityInfoCard = ({ _community }) => {
                   </span>
                   <span className="font-light">Members</span>
                 </div>
-                <div className="flex flex-col items-center bg-s-h-bg dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                {/* <div className="flex flex-col items-center bg-s-h-bg dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
                   <span className="font-semibold">{numberOfPosts}</span>
                   <span className="font-light">Posts</span>
-                </div>
+                </div> */}
                 {/* <div className="flex flex-col items-center bg-s-h-bg dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
                   <span className="font-semibold">0</span>
                   <span className="font-light">Matic</span>
@@ -439,13 +405,13 @@ const CommunityInfoCard = ({ _community }) => {
                   <div className="flex flex-col w-full">
                     <div className="relative bg-[#D7D7D7] h-[35px] rounded-[10px] flex flex-row">
                       <div className="flex z-10 self-center justify-self-center w-full justify-center text-white dark:text-p-text text-[14px]">
-                        Level {currentLevel}
+                        Level {level}
                       </div>
                       <div
                         className="absolute h-full bg-[#9378D8] rounded-[10px] "
                         style={{
                           width: `${calculateBarPercentage(
-                            levelThreshold,
+                            thresholdXP,
                             currentXP
                           )}%`,
                           maxWidth: '100%'
@@ -493,10 +459,10 @@ const CommunityInfoCard = ({ _community }) => {
                     {community.members?.length}
                   </span>
                 </div>
-                <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
+                {/* <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Posts: </span>
                   <span className="font-semibold">{numberOfPosts}</span>
-                </div>
+                </div> */}
                 {/* <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Matic transferred: </span>
                   <span className="font-semibold">0</span>
@@ -513,16 +479,16 @@ const CommunityInfoCard = ({ _community }) => {
                   {' '}
                   <div className="flex flex-row gap-1 items-center">
                     <div className="text-[12px] md:text-[14px] items-center">
-                      {`Lvl${currentLevel}`}
+                      {`Lvl${level}`}
                     </div>
                     <div className="flex flex-col w-full items-end">
-                      <div className="text-[10px] text-[#bbb]">{`${currentXP}/${levelThreshold}`}</div>
-                      <div className="relative bg-[#AA96E2] h-[3px] w-full">
+                      <div className="text-[10px] text-[#bbb]">{`${currentXP}/${thresholdXP}`}</div>
+                      <div className="relative bg-[#AA96E2] h-2.5 rounded-full w-full">
                         <div
-                          className="absolute h-full bg-[#6668FF]"
+                          className="absolute h-full rounded-full bg-[#6668FF] transition-all duration-500 ease-in-out"
                           style={{
                             width: `${calculateBarPercentage(
-                              levelThreshold,
+                              thresholdXP,
                               currentXP
                             )}%`,
                             maxWidth: '100%'
