@@ -15,6 +15,7 @@ interface Props {
   placeholder?: string
   className?: string
   modalClassName?: string
+  // eslint-disable-next-line no-unused-vars
   onProfileSelected?: (profile: Profile) => void
 }
 

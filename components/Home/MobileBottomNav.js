@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
-import { HiOutlineMail } from 'react-icons/hi'
 import { useMessageStore } from '../../store/message'
 import useNotificationsCount from '../Notification/useNotificationsCount'
 
@@ -58,7 +57,7 @@ const MobileBottomNav = () => {
   return (
     <div className="fixed bottom-0 w-full flex flex-row justify-evenly items-center bg-s-bg border-t-[0.5px] border-s-border">
       <div
-        className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+        className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={() => {
           if (isOnHomeFeed) {
             scrollToTop()
@@ -79,7 +78,7 @@ const MobileBottomNav = () => {
         />
       </div>
       <div
-        className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+        className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={() => {
           if (!router.pathname.startsWith('/explore')) {
             routeToExplore()
@@ -99,7 +98,7 @@ const MobileBottomNav = () => {
         />
       </div>
       <div
-        className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+        className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={routeToSearch}
       >
         <img
@@ -122,7 +121,7 @@ const MobileBottomNav = () => {
           scrollToTop()
         }}
       >
-        <div className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer">
+        <div className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer">
           <img
             src={`${
               active === 'notification'
@@ -134,13 +133,14 @@ const MobileBottomNav = () => {
           />
         </div>
         {Number(notificationsCount + lensNotificationsCount) > 0 && (
-          <div className="absolute -top-0.5 left-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
+          <div className="absolute top-2 right-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
             <span>{notificationsCount + lensNotificationsCount}</span>
+            {/* <span>10</span> */}
           </div>
         )}
       </div>
       <div
-        className="p-3.5 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+        className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
         <img

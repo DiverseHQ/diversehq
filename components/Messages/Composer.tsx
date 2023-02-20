@@ -1,11 +1,11 @@
 import React from 'react'
 import type { FC } from 'react'
 import { CircularProgress } from '@mui/material'
-import { RiSendPlane2Line } from 'react-icons/ri'
 import { IoMdSend } from 'react-icons/io'
 
 interface Props {
-  sendMessage: (message: string) => Promise<boolean>
+  // eslint-disable-next-line no-unused-vars
+  sendMessage: (s: string) => Promise<boolean>
   conversationKey: string
   disabledInput: boolean
 }

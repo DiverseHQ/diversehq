@@ -5,11 +5,7 @@ import { useProfile } from '../Common/WalletContext'
 // import { IoIosHelpCircleOutline } from 'react-icons/io'
 // import { BsMoon } from 'react-icons/bs'
 // import { AiOutlineGift } from 'react-icons/ai'
-import {
-  MdOutlineCreateNewFolder,
-  MdOutlineGroups,
-  MdOutlinePerson
-} from 'react-icons/md'
+import { MdOutlineCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
 import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FormControl, MenuItem, Select, Switch } from '@mui/material'
+import { MenuItem, Select, Switch } from '@mui/material'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useDevice from '../../Common/useDevice'
 import {

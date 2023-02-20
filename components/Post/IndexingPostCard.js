@@ -5,18 +5,11 @@ import useDevice from '../Common/useDevice'
 import ReactTimeAgo from 'react-time-ago'
 
 import { PublicationMainFocus, ReactionTypes } from '../../graphql/generated'
-import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import ReactEmbedo from './embed/ReactEmbedo'
 import { Markup } from 'interweave'
-import {
-  LensInfuraEndpoint,
-  MAX_CONTENT_LINES_FOR_POST
-} from '../../utils/config'
+import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
-import { FaRegComment } from 'react-icons/fa'
 import { BsCollection } from 'react-icons/bs'
-import { IoIosShareAlt } from 'react-icons/io'
 import Link from 'next/link'
 import Attachment from './Attachment'
 import { Tooltip } from '@mui/material'

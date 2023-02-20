@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import React from 'react'
-import LensFollowButton from '../User/LensFollowButton'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { SlUserFollow } from 'react-icons/sl'
 import { NewFollowerNotification } from '../../graphql/generated'

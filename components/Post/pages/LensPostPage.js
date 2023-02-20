@@ -1,19 +1,16 @@
-import { Link } from '@mui/material'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getCommunityInfoUsingId } from '../../../api/community'
 import { getNumberOfPostsInCommunity } from '../../../api/post'
-import { getUserFromAddressOrName, getUserInfo } from '../../../api/user'
+import { getUserInfo } from '../../../api/user'
 import { usePublicationQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info'
 import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import useDevice from '../../Common/useDevice'
 import JoinCommunityButton from '../../Community/JoinCommunityButton'
-import LensFollowButton from '../../User/LensFollowButton'
 import CombinedCommentSection from '../LensComments/CombinedCommentSection'
 import LensPostCard from '../LensPostCard'
 import { IoMdClose } from 'react-icons/io'
@@ -116,9 +113,6 @@ const LensPostPage = ({ id, post }) => {
     )
   }, [numberOfPosts, postInfo?.communityInfo])
 
-  console.log('profile', profile)
-  console.log('userlensProfile', userLensProfile)
-
   const getUserProfileAndLensProfile = async (id) => {
     try {
       const lensProfileRes = await getLensProfileInfo({
@@ -139,11 +133,11 @@ const LensPostPage = ({ id, post }) => {
   }
 
   return (
-    <div className="w-full flex justify-center pb-[50px]">
+    <div className="w-full flex flex-row space-x-10 justify-center pb-[50px]">
       <div
         className={`${
           router.pathname.startsWith('/p')
-            ? 'w-full md:w-[50%] md:min-w-[650px]'
+            ? 'w-full md:w-[700px]'
             : 'w-full md:w-[650px]'
         }`}
       >
@@ -151,25 +145,25 @@ const LensPostPage = ({ id, post }) => {
           (isMobile ? (
             <MobileLoader />
           ) : (
-            <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-gray-100 animate-pulse my-3 sm:my-6">
-              <div className="w-full flex flex-row items-center space-x-4 p-4">
-                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 rounded-full animate-pulse" />
-                <div className="h-2 sm:h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300" />
-                <div className="h-2 sm:h-4 w-[50px] rounded-full bg-gray-300" />
+            <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-s-bg dark:bg-s-bg my-3 sm:my-6">
+              <div className="w-full flex flex-row items-center space-x-4 p-2 px-4 animate-pulse">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full " />
+                <div className="h-4 w-[100px] sm:w-[200px] rounded-full bg-gray-300 dark:bg-p-bg" />
+                <div className="h-4 w-[50px] rounded-full bg-gray-300 dark:bg-p-bg" />
               </div>
-              <div className="w-full flex flex-row items-center space-x-4 sm:p-4 pr-4">
-                <div className="w-6 sm:w-[50px] h-4 " />
-                <div className="w-full mr-4 rounded-2xl bg-gray-300 h-[200px] sm:h-[300px]" />
+              <div className="w-full flex flex-row items-center space-x-4 sm:p-4 sm:py-2 py-1 pr-4 my-1 animate-pulse">
+                <div className="w-6 sm:w-[50px] h-4" />
+                <div className="w-full rounded-xl bg-gray-300 dark:bg-p-bg h-[20px] sm:h-[20px]" />
+              </div>
+              <div className="w-full flex flex-row items-center space-x-4 sm:p-4 sm:pb-2 pr-4 animate-pulse">
+                <div className="w-6 sm:w-[50px] h-4" />
+                <div className="w-full rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
               </div>
             </div>
           ))}
 
         {/* lens post card */}
-        {postInfo && (
-          <div className="flex flex-row">
-            <LensPostCard post={postInfo} loading={loading} />
-          </div>
-        )}
+        {postInfo && <LensPostCard post={postInfo} loading={loading} />}
         <CombinedCommentSection postId={id} postInfo={postInfo} />
       </div>
       {router.pathname.startsWith('/p/') && !isMobile && (

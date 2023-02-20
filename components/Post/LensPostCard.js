@@ -2,21 +2,16 @@ import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
 import {
-  PublicationMainFocus,
   ReactionTypes,
   useAddReactionMutation,
   useHidePublicationMutation
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
-import {
-  LensInfuraEndpoint,
-  MAX_CONTENT_LINES_FOR_POST
-} from '../../utils/config'
+import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
-import { getCommunityInfoUsingId } from '../../api/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 // import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
@@ -27,7 +22,6 @@ import {
   getURLsFromText,
   unpinFromIpfsInfura
 } from '../../utils/utils'
-import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import ReactEmbedo from './embed/ReactEmbedo'
@@ -189,9 +183,7 @@ const LensPostCard = ({ post, loading }) => {
         <div
           className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
             isMobile
-              ? `border-b-[1px] border-[#eee] dark:border-p-border ${
-                  router.pathname.startsWith('/p') ? 'mb-2' : ''
-                }`
+              ? `border-b-[1px] border-[#eee] dark:border-p-border`
               : 'pb-2'
           } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
           onClick={() => {
@@ -493,7 +485,7 @@ const LensPostCard = ({ post, loading }) => {
                           <Markup
                             className={`${
                               showMore ? 'line-clamp-5' : ''
-                            } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+                            } linkify whitespace-pre-wrap break-words text sm:text-base`}
                           >
                             {postInfo?.metadata?.content?.startsWith(
                               postInfo?.metadata?.name
@@ -543,7 +535,7 @@ const LensPostCard = ({ post, loading }) => {
 
               {/* bottom row */}
               {isMobile && router.pathname.startsWith('/p') && (
-                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-b-[1px] border-[#eee] dark:border-p-border gap-6">
+                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-t-[1px] border-b-[1px] border-[#eee] dark:border-p-border gap-6">
                   <div className="flex flex-row gap-1 text-[#687684]">
                     <span className="font-medium">{voteCount}</span>
                     <span>upvotes</span>

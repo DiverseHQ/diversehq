@@ -1,7 +1,6 @@
 import React from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { IoIosArrowUp } from 'react-icons/io'
-import { RiMailAddLine } from 'react-icons/ri'
 import { useMessageStore } from '../../store/message'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import getAvatar from '../User/lib/getAvatar'
@@ -10,7 +9,6 @@ const MessageHeader = ({ profile, open, setOpen }) => {
   const setConversationKey = useMessageStore(
     (state) => state.setConversationKey
   )
-  const handleShowProfiles = async () => {}
   const handleShowConversations = async (e) => {
     // don't call parent onclick function
     e.stopPropagation()

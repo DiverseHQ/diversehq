@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { memo } from 'react'
 import { useState } from 'react'
 import { useCommentFeedQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
@@ -13,7 +14,7 @@ const LensRepliedComments = ({ commentId, comments, setComments }) => {
         commentsOf: commentId
       },
       reactionRequest: {
-        profileId: lensProfile?.defaultProfile?.id
+        profileId: lensProfile?.defaultProfile?.id ?? null
       }
     },
     {
@@ -27,6 +28,9 @@ const LensRepliedComments = ({ commentId, comments, setComments }) => {
   }, [data?.publications?.items])
   const handleRepliedComments = async () => {
     const newComments = data?.publications?.items
+    if (comments.length > 0 && (!newComments || newComments.length === 0))
+      return
+
     setComments(newComments)
   }
   useEffect(() => {
@@ -48,4 +52,4 @@ const LensRepliedComments = ({ commentId, comments, setComments }) => {
   )
 }
 
-export default LensRepliedComments
+export default memo(LensRepliedComments)

@@ -1,6 +1,7 @@
 import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri'
+import { SlUserFollowing } from 'react-icons/sl'
 import {
   useCreateUnfollowTypedDataMutation,
   useProfileQuery,
@@ -98,7 +99,7 @@ const useLensFollowButton = (request) => {
             onClick={() => {
               handleUnfollowProfile(request.profileId)
             }}
-            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold w-full"
+            className="group/text bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn rounded-md px-3 py-1 text-sm font-semibold w-full"
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
@@ -106,9 +107,14 @@ const useLensFollowButton = (request) => {
                 <p>UnFollow</p>
               </div>
             ) : (
-              <div className="flex flex-row justify-center items-center space-x-1 ">
-                <RiUserUnfollowLine /> <p>UnFollow</p>
-              </div>
+              <>
+                <div className="hidden group-hover/text:flex flex-row justify-center items-center space-x-2">
+                  <RiUserUnfollowLine /> <p>UnFollow</p>
+                </div>
+                <div className="group-hover/text:hidden flex flex-row justify-center items-center space-x-2 ">
+                  <SlUserFollowing /> <p>Following</p>
+                </div>
+              </>
             )}
           </button>
         ) : (

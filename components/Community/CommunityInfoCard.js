@@ -26,8 +26,6 @@ import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { Tooltip } from '@mui/material'
-import { RWebShare } from 'react-web-share'
-import { GiExitDoor } from 'react-icons/gi'
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
   const { user, refreshUserInfo } = useProfile()

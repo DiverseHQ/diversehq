@@ -12,22 +12,19 @@ import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import { LensInfuraEndpoint } from '../../../utils/config'
 import LensRepliedComments from './LensRepliesComments'
 import LensCreateComment from './LensCreateComment'
-import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import { useRouter } from 'next/router'
 import { HiOutlineTrash } from 'react-icons/hi'
-import useDevice from '../../Common/useDevice'
-import PopUpWrapper from '../../Common/PopUpWrapper'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import { Tooltip } from '@mui/material'
+import { useCommentStore } from '../../../store/comment'
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()
-  const [showCreateComment, setShowCreateComment] = useState(false)
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
   const [upvoteCount, setUpvoteCount] = useState(
@@ -49,12 +46,15 @@ const LensCommentCard = ({ comment }) => {
   const [isAuthor, setIsAuthor] = useState(
     lensProfile?.defaultProfile?.id === comment?.profile?.id
   )
-  const { isMobile } = useDevice()
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
-
-  const { showModal, hideModal } = usePopUpModal()
+  const currentReplyComment = useCommentStore(
+    (state) => state.currentReplyComment
+  )
+  const setCurrentReplyComment = useCommentStore(
+    (state) => state.setCurrentReplyComment
+  )
 
   const { mutateAsync: deleteComment } = useHidePublicationMutation()
 
@@ -64,10 +64,6 @@ const LensCommentCard = ({ comment }) => {
   }, [comment, lensProfile])
 
   const [comments, setComments] = useState([])
-
-  useEffect(() => {
-    setComments([])
-  }, [comment?.id])
 
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
@@ -154,7 +150,6 @@ const LensCommentCard = ({ comment }) => {
         }
       })
       router.reload()
-      hideModal()
     } catch (error) {
       console.log(error)
     }
@@ -164,8 +159,7 @@ const LensCommentCard = ({ comment }) => {
     const prevComments = comments
     const newCommentsFirstPhase = [comment, ...prevComments]
     setComments(newCommentsFirstPhase)
-    setShowCreateComment(false)
-    hideModal()
+    setCurrentReplyComment(null)
     const indexResult = await pollUntilIndexed(tx)
     const commentId = commentIdFromIndexedResult(
       lensProfile?.defaultProfile?.id,
@@ -187,39 +181,6 @@ const LensCommentCard = ({ comment }) => {
     setComments(newCommentsSecondPhase)
   }
 
-  const openReplyModal = async () => {
-    if (!isSignedIn || !hasProfile) {
-      notifyInfo('How about loging in lens, first?')
-      return
-    }
-
-    // showModal({
-    //   component: (
-    //     <PopUpWrapper title={'Reply'} label={'Reply'} loading={false}>
-    //       <LensCreateComment
-    //         postId={comment.id}
-    //         addComment={addComment}
-    //         isReply={true}
-    //         replyCommentData={comment}
-    //       />
-    //     </PopUpWrapper>
-    //   ),
-    //   type: modalType.fullscreen,
-    //   onAction: () => {},
-    //   extraaInfo: {}
-    // })
-  }
-  const [isMobileReply, setIsMobileReply] = useState(false)
-
-  const handleMobileReply = async () => {
-    if (!isSignedIn || !hasProfile) {
-      notifyInfo('How about loging in lens, first?')
-      return
-    }
-
-    setIsMobileReply((prev) => !prev)
-  }
-
   return (
     <>
       {comment && (
@@ -227,9 +188,6 @@ const LensCommentCard = ({ comment }) => {
           {/* top row */}
           <div className="flex flex-row items-center justify-between w-full">
             <div className="flex flex-row items-center gap-2">
-              {/* commenting for now */}
-              {/* todo : ability to set lens profile image and fetch here */}
-
               <ImageWithPulsingLoader
                 src={
                   comment?.profile?.picture?.original?.url?.startsWith('ipfs')
@@ -238,7 +196,7 @@ const LensCommentCard = ({ comment }) => {
                       }`
                     : getStampFyiURL(comment?.profile?.ownedBy)
                 }
-                className="w-6 h-6 rounded-full mr-1"
+                className="w-6 h-6 rounded-full mr-1 object-cover"
               />
 
               <Link href={`/u/${comment?.profile?.handle}`} passHref>
@@ -340,19 +298,27 @@ const LensCommentCard = ({ comment }) => {
                 </div>
                 <button
                   className={`${
-                    showCreateComment
+                    currentReplyComment &&
+                    comment?.id &&
+                    currentReplyComment?.id === comment?.id
                       ? 'bg-p-btn-hover text-p-btn-hover-text'
                       : ''
-                  } hover:bg-p-btn-hover px-2 py-0.5 rounded-md`}
+                  } active:bg-p-btn-hover sm:hover:bg-p-btn-hover px-2 py-0.5 rounded-md`}
                   onClick={() => {
+                    if (!isSignedIn || !hasProfile) {
+                      notifyInfo(
+                        'Lens login required, so they can know who you are'
+                      )
+                      return
+                    }
                     if (!comment?.id) {
                       notifyInfo('not indexed yet, try again later')
                       return
                     }
-                    if (isMobile) {
-                      handleMobileReply()
+                    if (comment?.id === currentReplyComment?.id) {
+                      setCurrentReplyComment(null)
                     } else {
-                      setShowCreateComment(!showCreateComment)
+                      setCurrentReplyComment(comment)
                     }
                   }}
                 >
@@ -361,20 +327,10 @@ const LensCommentCard = ({ comment }) => {
               </div>
 
               {/* create comment if showCreateComment is true */}
-              {showCreateComment && !isMobile && (
+              {currentReplyComment?.id === comment?.id && (
                 <LensCreateComment
                   postId={comment.id}
                   addComment={addComment}
-                />
-              )}
-
-              {/* create comment if isMobileReply is true */}
-              {isMobileReply && isMobile && (
-                <LensCreateComment
-                  postId={comment.id}
-                  addComment={addComment}
-                  isMobileReply={isMobileReply}
-                  replyCommentData={comment}
                 />
               )}
 
