@@ -4,7 +4,8 @@ import Link from 'next/link'
 import {
   ReactionTypes,
   useAddReactionMutation,
-  useHidePublicationMutation
+  useHidePublicationMutation,
+  useRemoveReactionMutation
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
@@ -59,6 +60,7 @@ const LensPostCard = ({ post, loading }) => {
   }, [post])
 
   const { mutateAsync: addReaction } = useAddReactionMutation()
+  const { mutateAsync: removeReaction } = useRemoveReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const [isAuthor, setIsAuthor] = useState(
     lensProfile?.defaultProfile?.id === post?.profile?.id
@@ -72,7 +74,28 @@ const LensPostCard = ({ post, loading }) => {
   const { mutateAsync: removePost } = useHidePublicationMutation()
 
   const handleUpvote = async () => {
-    if (reaction === ReactionTypes.Upvote) return
+    if (reaction === ReactionTypes.Upvote) {
+      console.log(ReactionTypes.Upvote, 'reaction')
+      try {
+        if (!isSignedIn || !hasProfile) {
+          notifyInfo('How about loging in lens, first?')
+          return
+        }
+
+        await removeReaction({
+          request: {
+            profileId: lensProfile.defaultProfile.id,
+            publicationId: post.id,
+            reaction: ReactionTypes.Upvote
+          }
+        })
+        setReaction(null)
+        setUpvoteCount(upvoteCount - 1)
+        return
+      } catch (error) {
+        console.log(error)
+      }
+    }
     try {
       if (!isSignedIn || !hasProfile) {
         notifyInfo('How about loging in lens, first?')
@@ -99,7 +122,26 @@ const LensPostCard = ({ post, loading }) => {
   }
 
   const handleDownvote = async () => {
-    if (reaction === ReactionTypes.Downvote) return
+    if (reaction === ReactionTypes.Downvote) {
+      try {
+        if (!isSignedIn || !hasProfile) {
+          notifyInfo('How about loging in lens, first?')
+          return
+        }
+        await removeReaction({
+          request: {
+            profileId: lensProfile.defaultProfile.id,
+            publicationId: post.id,
+            reaction: ReactionTypes.Downvote
+          }
+        })
+        setReaction(null)
+        setDownvoteCount(downvoteCount - 1)
+        return
+      } catch (error) {
+        console.log(error)
+      }
+    }
     try {
       if (!isSignedIn || !hasProfile) {
         notifyInfo('How about loging in lens, first?')

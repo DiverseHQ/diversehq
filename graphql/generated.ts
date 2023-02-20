@@ -4420,6 +4420,13 @@ export type RefreshAccessTokenMutationVariables = Exact<{
 
 export type RefreshAccessTokenMutation = { __typename?: 'Mutation', refresh: { __typename?: 'AuthenticationResult', accessToken: any, refreshToken: any } };
 
+export type RemoveReactionMutationVariables = Exact<{
+  request: ReactionRequest;
+}>;
+
+
+export type RemoveReactionMutation = { __typename?: 'Mutation', removeReaction?: any | null };
+
 export type SearchProfilesQueryVariables = Exact<{
   request: SearchQueryRequest;
 }>;
@@ -6127,6 +6134,20 @@ export const useRefreshAccessTokenMutation = <
     useMutation<RefreshAccessTokenMutation, TError, RefreshAccessTokenMutationVariables, TContext>(
       ['RefreshAccessToken'],
       (variables?: RefreshAccessTokenMutationVariables) => fetchData<RefreshAccessTokenMutation, RefreshAccessTokenMutationVariables>(RefreshAccessTokenDocument, variables)(),
+      options
+    );
+export const RemoveReactionDocument = `
+    mutation RemoveReaction($request: ReactionRequest!) {
+  removeReaction(request: $request)
+}
+    `;
+export const useRemoveReactionMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<RemoveReactionMutation, TError, RemoveReactionMutationVariables, TContext>) =>
+    useMutation<RemoveReactionMutation, TError, RemoveReactionMutationVariables, TContext>(
+      ['RemoveReaction'],
+      (variables?: RemoveReactionMutationVariables) => fetchData<RemoveReactionMutation, RemoveReactionMutationVariables>(RemoveReactionDocument, variables)(),
       options
     );
 export const SearchProfilesDocument = `
