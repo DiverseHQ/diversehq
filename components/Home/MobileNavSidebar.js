@@ -114,7 +114,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         position="left"
       >
         <div className="flex flex-col absolute transition ease-in-out h-full bg-s-bg dark:text-p-text w-full">
-          <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-2">
+          <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-6">
             {user && address && (
               <div className="flex flex-col">
                 <div className="flex flex-row gap-1">
@@ -183,7 +183,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             )}
           </div>
           {(!isSignedIn || !hasProfile) && (
-            <div className="px-4">
+            <div className="px-4 mb-2">
               <LensLoginButton />
             </div>
           )}
