@@ -93,7 +93,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     if (_lensProfile) {
       refetch()
     }
-  }, [_profile._id, _lensProfile.id])
+  }, [_profile?._id, _lensProfile?.id])
 
   const getNumberOfPosts = async (address) => {
     try {
@@ -189,7 +189,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
               >
                 <div className="ml-24 flex flex-row justify-end md:justify-between items-start">
                   {!isMobile && (
-                    <div className="flex flex-row items-start justify-between sm:space-x-10 mt-1">
+                    <div className="flex flex-row items-start justify-between sm:space-x-10 mt-1 mb-2">
                       <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
                         {profile.name && <div>{profile.name}</div>}
                         {!profile.name && profile.walletAddress && (
@@ -311,7 +311,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-4 items-center text-[14px]">
+                  <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-3 items-center text-[14px]">
                     <div className="">
                       <span className="">Joined </span>
                       <span className="">Communities: </span>
