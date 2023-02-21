@@ -2,14 +2,11 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 // import { FaRegCopy } from 'react-icons/fa'
 import { getNumberOfPostsUsingUserAddress } from '../../../api/post'
-import { getUserInfo } from '../../../api/user'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
 // import { useNotify } from '../../Common/NotifyContext'
 import { useProfile } from '../../Common/WalletContext'
 import LensPostsProfilePublicationsColumn from '../../Post/LensPostsProfilePublicationsColumn'
 import PostsColumn from '../../Post/PostsColumn'
-import EditProfile from '../EditProfile'
 import useDevice from '../../Common/useDevice'
 import { GiBreakingChain } from 'react-icons/gi'
 import { useProfileQuery } from '../../../graphql/generated'
@@ -35,7 +32,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const [lensProfile, setLensProfile] = useState(_lensProfile)
   // const { notifyInfo } = useNotify()
   const { user } = useProfile()
-  const { showModal } = usePopUpModal()
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
   const [numberOfPosts, setNumberOfPosts] = useState(0)
   const { isMobile } = useDevice()
@@ -104,16 +100,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
     }
   }
 
-  const showUserInfoFromAddress = async () => {
-    try {
-      if (!profile.walletAddress) return
-      const userInfo = await getUserInfo(profile.walletAddress)
-      setProfile(userInfo)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   useEffect(() => {
     if (profile.walletAddress) {
       getNumberOfPosts(profile.walletAddress)
@@ -124,17 +110,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   //   navigator.clipboard.writeText(profile.walletAddress)
   //   notifyInfo('Copied to clipboard')
   // }
-
-  const handleEditProfile = () => {
-    showModal({
-      component: (
-        <EditProfile user={user} showUserInfo={showUserInfoFromAddress} />
-      ),
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
 
   const handleDmClick = async () => {
     if (!client) {
@@ -155,17 +130,19 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   return (
     <div>
       <>
-        <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] bg-s-bg">
-          <div className="h-[32px] flex flex-row items-center gap-3 text-[18px]">
-            <div className="flex items-center justify-center w-8 h-8 hover:bg-p-btn-hover rounded-full">
-              <BiArrowBack
-                onClick={() => router.back()}
-                className="w-6 h-6 rounded-full cursor-pointer"
-              />
+        {isMobile && (
+          <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] bg-s-bg">
+            <div className="h-[32px] flex flex-row items-center gap-3 text-[18px]">
+              <div className="flex items-center justify-center w-8 h-8 hover:bg-p-btn-hover rounded-full">
+                <BiArrowBack
+                  onClick={() => router.back()}
+                  className="w-6 h-6 rounded-full cursor-pointer"
+                />
+              </div>
+              <span className="font-bold text-[20px]">Profile</span>
             </div>
-            <span className="font-bold text-[20px]">Profile</span>
           </div>
-        </div>
+        )}
       </>
       {profile && (
         <div className="w-full flex justify-center">
@@ -238,12 +215,12 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     {user &&
                       user?.walletAddress.toLowerCase() ===
                         profile.walletAddress.toLowerCase() && (
-                        <div
+                        <Link
                           className="text-base text-p-btn-text bg-p-btn px-3 py-0.5 mx-2 rounded-md cursor-pointer"
-                          onClick={handleEditProfile}
+                          href={isMobile ? '/settings/profile' : '/settings'}
                         >
                           Edit
-                        </div>
+                        </Link>
                       )}
                     {lensProfile &&
                       isSignedIn &&
