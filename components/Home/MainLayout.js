@@ -25,10 +25,10 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
     if (typeof isMobile === 'undefined' || isMobileView) return
     setMobile(isMobile)
   }, [isMobile])
-  if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
-    return null
 
   const { theme } = useTheme()
+  if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
+    return null
   return (
     <>
       <Head>
