@@ -231,7 +231,7 @@ const CommunityInfoCard = ({ _community }) => {
             <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2">
               {isJoined ? (
                 <button
-                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text w-[90px] transition-all ease-in-out  duration-600`}
+                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text w-[90px] transition-all ease-in-out  duration-300`}
                   onClick={leaveCommunity}
                 >
                   <span className="group-hover/text:hidden">Joined</span>
