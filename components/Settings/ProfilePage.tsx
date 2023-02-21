@@ -10,7 +10,7 @@ const ProfilePage = () => {
     <>
       {isMobile && <MobileTopNavbarWithTitle title="Edit Profile" />}
 
-      <div className="sm:m-20 flex flex-row space-x-20">
+      <div className="sm:mx-20 sm:my-12 flex flex-row space-x-20">
         {!isMobile && (
           <div className="w-[500px]">
             <CommonSidebar />
