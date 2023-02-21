@@ -331,7 +331,11 @@ const LensPostCard = ({ post, loading }) => {
                     isDrawerOpen={isDrawerOpen}
                     setIsDrawerOpen={setIsDrawerOpen}
                   >
-                    <Tooltip title="More" arrow>
+                    <Tooltip
+                      TransitionProps={{ timeout: 600 }}
+                      title="More"
+                      arrow
+                    >
                       <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
                         <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
@@ -345,7 +349,12 @@ const LensPostCard = ({ post, loading }) => {
           <div className="flex flex-row w-full">
             {!isMobile && (
               <div className="flex flex-col items-center ml-1.5 mt-1">
-                <Tooltip title="Upvote" arrow placement="left">
+                <Tooltip
+                  TransitionProps={{ timeout: 600 }}
+                  title="Upvote"
+                  arrow
+                  placement="left"
+                >
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -365,7 +374,12 @@ const LensPostCard = ({ post, loading }) => {
                   </button>
                 </Tooltip>
                 <div className="font-bold leading-5">{voteCount}</div>
-                <Tooltip title="Downvote" arrow placement="left">
+                <Tooltip
+                  TransitionProps={{ timeout: 600 }}
+                  title="Downvote"
+                  arrow
+                  placement="left"
+                >
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -561,7 +575,11 @@ const LensPostCard = ({ post, loading }) => {
               >
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-1">
-                    <Tooltip title="Upvote" arrow>
+                    <Tooltip
+                      TransitionProps={{ timeout: 600 }}
+                      title="Upvote"
+                      arrow
+                    >
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
@@ -582,7 +600,11 @@ const LensPostCard = ({ post, loading }) => {
                     <div className="font-medium text-[#687684]">
                       {voteCount}
                     </div>
-                    <Tooltip title="Downvote" arrow>
+                    <Tooltip
+                      TransitionProps={{ timeout: 600 }}
+                      title="Downvote"
+                      arrow
+                    >
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
@@ -603,7 +625,11 @@ const LensPostCard = ({ post, loading }) => {
                   </div>
                 )}
                 {!router.pathname.startsWith('/p') ? (
-                  <Tooltip title="Comment" arrow>
+                  <Tooltip
+                    TransitionProps={{ timeout: 600 }}
+                    title="Comment"
+                    arrow
+                  >
                     <span onClick={(e) => e.stopPropagation()}>
                       <Link
                         href={`/p/${postInfo.id}`}
@@ -628,7 +654,11 @@ const LensPostCard = ({ post, loading }) => {
                     </span>
                   </Tooltip>
                 ) : (
-                  <Tooltip title="Comment" arrow>
+                  <Tooltip
+                    TransitionProps={{ timeout: 600 }}
+                    title="Comment"
+                    arrow
+                  >
                     <div className="flex flex-row items-center cursor-pointer  hover:bg-s-hover rounded-md p-1 font-medium">
                       {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />

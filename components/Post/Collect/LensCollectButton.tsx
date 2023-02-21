@@ -91,6 +91,7 @@ const LensCollectButton = ({
         }}
       >
         <Tooltip
+          TransitionProps={{ timeout: 600 }}
           title={isCollected || hasCollectedByMe ? 'Collected' : 'Collect'}
           arrow
         >
