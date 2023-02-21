@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
 import { usePopUpModal } from './CustomPopUpProvider'
@@ -13,8 +13,26 @@ const PopUpWrapper = ({
   children,
   isDisabled
 }) => {
-  const { hideModal } = usePopUpModal()
+  const { hideModal, showModal } = usePopUpModal()
   const { isDesktop } = useDevice()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (showModal) {
+        document.body.style.overflow = 'hidden'
+      } else {
+        document.body.style.overflow = 'auto'
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      document.body.style.overflow = 'auto' // set overflow to auto when popup is closed
+    }
+  }, [showModal])
+
   return (
     <div className="bg-p-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden text-p-text z-40">
       <div className="flex flex-row justify-between items-center pb-4 px-4">
