@@ -16,6 +16,9 @@ import { IoMdClose } from 'react-icons/io'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import { xpPerMember } from '../../../utils/config'
 import { getLevelAndThresholdXP } from '../../../lib/helpers'
+// import { CiMail } from 'react-icons/ci'
+// import { CircularProgress } from '@mui/material'
+import MessageButton from '../../Messages/MessageButton'
 
 const LensPostPage = ({ id, post }) => {
   const [postInfo, setPostInfo] = useState(post)
@@ -239,36 +242,43 @@ const LensPostPage = ({ id, post }) => {
               className="h-[80px] rounded-t-[15px] w-full object-cover"
             />
             <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
-              <div className="flex flex-row gap-2 justify-start">
-                <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
-                  <ImageWithFullScreenZoom
-                    src={
-                      profile?.profileImageUrl
-                        ? profile?.profileImageUrl
-                        : '/gradient.jpg'
-                    }
-                    className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
-                  />
+              <div className="flex flex-row gap-2 justify-between">
+                <div className="flex flex-row gap-2">
+                  <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
+                    <ImageWithFullScreenZoom
+                      src={
+                        profile?.profileImageUrl
+                          ? profile?.profileImageUrl
+                          : '/gradient.jpg'
+                      }
+                      className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-row">
+                    <div>
+                      <h2
+                        className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate"
+                        onClick={() => {
+                          if (profile?.walletAddress)
+                            router.push(`/u/${profile?.walletAddress}`)
+                        }}
+                      >
+                        {profile?.name}
+                      </h2>
+                      <h2
+                        className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate mb-3"
+                        onClick={() => {
+                          if (postInfo?.profile?.handle)
+                            router.push(`/u/${postInfo?.profile?.handle}`)
+                        }}
+                      >
+                        u/{postInfo?.profile?.handle}
+                      </h2>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h2
-                    className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate"
-                    onClick={() => {
-                      if (profile?.walletAddress)
-                        router.push(`/u/${profile?.walletAddress}`)
-                    }}
-                  >
-                    {profile?.name}
-                  </h2>
-                  <h2
-                    className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate mb-3"
-                    onClick={() => {
-                      if (postInfo?.profile?.handle)
-                        router.push(`/u/${postInfo?.profile?.handle}`)
-                    }}
-                  >
-                    {postInfo?.profile?.handle}
-                  </h2>
+                <div className="self-start">
+                  <MessageButton userLensProfile={userLensProfile} />
                 </div>
               </div>
               <p className="-translate-y-2 text-p-text">{profile?.bio}</p>
