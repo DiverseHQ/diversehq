@@ -108,7 +108,8 @@ const IndexingPostCard = ({ postInfo }) => {
             <div className="sm:mr-5 flex flex-row items-center">
               {/* pulsing dot */}
               <Tooltip
-                TransitionProps={{ timeout: 600 }}
+                enterDelay={1000}
+                leaveDelay={200}
                 title="Indexing"
                 arrow
               >

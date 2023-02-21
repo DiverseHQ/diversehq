@@ -213,7 +213,8 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
                   <Tooltip
-                    TransitionProps={{ timeout: 600 }}
+                    enterDelay={1000}
+                    leaveDelay={200}
                     title="More"
                     arrow
                   >
@@ -240,7 +241,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   }}
                   required
                 />
-                <Tooltip TransitionProps={{ timeout: 600 }} title="Save" arrow>
+                <Tooltip enterDelay={1000} leaveDelay={200} title="Save" arrow>
                   <div className="flex items-center hover:bg-p-btn-hover hover:text-[#66CD00] rounded-md p-1">
                     <AiOutlineCheck
                       className="text-base sm:text-[24px] cursor-pointer"
@@ -257,7 +258,8 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
               {/* upvote and downvote */}
               <div className="flex flex-row items-center gap-x-2 pt-2">
                 <Tooltip
-                  TransitionProps={{ timeout: 600 }}
+                  enterDelay={1000}
+                  leaveDelay={200}
                   title="Upvote"
                   arrow
                 >
@@ -278,7 +280,8 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                 </Tooltip>
                 <div className="font-medium text-[#687684]">{totalCount}</div>
                 <Tooltip
-                  TransitionProps={{ timeout: 600 }}
+                  enterDelay={1000}
+                  leaveDelay={200}
                   title="Downvote"
                   arrow
                 >

@@ -214,7 +214,8 @@ const LensCommentCard = ({ comment }) => {
               <div className="sm:mr-5 flex flex-row items-center">
                 {/* pulsing dot */}
                 <Tooltip
-                  TransitionProps={{ timeout: 600 }}
+                  enterDelay={1000}
+                  leaveDelay={200}
                   title="Indexing"
                   arrow
                 >
@@ -245,7 +246,8 @@ const LensCommentCard = ({ comment }) => {
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
                   <Tooltip
-                    TransitionProps={{ timeout: 600 }}
+                    enterDelay={1000}
+                    leaveDelay={200}
                     title="More"
                     arrow
                   >
@@ -273,7 +275,8 @@ const LensCommentCard = ({ comment }) => {
                 {/* upvote and downvote */}
                 <div className="flex flex-row items-center gap-x-2">
                   <Tooltip
-                    TransitionProps={{ timeout: 600 }}
+                    enterDelay={1000}
+                    leaveDelay={200}
                     title="Upvote"
                     arrow
                   >
@@ -293,7 +296,8 @@ const LensCommentCard = ({ comment }) => {
                   </Tooltip>
                   <div className="font-medium text-[#687684]">{voteCount}</div>
                   <Tooltip
-                    TransitionProps={{ timeout: 600 }}
+                    enterDelay={1000}
+                    leaveDelay={200}
                     title="Downvote"
                     arrow
                   >

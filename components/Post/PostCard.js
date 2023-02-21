@@ -316,7 +316,7 @@ const PostCard = ({ _post, setPosts }) => {
                 isDrawerOpen={isDrawerOpen}
                 setIsDrawerOpen={setIsDrawerOpen}
               >
-                <Tooltip TransitionProps={{ timeout: 600 }} title="More" arrow>
+                <Tooltip enterDelay={1000} leaveDelay={200} title="More" arrow>
                   <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                     <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
@@ -331,7 +331,8 @@ const PostCard = ({ _post, setPosts }) => {
         {!isMobile && (
           <div className="flex flex-col items-center ml-1.5 mt-1">
             <Tooltip
-              TransitionProps={{ timeout: 600 }}
+              enterDelay={1000}
+              leaveDelay={200}
               title="Upvote"
               arrow
               placement="left"
@@ -355,7 +356,8 @@ const PostCard = ({ _post, setPosts }) => {
             </Tooltip>
             <div className="font-bold leading-5">{totalCount}</div>
             <Tooltip
-              TransitionProps={{ timeout: 600 }}
+              enterDelay={1000}
+              leaveDelay={200}
               title="Downvote"
               arrow
               placement="left"
@@ -526,7 +528,8 @@ const PostCard = ({ _post, setPosts }) => {
             {isMobile && (
               <div className="flex flex-row items-center gap-x-1">
                 <Tooltip
-                  TransitionProps={{ timeout: 600 }}
+                  enterDelay={1000}
+                  leaveDelay={200}
                   title="Upvote"
                   arrow
                 >
@@ -550,7 +553,8 @@ const PostCard = ({ _post, setPosts }) => {
                 </Tooltip>
                 <div className="font-medium text-[#687684]">{totalCount}</div>
                 <Tooltip
-                  TransitionProps={{ timeout: 600 }}
+                  enterDelay={1000}
+                  leaveDelay={200}
                   title="Downvote"
                   arrow
                 >
@@ -574,7 +578,7 @@ const PostCard = ({ _post, setPosts }) => {
               </div>
             )}
             {!router.pathname.startsWith('/p') ? (
-              <Tooltip TransitionProps={{ timeout: 600 }} title="Comment" arrow>
+              <Tooltip enterDelay={1000} leaveDelay={200} title="Comment" arrow>
                 <span onClick={(e) => e.stopPropagation()}>
                   <Link
                     href={`/p/${post._id}`}
@@ -599,7 +603,7 @@ const PostCard = ({ _post, setPosts }) => {
                 </span>
               </Tooltip>
             ) : (
-              <Tooltip TransitionProps={{ timeout: 600 }} title="Comment" arrow>
+              <Tooltip enterDelay={1000} leaveDelay={200} title="Comment" arrow>
                 <div className="flex flex-row items-center hover:bg-p-btn-hover font-medium">
                   {/* {post.comments?.length === 0 && (
                   <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />

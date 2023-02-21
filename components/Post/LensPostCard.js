@@ -332,7 +332,8 @@ const LensPostCard = ({ post, loading }) => {
                     setIsDrawerOpen={setIsDrawerOpen}
                   >
                     <Tooltip
-                      TransitionProps={{ timeout: 600 }}
+                      enterDelay={1000}
+                      leaveDelay={200}
                       title="More"
                       arrow
                     >
@@ -350,7 +351,8 @@ const LensPostCard = ({ post, loading }) => {
             {!isMobile && (
               <div className="flex flex-col items-center ml-1.5 mt-1">
                 <Tooltip
-                  TransitionProps={{ timeout: 600 }}
+                  enterDelay={1000}
+                  leaveDelay={200}
                   title="Upvote"
                   arrow
                   placement="left"
@@ -375,7 +377,8 @@ const LensPostCard = ({ post, loading }) => {
                 </Tooltip>
                 <div className="font-bold leading-5">{voteCount}</div>
                 <Tooltip
-                  TransitionProps={{ timeout: 600 }}
+                  enterDelay={1000}
+                  leaveDelay={200}
                   title="Downvote"
                   arrow
                   placement="left"
@@ -576,7 +579,8 @@ const LensPostCard = ({ post, loading }) => {
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-1">
                     <Tooltip
-                      TransitionProps={{ timeout: 600 }}
+                      enterDelay={1000}
+                      leaveDelay={200}
                       title="Upvote"
                       arrow
                     >
@@ -601,7 +605,8 @@ const LensPostCard = ({ post, loading }) => {
                       {voteCount}
                     </div>
                     <Tooltip
-                      TransitionProps={{ timeout: 600 }}
+                      enterDelay={1000}
+                      leaveDelay={200}
                       title="Downvote"
                       arrow
                     >
@@ -626,7 +631,8 @@ const LensPostCard = ({ post, loading }) => {
                 )}
                 {!router.pathname.startsWith('/p') ? (
                   <Tooltip
-                    TransitionProps={{ timeout: 600 }}
+                    enterDelay={1000}
+                    leaveDelay={200}
                     title="Comment"
                     arrow
                   >
@@ -655,7 +661,8 @@ const LensPostCard = ({ post, loading }) => {
                   </Tooltip>
                 ) : (
                   <Tooltip
-                    TransitionProps={{ timeout: 600 }}
+                    enterDelay={1000}
+                    leaveDelay={200}
                     title="Comment"
                     arrow
                   >
