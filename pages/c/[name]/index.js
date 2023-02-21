@@ -5,9 +5,13 @@ import CommunityInfoCard from '../../../components/Community/CommunityInfoCard'
 import CommunityNotFound from '../../../components/Community/Page/CommunityNotFound'
 import CommunityPageSeo from '../../../components/Community/CommunityPageSeo'
 import LensPostsCommunityPublicationsColumn from '../../../components/Post/LensPostsCommunityPublicationsColumn'
+import useDevice from '../../../components/Common/useDevice'
+import CommunityPageMobileTopNav from '../../../components/Community/CommunityPageMobileTopNav'
 const CommunityPage = ({ community }) => {
+  const { isMobile } = useDevice()
   return (
     <div className="relative">
+      {isMobile && <CommunityPageMobileTopNav />}
       {community && <CommunityPageSeo community={community} />}
       {community && (
         <>

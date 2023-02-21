@@ -62,11 +62,7 @@ const Navbar = () => {
       type: modalType.customposition,
       onAction: () => {},
       extraaInfo: {
-        bottom:
-          window.innerHeight -
-          e.currentTarget.getBoundingClientRect().bottom -
-          120 +
-          'px',
+        top: e.currentTarget.getBoundingClientRect().bottom + 10 + 'px',
         left: e.currentTarget.getBoundingClientRect().left + 'px'
       }
     })

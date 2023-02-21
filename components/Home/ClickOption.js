@@ -7,6 +7,7 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 
 import { CgProfile } from 'react-icons/cg'
 import { AiOutlineDisconnect } from 'react-icons/ai'
+import { FiSettings } from 'react-icons/fi'
 
 const ClickOption = () => {
   const router = useRouter()
@@ -21,6 +22,11 @@ const ClickOption = () => {
     hideModal()
   }
 
+  const routeToSettings = () => {
+    router.push('/settings')
+    hideModal()
+  }
+
   const disconnectAndClear = () => {
     disconnect()
     hideModal()
@@ -29,6 +35,11 @@ const ClickOption = () => {
   return (
     <MoreOptionsModal
       list={[
+        {
+          label: 'Settings',
+          onClick: routeToSettings,
+          icon: () => <FiSettings className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+        },
         {
           label: 'View Profile',
           onClick: routeToUserProfile,

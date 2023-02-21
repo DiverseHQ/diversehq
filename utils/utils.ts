@@ -94,9 +94,7 @@ export const unpinFromIpfsInfura = async (hash: string) => {
   return result
 }
 
-export const uploadToIpfsInfuraAndGetPath = async (
-  data: PublicationMetadataV2Input
-) => {
+export const uploadToIpfsInfuraAndGetPath = async (data: any) => {
   const result = await client.add(JSON.stringify(data))
   return result.path
 }

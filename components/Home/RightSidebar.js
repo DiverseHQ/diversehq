@@ -7,8 +7,8 @@ import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import RightSideCommunityComponent from './RightSideCommunityComponent'
 import { HiOutlineSparkles } from 'react-icons/hi'
-import { useRouter } from 'next/router'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
+import useHideSidebar from './hook/useHideSidebar'
 
 const CommunitiesDiv = ({ text, communitiesList, Icon }) => {
   /*
@@ -29,6 +29,7 @@ const CommunitiesDiv = ({ text, communitiesList, Icon }) => {
 }
 
 const RightSidebar = () => {
+  const hide = useHideSidebar()
   const { user } = useProfile()
   const { notifyError } = useNotify()
 
@@ -76,12 +77,10 @@ const RightSidebar = () => {
   //   )
   // }, [])
 
-  const router = useRouter()
-
   return (
     <div
-      className={`relative hidden ${
-        router.pathname.startsWith('/p/') ? '' : 'lg:flex flex-col'
+      className={`relative ${
+        hide ? 'hidden' : 'lg:flex flex-col'
       } sticky top-[64px] h-[calc(100vh-62px)] w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
     >
       {user && createdCommunities?.length > 0 && (

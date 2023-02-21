@@ -31,9 +31,9 @@ const SearchModal = () => {
     }
   }, [router])
   return (
-    <div className="relative flex flex-row items-center border-[1px] border-p-btn dark:border-0 p-1 rounded-[14px] bg-s-bg dark:bg-[#272729] w-[300px] lg:w-[400px] 2xl:w-[500px] gap-2 md:gap-4">
-      <div className="text-p-text rounded-[12px] py-1 pl-2">
-        <AiOutlineSearch className="w-[23px] h-[23px] text-p-text" />
+    <div className="relative flex flex-row items-center sm:border-[1px] sm:border-p-btn dark:border-0 p-1 rounded-[14px] bg-s-bg dark:bg-[#272729] w-[300px] lg:w-[400px] 2xl:w-[500px] gap-2 md:gap-4">
+      <div className="text-p-text rounded-[12px] py-1">
+        <AiOutlineSearch className="w-[23px] h-[23px] text-s-text" />
       </div>
       <input
         className="bg-transparent mr-1 text-[14px] text-[#111] dark:text-p-btn-text outline-none w-full"

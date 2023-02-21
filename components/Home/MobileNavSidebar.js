@@ -21,7 +21,7 @@ import {
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { AiOutlineUsergroupAdd, AiOutlineDisconnect } from 'react-icons/ai'
-import { FiMoon, FiSun } from 'react-icons/fi'
+import { FiMoon, FiSettings, FiSun } from 'react-icons/fi'
 import { useTheme } from '../Common/ThemeProvider'
 import { useLensUserContext } from '../../lib/LensUserContext'
 
@@ -184,6 +184,17 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </div>
           )}
           <div className="flex flex-col px-4">
+            <button
+              onClick={() => {
+                setIsOpenSidebar(false)
+                router.push('/settings')
+              }}
+              className="flex flex-row items-center py-4 gap-4"
+            >
+              <FiSettings className="w-7 h-7 object-contain" />
+              <span className="text-p-text text-xl">Settings</span>
+            </button>
+            <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
             <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {

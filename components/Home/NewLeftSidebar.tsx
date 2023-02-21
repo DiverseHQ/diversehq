@@ -6,18 +6,18 @@ import CreateCommunity from './CreateCommunity'
 import CreatePostPopup from './CreatePostPopup'
 
 import { AiOutlineHome } from 'react-icons/ai'
-import Link from 'next/link'
-import { DISCORD_INVITE_LINK, userRoles } from '../../utils/config'
-import { FaDiscord } from 'react-icons/fa'
+import { userRoles } from '../../utils/config'
 import { CgProfile } from 'react-icons/cg'
 import { BiGroup } from 'react-icons/bi'
-import { useRouter } from 'next/router'
-
+import useHideSidebar from './hook/useHideSidebar'
+import Sidebar from '../Settings/Sidebar'
+// import { UserType } from '../../types/user'
 const NewLeftSidebar = () => {
-  const { user, address } = useProfile()
-  const { showModal } = usePopUpModal()
+  const { user }: any = useProfile()
+  const { showModal }: any = usePopUpModal()
+  const hide = useHideSidebar()
 
-  const { notifyInfo } = useNotify()
+  const { notifyInfo }: any = useNotify()
 
   const createCommunity = () => {
     if (!user) {
@@ -53,12 +53,10 @@ const NewLeftSidebar = () => {
     })
   }
 
-  const router = useRouter()
-
   return (
     <div
       className={`relative ${
-        router.pathname.startsWith('/p') ? 'hidden' : 'flex flex-col'
+        hide ? 'hidden' : 'flex flex-col'
       }  items-start sticky top-[64px] right-0 h-[calc(100vh-62px)] py-8 pl-4 md:pl-6 lg:pl-10 xl:pl-12 pr-2 md:pr-2 lg:pr-4 xl:pr-6 w-[150px] md:w-[250px] lg:w-[300px] xl:w-[350px] gap-4`}
     >
       <div className="flex flex-col rounded-[15px] relative">
@@ -91,40 +89,32 @@ const NewLeftSidebar = () => {
           </button>
         </div>
       </div>
-      <div className="bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border space-y-2 p-2">
-        <Link
-          className="flex flex-row items-center hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
-          href={'/'}
-        >
-          <AiOutlineHome className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-          <span className="text-[16px] font-medium">Home</span>
-        </Link>
-        <Link
-          className="flex flex-row items-center hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
-          href={'/explore'}
-        >
-          <BiGroup className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-          <span className="text-[16px] font-medium">All Communities</span>
-        </Link>
-        {user && address && (
-          <Link
-            className="flex flex-row items-center hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2 text-p-text"
-            href={`/u/${user.walletAddress}`}
-          >
-            <CgProfile className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-            <span className="text-[16px] font-medium">Profile</span>
-          </Link>
-        )}
-        <a
-          href={DISCORD_INVITE_LINK}
-          target="_blank"
-          rel="noreferrer"
-          className="flex flex-row items-center bg-transparent hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2 relative w-full text-p-text"
-        >
-          <FaDiscord className="w-[24px] h-[24px] object-contain" />
-          <span className="text-[16px] font-medium">Discord</span>
-        </a>
-      </div>
+      <Sidebar
+        items={[
+          {
+            icon: (
+              <AiOutlineHome className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+            ),
+            title: 'Home',
+            link: '/'
+          },
+          {
+            icon: (
+              <BiGroup className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+            ),
+            title: 'All Communities',
+            link: '/explore'
+          },
+          {
+            icon: (
+              <CgProfile className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+            ),
+            title: 'Profile',
+            link: `/u/${user?.walletAddress}`,
+            isHidden: !user?.walletAddress
+          }
+        ]}
+      />
     </div>
   )
 }

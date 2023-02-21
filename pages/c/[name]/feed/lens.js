@@ -1,14 +1,19 @@
 import React from 'react'
 import { getCommunityInfo } from '../../../../api/community'
+import useDevice from '../../../../components/Common/useDevice'
 import CommunityInfoCard from '../../../../components/Community/CommunityInfoCard'
+import CommunityPageMobileTopNav from '../../../../components/Community/CommunityPageMobileTopNav'
 import CommunityPageSeo from '../../../../components/Community/CommunityPageSeo'
 import CommunityNotFound from '../../../../components/Community/Page/CommunityNotFound'
 import LensPostsCommunityPublicationsColumn from '../../../../components/Post/LensPostsCommunityPublicationsColumn'
 import NavFilterCommunity from '../../../../components/Post/NavFilterCommunity'
 
 const lens = ({ community }) => {
+  const { isMobile } = useDevice()
+
   return (
     <div className="relative">
+      {isMobile && <CommunityPageMobileTopNav />}
       {community && <CommunityPageSeo community={community} />}
       {community && (
         <>
