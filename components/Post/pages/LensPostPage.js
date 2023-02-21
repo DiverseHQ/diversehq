@@ -106,13 +106,7 @@ const LensPostPage = ({ id, post }) => {
   return (
     <>
       <div className="w-full flex flex-row space-x-10 justify-center pb-[50px]">
-        <div
-          className={`${
-            router.pathname.startsWith('/p')
-              ? 'w-full md:w-[700px]'
-              : 'w-full md:w-[650px]'
-          }`}
-        >
+        <div className={`w-full md:w-[650px]`}>
           {!post &&
             (isMobile ? (
               <MobileLoader />
