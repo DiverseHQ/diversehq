@@ -227,7 +227,10 @@ const LensPostPage = ({ id, post }) => {
                   {postInfo?.communityInfo?.members?.length}
                 </span>
               </div>
-              <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+              <JoinCommunityButton
+                id={postInfo?.communityInfo?._id}
+                showJoined
+              />
             </div>
           </div>
           <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3">

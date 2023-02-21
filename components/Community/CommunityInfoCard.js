@@ -1,10 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState, useCallback } from 'react'
-import {
-  putJoinCommunity,
-  putLeaveCommunity,
-  getCommunityInfoUsingId
-} from '../../api/community'
+import { getCommunityInfoUsingId } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 
@@ -28,9 +24,10 @@ import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { Tooltip } from '@mui/material'
 import { getLevelAndThresholdXP } from '../../lib/helpers'
 import { xpPerMember } from '../../utils/config'
+import JoinCommunityButton from './JoinCommunityButton'
 const CommunityInfoCard = ({ _community }) => {
   const [community, setCommunity] = useState(_community)
-  const { user, refreshUserInfo } = useProfile()
+  const { user } = useProfile()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
   const router = useRouter()
@@ -45,7 +42,6 @@ const CommunityInfoCard = ({ _community }) => {
     }
   }, [_community])
 
-  const [isJoined, setIsJoined] = useState(false)
   const [isCreator, setIsCreator] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isExploreDrawerOpen, setIsExploreDrawerOpen] = useState(false)
@@ -53,34 +49,8 @@ const CommunityInfoCard = ({ _community }) => {
   // const [numberOfPosts, setNumberOfPosts] = useState(0)
   const name = community?.name
 
-  // const fetchNumberOfPosts = async () => {
-  //   const result = await getNumberOfPostsInCommunity(community._id)
-  //   setNumberOfPosts(result.numberOfPosts)
-  // }
-
-  const fetchCommunityInformation = useCallback(async () => {
-    try {
-      const res = await getCommunityInfoUsingId(community._id)
-      if (res.status !== 200) {
-        return
-      }
-      const result = await res.json()
-      setCommunity(result)
-    } catch (error) {
-      console.log(error)
-    }
-  }, [community?._id])
-
-  // useEffect(() => {
-  //   if (community?._id) {
-  //     fetchNumberOfPosts()
-  //   }
-  // }, [community])
-
   useEffect(() => {
     if (!user || !community) return
-    setIsJoined(!!user?.communities?.includes(community?._id))
-
     if (user.walletAddress === community.creator) {
       setIsCreator(true)
     }
@@ -93,36 +63,6 @@ const CommunityInfoCard = ({ _community }) => {
       // fetchNumberOfPosts()
 
       setCommunity({ ...comm })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const joinCommunity = async () => {
-    if (!user) {
-      notifyInfo('You might want to connect your wallet first')
-      return
-    }
-    try {
-      await putJoinCommunity(community._id)
-      notifyInfo('Joined 😍')
-      await refreshUserInfo()
-      await fetchCommunityInformation()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const leaveCommunity = async () => {
-    if (!user) {
-      notifyInfo('You might want to connect your wallet first')
-      return
-    }
-    try {
-      await putLeaveCommunity(community._id)
-      notifyInfo('Left 😢')
-      await refreshUserInfo()
-      await fetchCommunityInformation()
     } catch (error) {
       console.log(error)
     }
@@ -229,28 +169,13 @@ const CommunityInfoCard = ({ _community }) => {
               )}
             </div>
             <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2">
-              {isJoined ? (
-                <button
-                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text w-[90px] transition-all ease-in-out  duration-600`}
-                  onClick={leaveCommunity}
-                >
-                  <span className="group-hover/text:hidden">Joined</span>
-                  <span className="hidden group-hover/text:block">Leave</span>
-                </button>
-              ) : (
-                <button
-                  className={` rounded-md py-1.5 px-4 self-end text-sm sm:text-[14px] font-semibold bg-p-btn text-p-btn-text`}
-                  onClick={joinCommunity}
-                >
-                  Join
-                </button>
-              )}
+              <JoinCommunityButton id={community._id} showJoined={true} />
               <OptionsWrapper
                 OptionPopUpModal={() => (
                   <MoreOptionsModal
                     className="z-50"
                     list={
-                      isCreator && isJoined
+                      isCreator
                         ? [
                             {
                               label: 'Edit',

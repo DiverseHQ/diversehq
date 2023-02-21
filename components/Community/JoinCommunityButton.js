@@ -5,10 +5,10 @@ import { useNotify } from '../Common/NotifyContext'
 import useDevice from '../Common/useDevice'
 import { useProfile } from '../Common/WalletContext'
 
-const JoinCommunityButton = ({ id }) => {
+const JoinCommunityButton = ({ id, showJoined = false }) => {
   const [loading, setLoading] = useState(false)
   // const [leavingLoading, setLoading] = us
-  const [joined, setJoined] = useState(true)
+  const [joined, setJoined] = useState(false)
   const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   useEffect(() => {
@@ -71,7 +71,7 @@ const JoinCommunityButton = ({ id }) => {
           Join
         </button>
       )}
-      {joined && !loading && (
+      {joined && !loading && showJoined && (
         <button
           className={`text-xs sm:text-base px-2 sm:px-3 rounded-md ${
             router.pathname.startsWith('/p') && !isMobile
@@ -101,7 +101,6 @@ const JoinCommunityButton = ({ id }) => {
           {joined ? 'Leaving...' : 'Joining...'}
         </button>
       )}
-      {joined && !loading && <></>}
     </>
   )
 }
