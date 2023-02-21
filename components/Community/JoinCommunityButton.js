@@ -5,9 +5,10 @@ import { useNotify } from '../Common/NotifyContext'
 import useDevice from '../Common/useDevice'
 import { useProfile } from '../Common/WalletContext'
 
-const JoinCommunityButton = ({ id }) => {
+const JoinCommunityButton = ({ id, showJoined = false }) => {
   const [loading, setLoading] = useState(false)
-  const [joined, setJoined] = useState(true)
+  // const [leavingLoading, setLoading] = us
+  const [joined, setJoined] = useState(false)
   const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
   const { isMobile } = useDevice()
@@ -69,27 +70,24 @@ const JoinCommunityButton = ({ id }) => {
           Join
         </button>
       )}
-      {joined &&
-        !loading &&
-        !(router.pathname === '/') &&
-        !router.pathname.startsWith('/feed') && (
-          <button
-            className={`text-xs sm:text-base px-2 sm:px-3 rounded-md ${
-              router.pathname.startsWith('/p') && !isMobile
-                ? 'w-full'
-                : 'w-[75px]'
-            } ${
-              isMobile ? 'w-[65px] py-1' : 'py-0.5'
-            } bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text transition-all ease-in-out duration-300`}
-            onClick={(e) => {
-              e.stopPropagation()
-              handleLeave()
-            }}
-          >
-            <span className="group-hover/text:hidden">Joined</span>
-            <span className="hidden group-hover/text:block">Leave</span>
-          </button>
-        )}
+      {joined && !loading && showJoined && (
+        <button
+          className={`text-xs sm:text-base px-2 sm:px-3 rounded-md ${
+            router.pathname.startsWith('/p') && !isMobile
+              ? 'w-full'
+              : 'w-[75px]'
+          } ${
+            isMobile ? 'w-[65px] py-1' : 'py-0.5'
+          } transition-all ease-in-out duration-600 bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text transition-all ease-in-out duration-600`}
+          onClick={(e) => {
+            e.stopPropagation()
+            handleLeave()
+          }}
+        >
+          <span className="group-hover/text:hidden">Joined</span>
+          <span className="hidden group-hover/text:block">Leave</span>
+        </button>
+      )}
       {loading && (
         <button
           className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-0.5 rounded-md ${
@@ -102,7 +100,6 @@ const JoinCommunityButton = ({ id }) => {
           {joined ? 'Leaving...' : 'Joining...'}
         </button>
       )}
-      {joined && !loading && <></>}
     </>
   )
 }
