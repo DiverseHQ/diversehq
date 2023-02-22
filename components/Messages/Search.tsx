@@ -86,7 +86,7 @@ const Search = ({
                       {stringToLength(profile?.name, 15)}{' '}
                     </span>
                     <span className="text-sm text-s-text">
-                      {profile?.handle && `u/${profile?.handle}`}
+                      {profile?.handle && `u/${profile?.handle.split('.')[0]}`}
                     </span>
                   </div>
                 </div>

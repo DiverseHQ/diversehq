@@ -569,21 +569,19 @@ const CreatePostPopup = () => {
               <p className="text-p-text ml-4 text-xl">Back</p>
             </button>
           ) : (
-            <div className="border border-p-border rounded-full text-p-text w-fit px-1">
-              <button
-                className="text-blue-500 p-1"
-                onClick={showJoinedCommunities}
-              >
+            <div className="flex justify-center items-center border border-p-border rounded-full text-p-text w-fit h-[45px] bg-s-bg">
+              <button className="text-blue-500" onClick={showJoinedCommunities}>
                 {showCommunity.name ? (
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-center items-center p-2">
                     <img
                       src={showCommunity.image}
-                      className="rounded-full w-9 h-9"
+                      className="rounded-full w-10 h-10"
                     />
                     <h1 className="ml-2">{showCommunity.name}</h1>
+                    <AiOutlineDown className="w-4 h-4 mx-1" />
                   </div>
                 ) : (
-                  <div className="flex flex-row items-center justify-center">
+                  <div className="flex flex-row items-center justify-center px-2">
                     <div>Choose Community</div>
                     <AiOutlineDown className="w-4 h-4 mx-1" />
                   </div>
@@ -673,7 +671,7 @@ const CreatePostPopup = () => {
               {/* <ToolbarPlugin /> */}
               <RichTextPlugin
                 contentEditable={
-                  <ContentEditable className="block min-h-[70px] text-p-text overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px] outline-none" />
+                  <ContentEditable className="block min-h-[70px] text-p-text overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px] outline-none bg-s-bg" />
                 }
                 placeholder={
                   <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
@@ -703,12 +701,12 @@ const CreatePostPopup = () => {
               <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
             </div>
 
-            <div className="text-base leading-relaxed  m-4">
+            <div className="text-base leading-relaxed m-4">
               {file ? (
                 showAddedFile()
               ) : (
                 <label htmlFor="upload-file">
-                  <div className="h-32 text-s-text flex flex-col justify-center items-center border border-p-border  rounded-xl">
+                  <div className="h-32 text-s-text flex flex-col justify-center items-center border border-p-border bg-s-bg rounded-xl">
                     <div>
                       <AiOutlineCamera className="h-8 w-8" />
                     </div>

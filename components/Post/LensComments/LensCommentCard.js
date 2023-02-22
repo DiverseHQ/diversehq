@@ -199,9 +199,12 @@ const LensCommentCard = ({ comment }) => {
                 className="w-6 h-6 rounded-full mr-1 object-cover"
               />
 
-              <Link href={`/u/${comment?.profile?.handle}`} passHref>
+              <Link
+                href={`/u/${comment?.profile?.handle.split('.')[0]}`}
+                passHref
+              >
                 <div className="hover:underline font-bold text-base">
-                  u/{comment?.profile?.handle}
+                  u/{comment?.profile?.handle.split('.')[0]}
                 </div>
               </Link>
               <ReactTimeAgo

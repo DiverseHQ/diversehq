@@ -2,10 +2,8 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { getCommunityInfoUsingId } from '../../../api/community'
-import { getUserInfo } from '../../../api/user'
 import { usePublicationQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import useDevice from '../../Common/useDevice'
@@ -19,6 +17,8 @@ import { getLevelAndThresholdXP } from '../../../lib/helpers'
 // import { CiMail } from 'react-icons/ci'
 // import { CircularProgress } from '@mui/material'
 import MessageButton from '../../Messages/MessageButton'
+import getIPFSLink from '../../User/lib/getIPFSLink'
+import getAvatar from '../../User/lib/getAvatar'
 
 const LensPostPage = ({ id, post }) => {
   const [postInfo, setPostInfo] = useState(post)
@@ -38,10 +38,8 @@ const LensPostPage = ({ id, post }) => {
       enabled: !!id && !!lensProfile?.defaultProfile?.id
     }
   )
-  const [userLensProfile, setUserLensProfile] = useState({})
-  const [profile, setProfile] = useState({})
   const { FollowButton, isFollowedByMe } = useLensFollowButton({
-    profileId: userLensProfile?.id
+    profileId: postInfo?.profile?.id
   })
 
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
@@ -82,30 +80,14 @@ const LensPostPage = ({ id, post }) => {
     if (!postInfo?.communityInfo) {
       fetchCommunityInformationAndSetPost()
     }
-    if (postInfo?.profile?.handle) {
-      getUserProfileAndLensProfile(postInfo?.profile?.handle)
-    }
   }, [postInfo])
 
-  const getUserProfileAndLensProfile = async (id) => {
-    try {
-      const lensProfileRes = await getLensProfileInfo({
-        handle: id
-      })
-      if (lensProfileRes.profile) {
-        setUserLensProfile(lensProfileRes.profile)
-      }
-      if (lensProfileRes.profile.ownedBy) {
-        const userInfo = await getUserInfo(lensProfileRes.profile.ownedBy)
-        if (userInfo) {
-          setProfile(userInfo)
-        }
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  let _profileBanner =
+    postInfo?.profile?.coverPicture?.__typename === 'NftImage'
+      ? getIPFSLink(postInfo?.profile?.coverPicture?.uri)
+      : getIPFSLink(postInfo?.profile?.coverPicture?.original?.url)
 
+  console.log('_profileBanner', _profileBanner)
   return (
     <>
       <div className="w-full flex flex-row space-x-10 justify-center pb-[50px]">
@@ -233,7 +215,7 @@ const LensPostPage = ({ id, post }) => {
               </div>
               <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3">
                 <ImageWithFullScreenZoom
-                  src={profile?.bannerImageUrl}
+                  src={_profileBanner || '/gradient.jpg'}
                   className="h-[80px] rounded-t-[15px] w-full object-cover"
                 />
                 <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
@@ -241,11 +223,7 @@ const LensPostPage = ({ id, post }) => {
                     <div className="flex flex-row gap-2">
                       <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
                         <ImageWithFullScreenZoom
-                          src={
-                            profile?.profileImageUrl
-                              ? profile?.profileImageUrl
-                              : '/gradient.jpg'
-                          }
+                          src={getAvatar(postInfo?.profile)}
                           className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
                         />
                       </div>
@@ -254,42 +232,46 @@ const LensPostPage = ({ id, post }) => {
                           <h2
                             className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate"
                             onClick={() => {
-                              if (profile?.walletAddress)
-                                router.push(`/u/${profile?.walletAddress}`)
+                              router.push(
+                                `/u/${postInfo?.profile?.handle.split('.')[0]}`
+                              )
                             }}
                           >
-                            {profile?.name}
+                            {postInfo?.profile?.name}
                           </h2>
                           <h2
                             className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate mb-3"
                             onClick={() => {
-                              if (postInfo?.profile?.handle)
-                                router.push(`/u/${postInfo?.profile?.handle}`)
+                              router.push(
+                                `/u/${postInfo?.profile?.handle.split('.')[0]}`
+                              )
                             }}
                           >
-                            u/{postInfo?.profile?.handle}
+                            u/{postInfo?.profile?.handle.split('.')[0]}
                           </h2>
                         </div>
                       </div>
                     </div>
                     <div className="self-start">
                       {isFollowedByMe && (
-                        <MessageButton userLensProfile={userLensProfile} />
+                        <MessageButton userLensProfile={postInfo?.profile} />
                       )}
                     </div>
                   </div>
-                  <p className="-translate-y-2 text-p-text">{profile?.bio}</p>
+                  <p className="-translate-y-2 text-p-text">
+                    {postInfo?.profile?.bio}
+                  </p>
                   <div className="mb-2 text-p-text flex flex-row gap-2">
                     <span>
                       Followers:{' '}
                       <span className="font-semibold">
-                        {userLensProfile?.stats?.totalFollowers}
+                        {postInfo?.profile?.stats?.totalFollowers}
                       </span>
                     </span>
                     <span>
                       Following:{' '}
                       <span className="font-semibold">
-                        {userLensProfile?.stats?.totalFollowing}
+                        {postInfo?.profile?.stats?.totalFollowing}
                       </span>
                     </span>
                   </div>

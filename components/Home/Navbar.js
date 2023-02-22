@@ -232,12 +232,12 @@ const Navbar = () => {
           </div>
         )} */}
         {/* <CgProfile className="w-[25px] h-[25px] text-[#50555C] cursor-pointer" /> */}
-        {(!isSignedIn ||
-          !hasProfile ||
-          !lensProfile?.defaultProfile?.dispatcher?.canUseRelay) && (
+        {!isSignedIn ||
+        !hasProfile ||
+        !user ||
+        !lensProfile?.defaultProfile?.dispatcher?.canUseRelay ? (
           <LensLoginButton />
-        )}
-        {isSignedIn && lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
+        ) : (
           <div className="flex flex-row items-center space-x-2 text-p-text">
             <ImageWithPulsingLoader
               src={getAvatar(lensProfile?.defaultProfile)}
@@ -249,10 +249,10 @@ const Navbar = () => {
                 <div> {lensProfile?.defaultProfile?.name} </div>
               )}
               <Link
-                href={`/u/${lensProfile.defaultProfile.handle}`}
+                href={`/u/${lensProfile.defaultProfile.handle.split('.')[0]}`}
                 className={`hover:cursor-pointer hover:underline text-s-text text-sm p-2 md:p-0`}
               >
-                u/{lensProfile.defaultProfile.handle}
+                u/{lensProfile.defaultProfile.handle.split('.')[0]}
               </Link>
             </div>
           </div>

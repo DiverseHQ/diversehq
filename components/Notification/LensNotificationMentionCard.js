@@ -28,10 +28,14 @@ const LensNotificationMentionCard = ({ notification, isRead }) => {
         <div>
           <span>
             <Link
-              href={`/u/${notification?.mentionPublication?.profile?.handle}`}
+              href={`/u/${
+                notification?.mentionPublication?.profile?.handle.split('.')[0]
+              }`}
               className="font-bold hover:underline"
             >
-              {`u/${notification?.mentionPublication?.profile?.handle}`}
+              {`u/${
+                notification?.mentionPublication?.profile?.handle.split('.')[0]
+              }`}
             </Link>{' '}
           </span>
           <span>mentioned you in a </span>

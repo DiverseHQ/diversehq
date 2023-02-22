@@ -36,10 +36,18 @@ const LensNotificationCollectCard = ({
         <div>
           <span>
             <Link
-              href={`/u/${notification?.collectedPublication?.profile?.handle}`}
+              href={`/u/${
+                notification?.collectedPublication?.profile?.handle?.split(
+                  '.'
+                )[0]
+              }`}
               className="font-bold hover:underline"
             >
-              {`u/${notification?.collectedPublication?.profile?.handle}`}
+              {`u/${
+                notification?.collectedPublication?.profile?.handle?.split(
+                  '.'
+                )[0]
+              }`}
             </Link>
           </span>
           <span className="text-gray-500"> collected your </span>

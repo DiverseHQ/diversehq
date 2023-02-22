@@ -8,16 +8,18 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { CgProfile } from 'react-icons/cg'
 import { AiOutlineDisconnect } from 'react-icons/ai'
 import { FiSettings } from 'react-icons/fi'
+import { useLensUserContext } from '../../lib/LensUserContext'
 
 const ClickOption = () => {
   const router = useRouter()
   const { user } = useProfile()
   const { disconnect } = useDisconnect()
   const { hideModal } = usePopUpModal()
+  const { data: lensProfile } = useLensUserContext()
 
   const routeToUserProfile = () => {
-    if (user) {
-      router.push(`/u/${user.walletAddress}`)
+    if (user && lensProfile?.defaultProfile?.handle) {
+      router.push(`/u/${lensProfile?.defaultProfile?.handle.split('.')[0]}`)
     }
     hideModal()
   }

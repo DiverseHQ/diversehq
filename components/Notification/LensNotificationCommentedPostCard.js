@@ -9,8 +9,8 @@ const LensNotificationCommentedPostCard = ({ notification, isRead }) => {
       MainRow={() => (
         <div>
           <span className="hover:underline font-bold">
-            <Link href={`/u/${notification?.profile?.handle}`}>
-              u/{notification?.profile?.handle}
+            <Link href={`/u/${notification?.profile?.handle.split('.')[0]}`}>
+              u/{notification?.profile?.handle.split('.')[0]}
             </Link>
           </span>
           <span>

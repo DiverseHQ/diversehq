@@ -20,6 +20,7 @@ import {
   countLinesFromMarkdown,
   deleteFirebaseStorageFile,
   getURLsFromText,
+  stringToLength,
   unpinFromIpfsInfura
 } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
@@ -221,7 +222,7 @@ const LensPostCard = ({ post, loading }) => {
                     <span onClick={(e) => e.stopPropagation()}>
                       <Link href={`/c/${postInfo?.communityInfo?.name}`}>
                         <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                          {postInfo?.communityInfo?.name}
+                          {stringToLength(postInfo?.communityInfo?.name, 18)}
                         </div>
                       </Link>
                     </span>
@@ -229,12 +230,12 @@ const LensPostCard = ({ post, loading }) => {
 
                   <span onClick={(e) => e.stopPropagation()}>
                     <Link
-                      href={`/u/${postInfo?.profile?.handle}`}
+                      href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
                       className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                     >
                       <p className="pl-1.5 font-normal"> posted by</p>
                       <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                        u/{postInfo?.profile?.handle}
+                        u/{postInfo?.profile?.handle.split('.')[0]}
                       </div>
                     </Link>
                   </span>
@@ -278,13 +279,13 @@ const LensPostCard = ({ post, loading }) => {
                     <div className="flex flex-row items-center justify-start">
                       <span onClick={(e) => e.stopPropagation()}>
                         <Link
-                          href={`/u/${postInfo?.profile?.handle}`}
+                          href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
                           className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                           passHref
                         >
                           <p className="pl-1.5 font-normal"> posted by</p>
                           <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                            u/{postInfo?.profile?.handle}
+                            u/{postInfo?.profile?.handle.split('.')[0]}
                           </div>
                         </Link>
                       </span>

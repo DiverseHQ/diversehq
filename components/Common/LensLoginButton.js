@@ -101,34 +101,29 @@ const LensLoginButton = () => {
             <div className="flex flex-col items-start">
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
                 <Link
-                  href={`/u/${lensProfile.defaultProfile.handle}`}
+                  href={`/u/${lensProfile.defaultProfile.handle.split('.')[0]}`}
                   className={`mr-2 hover:cursor-pointer hover:underline ${
                     isMobile
                       ? 'dark:text-s-bg hover:font-semibold'
                       : 'dark:text-p-text'
                   } text-[20px] md:text-[16px] p-2 md:p-0`}
                 >
-                  u/{lensProfile.defaultProfile.handle}
+                  u/{lensProfile.defaultProfile.handle.spilt('.')[0]}
                 </Link>
               )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
                 !loading && (
                   <button
                     onClick={handleEnableDispatcher}
-                    className="flex flex-col items-center rounded-xl text-sm bg-[#62F030] px-2"
+                    className="rounded-full sm:rounded-xl text-sm bg-[#62F030] px-2"
                   >
-                    <div>
-                      <span>u/{lensProfile?.defaultProfile?.handle}</span>
-                    </div>
-                    <div>
-                      <spa>Go Signless</spa>
-                    </div>
+                    <span>Go Signless</span>
                   </button>
                 )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
                 loading && (
-                  <div className="rounded-xl text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
-                    Enabling...
+                  <div className="rounded-full sm:rounded-xl text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
+                    Going...
                   </div>
                 )}
             </div>

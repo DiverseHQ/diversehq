@@ -92,8 +92,15 @@ export const SUPPORTED_AUDIO_TYPE: string[] = [
   'audio/mpeg',
   'audio/ogg'
 ]
+/* eslint-disable */
+
+enum apiModeType {
+  dev = 'dev',
+  prod = 'prod'
+}
 
 // XP and Level configs
 export const baseXP = 200
 export const xpMultiplier = 4
 export const xpPerMember = 10
+export const apiMode: apiModeType = apiModeType.dev

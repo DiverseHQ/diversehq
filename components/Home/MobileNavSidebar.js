@@ -73,11 +73,11 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   }
 
   const routeToProfile = () => {
-    if (!address) {
+    if (!myLensProfile?.defaultProfile) {
       notifyInfo('You might want to login first')
       return
     }
-    router.push(`/u/${address}`)
+    router.push(`/u/${myLensProfile?.defaultProfile?.handle.split('.')[0]}`)
   }
 
   const handleWalletAddressCopy = () => {
@@ -112,7 +112,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       >
         <div className="flex flex-col absolute transition ease-in-out h-full bg-s-bg dark:text-p-text w-full">
           <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-6">
-            {isSignedIn && hasProfile && (
+            {isSignedIn && hasProfile && user && (
               <div className="flex flex-col">
                 <div className="flex flex-row gap-1">
                   <ImageWithPulsingLoader
@@ -135,7 +135,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                     <div className="font-semibold">
                       u/
                       {stringToLength(
-                        myLensProfile?.defaultProfile?.handle,
+                        myLensProfile?.defaultProfile?.handle.split('.')[0],
                         20
                       )}
                     </div>
@@ -159,7 +159,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               </div>
             )}
           </div>
-          {(!isSignedIn || !hasProfile) && (
+          {(!isSignedIn || !hasProfile || !user) && (
             <div className="px-4 mb-2">
               <LensLoginButton />
             </div>
