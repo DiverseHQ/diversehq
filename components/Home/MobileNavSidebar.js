@@ -24,6 +24,7 @@ import { AiOutlineUsergroupAdd, AiOutlineDisconnect } from 'react-icons/ai'
 import { FiMoon, FiSettings, FiSun } from 'react-icons/fi'
 import { useTheme } from '../Common/ThemeProvider'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import getAvatar from '../User/lib/getAvatar'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -111,11 +112,11 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       >
         <div className="flex flex-col absolute transition ease-in-out h-full bg-s-bg dark:text-p-text w-full">
           <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-6">
-            {user && address && (
+            {isSignedIn && hasProfile && (
               <div className="flex flex-col">
                 <div className="flex flex-row gap-1">
-                  <img
-                    src={user?.profileImageUrl}
+                  <ImageWithPulsingLoader
+                    src={getAvatar(myLensProfile?.defaultProfile)}
                     className="w-[55px] h-[55px] bg-[#333] rounded-full"
                     onClick={() => {
                       setIsOpenSidebar(false)
@@ -123,56 +124,36 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                     }}
                   />
                   <div className="flex flex-col items-start justify-center ml-4">
-                    {/* <div className="flex flex-row items-start"> */}
-                    {!isSignedIn || !hasProfile ? (
-                      <>
-                        {user?.name ? (
-                          <div className="font-semibold">{user.name}</div>
-                        ) : (
-                          <h3 className="font-semibold">
-                            {stringToLength(user.walletAddress, 20)}
-                          </h3>
+                    {myLensProfile?.defaultProfile?.name && (
+                      <div className="font-semibold">
+                        {stringToLength(
+                          myLensProfile?.defaultProfile?.name,
+                          20
                         )}
-                      </>
-                    ) : (
-                      <>
-                        {myLensProfile?.defaultProfile?.name && (
-                          <div className="font-semibold">
-                            {myLensProfile?.defaultProfile?.name}
-                          </div>
-                        )}
-                        <div className="font-semibold">
-                          u/
-                          {stringToLength(
-                            myLensProfile?.defaultProfile?.handle,
-                            20
-                          )}
-                        </div>
-                      </>
-                    )}
-                    {/* </div> */}
-                    {isSignedIn && hasProfile && (
-                      <div className="flex flex-row gap-4 text-p-text">
-                        <div className="">
-                          <span className="font-bold mr-1">
-                            {
-                              myLensProfile?.defaultProfile?.stats
-                                ?.totalFollowers
-                            }
-                          </span>
-                          <span className="font-light">Followers</span>
-                        </div>
-                        <div className="">
-                          <span className="font-bold mr-1">
-                            {
-                              myLensProfile?.defaultProfile?.stats
-                                ?.totalFollowing
-                            }
-                          </span>
-                          <span className="font-light">Following</span>
-                        </div>
                       </div>
                     )}
+                    <div className="font-semibold">
+                      u/
+                      {stringToLength(
+                        myLensProfile?.defaultProfile?.handle,
+                        20
+                      )}
+                    </div>
+
+                    <div className="flex flex-row gap-4 text-p-text">
+                      <div className="">
+                        <span className="font-bold mr-1">
+                          {myLensProfile?.defaultProfile?.stats?.totalFollowers}
+                        </span>
+                        <span className="font-light">Followers</span>
+                      </div>
+                      <div className="">
+                        <span className="font-bold mr-1">
+                          {myLensProfile?.defaultProfile?.stats?.totalFollowing}
+                        </span>
+                        <span className="font-light">Following</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
