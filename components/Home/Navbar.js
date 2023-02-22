@@ -9,18 +9,20 @@ import { IoMdNotificationsOutline } from 'react-icons/io'
 import ClickOption from './ClickOption'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
-import Image from 'next/image'
 import { useTheme } from '../Common/ThemeProvider'
 import { useNotify } from '../Common/NotifyContext'
 import { getJoinedCommunitiesApi } from '../../api/community'
 import { RiArrowDropDownLine } from 'react-icons/ri'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
-import getStampFyiURL from '../User/lib/getStampFyiURL'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import getAvatar from '../User/lib/getAvatar'
 
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
-  const { user, address } = useProfile()
+  const { user } = useProfile()
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { showModal } = usePopUpModal()
   const { theme, toggleTheme } = useTheme()
 
@@ -208,7 +210,7 @@ const Navbar = () => {
             <FiSun className="w-[25px] h-[25px] cursor-pointer" />
           )}
         </button>
-        {user && address && (
+        {/* {user && address && (
           <div
             className="flex flex-row rounded-full items-center justify-between hover:cursor-pointer h-[40px]"
             onClick={showMoreOptions}
@@ -228,9 +230,33 @@ const Navbar = () => {
               />
             )}
           </div>
-        )}
+        )} */}
         {/* <CgProfile className="w-[25px] h-[25px] text-[#50555C] cursor-pointer" /> */}
-        <LensLoginButton />
+        {(!isSignedIn ||
+          !hasProfile ||
+          !lensProfile?.defaultProfile?.dispatcher?.canUseRelay) && (
+          <LensLoginButton />
+        )}
+        {isSignedIn && lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
+          <div className="flex flex-row items-center space-x-2 text-p-text">
+            <ImageWithPulsingLoader
+              src={getAvatar(lensProfile?.defaultProfile)}
+              className="w-[40px] h-[40px] rounded-full cursor-pointer"
+              onClick={showMoreOptions}
+            />
+            <div className="flex flex-col">
+              {lensProfile?.defaultProfile?.name && (
+                <div> {lensProfile?.defaultProfile?.name} </div>
+              )}
+              <Link
+                href={`/u/${lensProfile.defaultProfile.handle}`}
+                className={`hover:cursor-pointer hover:underline text-s-text text-sm p-2 md:p-0`}
+              >
+                u/{lensProfile.defaultProfile.handle}
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

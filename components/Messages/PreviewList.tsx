@@ -44,7 +44,7 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
   }
 
   return (
-    <div className={`flex flex-col ${className}`}>
+    <div className={`flex flex-col  h-full ${className}`}>
       {/* todo search profile and message */}
       <Search
         placeholder="Search someone to chat with..."
@@ -67,7 +67,7 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
         </div>
       )}
       {!showAuthenticating && !showLoading && !profilesError && (
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full sm:h-[450px] overflow-y-auto">
           {sortedProfiles?.map(([key, profile]) => {
             const message = messages.get(key)
             if (!message) {

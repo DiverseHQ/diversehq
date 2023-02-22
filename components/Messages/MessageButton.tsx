@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { CiMail } from 'react-icons/ci'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useMessageStore } from '../../store/message'
-import useLensFollowButton from '../User/useLensFollowButton'
 import useXmtpClient from './hooks/useXmtpClient'
 import buildConversationId from './lib/buildConversationId'
 import { buildConversationKey } from './lib/conversationKey'
@@ -26,10 +25,6 @@ const MessageButton = ({ userLensProfile }) => {
   )
   const setIsOpen = useMessageStore((state) => state.setIsOpen)
 
-  const { isFollowedByMe } = useLensFollowButton({
-    profileId: lensProfile?.id
-  })
-
   const handleDmClick = async () => {
     if (!client) {
       await initXmtpClient()
@@ -51,8 +46,7 @@ const MessageButton = ({ userLensProfile }) => {
       {lensProfile &&
         isSignedIn &&
         hasProfile &&
-        lensProfile.ownedBy !== myLensProfile?.defaultProfile.ownedBy &&
-        isFollowedByMe && (
+        lensProfile.ownedBy !== myLensProfile?.defaultProfile.ownedBy && (
           <div
             className="p-1.5 rounded-full cursor-pointer hover:bg-p-btn-hover flex flex-row items-center space-x-1"
             onClick={handleDmClick}

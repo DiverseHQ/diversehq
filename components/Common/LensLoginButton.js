@@ -9,17 +9,20 @@ import { modalType, usePopUpModal } from './CustomPopUpProvider'
 import { useNotify } from './NotifyContext'
 import { useProfile } from './WalletContext'
 import ConnectWalletAndSignInButton from './ConnectWalletAndSignInButton'
-import { useRouter } from 'next/router'
 import useDevice from './useDevice'
 import { useQueryClient } from '@tanstack/react-query'
 
 const LensLoginButton = () => {
-  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const {
+    isSignedIn,
+    hasProfile,
+    data: lensProfile,
+    refetch
+  } = useLensUserContext()
   const { user, address } = useProfile()
   const { notifyInfo, notifySuccess } = useNotify()
   const { showModal } = usePopUpModal()
   const { isMobile } = useDevice()
-  const router = useRouter()
 
   const queryClient = useQueryClient()
 
@@ -72,7 +75,6 @@ const LensLoginButton = () => {
 
   const onSetDispatcherSuccess = async () => {
     notifySuccess('No more signing required for many actions')
-    router.reload()
     await queryClient.invalidateQueries({
       queryKey: ['lensUser']
     })
@@ -82,6 +84,7 @@ const LensLoginButton = () => {
     await queryClient.invalidateQueries({
       queryKey: ['lensUser', 'defaultProfile']
     })
+    await refetch()
   }
 
   useEffect(() => {

@@ -29,7 +29,12 @@ import {
 } from './types/profieMetadata'
 
 const ProfileForm = () => {
-  const { data: lensProfile, hasProfile, isSignedIn } = useLensUserContext()
+  const {
+    data: lensProfile,
+    hasProfile,
+    isSignedIn,
+    refetch
+  } = useLensUserContext()
   const [name, setName] = useState(lensProfile?.defaultProfile?.name)
   const [bio, setBio] = useState(lensProfile?.defaultProfile?.bio)
   const [website, setWebsite] = useState('')
@@ -196,6 +201,7 @@ const ProfileForm = () => {
         await queryClient.invalidateQueries({
           queryKey: ['lensUser', 'defaultProfile']
         })
+        await refetch()
         setSaving(false)
         return
       }
@@ -220,6 +226,7 @@ const ProfileForm = () => {
         await queryClient.invalidateQueries({
           queryKey: ['lensUser', 'defaultProfile']
         })
+        await refetch()
         setSaving(false)
       } else {
         const setProfileMetadata = (
@@ -249,6 +256,7 @@ const ProfileForm = () => {
         await queryClient.invalidateQueries({
           queryKey: ['lensUser', 'defaultProfile']
         })
+        await refetch()
         setSaving(false)
       }
     }

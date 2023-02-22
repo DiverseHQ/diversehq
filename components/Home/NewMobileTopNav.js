@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useProfile } from '../Common/WalletContext'
 import MobileNavSidebar from './MobileNavSidebar'
-import ConnectWalletAndSignInButton from '../Common/ConnectWalletAndSignInButton'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import MobileFilterDrawerButton from './MobileFilterDrawerButton'
@@ -13,13 +11,14 @@ import OptionsWrapper from '../Common/OptionsWrapper'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { HiOutlineSparkles } from 'react-icons/hi'
 import { AiOutlineDown, AiOutlineFire } from 'react-icons/ai'
+import LensLoginButton from '../Common/LensLoginButton'
+import getAvatar from '../User/lib/getAvatar'
 // import BottomDrawer from './BottomDrawer'
 
 const NewMobileTopNav = () => {
-  const { user } = useProfile()
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
   const router = useRouter()
-  const { hasProfile, isSignedIn } = useLensUserContext()
+  const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const [sortType, setSortType] = useState(sortTypes.LATEST)
   // also can remove this.. ?
   const [showOptionsModal, setShowOptionsModal] = useState(false)
@@ -65,22 +64,14 @@ const NewMobileTopNav = () => {
       >
         <>
           <div className="flex flex-row items-center justify-center space-x-4">
-            {!user && (
-              <ConnectWalletAndSignInButton
-                connectWalletLabel="Connect"
-                SignInLabel="Sign In"
-              />
-            )}
-            {user && (
+            {(!isSignedIn || !hasProfile) && <LensLoginButton />}
+            {isSignedIn && hasProfile && (
               <div className="relative">
                 <ImageWithPulsingLoader
-                  src={user?.profileImageUrl}
+                  src={getAvatar(lensProfile?.defaultProfile)}
                   onClick={() => setIsOpenSidebar(true)}
                   className="w-[35px] h-[35px] rounded-full cursor-pointer"
                 />
-                {(!isSignedIn || !hasProfile) && (
-                  <div className="absolute top-0 left-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
-                )}
               </div>
             )}
             <span className={`font-semibold text-[18px] `}>

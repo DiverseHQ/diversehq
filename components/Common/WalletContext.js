@@ -17,6 +17,7 @@ import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 import { userRoles } from '../../utils/config'
 import { useNotify } from './NotifyContext'
 import { useQueryClient } from '@tanstack/react-query'
+import { useLensUserContext } from '../../lib/LensUserContext'
 export const WalletContext = createContext([])
 
 export const WalletProvider = ({ children }) => {
@@ -27,6 +28,7 @@ export const WalletProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
   const { disconnect } = useDisconnect()
   const queryClient = useQueryClient()
+  const { refetch } = useLensUserContext()
 
   useEffect(() => {
     if (signer && address) {
@@ -46,6 +48,7 @@ export const WalletProvider = ({ children }) => {
     await queryClient.invalidateQueries({
       queryKey: ['lensUser', 'defaultProfile']
     })
+    await refetch()
   }
 
   useEffect(() => {
@@ -111,6 +114,7 @@ export const WalletProvider = ({ children }) => {
           await queryClient.invalidateQueries({
             queryKey: ['lensUser', 'defaultProfile']
           })
+          await refetch()
           disconnect()
         }
         return

@@ -686,20 +686,20 @@ const LensPostCard = ({ post, loading }) => {
                   </Tooltip>
                 )}
 
-                {postInfo?.collectModule?.__typename ===
+                {(postInfo?.collectModule?.__typename ===
                   'FreeCollectModuleSettings' ||
-                  (postInfo?.collectModule?.__typename ===
-                    'FeeCollectModuleSettings' && (
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <LensCollectButton
-                        publication={post}
-                        totalCollects={postInfo?.stats?.totalAmountOfCollects}
-                        hasCollectedByMe={postInfo?.hasCollectedByMe}
-                        author={postInfo?.profile}
-                        collectModule={postInfo?.collectModule}
-                      />
-                    </span>
-                  ))}
+                  postInfo?.collectModule?.__typename ===
+                    'FeeCollectModuleSettings') && (
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <LensCollectButton
+                      publication={post}
+                      totalCollects={postInfo?.stats?.totalAmountOfCollects}
+                      hasCollectedByMe={postInfo?.hasCollectedByMe}
+                      author={postInfo?.profile}
+                      collectModule={postInfo?.collectModule}
+                    />
+                  </span>
+                )}
                 <span onClick={(e) => e.stopPropagation()}>
                   <PostShareButton
                     url={`https://app.diversehq.xyz/p/${postInfo?.id}`}

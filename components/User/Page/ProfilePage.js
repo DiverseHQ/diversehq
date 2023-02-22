@@ -35,7 +35,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const { pathname } = router
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  const { FollowButton } = useLensFollowButton({
+  const { FollowButton, isFollowedByMe } = useLensFollowButton({
     profileId: lensProfile?.id
   })
 
@@ -192,7 +192,9 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                           Edit
                         </Link>
                       )}
-                    <MessageButton userLensProfile={lensProfile} />
+                    {isFollowedByMe && (
+                      <MessageButton userLensProfile={lensProfile} />
+                    )}
                   </div>
                 </div>
                 {isMobile && (

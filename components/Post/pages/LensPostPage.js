@@ -40,7 +40,7 @@ const LensPostPage = ({ id, post }) => {
   )
   const [userLensProfile, setUserLensProfile] = useState({})
   const [profile, setProfile] = useState({})
-  const { FollowButton } = useLensFollowButton({
+  const { FollowButton, isFollowedByMe } = useLensFollowButton({
     profileId: userLensProfile?.id
   })
 
@@ -273,7 +273,9 @@ const LensPostPage = ({ id, post }) => {
                       </div>
                     </div>
                     <div className="self-start">
-                      <MessageButton userLensProfile={userLensProfile} />
+                      {isFollowedByMe && (
+                        <MessageButton userLensProfile={userLensProfile} />
+                      )}
                     </div>
                   </div>
                   <p className="-translate-y-2 text-p-text">{profile?.bio}</p>

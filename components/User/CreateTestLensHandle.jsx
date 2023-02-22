@@ -13,6 +13,7 @@ import { pollUntilIndexed } from '../../lib/indexer/has-transaction-been-indexed
 import { BigNumber, utils } from 'ethers'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useQueryClient } from '@tanstack/react-query'
+import { useLensUserContext } from '../../lib/LensUserContext'
 
 const CreateTestLensHandle = () => {
   const { mutateAsync: createProfile } = useCreateProfileMutation()
@@ -20,6 +21,7 @@ const CreateTestLensHandle = () => {
     useCreateSetDefaultProfileTypedDataMutation()
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast()
+  const { refetch } = useLensUserContext()
 
   const { notifyError, notifySuccess, notifyInfo } = useNotify()
   const { hideModal } = usePopUpModal()
@@ -134,6 +136,7 @@ const CreateTestLensHandle = () => {
     await queryClient.invalidateQueries({
       queryKey: ['defaultProfile']
     })
+    await refetch()
     hideModal()
   }
   useEffect(() => {
