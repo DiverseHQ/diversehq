@@ -17,6 +17,7 @@ import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import getAvatar from '../User/lib/getAvatar'
+import { scrollToTop } from '../../lib/helpers'
 
 const Navbar = () => {
   const router = useRouter()
@@ -55,6 +56,14 @@ const Navbar = () => {
     await updateLensNotificationCount()
     updateNotificationCount()
     router.push('/notification')
+  }
+
+  const routeToHome = () => {
+    router.push('/')
+  }
+
+  const routeToExplore = () => {
+    router.push('/explore')
   }
 
   const showMoreOptions = (e) => {
@@ -124,24 +133,39 @@ const Navbar = () => {
         </div>
         <SearchModal />
         <div className="flex flex-row gap-0.5 lg:gap-1">
-          <Link href={'/'}>
-            <button
-              className={`font-medium ${
-                active === 'home' && 'bg-p-btn-hover'
-              } hover:bg-p-btn-hover  cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
-            >
-              Home
-            </button>
-          </Link>
-          <Link href={'/explore'}>
-            <button
-              className={`font-medium ${
-                active === 'explore' && 'bg-p-btn-hover'
-              } hover:bg-p-btn-hover cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
-            >
-              Explore
-            </button>
-          </Link>
+          <button
+            className={`font-medium ${
+              active === 'home' && 'bg-p-btn-hover'
+            } hover:bg-p-btn-hover  cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
+            onClick={() => {
+              if (
+                router.pathname === '/' ||
+                router.pathname.startsWith('/feed')
+              ) {
+                scrollToTop()
+              } else {
+                routeToHome()
+                return
+              }
+            }}
+          >
+            Home
+          </button>
+          <button
+            className={`font-medium ${
+              active === 'explore' && 'bg-p-btn-hover'
+            } hover:bg-p-btn-hover cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
+            onClick={() => {
+              if (router.pathname.startsWith('/explore')) {
+                scrollToTop()
+              } else {
+                routeToExplore()
+                return
+              }
+            }}
+          >
+            Explore
+          </button>
           <div className="flex flex-col text-p-text font-medium">
             <button
               className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-btn-hover`}

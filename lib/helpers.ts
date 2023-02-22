@@ -35,3 +35,10 @@ export const getLevelAndThresholdXP = (totalXP: number) => {
     thresholdXP
   }
 }
+
+export const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
