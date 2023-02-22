@@ -58,6 +58,7 @@ const MirrorButton = ({ postInfo }) => {
         })
         console.log(postTypedResult)
         notifySuccess('Mirrored successfully!')
+        setMirrored(true)
         setLoading(false)
         return
       } else {
@@ -79,6 +80,7 @@ const MirrorButton = ({ postInfo }) => {
         )
         console.log(postTypedResult, 'postTypedResult', signTransaction)
         notifySuccess('Mirrored successfully!')
+        setMirrored(true)
         setLoading(false)
       }
     } catch (err) {
