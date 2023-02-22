@@ -59,7 +59,6 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
     lensProfile?.coverPicture?.__typename === 'NftImage'
       ? getIPFSLink(lensProfile?.coverPicture?.uri)
       : getIPFSLink(lensProfile?.coverPicture?.original?.url)
-  console.log('_profileBanner: ', _profileBanner)
   const { isMobile } = useDevice()
 
   return (
