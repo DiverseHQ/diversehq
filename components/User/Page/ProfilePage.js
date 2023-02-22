@@ -19,13 +19,8 @@ import { BsCollection } from 'react-icons/bs'
 import { MdOutlineGroups } from 'react-icons/md'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 import getStampFyiURL from '../lib/getStampFyiURL'
-import { CiMail } from 'react-icons/ci'
-import useXmtpClient from '../../Messages/hooks/useXmtpClient'
-import { CircularProgress } from '@mui/material'
-import { useMessageStore } from '../../../store/message'
-import { buildConversationKey } from '../../Messages/lib/conversationKey'
-import buildConversationId from '../../Messages/lib/buildConversationId'
 import useLensFollowButton from '../useLensFollowButton'
+import MessageButton from '../../Messages/MessageButton'
 
 const ProfilePage = ({ _profile, _lensProfile }) => {
   const [profile, setProfile] = useState(_profile)
@@ -39,17 +34,8 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   const router = useRouter()
   const { pathname } = router
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const { client, initXmtpClient, loading } = useXmtpClient()
-  const setMessageProfiles = useMessageStore(
-    (state) => state.setMessageProfiles
-  )
-  const messageProfiles = useMessageStore((state) => state.messageProfiles)
-  const setConversationKey = useMessageStore(
-    (state) => state.setConversationKey
-  )
-  const setIsOpen = useMessageStore((state) => state.setIsOpen)
 
-  const { FollowButton, isFollowedByMe } = useLensFollowButton({
+  const { FollowButton } = useLensFollowButton({
     profileId: lensProfile?.id
   })
 
@@ -110,22 +96,6 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
   //   navigator.clipboard.writeText(profile.walletAddress)
   //   notifyInfo('Copied to clipboard')
   // }
-
-  const handleDmClick = async () => {
-    if (!client) {
-      await initXmtpClient()
-    }
-    const newMessagesProfile = new Map(messageProfiles)
-    const peerAddress = lensProfile?.ownedBy
-    const key = buildConversationKey(
-      peerAddress,
-      buildConversationId(myLensProfile?.defaultProfile?.id, lensProfile.id)
-    )
-    newMessagesProfile.set(key, lensProfile)
-    setMessageProfiles(newMessagesProfile)
-    setConversationKey(key)
-    setIsOpen(true)
-  }
 
   return (
     <div>
@@ -201,7 +171,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                     </div>
                   )}
 
-                  <div className="flex flex-row items-start my-2 md:my-3 px-2 py-1">
+                  <div className="flex flex-row items-center my-2 md:my-3 px-2 py-1">
                     {hasProfile &&
                       isSignedIn &&
                       myLensProfile &&
@@ -222,22 +192,7 @@ const ProfilePage = ({ _profile, _lensProfile }) => {
                           Edit
                         </Link>
                       )}
-                    {lensProfile &&
-                      isSignedIn &&
-                      hasProfile &&
-                      lensProfile.ownedBy !==
-                        myLensProfile?.defaultProfile.ownedBy &&
-                      isFollowedByMe && (
-                        <div
-                          className="p-1 rounded-xl cursor-pointer hover:bg-p-btn-hover flex flex-row items-center space-x-1"
-                          onClick={handleDmClick}
-                        >
-                          {!loading && <CiMail className="w-6 h-6" />}
-                          {loading && (
-                            <CircularProgress size="18px" color="primary" />
-                          )}
-                        </div>
-                      )}
+                    <MessageButton userLensProfile={lensProfile} />
                   </div>
                 </div>
                 {isMobile && (

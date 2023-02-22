@@ -213,7 +213,12 @@ const LensCommentCard = ({ comment }) => {
             {!comment.id && (
               <div className="sm:mr-5 flex flex-row items-center">
                 {/* pulsing dot */}
-                <Tooltip title="Indexing" arrow>
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Indexing"
+                  arrow
+                >
                   <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
                 </Tooltip>
               </div>
@@ -240,7 +245,12 @@ const LensCommentCard = ({ comment }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <Tooltip title="More" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="More"
+                    arrow
+                  >
                     <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                       <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
@@ -264,7 +274,12 @@ const LensCommentCard = ({ comment }) => {
               <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
                 {/* upvote and downvote */}
                 <div className="flex flex-row items-center gap-x-2">
-                  <Tooltip title="Upvote" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Upvote"
+                    arrow
+                  >
                     <button
                       onClick={handleUpvote}
                       className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
@@ -280,7 +295,12 @@ const LensCommentCard = ({ comment }) => {
                     </button>
                   </Tooltip>
                   <div className="font-medium text-[#687684]">{voteCount}</div>
-                  <Tooltip title="Downvote" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Downvote"
+                    arrow
+                  >
                     <button
                       onClick={handleDownvote}
                       className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"

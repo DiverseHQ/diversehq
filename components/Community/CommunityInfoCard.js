@@ -208,7 +208,7 @@ const CommunityInfoCard = ({ _community }) => {
                 isDrawerOpen={isExploreDrawerOpen}
                 setIsDrawerOpen={setIsExploreDrawerOpen}
               >
-                <Tooltip title="More" arrow>
+                <Tooltip enterDelay={1000} leaveDelay={200} title="More" arrow>
                   <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                     <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>

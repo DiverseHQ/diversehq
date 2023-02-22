@@ -91,6 +91,8 @@ const LensCollectButton = ({
         }}
       >
         <Tooltip
+          enterDelay={1000}
+          leaveDelay={200}
           title={isCollected || hasCollectedByMe ? 'Collected' : 'Collect'}
           arrow
         >

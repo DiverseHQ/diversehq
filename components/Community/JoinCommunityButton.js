@@ -11,12 +11,13 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
   const [joined, setJoined] = useState(false)
   const { user, refreshUserInfo } = useProfile()
   const { notifyInfo } = useNotify()
+  const { isMobile } = useDevice()
+  const router = useRouter()
+
   useEffect(() => {
     if (!user || !id) return
     setJoined(user.communities.includes(id))
   }, [user, id])
-
-  const router = useRouter()
 
   const handleJoin = async () => {
     if (!user) {
@@ -51,8 +52,6 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
     }
   }
 
-  const { isMobile } = useDevice()
-
   return (
     <>
       {!joined && !loading && (
@@ -79,7 +78,7 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
               : 'w-[75px]'
           } ${
             isMobile ? 'w-[65px] py-1' : 'py-0.5'
-          } transition-all ease-in-out duration-600 bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text transition-all ease-in-out duration-600`}
+          } duration-600 bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn group/text transition-all ease-in-out duration-300`}
           onClick={(e) => {
             e.stopPropagation()
             handleLeave()
