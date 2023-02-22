@@ -11,7 +11,6 @@ import { buildConversationKey } from './lib/conversationKey'
 const MessageButton = ({ userLensProfile }) => {
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
   const [lensProfile, setLensProfile] = useState(null)
-  console.log('lensprofilemessagebutton', lensProfile)
 
   useEffect(() => {
     setLensProfile(userLensProfile)
