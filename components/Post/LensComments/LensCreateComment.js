@@ -10,10 +10,8 @@ import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
 import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
-import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
 import { FiSend } from 'react-icons/fi'
-import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import getAvatar from '../../../components/User/lib/getAvatar'
 import { useCommentStore } from '../../../store/comment'
 import ReplyMobileInfo from './ReplyMobileInfo'
@@ -43,7 +41,6 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
   // todo: add appreciate amoount using contract
 
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
-  const { user } = useProfile()
   const { isMobile } = useDevice()
 
   const onSuccessCreateComment = async (tx, tempId) => {
