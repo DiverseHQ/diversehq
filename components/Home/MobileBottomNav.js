@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { useMessageStore } from '../../store/message'
 import useNotificationsCount from '../Notification/useNotificationsCount'
+import { scrollToTop } from '../../lib/helpers'
 
 const MobileBottomNav = () => {
   const {
@@ -46,13 +47,6 @@ const MobileBottomNav = () => {
       setActive('none')
     }
   }, [pathname])
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }
 
   return (
     <div className="fixed bottom-0 w-full flex flex-row justify-evenly items-center bg-s-bg border-t-[0.5px] border-s-border">
