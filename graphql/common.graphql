@@ -178,6 +178,13 @@ fragment PostFields on Post {
   isGated
 }
 
+fragment StatsFields on PublicationStats {
+  totalUpvotes
+  totalAmountOfMirrors
+  totalAmountOfCollects
+  totalAmountOfComments
+}
+
 fragment MirrorBaseFields on Mirror {
   id
   profile {
@@ -185,6 +192,7 @@ fragment MirrorBaseFields on Mirror {
   }
   stats {
     ...PublicationStatsFields
+    ...StatsFields
   }
   metadata {
     ...MetadataOutputFields
@@ -565,5 +573,15 @@ fragment EncryptedMediaSetFields on EncryptedMediaSet {
   }
   medium {
     ...EncryptedMediaFields
+  }
+}
+
+fragment RelayerResultFields on RelayResult {
+  ... on RelayerResult {
+    txHash
+    txId
+  }
+  ... on RelayError {
+    reason
   }
 }

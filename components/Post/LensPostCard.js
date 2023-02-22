@@ -32,6 +32,7 @@ import LensCollectButton from './Collect/LensCollectButton'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import { Tooltip } from '@mui/material'
 import Attachment from './Attachment'
+import MirrorButton from './MirrorButton'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -274,7 +275,12 @@ const LensPostCard = ({ post, loading }) => {
                       href={`/u/${postInfo?.profile?.handle}`}
                       className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                     >
-                      <p className="pl-1.5 font-normal"> posted by</p>
+                      <p className="pl-1.5 font-normal">
+                        {' '}
+                        {postInfo.__typename === 'Post'
+                          ? 'posted by'
+                          : 'mirrored by'}
+                      </p>
                       <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
                         u/{postInfo?.profile?.handle}
                       </div>
@@ -697,6 +703,9 @@ const LensPostCard = ({ post, loading }) => {
                     author={postInfo?.profile}
                     collectModule={postInfo?.collectModule}
                   />
+                </span>
+                <span onClick={(e) => e.stopPropagation()}>
+                  <MirrorButton postInfo={postInfo} />
                 </span>
                 <span onClick={(e) => e.stopPropagation()}>
                   <PostShareButton
