@@ -79,10 +79,6 @@ const MirrorButton = ({ postInfo }) => {
           }
         )
         console.log(postTypedResult, 'postTypedResult')
-        if (result) {
-          setIsSuccessful(true)
-        }
-        setLoading(false)
       }
     } catch (err) {
       console.log(err)
@@ -100,8 +96,11 @@ const MirrorButton = ({ postInfo }) => {
   }, [loading, isSuccessful])
 
   useEffect(() => {
-    console.log(postInfo)
-  }, [])
+    if (result) {
+      setIsSuccessful(true)
+      setLoading(false)
+    }
+  }, [result])
   return (
     <>
       <Tooltip title="Mirror" arrow>
