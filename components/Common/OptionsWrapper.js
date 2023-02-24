@@ -43,13 +43,15 @@ const OptionsWrapper = ({
 
   return (
     <>
-      <div
-        className="relative cursor-pointer"
-        ref={popupRef}
-        onClick={handleButtonClick}
-        id="options-wrapper"
-      >
-        {children}
+      <div className="relative">
+        <div
+          className="relative cursor-pointer"
+          ref={popupRef}
+          onClick={handleButtonClick}
+          id="options-wrapper"
+        >
+          {children}
+        </div>
         {showOptionsModal && (
           <div
             className={`absolute min-w-[150px] ${

@@ -59,6 +59,7 @@ const LensAllTopPublicationsColumn = () => {
   )
 
   useEffect(() => {
+    console.log('timestamp', timestamp)
     setExploreQueryRequestParams({
       cursor: null,
       hasMore: true,
@@ -69,6 +70,7 @@ const LensAllTopPublicationsColumn = () => {
 
   const getMorePosts = async () => {
     if (exploreQueryRequestParams.posts.length === 0) return
+    if (router.pathname !== '/' && router.pathname !== '/feed/all') return
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: exploreQueryRequestParams.nextCursor

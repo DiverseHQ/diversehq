@@ -11,6 +11,7 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import FilterRow from '../Common/UI/FilterRow'
 import FilterButton from '../Common/UI/FilterButton'
 import useSort from '../Common/Hook/useSort'
+
 const NavFilterAllPosts = () => {
   const router = useRouter()
   const { pathname } = router

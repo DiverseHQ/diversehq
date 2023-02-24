@@ -1,7 +1,7 @@
-import useSort from '../Common/Hook/useSort'
 import LensJoinedTopPublicationsColumn from './LensJoinedTopPublicationsColumn'
 import LensJoinedLatestPublicationsColumn from './LensJoinedLatestPublicationsColumn'
 import { memo } from 'react'
+import useSort from '../Common/Hook/useSort'
 const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   const { isTop } = useSort()
 

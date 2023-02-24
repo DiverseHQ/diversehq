@@ -18,7 +18,7 @@ const CommunityPage = ({ community }) => {
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
               <CommunityInfoCard _community={community} />
-              <NavFilterCommunity name={community.name} />
+              <NavFilterCommunity />
               <LensPostsCommunityPublicationsColumn communityInfo={community} />
             </div>
           </div>

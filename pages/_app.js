@@ -36,6 +36,7 @@ const ROUTES_TO_RETAIN = [
 function MyApp({ Component, pageProps, isMobileView }) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  // console.log('sortObject', sortObject)
   const retainedComponents = useRef({})
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
 
@@ -52,6 +53,8 @@ function MyApp({ Component, pageProps, isMobileView }) {
   const handleRouteChangeStart = () => {
     setIsLoading(true)
     if (isRetainableRoute) {
+      console.log('router.asPath', router.asPath)
+      console.log('window.scrollY', window.scrollY)
       retainedComponents.current[router.asPath].scrollPos = window.scrollY
     }
   }
@@ -125,6 +128,8 @@ function MyApp({ Component, pageProps, isMobileView }) {
           <>
             <div>
               {Object.entries(retainedComponents.current).map(([path, c]) => {
+                console.log('path', path)
+                console.log('display', router.asPath === path)
                 return (
                   <div
                     key={path}
@@ -137,7 +142,6 @@ function MyApp({ Component, pageProps, isMobileView }) {
                 )
               })}
             </div>
-
             {!isRetainableRoute && <Component {...pageProps} />}
           </>
         </MainLayout>

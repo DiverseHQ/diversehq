@@ -1,102 +1,89 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { memo } from 'react'
 import { HiSparkles } from 'react-icons/hi'
 import { MdLeaderboard } from 'react-icons/md'
-import useDevice from '../Common/useDevice'
-
-const NavFilterCommunity = ({ name }) => {
+import FilterRow from '../Common/UI/FilterRow'
+import FilterButton from '../Common/UI/FilterButton'
+import { sortTypes } from '../../utils/config'
+import { AiOutlineDown } from 'react-icons/ai'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import OptionsWrapper from '../Common/OptionsWrapper'
+import useSort from '../Common/Hook/useSort'
+const NavFilterCommunity = () => {
   const router = useRouter()
-  const { pathname } = router
-  const [active, setActive] = useState('lens')
-  const { isMobile } = useDevice()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
+  const { sortType, isTop } = useSort()
 
-  useEffect(() => {
-    if (pathname.endsWith('/new')) {
-      setActive('new')
-    } else if (pathname.endsWith('/top')) {
-      setActive('top')
-    } else if (pathname.endsWith('/hot')) {
-      setActive('hot')
-    } else if (pathname.endsWith('/lens')) {
-      setActive('lens')
-    } else {
-      setActive('lens')
-    }
-  }, [pathname])
+  const addQueryParam = (key, value) => {
+    // @ts-ignore
+    const query = new URLSearchParams(router.query)
+    query.set(key, value)
+    setIsDrawerOpen(false)
+    setShowOptionsModal(false)
+    router.push({ query: query.toString() })
+  }
 
   return (
-    <div
-      className={`font-bold text-sm sm:text-base flex flex-row px-3 sm:px-6 md:mt-10 py-2 md:py-3 w-full sm:rounded-xl justify-start space-x-5 md:space-x-9 items-center ${
-        isMobile
-          ? 'mb-4 rounded-[10px]'
-          : 'bg-white dark:bg-s-bg border-[1px] border-p-border'
-      }`}
-    >
-      <button
-        className={`flex p-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-          active === 'lens'
-            ? `${isMobile ? 'bg-s-bg' : 'bg-p-bg'}`
-            : `${
-                isMobile
-                  ? 'bg-p-hover text-p-hover-text'
-                  : 'hover:bg-p-hover hover:text-p-hover-text'
-              }`
-        }`}
+    <FilterRow>
+      <FilterButton
+        title="New"
+        Icon={<HiSparkles />}
+        active={!isTop}
         onClick={() => {
-          router.push(`/c/${name}/feed/lens`)
+          addQueryParam('sort', sortTypes.LATEST)
         }}
-      >
-        <img src="/lensLogo.svg" className="h-5 w-5" alt="lens logo icon" />
-        <div>Lens</div>
-      </button>
-      <button
-        className={`flex p-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl
-        ${
-          active === 'new'
-            ? `${isMobile ? 'bg-s-bg' : 'bg-p-bg'}`
-            : `${
-                isMobile
-                  ? 'bg-p-hover text-p-hover-text'
-                  : 'hover:bg-p-hover hover:text-p-hover-text'
-              }`
-        }`}
+      />
+      <FilterButton
+        title="Top"
+        Icon={<MdLeaderboard />}
+        active={isTop}
         onClick={() => {
-          router.push(`/c/${name}/feed/new`)
+          addQueryParam('sort', sortTypes.TOP_TODAY)
         }}
-      >
-        <HiSparkles />
-        <div>New</div>
-      </button>
-      <button
-        className={`flex p-2 items-center hover:cursor-pointer gap-2 rounded-md sm:rounded-xl ${
-          active === 'top'
-            ? `${isMobile ? 'bg-s-bg' : 'bg-p-bg'}`
-            : `${
-                isMobile
-                  ? 'bg-p-hover text-p-hover-text'
-                  : 'hover:bg-p-hover hover:text-p-hover-text'
-              }`
-        }`}
-        onClick={() => {
-          router.push(`/c/${name}/feed/top`)
-        }}
-      >
-        <MdLeaderboard />
-        <div>Top</div>
-      </button>
-      {/* <div
-        className={`flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-xl ${
-          active === 'hot' && 'bg-white'
-        }  hover:bg-[#eee]`}
-        onClick={() => {
-          router.push('/explore/hot')
-        }}
-      >
-        <SiHotjar />
-        <button>Hot</button>
-      </div> */}
-    </div>
+      />
+      {isTop && (
+        <OptionsWrapper
+          OptionPopUpModal={() => (
+            <MoreOptionsModal
+              className="z-50"
+              list={[
+                {
+                  label: sortTypes.TOP_TODAY,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.TOP_TODAY)
+                  }
+                },
+                {
+                  label: sortTypes.TOP_WEEK,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.TOP_WEEK)
+                  }
+                },
+                {
+                  label: sortTypes.TOP_MONTH,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.TOP_MONTH)
+                  }
+                }
+              ]}
+            />
+          )}
+          position="right"
+          showOptionsModal={showOptionsModal}
+          setShowOptionsModal={setShowOptionsModal}
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
+        >
+          <FilterButton
+            title={sortType}
+            active={true}
+            IconAtEnd={<AiOutlineDown className="h-3 w-3" />}
+          />
+        </OptionsWrapper>
+      )}
+    </FilterRow>
   )
 }
 
