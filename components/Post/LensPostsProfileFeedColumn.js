@@ -21,7 +21,7 @@ const LensPostsProfileFeedColumn = ({ profileId }) => {
         cursor: cursor,
         profileId: profileId,
         limit: LENS_POST_LIMIT,
-        feedEventItemTypes: [FeedEventItemType.Post, FeedEventItemType.Mirror]
+        feedEventItemTypes: [FeedEventItemType.Post]
       },
       reactionRequest: {
         profileId: profileId

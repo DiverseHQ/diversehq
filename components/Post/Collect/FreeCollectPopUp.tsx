@@ -94,7 +94,8 @@ const FreeCollectPopUp = ({
                           'Follow back'
                         ) : (
                           <div className="flex flex-row justify-center items-center space-x-1 ">
-                            <RiUserFollowLine /> <p>Follow {author.handle}</p>
+                            <RiUserFollowLine />{' '}
+                            <p>Follow u/{author.handle.split('.')[0]}</p>
                           </div>
                         )}
                       </button>
@@ -144,7 +145,9 @@ const FreeCollectPopUp = ({
               <>
                 {!isFollowedByMe && (
                   <div className="flex flex-col items-center self-start space-x-2 mb-2 font-medium w-full">
-                    <p>Follow {author.handle} to Collect for Free</p>
+                    <p>
+                      Follow {author.handle.split('.')[0]} to Collect for Free
+                    </p>
                     <button
                       onClick={() => {
                         handleFollowProfile(author.id)
@@ -158,7 +161,8 @@ const FreeCollectPopUp = ({
                         </div>
                       ) : (
                         <div className="flex flex-row justify-center items-center space-x-1 text-p-btn-text">
-                          <RiUserFollowLine /> <p>Follow {author.handle}</p>
+                          <RiUserFollowLine />{' '}
+                          <p>Follow {author.handle.split('.')[0]}</p>
                         </div>
                       )}
                     </button>

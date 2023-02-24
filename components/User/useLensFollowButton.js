@@ -41,7 +41,13 @@ const useLensFollowButton = (request) => {
         }
       })
       setIsFollowedByMe(true)
-      notifySuccess('Followed Successfully')
+      notifySuccess(
+        `Following ${
+          data?.profile?.name
+            ? data?.profile?.name
+            : `u/${data?.profile?.handle.split('.')[0]}`
+        }`
+      )
       setLoading(false)
     } catch (e) {
       console.log(e)
@@ -87,7 +93,13 @@ const useLensFollowButton = (request) => {
     if (isSignedTx && type === 'unfollow') {
       setLoading(false)
       setIsFollowedByMe(false)
-      notifySuccess('Unfollowed Successfully')
+      notifySuccess(
+        `UnFollowed ${
+          data?.profile?.name
+            ? data?.profile?.name
+            : `u/${data?.profile?.handle.split('.')[0]}`
+        }`
+      )
     }
   }, [isSignedTx, type])
 

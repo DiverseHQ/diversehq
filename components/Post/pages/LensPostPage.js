@@ -86,8 +86,6 @@ const LensPostPage = ({ id, post }) => {
     postInfo?.profile?.coverPicture?.__typename === 'NftImage'
       ? getIPFSLink(postInfo?.profile?.coverPicture?.uri)
       : getIPFSLink(postInfo?.profile?.coverPicture?.original?.url)
-
-  console.log('_profileBanner', _profileBanner)
   return (
     <>
       <div className="w-full flex flex-row space-x-10 justify-center pb-[50px]">

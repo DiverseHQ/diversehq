@@ -537,7 +537,9 @@ const LensPostCard = ({ post, loading }) => {
                     <Attachment
                       publication={postInfo}
                       className={`${
-                        router.pathname.startsWith('/p') ? '' : 'max-h-[450px]'
+                        router.pathname.startsWith('/p')
+                          ? 'max-h-[calc(100vh-50px)]'
+                          : 'max-h-[450px]'
                       }`}
                       showAll
                     />

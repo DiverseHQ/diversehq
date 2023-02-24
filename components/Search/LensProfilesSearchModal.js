@@ -38,7 +38,7 @@ const LensProfilesSearchModal = ({
   }, [searchProfileQuery?.data?.search?.items])
 
   const handleProfileClicked = (handle) => {
-    router.push(`/u/${handle}`)
+    router.push(`/u/${handle.split('.')[0]}`)
   }
 
   return (

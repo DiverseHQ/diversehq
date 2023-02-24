@@ -245,7 +245,7 @@ const FeeCollectPopUp = ({
                 <div className="px-4 w-full  mb-1 mt-1 ">
                   <p className="ml-1">
                     {' '}
-                    Follow {author.handle} To Collect the Post
+                    Follow u/{author.handle.split('.')[0]} To Collect the Post
                   </p>
                   <button
                     onClick={() => {
@@ -262,7 +262,8 @@ const FeeCollectPopUp = ({
                       'Follow back'
                     ) : (
                       <div className="flex flex-row justify-center items-center space-x-2 text-p-btn-text">
-                        <RiUserFollowLine /> <p>Follow {author.handle}</p>
+                        <RiUserFollowLine />{' '}
+                        <p>Follow u/{author.handle.split('.')[0]}</p>
                       </div>
                     )}
                   </button>
