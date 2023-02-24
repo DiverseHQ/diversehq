@@ -1,16 +1,11 @@
 import { useRouter } from 'next/router'
-import { useEffect, useReducer } from 'react'
+import { useEffect, useState } from 'react'
 import { sortTypes } from '../../../utils/config'
-import useRouterLoading from './useRouterLoading'
-
-function reducer(state, action) {
-  // update state based on action values
-  return { ...state, ...action }
-}
 
 let timestamp = Date.now() - 86400000
 
 function getTopSortAndTimestamp(sortType) {
+  console.log('sortType', sortType)
   if (!sortType) {
     return {
       isTop: false,
@@ -32,7 +27,11 @@ function getTopSortAndTimestamp(sortType) {
         // set newTimestamp to 30 days ago
         newTimestamp = Date.now() - 2592000000
       }
-      if (Math.abs(newTimestamp - timestamp) < 1000) {
+      console.log(
+        'Math.abs(newTimestamp - timestamp)',
+        Math.abs(newTimestamp - timestamp)
+      )
+      if (Math.abs(newTimestamp - timestamp) > 1000) {
         timestamp = newTimestamp
       }
       return { isTop: true, sortType: sortType, timestamp }
@@ -47,16 +46,20 @@ function getTopSortAndTimestamp(sortType) {
 }
 const useSort = () => {
   const { query } = useRouter()
-  const { loading } = useRouterLoading()
   const initialState = getTopSortAndTimestamp(query?.sort)
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, setState] = useState(initialState)
   useEffect(() => {
-    if (loading) return
+    console.log('query?.sort', query?.sort)
     if (query?.sort === state.sortType) return
-    dispatch(getTopSortAndTimestamp(query?.sort))
+    const { isTop, sortType, timestamp } = getTopSortAndTimestamp(query?.sort)
+    setState({ isTop, sortType, timestamp })
     // @ts-ignore
   }, [query?.sort])
-  return { ...state }
+
+  useEffect(() => {
+    console.log('state?.isTop', state?.isTop)
+  }, [state?.isTop])
+  return state
 }
 
 export default useSort

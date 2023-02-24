@@ -9,12 +9,13 @@ import { sortTypes } from '../../utils/config'
 import { AiOutlineDown } from 'react-icons/ai'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import OptionsWrapper from '../Common/OptionsWrapper'
-import useSort from '../Common/Hook/useSort'
+import { useSortHook } from '../Common/SortWrapper'
+import { useEffect } from 'react'
 const NavFilterCommunity = () => {
   const router = useRouter()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
-  const { sortType, isTop } = useSort()
+  const { sortType, isTop } = useSortHook()
 
   const addQueryParam = (key, value) => {
     // @ts-ignore
@@ -24,6 +25,11 @@ const NavFilterCommunity = () => {
     setShowOptionsModal(false)
     router.push({ query: query.toString() })
   }
+
+  useEffect(() => {
+    console.log('sortType', sortType)
+    console.log('isTop', isTop)
+  }, [sortType, isTop])
 
   return (
     <FilterRow>

@@ -5,16 +5,14 @@ import LensAllTopPublicationsColumn from './LensAllTopPublicationsColumn'
 
 const LensPostsExplorePublicationsColumn = () => {
   const { isTop } = useSort()
-
+  console.log('lensPostExplorePublicationColumn')
   return (
     <>
       <div className={`${isTop ? 'block' : 'hidden'}`}>
         <LensAllTopPublicationsColumn />
       </div>
-      <div>
-        <LensAllLatestPublicationsColumn
-          className={`${isTop ? 'block' : 'hidden'}`}
-        />
+      <div className={`${isTop ? 'hidden' : 'block'}`}>
+        <LensAllLatestPublicationsColumn />
       </div>
     </>
   )
