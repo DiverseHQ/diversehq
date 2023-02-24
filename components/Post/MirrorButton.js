@@ -11,32 +11,25 @@ import { useNotify } from '../Common/NotifyContext'
 
 const MirrorButton = ({ postInfo }) => {
   const isMirror = postInfo.__typename === 'Mirror'
-  const { mutateAsync: mirrorPost, isLoading } =
-    useCreateMirrorTypedDataMutation()
+  const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
   const { notifyError, notifySuccess } = useNotify()
   const { error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast(false)
-  const {
-    mutateAsync: mirrorPostViaDispatcher,
-    isLoading: dispatcherLoading,
-    error: dispatcherError
-  } = useCreateMirrorViaDispatcherMutation()
+    useSignTypedDataAndBroadcast()
+  const { mutateAsync: mirrorPostViaDispatcher } =
+    useCreateMirrorViaDispatcherMutation()
   const [mirrorCount, setMirrorCount] = useState(
     postInfo?.stats?.totalAmountOfMirrors
       ? postInfo?.stats?.totalAmountOfMirrors
       : 0
   )
+  const [isSuccessful, setIsSuccessful] = useState(false)
   const [mirrored, setMirrored] = useState(
     isMirror
       ? postInfo?.mirrorOf?.mirrors?.length > 0
       : postInfo?.mirrors?.length > 0
   )
-  // console.log(postInfo?.mirrors?.length > 0, 'rando')
   const [loading, setLoading] = useState(false)
-
-  console.log(mirrored, 'isMirrored', postInfo?.mirrors?.length > 0)
-  console.log(postInfo)
 
   const handleMirrorPost = async () => {
     setLoading(true)
@@ -44,6 +37,7 @@ const MirrorButton = ({ postInfo }) => {
     try {
       if (!isSignedIn) {
         notifyError('Please sign in to mirror a post')
+        setLoading(false)
         return
       }
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
@@ -57,8 +51,9 @@ const MirrorButton = ({ postInfo }) => {
           }
         })
         console.log(postTypedResult)
-        notifySuccess('Mirrored successfully!')
-        setMirrored(true)
+        if (postTypedResult) {
+          setIsSuccessful(true)
+        }
         setLoading(false)
         return
       } else {
@@ -71,6 +66,11 @@ const MirrorButton = ({ postInfo }) => {
             }
           }
         })
+        if (!postTypedResult) {
+          notifyError('Something went wrong')
+          setLoading(false)
+          return
+        }
         await signTypedDataAndBroadcast(
           postTypedResult.createMirrorTypedData.typedData,
           {
@@ -78,9 +78,10 @@ const MirrorButton = ({ postInfo }) => {
             type: 'Mirror'
           }
         )
-        console.log(postTypedResult, 'postTypedResult', signTransaction)
-        notifySuccess('Mirrored successfully!')
-        setMirrored(true)
+        console.log(postTypedResult, 'postTypedResult')
+        if (result) {
+          setIsSuccessful(true)
+        }
         setLoading(false)
       }
     } catch (err) {
@@ -91,11 +92,16 @@ const MirrorButton = ({ postInfo }) => {
   }
 
   useEffect(() => {
-    if (!dispatcherLoading && !loading && !mirrored) {
+    if (isSuccessful && !loading) {
       setMirrorCount((prev) => prev + 1)
-      console.log('This ran once again')
+      notifySuccess('Mirrored successfully!')
+      setMirrored(true)
     }
-  }, [dispatcherLoading, loading])
+  }, [loading, isSuccessful])
+
+  useEffect(() => {
+    console.log(postInfo)
+  }, [])
   return (
     <>
       <Tooltip title="Mirror" arrow>
