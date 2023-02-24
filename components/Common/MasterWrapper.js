@@ -9,7 +9,6 @@ import LensUserContextProvider from '../../lib/LensUserContext'
 import LexicalWrapper from './LexicalWrapper'
 import ThemeProvider from './ThemeProvider'
 import PostIndexingWrapper from '../Post/IndexingContext/PostIndexingWrapper'
-import SortWrapper from './SortWrapper'
 
 const queryClient = new QueryClient()
 
@@ -24,7 +23,7 @@ const MasterWrapper = ({ children }) => {
                 <LexicalWrapper>
                   <PostIndexingWrapper>
                     <CustomPopUpModalProvider>
-                      <SortWrapper>{children}</SortWrapper>
+                      {children}
                     </CustomPopUpModalProvider>
                   </PostIndexingWrapper>
                 </LexicalWrapper>
