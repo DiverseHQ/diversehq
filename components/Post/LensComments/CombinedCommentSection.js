@@ -104,7 +104,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   }
 
   return (
-    <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border py-2 ">
+    <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border overflow-hidden py-2 ">
       {/* create commentd */}
       {postInfo && (
         <LensCreateComment

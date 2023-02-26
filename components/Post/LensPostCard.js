@@ -228,7 +228,7 @@ const LensPostCard = ({ post, loading }) => {
         <div
           className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:pb-2 border-b-[1px] border-[#eee] dark:border-p-border rounded-t-2xl ${
             router.pathname.startsWith('/p')
-              ? 'sm:my-3 rounded-b-2xl'
+              ? 'sm:my-3 rounded-b-2xl sm:border-[1px] sm:border-s-border'
               : 'cursor-pointer'
           }`}
           onClick={() => {

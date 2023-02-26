@@ -97,7 +97,7 @@ const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
     handleExplorePublications()
   }, [data?.explorePublications?.pageInfo?.next])
   return (
-    <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border">
+    <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border overflow-hidden">
       <InfiniteScroll
         scrollThreshold={LENS_INFINITE_SCROLL_THRESHOLD}
         dataLength={exploreQueryRequestParams.posts.length}

@@ -44,7 +44,7 @@ const MainMsgModal = ({ isMobile = false }: Props) => {
       } ${
         isMobile
           ? 'w-full h-full left-0 right-0'
-          : 'w-[450px] h-[550px] rounded-t-2xl shadow-2xl border-[1px] border-p-border  right-4'
+          : 'w-[450px] h-[550px] rounded-t-2xl shadow-2xl border-[1px] border-s-border  right-4'
       } duration-500 transition-all z-40 `}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
