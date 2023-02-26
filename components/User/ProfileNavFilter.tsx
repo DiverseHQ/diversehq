@@ -80,7 +80,7 @@ const ProfileNavFilter = ({ _lensProfile }: Props) => {
               setIsDrawerOpen={setIsDrawerOpen}
             >
               <FilterButton
-                title={sortType}
+                title={String(sortType)}
                 active={true}
                 IconAtEnd={<AiOutlineDown className="h-3 w-3" />}
               />
