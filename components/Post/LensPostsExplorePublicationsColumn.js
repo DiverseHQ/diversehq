@@ -5,7 +5,6 @@ import LensAllTopPublicationsColumn from './LensAllTopPublicationsColumn'
 
 const LensPostsExplorePublicationsColumn = () => {
   const { isTop } = useSort()
-  console.log('lensPostExplorePublicationColumn')
   return (
     <>
       <div className={`${isTop ? 'block' : 'hidden'}`}>

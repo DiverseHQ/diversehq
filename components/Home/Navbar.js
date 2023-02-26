@@ -136,7 +136,7 @@ const Navbar = () => {
           <button
             className={`font-medium ${
               active === 'home' && 'bg-p-btn-hover'
-            } hover:bg-p-btn-hover  cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
+            } hover:bg-p-btn-hover  cursor-pointer rounded-md px-2 lg:px-3 py-1 text-p-text`}
             onClick={() => {
               if (
                 router.pathname === '/' ||
@@ -154,7 +154,7 @@ const Navbar = () => {
           <button
             className={`font-medium ${
               active === 'explore' && 'bg-p-btn-hover'
-            } hover:bg-p-btn-hover cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
+            } hover:bg-p-btn-hover cursor-pointer rounded-md px-2 lg:px-3 py-1 text-p-text`}
             onClick={() => {
               if (router.pathname.startsWith('/explore')) {
                 scrollToTop()
@@ -168,14 +168,14 @@ const Navbar = () => {
           </button>
           <div className="flex flex-col text-p-text font-medium">
             <button
-              className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-btn-hover`}
+              className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md  hover:bg-p-btn-hover`}
               onClick={getJoinedCommunities}
             >
               <p>Joined</p>
               <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
             </button>
             <div
-              className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-md sm:rounded-xl absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
+              className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-md absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
               ref={dropdownRef}
             >
               {showJoinedCommunities && (
@@ -219,7 +219,7 @@ const Navbar = () => {
           <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
           {/* a green count dot */}
           {Number(notificationsCount + lensNotificationsCount) > 0 && (
-            <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg">
+            <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg dark:border-s-bg">
               <span>{notificationsCount + lensNotificationsCount}</span>
             </div>
           )}

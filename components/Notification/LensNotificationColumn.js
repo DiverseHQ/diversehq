@@ -179,8 +179,8 @@ const LensNotificationColumn = () => {
                     notification={notification}
                     isRead={
                       notification.createdAt <
-                      (user.lastFetchedLensNotificationsTime
-                        ? user.lastFetchedLensNotificationsTime
+                      (user?.lastFetchedLensNotificationsTime
+                        ? user?.lastFetchedLensNotificationsTime
                         : new Date())
                     }
                   />

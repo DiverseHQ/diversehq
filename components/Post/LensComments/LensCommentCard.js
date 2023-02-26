@@ -208,6 +208,7 @@ const LensCommentCard = ({ comment }) => {
                 </div>
               </Link>
               <ReactTimeAgo
+                timeStyle="twitter"
                 className="text-xs sm:text-sm text-s-text"
                 date={new Date(comment.createdAt)}
                 locale="en-US"

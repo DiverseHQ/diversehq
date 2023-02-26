@@ -178,6 +178,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
               </Link>
               <div className="text-xs sm:text-sm text-s-text ml-2">
                 <ReactTimeAgo
+                  timeStyle="twitter"
                   date={new Date(comment.updatedAt || comment.createdAt)}
                   locale="en-US"
                 />

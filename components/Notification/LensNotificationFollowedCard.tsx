@@ -32,9 +32,11 @@ const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
             {notification?.wallet?.defaultProfile?.isFollowedByMe && 'finally '}
             followed you
           </div>
-          {!notification?.wallet?.defaultProfile?.isFollowedByMe && (
-            <FollowButton />
-          )}
+          <div>
+            {!notification?.wallet?.defaultProfile?.isFollowedByMe && (
+              <FollowButton />
+            )}
+          </div>
         </div>
       )}
       createdAt={notification?.createdAt}

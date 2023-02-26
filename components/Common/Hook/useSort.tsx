@@ -4,8 +4,7 @@ import { sortTypes } from '../../../utils/config'
 
 let timestamp = Date.now() - 86400000
 
-function getTopSortAndTimestamp(sortType) {
-  console.log('sortType', sortType)
+function getTopSortAndTimestamp(sortType: string | string[]) {
   if (!sortType) {
     return {
       isTop: false,
@@ -27,10 +26,6 @@ function getTopSortAndTimestamp(sortType) {
         // set newTimestamp to 30 days ago
         newTimestamp = Date.now() - 2592000000
       }
-      console.log(
-        'Math.abs(newTimestamp - timestamp)',
-        Math.abs(newTimestamp - timestamp)
-      )
       if (Math.abs(newTimestamp - timestamp) > 1000) {
         timestamp = newTimestamp
       }
@@ -49,16 +44,12 @@ const useSort = () => {
   const initialState = getTopSortAndTimestamp(query?.sort)
   const [state, setState] = useState(initialState)
   useEffect(() => {
-    console.log('query?.sort', query?.sort)
     if (query?.sort === state.sortType) return
     const { isTop, sortType, timestamp } = getTopSortAndTimestamp(query?.sort)
     setState({ isTop, sortType, timestamp })
     // @ts-ignore
   }, [query?.sort])
 
-  useEffect(() => {
-    console.log('state?.isTop', state?.isTop)
-  }, [state?.isTop])
   return state
 }
 

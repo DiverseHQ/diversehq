@@ -219,6 +219,7 @@ const PostCard = ({ _post, setPosts }) => {
                 {post.createdAt && (
                   <div className="text-xs sm:text-sm text-s-text ml-2">
                     <ReactTimeAgo
+                      timeStyle="twitter"
                       date={new Date(post.createdAt)}
                       locale="en-US"
                     />
@@ -268,6 +269,7 @@ const PostCard = ({ _post, setPosts }) => {
                     {post.createdAt && (
                       <div className="text-xs sm:text-sm text-s-text ml-2">
                         <ReactTimeAgo
+                          timeStyle="twitter"
                           date={new Date(post.createdAt)}
                           locale="en-US"
                         />

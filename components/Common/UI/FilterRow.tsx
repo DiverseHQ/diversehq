@@ -9,23 +9,22 @@ interface Props {
 const FilterRow = ({ classname, children, EndButton }: Props) => {
   return (
     <>
-      {!EndButton && (
-        <div
-          className={`font-bold text-sm sm:text-base flex flex-row mt-3 py-1 w-full sm:rounded-xl justify-between sm:justify-start sm:space-x-8 items-center text-p-text ${classname}`}
-        >
-          {children}
-        </div>
-      )}
-      {EndButton && (
-        <div
-          className={`font-bold text-sm sm:text-base flex flex-row mt-3 py-1 w-full sm:rounded-xl justify-between items-center text-p-text ${classname}`}
-        >
-          <div className="flex flex-row sm:space-x-8 justify-center items-center">
-            {children}
-          </div>
-          {EndButton}
-        </div>
-      )}
+      <div
+        className={`font-bold text-sm sm:text-base flex flex-row px-2 sm:px-0 py-3 w-full  items-center space-x-4 sm:space-x-8  sm:rounded ${
+          EndButton ? 'justify-between' : 'justify-start'
+        } ${classname}`}
+      >
+        {EndButton ? (
+          <>
+            <div className="flex flex-row space-x-4 sm:space-x-8 justify-center items-center">
+              {children}
+            </div>
+            {EndButton}
+          </>
+        ) : (
+          <>{children}</>
+        )}
+      </div>
     </>
   )
 }

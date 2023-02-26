@@ -2,15 +2,9 @@ import React, { useEffect, useState } from 'react'
 import MobileNavSidebar from './MobileNavSidebar'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
-import MobileFilterDrawerButton from './MobileFilterDrawerButton'
-import ExploreFilterDrawerButton from '../Explore/ExploreFilterDrawerButton'
-import NotificationFilterDrawerButton from '../Notification/NotificationFilterDrawerButton'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { sortTypes } from '../../utils/config'
-import OptionsWrapper from '../Common/OptionsWrapper'
-import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import { HiOutlineSparkles } from 'react-icons/hi'
-import { AiOutlineDown, AiOutlineFire } from 'react-icons/ai'
+
 import LensLoginButton from '../Common/LensLoginButton'
 import getAvatar from '../User/lib/getAvatar'
 // import BottomDrawer from './BottomDrawer'
@@ -21,8 +15,6 @@ const NewMobileTopNav = () => {
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const [sortType, setSortType] = useState(sortTypes.LATEST)
   // also can remove this.. ?
-  const [showOptionsModal, setShowOptionsModal] = useState(false)
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   useEffect(() => {
     if (router.query.sort && sortType !== router.query.sort) {
@@ -32,12 +24,6 @@ const NewMobileTopNav = () => {
       setSortType(sortTypes.LATEST)
     }
   }, [router.query])
-
-  const addQueryParam = (key, value) => {
-    const query = new URLSearchParams(router.query)
-    query.set(key, value)
-    router.push({ query: query.toString() })
-  }
 
   const showTopNav = () => {
     if (
@@ -79,88 +65,10 @@ const NewMobileTopNav = () => {
               {router.pathname.startsWith('/notification') && 'Notifications'}
               {(router.pathname.startsWith('/feed/all') ||
                 router.pathname.startsWith('/feed/foryou') ||
-                router.pathname === '/') && (
-                <OptionsWrapper
-                  OptionPopUpModal={() => (
-                    <MoreOptionsModal
-                      className="z-50"
-                      list={[
-                        {
-                          label: sortTypes.LATEST,
-                          onClick: () => {
-                            addQueryParam('sort', sortTypes.LATEST)
-                            setSortType(sortTypes.LATEST)
-                            setIsDrawerOpen(false)
-                            setShowOptionsModal(false)
-                          },
-                          icon: () => <HiOutlineSparkles className="h-5 w-5" />
-                        },
-                        {
-                          label: sortTypes.TOP_TODAY,
-                          onClick: () => {
-                            addQueryParam('sort', sortTypes.TOP_TODAY)
-                            setSortType(sortTypes.TOP_TODAY)
-                            setIsDrawerOpen(false)
-                            setShowOptionsModal(false)
-                          },
-                          icon: () => <AiOutlineFire className="h-5 w-5" />
-                        },
-                        {
-                          label: sortTypes.TOP_WEEK,
-                          onClick: () => {
-                            addQueryParam('sort', sortTypes.TOP_WEEK)
-                            setSortType(sortTypes.TOP_WEEK)
-                            setIsDrawerOpen(false)
-                            setShowOptionsModal(false)
-                          },
-                          icon: () => <AiOutlineFire className="h-5 w-5" />
-                        },
-                        {
-                          label: sortTypes.TOP_MONTH,
-                          onClick: () => {
-                            addQueryParam('sort', sortTypes.TOP_MONTH)
-                            setSortType(sortTypes.TOP_MONTH)
-                            setIsDrawerOpen(false)
-                            setShowOptionsModal(false)
-                          },
-                          icon: () => <AiOutlineFire className="h-5 w-5" />
-                        }
-                      ]}
-                    />
-                  )}
-                  position="right"
-                  showOptionsModal={showOptionsModal}
-                  setShowOptionsModal={setShowOptionsModal}
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                >
-                  <button
-                    className={` flex items-center hover:cursor-pointer gap-2 py-1 px-2 rounded-full bg-s-bg  hover:bg-p-hover hover:text-p-hover-text`}
-                  >
-                    <div className="flex flex-row items-center justify-center space-x-1">
-                      {sortType === sortTypes.LATEST ? (
-                        <HiOutlineSparkles className="h-4 w-4" />
-                      ) : (
-                        <AiOutlineFire className="h-4 w-4" />
-                      )}
-                      <div>{sortType}</div>
-                    </div>
-                    <AiOutlineDown className="w-3 h-3" />
-                  </button>
-                </OptionsWrapper>
-              )}
+                router.pathname === '/') &&
+                'Home'}
             </span>
           </div>
-
-          {(router.pathname === '/' || router.pathname.startsWith('/feed')) && (
-            <MobileFilterDrawerButton />
-          )}
-          {router.pathname.startsWith('/explore') && (
-            <ExploreFilterDrawerButton />
-          )}
-          {router.pathname.startsWith('/notification') && (
-            <NotificationFilterDrawerButton />
-          )}
         </>
       </div>
       <MobileNavSidebar

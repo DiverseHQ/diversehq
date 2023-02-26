@@ -165,7 +165,7 @@
 }
 
 :root {
-  --background: #eef1ff;
+  --background: #f6f8ff;
   --background-secondary: #ffffff;
   /* --accent-primary: #1d9bf0; */
   --accent-primary: #9378d8;
@@ -201,6 +201,12 @@
   --main-btn-text: #9378d8;
   --main-btn-hover-bg: #9378d8;
   --main-btn-hover-text: #ffffff;
+
+  --select-btn-bg: #ffffff;
+  --select-btn-text: #030303;
+  --select-btn-hover-bg: #fcfcfc;
+  --select-active-btn-bg: #d2daff;
+  --select-active-btn-text: #030303;
 }
 
 [data-theme='dark'] {
@@ -228,6 +234,12 @@
   --main-btn-text: #ffffff;
   --main-btn-hover-bg: #d7dadc;
   --main-btn-hover-text: #1a1a1b;
+
+  --select-btn-bg: #272727;
+  --select-btn-text: #fbfbfb;
+  --select-btn-hover-bg: #3b3b3b;
+  --select-active-btn-bg: #ffffff;
+  --select-active-btn-text: #464646;
 }
 
 .custom-zoom [data-rmiz-modal-overlay='visible'] {

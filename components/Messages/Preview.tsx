@@ -58,7 +58,7 @@ const Preview: FC<Props> = ({ profile, message, conversationKey }) => {
         {/** day js time go in format of 3M, 3H, 3D */}
         {/** dayjs with date and local time */}
         {/* {dayjs(message.sent).format('DD/MM/YYYY hh:mm A')} */}
-        <ReactTimeAgo date={message.sent} locale="en-US" />
+        <ReactTimeAgo timeStyle="twitter" date={message.sent} locale="en-US" />
       </div>
     </div>
   )

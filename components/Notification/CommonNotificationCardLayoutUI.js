@@ -23,8 +23,8 @@ const CommonNotificationCardLayoutUI = ({
             <Body />
           </div>
         </div>
-        <div className="items-end shrink-0 text-sm sm:text-base">
-          <ReactTimeAgo date={createdAt} locale="en-US" />
+        <div className="items-end shrink-0 text-sm sm:text-base pl-1">
+          <ReactTimeAgo timeStyle="twitter" date={createdAt} locale="en-US" />
         </div>
       </div>
       {!isRead && (

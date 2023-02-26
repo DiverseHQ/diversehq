@@ -1,14 +1,12 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
 import LensLoginButton from '../../components/Common/LensLoginButton'
-import useDevice from '../../components/Common/useDevice'
 import { useProfile } from '../../components/Common/WalletContext'
 // import CreatePostBar from '../../components/Home/CreatePostBar'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import LensPostJoinedCommunitiesPublications from '../../components/Post/LensPostJoinedCommunitiesPublications'
 import { useLensUserContext } from '../../lib/LensUserContext'
 const foryou = () => {
-  const { isDesktop } = useDevice()
   const { isSignedIn, hasProfile } = useLensUserContext()
   const { user } = useProfile()
   return (
@@ -22,8 +20,8 @@ const foryou = () => {
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
-          {/* {isDesktop && <CreatePostBar />} */}
-          {isDesktop && <NavFilterAllPosts />}
+          {/* {isDesktop && <CreatePostBar /> */}
+          <NavFilterAllPosts />
           {user && isSignedIn && hasProfile && (
             <LensPostJoinedCommunitiesPublications
               communityIds={user.communities}

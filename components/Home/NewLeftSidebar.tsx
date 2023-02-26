@@ -11,16 +11,17 @@ import { CgProfile } from 'react-icons/cg'
 import { BiGroup } from 'react-icons/bi'
 import useHideSidebar from './hook/useHideSidebar'
 import Sidebar from '../Settings/Sidebar'
+import { useLensUserContext } from '../../lib/LensUserContext'
 // import { UserType } from '../../types/user'
 const NewLeftSidebar = () => {
   const { user }: any = useProfile()
   const { showModal }: any = usePopUpModal()
   const hide = useHideSidebar()
-
   const { notifyInfo }: any = useNotify()
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 
   const createCommunity = () => {
-    if (!user) {
+    if (!user || !isSignedIn || !hasProfile) {
       notifyInfo('You shall not pass, without login first')
       return
     }
@@ -110,8 +111,8 @@ const NewLeftSidebar = () => {
               <CgProfile className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             ),
             title: 'Profile',
-            link: `/u/${user?.walletAddress}`,
-            isHidden: !user?.walletAddress
+            link: `/u/${lensProfile?.defaultProfile?.handle.split('.')[0]}`,
+            isHidden: !isSignedIn || !hasProfile
           }
         ]}
       />

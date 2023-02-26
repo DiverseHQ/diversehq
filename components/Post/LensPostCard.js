@@ -243,6 +243,7 @@ const LensPostCard = ({ post, loading }) => {
                     {postInfo?.createdAt && (
                       <div className="text-xs sm:text-sm text-s-text ml-2">
                         <ReactTimeAgo
+                          timeStyle="twitter"
                           date={new Date(postInfo.createdAt)}
                           locale="en-US"
                         />
@@ -293,6 +294,7 @@ const LensPostCard = ({ post, loading }) => {
                         {postInfo?.createdAt && (
                           <div className="text-xs sm:text-sm text-s-text ml-2">
                             <ReactTimeAgo
+                              timeStyle="twitter"
                               date={new Date(postInfo.createdAt)}
                               locale="en-US"
                             />
