@@ -32,6 +32,7 @@ import LensCollectButton from './Collect/LensCollectButton'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import { Tooltip } from '@mui/material'
 import Attachment from './Attachment'
+import CenteredDot from '../Common/UI/CenteredDot'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -228,7 +229,7 @@ const LensPostCard = ({ post, loading }) => {
                     </span>
                   )}
 
-                  <span onClick={(e) => e.stopPropagation()}>
+                  <span onClick={(e) => e.stopPropagation()} className="mr-1">
                     <Link
                       href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
                       className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
@@ -239,9 +240,10 @@ const LensPostCard = ({ post, loading }) => {
                       </div>
                     </Link>
                   </span>
+                  <CenteredDot />
                   <div>
                     {postInfo?.createdAt && (
-                      <div className="text-xs sm:text-sm text-s-text ml-2">
+                      <div className="text-xs sm:text-sm text-s-text ml-1">
                         <ReactTimeAgo
                           timeStyle="twitter"
                           date={new Date(postInfo.createdAt)}

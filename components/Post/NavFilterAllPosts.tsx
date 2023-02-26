@@ -87,7 +87,7 @@ const NavFilterAllPosts = () => {
           setIsDrawerOpen={setIsDrawerOpen}
         >
           <FilterButton
-            title={sortType}
+            title={String(sortType)}
             active={true}
             IconAtEnd={<AiOutlineDown className="w-3 h-3" />}
             className="item-end"
