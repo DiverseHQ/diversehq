@@ -1,6 +1,6 @@
 import React from 'react'
 // import { CiImageOn } from 'react-icons/ci'
-import { CgProfile } from 'react-icons/cg'
+// import { CgProfile } from 'react-icons/cg'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
 import CreatePostPopup from './CreatePostPopup'
@@ -8,6 +8,7 @@ import { useNotify } from '../Common/NotifyContext'
 import { modalType } from '../Common/CustomPopUpProvider'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import getAvatar from '../User/lib/getAvatar'
+import { BsFillPersonFill } from 'react-icons/bs'
 
 const CreatePostBar = () => {
   const { user } = useProfile()
@@ -35,12 +36,11 @@ const CreatePostBar = () => {
   return (
     <div className="flex flex-row items-center bg-s-bg mt-4 mb-2 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-s-border">
       <div className="flex items-center justify-center rounded-full w-[44px] h-[44px]">
-        {!isSignedIn ||
-          (!lensProfile && (
-            <div>
-              <CgProfile className="w-[32px] h-[32px]" />
-            </div>
-          ))}
+        {(!isSignedIn || !lensProfile) && (
+          <div>
+            <BsFillPersonFill className="w-[32px] h-[32px]" />
+          </div>
+        )}
         {isSignedIn && lensProfile && (
           <img
             src={getAvatar(lensProfile?.defaultProfile)}
