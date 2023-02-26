@@ -183,11 +183,11 @@ const LensPostCard = ({ post, loading }) => {
     <>
       {postInfo && (
         <div
-          className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
-            isMobile
-              ? `border-b-[1px] border-[#eee] dark:border-p-border`
-              : 'pb-2'
-          } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
+          className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:pb-2 border-b-[1px] border-[#eee] dark:border-p-border rounded-t-2xl ${
+            router.pathname.startsWith('/p')
+              ? 'sm:my-3 rounded-b-2xl'
+              : 'cursor-pointer'
+          }`}
           onClick={() => {
             if (router.pathname.startsWith('/p')) return
             router.push(`/p/${postInfo.id}`)

@@ -89,7 +89,7 @@ const LensAllTopCommunityPublicationsColumn = ({ communityInfo }) => {
   }
 
   return (
-    <div>
+    <div className="sm:rounded-2xl bg-s-bg">
       <InfiniteScroll
         dataLength={queryParams.posts.length}
         next={getMorePosts}

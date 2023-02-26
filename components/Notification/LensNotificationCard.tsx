@@ -14,37 +14,8 @@ const LensNotificationCard = ({
   notification: Notification
   isRead: boolean
 }) => {
-  // const { data: lensProfile } = useLensUserContext()
-  // if (
-  //   notification?.__typename === 'NewFollowerNotification' &&
-  //   !notification?.wallet?.defaultProfile
-  // ) {
-  //   return <></>
-  // }
-  // if (
-  //   notification?.__typename === 'NewCommentNotification' &&
-  //   notification?.profile?.id === lensProfile?.defaultProfile?.id
-  // ) {
-  //   return <></>
-  // }
-
-  // if (
-  //   notification?.__typename === 'NewReactionNotification' &&
-  //   notification?.profile?.id === lensProfile?.defaultProfile?.id
-  // ) {
-  //   return <></>
-  // }
-
-  // if (
-  //   notification?.__typename === 'NewCollectNotification' &&
-  //   (!notification?.wallet?.defaultProfile ||
-  //     notification?.wallet?.defaultProfile?.id ===
-  //       lensProfile?.defaultProfile?.id)
-  // ) {
-  //   return <></>
-  // }
   return (
-    <div className="sm:my-3 px-3 py-2 sm:p-3 sm:bg-s-bg sm:rounded-xl border-b border-s-border sm:border-none sm:shadow-sm w-full">
+    <div className="sm:my-3 px-3 py-2 sm:p-2 border-b border-[#eee] dark:border-p-border w-full">
       {notification?.__typename === 'NewCommentNotification' && (
         <LensNotificationCommentedPostCard
           notification={notification}

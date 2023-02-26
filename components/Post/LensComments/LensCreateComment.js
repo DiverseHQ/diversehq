@@ -163,7 +163,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
       {!isMobile ? (
         <>
           {/* Desktop create comment */}
-          <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
+          <div className="px-3 sm:px-5 items-center w-full bg-s-bg pt-1 pb-3 border-b border-[#eee] dark:border-p-border sm:rounded-t-2xl ">
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex flex-row items-center">
                 <ImageWithPulsingLoader
