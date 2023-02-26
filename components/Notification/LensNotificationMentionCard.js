@@ -31,20 +31,25 @@ const LensNotificationMentionCard = ({ notification, isRead }) => {
               href={`/u/${
                 notification?.mentionPublication?.profile?.handle.split('.')[0]
               }`}
-              className="font-bold hover:underline"
             >
-              {`u/${
-                notification?.mentionPublication?.profile?.handle.split('.')[0]
-              }`}
+              <div className="font-bold hover:underline">
+                {`u/${
+                  notification?.mentionPublication?.profile?.handle.split(
+                    '.'
+                  )[0]
+                }`}
+              </div>
             </Link>{' '}
           </span>
           <span>mentioned you in a </span>
           <span className="hover:underline font-bold">
             <Link href={`/p/${notification?.mentionPublication?.id}`}>
-              {notification?.notificationId?.startsWith('mention-post-') &&
-                'Post'}
-              {notification?.notificationId?.startsWith('mention-comment-') &&
-                'Comment'}
+              <>
+                {notification?.notificationId?.startsWith('mention-post-') &&
+                  'Post'}
+                {notification?.notificationId?.startsWith('mention-comment-') &&
+                  'Comment'}
+              </>
             </Link>
           </span>
         </div>

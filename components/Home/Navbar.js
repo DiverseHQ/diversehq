@@ -132,15 +132,15 @@ const Navbar = () => {
     <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-1.5 items-center shadow-sm gap-2 sticky top-0 bg-s-bg">
       <div className="flex flex-row items-center gap-4 lg:gap-5">
         <div>
-          <Link
-            className="flex flex-row justify-center items-center  h-fit w-fit"
-            href={'/'}
-          >
-            <img
-              src="/LogoV3TrimmedWithBG.png"
-              className="w-[25px] h-[25px] sm:w-[35px] sm:h-[35px]"
-              alt="DivrseHQ Logo"
-            />
+          <Link href={'/'}>
+            <div className="flex flex-row justify-center items-center space-x-2 h-fit w-fit">
+              <img
+                src="/LogoV3TrimmedWithBG.png"
+                className="w-[25px] h-[25px] sm:w-[35px] sm:h-[35px]"
+                alt="DivrseHQ Logo"
+              />
+              <div>BETA</div>
+            </div>
           </Link>
         </div>
         <SearchModal />
@@ -271,9 +271,12 @@ const Navbar = () => {
               <span onClick={(e) => e.stopPropagation()}>
                 <Link
                   href={`/u/${lensProfile.defaultProfile.handle.split('.')[0]}`}
-                  className={`hover:cursor-pointer className='leading-4' hover:underline text-s-text text-sm p-2 md:p-0`}
                 >
-                  u/{lensProfile.defaultProfile.handle.split('.')[0]}
+                  <div
+                    className={`hover:cursor-pointer className='leading-4' hover:underline text-s-text text-sm p-2 md:p-0`}
+                  >
+                    u/{lensProfile.defaultProfile.handle.split('.')[0]}
+                  </div>
                 </Link>
               </span>
             </div>

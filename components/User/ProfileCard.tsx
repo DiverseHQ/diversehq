@@ -92,12 +92,10 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                 {!lensProfile.name && profile.walletAddress && (
                   <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
                 )}
-                <Link
-                  href={`/u/${lensProfile?.handle.split('.')[0]}`}
-                  className="hover:underline cursor-pointer"
-                  passHref
-                >
-                  u/{lensProfile?.handle.split('.')[0]}
+                <Link href={`/u/${lensProfile?.handle.split('.')[0]}`} passHref>
+                  <div className="hover:underline cursor-pointer">
+                    u/{lensProfile?.handle.split('.')[0]}
+                  </div>
                 </Link>
                 <div className="font-normal">{lensProfile.bio}</div>
               </div>
@@ -118,11 +116,10 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
             {myLensProfile &&
               myLensProfile?.defaultProfile?.ownedBy.toLowerCase() ===
                 lensProfile?.ownedBy.toLowerCase() && (
-                <Link
-                  className="text-base text-p-btn-text bg-p-btn px-3 py-0.5 mx-2 rounded-md cursor-pointer"
-                  href={isMobile ? '/settings/profile' : '/settings'}
-                >
-                  Edit
+                <Link href={isMobile ? '/settings/profile' : '/settings'}>
+                  <div className="text-base text-p-btn-text bg-p-btn px-3 py-0.5 mx-2 rounded-md cursor-pointer">
+                    Edit
+                  </div>
                 </Link>
               )}
             {isFollowedByMe && <MessageButton userLensProfile={lensProfile} />}
@@ -136,12 +133,10 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                 {!lensProfile.name && profile.walletAddress && (
                   <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
                 )}
-                <Link
-                  href={`/u/${lensProfile?.handle.split('.')[0]}`}
-                  className="hover:underline cursor-pointer"
-                  passHref
-                >
-                  u/{lensProfile?.handle.split('.')[0]}
+                <Link href={`/u/${lensProfile?.handle.split('.')[0]}`} passHref>
+                  <div className="hover:underline cursor-pointer">
+                    u/{lensProfile?.handle.split('.')[0]}
+                  </div>
                 </Link>
               </div>
             </div>

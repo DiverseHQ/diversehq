@@ -167,14 +167,13 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                 }
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
               />
-              <Link
-                href={`/u/${comment.author}`}
-                className="hover:underline ml-2 font-bold text-base "
-              >
-                u/
-                {comment.authorName
-                  ? comment.authorName
-                  : comment.author.substring(0, 6) + '...'}
+              <Link href={`/u/${comment.author}`}>
+                <div className="hover:underline ml-2 font-bold text-base ">
+                  u/
+                  {comment.authorName
+                    ? comment.authorName
+                    : comment.author.substring(0, 6) + '...'}
+                </div>
               </Link>
               <div className="text-xs sm:text-sm text-s-text ml-2">
                 <ReactTimeAgo

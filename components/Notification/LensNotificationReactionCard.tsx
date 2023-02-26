@@ -35,7 +35,7 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
         <div>
           <span className="hover:underline font-bold">
             <Link href={`/u/${notification?.profile?.handle.split('.')[0]}`}>
-              u/{notification?.profile?.handle.split('.')[0]}
+              <>u/{notification?.profile?.handle.split('.')[0]}</>
             </Link>
           </span>
           <span>
@@ -87,11 +87,10 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
             </div>
           )}
           {showMore && (
-            <Link
-              href={`/p/${notification?.publication?.id}`}
-              className="text-blue-400 text-sm sm:text-base"
-            >
-              Show more
+            <Link href={`/p/${notification?.publication?.id}`}>
+              <div className="text-blue-400 text-sm sm:text-base">
+                Show more
+              </div>
             </Link>
           )}
         </div>

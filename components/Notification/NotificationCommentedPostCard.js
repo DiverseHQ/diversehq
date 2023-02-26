@@ -12,12 +12,14 @@ const NotificationCommentedPostCard = ({ notification }) => {
           <div>
             <span className="hover:underline font-bold">
               <Link href={`/u/${notification?.sender?.walletAddress}`}>
-                {notification?.sender?.name
-                  ? `u/${notification?.sender?.name}`
-                  : `u/${stringToLength(
-                      notification?.sender?.walletAddress,
-                      10
-                    )}`}
+                <>
+                  {notification?.sender?.name
+                    ? `u/${notification?.sender?.name}`
+                    : `u/${stringToLength(
+                        notification?.sender?.walletAddress,
+                        10
+                      )}`}
+                </>
               </Link>
             </span>
             <span>{' commented on your '}</span>

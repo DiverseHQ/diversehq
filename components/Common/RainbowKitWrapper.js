@@ -12,14 +12,15 @@ import {
   metaMaskWallet,
   walletConnectWallet
 } from '@rainbow-me/rainbowkit/wallets'
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
+import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
+import { polygonMumbai } from 'wagmi/chains'
 
 // import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 
 const { chains, provider } = configureChains(
-  [chain.polygonMumbai],
+  [polygonMumbai],
   [
     // process.env.NEXT_PUBLIC_ALCHEMY_ID
     // ignore this line, it's just to make the linter happy

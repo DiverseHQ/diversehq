@@ -37,16 +37,14 @@ const MobileSidebar = ({ items }: { items: item[] }) => {
           )
         }
         return (
-          <Link
-            className={`flex flex-row items-center justify-between active:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2`}
-            href={item.link}
-            key={item.title}
-          >
-            <div className="flex flex-row space-x-3 items-center">
-              {item.icon}
-              <span className="font-medium">{item.title}</span>
+          <Link href={item.link} key={item.title}>
+            <div className="flex flex-row items-center justify-between active:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2">
+              <div className="flex flex-row space-x-3 items-center">
+                {item.icon}
+                <span className="font-medium">{item.title}</span>
+              </div>
+              <MdKeyboardArrowRight className="w-8 h-8" />
             </div>
-            <MdKeyboardArrowRight className="w-8 h-8" />
           </Link>
         )
       })}

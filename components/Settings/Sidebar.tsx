@@ -35,15 +35,15 @@ const Sidebar = ({ items }) => {
         }
 
         return (
-          <Link
-            className={`flex flex-row items-center ${
-              pathname === item.link ? 'bg-s-hover' : ''
-            }  hover:bg-s-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2`}
-            href={item.link}
-            key={item.title}
-          >
-            {item.icon}
-            <span className="text-[16px] font-medium">{item.title}</span>
+          <Link href={item.link} key={item.title}>
+            <div
+              className={`flex flex-row items-center ${
+                pathname === item.link ? 'bg-s-hover' : ''
+              }  hover:bg-s-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2`}
+            >
+              {item.icon}
+              <span className="text-[16px] font-medium">{item.title}</span>
+            </div>
           </Link>
         )
       })}

@@ -102,13 +102,16 @@ const LensLoginButton = () => {
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
                 <Link
                   href={`/u/${lensProfile.defaultProfile.handle.split('.')[0]}`}
-                  className={`mr-2 hover:cursor-pointer hover:underline ${
-                    isMobile
-                      ? 'dark:text-s-bg hover:font-semibold'
-                      : 'dark:text-p-text'
-                  } text-[20px] md:text-[16px] p-2 md:p-0`}
                 >
-                  u/{lensProfile.defaultProfile.handle.spilt('.')[0]}
+                  <div
+                    className={`mr-2 hover:cursor-pointer hover:underline ${
+                      isMobile
+                        ? 'dark:text-s-bg hover:font-semibold'
+                        : 'dark:text-p-text'
+                    } text-[20px] md:text-[16px] p-2 md:p-0`}
+                  >
+                    u/{lensProfile.defaultProfile.handle.spilt('.')[0]}
+                  </div>
                 </Link>
               )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&

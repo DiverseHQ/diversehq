@@ -202,16 +202,15 @@ const PostCard = ({ _post, setPosts }) => {
               </span>
 
               <span onClick={(e) => e.stopPropagation()}>
-                <Link
-                  href={`/u/${post.author}`}
-                  className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                >
-                  <p className="pl-1.5"> posted by</p>
-                  <div className="pl-1.5 hover:cursor-pointer hover:underline">
-                    u/
-                    {post.authorName
-                      ? post.authorName
-                      : post.author?.slice(0, 6) + '...'}
+                <Link href={`/u/${post.author}`}>
+                  <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
+                    <p className="pl-1.5"> posted by</p>
+                    <div className="pl-1.5 hover:cursor-pointer hover:underline">
+                      u/
+                      {post.authorName
+                        ? post.authorName
+                        : post.author?.slice(0, 6) + '...'}
+                    </div>
                   </div>
                 </Link>
               </span>
@@ -251,17 +250,15 @@ const PostCard = ({ _post, setPosts }) => {
                 </span>
                 <div className="flex flex-row items-center justify-start">
                   <span onClick={(e) => e.stopPropagation()}>
-                    <Link
-                      href={`/u/${post.author}`}
-                      className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                      passHref
-                    >
-                      <p className="pl-1.5"> posted by</p>
-                      <div className="pl-1.5 hover:cursor-pointer hover:underline">
-                        u/
-                        {post.authorName
-                          ? post.authorName
-                          : post.author?.slice(0, 6) + '...'}
+                    <Link href={`/u/${post.author}`} passHref>
+                      <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
+                        <p className="pl-1.5"> posted by</p>
+                        <div className="pl-1.5 hover:cursor-pointer hover:underline">
+                          u/
+                          {post.authorName
+                            ? post.authorName
+                            : post.author?.slice(0, 6) + '...'}
+                        </div>
                       </div>
                     </Link>
                   </span>
@@ -413,11 +410,10 @@ const PostCard = ({ _post, setPosts }) => {
                       </div>
                       {showMore && (
                         <span onClick={(e) => e.stopPropagation()}>
-                          <Link
-                            href={`/p/${post._id}`}
-                            className="text-blue-400 text-sm sm:text-base"
-                          >
-                            Show more
+                          <Link href={`/p/${post._id}`}>
+                            <div className="text-blue-400 text-sm sm:text-base">
+                              Show more
+                            </div>
                           </Link>
                         </span>
                       )}
@@ -449,11 +445,10 @@ const PostCard = ({ _post, setPosts }) => {
                       </div>
                       {showMore && (
                         <span onClick={(e) => e.stopPropagation()}>
-                          <Link
-                            href={`/p/${post._id}`}
-                            className="text-blue-400 text-sm sm:text-base"
-                          >
-                            Show more
+                          <Link href={`/p/${post._id}`}>
+                            <div className="text-blue-400 text-sm sm:text-base">
+                              Show more
+                            </div>
                           </Link>
                         </span>
                       )}
@@ -582,25 +577,17 @@ const PostCard = ({ _post, setPosts }) => {
             {!router.pathname.startsWith('/p') ? (
               <Tooltip enterDelay={1000} leaveDelay={200} title="Comment" arrow>
                 <span onClick={(e) => e.stopPropagation()}>
-                  <Link
-                    href={`/p/${post._id}`}
-                    className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-medium"
-                    passHref
-                  >
-                    {/* {post.comments?.length === 0 && (
-                  <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />
-                )}
-                {post.comments?.length > 0 && (
-                  <FaRegCommentDots className="hover:cursor-pointer mr-2 w-4 h-4 " />
-                )} */}
-                    <img
-                      src="/comment.svg"
-                      alt="Comment"
-                      className="w-4 h-4 mr-2"
-                    />
-                    <span className="text-[#687684]">
-                      {post.comments?.length}
-                    </span>
+                  <Link href={`/p/${post._id}`} passHref>
+                    <div className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover font-medium">
+                      <img
+                        src="/comment.svg"
+                        alt="Comment"
+                        className="w-4 h-4 mr-2"
+                      />
+                      <span className="text-[#687684]">
+                        {post.comments?.length}
+                      </span>
+                    </div>
                   </Link>
                 </span>
               </Tooltip>

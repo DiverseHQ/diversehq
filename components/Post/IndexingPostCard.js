@@ -41,13 +41,12 @@ const IndexingPostCard = ({ postInfo }) => {
                     </div>
                   </Link>
 
-                  <Link
-                    href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
-                    className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                  >
-                    <p className="pl-1.5 font-normal"> posted by</p>
-                    <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                      u/{postInfo?.profile?.handle.split('.')[0]}
+                  <Link href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}>
+                    <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
+                      <p className="pl-1.5 font-normal"> posted by</p>
+                      <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                        u/{postInfo?.profile?.handle.split('.')[0]}
+                      </div>
                     </div>
                   </Link>
                   <div>
@@ -83,12 +82,13 @@ const IndexingPostCard = ({ postInfo }) => {
                     <div className="flex flex-row items-center justify-start">
                       <Link
                         href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
-                        className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                         passHref
                       >
-                        <p className="pl-1.5 font-normal"> posted by</p>
-                        <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                          u/{postInfo?.profile?.handle.split('.')[0]}
+                        <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
+                          <p className="pl-1.5 font-normal"> posted by</p>
+                          <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                            u/{postInfo?.profile?.handle.split('.')[0]}
+                          </div>
                         </div>
                       </Link>
                       <div>
@@ -166,11 +166,10 @@ const IndexingPostCard = ({ postInfo }) => {
                     </div>
                   )}
                   {showMore && (
-                    <Link
-                      href={`/p/${postInfo?.id}`}
-                      className="text-blue-400 text-sm sm:text-base"
-                    >
-                      Show more
+                    <Link href={`/p/${postInfo?.id}`}>
+                      <div className="text-blue-400 text-sm sm:text-base">
+                        Show more
+                      </div>
                     </Link>
                   )}
                 </div>

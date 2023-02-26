@@ -24,9 +24,10 @@ const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
                 href={`/u/${
                   notification?.wallet?.defaultProfile?.handle.split('.')[0]
                 }`}
-                className="font-bold hover:underline"
               >
-                u/{notification?.wallet?.defaultProfile?.handle.split('.')[0]}
+                <div className="font-bold hover:underline">
+                  u/{notification?.wallet?.defaultProfile?.handle.split('.')[0]}
+                </div>
               </Link>{' '}
             </span>
             {notification?.wallet?.defaultProfile?.isFollowedByMe && 'finally '}

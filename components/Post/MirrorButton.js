@@ -17,7 +17,6 @@ const MirrorButton = ({ postInfo }) => {
   const { result, signTypedDataAndBroadcast } = useSignTypedDataAndBroadcast()
   const { mutateAsync: mirrorPostViaDispatcher } =
     useCreateMirrorViaDispatcherMutation()
-  console.log(postInfo, 'postInfo')
   const [mirrorCount, setMirrorCount] = useState(
     postInfo?.stats?.totalAmountOfMirrors
       ? postInfo?.stats?.totalAmountOfMirrors
@@ -33,7 +32,6 @@ const MirrorButton = ({ postInfo }) => {
 
   const handleMirrorPost = async () => {
     setLoading(true)
-    console.log('mirroring')
     try {
       if (!isSignedIn) {
         notifyError('Please sign in to mirror a post')
@@ -50,7 +48,6 @@ const MirrorButton = ({ postInfo }) => {
             }
           }
         })
-        console.log(postTypedResult)
         if (postTypedResult) {
           setIsSuccessful(true)
         }
@@ -78,7 +75,6 @@ const MirrorButton = ({ postInfo }) => {
             type: 'Mirror'
           }
         )
-        console.log(postTypedResult, 'postTypedResult')
       }
     } catch (err) {
       console.log(err)

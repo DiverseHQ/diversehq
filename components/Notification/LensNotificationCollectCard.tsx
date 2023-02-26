@@ -41,22 +41,26 @@ const LensNotificationCollectCard = ({
                   '.'
                 )[0]
               }`}
-              className="font-bold hover:underline"
             >
-              {`u/${
-                notification?.collectedPublication?.profile?.handle?.split(
-                  '.'
-                )[0]
-              }`}
+              <div className="font-bold hover:underline">
+                {`u/${
+                  notification?.collectedPublication?.profile?.handle?.split(
+                    '.'
+                  )[0]
+                }`}
+              </div>
             </Link>
           </span>
           <span className="text-gray-500"> collected your </span>
           <span className="hover:underline font-bold">
             <Link href={`/p/${notification?.collectedPublication?.id}`}>
-              {notification?.notificationId?.startsWith('collected-post-') &&
-                'Post'}
-              {notification?.notificationId?.startsWith('collected-comment-') &&
-                'Comment'}
+              <>
+                {notification?.notificationId?.startsWith('collected-post-') &&
+                  'Post'}
+                {notification?.notificationId?.startsWith(
+                  'collected-comment-'
+                ) && 'Comment'}
+              </>
             </Link>
           </span>
         </div>
@@ -92,11 +96,10 @@ const LensNotificationCollectCard = ({
             </div>
           )}
           {showMore && (
-            <Link
-              href={`/p/${notification?.collectedPublication?.id}`}
-              className="text-blue-400 text-sm sm:text-base"
-            >
-              Show more
+            <Link href={`/p/${notification?.collectedPublication?.id}`}>
+              <div className="text-blue-400 text-sm sm:text-base">
+                Show more
+              </div>
             </Link>
           )}
         </>
