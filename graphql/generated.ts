@@ -1118,10 +1118,14 @@ export type Erc4626FeeCollectModuleSettings = {
   endTimestamp?: Maybe<Scalars['DateTime']>;
   /** True if only followers of publisher may collect the post. */
   followerOnly: Scalars['Boolean'];
+  /** The recipient of the ERC4626 vault shares */
+  recipient: Scalars['EthereumAddress'];
   /** The referral fee associated with this publication. */
   referralFee: Scalars['Float'];
   /** The collect modules enum */
   type: CollectModules;
+  /** The ERC4626 vault address */
+  vault: Scalars['ContractAddress'];
 };
 
 export type ElectedMirror = {
@@ -4185,13 +4189,6 @@ export type CreateCollectTypedDataMutationVariables = Exact<{
 
 export type CreateCollectTypedDataMutation = { __typename?: 'Mutation', createCollectTypedData: { __typename?: 'CreateCollectBroadcastItemResult', id: any, expiresAt: any, typedData: { __typename?: 'CreateCollectEIP712TypedData', types: { __typename?: 'CreateCollectEIP712TypedDataTypes', CollectWithSig: Array<{ __typename?: 'EIP712TypedDataField', name: string, type: string }> }, domain: { __typename?: 'EIP712TypedDataDomain', name: string, chainId: any, version: string, verifyingContract: any }, value: { __typename?: 'CreateCollectEIP712TypedDataValue', nonce: any, deadline: any, profileId: any, pubId: any, data: any } } } };
 
-export type CollectorsQueryVariables = Exact<{
-  request: WhoCollectedPublicationRequest;
-}>;
-
-
-export type CollectorsQuery = { __typename?: 'Query', whoCollectedPublication: { __typename?: 'PaginatedWhoCollectedResult', items: Array<{ __typename?: 'Wallet', address: any, defaultProfile?: { __typename?: 'Profile', isFollowedByMe: boolean, id: any, name?: string | null, bio?: string | null, isFollowing: boolean, followNftAddress?: any | null, metadata?: any | null, isDefault: boolean, handle: any, ownedBy: any, attributes?: Array<{ __typename?: 'Attribute', displayType?: string | null, traitType?: string | null, key: string, value: string }> | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null }, small?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null, medium?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null } | { __typename?: 'NftImage', contractAddress: any, tokenId: string, uri: any, verified: boolean } | null, coverPicture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null }, small?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null, medium?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null } | { __typename?: 'NftImage', contractAddress: any, tokenId: string, uri: any, verified: boolean } | null, dispatcher?: { __typename?: 'Dispatcher', address: any, canUseRelay: boolean } | null, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number, totalPosts: number, totalComments: number, totalMirrors: number, totalPublications: number, totalCollects: number }, followModule?: { __typename?: 'FeeFollowModuleSettings', type: FollowModules, recipient: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename?: 'ProfileFollowModuleSettings', type: FollowModules, contractAddress: any } | { __typename?: 'RevertFollowModuleSettings', type: FollowModules, contractAddress: any } | { __typename?: 'UnknownFollowModuleSettings', type: FollowModules, contractAddress: any, followModuleReturnData: any } | null, onChainIdentity: { __typename?: 'OnChainIdentity', proofOfHumanity: boolean, ens?: { __typename?: 'EnsOnChainIdentity', name?: any | null } | null, sybilDotOrg: { __typename?: 'SybilDotOrgIdentity', verified: boolean, source: { __typename?: 'SybilDotOrgIdentitySource', twitter: { __typename?: 'SybilDotOrgTwitterIdentity', handle?: string | null } } }, worldcoin: { __typename?: 'WorldcoinIdentity', isHuman: boolean } } } | null }>, pageInfo: { __typename?: 'PaginatedResultInfo', next?: any | null, totalCount?: number | null } } };
-
 export type CommentFeedQueryVariables = Exact<{
   request: PublicationsQueryRequest;
   reactionRequest?: InputMaybe<ReactionFieldResolverRequest>;
@@ -4348,6 +4345,13 @@ export type CreateSetProfileImageUriViaDispatcherMutationVariables = Exact<{
 
 export type CreateSetProfileImageUriViaDispatcherMutation = { __typename?: 'Mutation', createSetProfileImageURIViaDispatcher: { __typename?: 'RelayError', reason: RelayErrorReasons } | { __typename?: 'RelayerResult', txHash: any, txId: any } };
 
+export type CreateSetProfileMetadataViaDispatcherMutationVariables = Exact<{
+  request: CreatePublicSetProfileMetadataUriRequest;
+}>;
+
+
+export type CreateSetProfileMetadataViaDispatcherMutation = { __typename?: 'Mutation', createSetProfileMetadataViaDispatcher: { __typename?: 'RelayError', reason: RelayErrorReasons } | { __typename?: 'RelayerResult', txHash: any, txId: any } };
+
 export type ExplorePublicationsQueryVariables = Exact<{
   request: ExplorePublicationRequest;
   reactionRequest?: InputMaybe<ReactionFieldResolverRequest>;
@@ -4470,6 +4474,20 @@ export type CreateSetDispatcherTypedDataMutationVariables = Exact<{
 
 
 export type CreateSetDispatcherTypedDataMutation = { __typename?: 'Mutation', createSetDispatcherTypedData: { __typename?: 'CreateSetDispatcherBroadcastItemResult', id: any, expiresAt: any, typedData: { __typename?: 'CreateSetDispatcherEIP712TypedData', types: { __typename?: 'CreateSetDispatcherEIP712TypedDataTypes', SetDispatcherWithSig: Array<{ __typename?: 'EIP712TypedDataField', name: string, type: string }> }, domain: { __typename?: 'EIP712TypedDataDomain', name: string, chainId: any, version: string, verifyingContract: any }, value: { __typename?: 'CreateSetDispatcherEIP712TypedDataValue', nonce: any, deadline: any, profileId: any, dispatcher: any } } } };
+
+export type CreateSetProfileImageUriTypedDataMutationVariables = Exact<{
+  request: UpdateProfileImageRequest;
+}>;
+
+
+export type CreateSetProfileImageUriTypedDataMutation = { __typename?: 'Mutation', createSetProfileImageURITypedData: { __typename?: 'CreateSetProfileImageUriBroadcastItemResult', id: any, expiresAt: any, typedData: { __typename?: 'CreateSetProfileImageUriEIP712TypedData', domain: { __typename?: 'EIP712TypedDataDomain', name: string, chainId: any, version: string, verifyingContract: any }, types: { __typename?: 'CreateSetProfileImageUriEIP712TypedDataTypes', SetProfileImageURIWithSig: Array<{ __typename?: 'EIP712TypedDataField', name: string, type: string }> }, value: { __typename?: 'CreateSetProfileImageUriEIP712TypedDataValue', nonce: any, deadline: any, imageURI: any, profileId: any } } } };
+
+export type CreateSetProfileMetadataTypedDataMutationVariables = Exact<{
+  request: CreatePublicSetProfileMetadataUriRequest;
+}>;
+
+
+export type CreateSetProfileMetadataTypedDataMutation = { __typename?: 'Mutation', createSetProfileMetadataTypedData: { __typename?: 'CreateSetProfileMetadataURIBroadcastItemResult', id: any, expiresAt: any, typedData: { __typename?: 'CreateSetProfileMetadataURIEIP712TypedData', types: { __typename?: 'CreateSetProfileMetadataURIEIP712TypedDataTypes', SetProfileMetadataURIWithSig: Array<{ __typename?: 'EIP712TypedDataField', name: string, type: string }> }, domain: { __typename?: 'EIP712TypedDataDomain', name: string, chainId: any, version: string, verifyingContract: any }, value: { __typename?: 'CreateSetProfileMetadataURIEIP712TypedDataValue', nonce: any, deadline: any, profileId: any, metadata: any } } } };
 
 export type CreateUnfollowTypedDataMutationVariables = Exact<{
   request: UnfollowRequest;
@@ -5499,37 +5517,6 @@ export const useCreateCollectTypedDataMutation = <
       (variables?: CreateCollectTypedDataMutationVariables) => fetchData<CreateCollectTypedDataMutation, CreateCollectTypedDataMutationVariables>(CreateCollectTypedDataDocument, variables)(),
       options
     );
-export const CollectorsDocument = `
-    query Collectors($request: WhoCollectedPublicationRequest!) {
-  whoCollectedPublication(request: $request) {
-    items {
-      address
-      defaultProfile {
-        ...ProfileFields
-        isFollowedByMe
-      }
-    }
-    pageInfo {
-      next
-      totalCount
-    }
-  }
-}
-    ${ProfileFieldsFragmentDoc}
-${MediaFieldsFragmentDoc}
-${FollowModuleFieldsFragmentDoc}`;
-export const useCollectorsQuery = <
-      TData = CollectorsQuery,
-      TError = unknown
-    >(
-      variables: CollectorsQueryVariables,
-      options?: UseQueryOptions<CollectorsQuery, TError, TData>
-    ) =>
-    useQuery<CollectorsQuery, TError, TData>(
-      ['Collectors', variables],
-      fetchData<CollectorsQuery, CollectorsQueryVariables>(CollectorsDocument, variables),
-      options
-    );
 export const CommentFeedDocument = `
     query CommentFeed($request: PublicationsQueryRequest!, $reactionRequest: ReactionFieldResolverRequest) {
   publications(request: $request) {
@@ -5752,6 +5739,28 @@ export const useCreateSetProfileImageUriViaDispatcherMutation = <
     useMutation<CreateSetProfileImageUriViaDispatcherMutation, TError, CreateSetProfileImageUriViaDispatcherMutationVariables, TContext>(
       ['CreateSetProfileImageURIViaDispatcher'],
       (variables?: CreateSetProfileImageUriViaDispatcherMutationVariables) => fetchData<CreateSetProfileImageUriViaDispatcherMutation, CreateSetProfileImageUriViaDispatcherMutationVariables>(CreateSetProfileImageUriViaDispatcherDocument, variables)(),
+      options
+    );
+export const CreateSetProfileMetadataViaDispatcherDocument = `
+    mutation CreateSetProfileMetadataViaDispatcher($request: CreatePublicSetProfileMetadataURIRequest!) {
+  createSetProfileMetadataViaDispatcher(request: $request) {
+    ... on RelayerResult {
+      txHash
+      txId
+    }
+    ... on RelayError {
+      reason
+    }
+  }
+}
+    `;
+export const useCreateSetProfileMetadataViaDispatcherMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreateSetProfileMetadataViaDispatcherMutation, TError, CreateSetProfileMetadataViaDispatcherMutationVariables, TContext>) =>
+    useMutation<CreateSetProfileMetadataViaDispatcherMutation, TError, CreateSetProfileMetadataViaDispatcherMutationVariables, TContext>(
+      ['CreateSetProfileMetadataViaDispatcher'],
+      (variables?: CreateSetProfileMetadataViaDispatcherMutationVariables) => fetchData<CreateSetProfileMetadataViaDispatcherMutation, CreateSetProfileMetadataViaDispatcherMutationVariables>(CreateSetProfileMetadataViaDispatcherDocument, variables)(),
       options
     );
 export const ExplorePublicationsDocument = `
@@ -6360,6 +6369,80 @@ export const useCreateSetDispatcherTypedDataMutation = <
     useMutation<CreateSetDispatcherTypedDataMutation, TError, CreateSetDispatcherTypedDataMutationVariables, TContext>(
       ['CreateSetDispatcherTypedData'],
       (variables?: CreateSetDispatcherTypedDataMutationVariables) => fetchData<CreateSetDispatcherTypedDataMutation, CreateSetDispatcherTypedDataMutationVariables>(CreateSetDispatcherTypedDataDocument, variables)(),
+      options
+    );
+export const CreateSetProfileImageUriTypedDataDocument = `
+    mutation createSetProfileImageURITypedData($request: UpdateProfileImageRequest!) {
+  createSetProfileImageURITypedData(request: $request) {
+    id
+    expiresAt
+    typedData {
+      domain {
+        name
+        chainId
+        version
+        verifyingContract
+      }
+      types {
+        SetProfileImageURIWithSig {
+          name
+          type
+        }
+      }
+      value {
+        nonce
+        deadline
+        imageURI
+        profileId
+      }
+    }
+  }
+}
+    `;
+export const useCreateSetProfileImageUriTypedDataMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreateSetProfileImageUriTypedDataMutation, TError, CreateSetProfileImageUriTypedDataMutationVariables, TContext>) =>
+    useMutation<CreateSetProfileImageUriTypedDataMutation, TError, CreateSetProfileImageUriTypedDataMutationVariables, TContext>(
+      ['createSetProfileImageURITypedData'],
+      (variables?: CreateSetProfileImageUriTypedDataMutationVariables) => fetchData<CreateSetProfileImageUriTypedDataMutation, CreateSetProfileImageUriTypedDataMutationVariables>(CreateSetProfileImageUriTypedDataDocument, variables)(),
+      options
+    );
+export const CreateSetProfileMetadataTypedDataDocument = `
+    mutation createSetProfileMetadataTypedData($request: CreatePublicSetProfileMetadataURIRequest!) {
+  createSetProfileMetadataTypedData(request: $request) {
+    id
+    expiresAt
+    typedData {
+      types {
+        SetProfileMetadataURIWithSig {
+          name
+          type
+        }
+      }
+      domain {
+        name
+        chainId
+        version
+        verifyingContract
+      }
+      value {
+        nonce
+        deadline
+        profileId
+        metadata
+      }
+    }
+  }
+}
+    `;
+export const useCreateSetProfileMetadataTypedDataMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreateSetProfileMetadataTypedDataMutation, TError, CreateSetProfileMetadataTypedDataMutationVariables, TContext>) =>
+    useMutation<CreateSetProfileMetadataTypedDataMutation, TError, CreateSetProfileMetadataTypedDataMutationVariables, TContext>(
+      ['createSetProfileMetadataTypedData'],
+      (variables?: CreateSetProfileMetadataTypedDataMutationVariables) => fetchData<CreateSetProfileMetadataTypedDataMutation, CreateSetProfileMetadataTypedDataMutationVariables>(CreateSetProfileMetadataTypedDataDocument, variables)(),
       options
     );
 export const CreateUnfollowTypedDataDocument = `

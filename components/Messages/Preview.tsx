@@ -45,7 +45,7 @@ const Preview: FC<Props> = ({ profile, message, conversationKey }) => {
           <div className="flex flex-row items-center space-x-2">
             {profile?.name && <span className="text-md">{profile?.name}</span>}
             <span className={`${profile?.name ? 'text-sm text-s-text' : ''}`}>
-              {profile?.handle && `u/${profile?.handle}`}
+              {profile?.handle && `u/${profile?.handle.split('.')[0]}`}
             </span>
           </div>
           <div className="text-s-text">
@@ -58,7 +58,7 @@ const Preview: FC<Props> = ({ profile, message, conversationKey }) => {
         {/** day js time go in format of 3M, 3H, 3D */}
         {/** dayjs with date and local time */}
         {/* {dayjs(message.sent).format('DD/MM/YYYY hh:mm A')} */}
-        <ReactTimeAgo date={message.sent} locale="en-US" />
+        <ReactTimeAgo timeStyle="twitter" date={message.sent} locale="en-US" />
       </div>
     </div>
   )

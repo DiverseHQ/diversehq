@@ -63,7 +63,7 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
   }
 
   return (
-    <div>
+    <div className="sm:rounded-2xl bg-s-bg">
       <InfiniteScroll
         dataLength={posts.length}
         next={getMorePosts}

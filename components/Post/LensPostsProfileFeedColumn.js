@@ -21,7 +21,7 @@ const LensPostsProfileFeedColumn = ({ profileId }) => {
         cursor: cursor,
         profileId: profileId,
         limit: LENS_POST_LIMIT,
-        feedEventItemTypes: [FeedEventItemType.Post, FeedEventItemType.Mirror]
+        feedEventItemTypes: [FeedEventItemType.Post]
       },
       reactionRequest: {
         profileId: profileId
@@ -56,7 +56,7 @@ const LensPostsProfileFeedColumn = ({ profileId }) => {
   }
 
   return (
-    <div>
+    <div className="sm:rounded-2xl bg-s-bg">
       <InfiniteScroll
         dataLength={posts.length}
         next={getMorePosts}

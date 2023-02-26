@@ -12,7 +12,7 @@ import ExploreFeedNav from './ExploreFeedNav'
 const ExploreNewCommunitesPage = () => {
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
-  const { isDesktop, isMobile } = useDevice()
+  const { isMobile } = useDevice()
 
   useEffect(() => {
     getNewCommunities()
@@ -34,7 +34,7 @@ const ExploreNewCommunitesPage = () => {
       <div className="pt-6">
         <div className="w-full flex justify-center">
           <div className="w-full md:w-[650px]">
-            {isDesktop && <ExploreFeedNav />}
+            <ExploreFeedNav />
           </div>
         </div>
         <InfiniteScroll

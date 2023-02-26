@@ -21,6 +21,7 @@ import {
   countLinesFromMarkdown,
   deleteFirebaseStorageFile,
   getURLsFromText,
+  stringToLength,
   unpinFromIpfsInfura
 } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
@@ -33,6 +34,7 @@ import OptionsWrapper from '../Common/OptionsWrapper'
 import { Tooltip } from '@mui/material'
 import Attachment from './Attachment'
 import MirrorButton from './MirrorButton'
+import CenteredDot from '../Common/UI/CenteredDot'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -224,11 +226,11 @@ const LensPostCard = ({ post, loading }) => {
     <>
       {postInfo && (
         <div
-          className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:my-3 sm:rounded-2xl shadow-sm ${
-            isMobile
-              ? `border-b-[1px] border-[#eee] dark:border-p-border`
-              : 'pb-2'
-          } ${router.pathname.startsWith('/p') ? '' : 'cursor-pointer'}`}
+          className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg pt-3 sm:pb-2 border-b-[1px] border-[#eee] dark:border-p-border rounded-t-2xl ${
+            router.pathname.startsWith('/p')
+              ? 'sm:my-3 rounded-b-2xl'
+              : 'cursor-pointer'
+          }`}
           onClick={() => {
             if (router.pathname.startsWith('/p')) return
             router.push(`/p/${postInfo.id}`)
@@ -264,15 +266,15 @@ const LensPostCard = ({ post, loading }) => {
                     <span onClick={(e) => e.stopPropagation()}>
                       <Link href={`/c/${postInfo?.communityInfo?.name}`}>
                         <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                          {postInfo?.communityInfo?.name}
+                          {stringToLength(postInfo?.communityInfo?.name, 18)}
                         </div>
                       </Link>
                     </span>
                   )}
 
-                  <span onClick={(e) => e.stopPropagation()}>
+                  <span onClick={(e) => e.stopPropagation()} className="mr-1">
                     <Link
-                      href={`/u/${postInfo?.profile?.handle}`}
+                      href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
                       className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                     >
                       <p className="pl-1.5 font-normal">
@@ -282,14 +284,16 @@ const LensPostCard = ({ post, loading }) => {
                           : 'mirrored by'}
                       </p>
                       <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                        u/{postInfo?.profile?.handle}
+                        u/{postInfo?.profile?.handle.split('.')[0]}
                       </div>
                     </Link>
                   </span>
+                  <CenteredDot />
                   <div>
                     {postInfo?.createdAt && (
-                      <div className="text-xs sm:text-sm text-s-text ml-2">
+                      <div className="text-xs sm:text-sm text-s-text ml-1">
                         <ReactTimeAgo
+                          timeStyle="twitter"
                           date={new Date(postInfo.createdAt)}
                           locale="en-US"
                         />
@@ -326,13 +330,13 @@ const LensPostCard = ({ post, loading }) => {
                     <div className="flex flex-row items-center justify-start">
                       <span onClick={(e) => e.stopPropagation()}>
                         <Link
-                          href={`/u/${postInfo?.profile?.handle}`}
+                          href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
                           className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                           passHref
                         >
                           <p className="pl-1.5 font-normal"> posted by</p>
                           <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                            u/{postInfo?.profile?.handle}
+                            u/{postInfo?.profile?.handle.split('.')[0]}
                           </div>
                         </Link>
                       </span>
@@ -340,6 +344,7 @@ const LensPostCard = ({ post, loading }) => {
                         {postInfo?.createdAt && (
                           <div className="text-xs sm:text-sm text-s-text ml-2">
                             <ReactTimeAgo
+                              timeStyle="twitter"
                               date={new Date(postInfo.createdAt)}
                               locale="en-US"
                             />
@@ -379,7 +384,12 @@ const LensPostCard = ({ post, loading }) => {
                     isDrawerOpen={isDrawerOpen}
                     setIsDrawerOpen={setIsDrawerOpen}
                   >
-                    <Tooltip title="More" arrow>
+                    <Tooltip
+                      enterDelay={1000}
+                      leaveDelay={200}
+                      title="More"
+                      arrow
+                    >
                       <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
                         <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
@@ -393,7 +403,13 @@ const LensPostCard = ({ post, loading }) => {
           <div className="flex flex-row w-full">
             {!isMobile && (
               <div className="flex flex-col items-center ml-1.5 mt-1">
-                <Tooltip title="Upvote" arrow placement="left">
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Upvote"
+                  arrow
+                  placement="left"
+                >
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -413,7 +429,13 @@ const LensPostCard = ({ post, loading }) => {
                   </button>
                 </Tooltip>
                 <div className="font-bold leading-5">{voteCount}</div>
-                <Tooltip title="Downvote" arrow placement="left">
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Downvote"
+                  arrow
+                  placement="left"
+                >
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -567,8 +589,11 @@ const LensPostCard = ({ post, loading }) => {
                     <Attachment
                       publication={postInfo}
                       className={`${
-                        router.pathname.startsWith('/p') ? '' : 'max-h-[450px]'
+                        router.pathname.startsWith('/p')
+                          ? 'max-h-[calc(100vh-50px)]'
+                          : 'max-h-[450px]'
                       }`}
+                      showAll
                     />
                   </div>
                 ) : (
@@ -609,7 +634,12 @@ const LensPostCard = ({ post, loading }) => {
               >
                 {isMobile && (
                   <div className="flex flex-row items-center gap-x-1">
-                    <Tooltip title="Upvote" arrow>
+                    <Tooltip
+                      enterDelay={1000}
+                      leaveDelay={200}
+                      title="Upvote"
+                      arrow
+                    >
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
@@ -630,7 +660,12 @@ const LensPostCard = ({ post, loading }) => {
                     <div className="font-medium text-[#687684]">
                       {voteCount}
                     </div>
-                    <Tooltip title="Downvote" arrow>
+                    <Tooltip
+                      enterDelay={1000}
+                      leaveDelay={200}
+                      title="Downvote"
+                      arrow
+                    >
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
@@ -651,7 +686,12 @@ const LensPostCard = ({ post, loading }) => {
                   </div>
                 )}
                 {!router.pathname.startsWith('/p') ? (
-                  <Tooltip title="Comment" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Comment"
+                    arrow
+                  >
                     <span onClick={(e) => e.stopPropagation()}>
                       <Link
                         href={`/p/${postInfo.id}`}
@@ -676,7 +716,12 @@ const LensPostCard = ({ post, loading }) => {
                     </span>
                   </Tooltip>
                 ) : (
-                  <Tooltip title="Comment" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Comment"
+                    arrow
+                  >
                     <div className="flex flex-row items-center cursor-pointer  hover:bg-s-hover rounded-md p-1 font-medium">
                       {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
@@ -695,15 +740,21 @@ const LensPostCard = ({ post, loading }) => {
                     </div>
                   </Tooltip>
                 )}
-                <span onClick={(e) => e.stopPropagation()}>
-                  <LensCollectButton
-                    publication={post}
-                    totalCollects={postInfo?.stats?.totalAmountOfCollects}
-                    hasCollectedByMe={postInfo?.hasCollectedByMe}
-                    author={postInfo?.profile}
-                    collectModule={postInfo?.collectModule}
-                  />
-                </span>
+
+                {(postInfo?.collectModule?.__typename ===
+                  'FreeCollectModuleSettings' ||
+                  postInfo?.collectModule?.__typename ===
+                    'FeeCollectModuleSettings') && (
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <LensCollectButton
+                      publication={post}
+                      totalCollects={postInfo?.stats?.totalAmountOfCollects}
+                      hasCollectedByMe={postInfo?.hasCollectedByMe}
+                      author={postInfo?.profile}
+                      collectModule={postInfo?.collectModule}
+                    />
+                  </span>
+                )}
                 <span onClick={(e) => e.stopPropagation()}>
                   <MirrorButton postInfo={postInfo} />
                 </span>

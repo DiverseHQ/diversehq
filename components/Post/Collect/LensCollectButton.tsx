@@ -44,7 +44,7 @@ const LensCollectButton = ({
                 <div className="flex items-center flex-col justify-center px-4 text-p-text">
                   <div className="mb-2 self-start ">
                     <h1 className="font-medium text-lg ">
-                      Post By u/{publication.profile?.handle}
+                      Post By u/{publication.profile?.handle?.split('.')[0]}
                     </h1>
                     <p className="font-normal text-sm">
                       {stringToLength(publication.metadata?.name, 20)}
@@ -91,6 +91,8 @@ const LensCollectButton = ({
         }}
       >
         <Tooltip
+          enterDelay={1000}
+          leaveDelay={200}
           title={isCollected || hasCollectedByMe ? 'Collected' : 'Collect'}
           arrow
         >

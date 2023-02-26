@@ -87,7 +87,7 @@ const LensNotificationColumn = () => {
         isSignedIn &&
         hasProfile &&
         lensProfile?.defaultProfile?.id && (
-          <div>
+          <div className="sm:rounded-2xl bg-s-bg my-4">
             <InfiniteScroll
               dataLength={notifications.length}
               next={getMoreNotifications}
@@ -179,8 +179,8 @@ const LensNotificationColumn = () => {
                     notification={notification}
                     isRead={
                       notification.createdAt <
-                      (user.lastFetchedLensNotificationsTime
-                        ? user.lastFetchedLensNotificationsTime
+                      (user?.lastFetchedLensNotificationsTime
+                        ? user?.lastFetchedLensNotificationsTime
                         : new Date())
                     }
                   />

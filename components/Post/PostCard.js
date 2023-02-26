@@ -219,6 +219,7 @@ const PostCard = ({ _post, setPosts }) => {
                 {post.createdAt && (
                   <div className="text-xs sm:text-sm text-s-text ml-2">
                     <ReactTimeAgo
+                      timeStyle="twitter"
                       date={new Date(post.createdAt)}
                       locale="en-US"
                     />
@@ -268,6 +269,7 @@ const PostCard = ({ _post, setPosts }) => {
                     {post.createdAt && (
                       <div className="text-xs sm:text-sm text-s-text ml-2">
                         <ReactTimeAgo
+                          timeStyle="twitter"
                           date={new Date(post.createdAt)}
                           locale="en-US"
                         />
@@ -316,7 +318,7 @@ const PostCard = ({ _post, setPosts }) => {
                 isDrawerOpen={isDrawerOpen}
                 setIsDrawerOpen={setIsDrawerOpen}
               >
-                <Tooltip title="More" arrow>
+                <Tooltip enterDelay={1000} leaveDelay={200} title="More" arrow>
                   <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                     <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
@@ -330,7 +332,13 @@ const PostCard = ({ _post, setPosts }) => {
       <div className="flex flex-row w-full">
         {!isMobile && (
           <div className="flex flex-col items-center ml-1.5 mt-1">
-            <Tooltip title="Upvote" arrow placement="left">
+            <Tooltip
+              enterDelay={1000}
+              leaveDelay={200}
+              title="Upvote"
+              arrow
+              placement="left"
+            >
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -349,7 +357,13 @@ const PostCard = ({ _post, setPosts }) => {
               </button>
             </Tooltip>
             <div className="font-bold leading-5">{totalCount}</div>
-            <Tooltip title="Downvote" arrow placement="left">
+            <Tooltip
+              enterDelay={1000}
+              leaveDelay={200}
+              title="Downvote"
+              arrow
+              placement="left"
+            >
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -515,7 +529,12 @@ const PostCard = ({ _post, setPosts }) => {
           >
             {isMobile && (
               <div className="flex flex-row items-center gap-x-1">
-                <Tooltip title="Upvote" arrow>
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Upvote"
+                  arrow
+                >
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -535,7 +554,12 @@ const PostCard = ({ _post, setPosts }) => {
                   </button>
                 </Tooltip>
                 <div className="font-medium text-[#687684]">{totalCount}</div>
-                <Tooltip title="Downvote" arrow>
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Downvote"
+                  arrow
+                >
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -556,7 +580,7 @@ const PostCard = ({ _post, setPosts }) => {
               </div>
             )}
             {!router.pathname.startsWith('/p') ? (
-              <Tooltip title="Comment" arrow>
+              <Tooltip enterDelay={1000} leaveDelay={200} title="Comment" arrow>
                 <span onClick={(e) => e.stopPropagation()}>
                   <Link
                     href={`/p/${post._id}`}
@@ -581,7 +605,7 @@ const PostCard = ({ _post, setPosts }) => {
                 </span>
               </Tooltip>
             ) : (
-              <Tooltip title="Comment" arrow>
+              <Tooltip enterDelay={1000} leaveDelay={200} title="Comment" arrow>
                 <div className="flex flex-row items-center hover:bg-p-btn-hover font-medium">
                   {/* {post.comments?.length === 0 && (
                   <FaRegComment className="hover:cursor-pointer mr-2 w-4 h-4 " />

@@ -9,18 +9,21 @@ import { IoMdNotificationsOutline } from 'react-icons/io'
 import ClickOption from './ClickOption'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
-import Image from 'next/image'
 import { useTheme } from '../Common/ThemeProvider'
 import { useNotify } from '../Common/NotifyContext'
 import { getJoinedCommunitiesApi } from '../../api/community'
 import { RiArrowDropDownLine } from 'react-icons/ri'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
-import getStampFyiURL from '../User/lib/getStampFyiURL'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import getAvatar from '../User/lib/getAvatar'
+import { scrollToTop } from '../../lib/helpers'
 
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
-  const { user, address } = useProfile()
+  const { user } = useProfile()
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { showModal } = usePopUpModal()
   const { theme, toggleTheme } = useTheme()
 
@@ -55,6 +58,14 @@ const Navbar = () => {
     router.push('/notification')
   }
 
+  const routeToHome = () => {
+    router.push('/')
+  }
+
+  const routeToExplore = () => {
+    router.push('/explore')
+  }
+
   const showMoreOptions = (e) => {
     // setShowOptions(!showOptions)
     showModal({
@@ -62,11 +73,7 @@ const Navbar = () => {
       type: modalType.customposition,
       onAction: () => {},
       extraaInfo: {
-        bottom:
-          window.innerHeight -
-          e.currentTarget.getBoundingClientRect().bottom -
-          120 +
-          'px',
+        top: e.currentTarget.getBoundingClientRect().bottom + 10 + 'px',
         left: e.currentTarget.getBoundingClientRect().left + 'px'
       }
     })
@@ -126,34 +133,49 @@ const Navbar = () => {
         </div>
         <SearchModal />
         <div className="flex flex-row gap-0.5 lg:gap-1">
-          <Link href={'/'}>
-            <button
-              className={`font-medium ${
-                active === 'home' && 'bg-p-btn-hover'
-              } hover:bg-p-btn-hover  cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
-            >
-              Home
-            </button>
-          </Link>
-          <Link href={'/explore'}>
-            <button
-              className={`font-medium ${
-                active === 'explore' && 'bg-p-btn-hover'
-              } hover:bg-p-btn-hover cursor-pointer rounded-[8px] px-2 lg:px-3 py-1 text-p-text`}
-            >
-              Explore
-            </button>
-          </Link>
+          <button
+            className={`font-medium ${
+              active === 'home' && 'bg-p-btn-hover'
+            } hover:bg-p-btn-hover  cursor-pointer rounded-md px-2 lg:px-3 py-1 text-p-text`}
+            onClick={() => {
+              if (
+                router.pathname === '/' ||
+                router.pathname.startsWith('/feed')
+              ) {
+                scrollToTop()
+              } else {
+                routeToHome()
+                return
+              }
+            }}
+          >
+            Home
+          </button>
+          <button
+            className={`font-medium ${
+              active === 'explore' && 'bg-p-btn-hover'
+            } hover:bg-p-btn-hover cursor-pointer rounded-md px-2 lg:px-3 py-1 text-p-text`}
+            onClick={() => {
+              if (router.pathname.startsWith('/explore')) {
+                scrollToTop()
+              } else {
+                routeToExplore()
+                return
+              }
+            }}
+          >
+            Explore
+          </button>
           <div className="flex flex-col text-p-text font-medium">
             <button
-              className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md sm:rounded-xl  hover:bg-p-btn-hover`}
+              className={`flex p-1 sm:py-1 sm:px-2  flex-row items-center hover:cursor-pointer rounded-md  hover:bg-p-btn-hover`}
               onClick={getJoinedCommunities}
             >
               <p>Joined</p>
               <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
             </button>
             <div
-              className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-md sm:rounded-xl absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
+              className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-md absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
               ref={dropdownRef}
             >
               {showJoinedCommunities && (
@@ -197,7 +219,7 @@ const Navbar = () => {
           <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
           {/* a green count dot */}
           {Number(notificationsCount + lensNotificationsCount) > 0 && (
-            <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg">
+            <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg dark:border-s-bg">
               <span>{notificationsCount + lensNotificationsCount}</span>
             </div>
           )}
@@ -212,7 +234,7 @@ const Navbar = () => {
             <FiSun className="w-[25px] h-[25px] cursor-pointer" />
           )}
         </button>
-        {user && address && (
+        {/* {user && address && (
           <div
             className="flex flex-row rounded-full items-center justify-between hover:cursor-pointer h-[40px]"
             onClick={showMoreOptions}
@@ -232,9 +254,33 @@ const Navbar = () => {
               />
             )}
           </div>
-        )}
+        )} */}
         {/* <CgProfile className="w-[25px] h-[25px] text-[#50555C] cursor-pointer" /> */}
-        <LensLoginButton />
+        {!isSignedIn ||
+        !hasProfile ||
+        !user ||
+        !lensProfile?.defaultProfile?.dispatcher?.canUseRelay ? (
+          <LensLoginButton />
+        ) : (
+          <div className="flex flex-row items-center space-x-2 text-p-text">
+            <ImageWithPulsingLoader
+              src={getAvatar(lensProfile?.defaultProfile)}
+              className="w-[40px] h-[40px] rounded-full cursor-pointer"
+              onClick={showMoreOptions}
+            />
+            <div className="flex flex-col">
+              {lensProfile?.defaultProfile?.name && (
+                <div> {lensProfile?.defaultProfile?.name} </div>
+              )}
+              <Link
+                href={`/u/${lensProfile.defaultProfile.handle.split('.')[0]}`}
+                className={`hover:cursor-pointer hover:underline text-s-text text-sm p-2 md:p-0`}
+              >
+                u/{lensProfile.defaultProfile.handle.split('.')[0]}
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

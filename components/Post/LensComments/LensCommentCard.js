@@ -22,6 +22,7 @@ import OptionsWrapper from '../../Common/OptionsWrapper'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import { Tooltip } from '@mui/material'
 import { useCommentStore } from '../../../store/comment'
+import CenteredDot from '../../Common/UI/CenteredDot'
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()
@@ -156,10 +157,10 @@ const LensCommentCard = ({ comment }) => {
   }
 
   const addComment = async (tx, comment) => {
+    setCurrentReplyComment(null)
     const prevComments = comments
     const newCommentsFirstPhase = [comment, ...prevComments]
     setComments(newCommentsFirstPhase)
-    setCurrentReplyComment(null)
     const indexResult = await pollUntilIndexed(tx)
     const commentId = commentIdFromIndexedResult(
       lensProfile?.defaultProfile?.id,
@@ -199,12 +200,17 @@ const LensCommentCard = ({ comment }) => {
                 className="w-6 h-6 rounded-full mr-1 object-cover"
               />
 
-              <Link href={`/u/${comment?.profile?.handle}`} passHref>
+              <Link
+                href={`/u/${comment?.profile?.handle.split('.')[0]}`}
+                passHref
+              >
                 <div className="hover:underline font-bold text-base">
-                  u/{comment?.profile?.handle}
+                  u/{comment?.profile?.handle.split('.')[0]}
                 </div>
               </Link>
+              <CenteredDot />
               <ReactTimeAgo
+                timeStyle="twitter"
                 className="text-xs sm:text-sm text-s-text"
                 date={new Date(comment.createdAt)}
                 locale="en-US"
@@ -213,7 +219,12 @@ const LensCommentCard = ({ comment }) => {
             {!comment.id && (
               <div className="sm:mr-5 flex flex-row items-center">
                 {/* pulsing dot */}
-                <Tooltip title="Indexing" arrow>
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Indexing"
+                  arrow
+                >
                   <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
                 </Tooltip>
               </div>
@@ -240,8 +251,13 @@ const LensCommentCard = ({ comment }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <Tooltip title="More" arrow>
-                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="More"
+                    arrow
+                  >
+                    <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
                       <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                   </Tooltip>
@@ -264,10 +280,15 @@ const LensCommentCard = ({ comment }) => {
               <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
                 {/* upvote and downvote */}
                 <div className="flex flex-row items-center gap-x-2">
-                  <Tooltip title="Upvote" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Upvote"
+                    arrow
+                  >
                     <button
                       onClick={handleUpvote}
-                      className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
+                      className="hover:bg-s-hover cursor-pointer rounded-md p-1"
                     >
                       <img
                         src={
@@ -280,10 +301,15 @@ const LensCommentCard = ({ comment }) => {
                     </button>
                   </Tooltip>
                   <div className="font-medium text-[#687684]">{voteCount}</div>
-                  <Tooltip title="Downvote" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Downvote"
+                    arrow
+                  >
                     <button
                       onClick={handleDownvote}
-                      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                      className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
                     >
                       <img
                         src={
@@ -303,7 +329,7 @@ const LensCommentCard = ({ comment }) => {
                     currentReplyComment?.id === comment?.id
                       ? 'bg-p-btn-hover text-p-btn-hover-text'
                       : ''
-                  } active:bg-p-btn-hover sm:hover:bg-p-btn-hover px-2 py-0.5 rounded-md`}
+                  } active:bg-p-btn-hover sm:hover:bg-s-hover px-2 py-0.5 rounded-md`}
                   onClick={() => {
                     if (!isSignedIn || !hasProfile) {
                       notifyInfo(
@@ -327,12 +353,13 @@ const LensCommentCard = ({ comment }) => {
               </div>
 
               {/* create comment if showCreateComment is true */}
-              {currentReplyComment?.id === comment?.id && (
-                <LensCreateComment
-                  postId={comment.id}
-                  addComment={addComment}
-                />
-              )}
+              {currentReplyComment &&
+                currentReplyComment?.id === comment?.id && (
+                  <LensCreateComment
+                    postId={comment.id}
+                    addComment={addComment}
+                  />
+                )}
 
               {/* replies */}
               {comment?.id && (

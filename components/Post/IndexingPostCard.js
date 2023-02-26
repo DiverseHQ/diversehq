@@ -42,18 +42,19 @@ const IndexingPostCard = ({ postInfo }) => {
                   </Link>
 
                   <Link
-                    href={`/u/${postInfo?.profile?.handle}`}
+                    href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
                     className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                   >
                     <p className="pl-1.5 font-normal"> posted by</p>
                     <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                      u/{postInfo?.profile?.handle}
+                      u/{postInfo?.profile?.handle.split('.')[0]}
                     </div>
                   </Link>
                   <div>
                     {postInfo?.createdAt && (
                       <div className="text-xs sm:text-sm text-s-text ml-2">
                         <ReactTimeAgo
+                          timeStyle="twitter"
                           date={new Date(postInfo.createdAt)}
                           locale="en-US"
                         />
@@ -81,19 +82,20 @@ const IndexingPostCard = ({ postInfo }) => {
                     </Link>
                     <div className="flex flex-row items-center justify-start">
                       <Link
-                        href={`/u/${postInfo?.profile?.handle}`}
+                        href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
                         className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                         passHref
                       >
                         <p className="pl-1.5 font-normal"> posted by</p>
                         <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                          u/{postInfo?.profile?.handle}
+                          u/{postInfo?.profile?.handle.split('.')[0]}
                         </div>
                       </Link>
                       <div>
                         {postInfo?.createdAt && (
                           <div className="text-xs sm:text-sm text-s-text ml-2">
                             <ReactTimeAgo
+                              timeStyle="twitter"
                               date={new Date(postInfo.createdAt)}
                               locale="en-US"
                             />
@@ -107,7 +109,12 @@ const IndexingPostCard = ({ postInfo }) => {
             )}
             <div className="sm:mr-5 flex flex-row items-center">
               {/* pulsing dot */}
-              <Tooltip title="Indexing" arrow>
+              <Tooltip
+                enterDelay={1000}
+                leaveDelay={200}
+                title="Indexing"
+                arrow
+              >
                 <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
               </Tooltip>
             </div>

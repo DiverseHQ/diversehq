@@ -38,7 +38,7 @@ const LensProfilesSearchModal = ({
   }, [searchProfileQuery?.data?.search?.items])
 
   const handleProfileClicked = (handle) => {
-    router.push(`/u/${handle}`)
+    router.push(`/u/${handle.split('.')[0]}`)
   }
 
   return (
@@ -71,7 +71,9 @@ const LensProfilesSearchModal = ({
               />
               <div className="flex flex-col text-sm">
                 <div>{stringToLength(profile.name, 20)}</div>
-                <div className="text-s-text">u/{profile.handle}</div>
+                <div className="text-s-text">
+                  u/{profile.handle?.split('.')[0]}
+                </div>
               </div>
             </div>
           ))}

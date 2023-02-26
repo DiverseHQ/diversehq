@@ -113,7 +113,7 @@ const MessagesList: FC<MessageListProps> = ({
           const messageDiv = (
             <div key={`${msg.id}_${index}`}>
               {index === messages.length - 1 && (
-                <div className="w-full text-sm flex flex-row justify-center">
+                <div className="w-full text-sm flex flex-row justify-center my-2">
                   <div className="py-0.5 px-3 bg-p-bg rounded-md">
                     {formatDate(msg.sent)}
                   </div>

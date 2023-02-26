@@ -10,15 +10,14 @@ import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
 import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
-import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
 import { FiSend } from 'react-icons/fi'
-import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import getAvatar from '../../../components/User/lib/getAvatar'
 import { useCommentStore } from '../../../store/comment'
 import ReplyMobileInfo from './ReplyMobileInfo'
 import Giphy from '../Giphy'
 import { AiOutlineClose } from 'react-icons/ai'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 const LensCreateComment = ({ postId, addComment, postInfo }) => {
   const [focused, setFocused] = useState(false)
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -45,7 +44,6 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
   // todo: add appreciate amoount using contract
 
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
-  const { user } = useProfile()
   const { isMobile } = useDevice()
 
   const onSuccessCreateComment = async (tx, tempId) => {
@@ -184,19 +182,17 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
       {!isMobile ? (
         <>
           {/* Desktop create comment */}
-          <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
+          <div className="px-3 sm:px-5 items-center w-full bg-s-bg pt-1 pb-3 border-b border-[#eee] dark:border-p-border sm:rounded-t-2xl ">
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex flex-row items-center">
-                <img
-                  src={
-                    user?.profileImageUrl
-                      ? user?.profileImageUrl
-                      : getStampFyiURL(user?.walletAddress)
-                  }
+                <ImageWithPulsingLoader
+                  src={getAvatar(lensProfile?.defaultProfile)}
                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                 />
                 <div className="ml-2 font-bold text-base">
-                  {lensProfile?.defaultProfile?.handle}
+                  {lensProfile?.defaultProfile?.name
+                    ? lensProfile?.defaultProfile?.name
+                    : lensProfile?.defaultProfile?.handle.split('.')[0]}
                 </div>
               </div>
             </div>

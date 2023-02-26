@@ -32,7 +32,12 @@ module.exports = {
         'm-btn-bg': 'var(--main-btn-bg)', // main button background
         'm-btn-text': 'var(--main-btn-text)', // main button text
         'm-btn-hover-bg': 'var(--main-btn-hover-bg)', // main button hover background
-        'm-btn-hover-text': 'var(--main-btn-hover-text)' // main button hover text
+        'm-btn-hover-text': 'var(--main-btn-hover-text)', // main button hover text
+        'select-btn-bg': 'var(--select-btn-bg)', // select button background,
+        'select-btn-text': 'var(--select-btn-text)', // select button text,
+        'select-btn-hover-bg': 'var(--select-btn-hover-bg)', // select button background when hovered,
+        'select-active-btn-bg': 'var(--select-active-btn-bg)', // select button background when active,
+        'select-active-btn-text': 'var(--select-active-btn-text)' // select button text when active,
       },
       boxShadow: {
         top: '0px -2px 1px 1px rgba(0, 0, 0, 0.1)',

@@ -14,7 +14,7 @@ const PostShareButton = ({ url, text }) => {
         text
       }}
     >
-      <Tooltip title="Share" arrow>
+      <Tooltip enterDelay={1000} leaveDelay={200} title="Share" arrow>
         <div className="flex flex-row items-center hover:bg-s-hover rounded-md p-1">
           <img
             src="/share.svg"

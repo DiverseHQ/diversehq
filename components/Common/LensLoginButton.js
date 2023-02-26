@@ -9,17 +9,20 @@ import { modalType, usePopUpModal } from './CustomPopUpProvider'
 import { useNotify } from './NotifyContext'
 import { useProfile } from './WalletContext'
 import ConnectWalletAndSignInButton from './ConnectWalletAndSignInButton'
-import { useRouter } from 'next/router'
 import useDevice from './useDevice'
 import { useQueryClient } from '@tanstack/react-query'
 
 const LensLoginButton = () => {
-  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const {
+    isSignedIn,
+    hasProfile,
+    data: lensProfile,
+    refetch
+  } = useLensUserContext()
   const { user, address } = useProfile()
   const { notifyInfo, notifySuccess } = useNotify()
   const { showModal } = usePopUpModal()
   const { isMobile } = useDevice()
-  const router = useRouter()
 
   const queryClient = useQueryClient()
 
@@ -72,7 +75,6 @@ const LensLoginButton = () => {
 
   const onSetDispatcherSuccess = async () => {
     notifySuccess('No more signing required for many actions')
-    router.reload()
     await queryClient.invalidateQueries({
       queryKey: ['lensUser']
     })
@@ -82,6 +84,7 @@ const LensLoginButton = () => {
     await queryClient.invalidateQueries({
       queryKey: ['lensUser', 'defaultProfile']
     })
+    await refetch()
   }
 
   useEffect(() => {
@@ -98,34 +101,29 @@ const LensLoginButton = () => {
             <div className="flex flex-col items-start">
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
                 <Link
-                  href={`/u/${lensProfile.defaultProfile.handle}`}
+                  href={`/u/${lensProfile.defaultProfile.handle.split('.')[0]}`}
                   className={`mr-2 hover:cursor-pointer hover:underline ${
                     isMobile
                       ? 'dark:text-s-bg hover:font-semibold'
                       : 'dark:text-p-text'
                   } text-[20px] md:text-[16px] p-2 md:p-0`}
                 >
-                  u/{lensProfile.defaultProfile.handle}
+                  u/{lensProfile.defaultProfile.handle.spilt('.')[0]}
                 </Link>
               )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
                 !loading && (
                   <button
                     onClick={handleEnableDispatcher}
-                    className="flex flex-col items-center rounded-xl text-sm bg-[#62F030] px-2"
+                    className="rounded-full sm:rounded-xl text-sm bg-[#62F030] px-2"
                   >
-                    <div>
-                      <span>u/{lensProfile?.defaultProfile?.handle}</span>
-                    </div>
-                    <div>
-                      <spa>Go Signless</spa>
-                    </div>
+                    <span>Go Signless</span>
                   </button>
                 )}
               {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
                 loading && (
-                  <div className="rounded-xl text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
-                    Enabling...
+                  <div className="rounded-full sm:rounded-xl text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
+                    Going...
                   </div>
                 )}
             </div>

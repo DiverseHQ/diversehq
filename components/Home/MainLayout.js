@@ -25,10 +25,10 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
     if (typeof isMobile === 'undefined' || isMobileView) return
     setMobile(isMobile)
   }, [isMobile])
-  if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
-    return null
 
   const { theme } = useTheme()
+  if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
+    return null
   return (
     <>
       <Head>
@@ -39,7 +39,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
       </Head>
 
       {mobile && (
-        <div className="text-p-text bg-p-bg min-h-screen noSelect">
+        <div className="text-p-text bg-s-bg min-h-screen noSelect">
           {mounted && <NewMobileTopNav />}
           <Box
             sx={{

@@ -12,7 +12,7 @@ import ExploreFeedNav from './ExploreFeedNav'
 const ExploreTopCommunitiesPage = () => {
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
-  const { isDesktop, isMobile } = useDevice()
+  const { isMobile } = useDevice()
 
   useEffect(() => {
     getTopCommunities()
@@ -33,11 +33,7 @@ const ExploreTopCommunitiesPage = () => {
 
   return (
     <>
-      <div className="w-full flex justify-center shrink-0 pt-6">
-        <div className="w-full md:w-[650px]">
-          {isDesktop && <ExploreFeedNav />}
-        </div>
-      </div>
+      <ExploreFeedNav />
       <div>
         <InfiniteScroll
           dataLength={communities.length}
