@@ -80,12 +80,12 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
   const createComment = async () => {
     if (!lensProfile?.defaultProfile?.id) return
     const content = commentRef.current.value
-    if (!content || content === '' || !gifAttachment) return
+    if (!gifAttachment && (content.trim() === '' || !content)) return
     setLoading(true)
     let mainContentFocus = null
 
     if (gifAttachment) {
-      mainContentFocus = PublicationMainFocus.ImageOnly
+      mainContentFocus = PublicationMainFocus.Image
       console.log('gifAttachment while posting', gifAttachment)
     } else {
       mainContentFocus = PublicationMainFocus.TextOnly
@@ -104,16 +104,22 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
         content: content,
         external_url: 'https://diversehq.xyz',
         image: gifAttachment ? gifAttachment?.images?.original.url : null,
-        imageMimeType: gifAttachment
-          ? gifAttachment?.images?.original.url
-          : null,
+        imageMimeType: gifAttachment ? 'image/gif' : null,
         animation_url: gifAttachment
           ? gifAttachment?.images?.original.url
           : null,
         name: 'Create with DiverseHQ',
         attributes: [],
         tags: [],
-        appId: 'DiverseHQ'
+        appId: 'DiverseHQ',
+        media: gifAttachment
+          ? [
+              {
+                item: gifAttachment?.images?.original.url,
+                type: 'image/gif'
+              }
+            ]
+          : null
       })
       const createCommentRequest = {
         profileId: lensProfile?.defaultProfile?.id,
@@ -182,7 +188,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
       {!isMobile ? (
         <>
           {/* Desktop create comment */}
-          <div className="px-3 sm:px-5 items-center w-full bg-s-bg pt-1 pb-3 border-b border-[#eee] dark:border-p-border sm:rounded-t-2xl ">
+          <div className="px-3 sm:px-5 items-center w-full bg-s-bg pt-1 pb-3 sm:rounded-t-2xl ">
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex flex-row items-center">
                 <ImageWithPulsingLoader

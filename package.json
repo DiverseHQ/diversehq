@@ -10,7 +10,6 @@
     "codegen": "graphql-codegen"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.1",
     "@biconomy/mexa": "^3.0.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",

@@ -14,10 +14,10 @@ const MirrorButton = ({ postInfo }) => {
   const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
   const { notifyError, notifySuccess } = useNotify()
-  const { error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
+  const { result, signTypedDataAndBroadcast } = useSignTypedDataAndBroadcast()
   const { mutateAsync: mirrorPostViaDispatcher } =
     useCreateMirrorViaDispatcherMutation()
+  console.log(postInfo, 'postInfo')
   const [mirrorCount, setMirrorCount] = useState(
     postInfo?.stats?.totalAmountOfMirrors
       ? postInfo?.stats?.totalAmountOfMirrors
@@ -104,22 +104,20 @@ const MirrorButton = ({ postInfo }) => {
   return (
     <>
       <Tooltip title="Mirror" arrow>
-        <div className="hover:bg-s-hover rounded-md p-0.5 cursor-pointer flex flex-row items-center">
-          <button
-            onClick={handleMirrorPost}
-            className={`hover:bg-s-hover ${
-              mirrored ? 'bold' : 'text-[#687684]'
-            }`}
-            disabled={loading || mirrored}
-          >
-            {loading ? (
-              <CircularProgress size="14px" color="primary" />
-            ) : (
-              <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
-            )}
-          </button>
+        <button
+          onClick={handleMirrorPost}
+          className={`hover:bg-s-hover hover:bg-s-hover rounded-md p-0.5 cursor-pointer flex flex-row items-center ${
+            mirrored ? 'bold' : 'text-[#687684]'
+          }`}
+          disabled={loading || mirrored}
+        >
+          {loading ? (
+            <CircularProgress size="14px" color="primary" />
+          ) : (
+            <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
+          )}
           <p className="ml-2 font-medium text-[#687684]">{mirrorCount}</p>
-        </div>
+        </button>
       </Tooltip>
     </>
   )

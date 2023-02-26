@@ -160,26 +160,29 @@ const LensCommentCard = ({ comment }) => {
     setCurrentReplyComment(null)
     const prevComments = comments
     const newCommentsFirstPhase = [comment, ...prevComments]
-    setComments(newCommentsFirstPhase)
-    const indexResult = await pollUntilIndexed(tx)
-    const commentId = commentIdFromIndexedResult(
-      lensProfile?.defaultProfile?.id,
-      indexResult
-    )
+    try {
+      setComments(newCommentsFirstPhase)
+      const indexResult = await pollUntilIndexed(tx)
+      const commentId = commentIdFromIndexedResult(
+        lensProfile?.defaultProfile?.id,
+        indexResult
+      )
+      await addReaction({
+        request: {
+          profileId: lensProfile.defaultProfile.id,
+          publicationId: commentId,
+          reaction: ReactionTypes.Upvote
+        }
+      })
 
-    await addReaction({
-      request: {
-        profileId: lensProfile.defaultProfile.id,
-        publicationId: commentId,
-        reaction: ReactionTypes.Upvote
-      }
-    })
-
-    const newCommentsSecondPhase = newCommentsFirstPhase.map((c) =>
-      c.tempId === comment.tempId ? { ...c, id: commentId } : c
-    )
-    // add id to that comment
-    setComments(newCommentsSecondPhase)
+      const newCommentsSecondPhase = newCommentsFirstPhase.map((c) =>
+        c.tempId === comment.tempId ? { ...c, id: commentId } : c
+      )
+      // add id to that comment
+      setComments(newCommentsSecondPhase)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -270,11 +273,12 @@ const LensCommentCard = ({ comment }) => {
           <div className="flex flex-row w-full">
             {/* vertical line */}
             <div className="w-7 flex flex-row items-center justify-center py-2">
-              <div className="border-l-2 border-gray-300 h-full"></div>
+              <div className="border-l-2 border-[#eee] dark:border-p-border h-full"></div>
             </div>
             <div className="w-full">
               {/* content */}
               <div className="mt-1">{comment?.metadata?.content}</div>
+              {/* attachemnt */}
 
               {/* last row */}
               <div className="flex flex-row items-center space-x-6 pb-2 pt-1">

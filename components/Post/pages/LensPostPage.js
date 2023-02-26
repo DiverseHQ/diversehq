@@ -32,7 +32,8 @@ const LensPostPage = ({ id, post }) => {
       },
       reactionRequest: {
         profileId: lensProfile?.defaultProfile?.id
-      }
+      },
+      profileId: lensProfile?.defaultProfile?.id
     },
     {
       enabled: !!id && !!lensProfile?.defaultProfile?.id

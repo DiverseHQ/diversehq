@@ -1,6 +1,7 @@
 query ProfileFeed(
   $request: FeedRequest!
   $reactionRequest: ReactionFieldResolverRequest
+  $profileId: ProfileId
 ) {
   feed(request: $request) {
     items {

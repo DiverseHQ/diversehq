@@ -173,8 +173,18 @@ fragment PostFields on Post {
   appId
   hidden
   reaction(request: $reactionRequest)
-  mirrors(by: null)
+  mirrors(by: $profileId)
   hasCollectedByMe
+  canComment(profileId: $profileId) {
+    result
+  }
+  canMirror(profileId: $profileId) {
+    result
+  }
+  canDecrypt(profileId: $profileId) {
+    result
+    reasons
+  }
   isGated
 }
 

@@ -279,9 +279,8 @@ const LensPostCard = ({ post, loading }) => {
                     >
                       <p className="pl-1.5 font-normal">
                         {' '}
-                        {postInfo.__typename === 'Post'
-                          ? 'posted by'
-                          : 'mirrored by'}
+                        {postInfo.__typename === 'Post' && 'posted by'}
+                        {postInfo.__typename === 'Mirror' && 'mirrored by'}
                       </p>
                       <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
                         u/{postInfo?.profile?.handle.split('.')[0]}
@@ -334,7 +333,11 @@ const LensPostCard = ({ post, loading }) => {
                           className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
                           passHref
                         >
-                          <p className="pl-1.5 font-normal"> posted by</p>
+                          <p className="pl-1.5 font-normal">
+                            {' '}
+                            {postInfo.__typename === 'Post' && 'posted by'}
+                            {postInfo.__typename === 'Mirror' && 'mirrored by'}
+                          </p>
                           <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
                             u/{postInfo?.profile?.handle.split('.')[0]}
                           </div>

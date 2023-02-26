@@ -104,7 +104,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   }
 
   return (
-    <div className="sm:rounded-2xl bg-s-bg py-2">
+    <div className="sm:rounded-2xl bg-s-bg py-2 ">
       {/* create commentd */}
       {postInfo && (
         <LensCreateComment
@@ -153,7 +153,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
         endMessage={<></>}
       >
         {uniqueComments.length > 0 && (
-          <div className="bg-s-bg px-3 sm:px-5 py-4">
+          <div className="bg-s-bg px-3 sm:px-5 py-4 border-t border-[#eee] dark:border-p-border">
             {uniqueComments.map((comment, index) => {
               return <LensCommentCard key={index} comment={comment} />
             })}
