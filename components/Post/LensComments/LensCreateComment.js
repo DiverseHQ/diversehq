@@ -17,6 +17,8 @@ import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import getAvatar from '../../../components/User/lib/getAvatar'
 import { useCommentStore } from '../../../store/comment'
 import ReplyMobileInfo from './ReplyMobileInfo'
+import Giphy from '../Giphy'
+import { AiOutlineClose } from 'react-icons/ai'
 const LensCreateComment = ({ postId, addComment, postInfo }) => {
   const [focused, setFocused] = useState(false)
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -38,6 +40,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
 
   const commentRef = useRef()
   const [loading, setLoading] = useState(false)
+  const [gifAttachment, setGifAttachment] = useState(null)
 
   // todo: add appreciate amoount using contract
 
@@ -73,26 +76,42 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
     commentRef.current.value = ''
     commentRef.current.style.height = 'auto'
     commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
+    setGifAttachment(null)
   }
 
   const createComment = async () => {
     if (!lensProfile?.defaultProfile?.id) return
     const content = commentRef.current.value
-    if (!content || content === '') return
+    if (!content || content === '' || !gifAttachment) return
     setLoading(true)
+    let mainContentFocus = null
+
+    if (gifAttachment) {
+      mainContentFocus = PublicationMainFocus.ImageOnly
+      console.log('gifAttachment while posting', gifAttachment)
+    } else {
+      mainContentFocus = PublicationMainFocus.TextOnly
+      console.log('textOnly')
+    }
+
     try {
       const metadata_id = uuidv4()
       setTempId(tempId)
       const ipfsHash = await uploadToIpfsInfuraAndGetPath({
         version: '2.0.0',
-        mainContentFocus: PublicationMainFocus.TextOnly,
+        mainContentFocus: mainContentFocus,
         metadata_id: metadata_id,
         description: content,
         locale: 'en-US',
         content: content,
         external_url: 'https://diversehq.xyz',
-        image: null,
-        imageMimeType: null,
+        image: gifAttachment ? gifAttachment?.images?.original.url : null,
+        imageMimeType: gifAttachment
+          ? gifAttachment?.images?.original.url
+          : null,
+        animation_url: gifAttachment
+          ? gifAttachment?.images?.original.url
+          : null,
         name: 'Create with DiverseHQ',
         attributes: [],
         tags: [],
@@ -199,8 +218,26 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                   e.target.style.height = e.target.scrollHeight + 'px'
                 }}
               />
+              {gifAttachment && (
+                <div className="flex items-center mt-2">
+                  <div className="relative w-fit">
+                    <img
+                      src={gifAttachment.images.original.url}
+                      className="max-h-80 rounded-2xl object-cover"
+                      alt={gifAttachment.title}
+                      type="image/gif"
+                    />
+
+                    <AiOutlineClose
+                      onClick={() => setGifAttachment(null)}
+                      className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="w-full flex flex-row justify-end">
+            <div className="w-full flex flex-row justify-end space-x-2 items-center">
+              <Giphy setGifAttachment={setGifAttachment} />
               <button
                 disabled={loading}
                 onClick={createComment}
