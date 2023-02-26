@@ -1,6 +1,5 @@
 import { Tooltip } from '@mui/material'
 import React from 'react'
-import { useEffect } from 'react'
 import { usePopUpModal, modalType } from '../Common/CustomPopUpProvider'
 import GifSelector from './GifSelector'
 
