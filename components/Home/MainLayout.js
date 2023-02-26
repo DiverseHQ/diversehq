@@ -3,8 +3,6 @@ import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
-// import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
-import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
 import useDevice from '../Common/useDevice'
@@ -76,7 +74,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
           </Box>
 
           <div className="flex flex-row">
-            <NewLeftSidebar />
+            {/* <NewLeftSidebar /> */}
             <div className="relative flex-1 min-h-screen text-p-text">
               {/* <ScrollToTopButton /> */}
               {children}

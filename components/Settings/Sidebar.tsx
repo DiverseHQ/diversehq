@@ -16,7 +16,7 @@ const Sidebar = ({ items }) => {
   const { pathname } = useRouter()
   const { notifyInfo }: any = useNotify()
   return (
-    <div className="bg-[#EDE7FF] text-p-text dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border space-y-2 p-2">
+    <div className="text-p-text bg-s-bg w-full rounded-[15px] border-[1px] border-s-border space-y-2 p-2">
       {items.map((item: item) => {
         if (item.isHidden) return null
         if (item.disabled) {
@@ -37,8 +37,8 @@ const Sidebar = ({ items }) => {
         return (
           <Link
             className={`flex flex-row items-center ${
-              pathname === item.link ? 'bg-p-btn-hover' : ''
-            }  hover:bg-p-btn-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2`}
+              pathname === item.link ? 'bg-s-hover' : ''
+            }  hover:bg-s-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2`}
             href={item.link}
             key={item.title}
           >

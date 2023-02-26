@@ -1,5 +1,5 @@
 import React from 'react'
-import { CiImageOn } from 'react-icons/ci'
+// import { CiImageOn } from 'react-icons/ci'
 import { CgProfile } from 'react-icons/cg'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
@@ -33,7 +33,7 @@ const CreatePostBar = () => {
   }
 
   return (
-    <div className="flex flex-row items-center bg-s-bg mt-10 mb-4 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-p-border">
+    <div className="flex flex-row items-center bg-s-bg mt-4 mb-2 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-s-border">
       <div className="flex items-center justify-center rounded-full w-[44px] h-[44px]">
         {!isSignedIn ||
           (!lensProfile && (
@@ -49,12 +49,12 @@ const CreatePostBar = () => {
         )}
       </div>
       <div
-        className="p-2 flex-1 bg-[#EDE7FF] dark:bg-[#272729] rounded-[15px] h-[44px] flex flex-row items-center text-[#898A8D] cursor-pointer"
+        className="p-2 flex-1 bg-s-hover rounded-[15px] h-[44px] flex flex-row items-center text-[#898A8D] cursor-pointer"
         onClick={createPost}
       >
         <span>What&apos;s up?</span>
       </div>
-      <div className="flex flex-row gap-2 items-center">
+      {/* <div className="flex flex-row gap-2 items-center">
         <CiImageOn
           className="w-[20px] h-[20px] text-[#898A8D] cursor-pointer"
           onClick={createPost}
@@ -65,7 +65,7 @@ const CreatePostBar = () => {
         >
           POST
         </button>
-      </div>
+      </div> */}
     </div>
   )
 }

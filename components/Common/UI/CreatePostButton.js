@@ -3,12 +3,22 @@ import React from 'react'
 import CreatePostPopup from '../../Home/CreatePostPopup'
 import { modalType, usePopUpModal } from '../CustomPopUpProvider'
 import { HiPencil } from 'react-icons/hi'
+import { useProfile } from '../WalletContext'
+import { useLensUserContext } from '../../../lib/LensUserContext'
+import { useNotify } from '../NotifyContext'
 
 const CreatePostButton = () => {
   const { showModal } = usePopUpModal()
+  const { user } = useProfile()
+  const { isSignedIn, hasProfile } = useLensUserContext()
+  const { notifyInfo } = useNotify()
   const router = useRouter()
 
   const showCreatePostModal = () => {
+    if (!user || !isSignedIn || !hasProfile) {
+      notifyInfo('Login to create a post')
+      return
+    }
     showModal({
       component: <CreatePostPopup />,
       type: modalType.normal,

@@ -10,7 +10,7 @@ const FilterRow = ({ classname, children, EndButton }: Props) => {
   return (
     <>
       <div
-        className={`font-bold text-sm sm:text-base flex flex-row px-2 sm:px-0 py-3 w-full  items-center space-x-4 sm:space-x-8  sm:rounded ${
+        className={`font-bold text-sm sm:text-base flex flex-row px-2 py-3 w-full  items-center space-x-4 sm:space-x-8  sm:rounded ${
           EndButton ? 'justify-between' : 'justify-start'
         } ${classname}`}
       >
