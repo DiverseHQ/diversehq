@@ -9,7 +9,7 @@ import {
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
-import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
+import { appId, MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
@@ -38,7 +38,7 @@ import CenteredDot from '../Common/UI/CenteredDot'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
-const LensPostCard = ({ post, loading }) => {
+const LensPostCard = ({ post }) => {
   const { isMobile } = useDevice()
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(post?.reaction)
@@ -241,36 +241,42 @@ const LensPostCard = ({ post, loading }) => {
             {!isMobile && (
               <>
                 <div className="flex flex-row w-full items-center">
-                  {loading ? (
-                    <div className="animate-pulse rounded-full bg-p-bg lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
-                  ) : (
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <Link
-                        href={`/c/${postInfo?.communityInfo?.name}`}
-                        passHref
-                      >
-                        <ImageWithPulsingLoader
-                          src={
-                            postInfo?.communityInfo?.logoImageUrl
-                              ? postInfo?.communityInfo?.logoImageUrl
-                              : '/gradient.jpg'
-                          }
-                          className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
-                        />
-                      </Link>
-                    </span>
-                  )}
-                  {loading ? (
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  ) : (
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                        <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                          {stringToLength(postInfo?.communityInfo?.name, 18)}
-                        </div>
-                      </Link>
-                    </span>
-                  )}
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <div
+                      onClick={() => {
+                        if (postInfo?.communityInfo?._id) {
+                          router.push(`/c/${postInfo?.communityInfo?.name}`)
+                        } else {
+                          window.open(postInfo?.communityInfo?.link, '_blank')
+                        }
+                      }}
+                    >
+                      <ImageWithPulsingLoader
+                        src={
+                          postInfo?.communityInfo?.logoImageUrl
+                            ? postInfo?.communityInfo?.logoImageUrl
+                            : '/gradient.jpg'
+                        }
+                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover cursor-pointer"
+                      />
+                    </div>
+                  </span>
+
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <div
+                      onClick={() => {
+                        if (postInfo?.communityInfo?._id) {
+                          router.push(`/c/${postInfo?.communityInfo?.name}`)
+                        } else {
+                          window.open(postInfo?.communityInfo?.link, '_blank')
+                        }
+                      }}
+                    >
+                      <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
+                        {stringToLength(postInfo?.communityInfo?.name, 18)}
+                      </div>
+                    </div>
+                  </span>
 
                   <span onClick={(e) => e.stopPropagation()} className="mr-1">
                     <Link
@@ -308,7 +314,15 @@ const LensPostCard = ({ post, loading }) => {
               <>
                 <div className="flex flex-row w-full items-center">
                   <span onClick={(e) => e.stopPropagation()}>
-                    <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
+                    <div
+                      onClick={() => {
+                        if (postInfo?.communityInfo?._id) {
+                          router.push(`/c/${postInfo?.communityInfo?.name}`)
+                        } else {
+                          window.open(postInfo?.communityInfo?.link, '_blank')
+                        }
+                      }}
+                    >
                       <ImageWithPulsingLoader
                         src={
                           postInfo?.communityInfo?.logoImageUrl
@@ -317,15 +331,23 @@ const LensPostCard = ({ post, loading }) => {
                         }
                         className="rounded-full h-10 w-10 object-cover"
                       />
-                    </Link>
+                    </div>
                   </span>
                   <div className="flex flex-col justify-center items-start text-p-text">
                     <span onClick={(e) => e.stopPropagation()}>
-                      <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                      <div
+                        onClick={() => {
+                          if (postInfo?.communityInfo?._id) {
+                            router.push(`/c/${postInfo?.communityInfo?.name}`)
+                          } else {
+                            window.open(postInfo?.communityInfo?.link, '_blank')
+                          }
+                        }}
+                      >
                         <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
                           {postInfo?.communityInfo?.name}
                         </div>
-                      </Link>
+                      </div>
                     </span>
                     <div className="flex flex-row items-center justify-start">
                       <span onClick={(e) => e.stopPropagation()}>
@@ -365,7 +387,8 @@ const LensPostCard = ({ post, loading }) => {
             <span onClick={(e) => e.stopPropagation()}>
               <div className="sm:mr-5 flex flex-row items-center">
                 {!router.pathname.startsWith('/p/') &&
-                  !router.pathname.startsWith('/c/') && (
+                  !router.pathname.startsWith('/c/') &&
+                  postInfo?.communityInfo?._id && (
                     <JoinCommunityButton id={postInfo?.communityInfo?._id} />
                   )}
                 {isAuthor && (
@@ -469,15 +492,16 @@ const LensPostCard = ({ post, loading }) => {
                   {!router.pathname.startsWith('/p') ? (
                     <>
                       <div className="flex flex-row">
-                        {postInfo?.metadata?.name && (
-                          <Markup
-                            className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
-                          >
-                            {/* remove title text from content */}
+                        {postInfo?.metadata?.name &&
+                          postInfo?.appId === appId && (
+                            <Markup
+                              className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                            >
+                              {/* remove title text from content */}
 
-                            {postInfo?.metadata?.name}
-                          </Markup>
-                        )}
+                              {postInfo?.metadata?.name}
+                            </Markup>
+                          )}
                         {postInfo?.metadata?.contentWarning !== null && (
                           <div
                             className={`border ${
@@ -493,8 +517,9 @@ const LensPostCard = ({ post, loading }) => {
                           </div>
                         )}
                       </div>
-                      {postInfo?.metadata?.name !==
-                        postInfo?.metadata?.content && (
+                      {(postInfo?.metadata?.name !==
+                        postInfo?.metadata?.content ||
+                        postInfo?.appId !== appId) && (
                         <div
                           className={`${
                             showMore ? 'h-[150px]' : ''
@@ -526,15 +551,16 @@ const LensPostCard = ({ post, loading }) => {
                   ) : (
                     <>
                       <div className="flex flex-row">
-                        {postInfo?.metadata?.name && (
-                          <Markup
-                            className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
-                          >
-                            {/* remove title text from content */}
+                        {postInfo?.metadata?.name &&
+                          postInfo?.appId === appId && (
+                            <Markup
+                              className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                            >
+                              {/* remove title text from content */}
 
-                            {postInfo?.metadata?.name}
-                          </Markup>
-                        )}
+                              {postInfo?.metadata?.name}
+                            </Markup>
+                          )}
                         {postInfo?.metadata?.contentWarning !== null && (
                           <div
                             className={`border ${
@@ -550,8 +576,9 @@ const LensPostCard = ({ post, loading }) => {
                           </div>
                         )}
                       </div>
-                      {postInfo?.metadata?.name !==
-                        postInfo?.metadata?.content && (
+                      {(postInfo?.metadata?.name !==
+                        postInfo?.metadata?.content ||
+                        postInfo?.appId !== appId) && (
                         <div
                           className={`${
                             showMore ? 'h-[150px]' : ''

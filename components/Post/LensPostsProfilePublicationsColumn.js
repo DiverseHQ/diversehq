@@ -4,6 +4,7 @@ import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config.ts'
+import { getCommunityInfoFromAppId } from '../../utils/helper'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useDevice from '../Common/useDevice'
 import LensPostCard from './LensPostCard'
@@ -48,7 +49,11 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
       communityIds
     )
     for (let i = 0; i < newPosts.length; i++) {
-      newPosts[i].communityInfo = communityInfoForPosts[i]
+      if (!communityInfoForPosts[i]?._id) {
+        newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
+      } else {
+        newPosts[i].communityInfo = communityInfoForPosts[i]
+      }
     }
     if (
       posts.length === 0 ||

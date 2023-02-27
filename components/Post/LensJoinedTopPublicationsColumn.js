@@ -17,6 +17,7 @@ import LensPostCard from '../Post/LensPostCard'
 import useDevice from '../Common/useDevice'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useSort from '../Common/Hook/useSort'
+import { getCommunityInfoFromAppId } from '../../utils/helper'
 const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
   const router = useRouter()
   const { data: myLensProfile } = useLensUserContext()
@@ -82,7 +83,11 @@ const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
       communityIds
     )
     for (let i = 0; i < newPosts.length; i++) {
-      newPosts[i].communityInfo = communityInfoForPosts[i]
+      if (!communityInfoForPosts[i]?._id) {
+        newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
+      } else {
+        newPosts[i].communityInfo = communityInfoForPosts[i]
+      }
     }
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,

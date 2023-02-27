@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineFileAdd } from 'react-icons/ai'
-import { getCommunityInfoUsingId } from '../../../api/community'
 import { usePublicationQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
@@ -44,44 +43,22 @@ const LensPostPage = ({ id, post }) => {
   })
 
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
-    postInfo?.communityInfo?.members.length * xpPerMember || 0
+    (postInfo?.communityInfo?.members?.length
+      ? postInfo?.communityInfo?.members?.length
+      : 0) * xpPerMember || 0
   )
 
   useEffect(() => {
     if (!data?.publication) return
-    setPostInfo(data.publication)
+    setPostInfo({ ...postInfo, ...data.publication })
   }, [data])
 
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
-
-  // fetches the communityInfo and sets the feild in the postInfo object
-  const fetchCommunityInformationAndSetPost = async () => {
-    try {
-      const communityId = postInfo?.metadata?.tags?.[0]
-      if (!communityId) return
-      setLoading(true)
-      const communityInfo = await getCommunityInfoUsingId(communityId)
-      setPostInfo({ ...postInfo, communityInfo })
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const calculateBarPercentage = (currentXP, threshold) => {
     const percentage = Math.round((threshold * 100) / currentXP)
     return percentage
   }
-
-  // fetch the new communityInfo every time post changes
-  useEffect(() => {
-    if (!postInfo) return
-    if (!postInfo?.communityInfo) {
-      fetchCommunityInformationAndSetPost()
-    }
-  }, [postInfo])
 
   let _profileBanner =
     postInfo?.profile?.coverPicture?.__typename === 'NftImage'
@@ -112,7 +89,7 @@ const LensPostPage = ({ id, post }) => {
               </div>
             ))}
           {/* lens post card */}
-          {postInfo && <LensPostCard post={postInfo} loading={loading} />}
+          {postInfo && <LensPostCard post={postInfo} />}
           <CombinedCommentSection postId={id} postInfo={postInfo} />
         </div>
         {router.pathname.startsWith('/p/') && !isMobile && (
@@ -120,96 +97,107 @@ const LensPostPage = ({ id, post }) => {
             <div className="flex flex-col sticky top-[64px] h-[calc(100vh-64px)] overflow-scroll no-scrollbar">
               <div className="flex flex-row items-center ml-4 mt-3 justify-end">
                 <div
-                  className="flex hover:bg-p-btn-hover rounded-md p-1 cursor-pointer items-center gap-2"
+                  className="flex hover:bg-s-hover rounded-full p-1 cursor-pointer items-center gap-2"
                   onClick={() => router.back()}
                 >
                   <IoMdClose className="w-6 h-6" />
                   <span className="text-[18px]">Close</span>
                 </div>
               </div>
-              <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3">
+              <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] bg-s-bg ml-4 mt-3">
                 <ImageWithFullScreenZoom
-                  src={postInfo?.communityInfo?.bannerImageUrl}
+                  src={
+                    postInfo?.communityInfo?.bannerImageUrl
+                      ? postInfo?.communityInfo?.bannerImageUrl
+                      : '/gradient.jpg'
+                  }
                   className="h-[80px] rounded-t-[15px] w-full object-cover"
                 />
                 <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
                   <div className="flex flex-row gap-2 justify-start">
-                    <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
-                      {loading ? (
-                        <div className="animate-pulse rounded-full bg-p-bg lg:w-[40px] lg:h-[40px] h-[30px] w-[30px]" />
-                      ) : (
-                        <ImageWithFullScreenZoom
-                          src={
-                            postInfo?.communityInfo?.logoImageUrl
-                              ? postInfo?.communityInfo?.logoImageUrl
-                              : '/gradient.jpg'
-                          }
-                          className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
-                        />
-                      )}
+                    <div className="flex items-center justify-center rounded-full bg-s-bg w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
+                      <ImageWithFullScreenZoom
+                        src={
+                          postInfo?.communityInfo?.logoImageUrl
+                            ? postInfo?.communityInfo?.logoImageUrl
+                            : '/gradient.jpg'
+                        }
+                        className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
+                      />
                     </div>
                     <div
                       onClick={() => {
-                        if (postInfo?.communityInfo?.name)
+                        if (
+                          postInfo?.communityInfo?.name &&
+                          postInfo?.communityInfo?._id
+                        ) {
                           router.push(`/c/${postInfo?.communityInfo?.name}`)
+                          return
+                        }
+                        if (postInfo?.communityInfo?.link) {
+                          window.open(postInfo?.communityInfo?.link, '_blank')
+                          return
+                        }
                       }}
                     >
-                      {loading ? (
-                        <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                      ) : (
-                        <h2 className="font-bold text-p-text text-[20px]  hover:underline cursor-pointer truncate">
-                          {postInfo?.communityInfo?.name}
-                        </h2>
-                      )}
+                      <h2 className="font-bold text-p-text text-[20px]  hover:underline cursor-pointer truncate">
+                        {postInfo?.communityInfo?.name}
+                      </h2>
                     </div>
                   </div>
-                  <div className="-translate-y-2 mb-2">
-                    <div className="flex flex-row gap-1 items-center w-[80%] mb-1">
-                      <div className="text-[12px] md:text-[14px] items-center">
-                        {`Lvl${level}`}
-                      </div>
-                      <div className="flex flex-col w-full items-end">
-                        <div className="text-[10px] text-[#bbb]">{`${currentXP}/${thresholdXP}`}</div>
-                        <div className="relative bg-[#AA96E2] rounded-full h-2.5 w-full">
-                          <div
-                            className="absolute h-full bg-[#6668FF] rounded-full transition-all duration-500 ease-in-out"
-                            style={{
-                              width: `${calculateBarPercentage(
-                                thresholdXP,
-                                currentXP
-                              )}%`,
-                              maxWidth: '100%'
-                            }}
-                          ></div>
+                  {postInfo?.communityInfo?._id && (
+                    <div className="-translate-y-2 mb-2">
+                      <div className="flex flex-row gap-1 items-center w-[80%] mb-1">
+                        <div className="text-[12px] md:text-[14px] items-center">
+                          {`Lvl${level}`}
+                        </div>
+                        <div className="flex flex-col w-full items-end">
+                          <div className="text-[10px] text-[#bbb]">{`${currentXP}/${thresholdXP}`}</div>
+                          <div className="relative bg-[#AA96E2] rounded-full h-2.5 w-full">
+                            <div
+                              className="absolute h-full bg-[#6668FF] rounded-full transition-all duration-500 ease-in-out"
+                              style={{
+                                width: `${calculateBarPercentage(
+                                  thresholdXP,
+                                  currentXP
+                                )}%`,
+                                maxWidth: '100%'
+                              }}
+                            ></div>
+                          </div>
                         </div>
                       </div>
+                      {/* createdat */}
+                      <div className="flex flex-row gap-0.5 items-center text-xs md:text-[14px] text-[#aaa]">
+                        <AiOutlineFileAdd />
+                        <span>
+                          Created{' '}
+                          {new Date(postInfo?.communityInfo?.createdAt)
+                            .toDateString()
+                            .split(' ')
+                            .slice(1)
+                            .join(' ')}
+                        </span>
+                      </div>
                     </div>
-                    {/* createdat */}
-                    <div className="flex flex-row gap-0.5 items-center text-xs md:text-[14px] text-[#aaa]">
-                      <AiOutlineFileAdd />
-                      <span>
-                        Created{' '}
-                        {new Date(postInfo?.communityInfo?.createdAt)
-                          .toDateString()
-                          .split(' ')
-                          .slice(1)
-                          .join(' ')}
-                      </span>
-                    </div>
-                  </div>
+                  )}
                   <p className="mb-2 text-p-text">
                     {postInfo?.communityInfo?.description}
                   </p>
-                  <div className="mb-2 text-p-text">
-                    <span>Members: </span>
-                    <span className="font-semibold">
-                      {postInfo?.communityInfo?.members?.length}
-                    </span>
-                  </div>
-                  <JoinCommunityButton
-                    id={postInfo?.communityInfo?._id}
-                    showJoined
-                  />
+                  {postInfo?.communityInfo?._id && (
+                    <>
+                      <div className="mb-2 text-p-text">
+                        <span>Members: </span>
+                        <span className="font-semibold">
+                          {postInfo?.communityInfo?.members?.length}
+                        </span>
+                      </div>
+                      <JoinCommunityButton
+                        id={postInfo?.communityInfo?._id}
+                        showJoined
+                      />
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3">

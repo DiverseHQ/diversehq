@@ -10,6 +10,8 @@ import OffChainPostSeo from '../../components/Post/PostSeos/OffChainPostSeo'
 import PostNotFoundSeo from '../../components/Post/PostSeos/PostNotFoundSeo'
 import getSinglePublicationInfo from '../../lib/post/get-single-publication-info'
 import PostPageMobileTopNav from '../../components/Post/PostPageMobileTopNav'
+import { getCommunityInfoUsingId } from '../../api/community'
+import { getCommunityInfoFromAppId } from '../../utils/helper'
 // types are post, lens, notFound
 // post is a offchain post
 // lens is a onchain lens post
@@ -39,7 +41,20 @@ export async function getServerSideProps({ params = {} }) {
       try {
         const response = await getSinglePublicationInfo(id)
         if (response?.publication) {
-          return { type: 'lens', post: response.publication }
+          let post = response.publication
+          const communityId = post?.metadata?.tags?.[0]
+          if (!communityId) {
+            post.communityInfo = getCommunityInfoFromAppId(post?.appId)
+            return { type: 'lens', post }
+          }
+          const communityInfo = await getCommunityInfoUsingId(communityId)
+          if (communityInfo?._id) {
+            post.communityInfo = communityInfo
+            return { type: 'lens', post }
+          } else {
+            post.communityInfo = getCommunityInfoFromAppId(post?.appId)
+            return { type: 'lens', post }
+          }
         }
       } catch (error) {
         console.log(error)

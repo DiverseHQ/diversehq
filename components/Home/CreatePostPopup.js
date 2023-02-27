@@ -46,7 +46,7 @@ import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
 import useDevice from '../Common/useDevice'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
-import { supportedMimeTypes } from '../../utils/config'
+import { appId, supportedMimeTypes } from '../../utils/config'
 import { IoIosArrowBack } from 'react-icons/io'
 // import { useTheme } from '../Common/ThemeProvider'
 
@@ -246,7 +246,7 @@ const CreatePostPopup = () => {
         mimeType !== 'text' && !mimeType.startsWith('image') ? url : null,
       attributes: [],
       tags: [communityId],
-      appId: 'DiverseHQ'
+      appId: appId
     }
     const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
     const createPostRequest = {

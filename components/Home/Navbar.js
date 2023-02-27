@@ -133,7 +133,7 @@ const Navbar = () => {
       <div className="flex flex-row items-center gap-4 lg:gap-5">
         <div>
           <Link href={'/'}>
-            <div className="flex flex-row justify-center items-center space-x-2 h-fit w-fit">
+            <div className="flex flex-row justify-center items-center space-x-2 h-fit w-fit cursor-pointer">
               <img
                 src="/LogoV3TrimmedWithBG.png"
                 className="w-[25px] h-[25px] sm:w-[35px] sm:h-[35px]"
