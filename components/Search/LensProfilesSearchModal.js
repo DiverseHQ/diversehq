@@ -48,7 +48,7 @@ const LensProfilesSearchModal = ({
           <div className="m-2 p-2 text-base font-bold">Profiles</div>
           {lensProfiles.map((profile) => (
             <div
-              className="hover:bg-p-btn-hover m-2 flex flex-row p-2  items-center rounded-xl cursor-pointer"
+              className="hover:bg-p-btn-hover m-2 flex flex-row p-1  items-center rounded-full cursor-pointer"
               key={profile.id}
               onClick={() => {
                 inputRef.current.value = ''
@@ -67,7 +67,7 @@ const LensProfilesSearchModal = ({
                       : profile?.picture?.original?.url
                     : getStampFyiURL(profile?.ownedBy)
                 }
-                className="w-10 h-10 mr-5 rounded-full object-cover"
+                className="w-8 h-8 mr-3 rounded-full object-cover"
               />
               <div className="flex flex-col text-sm">
                 <div>{stringToLength(profile.name, 20)}</div>

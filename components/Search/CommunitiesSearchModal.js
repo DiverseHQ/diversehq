@@ -17,7 +17,7 @@ const CommunitiesSearchModal = ({
       setCommunities([])
       return
     }
-    const res = await searchCommunityFromName(searchTerm, 5)
+    const res = await searchCommunityFromName(searchTerm, 6)
     setCommunities(res)
   }
 
@@ -36,7 +36,7 @@ const CommunitiesSearchModal = ({
           <div className="m-2 p-2 text-base font-bold">Communities</div>
           {communities.map((community) => (
             <div
-              className="m-2 flex flex-row p-2 hover:bg-p-btn-hover underline-offset-4  items-center rounded-[25px] cursor-pointer"
+              className="m-2 flex flex-row p-1 hover:bg-p-btn-hover underline-offset-4  items-center rounded-full cursor-pointer"
               key={community._id}
               onClick={() => {
                 inputRef.current.value = ''
@@ -46,7 +46,7 @@ const CommunitiesSearchModal = ({
             >
               <ImageWithPulsingLoader
                 src={community.logoImageUrl}
-                className="w-10 h-10 mr-5 rounded-full object-cover"
+                className="w-8 h-8 mr-3 rounded-full object-cover"
               />
               <div>{community.name}</div>
             </div>

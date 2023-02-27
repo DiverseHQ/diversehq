@@ -139,7 +139,7 @@ const Navbar = () => {
                 className="w-[25px] h-[25px] sm:w-[35px] sm:h-[35px]"
                 alt="DivrseHQ Logo"
               />
-              <div>BETA</div>
+              <div className="text-p-text">BETA</div>
             </div>
           </Link>
         </div>
