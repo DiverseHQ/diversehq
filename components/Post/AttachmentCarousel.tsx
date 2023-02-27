@@ -36,6 +36,18 @@ const AttachmentCarousel = ({ publication, medias, className }) => {
           {index + 1}/{medias.length}
         </div>
       </div>
+      <div className="absolute bottom-[20px] left-[50%] -translate-x-[50%] flex gap-2">
+        {medias.map((media, i) => {
+          return (
+            <div
+              key={i}
+              className={`w-2 h-2 ${
+                i === index ? 'bg-[#9378d8]' : 'bg-s-bg'
+              } rounded-full`}
+            ></div>
+          )
+        })}
+      </div>
     </>
   )
 
