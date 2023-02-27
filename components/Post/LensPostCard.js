@@ -594,10 +594,9 @@ const LensPostCard = ({ post, loading }) => {
                       publication={postInfo}
                       className={`${
                         router.pathname.startsWith('/p')
-                          ? 'max-h-[calc(100vh-50px)]'
+                          ? 'max-h-screen'
                           : 'max-h-[450px]'
                       }`}
-                      showAll
                     />
                   </div>
                 ) : (

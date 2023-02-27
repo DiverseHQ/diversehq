@@ -48,7 +48,7 @@ const AttachmentSlide = ({
         onSwitching={(i) => {
           setFineIndex(i)
         }}
-        className="items-center justify-center"
+        // className="items-center justify-center"
         containerStyle={{ alignItems: 'center' }}
       >
         {views}
