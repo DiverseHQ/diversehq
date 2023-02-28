@@ -42,7 +42,7 @@ const AttachmentCarousel = ({ publication, medias, className }) => {
             <div
               key={i}
               className={`w-2 h-2 ${
-                i === index ? 'bg-[#9378d8]' : 'bg-s-bg'
+                i === index ? 'bg-[#9378d8]' : 'bg-p-bg'
               } rounded-full`}
             ></div>
           )

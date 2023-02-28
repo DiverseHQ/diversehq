@@ -8,6 +8,8 @@ import {
   SUPPORTED_IMAGE_TYPE,
   SUPPORTED_VIDEO_TYPE
 } from '../../utils/config'
+import AudioPlayer from './AudioPlayer'
+import getIPFSLink from '../User/lib/getIPFSLink'
 // import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 // import useDevice from '../Common/useDevice'
 // import { useRouter } from 'next/router'
@@ -36,7 +38,15 @@ const AttachmentMedia = ({ type, url, publication, className }) => {
           poster={getCoverUrl}
         />
       ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
-        <audio src={url} className={`${className}`} loop controls muted />
+        <AudioPlayer
+          src={url}
+          className={`${className}`}
+          coverImage={
+            imageProxy(getIPFSLink(publication?.metadata?.cover?.original.url)) ||
+            imageProxy(getIPFSLink(publication?.metadata?.image))
+          }
+          publication={publication}
+        />
       ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
         <ImageWithFullScreenZoom
           src={url}

@@ -79,18 +79,6 @@ const Attachment: FC<Props> = ({ publication, className }) => {
               <div className="absolute top-[10px] right-[10px] z-20 bg-p-bg py-0.5 px-2 rounded-full">
                 {currentMedia + 1}/{medias.length}
               </div>
-              <div className="absolute bottom-[20px] left-[50%] -translate-x-[50%] flex gap-2 z-20">
-                {medias.map((media, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className={`w-2 h-2 ${
-                        i === currentMedia ? 'bg-[#9378d8]' : 'bg-s-bg'
-                      } rounded-full`}
-                    ></div>
-                  )
-                })}
-              </div>
             </>
           )}
           <AttachmentMedia
