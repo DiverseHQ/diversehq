@@ -164,6 +164,35 @@
   }
 }
 
+/** CSS overrides for audio player **/
+.plyr {
+  @apply rounded-lg;
+}
+
+.plyr__control--overlaid {
+  @apply !bg-[#9378d8];
+}
+
+.plyr--full-ui input[type='range'] {
+  @apply !text-[#fff];
+}
+
+.plyr__control {
+  @apply !bg-[#9378d8];
+}
+
+.plyr--audio .plyr__controls {
+  @apply !bg-transparent !text-white;
+}
+
+.plyr--audio .plyr__control {
+  @apply hover:!bg-transparent;
+}
+
+.plyr--audio.plyr--full-ui input[type='range'] {
+  @apply !text-white;
+}
+
 :root {
   --background: #f9f9f9;
   --background-secondary: #ffffff;
