@@ -108,6 +108,12 @@ fragment MetadataOutputFields on MetadataOutput {
   description
   content
   contentWarning
+  image
+  cover {
+    original {
+      url
+    }
+  }
   media {
     original {
       ...MediaFields
