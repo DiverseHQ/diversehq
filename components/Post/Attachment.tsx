@@ -41,7 +41,7 @@ const Attachment: FC<Props> = ({ publication, className }) => {
     <>
       {isMobile ? (
         <div
-          className="relative flex flex-col justify-center items-center"
+          className="relative flex flex-col justify-center items-center overflow-x-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           <AttachmentCarousel

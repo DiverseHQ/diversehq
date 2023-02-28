@@ -42,8 +42,9 @@ const AttachmentMedia = ({ type, url, publication, className }) => {
           src={url}
           className={`${className}`}
           coverImage={
-            imageProxy(getIPFSLink(publication?.metadata?.cover?.original.url)) ||
-            imageProxy(getIPFSLink(publication?.metadata?.image))
+            imageProxy(
+              getIPFSLink(publication?.metadata?.cover?.original.url)
+            ) || imageProxy(getIPFSLink(publication?.metadata?.image))
           }
           publication={publication}
         />

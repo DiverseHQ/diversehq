@@ -14,16 +14,12 @@ interface Props {
   className?: string
 }
 
-// interface Props {
-//   src: string
-//   isNew?: boolean
-//   coverImage: string
-//   //   publication?: Publication
-//   //   txn: OptimisticTransaction
-//   //   expandCover: (url: string) => void
-// }
-
-const AudioPlayer: FC<Props> = ({ src, publication, coverImage, className }) => {
+const AudioPlayer: FC<Props> = ({
+  src,
+  publication,
+  coverImage,
+  className
+}) => {
   const [playing, setPlaying] = useState(false)
   const playerRef = useRef<APITypes>(null)
 
@@ -41,39 +37,38 @@ const AudioPlayer: FC<Props> = ({ src, publication, coverImage, className }) => 
 
   return (
     <div className={`flex items-center ${className}`}>
-
-    <div className={`bg-[#9378d8] overflow-hidden rounded-xl px-3.5 pt-3.5 md:p-0`}>
-      <div className="flex flex-wrap md:flex-nowrap md:space-x-2">
-        <CoverImage
-          coverImage={coverImage}
-        />
-        <div className="flex w-full flex-col justify-between truncate py-1 md:px-3">
-          <div className="mt-3 flex justify-between md:mt-7">
-            <div className="flex w-full items-center space-x-2.5 truncate">
-              <button type="button" onClick={handlePlayPause}>
-                {playing && !playerRef.current?.plyr.paused ? (
-                  <AiFillPauseCircle className="h-[50px] w-[50px] text-gray-100 hover:text-white" />
-                ) : (
-                  <AiFillPlayCircle className="h-[50px] w-[50px] text-gray-100 hover:text-white" />
-                )}
-              </button>
-              <div className="w-full truncate pr-3">
-                <h5 className="truncate text-lg text-white">
-                  {publication?.metadata.name}
-                </h5>
-                <h6 className="truncate text-white/70">
-                  {
-                    publication?.metadata?.attributes[1]?.value || publication?.profile.name}
-                </h6>
+      <div
+        className={`bg-[#9378d8] overflow-hidden rounded-xl px-3.5 pt-3.5 md:p-0`}
+      >
+        <div className="flex flex-wrap md:flex-nowrap md:space-x-2">
+          <CoverImage coverImage={coverImage} />
+          <div className="flex w-full flex-col justify-between truncate py-1 md:px-3">
+            <div className="mt-3 flex justify-between md:mt-7">
+              <div className="flex w-full items-center space-x-2.5 truncate">
+                <button type="button" onClick={handlePlayPause}>
+                  {playing && !playerRef.current?.plyr.paused ? (
+                    <AiFillPauseCircle className="h-[50px] w-[50px] text-gray-100 hover:text-white" />
+                  ) : (
+                    <AiFillPlayCircle className="h-[50px] w-[50px] text-gray-100 hover:text-white" />
+                  )}
+                </button>
+                <div className="w-full truncate pr-3">
+                  <h5 className="truncate text-lg text-white">
+                    {publication?.metadata.name}
+                  </h5>
+                  <h6 className="truncate text-white/70">
+                    {publication?.metadata?.attributes[1]?.value ||
+                      publication?.profile.name}
+                  </h6>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="md:pb-3 bg-transparent">
-            <Player src={src} playerRef={playerRef} />
+            <div className="md:pb-3 bg-transparent">
+              <Player src={src} playerRef={playerRef} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   )
 }

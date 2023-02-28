@@ -36,7 +36,7 @@ const AttachmentCarousel = ({ publication, medias, className }) => {
           {index + 1}/{medias.length}
         </div>
       </div>
-      <div className="absolute bottom-[20px] left-[50%] -translate-x-[50%] flex gap-2">
+      <div className="absolute bottom-[20px] left-[50%] -translate-x-[50%] flex gap-2 overflow-x-hidden">
         {medias.map((media, i) => {
           return (
             <div
@@ -57,7 +57,10 @@ const AttachmentCarousel = ({ publication, medias, className }) => {
       const url = getIPFSLink(media.original.url)
 
       return (
-        <div key={i} className="flex items-center justify-center">
+        <div
+          key={i}
+          className="flex items-center justify-center overflow-x-hidden"
+        >
           <AttachmentMedia
             url={url}
             type={type}
@@ -69,7 +72,11 @@ const AttachmentCarousel = ({ publication, medias, className }) => {
     })
   return (
     <div>
-      <AttachmentSlide renderElements={renderElements} transition="0.8s">
+      <AttachmentSlide
+        renderElements={renderElements}
+        transition="0.8s"
+        className="overflow-x-hidden"
+      >
         {renderChildren}
       </AttachmentSlide>
     </div>

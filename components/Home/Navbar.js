@@ -19,6 +19,7 @@ import { scrollToTop } from '../../lib/helpers'
 import FilterButton from '../Common/UI/FilterButton'
 import { AiOutlinePlus } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
+import { Toolbar, Tooltip } from '@mui/material'
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
@@ -219,24 +220,28 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex flex-row items-center gap-2">
-        <button
-          className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"
-          onClick={createPost}
-        >
-          <AiOutlinePlus className="w-[25px] h-[25px] object-contain" />
-        </button>
-        <button
-          className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"
-          onClick={routeToNotifications}
-        >
-          <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
-          {/* a green count dot */}
-          {Number(lensNotificationsCount) > 0 && (
-            <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg dark:border-s-bg">
-              <span>{lensNotificationsCount}</span>
-            </div>
-          )}
-        </button>
+        <Tooltip title="Create Post" arrow>
+          <button
+            className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"
+            onClick={createPost}
+          >
+            <AiOutlinePlus className="w-[25px] h-[25px] object-contain" />
+          </button>
+        </Tooltip>
+        <Tooltip title="Notifications" arrow>
+          <button
+            className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"
+            onClick={routeToNotifications}
+          >
+            <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
+            {/* a green count dot */}
+            {Number(lensNotificationsCount) > 0 && (
+              <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg dark:border-s-bg">
+                <span>{lensNotificationsCount}</span>
+              </div>
+            )}
+          </button>
+        </Tooltip>
         {/* <button
           className="text-p-text hover:bg-s-hover p-1 rounded-full"
           onClick={toggleTheme}
