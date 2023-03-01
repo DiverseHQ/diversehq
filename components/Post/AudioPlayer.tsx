@@ -10,7 +10,7 @@ import { Publication } from '../../graphql/generated'
 interface Props {
   src: string
   publication: Publication
-  coverImage?: string
+  coverImage: string
   className?: string
 }
 
@@ -37,10 +37,8 @@ const AudioPlayer: FC<Props> = ({
 
   return (
     <div className={`flex items-center ${className}`}>
-      <div
-        className={`bg-[#9378d8] overflow-hidden rounded-xl px-3.5 pt-3.5 md:p-0`}
-      >
-        <div className="flex flex-wrap md:flex-nowrap md:space-x-2">
+      <div className={`bg-[#9378d8] overflow-hidden rounded-xl`}>
+        <div className="flex flex-nowrap space-x-2">
           <CoverImage coverImage={coverImage} />
           <div className="flex w-full flex-col justify-between truncate py-1 md:px-3">
             <div className="mt-3 flex justify-between md:mt-7">
@@ -57,8 +55,7 @@ const AudioPlayer: FC<Props> = ({
                     {publication?.metadata.name}
                   </h5>
                   <h6 className="truncate text-white/70">
-                    {publication?.metadata?.attributes[1]?.value ||
-                      publication?.profile.name}
+                    {publication?.metadata?.attributes[1]?.value}
                   </h6>
                 </div>
               </div>
