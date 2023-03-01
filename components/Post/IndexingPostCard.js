@@ -6,7 +6,6 @@ import ReactTimeAgo from 'react-time-ago'
 
 import { PublicationMainFocus, ReactionTypes } from '../../graphql/generated'
 import ReactEmbedo from './embed/ReactEmbedo'
-import { Markup } from 'interweave'
 import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
 import { BsCollection } from 'react-icons/bs'
@@ -14,6 +13,7 @@ import Link from 'next/link'
 import Attachment from './Attachment'
 import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
+import Markup from '../Lexical/Markup'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
