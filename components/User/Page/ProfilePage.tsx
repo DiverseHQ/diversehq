@@ -7,8 +7,15 @@ import { BiArrowBack } from 'react-icons/bi'
 
 import ProfileCard from '../ProfileCard'
 import ProfileNavFilter from '../ProfileNavFilter'
+import { UserType } from '../../../types/user'
+import { Profile } from '../../../graphql/generated'
 
-const ProfilePage = ({ _profile, _lensProfile }) => {
+interface Props {
+  _profile: UserType
+  _lensProfile: Profile
+}
+
+const ProfilePage = ({ _profile, _lensProfile }: Props) => {
   // const { notifyInfo } = useNotify()
   const { isMobile } = useDevice()
   const router = useRouter()

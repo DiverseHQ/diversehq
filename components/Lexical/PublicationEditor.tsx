@@ -6,7 +6,7 @@ import {
   TEXT_FORMAT_TRANSFORMERS
 } from '@lexical/markdown'
 import React from 'react'
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
+// import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
 import LexicalAutoLinkPlugin from './Plugins/LexicalAutoLinkPlugin'
 import ImagesPlugin from './Plugins/ImagesPlugin'
@@ -48,7 +48,7 @@ const PublicationEditor = ({ setContent, onPaste }: Props) => {
         }}
       />
       <NewMentionsPlugin />
-      <HistoryPlugin />
+      {/* <HistoryPlugin /> */}
       <HashtagPlugin />
       <LexicalAutoLinkPlugin />
       <ImagesPlugin onPaste={onPaste} />

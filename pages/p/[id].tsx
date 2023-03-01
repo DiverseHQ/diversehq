@@ -12,11 +12,17 @@ import getSinglePublicationInfo from '../../lib/post/get-single-publication-info
 import PostPageMobileTopNav from '../../components/Post/PostPageMobileTopNav'
 import { getCommunityInfoUsingId } from '../../api/community'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
+import { postWithCommunityInfoType } from '../../types/post'
 // types are post, lens, notFound
 // post is a offchain post
 // lens is a onchain lens post
 // notFound is a 404 page
-const Page = ({ type, post, id }) => {
+interface Props {
+  type: string
+  post?: postWithCommunityInfoType
+  id: string
+}
+const Page = ({ type, post, id }: Props) => {
   const { isMobile } = useDevice()
   return (
     <>
@@ -26,14 +32,14 @@ const Page = ({ type, post, id }) => {
       <>
         {isMobile && <PostPageMobileTopNav />}
         {type === 'lens' && <LensPostPage id={id} post={post} />}
-        {type === 'post' && <PostPage id={id} post={post} />}
+        {type === 'post' && <PostPage post={post} />}
         {type === 'notFound' && <PostNotFound />}
       </>
     </>
   )
 }
 
-export async function getServerSideProps({ params = {} }) {
+export async function getServerSideProps({ params }) {
   const { id } = params
 
   const getPost = async (id) => {
@@ -41,7 +47,8 @@ export async function getServerSideProps({ params = {} }) {
       try {
         const response = await getSinglePublicationInfo(id)
         if (response?.publication) {
-          let post = response.publication
+          // @ts-ignore
+          let post: postWithCommunityInfoType = response.publication
           const communityId = post?.metadata?.tags?.[0]
           if (!communityId) {
             post.communityInfo = getCommunityInfoFromAppId(post?.appId)

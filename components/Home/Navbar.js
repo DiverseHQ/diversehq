@@ -227,14 +227,16 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex flex-row items-center gap-2">
-        <Tooltip title="Create Post" arrow>
-          <button
-            className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"
-            onClick={createPost}
-          >
-            <AiOutlinePlus className="w-[25px] h-[25px] object-contain" />
-          </button>
-        </Tooltip>
+        {!pathname.startsWith('/settings') && (
+          <Tooltip title="Create Post" arrow>
+            <button
+              className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"
+              onClick={createPost}
+            >
+              <AiOutlinePlus className="w-[25px] h-[25px] object-contain" />
+            </button>
+          </Tooltip>
+        )}
         <Tooltip title="Notifications" arrow>
           <button
             className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"

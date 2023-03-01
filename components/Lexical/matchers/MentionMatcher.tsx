@@ -20,9 +20,9 @@ export const Mention = ({ ...props }: any) => {
         event.stopPropagation()
       }}
     >
-      <div className="hover:underline text-p-btn">
+      <span className="hover:underline text-p-btn cursor-pointer">
         {profile?.handle && `u/${formatHandle(props.display.slice(1))}`}
-      </div>
+      </span>
     </Link>
   )
 }

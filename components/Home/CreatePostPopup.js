@@ -27,8 +27,8 @@ import {
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import FormTextInput from '../Common/UI/FormTextInput'
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $getRoot } from 'lexical'
+// import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+// import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
@@ -58,7 +58,7 @@ const CreatePostPopup = () => {
   // const [isLensPost, setIsLensPost] = useState(
   //   (isSignedIn && hasProfile) || false
   // )
-  const [editor] = useLexicalComposerContext()
+  // const [editor] = useLexicalComposerContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
   const [collectSettings, setCollectSettings] = useState({
     freeCollectModule: { followerOnly: false }
@@ -67,13 +67,13 @@ const CreatePostPopup = () => {
   const { addPost } = usePostIndexing()
   // const [IPFSHash, setIPFSHash] = useState(null)
   const [imageUpload, setImageUpload] = useState(false)
-  useEffect(() => {
-    return () => {
-      editor?.update(() => {
-        $getRoot().clear()
-      })
-    }
-  }, [])
+  // useEffect(() => {
+  //   return () => {
+  //     editor?.update(() => {
+  //       $getRoot().clear()
+  //     })
+  //   }
+  // }, [])
 
   const { notifyError, notifyInfo } = useNotify()
   // const router = useRouter()
