@@ -117,7 +117,7 @@ const FeeCollectPopUp = ({
   return (
     <>
       {isDesktop ? (
-        <div className="w-fit py-1 bg-s-bg shadow-lg rounded-lg px-3 h-full flex flex-row items-center justify-center space-x-6  border border-p-border rounded-xl  shadow-sm shadow-p-border">
+        <div className="w-fit py-1 bg-s-bg px-3 h-full flex flex-row items-center justify-center space-x-6  border border-p-border rounded-xl shadow shadow-s-border">
           <div className="flex flex-col  justify-center items-center mt-2">
             {collectModule.followerOnly && !isFollowedByMe && (
               <div className="flex flex-row items-center justify-center space-x-6 py-3 ">
@@ -188,7 +188,7 @@ const FeeCollectPopUp = ({
                   </div>
                 )}
                 {!hasAmount && isAllowed && (
-                  <div className="text-p-text font-medium text-base py-1 px-2 px-3.5">
+                  <div className="text-p-text font-medium text-base py-1 px-3.5">
                     <p>
                       Collect for {''} {collectModule?.amount?.value} {''}{' '}
                       {collectModule?.amount?.asset?.symbol}
@@ -218,7 +218,7 @@ const FeeCollectPopUp = ({
                   collectModule.followerOnly &&
                   !isFollowedByMe)
               }
-              className={`bg-p-btn text-p-btn-text rounded-md py-1.5 px-4 text-center  flex font-semibold text-p-text justify-center items-center h-10 self-center ${
+              className={`bg-p-btn text-p-btn-text rounded-md py-1.5 px-4 text-center flex font-semibold justify-center items-center h-10 self-center ${
                 !isAllowed || (collectModule.followerOnly && !isFollowedByMe)
                   ? 'hidden'
                   : ''
@@ -252,7 +252,7 @@ const FeeCollectPopUp = ({
                     onClick={() => {
                       handleFollowProfile(author.id)
                     }}
-                    className="bg-p-btn rounded-full text-center flex font-semibold text-p-btn-text py-1 justify-center items-center text-p-text w-full text-xl"
+                    className="bg-p-btn rounded-full text-center flex font-semibold text-p-btn-text py-1 justify-center items-center w-full text-xl"
                   >
                     {followLoading ? (
                       <div className="flex flex-row justify-center items-center space-x-2 text-p-btn-text">
@@ -331,7 +331,7 @@ const FeeCollectPopUp = ({
                       collectModule.followerOnly &&
                       !isFollowedByMe)
                   }
-                  className={`bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl${
+                  className={`bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center w-full text-xl${
                     !isAllowed ||
                     (collectModule.followerOnly && !isFollowedByMe)
                       ? 'hidden'
@@ -340,12 +340,12 @@ const FeeCollectPopUp = ({
                 >
                   <div className='className="flex flex-row justify-center items-center space-x-2"'>
                     {loading ? (
-                      <div className="flex flex-row justify-center text-p-btn-text items-center space-x-2 text-p-btn-text">
+                      <div className="flex flex-row justify-center text-p-btn-text items-center space-x-2">
                         <CircularProgress size="18px" color="primary" />
                         <div>Collecting...</div>
                       </div>
                     ) : (
-                      <div className="flex flex-row items-center space-x-2 text-p-btn-text text-p-btn-text">
+                      <div className="flex flex-row items-center space-x-2 text-p-btn-text">
                         <BsCollection className="w-5 h-5" />
                         <p>
                           Collect For {parseFloat(collectModule?.amount?.value)}
