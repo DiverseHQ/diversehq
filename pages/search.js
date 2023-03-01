@@ -45,8 +45,8 @@ const search = () => {
       />
       {isMobile && (
         <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] bg-s-bg">
-          <div className="h-[32px] flex flex-row items-center gap-3 text-[18px]">
-            <span className="font-bold text-[20px]">
+          <div className="h-[32px] flex flex-row items-center gap-3 text-[18px] w-full">
+            <span className="font-bold text-[20px] w-full">
               <SearchModal />
             </span>
           </div>
