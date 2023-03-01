@@ -19,7 +19,7 @@ import { scrollToTop } from '../../lib/helpers'
 import FilterButton from '../Common/UI/FilterButton'
 import { AiOutlinePlus } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
-import { Toolbar, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
@@ -140,7 +140,13 @@ const Navbar = () => {
                 className="w-[25px] h-[25px] sm:w-[35px] sm:h-[35px]"
                 alt="DivrseHQ Logo"
               />
-              <div className="text-p-text">BETA</div>
+              <Tooltip
+                title={`The platform is in early BETA phase and things might break and change. \n Please report any bugs or issues you find on Discord.`}
+                placement="bottom"
+                arrow
+              >
+                <div className="text-p-text">BETA</div>
+              </Tooltip>
             </div>
           </Link>
         </div>
