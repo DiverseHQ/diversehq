@@ -48,7 +48,7 @@ const MessageButton = ({ userLensProfile }) => {
         hasProfile &&
         lensProfile.ownedBy !== myLensProfile?.defaultProfile.ownedBy && (
           <div
-            className="p-1.5 rounded-full cursor-pointer hover:bg-p-btn-hover flex flex-row items-center space-x-1"
+            className="p-1.5 rounded-full cursor-pointer hover:bg-s-hover flex flex-row items-center space-x-1"
             onClick={handleDmClick}
           >
             {!loading && <CiMail className="w-6 h-6" />}

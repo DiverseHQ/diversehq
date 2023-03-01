@@ -16,7 +16,10 @@ import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import { useRouter } from 'next/router'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
-import { commentIdFromIndexedResult } from '../../../utils/utils'
+import {
+  commentIdFromIndexedResult,
+  stringToLength
+} from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
@@ -201,14 +204,23 @@ const LensCommentCard = ({ comment }) => {
                       }`
                     : getStampFyiURL(comment?.profile?.ownedBy)
                 }
-                className="w-6 h-6 rounded-full mr-1 object-cover"
+                className="w-6 h-6 rounded-full object-cover"
               />
-
+              {comment?.profile?.name && (
+                <Link
+                  href={`/u/${formatHandle(comment?.profile?.handle)}`}
+                  passHref
+                >
+                  <div className="hover:underline font-bold text-p-text cursor-pointer">
+                    {stringToLength(comment?.profile?.name, 20)}
+                  </div>
+                </Link>
+              )}
               <Link
                 href={`/u/${formatHandle(comment?.profile?.handle)}`}
                 passHref
               >
-                <div className="hover:underline font-bold text-base">
+                <div className="hover:underline font-medium text-s-text text-sm cursor-pointer">
                   u/{formatHandle(comment?.profile?.handle)}
                 </div>
               </Link>

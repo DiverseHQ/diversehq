@@ -55,9 +55,9 @@ const LensPostPageCommunityCard = ({
               }
             }}
           >
-            <h2 className="font-bold text-p-text text-[20px]  hover:underline cursor-pointer truncate">
+            <div className="font-bold text-p-text text-lg  hover:underline cursor-pointer truncate">
               {communityInfo?.name}
-            </h2>
+            </div>
           </div>
         </div>
         {communityInfo?._id && (
@@ -96,10 +96,12 @@ const LensPostPageCommunityCard = ({
             </div>
           </div>
         )}
-        <p className="mb-2 text-p-text">{communityInfo?.description}</p>
+        <p className="mb-2 leading-5 text-p-text">
+          {communityInfo?.description}
+        </p>
         {communityInfo?._id && (
           <>
-            <div className="mb-2 text-p-text">
+            <div className="mb-2 text-s-text text-sm leading-5">
               <span>Members: </span>
               <span className="font-semibold">
                 {communityInfo?.members?.length}

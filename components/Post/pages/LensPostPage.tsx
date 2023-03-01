@@ -10,6 +10,7 @@ import { IoMdClose } from 'react-icons/io'
 import LensPageProfileCard from '../Cards/LensPageProfileCard'
 import { postWithCommunityInfoType } from '../../../types/post'
 import LensPostPageCommunityCard from '../Cards/LensPostPageCommunityCard'
+import PostPageMentionsColumn from '../PostPageMentionsColumn'
 
 interface Props {
   id: string
@@ -46,7 +47,7 @@ const LensPostPage = ({ id, post }: Props) => {
 
   return (
     <>
-      <div className="w-full flex flex-row space-x-10 justify-center pb-[50px]">
+      <div className="w-full flex flex-row space-x-12 justify-center pb-[50px]">
         <div className={`w-full md:w-[650px]`}>
           {!post &&
             (isMobile ? (
@@ -74,7 +75,7 @@ const LensPostPage = ({ id, post }: Props) => {
         </div>
         {router.pathname.startsWith('/p/') && !isMobile && (
           <>
-            <div className="flex flex-col sticky top-[64px] h-[calc(100vh-64px)] overflow-scroll no-scrollbar">
+            <div className="flex flex-col sticky top-[64px] mb-20">
               <div className="flex flex-row items-center ml-4 mt-3 justify-end">
                 <div
                   className="flex hover:bg-s-hover rounded-full p-1 cursor-pointer items-center gap-2"
@@ -84,10 +85,14 @@ const LensPostPage = ({ id, post }: Props) => {
                   <span className="text-[18px]">Close</span>
                 </div>
               </div>
+              <div className="px-5 font-medium">Community</div>
               <LensPostPageCommunityCard
                 communityInfo={postInfo?.communityInfo}
               />
-              <LensPageProfileCard profile={postInfo?.profile} />
+              <div className="px-5 mt-6 font-medium">Creator</div>
+              <LensPageProfileCard _profile={postInfo?.profile} />
+
+              <PostPageMentionsColumn content={postInfo?.metadata?.content} />
             </div>
           </>
         )}

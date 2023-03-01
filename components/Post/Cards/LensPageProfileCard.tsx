@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
-import React from 'react'
-import { Profile } from '../../../graphql/generated'
+import React, { useState, useEffect } from 'react'
+import { Profile, useProfileQuery } from '../../../graphql/generated'
+import { useLensUserContext } from '../../../lib/LensUserContext'
 import { stringToLength } from '../../../utils/utils'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 import Markup from '../../Lexical/Markup'
@@ -11,13 +12,35 @@ import getIPFSLink from '../../User/lib/getIPFSLink'
 import useLensFollowButton from '../../User/useLensFollowButton'
 
 interface Props {
-  profile: Profile
+  _profile?: Profile
+  profileHandle?: string
 }
 
-const LensPageProfileCard = ({ profile }: Props) => {
+const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
   const router = useRouter()
+  const [profile, setProfile] = useState<Profile>(_profile)
+
+  const { data } = useProfileQuery(
+    {
+      request: {
+        handle: profileHandle
+      }
+    },
+    {
+      enabled: !!profileHandle && !_profile
+    }
+  )
+
+  useEffect(() => {
+    if (!data?.profile) return
+    // @ts-ignore
+    setProfile(data.profile)
+  }, [data])
+
+  const { isSignedIn, hasProfile } = useLensUserContext()
   const { FollowButton, isFollowedByMe } = useLensFollowButton({
-    profileId: profile?.id
+    profileId: _profile?.id || null,
+    handle: profileHandle || null
   })
   let _profileBanner =
     profile?.coverPicture?.__typename === 'NftImage'
@@ -49,7 +72,7 @@ const LensPageProfileCard = ({ profile }: Props) => {
                   {stringToLength(profile?.name, 20)}
                 </div>
                 <div
-                  className="font-medium text text-p-btn  hover:underline cursor-pointer truncate mb-3"
+                  className="font-medium text text-s-text  hover:underline cursor-pointer truncate mb-3"
                   onClick={() => {
                     router.push(`/u/${formatHandle(profile?.handle)}`)
                   }}
@@ -60,13 +83,15 @@ const LensPageProfileCard = ({ profile }: Props) => {
             </div>
           </div>
           <div className="self-start">
-            {isFollowedByMe && <MessageButton userLensProfile={profile} />}
+            {isFollowedByMe && hasProfile && isSignedIn && (
+              <MessageButton userLensProfile={profile} />
+            )}
           </div>
         </div>
         <p className="-translate-y-2 text-p-text leading-5">
           <Markup>{stringToLength(profile?.bio, 200)}</Markup>
         </p>
-        <div className="mb-2 text-s-text flex flex-row gap-2">
+        <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
           <span>
             Followers:{' '}
             <span className="font-semibold">
