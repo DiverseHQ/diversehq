@@ -7,17 +7,6 @@ import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
 import { BsCollection } from 'react-icons/bs'
-// import FormTextInput from '../Common/UI/FormTextInput'
-import {
-  $convertToMarkdownString,
-  TEXT_FORMAT_TRANSFORMERS
-} from '@lexical/markdown'
-import { ContentEditable } from '@lexical/react/LexicalContentEditable'
-import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
-import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin'
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import {
   deleteFirebaseStorageFile,
   uploadFileToFirebaseAndGetUrl,
@@ -31,13 +20,12 @@ import { CircularProgress } from '@mui/material'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import {
+  PublicationContentWarning,
   PublicationMainFocus,
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import ImagesPlugin from '../Lexical/ImagesPlugin'
-import LexicalAutoLinkPlugin from '../Lexical/LexicalAutoLinkPlugin'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $getRoot } from 'lexical'
@@ -48,12 +36,9 @@ import useDevice from '../Common/useDevice'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { appId, supportedMimeTypes } from '../../utils/config'
 import { IoIosArrowBack } from 'react-icons/io'
-// import { useTheme } from '../Common/ThemeProvider'
-
-const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
+import PublicationEditor from '../Lexical/PublicationEditor'
 
 const CreatePostPopup = () => {
-  // const { theme } = useTheme()
   const [title, setTitle] = useState('')
   const [file, setFile] = useState(null)
   const [content, setContent] = useState('')
@@ -95,7 +80,7 @@ const CreatePostPopup = () => {
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
   const { isMobile } = useDevice()
-  // const [flair, setFlair] = useState(null)
+  const [flair, setFlair] = useState(null)
   const [firebaseUrl, setFirebaseUrl] = useState(null)
 
   const { mutateAsync: createPostViaDispatcher } =
@@ -209,15 +194,15 @@ const CreatePostPopup = () => {
       mainContentFocus = PublicationMainFocus.TextOnly
     }
 
-    // if (flair === 'SENSITIVE') {
-    //   contentWarning = PublicationContentWarning.Sensitive
-    // } else if (flair === 'NSFW') {
-    //   contentWarning = PublicationContentWarning.Nsfw
-    // } else if (flair === 'SPOILER') {
-    //   contentWarning = PublicationContentWarning.Spoiler
-    // } else {
-    //   contentWarning = PublicationContentWarning.null
-    // }
+    if (flair === 'SENSITIVE') {
+      contentWarning = PublicationContentWarning.Sensitive
+    } else if (flair === 'NSFW') {
+      contentWarning = PublicationContentWarning.Nsfw
+    } else if (flair === 'SPOILER') {
+      contentWarning = PublicationContentWarning.Spoiler
+    } else {
+      contentWarning = PublicationContentWarning.null
+    }
 
     //todo map to community id, so that can be identified by community
     const metadataId = uuidv4()
@@ -595,7 +580,7 @@ const CreatePostPopup = () => {
               showCollectSettings ? 'hidden' : ''
             }`}
           >
-            {/* <select
+            <select
               onChange={(e) => {
                 e.preventDefault()
                 setFlair(e.target.value)
@@ -604,7 +589,7 @@ const CreatePostPopup = () => {
               value={flair}
             >
               <option
-                value={}
+                value={null}
                 className="hidden flex flex-row space-x-1 items-center"
               >
                 Flair
@@ -613,8 +598,7 @@ const CreatePostPopup = () => {
               <option value="NSFW">NSFW</option>
               <option value="SENSITIVE">Sensitive</option>
               <option value="SPOILER">Spoiler</option>
-            </select> */}
-            {/* {isLensPost && ( */}
+            </select>
             <button
               onClick={() => {
                 if (!isMobile) {
@@ -625,12 +609,12 @@ const CreatePostPopup = () => {
                 }
               }}
               disabled={loading}
-              className="rounded-full hover:bg-s-hover p-2 mr-6 cursor-pointer"
+              className="rounded-full hover:bg-s-hover p-2 cursor-pointer"
             >
               <BsCollection className="w-5 h-5" />
             </button>
             {/* )} */}
-            <img src="/lensLogoWithoutText.svg" className="w-5" />
+            {/* <img src="/lensLogoWithoutText.svg" className="w-5" /> */}
             {/* <Switch
               checked={isLensPost}
               onChange={() => {
@@ -666,40 +650,11 @@ const CreatePostPopup = () => {
               disabled={loading}
             />
             {/* Rich text editor */}
-            <div className="relative">
-              {/* todo toolbar for rich text editor */}
-              {/* <ToolbarPlugin /> */}
-              <RichTextPlugin
-                contentEditable={
-                  <ContentEditable className="block min-h-[70px] text-p-text overflow-auto px-4 py-2 border border-p-border rounded-xl m-4 max-h-[300px] sm:max-h-[350px] outline-none bg-s-bg" />
-                }
-                placeholder={
-                  <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
-                    <div>{"What's this about...? (optional)"}</div>
-                  </div>
-                }
-              />
-              <OnChangePlugin
-                onChange={(editorState) => {
-                  editorState.read(() => {
-                    const markdown = $convertToMarkdownString(TRANSFORMERS)
-                    setContent(markdown)
-                  })
-                }}
-              />
-              <HistoryPlugin />
-              <HashtagPlugin />
-              <LexicalAutoLinkPlugin />
-              <ImagesPlugin
-                onPaste={async (files) => {
-                  const file = files[0]
-                  if (!file) return
-                  setFile(file)
-                  setImageValue(URL.createObjectURL(file))
-                }}
-              />
-              <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-            </div>
+            <PublicationEditor
+              setContent={setContent}
+              setFile={setFile}
+              setImageValue={setImageValue}
+            />
 
             <div className="text-base leading-relaxed m-4">
               {file ? (

@@ -9,7 +9,7 @@ import {
   SUPPORTED_VIDEO_TYPE
 } from '../../utils/config'
 import AudioPlayer from './AudioPlayer'
-import getIPFSLink from '../User/lib/getIPFSLink'
+// import getIPFSLink from '../User/lib/getIPFSLink'
 // import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 // import useDevice from '../Common/useDevice'
 // import { useRouter } from 'next/router'
@@ -42,15 +42,14 @@ const AttachmentMedia = ({ type, url, publication, className }) => {
           src={url}
           className={`${className}`}
           coverImage={
-            imageProxy(
-              getIPFSLink(publication?.metadata?.cover?.original.url)
-            ) || imageProxy(getIPFSLink(publication?.metadata?.image))
+            imageProxy(publication?.metadata?.cover?.original?.url) ||
+            imageProxy(publication?.metadata?.image)
           }
           publication={publication}
         />
       ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
         <ImageWithFullScreenZoom
-          src={url}
+          src={imageProxy(url)}
           className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
           alt={publication?.metadata?.content}
         />

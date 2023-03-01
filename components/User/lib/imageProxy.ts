@@ -1,4 +1,5 @@
-// import { IMAGE_KIT_ENDPOINT } from '../../../utils/config'
+import { IMAGE_KIT_ENDPOINT } from '../../../utils/config'
+import getIPFSLink, { isIpfsHashLink } from './getIPFSLink'
 
 /**
  *
@@ -9,8 +10,13 @@
 // eslint-disable-next-line no-unused-vars
 const imageProxy = (url: string, tr: string = ''): string => {
   // for now, returning the original url
-  return url
-  // return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,${tr}/${url}`
+  // return url
+  if (!isIpfsHashLink(url)) {
+    return url
+  }
+  return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,${tr}/${getIPFSLink(
+    url
+  )}`
 }
 
 export default imageProxy
