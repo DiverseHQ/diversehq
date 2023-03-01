@@ -222,15 +222,64 @@ fragment MirrorBaseFields on Mirror {
 }
 
 fragment MirrorFields on Mirror {
-  ...MirrorBaseFields
+  id
+  profile {
+    ...ProfileFields
+  }
+  reaction(request: $reactionRequest)
+  isGated
+  canComment(profileId: $profileId) {
+    result
+  }
+  canMirror(profileId: $profileId) {
+    result
+  }
+  canDecrypt(profileId: $profileId) {
+    result
+    reasons
+  }
+  collectModule {
+    ...CollectModuleFields
+  }
+  stats {
+    ...StatsFields
+  }
+  metadata {
+    ...MetadataFields
+  }
+  hidden
   mirrorOf {
     ... on Post {
       ...PostFields
     }
     ... on Comment {
-      ...CommentFields
+      id
+      profile {
+        ...ProfileFields
+      }
+      collectNftAddress
+      reaction(request: $reactionRequest)
+      mirrors(by: $profileId)
+      onChainContentURI
+      isGated
+      canComment(profileId: $profileId) {
+        result
+      }
+      canMirror(profileId: $profileId) {
+        result
+      }
+      canDecrypt(profileId: $profileId) {
+        result
+        reasons
+      }
+      stats {
+        ...StatsFields
+      }
+      createdAt
     }
   }
+  createdAt
+  appId
 }
 
 fragment CommentBaseFields on Comment {
@@ -277,6 +326,9 @@ fragment CommentFields on Comment {
         }
       }
     }
+  }
+  metadata {
+    ...MetadataFields
   }
 }
 
@@ -593,5 +645,44 @@ fragment RelayerResultFields on RelayResult {
   }
   ... on RelayError {
     reason
+  }
+}
+fragment MetadataFields on MetadataOutput {
+  name
+  content
+  image
+  attributes {
+    traitType
+    value
+  }
+  cover {
+    original {
+      url
+    }
+  }
+  media {
+    original {
+      url
+      mimeType
+    }
+  }
+  encryptionParams {
+    accessCondition {
+      or {
+        criteria {
+          ...SimpleConditionFields
+          and {
+            criteria {
+              ...SimpleConditionFields
+            }
+          }
+          or {
+            criteria {
+              ...SimpleConditionFields
+            }
+          }
+        }
+      }
+    }
   }
 }
