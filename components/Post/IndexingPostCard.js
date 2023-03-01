@@ -4,7 +4,7 @@ import useDevice from '../Common/useDevice'
 
 import ReactTimeAgo from 'react-time-ago'
 
-import { PublicationMainFocus, ReactionTypes } from '../../graphql/generated'
+import { PublicationMainFocus } from '../../graphql/generated'
 import ReactEmbedo from './embed/ReactEmbedo'
 import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
@@ -14,6 +14,7 @@ import Attachment from './Attachment'
 import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
 import Markup from '../Lexical/Markup'
+import { AiOutlineRetweet } from 'react-icons/ai'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
@@ -127,11 +128,7 @@ const IndexingPostCard = ({ postInfo }) => {
                 <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                   <img
                     //  onClick={liked ? handleUnLike : handleLike}
-                    src={
-                      postInfo.reaction === ReactionTypes.Upvote
-                        ? '/UpvotedFilled.svg'
-                        : '/upvoteGray.svg'
-                    }
+                    src={'/UpvotedFilled.svg'}
                     className="w-5 h-5"
                   />
                 </button>
@@ -227,6 +224,13 @@ const IndexingPostCard = ({ postInfo }) => {
                 >
                   <BsCollection className="w-4 h-4 " />
                   <div className="ml-2">0</div>
+                </button>
+                <button
+                  disabled={true}
+                  className="hover:bg-p-btn-hover text-[#687684] rounded-md p-1 cursor-pointer flex flex-row items-center"
+                >
+                  <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
+                  <p className="ml-2 font-medium text-[#687684]">0</p>
                 </button>
                 <div className="hover:bg-p-btn-hover rounded-md p-1">
                   <img

@@ -8,5 +8,6 @@ export type CommunityType = {
   members?: string[]
   link?: string
   createdAt?: string
+  updatedAt?: string
   [key: string]: any
 }

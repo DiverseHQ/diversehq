@@ -4,17 +4,14 @@ import { getCommunityInfoUsingId } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 
-import {
-  modalType,
-  usePopUpModal
-} from '../../components/Common/CustomPopUpProvider'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import EditCommunity from './EditCommunity'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 // import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
 import { BiChevronDown, BiEdit } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
-import { BsCollection } from 'react-icons/bs'
+// import { BsCollection } from 'react-icons/bs'
 import { RiMore2Fill } from 'react-icons/ri'
 import { IoIosShareAlt } from 'react-icons/io'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
@@ -25,7 +22,19 @@ import { Tooltip } from '@mui/material'
 import { getLevelAndThresholdXP } from '../../lib/helpers'
 import { xpPerMember } from '../../utils/config'
 import JoinCommunityButton from './JoinCommunityButton'
-const CommunityInfoCard = ({ _community }) => {
+import { CommunityType } from '../../types/community'
+import { Profile } from '../../graphql/generated'
+import Link from 'next/link'
+import formatHandle from '../User/lib/formatHandle'
+
+interface CommunityProp extends CommunityType {
+  creatorProfile: Profile
+}
+
+interface Props {
+  _community: CommunityProp
+}
+const CommunityInfoCard = ({ _community }: Props) => {
   const [community, setCommunity] = useState(_community)
   const { user } = useProfile()
   const { notifyInfo } = useNotify()
@@ -360,17 +369,30 @@ const CommunityInfoCard = ({ _community }) => {
                       .join(' ')}
                   </span>
                 </div>
-                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                {/* <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
                   <BsCollection className='className="w-5 h-5"' />
                   <span>Matic transferred: 0</span>
-                </div>
+                </div> */}
                 <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
                   <img
                     src="/createdByUser.svg"
                     alt="created by user"
                     className="w-5 h-5"
                   />
-                  <span>Created by u/0</span>
+                  <span>
+                    Created by{' '}
+                    <span>
+                      <Link
+                        href={`u/${formatHandle(
+                          community?.creatorProfile?.handle
+                        )}`}
+                      >
+                        <span>{`u/${formatHandle(
+                          community?.creatorProfile?.handle
+                        )}`}</span>
+                      </Link>
+                    </span>
+                  </span>
                 </div>
               </div>
             </BottomDrawerWrapper>
@@ -384,6 +406,14 @@ const CommunityInfoCard = ({ _community }) => {
                     {community.members?.length}
                   </span>
                 </div>
+                {router.pathname.startsWith('/c/') && (
+                  <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
+                    <span>Members: </span>
+                    <span className="font-semibold">
+                      {community.members?.length}
+                    </span>
+                  </div>
+                )}
                 {/* <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Posts: </span>
                   <span className="font-semibold">{numberOfPosts}</span>
