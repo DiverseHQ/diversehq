@@ -1,11 +1,11 @@
 import React from 'react'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import AttachmentSlide from './AttachmentSlide'
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
+// import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 import AttachmentMedia from './AttachmentMedia'
 
 const AttachmentCarousel = ({ publication, medias, className }) => {
-  const renderElements = ({ index, onChangeIndex }) => (
+  const renderElements = ({ index }) => (
     <>
       <div className="flex flex-row justify-end absolute top-[10px] right-[10px]">
         <div className=" bg-p-bg rounded-full px-2 py-0.5">
