@@ -20,7 +20,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState(null)
   const [nextCursor, setNextCursor] = useState(null)
-  const { data: lensProfile } = useLensUserContext()
+  const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isMobile } = useDevice()
 
@@ -104,7 +104,13 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   }
 
   return (
-    <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border overflow-hidden py-2 ">
+    <div
+      className={`sm:rounded-2xl bg-s-bg overflow-hidden ${
+        hasProfile && isSignedIn && lensProfile?.defaultProfile?.id && !isMobile
+          ? 'border-[1px] border-s-border'
+          : ''
+      }`}
+    >
       {/* create commentd */}
       {postInfo && (
         <LensCreateComment
@@ -114,8 +120,8 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
           // setComments={setComments}
         />
       )}
-      {/* comments section */}
 
+      {/* comments section */}
       <InfiniteScroll
         dataLength={comments.length}
         next={getMorePosts}
@@ -153,7 +159,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
         endMessage={<></>}
       >
         {uniqueComments.length > 0 && (
-          <div className="bg-s-bg px-3 sm:px-5 py-4 border-t border-[#eee] dark:border-p-border">
+          <div className="bg-s-bg px-3 sm:px-5 py-4 border-t border-s-border">
             {uniqueComments.map((comment, index) => {
               return <LensCommentCard key={index} comment={comment} />
             })}
