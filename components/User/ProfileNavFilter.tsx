@@ -9,6 +9,7 @@ import OptionsWrapper from '../Common/OptionsWrapper'
 import FilterButton from '../Common/UI/FilterButton'
 import FilterRow from '../Common/UI/FilterRow'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import formatHandle from './lib/formatHandle'
 
 interface Props {
   _lensProfile: Profile
@@ -93,7 +94,7 @@ const ProfileNavFilter = ({ _lensProfile }: Props) => {
         title="Posts"
         active={!pathname.endsWith('/collected')}
         onClick={() => {
-          router.push(`/u/${_lensProfile?.handle.split('.')[0]}`)
+          router.push(`/u/${formatHandle(_lensProfile?.handle)}`)
         }}
         Icon={<HiSparkles className="h-5 w-5" />}
       />
@@ -101,7 +102,7 @@ const ProfileNavFilter = ({ _lensProfile }: Props) => {
         title="Collected"
         active={pathname.endsWith('/collected')}
         onClick={() => {
-          router.push(`/u/${_lensProfile?.handle.split('.')[0]}/feed/collected`)
+          router.push(`/u/${formatHandle(_lensProfile?.handle)}/feed/collected`)
         }}
         Icon={<HiCollection className="h-5 w-5" />}
       />

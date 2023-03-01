@@ -12,6 +12,7 @@ import {
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../../Common/NotifyContext'
 import useDevice from '../../Common/useDevice'
+import formatHandle from '../../User/lib/formatHandle'
 // import PopUpWrapper from '../../Common/PopUpWrapper'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import AllowanceButton from './AllowanceButton'
@@ -245,7 +246,7 @@ const FeeCollectPopUp = ({
                 <div className="px-4 w-full  mb-1 mt-1 ">
                   <p className="ml-1">
                     {' '}
-                    Follow u/{author.handle.split('.')[0]} To Collect the Post
+                    Follow u/{formatHandle(author.handle)} To Collect the Post
                   </p>
                   <button
                     onClick={() => {
@@ -263,7 +264,7 @@ const FeeCollectPopUp = ({
                     ) : (
                       <div className="flex flex-row justify-center items-center space-x-2 text-p-btn-text">
                         <RiUserFollowLine />{' '}
-                        <p>Follow u/{author.handle.split('.')[0]}</p>
+                        <p>Follow u/{formatHandle(author.handle)}</p>
                       </div>
                     )}
                   </button>

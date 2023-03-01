@@ -19,6 +19,7 @@ import {
 } from '../../utils/utils'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useNotify } from '../Common/NotifyContext'
+import FormRichTextInput from '../Common/UI/FormRichTextInput'
 import FormTextInput from '../Common/UI/FormTextInput'
 import getAvatar from '../User/lib/getAvatar'
 import getIPFSLink from '../User/lib/getIPFSLink'
@@ -279,7 +280,7 @@ const ProfileForm = () => {
         <label htmlFor="profileBanner">
           <div
             className={`flex h-48 ${
-              profileBanner ? 'border border-p-border' : ''
+              profileBanner ? 'border border-s-border' : ''
             }  rounded-xl items-center justify-center cursor-pointer`}
           >
             {/* eslint-disable-next-line */}
@@ -292,7 +293,7 @@ const ProfileForm = () => {
 
             <div className="absolute flex flex-row space-x-8">
               <Tooltip title="Upload" TransitionProps={{ timeout: 600 }} arrow>
-                <div className="bg-p-bg rounded-full p-2">
+                <div className="bg-s-bg rounded-full p-2">
                   <AiOutlineCamera className="h-8 w-8" />
                 </div>
               </Tooltip>
@@ -310,7 +311,7 @@ const ProfileForm = () => {
                       handleSetProfileBannerFromLensProfile()
                     }}
                   >
-                    <div className="bg-p-bg rounded-full p-2">
+                    <div className="bg-s-bg rounded-full p-2">
                       <MdOutlineClear className="h-8 w-8" />
                     </div>
                   </span>
@@ -323,7 +324,7 @@ const ProfileForm = () => {
         <div
           className={`flex relative ${
             profileImage ? '' : 'border-2 border-p-border'
-          } h-24 w-24 sm:h-36 sm:w-36 rounded-full bottom-12 sm:bottom-20 ml-4 sm:ml-8 items-center justify-center bg-[#EDE7FF] dark:bg-s-bg z-10 cursor-pointer`}
+          } h-24 w-24 sm:h-36 sm:w-36 rounded-full bottom-12 sm:bottom-20 ml-4 sm:ml-8 items-center justify-center bg-s-bg z-10 cursor-pointer`}
         >
           {profileImage && (
             <label htmlFor="profileImage">
@@ -338,7 +339,7 @@ const ProfileForm = () => {
           <div className="absolute flex flex-row items-center space-x-3">
             <Tooltip TransitionProps={{ timeout: 600 }} title="Change" arrow>
               <label htmlFor="profileImage">
-                <div className="bg-p-bg rounded-full p-1 cursor-pointer">
+                <div className="bg-s-bg rounded-full p-1 cursor-pointer">
                   <AiOutlineCamera className="h-6 w-6 " />
                 </div>
               </label>
@@ -347,7 +348,7 @@ const ProfileForm = () => {
             {profileImageFile && (
               <Tooltip TransitionProps={{ timeout: 600 }} title="Clear" arrow>
                 <div
-                  className="bg-p-bg rounded-full p-1 cursor-pointer"
+                  className="bg-s-bg rounded-full p-1 cursor-pointer"
                   onClick={() => {
                     profileImageInputRef.current.value = ''
                     setProfileImageFile(null)
@@ -388,7 +389,7 @@ const ProfileForm = () => {
           required
           disabled={saving}
         />
-        <FormTextInput
+        {/* <FormTextInput
           label="Bio"
           placeholder="Say a bit more about you..."
           value={bio}
@@ -396,6 +397,12 @@ const ProfileForm = () => {
           required
           maxLength={200}
           disabled={saving}
+        /> */}
+        <FormRichTextInput
+          label="Bio"
+          placeholder="Say a bit more about you..."
+          startingValue={bio}
+          setContent={setBio}
         />
 
         <FormTextInput

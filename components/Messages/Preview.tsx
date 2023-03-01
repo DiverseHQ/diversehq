@@ -7,6 +7,7 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import { useMessageStore } from '../../store/message'
 import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 
 interface Props {
@@ -45,7 +46,7 @@ const Preview: FC<Props> = ({ profile, message, conversationKey }) => {
           <div className="flex flex-row items-center space-x-2">
             {profile?.name && <span className="text-md">{profile?.name}</span>}
             <span className={`${profile?.name ? 'text-sm text-s-text' : ''}`}>
-              {profile?.handle && `u/${profile?.handle.split('.')[0]}`}
+              {profile?.handle && `u/${formatHandle(profile?.handle)}`}
             </span>
           </div>
           <div className="text-s-text">

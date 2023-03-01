@@ -9,6 +9,8 @@ import { MDStrikeMatcher } from './matchers/markdown/MDStrikeMatcher'
 import { UrlMatcher } from './matchers/UrlMatcher'
 import React from 'react'
 import trimify from './trimify'
+import { MentionMatcher } from './matchers/MentionMatcher'
+import { HashtagMatcher } from './matchers/HashtagMatcher'
 
 interface Props {
   children: string
@@ -25,8 +27,10 @@ const Markup: FC<Props> = ({
 }) => {
   const defaultMatchers = [
     new MDCodeMatcher('mdCode'),
+    new MentionMatcher('mention'),
     new MDLinkMatcher('mdLink'),
     new UrlMatcher('url'),
+    new HashtagMatcher('hashtag'),
     new MDBoldMatcher('mdBold'),
     new MDItalicMatcher('mdItalic'),
     new MDStrikeMatcher('mdStrike'),

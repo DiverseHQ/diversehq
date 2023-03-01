@@ -7,6 +7,7 @@ import { CircularProgress } from '@mui/material'
 import { RiUserFollowLine } from 'react-icons/ri'
 import useDevice from '../../Common/useDevice'
 import { BsCollection } from 'react-icons/bs'
+import formatHandle from '../../User/lib/formatHandle'
 type Props = {
   setIsCollected: any
   setCollectCount: any
@@ -95,7 +96,7 @@ const FreeCollectPopUp = ({
                         ) : (
                           <div className="flex flex-row justify-center items-center space-x-1 ">
                             <RiUserFollowLine />{' '}
-                            <p>Follow u/{author.handle.split('.')[0]}</p>
+                            <p>Follow u/{formatHandle(author.handle)}</p>
                           </div>
                         )}
                       </button>
@@ -146,7 +147,7 @@ const FreeCollectPopUp = ({
                 {!isFollowedByMe && (
                   <div className="flex flex-col items-center self-start space-x-2 mb-2 font-medium w-full">
                     <p>
-                      Follow {author.handle.split('.')[0]} to Collect for Free
+                      Follow {formatHandle(author.handle)} to Collect for Free
                     </p>
                     <button
                       onClick={() => {
@@ -162,7 +163,7 @@ const FreeCollectPopUp = ({
                       ) : (
                         <div className="flex flex-row justify-center items-center space-x-1 text-p-btn-text">
                           <RiUserFollowLine />{' '}
-                          <p>Follow {author.handle.split('.')[0]}</p>
+                          <p>Follow {formatHandle(author.handle)}</p>
                         </div>
                       )}
                     </button>

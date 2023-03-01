@@ -14,6 +14,7 @@ import CreateCommunity from './CreateCommunity'
 import { BsFillPersonFill } from 'react-icons/bs'
 import { IoIosMoon, IoMdSettings } from 'react-icons/io'
 import { HiSun } from 'react-icons/hi'
+import formatHandle from '../User/lib/formatHandle'
 
 const ClickOption = () => {
   const router = useRouter()
@@ -26,7 +27,7 @@ const ClickOption = () => {
 
   const routeToUserProfile = () => {
     if (user && lensProfile?.defaultProfile?.handle) {
-      router.push(`/u/${lensProfile?.defaultProfile?.handle.split('.')[0]}`)
+      router.push(`/u/${formatHandle(lensProfile?.defaultProfile?.handle)}`)
     }
     hideModal()
   }

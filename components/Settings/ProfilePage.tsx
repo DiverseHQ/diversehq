@@ -16,7 +16,7 @@ const ProfilePage = () => {
             <CommonSidebar />
           </div>
         )}
-        <div className="w-full bg-s-bg sm:bg-[#EDE7FF] text-p-text dark:bg-s-bg w-full sm:rounded-[15px] sm:border-[1px] sm:border-p-border sm:p-4">
+        <div className="w-full bg-s-bg text-p-text w-full sm:rounded-[15px] sm:border-[1px] sm:border-s-border sm:p-4">
           <ProfileForm />
         </div>
       </div>

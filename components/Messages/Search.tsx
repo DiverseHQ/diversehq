@@ -10,6 +10,7 @@ import {
 import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import getAvatar from '../User/lib/getAvatar'
+import formatHandle from '../User/lib/formatHandle'
 
 interface Props {
   placeholder?: string
@@ -86,7 +87,7 @@ const Search = ({
                       {stringToLength(profile?.name, 15)}{' '}
                     </span>
                     <span className="text-sm text-s-text">
-                      {profile?.handle && `u/${profile?.handle.split('.')[0]}`}
+                      {profile?.handle && `u/${formatHandle(profile?.handle)}`}
                     </span>
                   </div>
                 </div>

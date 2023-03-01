@@ -18,6 +18,7 @@ import { getLevelAndThresholdXP } from '../../../lib/helpers'
 import MessageButton from '../../Messages/MessageButton'
 import getIPFSLink from '../../User/lib/getIPFSLink'
 import getAvatar from '../../User/lib/getAvatar'
+import formatHandle from '../../User/lib/formatHandle'
 
 const LensPostPage = ({ id, post }) => {
   const [postInfo, setPostInfo] = useState(post)
@@ -220,7 +221,7 @@ const LensPostPage = ({ id, post }) => {
                             className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate"
                             onClick={() => {
                               router.push(
-                                `/u/${postInfo?.profile?.handle.split('.')[0]}`
+                                `/u/${formatHandle(postInfo?.profile?.handle)}`
                               )
                             }}
                           >
@@ -230,11 +231,11 @@ const LensPostPage = ({ id, post }) => {
                             className="font-bold text-p-text text-[16px]  hover:underline cursor-pointer truncate mb-3"
                             onClick={() => {
                               router.push(
-                                `/u/${postInfo?.profile?.handle.split('.')[0]}`
+                                `/u/${formatHandle(postInfo?.profile?.handle)}`
                               )
                             }}
                           >
-                            u/{postInfo?.profile?.handle.split('.')[0]}
+                            u/{formatHandle(postInfo?.profile?.handle)}
                           </h2>
                         </div>
                       </div>

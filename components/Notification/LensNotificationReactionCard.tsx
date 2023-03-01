@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { ImArrowUp, ImArrowDown } from 'react-icons/im'
 import { NewReactionNotification } from '../../graphql/generated'
+import formatHandle from '../User/lib/formatHandle'
 type Props = {
   notification: NewReactionNotification
   isRead: boolean
@@ -34,8 +35,8 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
       MainRow={() => (
         <div>
           <span className="hover:underline font-bold">
-            <Link href={`/u/${notification?.profile?.handle.split('.')[0]}`}>
-              <>u/{notification?.profile?.handle.split('.')[0]}</>
+            <Link href={`/u/${formatHandle(notification?.profile?.handle)}`}>
+              <>u/{formatHandle(notification?.profile?.handle)}</>
             </Link>
           </span>
           <span>

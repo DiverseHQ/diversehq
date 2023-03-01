@@ -35,6 +35,7 @@ import { Tooltip } from '@mui/material'
 import Attachment from './Attachment'
 import MirrorButton from './MirrorButton'
 import CenteredDot from '../Common/UI/CenteredDot'
+import formatHandle from '../User/lib/formatHandle'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -280,7 +281,7 @@ const LensPostCard = ({ post }) => {
 
                   <span onClick={(e) => e.stopPropagation()} className="mr-1">
                     <Link
-                      href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
+                      href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
                     >
                       <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
                         <p className="pl-1.5 font-normal">
@@ -289,7 +290,7 @@ const LensPostCard = ({ post }) => {
                           {postInfo.__typename === 'Mirror' && 'mirrored by'}
                         </p>
                         <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                          u/{postInfo?.profile?.handle.split('.')[0]}
+                          u/{formatHandle(postInfo?.profile?.handle)}
                         </div>
                       </div>
                     </Link>
@@ -352,7 +353,7 @@ const LensPostCard = ({ post }) => {
                     <div className="flex flex-row items-center justify-start">
                       <span onClick={(e) => e.stopPropagation()}>
                         <Link
-                          href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
+                          href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
                           passHref
                         >
                           <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
@@ -363,7 +364,7 @@ const LensPostCard = ({ post }) => {
                                 'mirrored by'}
                             </p>
                             <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                              u/{postInfo?.profile?.handle.split('.')[0]}
+                              u/{formatHandle(postInfo?.profile?.handle)}
                             </div>
                           </div>
                         </Link>

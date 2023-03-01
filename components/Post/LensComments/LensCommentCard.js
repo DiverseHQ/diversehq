@@ -23,6 +23,7 @@ import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import { Tooltip } from '@mui/material'
 import { useCommentStore } from '../../../store/comment'
 import CenteredDot from '../../Common/UI/CenteredDot'
+import formatHandle from '../../User/lib/formatHandle'
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()
@@ -204,11 +205,11 @@ const LensCommentCard = ({ comment }) => {
               />
 
               <Link
-                href={`/u/${comment?.profile?.handle.split('.')[0]}`}
+                href={`/u/${formatHandle(comment?.profile?.handle)}`}
                 passHref
               >
                 <div className="hover:underline font-bold text-base">
-                  u/{comment?.profile?.handle.split('.')[0]}
+                  u/{formatHandle(comment?.profile?.handle)}
                 </div>
               </Link>
               <CenteredDot />

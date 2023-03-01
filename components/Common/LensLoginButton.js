@@ -11,6 +11,7 @@ import { useProfile } from './WalletContext'
 import ConnectWalletAndSignInButton from './ConnectWalletAndSignInButton'
 import useDevice from './useDevice'
 import { useQueryClient } from '@tanstack/react-query'
+import formatHandle from '../User/lib/formatHandle'
 
 const LensLoginButton = () => {
   const {
@@ -101,7 +102,7 @@ const LensLoginButton = () => {
             <div className="flex flex-col items-start">
               {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
                 <Link
-                  href={`/u/${lensProfile.defaultProfile.handle.split('.')[0]}`}
+                  href={`/u/${formatHandle(lensProfile.defaultProfile.handle)}`}
                 >
                   <div
                     className={`mr-2 hover:cursor-pointer hover:underline ${

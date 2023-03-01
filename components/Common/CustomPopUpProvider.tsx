@@ -1,6 +1,36 @@
 import React, { useContext, useEffect, useState, createContext } from 'react'
 
-export const CustomPopUpModalContext = createContext([])
+interface ModalType {
+  visiblity: boolean
+  component: any
+  type: string
+  onAction: () => void
+  extraaInfo: any
+}
+/* eslint-disable */
+interface ContextType {
+  modal: {
+    visiblity: boolean
+    component: any
+    type: string
+    onAction: () => void
+    extraaInfo: any
+  }
+  showModal: ({
+    component,
+    type,
+    onAction,
+    extraaInfo
+  }: {
+    component: any
+    type: string
+    onAction: () => void
+    extraaInfo: any
+  }) => void
+  hideModal: () => void
+}
+
+export const CustomPopUpModalContext = createContext<ContextType>(null)
 export const modalType = {
   normal: 'NORMAL',
   large: 'LARGE',
@@ -18,7 +48,7 @@ const Modal = ({
   right,
   bottom
 }) => {
-  const [visiblity, setVisiblity] = useState(show)
+  const [visiblity, setVisiblity] = useState<boolean>(show)
   let TimeOut
   useEffect(() => {
     if (TimeOut) {
@@ -73,7 +103,7 @@ const Modal = ({
   return <></>
 }
 const CustomPopUpModalProvider = ({ children }) => {
-  const [modal, setModal] = useState({
+  const [modal, setModal] = useState<ModalType>({
     visiblity: false,
     type: 'normal',
     component: <></>,

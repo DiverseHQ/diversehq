@@ -5,6 +5,7 @@ import { countLinesFromMarkdown } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { GoMention } from 'react-icons/go'
+import formatHandle from '../User/lib/formatHandle'
 
 const LensNotificationMentionCard = ({ notification, isRead }) => {
   const [showMore, setShowMore] = useState(
@@ -28,9 +29,9 @@ const LensNotificationMentionCard = ({ notification, isRead }) => {
         <div>
           <span>
             <Link
-              href={`/u/${
-                notification?.mentionPublication?.profile?.handle.split('.')[0]
-              }`}
+              href={`/u/${formatHandle(
+                notification?.mentionPublication?.profile?.handle
+              )}`}
             >
               <div className="font-bold hover:underline">
                 {`u/${

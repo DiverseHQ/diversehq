@@ -1,5 +1,5 @@
 import { IMAGE_KIT_ENDPOINT } from '../../../utils/config'
-import getIPFSLink, { isIpfsHashLink } from './getIPFSLink'
+import getIPFSLink from './getIPFSLink'
 
 /**
  *
@@ -8,13 +8,13 @@ import getIPFSLink, { isIpfsHashLink } from './getIPFSLink'
  * @returns imgproxy URL
  */
 // eslint-disable-next-line no-unused-vars
-const imageProxy = (url: string, tr: string = ''): string => {
+const imageProxy = (url: string, tr: string = '', name?: string): string => {
   // for now, returning the original url
   // return url
-  if (!isIpfsHashLink(url)) {
+  if (url.startsWith('https://firebasestorage.googleapis.com/')) {
     return url
   }
-  return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,${tr}/${getIPFSLink(
+  return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,n-${name},${tr}/${getIPFSLink(
     url
   )}`
 }

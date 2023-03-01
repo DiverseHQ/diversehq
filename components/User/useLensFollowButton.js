@@ -9,6 +9,7 @@ import {
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useNotify } from '../Common/NotifyContext'
+import formatHandle from './lib/formatHandle'
 
 const useLensFollowButton = (request) => {
   const { mutateAsync: proxyAction } = useProxyActionMutation()
@@ -45,7 +46,7 @@ const useLensFollowButton = (request) => {
         `Following ${
           data?.profile?.name
             ? data?.profile?.name
-            : `u/${data?.profile?.handle.split('.')[0]}`
+            : `u/${formatHandle(data?.profile?.handle)}`
         }`
       )
       setLoading(false)
@@ -97,7 +98,7 @@ const useLensFollowButton = (request) => {
         `UnFollowed ${
           data?.profile?.name
             ? data?.profile?.name
-            : `u/${data?.profile?.handle.split('.')[0]}`
+            : `u/${formatHandle(data?.profile?.handle)}`
         }`
       )
     }

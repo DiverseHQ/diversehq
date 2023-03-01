@@ -11,6 +11,7 @@ const PopUpWrapper = ({
   label,
   loading,
   children,
+  hideTopBar = false,
   isDisabled
 }) => {
   const { hideModal, showModal } = usePopUpModal()
@@ -34,37 +35,46 @@ const PopUpWrapper = ({
   }, [showModal])
 
   return (
-    <div className="bg-p-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden text-p-text z-40">
-      <div className="flex flex-row justify-between items-center pb-4 px-4">
-        <div className="flex flex-row justify-center items-center">
-          <div
-            className="cursor-pointer w-8 h-8 text-p-text  hover:bg-s-hover hover:duration-300 flex justify-center items-center rounded-full"
-            onClick={() => hideModal()}
-          >
-            {isDesktop && <AiOutlineClose className="w-5 h-5  items-center" />}
-            {!isDesktop && <BiArrowBack className="w-6 h-6 items-center" />}
+    <div className="bg-s-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden text-p-text z-40">
+      {!hideTopBar && (
+        <div className="flex flex-row justify-between items-center pb-4 px-4">
+          <div className="flex flex-row justify-center items-center">
+            <div
+              className="cursor-pointer w-8 h-8 text-p-text  hover:bg-s-hover hover:duration-300 flex justify-center items-center rounded-full"
+              onClick={() => hideModal()}
+            >
+              {isDesktop && (
+                <AiOutlineClose className="w-5 h-5  items-center" />
+              )}
+              {!isDesktop && <BiArrowBack className="w-6 h-6 items-center" />}
+            </div>
+            <div className="text-p-text ml-4 text-xl">{title}</div>
           </div>
-          <div className="text-p-text ml-4 text-xl">{title}</div>
+          {onClick && (
+            <>
+              {!loading ? (
+                <button
+                  className={`text-p-btn-text ${
+                    isDisabled ? 'bg-p-btn-disabled' : 'bg-p-btn'
+                  } px-3 py-1 font-bold uppercase rounded-full text-base text-p-btn-text`}
+                  type="button"
+                  onClick={onClick}
+                  disabled={loading || isDisabled}
+                >
+                  {label}
+                </button>
+              ) : (
+                <Image
+                  src="/loading.svg"
+                  alt="loading"
+                  width={30}
+                  height={30}
+                />
+              )}
+            </>
+          )}
         </div>
-        {onClick && (
-          <>
-            {!loading ? (
-              <button
-                className={`text-p-btn-text ${
-                  isDisabled ? 'bg-p-btn-disabled' : 'bg-p-btn'
-                } px-3 py-1 font-bold uppercase rounded-full text-base text-p-btn-text`}
-                type="button"
-                onClick={onClick}
-                disabled={loading || isDisabled}
-              >
-                {label}
-              </button>
-            ) : (
-              <Image src="/loading.svg" alt="loading" width={30} height={30} />
-            )}
-          </>
-        )}
-      </div>
+      )}
       {children}
     </div>
   )

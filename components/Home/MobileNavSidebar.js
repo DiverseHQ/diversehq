@@ -26,6 +26,7 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import getAvatar from '../User/lib/getAvatar'
 import { IoIosMoon, IoMdSettings } from 'react-icons/io'
 import { HiSun } from 'react-icons/hi'
+import formatHandle from '../User/lib/formatHandle'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -78,7 +79,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       notifyInfo('You might want to login first')
       return
     }
-    router.push(`/u/${myLensProfile?.defaultProfile?.handle.split('.')[0]}`)
+    router.push(`/u/${formatHandle(myLensProfile?.defaultProfile?.handle)}`)
   }
 
   const handleWalletAddressCopy = () => {
@@ -136,7 +137,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                     <div className="font-semibold">
                       u/
                       {stringToLength(
-                        myLensProfile?.defaultProfile?.handle.split('.')[0],
+                        formatHandle(myLensProfile?.defaultProfile?.handle),
                         20
                       )}
                     </div>

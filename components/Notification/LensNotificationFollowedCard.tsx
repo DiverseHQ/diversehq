@@ -4,6 +4,7 @@ import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { SlUserFollow } from 'react-icons/sl'
 import { NewFollowerNotification } from '../../graphql/generated'
 import useLensFollowButton from '../User/useLensFollowButton'
+import formatHandle from '../User/lib/formatHandle'
 
 interface Props {
   notification: NewFollowerNotification
@@ -21,12 +22,12 @@ const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
           <div className="pr-2">
             <span>
               <Link
-                href={`/u/${
-                  notification?.wallet?.defaultProfile?.handle.split('.')[0]
-                }`}
+                href={`/u/${formatHandle(
+                  notification?.wallet?.defaultProfile?.handle
+                )}`}
               >
                 <div className="font-bold hover:underline">
-                  u/{notification?.wallet?.defaultProfile?.handle.split('.')[0]}
+                  u/{formatHandle(notification?.wallet?.defaultProfile?.handle)}
                 </div>
               </Link>{' '}
             </span>

@@ -3,6 +3,7 @@ import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { CodeNode } from '@lexical/code'
 import { HashtagNode } from '@lexical/hashtag'
 import { AutoLinkNode, LinkNode } from '@lexical/link'
+import { MentionNode } from '../Lexical/Nodes/MentionsNode'
 
 const initialConfig = {
   namespace: 'composer',
@@ -14,7 +15,7 @@ const initialConfig = {
     },
     link: 'text-blue-500 hover:underline'
   },
-  nodes: [CodeNode, HashtagNode, AutoLinkNode, LinkNode],
+  nodes: [CodeNode, HashtagNode, AutoLinkNode, LinkNode, MentionNode],
   editorState: null,
   onError: (error) => {
     console.error(error)

@@ -18,10 +18,21 @@ import { userRoles } from '../../utils/config'
 import { useNotify } from './NotifyContext'
 import { useQueryClient } from '@tanstack/react-query'
 import { useLensUserContext } from '../../lib/LensUserContext'
-export const WalletContext = createContext([])
+import { UserType } from '../../types/user'
+
+interface ContextType {
+  address: string
+  refreshUserInfo: () => void
+  user: UserType
+  loading: boolean
+  // eslint-disable-next-line
+  fetchWeb3Token: (useEffectCalled?: boolean) => void
+}
+
+export const WalletContext = createContext<ContextType>(null)
 
 export const WalletProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<UserType>(null)
   const { data: signer } = useSigner()
   const { notifyInfo } = useNotify()
   const { address, isDisconnected } = useAccount()

@@ -12,6 +12,7 @@ import { BiGroup } from 'react-icons/bi'
 import useHideSidebar from './hook/useHideSidebar'
 import Sidebar from '../Settings/Sidebar'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import formatHandle from '../User/lib/formatHandle'
 // import { UserType } from '../../types/user'
 const NewLeftSidebar = () => {
   const { user }: any = useProfile()
@@ -111,7 +112,7 @@ const NewLeftSidebar = () => {
               <CgProfile className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             ),
             title: 'Profile',
-            link: `/u/${lensProfile?.defaultProfile?.handle.split('.')[0]}`,
+            link: `/u/${formatHandle(lensProfile?.defaultProfile?.handle)}`,
             isHidden: !isSignedIn || !hasProfile
           }
         ]}

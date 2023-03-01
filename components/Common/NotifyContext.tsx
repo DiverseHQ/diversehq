@@ -2,10 +2,18 @@ import React, { createContext, useContext } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-export const NotfiyContext = createContext([])
+/* eslint-disable */
+
+interface ContextType {
+  notifyInfo: (message: string) => void
+  notifyError: (message: string) => void
+  notifySuccess: (message: string) => void
+}
+
+export const NotfiyContext = createContext<ContextType>(null)
 
 export const NotifyProvider = ({ children }) => {
-  const notifyInfo = (message) => {
+  const notifyInfo = (message: string) => {
     toast.info(message, {
       position: 'top-center',
       autoClose: 2000,
@@ -15,11 +23,11 @@ export const NotifyProvider = ({ children }) => {
     })
   }
 
-  const notifyError = (message) => {
+  const notifyError = (message: string) => {
     toast.error(message)
   }
 
-  const notifySuccess = (message) => {
+  const notifySuccess = (message: string) => {
     toast.success(message)
   }
   return (

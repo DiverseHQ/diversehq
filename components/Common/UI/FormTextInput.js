@@ -9,7 +9,7 @@ const FormTextInput = ({
 }) => {
   return (
     <label>
-      <div className="border rounded-xl border-p-border mx-4 py-2 px-4 my-4 text-p-text bg-s-bg">
+      <div className="border rounded-xl border-s-border mx-4 py-2 px-4 my-4 text-p-text bg-s-bg">
         <div className="pb-2">{label}</div>
         <div className="flex flex-row items-center justify-between">
           <input

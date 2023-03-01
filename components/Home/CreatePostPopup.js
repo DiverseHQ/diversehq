@@ -543,6 +543,7 @@ const CreatePostPopup = () => {
         label="POST"
         loading={loading}
         isDisabled={!communityId || title.length === 0 || imageUpload}
+        hideTopBar={showCollectSettings}
       >
         <div className="flex flex-row items-center justify-between px-4 z-50">
           {showCollectSettings ? (
@@ -554,8 +555,8 @@ const CreatePostPopup = () => {
               <p className="text-p-text ml-4 text-xl">Back</p>
             </button>
           ) : (
-            <div className="flex justify-center items-center border border-p-border rounded-full text-p-text w-fit h-[45px] bg-s-bg">
-              <button className="text-blue-500" onClick={showJoinedCommunities}>
+            <div className="flex justify-center items-center border border-s-border rounded-full text-p-text w-fit h-[45px] bg-s-bg">
+              <button className="" onClick={showJoinedCommunities}>
                 {showCommunity.name ? (
                   <div className="flex justify-center items-center p-2">
                     <img
@@ -585,7 +586,7 @@ const CreatePostPopup = () => {
                 e.preventDefault()
                 setFlair(e.target.value)
               }}
-              className="bg-p-bg border border-p-border outline-none mr-2 px-1 py-1 rounded-md text-p-text"
+              className="bg-p-bg border border-s-border outline-none mr-2 px-1 py-1 rounded-md text-p-text"
               value={flair}
             >
               <option
@@ -652,8 +653,12 @@ const CreatePostPopup = () => {
             {/* Rich text editor */}
             <PublicationEditor
               setContent={setContent}
-              setFile={setFile}
-              setImageValue={setImageValue}
+              onPaste={(files) => {
+                const file = files[0]
+                if (!file) return
+                setFile(file)
+                setImageValue(URL.createObjectURL(file))
+              }}
             />
 
             <div className="text-base leading-relaxed m-4">
@@ -661,7 +666,7 @@ const CreatePostPopup = () => {
                 showAddedFile()
               ) : (
                 <label htmlFor="upload-file">
-                  <div className="h-32 text-s-text flex flex-col justify-center items-center border border-p-border bg-s-bg rounded-xl">
+                  <div className="h-32 text-s-text flex flex-col justify-center items-center border border-s-border bg-s-bg rounded-xl">
                     <div>
                       <AiOutlineCamera className="h-8 w-8" />
                     </div>

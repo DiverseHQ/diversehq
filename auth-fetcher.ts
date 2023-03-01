@@ -9,6 +9,8 @@ export const endpoint =
   apiMode === 'dev' ? 'https://api-mumbai.lens.dev/' : 'https://api.lens.dev/'
 export const STORAGE_KEY = 'LH_STORAGE_KEY'
 
+/* eslint-disable */
+
 async function getAccessToken(): Promise<string | null> {
   const tokenValue = readAccessTokenFromStorage()
 

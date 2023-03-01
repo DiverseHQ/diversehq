@@ -10,6 +10,7 @@ import {
 } from '../../utils/config'
 import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import formatHandle from '../User/lib/formatHandle'
 import getStampFyiURL from '../User/lib/getStampFyiURL'
 
 const LensProfilesSearchModal = ({
@@ -38,7 +39,7 @@ const LensProfilesSearchModal = ({
   }, [searchProfileQuery?.data?.search?.items])
 
   const handleProfileClicked = (handle) => {
-    router.push(`/u/${handle.split('.')[0]}`)
+    router.push(`/u/${formatHandle(handle)}`)
   }
 
   return (
@@ -72,7 +73,7 @@ const LensProfilesSearchModal = ({
               <div className="flex flex-col text-sm">
                 <div>{stringToLength(profile.name, 20)}</div>
                 <div className="text-s-text">
-                  u/{profile.handle?.split('.')[0]}
+                  u/{formatHandle(profile.handle)}
                 </div>
               </div>
             </div>

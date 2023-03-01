@@ -20,6 +20,7 @@ import FilterButton from '../Common/UI/FilterButton'
 import { AiOutlinePlus } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
 import { Tooltip } from '@mui/material'
+import formatHandle from '../User/lib/formatHandle'
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
@@ -281,12 +282,12 @@ const Navbar = () => {
               )}
               <span onClick={(e) => e.stopPropagation()}>
                 <Link
-                  href={`/u/${lensProfile.defaultProfile.handle.split('.')[0]}`}
+                  href={`/u/${formatHandle(lensProfile.defaultProfile.handle)}`}
                 >
                   <div
                     className={`hover:cursor-pointer className='leading-4' hover:underline text-s-text text-sm p-2 md:p-0`}
                   >
-                    u/{lensProfile.defaultProfile.handle.split('.')[0]}
+                    u/{formatHandle(lensProfile.defaultProfile.handle)}
                   </div>
                 </Link>
               </span>

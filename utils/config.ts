@@ -94,16 +94,18 @@ export const SUPPORTED_AUDIO_TYPE: string[] = [
 ]
 /* eslint-disable */
 
-enum apiModeType {
-  dev = 'dev',
-  prod = 'prod'
-}
-
 // XP and Level configs
 export const baseXP = 200
 export const xpMultiplier = 4
 export const xpPerMember = 10
-export const apiMode: apiModeType = apiModeType.dev
+export const apiMode: string = 'dev'
+export const isMainnet: boolean = apiMode === 'mainnet'
+export const HANDLE_SUFFIX: string = isMainnet ? '.lens' : '.test'
+
+// Named transforms
+export const AVATAR = 'avatar'
+export const COVER = 'cover'
+export const ATTACHMENT = 'attachment'
 
 // lens appId and its information
 export const infoFromLensAppId = {

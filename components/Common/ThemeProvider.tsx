@@ -3,7 +3,13 @@ import { useContext } from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { createContext } from 'react'
-export const ThemeContext = createContext({})
+
+interface ContextType {
+  theme: string
+  toggleTheme: () => void
+}
+
+export const ThemeContext = createContext<ContextType>(null)
 // import MUITheme from './MUITheme'
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('light')

@@ -13,6 +13,7 @@ import { BsCollection } from 'react-icons/bs'
 import Link from 'next/link'
 import Attachment from './Attachment'
 import { Tooltip } from '@mui/material'
+import formatHandle from '../User/lib/formatHandle'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
@@ -41,11 +42,11 @@ const IndexingPostCard = ({ postInfo }) => {
                     </div>
                   </Link>
 
-                  <Link href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}>
+                  <Link href={`/u/${formatHandle(postInfo?.profile?.handle)}`}>
                     <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
                       <p className="pl-1.5 font-normal"> posted by</p>
                       <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                        u/{postInfo?.profile?.handle.split('.')[0]}
+                        u/{formatHandle(postInfo?.profile?.handle)}
                       </div>
                     </div>
                   </Link>
@@ -81,13 +82,13 @@ const IndexingPostCard = ({ postInfo }) => {
                     </Link>
                     <div className="flex flex-row items-center justify-start">
                       <Link
-                        href={`/u/${postInfo?.profile?.handle.split('.')[0]}`}
+                        href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
                         passHref
                       >
                         <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
                           <p className="pl-1.5 font-normal"> posted by</p>
                           <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                            u/{postInfo?.profile?.handle.split('.')[0]}
+                            u/{formatHandle(postInfo?.profile?.handle)}
                           </div>
                         </div>
                       </Link>

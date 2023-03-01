@@ -18,6 +18,7 @@ import ReplyMobileInfo from './ReplyMobileInfo'
 import Giphy from '../Giphy'
 import { AiOutlineClose } from 'react-icons/ai'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import formatHandle from '../../User/lib/formatHandle'
 const LensCreateComment = ({ postId, addComment, postInfo }) => {
   const [focused, setFocused] = useState(false)
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -198,7 +199,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                 <div className="ml-2 font-bold text-base">
                   {lensProfile?.defaultProfile?.name
                     ? lensProfile?.defaultProfile?.name
-                    : lensProfile?.defaultProfile?.handle.split('.')[0]}
+                    : formatHandle(lensProfile?.defaultProfile?.handle)}
                 </div>
               </div>
             </div>

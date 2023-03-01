@@ -9,7 +9,9 @@ import { UserType } from '../../types/user'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import useDevice from '../Common/useDevice'
+import Markup from '../Lexical/Markup'
 import MessageButton from '../Messages/MessageButton'
+import formatHandle from './lib/formatHandle'
 import getAvatar from './lib/getAvatar'
 import getIPFSLink from './lib/getIPFSLink'
 import useLensFollowButton from './useLensFollowButton'
@@ -87,17 +89,19 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
         <div className="ml-24 flex flex-row justify-end md:justify-between items-start">
           {!isMobile && (
             <div className="flex flex-row items-start justify-between sm:space-x-10 mt-1 mb-2">
-              <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
+              <div className="flex flex-col items-start font-medium text-base sm:text-base tracking-wider">
                 {lensProfile?.name && <div>{lensProfile.name}</div>}
                 {!lensProfile.name && profile.walletAddress && (
                   <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
                 )}
-                <Link href={`/u/${lensProfile?.handle.split('.')[0]}`} passHref>
+                <Link href={`/u/${formatHandle(lensProfile?.handle)}`} passHref>
                   <div className="hover:underline cursor-pointer">
-                    u/{lensProfile?.handle.split('.')[0]}
+                    u/{formatHandle(lensProfile?.handle)}
                   </div>
                 </Link>
-                <div className="font-normal">{lensProfile.bio}</div>
+                <div className="font-normal">
+                  <Markup>{lensProfile.bio}</Markup>
+                </div>
               </div>
             </div>
           )}
@@ -133,9 +137,9 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                 {!lensProfile.name && profile.walletAddress && (
                   <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
                 )}
-                <Link href={`/u/${lensProfile?.handle.split('.')[0]}`} passHref>
+                <Link href={`/u/${formatHandle(lensProfile?.handle)}`} passHref>
                   <div className="hover:underline cursor-pointer">
-                    u/{lensProfile?.handle.split('.')[0]}
+                    u/{formatHandle(lensProfile?.handle)}
                   </div>
                 </Link>
               </div>
@@ -231,7 +235,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
       >
         <div className="flex flex-col gap-4 mx-4 mb-4">
           <h3 className="font-bold text-[20px] self-center">
-            {lensProfile?.name ?? `u/${lensProfile.handle.split('.')[0]}`}
+            {lensProfile?.name ?? `u/${formatHandle(lensProfile.handle)}`}
           </h3>
           <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
             <BiRepost />

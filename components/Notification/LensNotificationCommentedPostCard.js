@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { BiCommentAdd } from 'react-icons/bi'
+import formatHandle from '../User/lib/formatHandle'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
 const LensNotificationCommentedPostCard = ({ notification, isRead }) => {
@@ -9,8 +10,8 @@ const LensNotificationCommentedPostCard = ({ notification, isRead }) => {
       MainRow={() => (
         <div>
           <span className="hover:underline font-bold">
-            <Link href={`/u/${notification?.profile?.handle.split('.')[0]}`}>
-              <>u/{notification?.profile?.handle.split('.')[0]}</>
+            <Link href={`/u/${formatHandle(notification?.profile?.handle)}`}>
+              <>u/{formatHandle(notification?.profile?.handle)}</>
             </Link>
           </span>
           <span>

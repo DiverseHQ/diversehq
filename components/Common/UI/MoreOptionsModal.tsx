@@ -1,12 +1,24 @@
 import React from 'react'
 
-const MoreOptionsModal = ({ list, className }) => {
+interface ItemType {
+  label: string
+  icon?: React.FC
+  onClick?: () => void
+  className?: string
+}
+
+interface Props {
+  list: ItemType[]
+  className?: string
+}
+
+const MoreOptionsModal = ({ list, className }: Props) => {
   return (
     <>
       <div
         className={`flex flex-col bg-s-bg sm:rounded-xl p-1 sm:shadow-md min-w-[180px] border-[1px] border-s-border w-fit ${className}`}
       >
-        {list.map((item, index) => {
+        {list.map((item: ItemType, index: number) => {
           return (
             <div
               key={index}
