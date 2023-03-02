@@ -48,6 +48,7 @@ import useDevice from '../Common/useDevice'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { supportedMimeTypes } from '../../utils/config'
 import { IoIosArrowBack } from 'react-icons/io'
+import Giphy from '../Post/Giphy'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS]
@@ -109,6 +110,7 @@ const CreatePostPopup = () => {
     JSON.parse(window.localStorage.getItem('recentCommunities')) || []
   const [selectedCommunity, setSelectedCommunity] = useState(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [gifAttachment, setGifAttachment] = useState(null)
 
   const storeRecentCommunities = () => {
     window.localStorage.setItem(
@@ -462,11 +464,18 @@ const CreatePostPopup = () => {
 
   const showAddedFile = () => {
     // check if the file is image or video and show it
-    if (!file) return null
+    if (!file && !gifAttachment) return null
     const type = file.type.split('/')[0]
     return (
       <div className="flex items-center justify-center">
         <div className="relative w-fit">
+          {type === 'gif' && (
+            <img
+              src={gifAttachment?.images?.original.url}
+              className="max-h-80 rounded-2xl object-cover"
+              alt="Your amazing post"
+            />
+          )}
           {type === 'image' && (
             <img
               src={imageValue}
@@ -483,6 +492,7 @@ const CreatePostPopup = () => {
               muted
             ></video>
           )}
+
           {imageUpload ? (
             <CircularProgress
               size="30px"
@@ -548,6 +558,12 @@ const CreatePostPopup = () => {
     if (!file) return
     if (file && isLensPost && !firebaseUrl) upLoadFile()
   }, [file])
+
+  const handleGifClick = (event) => {
+    event.stopPropogation()
+  }
+
+  console.log('gifAttachment', gifAttachment)
 
   const PopUpModal = () => {
     return (
@@ -717,6 +733,9 @@ const CreatePostPopup = () => {
                   </div>
                 </label>
               )}
+            </div>
+            <div className="ml-6" onClick={() => handleGifClick}>
+              <Giphy setGifAttachment={setGifAttachment} />
             </div>
             <input
               type="file"
