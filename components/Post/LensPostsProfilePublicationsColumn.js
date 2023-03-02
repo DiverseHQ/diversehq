@@ -42,7 +42,8 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
   const handleSetPosts = async (newPosts) => {
     if (newPosts.length === 0) return
     const communityIds = newPosts.map((post) => {
-      if (post.metadata.tags.length === 0) return 'null'
+      if (!post?.metadata?.tags || post?.metadata?.tags?.length === 0)
+        return 'null'
       return post.metadata.tags[0]
     })
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(

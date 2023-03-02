@@ -37,10 +37,15 @@ import MirrorButton from './MirrorButton'
 import CenteredDot from '../Common/UI/CenteredDot'
 import formatHandle from '../User/lib/formatHandle'
 import { AiOutlineRetweet } from 'react-icons/ai'
+import { postWithCommunityInfoType } from '../../types/post'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
-const LensPostCard = ({ post }) => {
+interface Props {
+  post: postWithCommunityInfoType
+}
+
+const LensPostCard = ({ post }: Props) => {
   const { isMobile } = useDevice()
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(post?.reaction)
@@ -51,8 +56,7 @@ const LensPostCard = ({ post }) => {
   )
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
-  const [postInfo, setPostInfo] = useState(post)
-  const isMirror = postInfo.__typename === 'Mirror'
+  const [postInfo, setPostInfo] = useState<postWithCommunityInfoType>(post)
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
@@ -81,7 +85,6 @@ const LensPostCard = ({ post }) => {
 
   const handleUpvote = async () => {
     if (reaction === ReactionTypes.Upvote) {
-      console.log(ReactionTypes.Upvote, 'reaction')
       try {
         if (!isSignedIn || !hasProfile) {
           notifyInfo('How about loging in lens, first?')
@@ -240,10 +243,13 @@ const LensPostCard = ({ post }) => {
           }}
         >
           {/* top row */}
-          {isMirror && (
-            <div className="flex flex-row space-x-1 items-center ml-1 mb-1">
-              <AiOutlineRetweet />
-              <p className=" font-medium">mirrored</p>
+          {postInfo?.mirroredBy && (
+            <div className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text">
+              <AiOutlineRetweet className="w-3 h-3" />
+              <span className="pr-1">{'mirrored by '}</span>
+              <Link href={`u/${formatHandle(postInfo?.mirroredBy?.handle)}`}>
+                <>{`u/${formatHandle(postInfo?.mirroredBy?.handle)}`} </>
+              </Link>
             </div>
           )}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
@@ -288,20 +294,16 @@ const LensPostCard = ({ post }) => {
                   </span>
 
                   <span onClick={(e) => e.stopPropagation()} className="mr-1">
-                    <Link
-                      href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
-                    >
-                      <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
-                        <p className="pl-1.5 font-normal">
-                          {' '}
-                          {postInfo.__typename === 'Post' && 'posted by'}
-                          {postInfo.__typename === 'Mirror' && 'mirrored by'}
-                        </p>
+                    <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
+                      <p className="pl-1.5 font-normal">{' posted by'}</p>
+                      <Link
+                        href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
+                      >
                         <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
                           u/{formatHandle(postInfo?.profile?.handle)}
                         </div>
-                      </div>
-                    </Link>
+                      </Link>
+                    </div>
                   </span>
                   <CenteredDot />
                   <div>
@@ -360,22 +362,19 @@ const LensPostCard = ({ post }) => {
                     </span>
                     <div className="flex flex-row items-center justify-start">
                       <span onClick={(e) => e.stopPropagation()}>
-                        <Link
-                          href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
-                          passHref
-                        >
-                          <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
-                            <p className="pl-1.5 font-normal">
-                              {' '}
-                              {postInfo.__typename === 'Post' && 'posted by'}
-                              {postInfo.__typename === 'Mirror' &&
-                                'mirrored by'}
-                            </p>
+                        <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
+                          <p className="pl-1.5 font-normal">{' posted by '}</p>
+                          <Link
+                            href={`/u/${formatHandle(
+                              postInfo?.profile?.handle
+                            )}`}
+                            passHref
+                          >
                             <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
                               u/{formatHandle(postInfo?.profile?.handle)}
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
+                        </div>
                       </span>
                       <div>
                         {postInfo?.createdAt && (

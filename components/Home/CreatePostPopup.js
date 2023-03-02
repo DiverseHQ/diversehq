@@ -98,6 +98,15 @@ const CreatePostPopup = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [gifAttachment, setGifAttachment] = useState(null)
 
+  useEffect(() => {
+    console.log('gifAttachment', gifAttachment)
+    console.log(
+      'gifAttachment?.images?.original?.url',
+      gifAttachment?.images?.original?.url
+    )
+    setImageValue(gifAttachment ? gifAttachment?.images?.original?.url : null)
+  }, [gifAttachment])
+
   const storeRecentCommunities = () => {
     window.localStorage.setItem(
       'recentCommunities',
@@ -140,6 +149,9 @@ const CreatePostPopup = () => {
     }
     // }
     storeRecentCommunities()
+    if (gifAttachment) {
+      handleCreateLensPost(title, communityId, 'image/gif', imageValue)
+    }
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {
         notifyError('File type not supported')
@@ -451,17 +463,12 @@ const CreatePostPopup = () => {
   const showAddedFile = () => {
     // check if the file is image or video and show it
     if (!file && !gifAttachment) return null
-    const type = file.type.split('/')[0]
+    let type = null
+    if (file) type = file.type.split('/')[0]
+    if (gifAttachment) type = 'image'
     return (
       <div className="flex items-center justify-center">
         <div className="relative w-fit">
-          {type === 'gif' && (
-            <img
-              src={gifAttachment?.images?.original.url}
-              className="max-h-80 rounded-2xl object-cover"
-              alt="Your amazing post"
-            />
-          )}
           {type === 'image' && (
             <img
               src={imageValue}
@@ -545,11 +552,7 @@ const CreatePostPopup = () => {
     if (file && !firebaseUrl) upLoadFile()
   }, [file])
 
-  const handleGifClick = (event) => {
-    event.stopPropogation()
-  }
-
-  console.log('gifAttachment', gifAttachment)
+  // console.log('gifAttachment', gifAttachment)
 
   const PopUpModal = () => {
     return (
@@ -679,7 +682,7 @@ const CreatePostPopup = () => {
             />
 
             <div className="text-base leading-relaxed m-4">
-              {file ? (
+              {file || gifAttachment ? (
                 showAddedFile()
               ) : (
                 <label htmlFor="upload-file">
@@ -695,7 +698,12 @@ const CreatePostPopup = () => {
                 </label>
               )}
             </div>
-            <div className="ml-6" onClick={() => handleGifClick}>
+            <div
+              className="ml-6"
+              // onClick={(e) => {
+              //   e.stopPropagation()
+              // }}
+            >
               <Giphy setGifAttachment={setGifAttachment} />
             </div>
             <input

@@ -22,8 +22,6 @@ const MirrorButton = ({ postInfo }) => {
       ? postInfo?.stats?.totalAmountOfMirrors
       : 0
   )
-
-  console.log(postInfo, 'postInfo')
   const [isSuccessful, setIsSuccessful] = useState(false)
   const [mirrored, setMirrored] = useState(
     isMirror

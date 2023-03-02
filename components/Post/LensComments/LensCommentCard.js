@@ -33,6 +33,8 @@ const LensCommentCard = ({ comment }) => {
   const router = useRouter()
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
+  console.log('comment', comment)
+  console.log('reaction of ', comment?.metadata?.content, reaction)
   const [upvoteCount, setUpvoteCount] = useState(
     comment?.stats?.totalUpvotes ? comment?.stats?.totalUpvotes : 0
   )

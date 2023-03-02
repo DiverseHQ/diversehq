@@ -163,13 +163,6 @@ const IndexingPostCard = ({ postInfo }) => {
                       </Markup>
                     </div>
                   )}
-                  {showMore && (
-                    <Link href={`/p/${postInfo?.id}`}>
-                      <div className="text-blue-400 text-sm sm:text-base">
-                        Show more
-                      </div>
-                    </Link>
-                  )}
                 </div>
                 {postInfo?.metadata?.media?.length > 0 && (
                   <div className="sm:pl-5  sm:pr-6 sm:pb-1">

@@ -1,32 +1,21 @@
 import React, { useContext, useEffect, useState, createContext } from 'react'
 
 interface ModalType {
-  visiblity: boolean
+  visiblity?: boolean
   component: any
-  type: string
-  onAction: () => void
-  extraaInfo: any
+  type?: string
+  onAction?: () => void
+  extraaInfo?: any
 }
 /* eslint-disable */
 interface ContextType {
-  modal: {
-    visiblity: boolean
-    component: any
-    type: string
-    onAction: () => void
-    extraaInfo: any
-  }
   showModal: ({
+    visiblity,
     component,
     type,
     onAction,
     extraaInfo
-  }: {
-    component: any
-    type: string
-    onAction: () => void
-    extraaInfo: any
-  }) => void
+  }: ModalType) => void
   hideModal: () => void
 }
 
@@ -103,43 +92,34 @@ const Modal = ({
   return <></>
 }
 const CustomPopUpModalProvider = ({ children }) => {
-  const [modal, setModal] = useState<ModalType>({
-    visiblity: false,
-    type: 'normal',
-    component: <></>,
-    onAction: () => {},
-    extraaInfo: {}
-  })
+  const [modals, setModals] = useState<ModalType[]>([])
 
   const providerVal = {
-    modal,
-    showModal: ({ component, type, onAction = () => {}, extraaInfo = {} }) => {
-      setModal({
-        ...modal,
-        visiblity: true,
-        component,
-        type,
-        onAction,
-        extraaInfo
-      })
+    showModal: (modal: ModalType) => {
+      setModals((prev) => [...prev, modal])
     },
     hideModal: () => {
-      setModal({ ...modal, visiblity: false, onAction: () => {} })
+      setModals((prev) => {
+        prev.pop()
+        return [...prev]
+      })
     }
   }
   return (
     <CustomPopUpModalContext.Provider value={providerVal}>
       <>
-        <Modal
-          show={modal.visiblity}
-          type={modal.type}
-          component={modal.component}
-          onBackBtnClick={providerVal.hideModal}
-          top={modal.extraaInfo.top ? modal.extraaInfo.top : 'auto'}
-          left={modal.extraaInfo.left ? modal.extraaInfo.left : 'auto'}
-          bottom={modal.extraaInfo.bottom ? modal.extraaInfo.bottom : 'auto'}
-          right={modal.extraaInfo.right ? modal.extraaInfo.right : 'auto'}
-        />
+        {modals.map((modal) => (
+          <Modal
+            show={modal.visiblity}
+            type={modal.type}
+            component={modal.component}
+            onBackBtnClick={providerVal.hideModal}
+            top={modal.extraaInfo.top ? modal.extraaInfo.top : 'auto'}
+            left={modal.extraaInfo.left ? modal.extraaInfo.left : 'auto'}
+            bottom={modal.extraaInfo.bottom ? modal.extraaInfo.bottom : 'auto'}
+            right={modal.extraaInfo.right ? modal.extraaInfo.right : 'auto'}
+          />
+        ))}
         {children}
       </>
     </CustomPopUpModalContext.Provider>

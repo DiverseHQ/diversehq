@@ -70,11 +70,13 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
       reaction: ReactionTypes.Upvote
     }
     setLoading(false)
+    if (commentRef?.current) {
+      commentRef.current.value = ''
+      commentRef.current.style.height = 'auto'
+      commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
+    }
     addComment(tx, comment)
     setCurrentReplyComment(null)
-    commentRef.current.value = ''
-    commentRef.current.style.height = 'auto'
-    commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
     setGifAttachment(null)
   }
 
