@@ -3,7 +3,6 @@ import React from 'react'
 import { Publication } from '../../../graphql/generated'
 // import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
-import getIPFSLink from '../../User/lib/getIPFSLink'
 import imageProxy from '../../User/lib/imageProxy'
 
 const LensPostSeo = ({ post }: { post: Publication }) => {

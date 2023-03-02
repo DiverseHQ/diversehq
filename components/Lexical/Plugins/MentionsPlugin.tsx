@@ -17,12 +17,10 @@ import {
   SearchRequestTypes,
   useSearchProfilesQuery
 } from '../../../graphql/generated'
-import { AVATAR } from '../../../utils/config'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../../User/lib/formatHandle'
 import getIPFSLink from '../../User/lib/getIPFSLink'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
-import imageProxy from '../../User/lib/imageProxy'
 
 import { $createMentionNode } from '../Nodes/MentionsNode'
 
