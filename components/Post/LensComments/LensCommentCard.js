@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
 import {
@@ -30,6 +30,7 @@ import formatHandle from '../../User/lib/formatHandle'
 import AttachmentMedia from '../Attachment'
 
 const LensCommentCard = ({ comment }) => {
+  const [comments, setComments] = useState([])
   const router = useRouter()
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
@@ -69,7 +70,9 @@ const LensCommentCard = ({ comment }) => {
     setIsAuthor(lensProfile?.defaultProfile?.id === comment?.profile?.id)
   }, [comment, lensProfile])
 
-  const [comments, setComments] = useState([])
+  useEffect(() => {
+    setReaction(comment?.reaction)
+  }, [comment])
 
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
@@ -78,7 +81,7 @@ const LensCommentCard = ({ comment }) => {
   const handleUpvote = async () => {
     if (reaction === ReactionTypes.Upvote) return
     if (!comment?.id) {
-      notifyInfo('not indexed yet, try again later')
+      notifyInfo('not indexed yet, try in a moment')
       return
     }
     try {
@@ -114,7 +117,7 @@ const LensCommentCard = ({ comment }) => {
         return
       }
       if (!comment?.id) {
-        notifyInfo('not indexed yet, try again later')
+        notifyInfo('not indexed yet, try in a moment')
         return
       }
       setReaction(ReactionTypes.Downvote)
@@ -138,7 +141,7 @@ const LensCommentCard = ({ comment }) => {
 
   const handleDeleteComment = async () => {
     if (!comment?.id) {
-      notifyInfo('not indexed yet, try again later')
+      notifyInfo('not indexed yet, try in a moment')
       return
     }
     try {
@@ -362,7 +365,7 @@ const LensCommentCard = ({ comment }) => {
                       return
                     }
                     if (!comment?.id) {
-                      notifyInfo('not indexed yet, try again later')
+                      notifyInfo('not indexed yet, try in a moment')
                       return
                     }
                     if (comment?.id === currentReplyComment?.id) {
@@ -392,6 +395,7 @@ const LensCommentCard = ({ comment }) => {
                     commentId={comment.id}
                     comments={comments}
                     setComments={setComments}
+                    disableFetch={!comment?.__typename}
                   />
                 </div>
               )}
@@ -404,4 +408,4 @@ const LensCommentCard = ({ comment }) => {
   )
 }
 
-export default LensCommentCard
+export default memo(LensCommentCard)
