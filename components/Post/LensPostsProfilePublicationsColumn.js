@@ -42,9 +42,14 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
   const handleSetPosts = async (newPosts) => {
     if (newPosts.length === 0) return
     const communityIds = newPosts.map((post) => {
-      if (!post?.metadata?.tags || post?.metadata?.tags?.length === 0)
-        return 'null'
-      return post.metadata.tags[0]
+      if (post?.metadata?.tags?.[0]) {
+        return post.metadata.tags[0]
+      }
+      if (post?.__typename === 'Mirror') {
+        console.log('mirror post id', post.mirrorOf?.metadata?.tags[0])
+        return post.mirrorOf?.metadata?.tags[0]
+      }
+      return 'null'
     })
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
@@ -53,6 +58,11 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
       if (!communityInfoForPosts[i]?._id) {
         newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
       } else {
+        if (newPosts[i]?.__typename === 'Mirror') {
+          let mirrorPost = newPosts[i]
+          newPosts[i] = mirrorPost?.mirrorOf
+          newPosts[i].mirroredBy = mirrorPost.profile
+        }
         newPosts[i].communityInfo = communityInfoForPosts[i]
       }
     }

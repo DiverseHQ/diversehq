@@ -20,7 +20,7 @@ export const Mention = ({ ...props }: any) => {
       }}
     >
       <Link href={`/u/${formatHandle(props.display.slice(1))}`}>
-        <span className="hover:underline text-p-btn cursor-pointer">
+        <span className="hover:underline text-blue-400 cursor-pointer">
           {profile?.handle && `u/${formatHandle(props.display.slice(1))}`}
         </span>
       </Link>

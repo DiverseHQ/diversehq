@@ -38,7 +38,7 @@ const MessageTile: FC<MessageTileProps> = ({ message, currentProfile }) => {
           <span>
             {message.error
               ? `Error: ${message.error?.message}`
-              : <Markup matchOnlyUrl>{message.content}</Markup> ?? ''}
+              : <Markup>{message.content}</Markup> ?? ''}
           </span>
         </div>
 
