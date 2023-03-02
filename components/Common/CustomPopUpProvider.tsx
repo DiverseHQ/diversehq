@@ -29,7 +29,6 @@ export const modalType = {
 }
 const Modal = ({
   type,
-  show,
   onBackBtnClick,
   component,
   top,
@@ -37,65 +36,46 @@ const Modal = ({
   right,
   bottom
 }) => {
-  const [visiblity, setVisiblity] = useState<boolean>(show)
-  let TimeOut
-  useEffect(() => {
-    if (TimeOut) {
-      clearTimeout(TimeOut)
-    }
-    if (!show) {
-      setTimeout(() => {
-        setVisiblity(false)
-      }, 300)
-    } else {
-      setVisiblity(true)
-    }
-  }, [show])
-
-  if (visiblity)
-    return (
-      <div className="flex flex-row justify-center items-center fixed z-50 no-scrollbar w-full h-full">
-        <div className="flex justify-center items-center relative w-full h-full">
+  return (
+    <div className="flex flex-row justify-center items-center fixed z-50 no-scrollbar w-full h-full">
+      <div className="flex justify-center items-center relative w-full h-full">
+        <div
+          className={`w-full h-full absolute ${
+            type !== modalType.customposition &&
+            'bg-black/40 backdrop-opacity-40  backdrop-blur-sm'
+          } z-0`}
+          onClick={onBackBtnClick}
+        ></div>
+        {type !== modalType.customposition && (
           <div
-            className={`w-full h-full absolute ${
-              type !== modalType.customposition &&
-              'bg-black/40 backdrop-opacity-40  backdrop-blur-sm'
-            } z-0`}
-            onClick={onBackBtnClick}
-          ></div>
-          {type !== modalType.customposition && (
-            <div
-              key={show ? 'enter-animation' : ' exit-animation '}
-              className={`flex overflow-y-scroll no-scrollbar ${
-                type === modalType.fullscreen && ''
-              } ${show ? 'enter-animation' : 'exit-animation'} relative`}
-              style={{ zIndex: 1 }}
-            >
-              {component}
-            </div>
-          )}
+            key={'enter-animation'}
+            className={`flex overflow-y-scroll no-scrollbar ${
+              type === modalType.fullscreen && ''
+            } enter-animation relative`}
+            style={{ zIndex: 1 }}
+          >
+            {component}
+          </div>
+        )}
 
-          {type === modalType.customposition && (
-            <div
-              className={`flex h-fit absolute z-10 ${
-                show ? 'enter-fade-animation' : 'exit-fade-animation '
-              }`}
-              style={{ left, bottom, top, right }}
-            >
-              {component}
-            </div>
-          )}
-        </div>
+        {type === modalType.customposition && (
+          <div
+            className={`flex h-fit absolute z-10 enter-fade-animation`}
+            style={{ left, bottom, top, right }}
+          >
+            {component}
+          </div>
+        )}
       </div>
-    )
-
-  return <></>
+    </div>
+  )
 }
 const CustomPopUpModalProvider = ({ children }) => {
   const [modals, setModals] = useState<ModalType[]>([])
-
+  console.log('modals', modals)
   const providerVal = {
     showModal: (modal: ModalType) => {
+      console.log('showModal', modal)
       setModals((prev) => [...prev, modal])
     },
     hideModal: () => {
@@ -110,7 +90,6 @@ const CustomPopUpModalProvider = ({ children }) => {
       <>
         {modals.map((modal) => (
           <Modal
-            show={modal.visiblity}
             type={modal.type}
             component={modal.component}
             onBackBtnClick={providerVal.hideModal}
