@@ -26,7 +26,7 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
             ? [
                 {
                   url: imageProxy(
-                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    post?.metadata?.media[0]?.original.url,
                     'w-1200,h-630,q-50'
                   )
                 }
@@ -37,12 +37,12 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
             ? [
                 {
                   url: imageProxy(
-                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    post?.metadata?.media[0]?.original.url,
                     'w-1200,h-630,q-50'
                   ),
                   alt: post?.metadata?.content,
                   secureUrl: imageProxy(
-                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    post?.metadata?.media[0]?.original.url,
                     'w-1200,h-630,q-50'
                   ),
                   type: post?.metadata?.media[0]?.original?.mimeType,
