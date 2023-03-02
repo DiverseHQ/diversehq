@@ -56,7 +56,7 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
     <>
       {!joined && !loading && (
         <button
-          className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 rounded-md ${
+          className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 rounded-md border-[1px] border-p-btn ${
             router.pathname.startsWith('/p') && !isMobile
               ? 'w-full'
               : 'w-[75px]'
@@ -90,7 +90,7 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
       )}
       {loading && (
         <button
-          className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-0.5 rounded-md ${
+          className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-0.5 rounded-md border-[1px] border-p-btn ${
             router.pathname.startsWith('/p') && !isMobile
               ? 'w-full'
               : 'w-[75px]'
