@@ -116,7 +116,11 @@ const CommunityInfoCard = ({ _community }) => {
             isMobile && router.pathname.startsWith('/explore')
               ? 'rounded-[20px] mx-2'
               : ''
-          }`}
+          } ${router.pathname.startsWith('/explore') ? 'cursor-pointer' : ''}`}
+          onClick={() => {
+            if (router.pathname.startsWith('/c')) return
+            redirectToCommunityPage()
+          }}
         >
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
@@ -170,56 +174,65 @@ const CommunityInfoCard = ({ _community }) => {
             </div>
             <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2">
               <JoinCommunityButton id={community._id} showJoined={true} />
-              <OptionsWrapper
-                OptionPopUpModal={() => (
-                  <MoreOptionsModal
-                    className="z-50"
-                    list={
-                      isCreator
-                        ? [
-                            {
-                              label: 'Edit',
-                              onClick: editCommunity,
-                              icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
-                            },
-                            {
-                              label: 'Share',
-                              onClick: shareCommunity,
-                              icon: () => (
-                                <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                              )
-                            }
-                          ]
-                        : [
-                            {
-                              label: 'Share',
-                              onClick: shareCommunity,
-                              icon: () => (
-                                <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                              )
-                            }
-                          ]
-                    }
-                  />
-                )}
-                position="left"
-                showOptionsModal={showOptionsModal}
-                setShowOptionsModal={setShowOptionsModal}
-                isDrawerOpen={isExploreDrawerOpen}
-                setIsDrawerOpen={setIsExploreDrawerOpen}
-              >
-                <Tooltip enterDelay={1000} leaveDelay={200} title="More" arrow>
-                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                    <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                </Tooltip>
-              </OptionsWrapper>
+              <span onClick={(e) => e.stopPropagation()}>
+                <OptionsWrapper
+                  OptionPopUpModal={() => (
+                    <MoreOptionsModal
+                      className="z-50"
+                      list={
+                        isCreator
+                          ? [
+                              {
+                                label: 'Edit',
+                                onClick: editCommunity,
+                                icon: () => (
+                                  <BiEdit className="mr-1.5 w-6 h-6" />
+                                )
+                              },
+                              {
+                                label: 'Share',
+                                onClick: shareCommunity,
+                                icon: () => (
+                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                )
+                              }
+                            ]
+                          : [
+                              {
+                                label: 'Share',
+                                onClick: shareCommunity,
+                                icon: () => (
+                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                )
+                              }
+                            ]
+                      }
+                    />
+                  )}
+                  position="left"
+                  showOptionsModal={showOptionsModal}
+                  setShowOptionsModal={setShowOptionsModal}
+                  isDrawerOpen={isExploreDrawerOpen}
+                  setIsDrawerOpen={setIsExploreDrawerOpen}
+                >
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="More"
+                    arrow
+                  >
+                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                  </Tooltip>
+                </OptionsWrapper>
+              </span>
             </div>
           </div>
 
           {isMobile && (
             <>
-              {/* name row */}
+              {/* name and description row */}
               <div className="flex flex-col px-5">
                 <p
                   className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer truncate"
@@ -239,9 +252,8 @@ const CommunityInfoCard = ({ _community }) => {
                   {community.description}
                 </div>
               </div>
-              {/* description row */}
 
-              {/* level and date */}
+              {/* level and date for mobile */}
               {!router.pathname.startsWith('/explore') && (
                 <div className="flex flex-row items-center py-1">
                   {/* level */}
@@ -316,6 +328,7 @@ const CommunityInfoCard = ({ _community }) => {
               </div>
             )}
 
+            {/* bottom drawer for mobile */}
             <BottomDrawerWrapper
               isDrawerOpen={isDrawerOpen}
               setIsDrawerOpen={setIsDrawerOpen}
@@ -375,9 +388,9 @@ const CommunityInfoCard = ({ _community }) => {
               </div>
             </BottomDrawerWrapper>
 
+            {/* stats UI for desktop */}
             {!isMobile && (
               <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-xs md:text-[16px]">
-                {/* stats UI for desktop */}
                 <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Members: </span>
                   <span className="font-semibold">
@@ -396,7 +409,7 @@ const CommunityInfoCard = ({ _community }) => {
             )}
 
             {/* todo make dynamic from the backend */}
-
+            {/* level and date for desktop */}
             <div className="flex flex-col gap-1">
               {/* level */}
               {!isMobile && (
