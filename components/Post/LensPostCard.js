@@ -36,6 +36,7 @@ import Attachment from './Attachment'
 import MirrorButton from './MirrorButton'
 import CenteredDot from '../Common/UI/CenteredDot'
 import formatHandle from '../User/lib/formatHandle'
+import { IoIosShareAlt } from 'react-icons/io'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -223,6 +224,16 @@ const LensPostCard = ({ post }) => {
   const isBlur =
     !router.pathname.startsWith('/p') && postInfo?.metadata?.contentWarning
 
+  const sharePost = () => {
+    if (navigator.share) {
+      navigator.share({
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/p/${postInfo.id}`
+      })
+    } else {
+      notifyInfo('Sharing is not supported on your device')
+    }
+  }
+
   return (
     <>
       {postInfo && (
@@ -392,20 +403,39 @@ const LensPostCard = ({ post }) => {
                   postInfo?.communityInfo?._id && (
                     <JoinCommunityButton id={postInfo?.communityInfo?._id} />
                   )}
-                {isAuthor && (
+                {isMobile ? (
                   <OptionsWrapper
                     OptionPopUpModal={() => (
                       <MoreOptionsModal
                         className="z-50"
-                        list={[
-                          {
-                            label: 'Delete Post',
-                            onClick: handleDeletePost,
-                            icon: () => (
-                              <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                            )
-                          }
-                        ]}
+                        list={
+                          isAuthor
+                            ? [
+                                {
+                                  label: 'Share Post',
+                                  onClick: sharePost,
+                                  icon: () => (
+                                    <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                  )
+                                },
+                                {
+                                  label: 'Delete Post',
+                                  onClick: handleDeletePost,
+                                  icon: () => (
+                                    <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                                  )
+                                }
+                              ]
+                            : [
+                                {
+                                  label: 'Share Post',
+                                  onClick: sharePost,
+                                  icon: () => (
+                                    <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                  )
+                                }
+                              ]
+                        }
                       />
                     )}
                     position="left"
@@ -425,6 +455,41 @@ const LensPostCard = ({ post }) => {
                       </div>
                     </Tooltip>
                   </OptionsWrapper>
+                ) : (
+                  isAuthor && (
+                    <OptionsWrapper
+                      OptionPopUpModal={() => (
+                        <MoreOptionsModal
+                          className="z-50"
+                          list={[
+                            {
+                              label: 'Delete Post',
+                              onClick: handleDeletePost,
+                              icon: () => (
+                                <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                              )
+                            }
+                          ]}
+                        />
+                      )}
+                      position="left"
+                      showOptionsModal={showOptionsModal}
+                      setShowOptionsModal={setShowOptionsModal}
+                      isDrawerOpen={isDrawerOpen}
+                      setIsDrawerOpen={setIsDrawerOpen}
+                    >
+                      <Tooltip
+                        enterDelay={1000}
+                        leaveDelay={200}
+                        title="More"
+                        arrow
+                      >
+                        <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
+                          <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                        </div>
+                      </Tooltip>
+                    </OptionsWrapper>
+                  )
                 )}
               </div>
             </span>
@@ -676,7 +741,7 @@ const LensPostCard = ({ post }) => {
                           e.stopPropagation()
                           handleUpvote()
                         }}
-                        className="hover:bg-s-hover cursor-pointer rounded-md p-1"
+                        className="hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md p-1"
                       >
                         <img
                           src={
@@ -702,7 +767,7 @@ const LensPostCard = ({ post }) => {
                           e.stopPropagation()
                           handleDownvote()
                         }}
-                        className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
+                        className="hover:bg-s-hover active:bg-s-hover rounded-md p-1 cursor-pointer"
                       >
                         <img
                           src={
@@ -731,7 +796,7 @@ const LensPostCard = ({ post }) => {
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )} */}
-                        <div className="flex flex-row items-center cursor-pointer hover:bg-s-hover rounded-md p-1 font-medium">
+                        <div className="flex flex-row items-center cursor-pointer hover:bg-s-hover active:bg-s-hover rounded-md p-1 font-medium">
                           <img
                             src="/comment.svg"
                             alt="Comment"
@@ -751,7 +816,7 @@ const LensPostCard = ({ post }) => {
                     title="Comment"
                     arrow
                   >
-                    <div className="flex flex-row items-center cursor-pointer  hover:bg-s-hover rounded-md p-1 font-medium">
+                    <div className="flex flex-row items-center cursor-pointer  hover:bg-s-hover active:bg-s-hover rounded-md p-1 font-medium">
                       {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
@@ -787,12 +852,14 @@ const LensPostCard = ({ post }) => {
                 <span onClick={(e) => e.stopPropagation()}>
                   <MirrorButton postInfo={postInfo} />
                 </span>
-                <span onClick={(e) => e.stopPropagation()}>
-                  <PostShareButton
-                    url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
-                    text={postInfo?.metadata?.name}
-                  />
-                </span>
+                {!isMobile && (
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <PostShareButton
+                      url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
+                      text={postInfo?.metadata?.name}
+                    />
+                  </span>
+                )}
               </div>
             </div>
           </div>
