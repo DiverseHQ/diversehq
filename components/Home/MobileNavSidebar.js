@@ -5,10 +5,10 @@ import { useProfile } from '../Common/WalletContext'
 // import { IoIosHelpCircleOutline } from 'react-icons/io'
 // import { BsMoon } from 'react-icons/bs'
 // import { AiOutlineGift } from 'react-icons/ai'
-import { MdOutlineCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
-import CreateCommunity from './CreateCommunity'
+import { MdOutlineGroups } from 'react-icons/md'
+// import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+// import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import LensLoginButton from '../Common/LensLoginButton'
 import { stringToLength } from '../../utils/utils'
 import { FaDiscord, FaRegCopy } from 'react-icons/fa'
@@ -29,7 +29,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
   const { user, address } = useProfile()
   const { notifyInfo, notifyError } = useNotify()
-  const { showModal } = usePopUpModal()
+  // const { showModal } = usePopUpModal()
   const { disconnect } = useDisconnect()
   const [createdCommunities, setCreatedCommunities] = useState([])
   const [showCreatedCommunities, setShowCreatedCommunities] = useState(false)
@@ -57,19 +57,19 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     getJoinedCommunities()
   }, [user])
 
-  const createCommunity = () => {
-    // setShowOptions(!showOptions)
-    if (!user) {
-      notifyInfo('You shall not pass, without login first')
-      return
-    }
-    showModal({
-      component: <CreateCommunity />,
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
+  // const createCommunity = () => {
+  //   // setShowOptions(!showOptions)
+  //   if (!user) {
+  //     notifyInfo('You shall not pass, without login first')
+  //     return
+  //   }
+  //   showModal({
+  //     component: <CreateCommunity />,
+  //     type: modalType.normal,
+  //     onAction: () => {},
+  //     extraaInfo: {}
+  //   })
+  // }
 
   const routeToProfile = () => {
     if (!address) {
@@ -184,7 +184,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             </div>
           )}
           <div className="flex flex-col px-4">
-            <button
+            {/* <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
                 createCommunity()
@@ -193,7 +193,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             >
               <MdOutlineCreateNewFolder className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Create Community</span>
-            </button>
+            </button> */}
 
             <button
               className="flex flex-row items-center   py-4 gap-4"

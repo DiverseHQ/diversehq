@@ -2,12 +2,12 @@ import React from 'react'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import { usePopUpModal, modalType } from '../Common/CustomPopUpProvider'
-import CreateCommunity from './CreateCommunity'
+// import CreateCommunity from './CreateCommunity'
 import CreatePostPopup from './CreatePostPopup'
 
 import { AiOutlineHome } from 'react-icons/ai'
 import Link from 'next/link'
-import { DISCORD_INVITE_LINK, userRoles } from '../../utils/config'
+import { DISCORD_INVITE_LINK } from '../../utils/config'
 import { FaDiscord } from 'react-icons/fa'
 import { CgProfile } from 'react-icons/cg'
 import { BiGroup } from 'react-icons/bi'
@@ -19,26 +19,26 @@ const NewLeftSidebar = () => {
 
   const { notifyInfo } = useNotify()
 
-  const createCommunity = () => {
-    if (!user) {
-      notifyInfo('You shall not pass, without login first')
-      return
-    }
-    if (
-      user?.role >= userRoles.WHITELISTED_USER &&
-      user?.communityCreationSpells <= 0
-    ) {
-      notifyInfo('You have used all your community creation spells')
-      return
-    }
+  // const createCommunity = () => {
+  //   if (!user) {
+  //     notifyInfo('You shall not pass, without login first')
+  //     return
+  //   }
+  //   if (
+  //     user?.role >= userRoles.WHITELISTED_USER &&
+  //     user?.communityCreationSpells <= 0
+  //   ) {
+  //     notifyInfo('You have used all your community creation spells')
+  //     return
+  //   }
 
-    showModal({
-      component: <CreateCommunity />,
-      type: modalType.fullscreen,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
+  //   showModal({
+  //     component: <CreateCommunity />,
+  //     type: modalType.fullscreen,
+  //     onAction: () => {},
+  //     extraaInfo: {}
+  //   })
+  // }
 
   const createPost = () => {
     if (!user) {
@@ -83,12 +83,12 @@ const NewLeftSidebar = () => {
           >
             Create Post
           </button>
-          <button
+          {/* <button
             className="flex flex-row items-center justify-center w-full px-2 py-2 rounded-[10px] border-[1px] border-p-btn dark:border-p-text bg-m-btn-bg text-m-btn-text hover:bg-m-btn-hover-bg hover:text-m-btn-hover-text text-[16px] font-semibold transition-all duration-400"
             onClick={createCommunity}
           >
             Create Community
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border space-y-2 p-2">
