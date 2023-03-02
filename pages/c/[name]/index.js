@@ -51,7 +51,6 @@ export async function getServerSideProps({ params = {} }) {
     ethereumAddress: community?.creator
   })
   community.creatorProfile = profile?.defaultProfile
-  console.log(community)
   return {
     props: {
       community
