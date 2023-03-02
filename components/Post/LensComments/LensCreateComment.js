@@ -8,7 +8,10 @@ import {
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
-import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
+import {
+  stringToLength,
+  uploadToIpfsInfuraAndGetPath
+} from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
 import useDevice from '../../Common/useDevice'
 import { FiSend } from 'react-icons/fi'
@@ -57,7 +60,8 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
           }
         },
         id: lensProfile?.defaultProfile?.id,
-        handle: lensProfile?.defaultProfile?.handle
+        handle: lensProfile?.defaultProfile?.handle,
+        name: lensProfile?.defaultProfile?.name
       },
       createdAt: new Date().toISOString(),
       metadata: {
@@ -193,15 +197,20 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
           {/* Desktop create comment */}
           <div className="px-3 sm:px-5 items-center w-full bg-s-bg pt-1 pb-3 sm:rounded-t-2xl ">
             <div className="flex flex-row justify-between items-center w-full">
-              <div className="flex flex-row items-center">
+              <div className="flex flex-row items-center space-x-2">
                 <ImageWithPulsingLoader
                   src={getAvatar(lensProfile?.defaultProfile)}
                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                 />
-                <div className="ml-2 font-bold text-base">
-                  {lensProfile?.defaultProfile?.name
-                    ? lensProfile?.defaultProfile?.name
-                    : formatHandle(lensProfile?.defaultProfile?.handle)}
+                {lensProfile?.defaultProfile?.name && (
+                  <div className="font-bold text-base">
+                    {stringToLength(lensProfile?.defaultProfile?.name, 20)}
+                  </div>
+                )}
+                <div className="text-sm font-medium text-s-text">
+                  <span>
+                    u/{formatHandle(lensProfile?.defaultProfile?.handle)}
+                  </span>
                 </div>
               </div>
             </div>
