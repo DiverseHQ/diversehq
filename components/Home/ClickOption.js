@@ -2,20 +2,27 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../Common/WalletContext'
 import { useDisconnect } from 'wagmi'
-import { usePopUpModal } from '../Common/CustomPopUpProvider'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-
-import { CgProfile } from 'react-icons/cg'
 import { AiOutlineDisconnect } from 'react-icons/ai'
-import { FiSettings } from 'react-icons/fi'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import { MdCreateNewFolder } from 'react-icons/md'
+import { useTheme } from '../Common/ThemeProvider'
+import { useNotify } from '../Common/NotifyContext'
+import { userRoles } from '../../utils/config'
+import CreateCommunity from './CreateCommunity'
+import { BsFillPersonFill } from 'react-icons/bs'
+import { IoIosMoon, IoMdSettings } from 'react-icons/io'
+import { HiSun } from 'react-icons/hi'
 
 const ClickOption = () => {
   const router = useRouter()
   const { user } = useProfile()
   const { disconnect } = useDisconnect()
-  const { hideModal } = usePopUpModal()
-  const { data: lensProfile } = useLensUserContext()
+  const { hideModal, showModal } = usePopUpModal()
+  const { theme, toggleTheme } = useTheme()
+  const { notifyInfo } = useNotify()
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 
   const routeToUserProfile = () => {
     if (user && lensProfile?.defaultProfile?.handle) {
@@ -34,24 +41,69 @@ const ClickOption = () => {
     hideModal()
   }
 
+  const createCommunity = () => {
+    if (!user || !isSignedIn || !hasProfile) {
+      notifyInfo('You shall not pass, without login first')
+      return
+    }
+    if (
+      user?.role >= userRoles.WHITELISTED_USER &&
+      user?.communityCreationSpells <= 0
+    ) {
+      notifyInfo(
+        'You have used all your community creation spells OR you are not a whitelisted user'
+      )
+      return
+    }
+
+    showModal({
+      component: <CreateCommunity />,
+      type: modalType.fullscreen,
+      onAction: () => {},
+      extraaInfo: {}
+    })
+  }
+
   return (
     <MoreOptionsModal
       list={[
         {
-          label: 'Settings',
-          onClick: routeToSettings,
-          icon: () => <FiSettings className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-        },
-        {
           label: 'View Profile',
           onClick: routeToUserProfile,
-          icon: () => <CgProfile className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+          icon: () => (
+            <BsFillPersonFill className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+          )
+        },
+        {
+          label: 'Settings',
+          onClick: routeToSettings,
+          icon: () => <IoMdSettings className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+        },
+        {
+          label: 'Create Community',
+          onClick: createCommunity,
+          icon: () => (
+            <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+          )
         },
         {
           label: 'Disconnect',
           onClick: disconnectAndClear,
           icon: () => (
             <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+          )
+        },
+        {
+          label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
+          onClick: toggleTheme,
+          icon: () => (
+            <>
+              {theme === 'light' ? (
+                <IoIosMoon className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+              ) : (
+                <HiSun className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+              )}
+            </>
           )
         }
       ]}

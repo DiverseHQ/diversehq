@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
-import { postCreatePost } from '../../api/post'
+// import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
 import { BsCollection } from 'react-icons/bs'
@@ -26,7 +26,7 @@ import {
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import { CircularProgress, Switch } from '@mui/material'
+import { CircularProgress } from '@mui/material'
 
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
@@ -70,10 +70,10 @@ const CreatePostPopup = () => {
     left: '0px',
     top: '0px'
   })
-  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
-  const [isLensPost, setIsLensPost] = useState(
-    (isSignedIn && hasProfile) || false
-  )
+  const { data: lensProfile } = useLensUserContext()
+  // const [isLensPost, setIsLensPost] = useState(
+  //   (isSignedIn && hasProfile) || false
+  // )
   const [editor] = useLexicalComposerContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
   const [collectSettings, setCollectSettings] = useState({
@@ -91,8 +91,8 @@ const CreatePostPopup = () => {
     }
   }, [])
 
-  const { notifyError, notifySuccess, notifyInfo } = useNotify()
-  const router = useRouter()
+  const { notifyError, notifyInfo } = useNotify()
+  // const router = useRouter()
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
   const { isMobile } = useDevice()
@@ -124,10 +124,10 @@ const CreatePostPopup = () => {
     )
   }
 
-  const closeModal = async () => {
-    setShowCommunity({ name: '', image: '' })
-    hideModal()
-  }
+  // const closeModal = async () => {
+  //   setShowCommunity({ name: '', image: '' })
+  //   hideModal()
+  // }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -142,17 +142,17 @@ const CreatePostPopup = () => {
       setLoading(false)
       return
     }
-    if (isLensPost) {
-      console.log('collectSettings', collectSettings)
-      if (
-        collectSettings?.feeCollectModule &&
-        Number(collectSettings?.feeCollectModule?.amount?.value) < 0.01
-      ) {
-        notifyError(`Price should be atleast 0.01`)
-        setLoading(false)
-        return
-      }
+    // if (isLensPost) {
+    // console.log('collectSettings', collectSettings)
+    if (
+      collectSettings?.feeCollectModule &&
+      Number(collectSettings?.feeCollectModule?.amount?.value) < 0.01
+    ) {
+      notifyError(`Price should be atleast 0.01`)
+      setLoading(false)
+      return
     }
+    // }
     storeRecentCommunities()
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {
@@ -167,33 +167,33 @@ const CreatePostPopup = () => {
         return
       }
 
-      if (isLensPost) {
-        // eslint-disable-next-line
+      // if (isLensPost) {
+      // eslint-disable-next-line
 
-        // const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
-        // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
-        // const ipfsPath = `ipfs://${ipfsHash}`
-        if (!firebaseUrl) {
-          return
-        }
-        handleCreateLensPost(title, communityId, file.type, firebaseUrl)
+      // const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
+      // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+      // const ipfsPath = `ipfs://${ipfsHash}`
+      if (!firebaseUrl) {
         return
       }
+      handleCreateLensPost(title, communityId, file.type, firebaseUrl)
+      return
+      // }
 
-      const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
-      handleCreatePost(
-        title,
-        file.type,
-        uploadedFile.uploadedToUrl,
-        uploadedFile.path
-      )
+      // const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
+      // handleCreatePost(
+      //   title,
+      //   file.type,
+      //   uploadedFile.uploadedToUrl,
+      //   uploadedFile.path
+      // )
     } else {
-      if (isLensPost) {
-        console.log('lenspost with media')
-        handleCreateLensPost(title, communityId, 'text', null)
-        return
-      }
-      handleCreatePost(title, 'text')
+      // if (isLensPost) {
+      console.log('lenspost with media')
+      handleCreateLensPost(title, communityId, 'text', null)
+      return
+      // }
+      // handleCreatePost(title, 'text')
     }
   }
 
@@ -341,33 +341,33 @@ const CreatePostPopup = () => {
     }
   }, [error])
 
-  const handleCreatePost = async (title, mimeType, url, path) => {
-    const postData = {
-      communityId,
-      title,
-      content
-    }
-    //todo handle audio file types
-    const type = mimeType.split('/')[0]
-    if (mimeType !== 'text') {
-      postData[type === 'image' ? 'postImageUrl' : 'postVideoUrl'] = url
-      postData.filePath = path
-    }
+  // const handleCreatePost = async (title, mimeType, url, path) => {
+  //   const postData = {
+  //     communityId,
+  //     title,
+  //     content
+  //   }
+  //   //todo handle audio file types
+  //   const type = mimeType.split('/')[0]
+  //   if (mimeType !== 'text') {
+  //     postData[type === 'image' ? 'postImageUrl' : 'postVideoUrl'] = url
+  //     postData.filePath = path
+  //   }
 
-    try {
-      const resp = await postCreatePost(postData)
-      const respData = await resp.json()
-      if (resp.status !== 200) {
-        notifyError(respData.msg)
-        return
-      }
-      closeModal()
-      router.push(`/p/${respData._id}`)
-      notifySuccess('Post created successfully')
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  //   try {
+  //     const resp = await postCreatePost(postData)
+  //     const respData = await resp.json()
+  //     if (resp.status !== 200) {
+  //       notifyError(respData.msg)
+  //       return
+  //     }
+  //     closeModal()
+  //     router.push(`/p/${respData._id}`)
+  //     notifySuccess('Post created successfully')
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   const handleSelect = (community) => {
     const id = community._id
@@ -538,15 +538,15 @@ const CreatePostPopup = () => {
           return
         }
 
-        if (isLensPost) {
-          // file should be less than 2mb
-          const fileObj = await uploadFileToFirebaseAndGetUrl(file, address)
-          setFirebaseUrl(fileObj.uploadedToUrl)
-          // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
-          // setIPFSHash(ipfsHash)
-          setImageUpload(false)
-        }
+        // if (isLensPost) {
+        // file should be less than 2mb
+        const fileObj = await uploadFileToFirebaseAndGetUrl(file, address)
+        setFirebaseUrl(fileObj.uploadedToUrl)
+        // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+        // setIPFSHash(ipfsHash)
         setImageUpload(false)
+        // }
+        // setImageUpload(false)
       }
     } catch (e) {
       console.log(e)
@@ -556,7 +556,7 @@ const CreatePostPopup = () => {
 
   useEffect(() => {
     if (!file) return
-    if (file && isLensPost && !firebaseUrl) upLoadFile()
+    if (file && !firebaseUrl) upLoadFile()
   }, [file])
 
   const handleGifClick = (event) => {
@@ -578,10 +578,10 @@ const CreatePostPopup = () => {
         <div className="flex flex-row items-center justify-between px-4 z-50">
           {showCollectSettings ? (
             <button
-              className="flex flex-row space-x-1 items-center justify-center"
+              className="flex flex-row space-x-1 items-center justify-center  hover:bg-s-hover p-1 rounded-full"
               onClick={() => setShowCollectSettings(false)}
             >
-              <IoIosArrowBack className="w-6 h-6 hover:bg-p-btn-hover" />
+              <IoIosArrowBack className="w-6 h-6" />
               <p className="text-p-text ml-4 text-xl">Back</p>
             </button>
           ) : (
@@ -630,24 +630,24 @@ const CreatePostPopup = () => {
               <option value="SENSITIVE">Sensitive</option>
               <option value="SPOILER">Spoiler</option>
             </select> */}
-            {isLensPost && (
-              <button
-                onClick={() => {
-                  if (!isMobile) {
-                    setShowCollectSettings(!showCollectSettings)
-                    return
-                  } else {
-                    setIsDrawerOpen(true)
-                  }
-                }}
-                disabled={loading}
-                className="rounded-full hover:bg-p-btn-hover p-2 mr-6 cursor-pointer"
-              >
-                <BsCollection className="w-5 h-5" />
-              </button>
-            )}
+            {/* {isLensPost && ( */}
+            <button
+              onClick={() => {
+                if (!isMobile) {
+                  setShowCollectSettings(!showCollectSettings)
+                  return
+                } else {
+                  setIsDrawerOpen(true)
+                }
+              }}
+              disabled={loading}
+              className="rounded-full hover:bg-s-hover p-2 mr-6 cursor-pointer"
+            >
+              <BsCollection className="w-5 h-5" />
+            </button>
+            {/* )} */}
             <img src="/lensLogoWithoutText.svg" className="w-5" />
-            <Switch
+            {/* <Switch
               checked={isLensPost}
               onChange={() => {
                 if (!isSignedIn || !hasProfile) {
@@ -665,7 +665,7 @@ const CreatePostPopup = () => {
                   color: 'grey'
                 }
               }}
-            />
+            /> */}
           </div>
         </div>
 

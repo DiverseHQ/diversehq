@@ -97,7 +97,7 @@ const PostsColumn = ({ source, sortBy, data }) => {
   }, [data, source, sortBy, hasMore, posts])
 
   return (
-    <div className="sm:rounded-2xl bg-s-bg">
+    <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border">
       <InfiniteScroll
         dataLength={posts.length}
         next={getMorePosts}

@@ -6,7 +6,7 @@ import { scrollToTop } from '../../lib/helpers'
 
 const MobileBottomNav = () => {
   const {
-    notificationsCount,
+    // notificationsCount,
     lensNotificationsCount,
     updateLensNotificationCount,
     updateNotificationCount
@@ -128,9 +128,9 @@ const MobileBottomNav = () => {
             className="w-[23px] h-[23px]"
           />
         </div>
-        {Number(notificationsCount + lensNotificationsCount) > 0 && (
+        {Number(lensNotificationsCount) > 0 && (
           <div className="absolute top-2 right-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg dark:border-s-bg">
-            <span>{notificationsCount + lensNotificationsCount}</span>
+            <span>{lensNotificationsCount}</span>
             {/* <span>10</span> */}
           </div>
         )}

@@ -104,7 +104,7 @@ const LensAllLatestPublicationsColumn = () => {
 
   const { isMobile } = useDevice()
   return (
-    <div className="sm:rounded-2xl bg-s-bg">
+    <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border border-[1px] border-s-border">
       <InfiniteScroll
         scrollThreshold={LENS_INFINITE_SCROLL_THRESHOLD}
         dataLength={exploreQueryRequestParams?.posts?.length || 0}

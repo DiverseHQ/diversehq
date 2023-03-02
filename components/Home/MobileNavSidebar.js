@@ -5,7 +5,7 @@ import { useProfile } from '../Common/WalletContext'
 // import { IoIosHelpCircleOutline } from 'react-icons/io'
 // import { BsMoon } from 'react-icons/bs'
 // import { AiOutlineGift } from 'react-icons/ai'
-import { MdOutlineCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
+import { MdCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
 import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -21,10 +21,11 @@ import {
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { AiOutlineUsergroupAdd, AiOutlineDisconnect } from 'react-icons/ai'
-import { FiMoon, FiSettings, FiSun } from 'react-icons/fi'
 import { useTheme } from '../Common/ThemeProvider'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import getAvatar from '../User/lib/getAvatar'
+import { IoIosMoon, IoMdSettings } from 'react-icons/io'
+import { HiSun } from 'react-icons/hi'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -172,7 +173,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               }}
               className="flex flex-row items-center py-4 gap-4"
             >
-              <FiSettings className="w-7 h-7 object-contain" />
+              <IoMdSettings className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Settings</span>
             </button>
             <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
@@ -183,7 +184,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                 setIsOpenSidebar(false)
               }}
             >
-              <MdOutlineCreateNewFolder className="w-7 h-7 object-contain" />
+              <MdCreateNewFolder className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Create Community</span>
             </button>
 
@@ -213,9 +214,9 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               onClick={toggleTheme}
             >
               {theme === 'light' ? (
-                <FiMoon className="w-7 h-7 object-contain" />
+                <IoIosMoon className="w-7 h-7 object-contain" />
               ) : (
-                <FiSun className="w-7 h-7 object-contain" />
+                <HiSun className="w-7 h-7 object-contain" />
               )}
               <span className="text-p-text text-xl">
                 {theme === 'light' ? 'Dark Mode' : 'Light Mode'}

@@ -16,7 +16,7 @@ const CommunitiesDiv = ({ text, communitiesList, Icon }) => {
     communitiesList is the list of communities to map over
   */
   return (
-    <div className="flex flex-col mb-4 md:mb-6 bg-[#EDE7FF] dark:bg-s-bg w-full rounded-[15px] border-[1px] border-p-border space-y-3 p-2">
+    <div className="flex flex-col mb-4 md:mb-6 bg-s-bg w-full rounded-[15px] border-[1px] border-s-border space-y-3 p-2">
       <div className="flex flex-row gap-1 xl:gap-2 items-center text-p-text px-3">
         <Icon />
         <h3 className="text-[18px] font-medium">{text}</h3>
@@ -50,7 +50,7 @@ const RightSidebar = () => {
 
   const fetchTopCommunities = async () => {
     try {
-      const communities = await getAllCommunities(10, 0, 'top')
+      const communities = await getAllCommunities(6, 0, 'top')
       if (communities.communities.length > 0) {
         setTopCommunities(communities.communities)
       }
