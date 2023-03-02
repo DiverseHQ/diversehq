@@ -34,7 +34,7 @@ const LensNotificationCollectCard = ({
     <CommonNotificationCardLayoutUI
       MainRow={() => (
         <div>
-          <span>
+          <span onClick={(e) => e.stopPropagation()}>
             <Link
               href={`/u/${
                 notification?.collectedPublication?.profile?.handle?.split(
@@ -107,6 +107,7 @@ const LensNotificationCollectCard = ({
       createdAt={notification.createdAt}
       Icon={() => <BsCollectionFill />}
       isRead={isRead}
+      cardLink={`/p/${notification?.collectedPublication?.id}`}
     />
   )
 }

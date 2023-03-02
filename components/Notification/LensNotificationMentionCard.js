@@ -27,7 +27,7 @@ const LensNotificationMentionCard = ({ notification, isRead }) => {
     <CommonNotificationCardLayoutUI
       MainRow={() => (
         <div>
-          <span>
+          <span onClick={(e) => e.stopPropagation()}>
             <Link
               href={`/u/${formatHandle(
                 notification?.mentionPublication?.profile?.handle
@@ -98,6 +98,7 @@ const LensNotificationMentionCard = ({ notification, isRead }) => {
       )}
       Icon={() => <GoMention />}
       isRead={isRead}
+      cardLink={`/p/${notification?.mentionPublication?.id}`}
     />
   )
 }
