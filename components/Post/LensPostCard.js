@@ -36,6 +36,7 @@ import Attachment from './Attachment'
 import MirrorButton from './MirrorButton'
 import CenteredDot from '../Common/UI/CenteredDot'
 import formatHandle from '../User/lib/formatHandle'
+import { AiOutlineRetweet } from 'react-icons/ai'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -51,6 +52,7 @@ const LensPostCard = ({ post }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const [postInfo, setPostInfo] = useState(post)
+  const isMirror = postInfo.__typename === 'Mirror'
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
@@ -238,6 +240,12 @@ const LensPostCard = ({ post }) => {
           }}
         >
           {/* top row */}
+          {isMirror && (
+            <div className="flex flex-row space-x-1 items-center ml-1 mb-1">
+              <AiOutlineRetweet />
+              <p className=" font-medium">mirrored</p>
+            </div>
+          )}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
               <>

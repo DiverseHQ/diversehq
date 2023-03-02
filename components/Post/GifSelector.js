@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { Grid } from '@giphy/react-components'
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { useDebounce } from '../Common/Hook/useDebounce'
-import PopUpWrapper from '../Common/PopUpWrapper'
-import { usePopUpModal } from '../Common/CustomPopUpProvider'
+import { useRouter } from 'next/router'
 
 const giphyFetch = new GiphyFetch('sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh')
 
-const GifSelector = ({ setGifAttachment }) => {
+const GifSelector = ({ setGifAttachment, setShowModal }) => {
   const [categories, setCategories] = useState([])
   const [debouncedGifInput, setDebouncedGifInput] = useState('')
   const [searchText, setSearchText] = useState('')
-  const { hideModal } = usePopUpModal()
+  const router = useRouter()
 
   const fetchGiphyCategories = async () => {
     const { data } = await giphyFetch.categories()
@@ -22,7 +21,7 @@ const GifSelector = ({ setGifAttachment }) => {
     setGifAttachment(item)
     setDebouncedGifInput('')
     setSearchText('')
-    hideModal()
+    setShowModal(false)
   }
 
   useDebounce(
@@ -45,10 +44,19 @@ const GifSelector = ({ setGifAttachment }) => {
     const keyword = evt.target.value
     setDebouncedGifInput(keyword)
   }
+  const handleClick = (event) => {
+    event.stopPropagation()
+  }
 
   return (
-    <PopUpWrapper title="Select GIF">
-      <div className="m-3">
+    // <PopUpWrapper title="Select GIF">
+    <div
+      onClick={handleClick}
+      className={` ${
+        router.pathname === '/' && 'fixed'
+      } bg-p-bg overflow-y-auto overflow-x-hidden text-p-text z-40 sm:rounded-3xl  w-screen  p-1 sm:w-[550px]`}
+    >
+      <div className="m-2">
         <input
           type="text"
           placeholder={`Search for GIFs`}
@@ -97,7 +105,8 @@ const GifSelector = ({ setGifAttachment }) => {
           </div>
         )}
       </div>
-    </PopUpWrapper>
+    </div>
+    // </PopUpWrapper>
   )
 }
 

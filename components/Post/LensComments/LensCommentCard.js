@@ -27,6 +27,7 @@ import { Tooltip } from '@mui/material'
 import { useCommentStore } from '../../../store/comment'
 import CenteredDot from '../../Common/UI/CenteredDot'
 import formatHandle from '../../User/lib/formatHandle'
+import AttachmentMedia from '../Attachment'
 
 const LensCommentCard = ({ comment }) => {
   const router = useRouter()
@@ -292,7 +293,13 @@ const LensCommentCard = ({ comment }) => {
               {/* content */}
               <div className="mt-1">{comment?.metadata?.content}</div>
               {/* attachemnt */}
-
+              {comment?.metadata?.media && (
+                <AttachmentMedia
+                  url={comment?.metadata?.media[0]?.original?.url}
+                  type={comment?.metadata?.media[0]?.type}
+                  publication={comment}
+                />
+              )}
               {/* last row */}
               <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
                 {/* upvote and downvote */}

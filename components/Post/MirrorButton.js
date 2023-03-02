@@ -22,6 +22,8 @@ const MirrorButton = ({ postInfo }) => {
       ? postInfo?.stats?.totalAmountOfMirrors
       : 0
   )
+
+  console.log(postInfo, 'postInfo')
   const [isSuccessful, setIsSuccessful] = useState(false)
   const [mirrored, setMirrored] = useState(
     isMirror
@@ -102,7 +104,7 @@ const MirrorButton = ({ postInfo }) => {
         <button
           onClick={handleMirrorPost}
           className={`hover:bg-s-hover hover:bg-s-hover rounded-md p-0.5 cursor-pointer flex flex-row items-center ${
-            mirrored ? 'bold' : 'text-[#687684]'
+            mirrored ? 'font-bold' : 'text-[#687684]'
           }`}
           disabled={loading || mirrored}
         >
