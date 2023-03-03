@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useRef } from 'react'
 import Embedo from 'embedo'
 import { uuidv4 } from '@firebase/util'
+import LinkPreview from './LinkPreview'
 // import { ReactTinyLink } from 'react-tiny-link'
 // import LinkPreview from './LinkPreview'
 // import { useState } from 'react'
@@ -75,8 +76,7 @@ const ReactEmbedo = ({ url, ...props }) => {
       {isEmbedable(url) ? (
         <div ref={embedoRef} id={uuidv4()} {...props}></div>
       ) : (
-        // <LinkPreview url={url} />
-        <></>
+        <LinkPreview url={url} />
       )}
     </>
   )

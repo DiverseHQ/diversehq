@@ -20,13 +20,11 @@ import Markup from '../Lexical/Markup'
 import {
   countLinesFromMarkdown,
   deleteFirebaseStorageFile,
-  getURLsFromText,
   stringToLength,
   unpinFromIpfsInfura
 } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import ReactEmbedo from './embed/ReactEmbedo'
 import PostShareButton from './PostShareButton'
 import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
@@ -684,29 +682,20 @@ const LensPostCard = ({ post }: Props) => {
                     </>
                   )}
                 </div>
-                {postInfo?.metadata?.media.length > 0 ? (
-                  <div
-                    className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
-                      isBlur ? 'blur-xl' : ''
+                <div
+                  className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                    isBlur ? 'blur-xl' : ''
+                  }`}
+                >
+                  <Attachment
+                    publication={postInfo}
+                    className={`${
+                      router.pathname.startsWith('/p')
+                        ? 'max-h-screen'
+                        : 'max-h-[450px]'
                     }`}
-                  >
-                    <Attachment
-                      publication={postInfo}
-                      className={`${
-                        router.pathname.startsWith('/p')
-                          ? 'max-h-screen'
-                          : 'max-h-[450px]'
-                      }`}
-                    />
-                  </div>
-                ) : (
-                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
-                    <ReactEmbedo
-                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
-                    />
-                  )
-                )}
+                  />
+                </div>
               </div>
 
               {/* bottom row */}

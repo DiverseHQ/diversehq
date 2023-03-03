@@ -2,10 +2,13 @@
 import React, { FC, useState } from 'react'
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 import { Publication } from '../../graphql/generated'
+import { getURLsFromText } from '../../utils/utils'
 import useDevice from '../Common/useDevice'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import AttachmentCarousel from './AttachmentCarousel'
 import AttachmentMedia from './AttachmentMedia'
+import LinkPreview from './embed/LinkPreview'
+import ReactEmbedo from './embed/ReactEmbedo'
 
 interface Props {
   publication: Publication
@@ -14,8 +17,6 @@ interface Props {
 
 const Attachment: FC<Props> = ({ publication, className }) => {
   const medias = publication?.metadata?.media
-
-  if (medias.length === 0) return <></>
 
   const [currentMedia, setCurrentMedia] = useState(0)
 
@@ -36,6 +37,14 @@ const Attachment: FC<Props> = ({ publication, className }) => {
   }
 
   const { isMobile } = useDevice()
+
+  if (medias.length === 0) {
+    if (getURLsFromText(publication?.metadata?.content)?.length > 0) {
+      return (
+        <ReactEmbedo url={getURLsFromText(publication?.metadata?.content)[0]} />
+      )
+    } else return null
+  }
 
   return (
     <>
