@@ -29,8 +29,8 @@ const GifSelector = ({
     setGifAttachment(item)
     setDebouncedGifInput('')
     setSearchText('')
-    setShowModal(false)
-    setShowGiphyDrawer(false)
+    if (!isMobile) setShowModal(false)
+    else setShowGiphyDrawer(false)
   }
 
   useDebounce(

@@ -272,6 +272,23 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                 toHandle={postInfo?.profile?.handle}
               />
             )}
+            {gifAttachment && isMobile && (
+              <div className="flex items-center mt-2 mb-2">
+                <div className="relative w-fit">
+                  <img
+                    src={gifAttachment.images.original.url}
+                    className="max-h-80 rounded-2xl object-cover"
+                    alt={gifAttachment.title}
+                    type="image/gif"
+                  />
+
+                  <AiOutlineClose
+                    onClick={() => setGifAttachment(null)}
+                    className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
+                  />
+                </div>
+              </div>
+            )}
             <div className="flex flex-row items-center w-full rounded-xl border-2 border-p-border">
               <div className="flex-1  relative mr-2">
                 <textarea
@@ -295,7 +312,8 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                   onBlur={() => setFocused(false)}
                 />
               </div>
-              <div className="self-end p-2">
+              <div className="self-end p-2 flex flex-row space-x-1">
+                <Giphy setGifAttachment={setGifAttachment} />
                 {!loading && (
                   <FiSend
                     onClick={createComment}

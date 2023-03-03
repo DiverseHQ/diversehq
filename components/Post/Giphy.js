@@ -41,7 +41,7 @@ const Giphy = ({ setGifAttachment }) => {
             10 +
             'px'
           }
-          setShowGiphyDrawer={setShowGiphyDrawer}
+          setShowGiphyDrawer={(value) => setShowGiphyDrawer(value)}
           left={gifButtonRef?.current?.getBoundingClientRect().left + 'px'}
         />
       </BottomDrawerWrapper>
