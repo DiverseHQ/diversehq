@@ -249,14 +249,14 @@ const LensCommentCard = ({ comment }) => {
                 </Tooltip>
               </div>
             )}
-            {isAuthor && comment.id && (
+            {isAuthor && comment.id && !comment.hidden && (
               <div>
                 <OptionsWrapper
                   OptionPopUpModal={() => (
                     <MoreOptionsModal
                       list={[
                         {
-                          label: 'Delete Comment',
+                          label: 'Delete',
                           onClick: handleDeleteComment,
                           icon: () => (
                             <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
