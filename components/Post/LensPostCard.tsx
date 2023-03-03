@@ -253,12 +253,19 @@ const LensPostCard = ({ post }: Props) => {
         >
           {/* top row */}
           {postInfo?.mirroredBy && (
-            <div className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text">
-              <AiOutlineRetweet className="w-3 h-3" />
-              <span className="pr-1">{'mirrored by '}</span>
-              <Link href={`u/${formatHandle(postInfo?.mirroredBy?.handle)}`}>
-                <>{`u/${formatHandle(postInfo?.mirroredBy?.handle)}`} </>
+            <div
+              className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text"
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            >
+              <AiOutlineRetweet className="w-4 h-4 pr-0.5" />
+              <Link href={`/u/${formatHandle(postInfo?.mirroredBy?.handle)}`}>
+                <div className="hover:underline">
+                  {`u/${formatHandle(postInfo?.mirroredBy?.handle)}`}{' '}
+                </div>
               </Link>
+              <span className="pl-0.5">{'mirrored'}</span>
             </div>
           )}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
