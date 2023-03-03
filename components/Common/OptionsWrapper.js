@@ -34,7 +34,7 @@ const OptionsWrapper = ({
   }, [popupRef])
 
   const handleButtonClick = () => {
-    if (isMobile) {
+    if (isMobile?.isMobile) {
       setIsDrawerOpen(true)
     } else {
       setShowOptionsModal(true)

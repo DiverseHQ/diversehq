@@ -1,12 +1,16 @@
 import { Tooltip } from '@mui/material'
 // import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import useDevice from '../Common/useDevice'
 // import OptionsWrapper from '../Common/OptionsWrapper'
 import GifSelector from './GifSelector'
 
 const Giphy = ({ setGifAttachment }) => {
   const [showGiphyModal, setShowGiphyModal] = useState(false)
   const gifButtonRef = useRef(null)
+  const { isMobile } = useDevice()
+  const [showGiphyDrawer, setShowGiphyDrawer] = useState(false)
   return (
     <>
       {showGiphyModal && (
@@ -22,11 +26,36 @@ const Giphy = ({ setGifAttachment }) => {
           left={gifButtonRef?.current?.getBoundingClientRect().left + 'px'}
         />
       )}
+      <BottomDrawerWrapper
+        isDrawerOpen={showGiphyDrawer}
+        setIsDrawerOpen={setShowGiphyDrawer}
+        showClose
+        position="bottom"
+      >
+        <GifSelector
+          setGifAttachment={setGifAttachment}
+          setShowModal={setShowGiphyModal}
+          bottom={
+            window.innerHeight -
+            gifButtonRef?.current?.getBoundingClientRect().top +
+            10 +
+            'px'
+          }
+          setShowGiphyDrawer={setShowGiphyDrawer}
+          left={gifButtonRef?.current?.getBoundingClientRect().left + 'px'}
+        />
+      </BottomDrawerWrapper>
       <Tooltip placement="bottom" arrow title="Add GIF">
         <button
           whileTap={{ scale: 0.9 }}
           type="button"
-          onClick={() => setShowGiphyModal(!showGiphyModal)}
+          onClick={() => {
+            if (isMobile) {
+              setShowGiphyDrawer(!showGiphyDrawer)
+            } else {
+              setShowGiphyModal(!showGiphyModal)
+            }
+          }}
           aria-label="Choose GIFs"
           id="giphy-button"
           ref={gifButtonRef}

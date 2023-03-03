@@ -1,4 +1,4 @@
-import { CircularProgress, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import {
@@ -13,7 +13,7 @@ const MirrorButton = ({ postInfo }) => {
   const isMirror = postInfo.__typename === 'Mirror'
   const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
-  const { notifyError } = useNotify()
+  const { notifyError, notifySuccess } = useNotify()
   const { result, signTypedDataAndBroadcast } = useSignTypedDataAndBroadcast()
   const { mutateAsync: mirrorPostViaDispatcher } =
     useCreateMirrorViaDispatcherMutation()
@@ -50,6 +50,8 @@ const MirrorButton = ({ postInfo }) => {
         })
         if (postTypedResult) {
           setIsSuccessful(true)
+          setMirrorCount((prev) => prev + 1)
+          notifySuccess('Mirrored successfully')
         }
         setLoading(false)
         return
@@ -85,7 +87,6 @@ const MirrorButton = ({ postInfo }) => {
 
   useEffect(() => {
     if (isSuccessful && !loading) {
-      setMirrorCount((prev) => prev + 1)
       setMirrored(true)
     }
   }, [loading, isSuccessful])
@@ -94,6 +95,8 @@ const MirrorButton = ({ postInfo }) => {
     if (result) {
       setIsSuccessful(true)
       setLoading(false)
+      setMirrorCount((prev) => prev + 1)
+      notifySuccess('Mirrored successfully')
     }
   }, [result])
   return (
@@ -106,11 +109,7 @@ const MirrorButton = ({ postInfo }) => {
           }`}
           disabled={loading || mirrored}
         >
-          {loading ? (
-            <CircularProgress size="14px" color="primary" />
-          ) : (
-            <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
-          )}
+          <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
           <p className="ml-2 font-medium text-[#687684]">{mirrorCount}</p>
         </button>
       </Tooltip>
