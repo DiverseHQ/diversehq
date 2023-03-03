@@ -34,7 +34,6 @@ const LinkPreview = ({ url }: { url: string }) => {
       const previewData = await getLinkPreview(url, {
         timeout: 10000
       }).then((r) => r)
-      console.log('previewData', previewData)
       // @ts-ignore
       setLinkPreview(previewData)
     } catch (e) {

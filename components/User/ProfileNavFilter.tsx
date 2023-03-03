@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
-import { AiOutlineDown } from 'react-icons/ai'
+import React from 'react'
+// import { AiOutlineDown } from 'react-icons/ai'
 import { HiCollection, HiSparkles } from 'react-icons/hi'
 import { Profile } from '../../graphql/generated'
-import { sortTypes } from '../../utils/config'
-import useSort from '../Common/Hook/useSort'
-import OptionsWrapper from '../Common/OptionsWrapper'
+// import { sortTypes } from '../../utils/config'
+// import useSort from '../Common/Hook/useSort'
+// import OptionsWrapper from '../Common/OptionsWrapper'
 import FilterButton from '../Common/UI/FilterButton'
 import FilterRow from '../Common/UI/FilterRow'
-import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+// import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import formatHandle from './lib/formatHandle'
 
 interface Props {
@@ -18,22 +18,22 @@ interface Props {
 const ProfileNavFilter = ({ _lensProfile }: Props) => {
   const router = useRouter()
   const { pathname } = router
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [showOptionsModal, setShowOptionsModal] = useState(false)
-  const { sortType } = useSort()
+  // const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  // const [showOptionsModal, setShowOptionsModal] = useState(false)
+  // const { sortType } = useSort()
 
-  const addQueryParam = (key, value) => {
-    // @ts-ignore
-    const query = new URLSearchParams(router.query)
-    query.set(key, value)
-    router.push({ query: query.toString() })
-  }
+  // const addQueryParam = (key, value) => {
+  //   // @ts-ignore
+  //   const query = new URLSearchParams(router.query)
+  //   query.set(key, value)
+  //   router.push({ query: query.toString() })
+  // }
 
   return (
     <FilterRow
       EndButton={
         <>
-          {!pathname.endsWith('/collected') && (
+          {/* {!pathname.endsWith('/collected') && (
             <OptionsWrapper
               OptionPopUpModal={() => (
                 <MoreOptionsModal
@@ -86,7 +86,7 @@ const ProfileNavFilter = ({ _lensProfile }: Props) => {
                 IconAtEnd={<AiOutlineDown className="h-3 w-3" />}
               />
             </OptionsWrapper>
-          )}
+          )} */}
         </>
       }
     >
