@@ -6,7 +6,7 @@ import { isMainnet } from '../../../utils/config'
 export const Hashtag = ({ ...props }: any) => {
   // todo make own hastag page
   return (
-    <span className="inline-flex text-p-btn items-center space-x-1">
+    <span className="inline-flex text-blue-400 items-center space-x-1">
       <a
         href={`${
           isMainnet ? 'https://lenster.xyz' : 'https://testnet.lenster.xyz'

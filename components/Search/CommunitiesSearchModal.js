@@ -48,7 +48,7 @@ const CommunitiesSearchModal = ({
                 src={community.logoImageUrl}
                 className="w-8 h-8 mr-3 rounded-full object-cover"
               />
-              <div>{community.name}</div>
+              <div className="text-sm">{community.name}</div>
             </div>
           ))}
         </div>

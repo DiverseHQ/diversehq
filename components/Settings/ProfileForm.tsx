@@ -401,7 +401,7 @@ const ProfileForm = () => {
         <FormRichTextInput
           label="Bio"
           placeholder="Say a bit more about you..."
-          startingValue={bio}
+          startingValue={lensProfile?.defaultProfile?.bio}
           setContent={setBio}
         />
 

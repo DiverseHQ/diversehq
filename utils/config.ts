@@ -148,6 +148,13 @@ export const infoFromLensAppId = {
     name: 'Wav3s',
     description: 'Your content promoted through web3 social media.',
     link: 'https://wav3s.app/'
+  },
+  lensport: {
+    appId: 'lensport',
+    logoLink: 'https://lensport.io/static/media/lensport_icon.e4bdb518.png',
+    name: 'Lensport',
+    description: 'Discover, collect, and sell amazing posts.',
+    link: 'https://lensport.io'
   }
 }
 

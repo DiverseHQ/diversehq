@@ -3,7 +3,6 @@ import React from 'react'
 import { Publication } from '../../../graphql/generated'
 // import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
-import getIPFSLink from '../../User/lib/getIPFSLink'
 import imageProxy from '../../User/lib/imageProxy'
 
 const LensPostSeo = ({ post }: { post: Publication }) => {
@@ -26,7 +25,7 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
             ? [
                 {
                   url: imageProxy(
-                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    post?.metadata?.media[0]?.original.url,
                     'w-1200,h-630,q-50'
                   )
                 }
@@ -37,12 +36,12 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
             ? [
                 {
                   url: imageProxy(
-                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    post?.metadata?.media[0]?.original.url,
                     'w-1200,h-630,q-50'
                   ),
                   alt: post?.metadata?.content,
                   secureUrl: imageProxy(
-                    getIPFSLink(post?.metadata?.media[0]?.original.url),
+                    post?.metadata?.media[0]?.original.url,
                     'w-1200,h-630,q-50'
                   ),
                   type: post?.metadata?.media[0]?.original?.mimeType,

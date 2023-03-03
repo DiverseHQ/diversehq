@@ -7,6 +7,7 @@ import {
   useProfileQuery,
   useProxyActionMutation
 } from '../../graphql/generated'
+import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useNotify } from '../Common/NotifyContext'
 import formatHandle from './lib/formatHandle'
@@ -19,10 +20,16 @@ const useLensFollowButton = (request) => {
   const [isFollowedByMe, setIsFollowedByMe] = useState(false)
   const [loading, setLoading] = useState(false)
   const { notifySuccess, notifyError } = useNotify()
+  const { isSignedIn, hasProfile } = useLensUserContext()
 
-  const { data } = useProfileQuery({
-    request: request
-  })
+  const { data } = useProfileQuery(
+    {
+      request: request
+    },
+    {
+      enabled: isSignedIn && hasProfile
+    }
+  )
 
   useEffect(() => {
     if (!data?.profile) return
@@ -105,12 +112,13 @@ const useLensFollowButton = (request) => {
   }, [isSignedTx, type])
 
   const FollowButton = () => {
+    if (!isSignedIn || !hasProfile) return null
     return (
       <>
         {data?.profile && isFollowedByMe ? (
           <button
             onClick={() => {
-              handleUnfollowProfile(request.profileId)
+              handleUnfollowProfile(data?.profile?.id)
             }}
             className="group/text bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn rounded-md px-3 py-1 text-sm font-semibold w-full"
           >
@@ -133,7 +141,7 @@ const useLensFollowButton = (request) => {
         ) : (
           <button
             onClick={() => {
-              handleFollowProfile(request.profileId)
+              handleFollowProfile(data?.profile?.id)
             }}
             className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold w-full"
           >

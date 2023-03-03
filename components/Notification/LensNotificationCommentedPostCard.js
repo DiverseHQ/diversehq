@@ -21,7 +21,7 @@ const LensNotificationCommentedPostCard = ({ notification, isRead }) => {
             {notification?.notificationId?.startsWith('commented-post') &&
               ' commented on your '}
             {notification?.notificationId?.startsWith('commented-comment') &&
-              ' replied to your comment of this '}
+              ' replied your comment on this '}
           </span>
           <span
             className="hover:underline font-bold"

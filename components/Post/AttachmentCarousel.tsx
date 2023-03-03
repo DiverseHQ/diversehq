@@ -41,7 +41,7 @@ const AttachmentCarousel: FC<Props> = ({ publication, medias, className }) => {
       return (
         <div
           key={i}
-          className="flex items-center justify-center overflow-x-hidden"
+          className="flex items-center justify-center overflow-hidden"
         >
           <AttachmentMedia
             url={url}

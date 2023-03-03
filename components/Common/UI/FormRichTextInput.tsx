@@ -43,7 +43,7 @@ const FormRichTextInput = ({
         $getRoot().clear()
       })
     }
-  }, [])
+  }, [startingValue])
 
   return (
     <label>

@@ -7,6 +7,8 @@ import CommunityPageSeo from '../../../components/Community/CommunityPageSeo'
 import LensPostsCommunityPublicationsColumn from '../../../components/Post/LensPostsCommunityPublicationsColumn'
 import useDevice from '../../../components/Common/useDevice'
 import CommunityPageMobileTopNav from '../../../components/Community/CommunityPageMobileTopNav'
+import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info'
+
 const CommunityPage = ({ community }) => {
   const { isMobile } = useDevice()
   return (
@@ -45,6 +47,10 @@ export async function getServerSideProps({ params = {} }) {
     }
   }
   const community = await fetchCommunityInfo(name)
+  const profile = await getDefaultProfileInfo({
+    ethereumAddress: community?.creator
+  })
+  community.creatorProfile = profile?.defaultProfile
   return {
     props: {
       community

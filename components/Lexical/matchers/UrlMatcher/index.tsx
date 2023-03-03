@@ -23,7 +23,7 @@ const Url = ({ children, url }: UrlProps) => {
       href={href}
       target="_blank"
       onClick={(event) => event.stopPropagation()}
-      className="text-p-btn hover:underline"
+      className="text-blue-400 hover:underline"
       rel="noopener"
     >
       {children}

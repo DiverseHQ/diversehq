@@ -14,16 +14,17 @@ export const Mention = ({ ...props }: any) => {
   }
 
   return (
-    <Link
-      href={`/u/${formatHandle(props.display.slice(1))}`}
-      onClick={(event) => {
-        event.stopPropagation()
+    <span
+      onClick={(e) => {
+        e.stopPropagation()
       }}
     >
-      <div className="hover:underline text-p-btn">
-        {profile?.handle && `u/${formatHandle(props.display.slice(1))}`}
-      </div>
-    </Link>
+      <Link href={`/u/${formatHandle(props.display.slice(1))}`}>
+        <span className="hover:underline text-blue-400 cursor-pointer">
+          {profile?.handle && `u/${formatHandle(props.display.slice(1))}`}
+        </span>
+      </Link>
+    </span>
   )
 }
 

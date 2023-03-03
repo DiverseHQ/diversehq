@@ -17,10 +17,10 @@ import {
   SearchRequestTypes,
   useSearchProfilesQuery
 } from '../../../graphql/generated'
-import { AVATAR } from '../../../utils/config'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../../User/lib/formatHandle'
+import getIPFSLink from '../../User/lib/getIPFSLink'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
-import imageProxy from '../../User/lib/imageProxy'
 
 import { $createMentionNode } from '../Nodes/MentionsNode'
 
@@ -137,10 +137,8 @@ const MentionsTypeaheadMenuItem: FC<Props> = ({
       onClick={onClick}
     >
       <div className="text-p-text hover:bg-s-hover bg-s-bg flex items-center space-x-2 m-1.5 px-3 py-1 rounded-xl">
-        <img
+        <ImageWithPulsingLoader
           className="rounded-full w-7 h-7"
-          height="32"
-          width="32"
           src={option.picture}
           alt={option.handle}
         />
@@ -215,7 +213,7 @@ const NewMentionsPlugin: FC = () => {
         .map(({ name, picture, handle }) => {
           return new MentionTypeaheadOption(
             name ?? handle,
-            imageProxy(picture, AVATAR),
+            getIPFSLink(picture),
             handle
           )
         })

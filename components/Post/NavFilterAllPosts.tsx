@@ -102,7 +102,7 @@ const NavFilterAllPosts = () => {
         onClick={() => {
           router.push('/feed/all')
         }}
-        tooltipTitle="Post from all communities"
+        tooltipTitle="Posts from all communities"
       />
       <FilterButton
         Icon={<CgCommunity className="h-6 w-6" />}
@@ -111,7 +111,7 @@ const NavFilterAllPosts = () => {
         onClick={() => {
           router.push('/feed/foryou')
         }}
-        tooltipTitle="Post from communities you joined"
+        tooltipTitle="Posts from communities you joined"
       />
     </FilterRow>
   )

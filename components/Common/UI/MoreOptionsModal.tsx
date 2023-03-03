@@ -16,7 +16,7 @@ const MoreOptionsModal = ({ list, className }: Props) => {
   return (
     <>
       <div
-        className={`flex flex-col bg-s-bg sm:rounded-xl p-1 sm:shadow-md min-w-[180px] border-[1px] border-s-border w-fit ${className}`}
+        className={`flex flex-col bg-s-bg sm:rounded-xl p-1 sm:shadow-md min-w-[180px] sm:border-[1px] border-s-border w-fit ${className}`}
       >
         {list.map((item: ItemType, index: number) => {
           return (

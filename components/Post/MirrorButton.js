@@ -13,7 +13,7 @@ const MirrorButton = ({ postInfo }) => {
   const isMirror = postInfo.__typename === 'Mirror'
   const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
-  const { notifyError, notifySuccess } = useNotify()
+  const { notifyError } = useNotify()
   const { result, signTypedDataAndBroadcast } = useSignTypedDataAndBroadcast()
   const { mutateAsync: mirrorPostViaDispatcher } =
     useCreateMirrorViaDispatcherMutation()
@@ -86,7 +86,6 @@ const MirrorButton = ({ postInfo }) => {
   useEffect(() => {
     if (isSuccessful && !loading) {
       setMirrorCount((prev) => prev + 1)
-      notifySuccess('Mirrored successfully!')
       setMirrored(true)
     }
   }, [loading, isSuccessful])
@@ -103,7 +102,7 @@ const MirrorButton = ({ postInfo }) => {
         <button
           onClick={handleMirrorPost}
           className={`hover:bg-s-hover hover:bg-s-hover rounded-md p-0.5 cursor-pointer flex flex-row items-center ${
-            mirrored ? 'bold' : 'text-[#687684]'
+            mirrored ? 'font-bold' : 'text-[#687684]'
           }`}
           disabled={loading || mirrored}
         >

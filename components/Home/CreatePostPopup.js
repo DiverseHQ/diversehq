@@ -27,8 +27,8 @@ import {
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import FormTextInput from '../Common/UI/FormTextInput'
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $getRoot } from 'lexical'
+// import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+// import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
@@ -37,6 +37,8 @@ import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { appId, supportedMimeTypes } from '../../utils/config'
 import { IoIosArrowBack } from 'react-icons/io'
 import PublicationEditor from '../Lexical/PublicationEditor'
+import Giphy from '../Post/Giphy'
+// import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
   const [title, setTitle] = useState('')
@@ -58,7 +60,7 @@ const CreatePostPopup = () => {
   // const [isLensPost, setIsLensPost] = useState(
   //   (isSignedIn && hasProfile) || false
   // )
-  const [editor] = useLexicalComposerContext()
+  // const [editor] = useLexicalComposerContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
   const [collectSettings, setCollectSettings] = useState({
     freeCollectModule: { followerOnly: false }
@@ -67,13 +69,13 @@ const CreatePostPopup = () => {
   const { addPost } = usePostIndexing()
   // const [IPFSHash, setIPFSHash] = useState(null)
   const [imageUpload, setImageUpload] = useState(false)
-  useEffect(() => {
-    return () => {
-      editor?.update(() => {
-        $getRoot().clear()
-      })
-    }
-  }, [])
+  // useEffect(() => {
+  //   return () => {
+  //     editor?.update(() => {
+  //       $getRoot().clear()
+  //     })
+  //   }
+  // }, [])
 
   const { notifyError, notifyInfo } = useNotify()
   // const router = useRouter()
@@ -94,6 +96,16 @@ const CreatePostPopup = () => {
     JSON.parse(window.localStorage.getItem('recentCommunities')) || []
   const [selectedCommunity, setSelectedCommunity] = useState(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [gifAttachment, setGifAttachment] = useState(null)
+
+  useEffect(() => {
+    console.log('gifAttachment', gifAttachment)
+    console.log(
+      'gifAttachment?.images?.original?.url',
+      gifAttachment?.images?.original?.url
+    )
+    setImageValue(gifAttachment ? gifAttachment?.images?.original?.url : null)
+  }, [gifAttachment])
 
   const storeRecentCommunities = () => {
     window.localStorage.setItem(
@@ -137,6 +149,9 @@ const CreatePostPopup = () => {
     }
     // }
     storeRecentCommunities()
+    if (gifAttachment) {
+      handleCreateLensPost(title, communityId, 'image/gif', imageValue)
+    }
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {
         notifyError('File type not supported')
@@ -447,8 +462,10 @@ const CreatePostPopup = () => {
 
   const showAddedFile = () => {
     // check if the file is image or video and show it
-    if (!file) return null
-    const type = file.type.split('/')[0]
+    if (!file && !gifAttachment) return null
+    let type = null
+    if (file) type = file.type.split('/')[0]
+    if (gifAttachment) type = 'image'
     return (
       <div className="flex items-center justify-center">
         <div className="relative w-fit">
@@ -468,6 +485,7 @@ const CreatePostPopup = () => {
               muted
             ></video>
           )}
+
           {imageUpload ? (
             <CircularProgress
               size="30px"
@@ -533,6 +551,8 @@ const CreatePostPopup = () => {
     if (!file) return
     if (file && !firebaseUrl) upLoadFile()
   }, [file])
+
+  // console.log('gifAttachment', gifAttachment)
 
   const PopUpModal = () => {
     return (
@@ -662,7 +682,7 @@ const CreatePostPopup = () => {
             />
 
             <div className="text-base leading-relaxed m-4">
-              {file ? (
+              {file || gifAttachment ? (
                 showAddedFile()
               ) : (
                 <label htmlFor="upload-file">
@@ -677,6 +697,14 @@ const CreatePostPopup = () => {
                   </div>
                 </label>
               )}
+            </div>
+            <div
+              className="ml-6"
+              // onClick={(e) => {
+              //   e.stopPropagation()
+              // }}
+            >
+              <Giphy setGifAttachment={setGifAttachment} />
             </div>
             <input
               type="file"

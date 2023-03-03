@@ -6,6 +6,7 @@ import { MdOutlineGroups } from 'react-icons/md'
 import { Profile, useProfileQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { UserType } from '../../types/user'
+import { stringToLength } from '../../utils/utils'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import useDevice from '../Common/useDevice'
@@ -90,16 +91,23 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
           {!isMobile && (
             <div className="flex flex-row items-start justify-between sm:space-x-10 mt-1 mb-2">
               <div className="flex flex-col items-start font-medium text-base sm:text-base tracking-wider">
-                {lensProfile?.name && <div>{lensProfile.name}</div>}
-                {!lensProfile.name && profile.walletAddress && (
-                  <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
-                )}
-                <Link href={`/u/${formatHandle(lensProfile?.handle)}`} passHref>
-                  <div className="hover:underline cursor-pointer">
-                    u/{formatHandle(lensProfile?.handle)}
-                  </div>
-                </Link>
-                <div className="font-normal">
+                <div className="flex flex-row space-x-4">
+                  {lensProfile?.name && (
+                    <div>{stringToLength(lensProfile.name, 20)}</div>
+                  )}
+                  {!lensProfile.name && profile.walletAddress && (
+                    <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
+                  )}
+                  <Link
+                    href={`/u/${formatHandle(lensProfile?.handle)}`}
+                    passHref
+                  >
+                    <div className="hover:underline cursor-pointer text-s-text">
+                      u/{formatHandle(lensProfile?.handle)}
+                    </div>
+                  </Link>
+                </div>
+                <div className="font-normal text-sm">
                   <Markup>{lensProfile.bio}</Markup>
                 </div>
               </div>

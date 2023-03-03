@@ -1,35 +1,35 @@
 import { Tooltip } from '@mui/material'
-import React from 'react'
-import { usePopUpModal, modalType } from '../Common/CustomPopUpProvider'
+// import { useRouter } from 'next/router'
+import React, { useRef, useState } from 'react'
+// import OptionsWrapper from '../Common/OptionsWrapper'
 import GifSelector from './GifSelector'
 
 const Giphy = ({ setGifAttachment }) => {
-  const { showModal } = usePopUpModal()
-
-  const handleClick = () => {
-    // setShowGiphyModal(true)
-    showModal({
-      component: (
-        <GifSelector
-          setShowModal={showModal}
-          setGifAttachment={setGifAttachment}
-        />
-      ),
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
-
+  const [showGiphyModal, setShowGiphyModal] = useState(false)
+  const gifButtonRef = useRef(null)
   return (
     <>
-      <Tooltip placement="top" content="GIF">
+      {showGiphyModal && (
+        <GifSelector
+          setGifAttachment={setGifAttachment}
+          setShowModal={setShowGiphyModal}
+          bottom={
+            window.innerHeight -
+            gifButtonRef?.current?.getBoundingClientRect().top +
+            10 +
+            'px'
+          }
+          left={gifButtonRef?.current?.getBoundingClientRect().left + 'px'}
+        />
+      )}
+      <Tooltip placement="bottom" arrow title="Add GIF">
         <button
           whileTap={{ scale: 0.9 }}
           type="button"
-          onClick={() => handleClick()}
-          //   disabled={attachments.length >= 4}
+          onClick={() => setShowGiphyModal(!showGiphyModal)}
           aria-label="Choose GIFs"
+          id="giphy-button"
+          ref={gifButtonRef}
         >
           <div className="fill-p-text w-full">
             <svg viewBox="0 0 24 24" className="h-5 w-5">
