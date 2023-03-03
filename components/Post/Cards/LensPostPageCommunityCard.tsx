@@ -22,26 +22,42 @@ const LensPostPageCommunityCard = ({
     return percentage
   }
   return (
-    <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] bg-s-bg ml-4 mt-3">
-      <ImageWithFullScreenZoom
-        src={
-          communityInfo?.bannerImageUrl
-            ? communityInfo?.bannerImageUrl
-            : '/gradient.jpg'
+    <div
+      className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] bg-s-bg ml-4 mt-3 cursor-pointer"
+      onClick={() => {
+        if (communityInfo?.name && communityInfo?._id) {
+          router.push(`/c/${communityInfo?.name}`)
+          return
         }
-        className="h-[80px] rounded-t-[15px] w-full object-cover"
-      />
+        if (communityInfo?.link) {
+          window.open(communityInfo?.link, '_blank')
+          return
+        }
+      }}
+    >
+      <span onClick={(e) => e.stopPropagation()}>
+        <ImageWithFullScreenZoom
+          src={
+            communityInfo?.bannerImageUrl
+              ? communityInfo?.bannerImageUrl
+              : '/gradient.jpg'
+          }
+          className="h-[80px] rounded-t-[15px] w-full object-cover"
+        />
+      </span>
       <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
         <div className="flex flex-row gap-2 justify-start">
           <div className="flex items-center justify-center rounded-full bg-s-bg w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
-            <ImageWithFullScreenZoom
-              src={
-                communityInfo?.logoImageUrl
-                  ? communityInfo?.logoImageUrl
-                  : '/gradient.jpg'
-              }
-              className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
-            />
+            <span onClick={(e) => e.stopPropagation()}>
+              <ImageWithFullScreenZoom
+                src={
+                  communityInfo?.logoImageUrl
+                    ? communityInfo?.logoImageUrl
+                    : '/gradient.jpg'
+                }
+                className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
+              />
+            </span>
           </div>
           <div
             onClick={() => {

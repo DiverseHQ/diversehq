@@ -117,7 +117,8 @@ const useLensFollowButton = (request) => {
       <>
         {data?.profile && isFollowedByMe ? (
           <button
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               handleUnfollowProfile(data?.profile?.id)
             }}
             className="group/text bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn rounded-md px-3 py-1 text-sm font-semibold w-full"
@@ -140,7 +141,8 @@ const useLensFollowButton = (request) => {
           </button>
         ) : (
           <button
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               handleFollowProfile(data?.profile?.id)
             }}
             className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold w-full"

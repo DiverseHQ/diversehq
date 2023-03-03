@@ -47,15 +47,25 @@ const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
       ? getIPFSLink(profile?.coverPicture?.uri)
       : getIPFSLink(profile?.coverPicture?.original?.url)
   return (
-    <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3">
-      <ImageWithFullScreenZoom
-        src={_profileBanner || '/gradient.jpg'}
-        className="h-[80px] rounded-t-[15px] w-full object-cover"
-      />
+    <div
+      className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3 cursor-pointer"
+      onClick={() => {
+        router.push(`/u/${formatHandle(profile?.handle)}`)
+      }}
+    >
+      <span onClick={(e) => e.stopPropagation()}>
+        <ImageWithFullScreenZoom
+          src={_profileBanner || '/gradient.jpg'}
+          className="h-[80px] rounded-t-[15px] w-full object-cover"
+        />
+      </span>
       <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
         <div className="flex flex-row gap-2 justify-between">
           <div className="flex flex-row gap-2">
-            <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
+            <div
+              className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6"
+              onClick={(e) => e.stopPropagation()}
+            >
               <ImageWithFullScreenZoom
                 src={getAvatar(profile)}
                 className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
