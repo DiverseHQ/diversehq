@@ -49,7 +49,7 @@ const LensProfilesSearchModal = ({
           <div className="m-2 p-2 text-base font-bold">Profiles</div>
           {lensProfiles.map((profile) => (
             <div
-              className="hover:bg-p-btn-hover m-2 flex flex-row p-1  items-center rounded-full cursor-pointer"
+              className="hover:bg-s-hover m-2 flex flex-row p-1  items-center rounded-full cursor-pointer"
               key={profile.id}
               onClick={() => {
                 inputRef.current.value = ''

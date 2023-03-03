@@ -23,16 +23,16 @@ const MessageTile: FC<MessageTileProps> = ({ message, currentProfile }) => {
   const isSender = address.toLowerCase() === message.senderAddress.toLowerCase()
   return (
     <div
-      className={`flex flex-row w-full px-2 py-1 ${
-        isSender
-          ? ' justify-end text-[#ffffff]'
-          : 'text-[#000000] justify-start'
+      className={`flex flex-row w-full px-2 py-1  text-p-text ${
+        isSender ? ' justify-end' : 'justify-start '
       } `}
     >
       <div className="flex flex-col space-y-0.5">
         <div
           className={`px-4 py-2 max-w-[370px] rounded-2xl break-words ${
-            isSender ? ' bg-p-btn rounded-br-sm' : 'bg-p-hover rounded-bl-sm'
+            isSender
+              ? ' bg-[#d5d6f7] dark:bg-[#19416b] rounded-br-sm'
+              : 'bg-s-hover rounded-bl-sm'
           }`}
         >
           <span>

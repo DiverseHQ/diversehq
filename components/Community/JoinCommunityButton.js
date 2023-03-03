@@ -43,7 +43,6 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
     try {
       setLoading(true)
       await putLeaveCommunity(id)
-      notifyInfo('Left 😢')
       await refreshUserInfo()
     } catch (error) {
       console.log(error)
@@ -55,20 +54,39 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
   return (
     <>
       {!joined && !loading && (
-        <button
-          className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 rounded-md border-[1px] border-p-btn ${
-            router.pathname.startsWith('/p') && !isMobile
-              ? 'w-full'
-              : 'w-[75px]'
-          } ${isMobile ? 'w-[65px] py-1' : 'py-0.5'}`}
-          onClick={(e) => {
-            e.stopPropagation()
-            handleJoin()
-          }}
-          disabled={joined}
-        >
-          Join
-        </button>
+        <>
+          {showJoined ? (
+            <button
+              className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-0.5 rounded-md border-[1px] border-p-btn ${
+                router.pathname.startsWith('/p') && !isMobile
+                  ? 'w-full'
+                  : 'w-[75px]'
+              }`}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleJoin()
+              }}
+              disabled={joined}
+            >
+              Join
+            </button>
+          ) : (
+            <button
+              className={`text-xs sm:text-base text-p-btn hover:bg-p-btn hover:text-p-btn-text px-2 sm:px-3 py-0.5 rounded-md border-[1px] border-p-btn ${
+                router.pathname.startsWith('/p') && !isMobile
+                  ? 'w-full'
+                  : 'w-[75px]'
+              }`}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleJoin()
+              }}
+              disabled={joined}
+            >
+              Join
+            </button>
+          )}
+        </>
       )}
       {joined && !loading && showJoined && (
         <button
@@ -91,10 +109,8 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
       {loading && (
         <button
           className={`text-xs sm:text-base text-p-btn-text bg-p-btn px-2 sm:px-3 py-0.5 rounded-md border-[1px] border-p-btn ${
-            router.pathname.startsWith('/p') && !isMobile
-              ? 'w-full'
-              : 'w-[75px]'
-          } ${isMobile ? 'w-[65px] py-1' : 'py-0.5'}`}
+            isMobile ? 'w-[65px] py-1' : 'py-0.5'
+          }`}
           disabled={loading}
         >
           {joined ? 'Leaving...' : 'Joining...'}

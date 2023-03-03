@@ -7,7 +7,6 @@ import useDevice from '../Common/useDevice'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import AttachmentCarousel from './AttachmentCarousel'
 import AttachmentMedia from './AttachmentMedia'
-import LinkPreview from './embed/LinkPreview'
 import ReactEmbedo from './embed/ReactEmbedo'
 
 interface Props {
