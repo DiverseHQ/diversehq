@@ -12,6 +12,7 @@ import { commentIdFromIndexedResult } from '../../../utils/utils'
 import LensCommentCard from './LensCommentCard'
 import LensCreateComment from './LensCreateComment'
 import MobileLoader from '../../Common/UI/MobileLoader'
+import useDevice from '../../Common/useDevice'
 
 const CombinedCommentSection = ({ postId, postInfo }) => {
   const [comments, setComments] = useState([])
@@ -21,6 +22,7 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
   const [nextCursor, setNextCursor] = useState(null)
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { mutateAsync: addReaction } = useAddReactionMutation()
+  const { isMobile } = useDevice()
 
   const { data } = useCommentFeedQuery(
     {
