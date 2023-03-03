@@ -146,7 +146,7 @@ const Navbar = () => {
               placement="bottom"
               arrow
             >
-              <div className="text-p-text">BETA</div>
+              <div className="text-s-text text-sm">BETA</div>
             </Tooltip>
           </div>
         </div>

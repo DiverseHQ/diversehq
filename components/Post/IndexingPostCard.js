@@ -143,7 +143,7 @@ const IndexingPostCard = ({ postInfo }) => {
             <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
                 <div className="mb-2 px-3 sm:pl-3.5">
-                  {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
+                  {postInfo?.metadata?.name && (
                     <div className="font-medium text-base sm:text-lg w-full break-words">
                       {postInfo?.metadata?.name}
                     </div>
@@ -159,7 +159,13 @@ const IndexingPostCard = ({ postInfo }) => {
                           showMore ? 'line-clamp-5' : ''
                         } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                       >
-                        {postInfo?.metadata?.content}
+                        {postInfo?.metadata?.content?.startsWith(
+                          postInfo?.metadata?.name
+                        )
+                          ? postInfo?.metadata?.content?.slice(
+                              postInfo?.metadata?.name.length
+                            )
+                          : postInfo?.metadata?.content}
                       </Markup>
                     </div>
                   )}
