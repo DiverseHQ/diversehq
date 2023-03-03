@@ -150,9 +150,9 @@ const GifSelector = ({
                 <Grid
                   onGifClick={(item) => onSelectGif(item)}
                   fetchGifs={fetchGifs}
-                  width={550}
+                  width={380}
                   hideAttribution
-                  columns={3}
+                  columns={2}
                   noResultsMessage={
                     <div className="grid h-full w-full place-items-center">
                       <p>No GIFs found.</p>

@@ -39,7 +39,6 @@ import { IoIosArrowBack } from 'react-icons/io'
 import PublicationEditor from '../Lexical/PublicationEditor'
 import Giphy from '../Post/Giphy'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import FilterButton from '../Common/UI/FilterButton'
 import OptionsWrapper from '../Common/OptionsWrapper'
 // import { useTheme } from '../Common/ThemeProvider'
 
@@ -614,7 +613,7 @@ const CreatePostPopup = () => {
                     {
                       label: 'None',
                       onClick: () => {
-                        setFlair('')
+                        setFlair('None')
                         setShowOptionsModal(false)
                       }
                     },
