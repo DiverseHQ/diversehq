@@ -90,7 +90,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
         <div className="ml-24 flex flex-row justify-end md:justify-between items-start">
           {!isMobile && (
             <div className="flex flex-row items-start justify-between sm:space-x-10 mt-1 mb-2">
-              <div className="flex flex-col items-start font-medium text-base sm:text-base">
+              <div className="flex flex-col items-start font-medium text-base sm:text-base tracking-wider">
                 <div className="flex flex-row space-x-4">
                   {lensProfile?.name && (
                     <div>{stringToLength(lensProfile.name, 20)}</div>

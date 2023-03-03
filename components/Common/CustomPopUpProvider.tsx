@@ -74,6 +74,7 @@ const CustomPopUpModalProvider = ({ children }) => {
   const [modals, setModals] = useState<ModalType[]>([])
   const providerVal = {
     showModal: (modal: ModalType) => {
+      console.log('showModal', modal)
       setModals((prev) => [...prev, modal])
     },
     hideModal: () => {

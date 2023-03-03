@@ -16,7 +16,6 @@ import formatHandle from '../../User/lib/formatHandle'
 // import PopUpWrapper from '../../Common/PopUpWrapper'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import AllowanceButton from './AllowanceButton'
-import Uniswap from './Uniswap'
 import useCollectPublication from './useCollectPublication'
 
 type Props = {
@@ -118,7 +117,7 @@ const FeeCollectPopUp = ({
   return (
     <>
       {isDesktop ? (
-        <div className="w-fit py-1 bg-s-bg px-3 h-full flex flex-row items-center justify-center space-x-6  border border-s-border rounded-xl shadow shadow-s-border">
+        <div className="w-fit py-1 bg-s-bg px-3 h-full flex flex-row items-center justify-center space-x-6  border border-p-border rounded-xl shadow shadow-s-border">
           <div className="flex flex-col  justify-center items-center mt-2">
             {collectModule.followerOnly && !isFollowedByMe && (
               <div className="flex flex-row items-center justify-center space-x-6 py-3 ">
@@ -162,21 +161,14 @@ const FeeCollectPopUp = ({
                   }`}
                 >
                   <p className="text-p-text font-medium text-base">
-                    Required {' :'}{' '}
-                    <span className="text-s-text">
-                      {' '}
-                      {collectModule?.amount?.value}{' '}
-                      {collectModule.amount?.asset?.symbol}{' '}
-                    </span>{' '}
+                    Collect for {''} {collectModule?.amount?.value}{' '}
+                    {collectModule.amount?.asset?.symbol} <br></br>
                   </p>
                   <p className="text-p-text font-medium text-base">
                     In Wallet:{' '}
-                    <span className="text-s-text">
-                      {parseFloat(
-                        balanceData?.formatted ? balanceData?.formatted : '0'
-                      )}{' '}
-                      {collectModule?.amount?.asset?.symbol}
-                    </span>
+                    {parseFloat(
+                      balanceData?.formatted ? balanceData?.formatted : '0'
+                    )}{' '}
                   </p>
                 </div>
               </>
@@ -196,25 +188,18 @@ const FeeCollectPopUp = ({
                   </div>
                 )}
                 {!hasAmount && isAllowed && (
-                  <div className="text-p-text font-medium text-base space-y-1 flex flex-col py-1 px-3">
-                    <p className="text-p-text font-medium text-base">
-                      Required {' :'}{' '}
-                      <span className="text-s-text">
-                        {' '}
-                        {collectModule?.amount?.value}{' '}
-                        {collectModule.amount?.asset?.symbol}{' '}
-                      </span>{' '}
+                  <div className="text-p-text font-medium text-base py-1 px-3.5">
+                    <p>
+                      Collect for {''} {collectModule?.amount?.value} {''}{' '}
+                      {collectModule?.amount?.asset?.symbol}
                     </p>
-                    <span className="">
+                    <span>
                       In Wallet :{' '}
-                      <span className="text-s-text">
-                        {parseFloat(
-                          balanceData?.formatted ? balanceData?.formatted : '0'
-                        )}{' '}
-                        {collectModule?.amount?.asset?.symbol}
-                      </span>
+                      {parseFloat(
+                        balanceData?.formatted ? balanceData?.formatted : '0'
+                      )}{' '}
+                      {collectModule?.amount?.asset?.symbol}
                     </span>
-                    <Uniswap module={collectModule} />
                   </div>
                 )}
               </>
