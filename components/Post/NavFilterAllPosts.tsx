@@ -11,6 +11,7 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import FilterRow from '../Common/UI/FilterRow'
 import FilterButton from '../Common/UI/FilterButton'
 import useSort from '../Common/Hook/useSort'
+// import { track } from '../../utils/analytics'
 
 const NavFilterAllPosts = () => {
   const router = useRouter()
@@ -109,6 +110,7 @@ const NavFilterAllPosts = () => {
         title="For You"
         active={active === 'foryou'}
         onClick={() => {
+          // track('Clicked For You', { location: router.asPath })
           router.push('/feed/foryou')
         }}
         tooltipTitle="Posts from communities you joined"

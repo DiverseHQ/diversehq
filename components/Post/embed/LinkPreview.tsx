@@ -50,7 +50,7 @@ const LinkPreview = ({ url }: { url: string }) => {
   if (!linkDetails) return null
 
   return (
-    <a href={linkDetails?.url} target="_blank" rel="noreferrer">
+    <a href={url} target="_blank" rel="noreferrer">
       <div className="mx-3 sm:mx-0 rounded-xl bg-s-bg border border-s-border hover:bg-s-hover cursor-pointer">
         {linkDetails?.videos?.length > 0 ? (
           <VideoWithAutoPause
@@ -69,21 +69,25 @@ const LinkPreview = ({ url }: { url: string }) => {
           </>
         )}
         <div className="p-3">
-          <div className="text-s-text text-lg font-medium">
+          <div className="text-s-text flex flex-row items-center space-x-2 text-sm font-medium">
+            {linkDetails?.favicons?.[0] && (
+              <ImageWithPulsingLoader
+                src={linkDetails?.favicons?.[0]}
+                className="w-4 h-4 rounded-full object-cover"
+              />
+            )}
+            <span>
+              {url
+                .replace('https://', '')
+                .replace('http://', '')
+                .replace('www.', '')}
+            </span>
+          </div>
+          <div className="text-p-text text font-medium">
             {linkDetails?.title}
           </div>
           <div className="text-s-text text-sm font-medium">
-            {stringToLength(linkDetails?.description, 75)}
-          </div>
-          <div className="flex flex-row items-center py-1 space-x-1 text-s-text text-sm font-medium">
-            <ImageWithPulsingLoader
-              src={linkDetails?.favicons?.[0]}
-              className="w-5 h-5 rounded-full object-cover"
-            />
-            <div>
-              <span>{linkDetails?.siteName}</span>
-              <span className="text-xs pl-1">{linkDetails?.url}</span>
-            </div>
+            {stringToLength(linkDetails?.description, 200)}
           </div>
         </div>
       </div>

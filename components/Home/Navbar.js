@@ -146,7 +146,10 @@ const Navbar = () => {
               placement="bottom"
               arrow
             >
-              <div className="text-s-text text-sm">BETA</div>
+              <div className="flex flex-col justify-center items-start leading-5">
+                <div className="text-s-text text-sm">Private</div>
+                <div className="text-s-text text-sm">BETA</div>
+              </div>
             </Tooltip>
           </div>
         </div>
