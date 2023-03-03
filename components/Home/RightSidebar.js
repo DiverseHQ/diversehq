@@ -81,7 +81,7 @@ const RightSidebar = () => {
     <div
       className={`relative ${
         hide ? 'hidden' : 'lg:flex flex-col'
-      } sticky top-[64px] h-[calc(100vh-62px)] w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
+      } w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
     >
       {user && createdCommunities?.length > 0 && (
         <CommunitiesDiv

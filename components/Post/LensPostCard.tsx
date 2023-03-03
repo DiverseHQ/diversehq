@@ -561,7 +561,7 @@ const LensPostCard = ({ post }: Props) => {
             {/* main content */}
             <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
-                <div className="mb-2 px-3 sm:pl-3.5 ">
+                <div className="mb-2 px-4 sm:pl-3.5 ">
                   {!router.pathname.startsWith('/p') ? (
                     <>
                       <div className="flex flex-row">

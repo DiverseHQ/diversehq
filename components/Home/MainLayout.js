@@ -73,9 +73,9 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
             {isLoading && <LinearProgress />}
           </Box>
 
-          <div className="flex flex-row">
+          <div className="flex flex-row justify-center space-x-12">
             {/* <NewLeftSidebar /> */}
-            <div className="relative flex-1 min-h-screen text-p-text">
+            <div className="relative min-h-screen text-p-text">
               {/* <ScrollToTopButton /> */}
               {children}
             </div>
