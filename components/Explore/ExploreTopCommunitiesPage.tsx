@@ -4,6 +4,7 @@ import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getAllCommunities } from '../../api/community'
 import { COMMUNITY_LIMIT } from '../../utils/config'
+import CommunityInfoCardLoader from '../Common/UI/Loaders/CommunityInfoCardLoader'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useDevice from '../Common/useDevice'
 import CommunityInfoCard from '../Community/CommunityInfoCard'
@@ -52,62 +53,7 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
               dataLength={communities.length}
               next={getTopCommunities}
               hasMore={hasMore}
-              loader={
-                isMobile ? (
-                  <MobileLoader />
-                ) : (
-                  <>
-                    <div className="w-full bg-gray-100 dark:bg-s-bg animate-pulse my-4 sm:my-6">
-                      <div className="w-full h-[100px] bg-gray-300 dark:bg-p-bg" />
-                      <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
-                        <div className="w-32 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-32 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-20 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                      </div>
-                      <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
-                        <div className="w-20 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-28 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                      </div>
-                    </div>
-                    <div className="w-full bg-gray-100 dark:bg-s-bg animate-pulse my-4 sm:my-6">
-                      <div className="w-full h-[100px] bg-gray-300 dark:bg-p-bg" />
-                      <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
-                        <div className="w-32 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-32 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-20 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                      </div>
-                      <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
-                        <div className="w-20 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-28 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                      </div>
-                    </div>
-                    <div className="w-full bg-gray-100 dark:bg-s-bg animate-pulse my-4 sm:my-6">
-                      <div className="w-full h-[100px] bg-gray-300 dark:bg-p-bg" />
-                      <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
-                        <div className="w-32 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-32 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-20 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                      </div>
-                      <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
-                        <div className="w-20 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-28 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                      </div>
-                    </div>
-                    <div className="w-full bg-gray-100 dark:bg-s-bg animate-pulse my-4 sm:my-6">
-                      <div className="w-full h-[100px] bg-gray-300 dark:bg-p-bg" />
-                      <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
-                        <div className="w-32 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-32 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-20 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                      </div>
-                      <div className="w-full flex flex-row items-center space-x-4 p-2 px-4">
-                        <div className="w-20 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                        <div className="w-28 h-4 bg-gray-300 dark:bg-p-bg rounded-full" />
-                      </div>
-                    </div>
-                  </>
-                )
-              }
+              loader={isMobile ? <MobileLoader /> : <CommunityInfoCardLoader />}
               endMessage={<></>}
             >
               {communities.map((community) => {

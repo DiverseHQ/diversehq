@@ -14,7 +14,6 @@ interface Props {
 }
 
 const ExploreFeedNav: FC<Props> = ({ showUnjoined, setShowUnjoined }) => {
-  console.log(showUnjoined)
   //get current page path
   const router = useRouter()
   const { user } = useProfile()
