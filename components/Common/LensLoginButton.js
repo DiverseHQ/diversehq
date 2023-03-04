@@ -111,7 +111,8 @@ const LensLoginButton = () => {
                         : 'dark:text-p-text'
                     } text-[20px] md:text-[16px] p-2 md:p-0`}
                   >
-                    u/{lensProfile.defaultProfile.handle.spilt('.')[0]}
+                    u/
+                    {formatHandle(lensProfile.defaultProfile.handle)}
                   </div>
                 </Link>
               )}

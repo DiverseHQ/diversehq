@@ -33,7 +33,7 @@ const ExploreSwitch: FC<Props> = ({ showUnjoined, setShowUnjoined }) => {
             checked={showUnjoined}
           />
         }
-        label="Show All Unjoined Communities"
+        label="Yet to join"
         labelPlacement="start"
       />
     </>
