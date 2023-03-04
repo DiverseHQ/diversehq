@@ -1,14 +1,23 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { HiSparkles } from 'react-icons/hi'
 import { MdLeaderboard } from 'react-icons/md'
 import FilterButton from '../Common/UI/FilterButton'
 import FilterRow from '../Common/UI/FilterRow'
+import { useProfile } from '../Common/WalletContext'
 // import { SiHotjar } from 'react-icons/si'
+import ExploreSwitch from './ExploreSwitch'
 
-const ExploreFeedNav = () => {
+interface Props {
+  showUnjoined?: boolean
+  setShowUnjoined?: any
+}
+
+const ExploreFeedNav: FC<Props> = ({ showUnjoined, setShowUnjoined }) => {
+  console.log(showUnjoined)
   //get current page path
   const router = useRouter()
+  const { user } = useProfile()
   const { pathname } = router
   const [active, setActive] = useState('top')
 
@@ -23,7 +32,16 @@ const ExploreFeedNav = () => {
   }, [pathname])
 
   return (
-    <FilterRow>
+    <FilterRow
+      EndButton={
+        user && (
+          <ExploreSwitch
+            showUnjoined={showUnjoined}
+            setShowUnjoined={setShowUnjoined}
+          />
+        )
+      }
+    >
       <FilterButton
         active={active === 'top'}
         onClick={() => router.push('/explore/top')}

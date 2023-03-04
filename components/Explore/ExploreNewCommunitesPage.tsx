@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -9,7 +9,15 @@ import useDevice from '../Common/useDevice'
 import CommunityInfoCard from '../Community/CommunityInfoCard'
 import ExploreFeedNav from './ExploreFeedNav'
 
-const ExploreNewCommunitesPage = () => {
+interface Props {
+  showUnjoined: boolean
+  setShowUnjoined: any
+}
+
+const ExploreNewCommunitesPage: FC<Props> = ({
+  showUnjoined,
+  setShowUnjoined
+}) => {
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const { isMobile } = useDevice()
@@ -33,7 +41,10 @@ const ExploreNewCommunitesPage = () => {
     <>
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
-          <ExploreFeedNav />
+          <ExploreFeedNav
+            showUnjoined={showUnjoined}
+            setShowUnjoined={setShowUnjoined}
+          />
           <InfiniteScroll
             dataLength={communities.length}
             next={getNewCommunities}
