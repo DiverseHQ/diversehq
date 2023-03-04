@@ -15,6 +15,7 @@ import MessageButton from '../Messages/MessageButton'
 import formatHandle from './lib/formatHandle'
 import getAvatar from './lib/getAvatar'
 import getIPFSLink from './lib/getIPFSLink'
+import ProfileLinksRow from './ProfileLinksRow'
 import useLensFollowButton from './useLensFollowButton'
 
 interface Props {
@@ -155,8 +156,9 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
             <div>{lensProfile.bio}</div>
           </>
         )}
+        <ProfileLinksRow profile={lensProfile} />
         {isMobile ? (
-          <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px]">
+          <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 items-center text-[14px]">
             {/* onchain lens data */}
             {lensProfile && (
               <>
@@ -192,7 +194,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-3 items-center text-[14px]">
+          <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-1 items-center text-[14px]">
             <div className="">
               <span className="">Joined </span>
               <span className="">Communities: </span>
