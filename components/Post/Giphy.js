@@ -24,7 +24,6 @@ const Giphy = ({ setGifAttachment }) => {
       )}
       <Tooltip placement="bottom" arrow title="Add GIF">
         <button
-          whileTap={{ scale: 0.9 }}
           type="button"
           onClick={() => setShowGiphyModal(!showGiphyModal)}
           aria-label="Choose GIFs"

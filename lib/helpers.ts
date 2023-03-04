@@ -42,3 +42,7 @@ export const scrollToTop = () => {
     behavior: 'smooth'
   })
 }
+
+export const shortFormOfLink = (link: string) => {
+  return link.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
+}

@@ -20,13 +20,11 @@ import Markup from '../Lexical/Markup'
 import {
   countLinesFromMarkdown,
   deleteFirebaseStorageFile,
-  getURLsFromText,
   stringToLength,
   unpinFromIpfsInfura
 } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import ReactEmbedo from './embed/ReactEmbedo'
 import PostShareButton from './PostShareButton'
 import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
@@ -255,12 +253,19 @@ const LensPostCard = ({ post }: Props) => {
         >
           {/* top row */}
           {postInfo?.mirroredBy && (
-            <div className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text">
-              <AiOutlineRetweet className="w-3 h-3" />
-              <span className="pr-1">{'mirrored by '}</span>
-              <Link href={`u/${formatHandle(postInfo?.mirroredBy?.handle)}`}>
-                <>{`u/${formatHandle(postInfo?.mirroredBy?.handle)}`} </>
+            <div
+              className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text"
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            >
+              <AiOutlineRetweet className="w-4 h-4 pr-0.5" />
+              <Link href={`/u/${formatHandle(postInfo?.mirroredBy?.handle)}`}>
+                <div className="hover:underline">
+                  {`u/${formatHandle(postInfo?.mirroredBy?.handle)}`}{' '}
+                </div>
               </Link>
+              <span className="pl-0.5">{'mirrored'}</span>
             </div>
           )}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
@@ -561,7 +566,7 @@ const LensPostCard = ({ post }: Props) => {
             {/* main content */}
             <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
-                <div className="mb-2 px-3 sm:pl-3.5 ">
+                <div className="mb-2 px-4 sm:pl-3.5 ">
                   {!router.pathname.startsWith('/p') ? (
                     <>
                       <div className="flex flex-row">
@@ -684,29 +689,20 @@ const LensPostCard = ({ post }: Props) => {
                     </>
                   )}
                 </div>
-                {postInfo?.metadata?.media.length > 0 ? (
-                  <div
-                    className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
-                      isBlur ? 'blur-xl' : ''
+                <div
+                  className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                    isBlur ? 'blur-xl' : ''
+                  }`}
+                >
+                  <Attachment
+                    publication={postInfo}
+                    className={`${
+                      router.pathname.startsWith('/p')
+                        ? 'max-h-screen'
+                        : 'max-h-[450px]'
                     }`}
-                  >
-                    <Attachment
-                      publication={postInfo}
-                      className={`${
-                        router.pathname.startsWith('/p')
-                          ? 'max-h-screen'
-                          : 'max-h-[450px]'
-                      }`}
-                    />
-                  </div>
-                ) : (
-                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
-                    <ReactEmbedo
-                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
-                    />
-                  )
-                )}
+                  />
+                </div>
               </div>
 
               {/* bottom row */}

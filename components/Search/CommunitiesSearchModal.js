@@ -36,7 +36,7 @@ const CommunitiesSearchModal = ({
           <div className="m-2 p-2 text-base font-bold">Communities</div>
           {communities.map((community) => (
             <div
-              className="m-2 flex flex-row p-1 hover:bg-p-btn-hover underline-offset-4  items-center rounded-full cursor-pointer"
+              className="m-2 flex flex-row p-1 hover:bg-s-hover underline-offset-4  items-center rounded-full cursor-pointer"
               key={community._id}
               onClick={() => {
                 inputRef.current.value = ''

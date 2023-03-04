@@ -11,8 +11,6 @@ const LensRepliedComments = ({
   setComments,
   disableFetch = false
 }) => {
-  console.log('LensRepliedComment for commentId', commentId)
-  console.log('LensReplied disableFetch', disableFetch)
   const [uniqueComments, setUniqueComments] = useState([])
   const { data: lensProfile } = useLensUserContext()
   const { data } = useCommentFeedQuery(

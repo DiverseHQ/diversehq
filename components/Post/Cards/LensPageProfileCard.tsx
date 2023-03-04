@@ -9,6 +9,7 @@ import MessageButton from '../../Messages/MessageButton'
 import formatHandle from '../../User/lib/formatHandle'
 import getAvatar from '../../User/lib/getAvatar'
 import getIPFSLink from '../../User/lib/getIPFSLink'
+import ProfileLinksRow from '../../User/ProfileLinksRow'
 import useLensFollowButton from '../../User/useLensFollowButton'
 
 interface Props {
@@ -60,15 +61,15 @@ const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
         />
       </span>
       <div className="rounded-b-[15px] bg-s-bg pt-2 pb-3 px-3">
-        <div className="flex flex-row gap-2 justify-between">
+        <div className="flex flex-row gap-2 justify-between mb-2">
           <div className="flex flex-row gap-2">
             <div
-              className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6"
+              className="flex items-center justify-center rounded-full bg-s-bg -mt-12"
               onClick={(e) => e.stopPropagation()}
             >
               <ImageWithFullScreenZoom
                 src={getAvatar(profile)}
-                className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
+                className="rounded-full w-[70px] h-[70px] object-cover  border-s-bg border-4"
               />
             </div>
             <div className="flex flex-row">
@@ -98,9 +99,12 @@ const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
             )}
           </div>
         </div>
-        <p className="-translate-y-2 text-p-text leading-5">
+        <p className="text-p-text leading-5 -mt-4 pb-2">
           <Markup>{stringToLength(profile?.bio, 200)}</Markup>
         </p>
+        <div className="pb-2">
+          <ProfileLinksRow profile={profile} />
+        </div>
         <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
           <span>
             Followers:{' '}
