@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import {
   getAllCommunities,
-  getCreatedCommunitiesApi
+  getCreatedCommunitiesApi,
+  getNotJoinedCommunities
 } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
@@ -60,14 +61,32 @@ const RightSidebar = () => {
     }
   }
 
+  const fetchTopNotJoinedCommunities = async () => {
+    try {
+      const communities = await getNotJoinedCommunities(6, 0, 'top')
+      if (communities.communities.length > 0) {
+        setTopCommunities(communities.communities)
+      }
+    } catch (error) {
+      console.log(error)
+      notifyError("Couldn't fetch top communities")
+    }
+  }
+
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      fetchTopCommunities()
+      return
+    }
     fetchAndSetCreatedCommunities()
+    fetchTopNotJoinedCommunities()
   }, [user])
 
   useEffect(() => {
     if (topCommunities.length > 0) return
-    fetchTopCommunities()
+    if (!user) {
+      fetchTopCommunities()
+    }
   }, [])
 
   // useEffect(() => {

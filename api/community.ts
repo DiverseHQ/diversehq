@@ -74,7 +74,7 @@ export const putLeaveCommunity = async (communityId: string) => {
 export const getAllCommunities = async (
   limit: number,
   skips: number,
-  sortBy: string
+  sortBy?: string
 ) => {
   try {
     return await fetch(
@@ -84,6 +84,28 @@ export const getAllCommunities = async (
           skips: skips.toString(),
           sortBy
         })
+    ).then((res) => res.json())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getNotJoinedCommunities = async (
+  limit: number,
+  skips: number,
+  sortBy?: string
+) => {
+  try {
+    return await fetch(
+      `${apiEndpoint}/community/getNotJoinedCommunitiesOfUser?` +
+        new URLSearchParams({
+          limit: limit.toString(),
+          skips: skips.toString(),
+          sortBy
+        }),
+      {
+        headers: getHeaders()
+      }
     ).then((res) => res.json())
   } catch (error) {
     console.log(error)
