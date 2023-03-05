@@ -193,3 +193,37 @@ export const isCreatorOrModeratorOfCommunity = async (name: string) => {
     console.log(error)
   }
 }
+
+export const addModeratorsToCommunity = async (
+  name: string,
+  moderators: string[]
+) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/add-moderators`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        moderators
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const removeModeratorFromCommunity = async (
+  name: string,
+  moderator: string
+) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/remove-moderator`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        moderator
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}

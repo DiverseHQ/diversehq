@@ -8,6 +8,7 @@ export type CommunityType = {
   logoImageUrl?: string
   creator?: string
   members?: string[]
+  moderators?: string[]
   link?: string
   createdAt?: string
   updatedAt?: string

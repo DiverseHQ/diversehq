@@ -54,7 +54,7 @@ const MessageButton = ({ userLensProfile }) => {
               handleDmClick()
             }}
           >
-            {!loading && <CiMail className="w-6 h-6" />}
+            {!loading && <CiMail className="w-5 h-5" />}
             {loading && <CircularProgress size="18px" color="primary" />}
           </div>
         )}

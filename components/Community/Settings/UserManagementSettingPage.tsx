@@ -12,7 +12,7 @@ const UserManagementSettingPage = () => {
 
       <div className="sm:mx-20 sm:my-12 flex flex-row space-x-20">
         {!isMobile && (
-          <div className="w-[500px]">
+          <div className="w-[300px]">
             <SettingsSidebar />
           </div>
         )}
