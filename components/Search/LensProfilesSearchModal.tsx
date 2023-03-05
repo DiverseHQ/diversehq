@@ -1,26 +1,33 @@
-import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
+  Profile,
   SearchRequestTypes,
   useSearchProfilesQuery
 } from '../../graphql/generated'
-import {
-  LensInfuraEndpoint,
-  LENS_SEARCH_PROFILE_LIMIT
-} from '../../utils/config'
+import { LENS_SEARCH_PROFILE_LIMIT } from '../../utils/config'
 import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../User/lib/formatHandle'
-import getStampFyiURL from '../User/lib/getStampFyiURL'
+import getAvatar from '../User/lib/getAvatar'
+
+/* eslint-disable */
+
+interface Props {
+  searchTerm: string
+  setSearchTerm: (searchTerm: string) => void
+  inputRef: React.RefObject<HTMLInputElement>
+  onProfileSelect: (profile: Profile) => void
+  showLable?: boolean
+}
 
 const LensProfilesSearchModal = ({
   searchTerm,
   setSearchTerm,
   inputRef,
-  lensProfiles,
-  setLensProfiles
-}) => {
-  const router = useRouter()
+  showLable = true,
+  onProfileSelect
+}: Props) => {
+  const [lensProfiles, setLensProfiles] = useState<Profile[]>([])
   const searchProfileQuery = useSearchProfilesQuery({
     request: {
       query: searchTerm,
@@ -32,21 +39,37 @@ const LensProfilesSearchModal = ({
     searchProfileQuery.refetch()
   }, [searchTerm])
 
+  const handleOutsideClick = (e) => {
+    if (inputRef.current && !inputRef.current.contains(e.target)) {
+      setLensProfiles([])
+    }
+  }
+
   useEffect(() => {
-    if (searchProfileQuery?.data?.search?.items) {
+    document.addEventListener('click', handleOutsideClick)
+    return () => {
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }, [inputRef])
+
+  useEffect(() => {
+    if (
+      searchProfileQuery?.data?.search?.__typename === 'ProfileSearchResult' &&
+      searchProfileQuery?.data?.search?.items
+    ) {
+      //@ts-ignore
       setLensProfiles(searchProfileQuery?.data?.search?.items)
     }
+    // @ts-ignore
   }, [searchProfileQuery?.data?.search?.items])
-
-  const handleProfileClicked = (handle) => {
-    router.push(`/u/${formatHandle(handle)}`)
-  }
 
   return (
     <>
       {lensProfiles.length > 0 && (
         <div>
-          <div className="m-2 p-2 text-base font-bold">Profiles</div>
+          {showLable && (
+            <div className="m-2 p-2 text-base font-bold">Profiles</div>
+          )}
           {lensProfiles.map((profile) => (
             <div
               className="hover:bg-s-hover m-2 flex flex-row p-1  items-center rounded-full cursor-pointer"
@@ -54,20 +77,11 @@ const LensProfilesSearchModal = ({
               onClick={() => {
                 inputRef.current.value = ''
                 setSearchTerm('')
-                handleProfileClicked(profile.handle)
+                onProfileSelect(profile)
               }}
             >
               <ImageWithPulsingLoader
-                src={
-                  profile?.picture?.original?.url
-                    ? profile?.picture?.original?.url.startsWith('ipfs://')
-                      ? `${LensInfuraEndpoint}${profile?.picture?.original?.url?.replace(
-                          'ipfs://',
-                          ''
-                        )}`
-                      : profile?.picture?.original?.url
-                    : getStampFyiURL(profile?.ownedBy)
-                }
+                src={getAvatar(profile)}
                 className="w-8 h-8 mr-3 rounded-full object-cover"
               />
               <div className="flex flex-col text-sm">

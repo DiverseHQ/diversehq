@@ -180,3 +180,16 @@ export const getCreatedCommunitiesApi = async (): Promise<CommunityType[]> => {
     return []
   }
 }
+
+export const isCreatorOrModeratorOfCommunity = async (name: string) => {
+  try {
+    return await fetch(
+      `${apiEndpoint}/community/${name}/isCreatorOrModeratorOfCommunity`,
+      {
+        headers: getHeaders()
+      }
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}

@@ -219,7 +219,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex flex-row items-center gap-2">
-        {!pathname.startsWith('/settings') && (
+        {!pathname.includes('/settings') && (
           <Tooltip title="Create Post" arrow>
             <button
               className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"

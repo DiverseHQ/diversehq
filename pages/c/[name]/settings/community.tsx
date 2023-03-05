@@ -1,15 +1,15 @@
 import React from 'react'
 import { getCommunityInfo } from '../../../../api/community'
-import AuthCommunity from '../../../../components/Community/AuthCommunity'
-import CommunitySettingsIndexPage from '../../../../components/Community/Settings/CommunitySettingsIndexPage'
+import AuthCreatorOfCommunity from '../../../../components/Community/AuthCreatorOfCommunity'
+import CommunitySettingsPage from '../../../../components/Community/Settings/CommunitySettingsPage'
 import getDefaultProfileInfo from '../../../../lib/profile/get-default-profile-info'
 import { CommunityType } from '../../../../types/community'
 
-const index = ({ community }: { community: CommunityType }) => {
+const community = ({ community }: { community: CommunityType }) => {
   return (
-    <AuthCommunity>
-      <CommunitySettingsIndexPage community={community} />
-    </AuthCommunity>
+    <AuthCreatorOfCommunity>
+      <CommunitySettingsPage community={community} />
+    </AuthCreatorOfCommunity>
   )
 }
 
@@ -44,4 +44,4 @@ export async function getServerSideProps({
   }
 }
 
-export default index
+export default community

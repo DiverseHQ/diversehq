@@ -1,17 +1,25 @@
-import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { searchCommunityFromName } from '../../api/community'
+import { CommunityType } from '../../types/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+
+/* eslint-disable */
+
+interface Props {
+  searchTerm: string
+  setSearchTerm: (searchTerm: string) => void
+  inputRef: React.RefObject<HTMLInputElement>
+  onCommunitySelect: (community: CommunityType) => void
+}
 
 const CommunitiesSearchModal = ({
   searchTerm,
   setSearchTerm,
   inputRef,
-  communities,
-  setCommunities
-}) => {
-  const router = useRouter()
+  onCommunitySelect
+}: Props) => {
+  const [communities, setCommunities] = useState([])
   const setCommunitiesOnSearchChange = async () => {
     if (searchTerm === '') {
       setCommunities([])
@@ -21,13 +29,22 @@ const CommunitiesSearchModal = ({
     setCommunities(res)
   }
 
+  const handleOutsideClick = (e) => {
+    if (inputRef.current && !inputRef.current.contains(e.target)) {
+      setCommunities([])
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick)
+    return () => {
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }, [inputRef])
+
   useEffect(() => {
     setCommunitiesOnSearchChange()
   }, [searchTerm])
-
-  const handleCommunityClicked = (name) => {
-    router.push(`/c/${name}`)
-  }
 
   return (
     <>
@@ -41,7 +58,7 @@ const CommunitiesSearchModal = ({
               onClick={() => {
                 inputRef.current.value = ''
                 setSearchTerm('')
-                handleCommunityClicked(community.name)
+                onCommunitySelect(community)
               }}
             >
               <ImageWithPulsingLoader

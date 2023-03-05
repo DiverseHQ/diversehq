@@ -29,18 +29,6 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
   const router = useRouter()
   const { address } = useAccount()
 
-  //   useEffect(() => {
-  //     setLogoImage(
-  //       'https://www.sunrise-divers.com/wp-content/uploads/2017/02/diver-fish-clear-water.jpg'
-  //     )
-  //     setCommunityBanner(
-  //       'https://www.sunrise-divers.com/wp-content/uploads/2017/02/diver-fish-clear-water.jpg'
-  //     )
-
-  //     setName('Test community name')
-  //     setDescription('Test description')
-  //   }, [])
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -88,10 +76,6 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
       notifyError(error.message)
     }
   }
-
-  // const onChangeName = useCallback((e) => {
-  //   setName(e.target.value)
-  // }, [])
 
   const onChangeDescription = useCallback((e) => {
     setDescription(e.target.value)

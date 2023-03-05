@@ -1,30 +1,14 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
+import formatHandle from '../User/lib/formatHandle'
 import CommunitiesSearchModal from './CommunitiesSearchModal'
 import LensProfilesSearchModal from './LensProfilesSearchModal'
 
 const SearchModal = () => {
   const inputRef = useRef()
   const [searchTerm, setSearchTerm] = useState('')
-  const [communities, setCommunities] = useState([])
-  const [lensProfiles, setLensProfiles] = useState([])
   const router = useRouter()
-
-  const handleOutsideClick = (e) => {
-    if (inputRef.current && !inputRef.current.contains(e.target)) {
-      setCommunities([])
-      setLensProfiles([])
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('click', handleOutsideClick)
-    return () => {
-      document.removeEventListener('click', handleOutsideClick)
-    }
-  }, [inputRef])
-
   useEffect(() => {
     if (router.pathname === '/search') {
       inputRef.current.focus()
@@ -46,16 +30,18 @@ const SearchModal = () => {
         <CommunitiesSearchModal
           searchTerm={searchTerm}
           inputRef={inputRef}
-          communities={communities}
-          setCommunities={setCommunities}
           setSearchTerm={setSearchTerm}
+          onCommunitySelect={(community) => {
+            router.push(`/c/${community.name}`)
+          }}
         />
         <LensProfilesSearchModal
           searchTerm={searchTerm}
           inputRef={inputRef}
-          lensProfiles={lensProfiles}
-          setLensProfiles={setLensProfiles}
           setSearchTerm={setSearchTerm}
+          onProfileSelect={(profile) => {
+            router.push(`/u/${formatHandle(profile?.handle)}`)
+          }}
         />
       </div>
       {searchTerm !== '' && (
