@@ -419,14 +419,6 @@ const CommunityInfoCard = ({ _community }: Props) => {
                     {community.members?.length}
                   </span>
                 </div>
-                {router.pathname.startsWith('/c/') && (
-                  <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
-                    <span>Members: </span>
-                    <span className="font-semibold">
-                      {community.members?.length}
-                    </span>
-                  </div>
-                )}
                 {/* <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Posts: </span>
                   <span className="font-semibold">{numberOfPosts}</span>
