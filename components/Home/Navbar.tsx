@@ -35,6 +35,8 @@ const Navbar = () => {
   const [fetchingJoinedCommunities, setFetchingJoinedCommunities] =
     useState(false)
   const { notifyError } = useNotify()
+  const recentCommunities =
+    JSON.parse(window.localStorage.getItem('recentCommunities')) || []
 
   const {
     // notificationsCount,
@@ -120,7 +122,15 @@ const Navbar = () => {
     try {
       setFetchingJoinedCommunities(true)
       const response = await getJoinedCommunitiesApi()
-      setJoinedCommunities(response)
+      // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
+      setJoinedCommunities([
+        ...recentCommunities,
+        // removing the communities in the recentCommunities from the joinedCommunities using communityId
+        ...response.filter(
+          (community) =>
+            !recentCommunities.some((c) => c?._id === community?._id)
+        )
+      ])
       setShowJoinedCommunities(!showJoinedCommunities)
     } catch (error) {
       console.log('error', error)
