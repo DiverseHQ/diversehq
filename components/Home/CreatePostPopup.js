@@ -92,8 +92,8 @@ const CreatePostPopup = () => {
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
 
-  const recentCommunities =
-    JSON.parse(window.localStorage.getItem('recentCommunities')) || []
+  const mostPostedCommunities =
+    JSON.parse(window.localStorage.getItem('mostPostedCommunities')) || []
   const [selectedCommunity, setSelectedCommunity] = useState(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [gifAttachment, setGifAttachment] = useState(null)
@@ -107,12 +107,12 @@ const CreatePostPopup = () => {
     setImageValue(gifAttachment ? gifAttachment?.images?.original?.url : null)
   }, [gifAttachment])
 
-  const storeRecentCommunities = () => {
+  const storeMostPostedCommunities = () => {
     window.localStorage.setItem(
-      'recentCommunities',
+      'mostPostedCommunities',
       JSON.stringify([
         selectedCommunity,
-        ...recentCommunities.filter(
+        ...mostPostedCommunities.filter(
           (community) => community?._id !== selectedCommunity?._id
         )
       ])
@@ -148,7 +148,7 @@ const CreatePostPopup = () => {
       return
     }
     // }
-    storeRecentCommunities()
+    storeMostPostedCommunities()
     if (gifAttachment) {
       handleCreateLensPost(title, communityId, 'image/gif', imageValue)
     }
@@ -384,12 +384,13 @@ const CreatePostPopup = () => {
     }
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
-    // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
+    // setting the joinedCommunitites with mostPostedCommunities from the localStorage at the top
     setJoinedCommunities([
-      ...recentCommunities,
-      // removing the communities in the recentCommunities from the joinedCommunities using communityId
+      ...mostPostedCommunities,
+      // removing the communities in the mostPostedCommunities from the joinedCommunities using communityId
       ...response.filter(
-        (community) => !recentCommunities.some((c) => c?._id === community?._id)
+        (community) =>
+          !mostPostedCommunities.some((c) => c?._id === community?._id)
       )
     ])
     setLoadingJoinedCommunities(false)

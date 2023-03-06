@@ -95,6 +95,20 @@ const Navbar = () => {
     })
   }
 
+  // const [selectedCommunity, setSelectedCommunity] = useState(null)
+
+  const storeRecentCommunities = (community) => {
+    window.localStorage.setItem(
+      'recentCommunities',
+      JSON.stringify([
+        community,
+        ...recentCommunities.filter(
+          (community) => community?._id !== community?._id
+        )
+      ])
+    )
+  }
+
   useEffect(() => {
     const handleClick = (event) => {
       // Check if the target element of the click is the dropdown element
@@ -203,6 +217,7 @@ const Navbar = () => {
                     filterParam="name"
                     handleSelect={(community) => {
                       setShowJoinedCommunities(false)
+                      storeRecentCommunities(community)
                       router.push(`/c/${community?.name}`)
                     }}
                   />
