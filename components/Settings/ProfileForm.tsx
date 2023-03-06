@@ -275,7 +275,7 @@ const ProfileForm = () => {
     return <LensLoginButton />
   }
   return (
-    <div className="p-2 sm:p-4 flex flex-col space-y-2">
+    <div className="p-2 w-full relative sm:p-3 space-y-2">
       <div className="h-60">
         <label htmlFor="profileBanner">
           <div
@@ -330,7 +330,7 @@ const ProfileForm = () => {
             <label htmlFor="profileImage">
               {' '}
               <img
-                className="rounded-full object-cover w-22 h-22 sm:w-32 sm:h-32 cursor-pointer"
+                className="rounded-full object-cover w-24 h-24 sm:w-32 sm:h-32 cursor-pointer"
                 src={profileImage}
                 alt="PFP"
               />

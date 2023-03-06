@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import {
   getAllCommunities,
-  getCreatedCommunitiesApi
+  getCreatedCommunitiesApi,
+  getNotJoinedCommunities
 } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
@@ -19,7 +20,7 @@ const CommunitiesDiv = ({ text, communitiesList, Icon }) => {
     <div className="flex flex-col mb-4 md:mb-6 bg-s-bg w-full rounded-[15px] border-[1px] border-s-border space-y-3 p-2">
       <div className="flex flex-row gap-1 xl:gap-2 items-center text-p-text px-3">
         <Icon />
-        <h3 className="text-[18px] font-medium">{text}</h3>
+        <h3 className="text-lg leading-6 font-medium">{text}</h3>
       </div>
       {communitiesList?.map((community, i) => {
         return <RightSideCommunityComponent key={i} community={community} />
@@ -60,14 +61,32 @@ const RightSidebar = () => {
     }
   }
 
+  const fetchTopNotJoinedCommunities = async () => {
+    try {
+      const communities = await getNotJoinedCommunities(6, 0, 'top')
+      if (communities.communities.length > 0) {
+        setTopCommunities(communities.communities)
+      }
+    } catch (error) {
+      console.log(error)
+      notifyError("Couldn't fetch top communities")
+    }
+  }
+
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      fetchTopCommunities()
+      return
+    }
     fetchAndSetCreatedCommunities()
+    fetchTopNotJoinedCommunities()
   }, [user])
 
   useEffect(() => {
     if (topCommunities.length > 0) return
-    fetchTopCommunities()
+    if (!user) {
+      fetchTopCommunities()
+    }
   }, [])
 
   // useEffect(() => {
@@ -81,7 +100,7 @@ const RightSidebar = () => {
     <div
       className={`relative ${
         hide ? 'hidden' : 'lg:flex flex-col'
-      } sticky top-[64px] h-[calc(100vh-62px)] w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
+      } w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
     >
       {user && createdCommunities?.length > 0 && (
         <CommunitiesDiv
@@ -112,7 +131,7 @@ const RightSidebar = () => {
       )} */}
       {topCommunities?.length > 0 && (
         <CommunitiesDiv
-          text="Top Communities"
+          text="Recommended Communities"
           communitiesList={topCommunities}
           Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
         />

@@ -2,9 +2,11 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config'
+import { getCommunityInfoFromAppId } from '../../utils/helper'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useDevice from '../Common/useDevice'
 import LensPostCard from './LensPostCard'
@@ -40,7 +42,41 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
   }, [collectPublicationResult?.data?.publications?.pageInfo?.next])
 
   const handleSetPosts = async (newPosts) => {
-    setPosts([...posts, ...newPosts])
+    if (newPosts.length === 0) return
+    const communityIds = newPosts.map((post) => {
+      if (post?.metadata?.tags?.[0]) {
+        return post.metadata.tags[0]
+      }
+      if (post?.__typename === 'Mirror') {
+        console.log('mirror post id', post.mirrorOf?.metadata?.tags[0])
+        return post.mirrorOf?.metadata?.tags[0]
+      }
+      return 'null'
+    })
+    const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
+      communityIds
+    )
+    for (let i = 0; i < newPosts.length; i++) {
+      if (!communityInfoForPosts[i]?._id) {
+        newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
+      } else {
+        if (newPosts[i]?.__typename === 'Mirror') {
+          let mirrorPost = newPosts[i]
+          newPosts[i] = mirrorPost?.mirrorOf
+          newPosts[i].mirroredBy = mirrorPost.profile
+        }
+        newPosts[i].communityInfo = communityInfoForPosts[i]
+      }
+    }
+    if (
+      posts.length === 0 ||
+      posts[posts.length - 1].profile.id !== newPosts[0].profile.id
+    ) {
+      setHasMore(true)
+      setPosts(newPosts)
+    } else {
+      setPosts([...posts, ...newPosts])
+    }
   }
 
   const handleUserPublications = async (newItems) => {

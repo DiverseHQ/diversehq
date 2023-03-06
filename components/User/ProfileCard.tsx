@@ -15,6 +15,7 @@ import MessageButton from '../Messages/MessageButton'
 import formatHandle from './lib/formatHandle'
 import getAvatar from './lib/getAvatar'
 import getIPFSLink from './lib/getIPFSLink'
+import ProfileLinksRow from './ProfileLinksRow'
 import useLensFollowButton from './useLensFollowButton'
 
 interface Props {
@@ -90,7 +91,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
         <div className="ml-24 flex flex-row justify-end md:justify-between items-start">
           {!isMobile && (
             <div className="flex flex-row items-start justify-between sm:space-x-10 mt-1 mb-2">
-              <div className="flex flex-col items-start font-medium text-base sm:text-base tracking-wider">
+              <div className="flex flex-col items-start font-medium text-base sm:text-base ">
                 <div className="flex flex-row space-x-4">
                   {lensProfile?.name && (
                     <div>{stringToLength(lensProfile.name, 20)}</div>
@@ -140,7 +141,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
         {isMobile && (
           <>
             <div className="flex flex-row items-start justify-start space-x-10">
-              <div className="flex flex-col items-start font-bold text-base sm:text-base tracking-wider">
+              <div className="flex flex-col items-start font-bold text-base sm:text-base">
                 {lensProfile.name && <div>{lensProfile.name}</div>}
                 {!lensProfile.name && profile.walletAddress && (
                   <div>{profile.walletAddress.substring(0, 6) + '...'}</div>
@@ -152,11 +153,12 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                 </Link>
               </div>
             </div>
-            <div>{lensProfile.bio}</div>
+            <Markup>{lensProfile.bio}</Markup>
           </>
         )}
+        <ProfileLinksRow profile={lensProfile} />
         {isMobile ? (
-          <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 mt-4 items-center text-[14px]">
+          <div className="flex flex-row flex-wrap gap-x-2 gap-y-2 items-center text-[14px]">
             {/* onchain lens data */}
             {lensProfile && (
               <>
@@ -192,7 +194,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-3 items-center text-[14px]">
+          <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-1 items-center text-[14px]">
             <div className="">
               <span className="">Joined </span>
               <span className="">Communities: </span>

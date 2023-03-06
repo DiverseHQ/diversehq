@@ -13,7 +13,7 @@ interface item {
 }
 
 const Sidebar = ({ items }) => {
-  const { pathname } = useRouter()
+  const { asPath } = useRouter()
   const { notifyInfo }: any = useNotify()
   return (
     <div className="text-p-text bg-s-bg w-full rounded-[15px] border-[1px] border-s-border space-y-2 p-2">
@@ -21,9 +21,14 @@ const Sidebar = ({ items }) => {
         if (item.isHidden) return null
         if (item.disabled) {
           return (
-            <Tooltip title="Coming soon" key={item.title}>
+            <Tooltip
+              title="Coming soon"
+              placement="left"
+              arrow
+              key={item.title}
+            >
               <div
-                className="flex flex-row items-center px-4 py-3 rounded-[15px] gap-1 md:gap-2"
+                className="flex cursor-pointer flex-row items-center px-4 py-3 rounded-[15px] gap-1 md:gap-2"
                 key={item.title}
                 onClick={() => notifyInfo('Coming soon')}
               >
@@ -37,8 +42,8 @@ const Sidebar = ({ items }) => {
         return (
           <Link href={item.link} key={item.title}>
             <div
-              className={`flex flex-row items-center ${
-                pathname === item.link ? 'bg-s-hover' : ''
+              className={`flex cursor-pointer flex-row items-center ${
+                asPath === item.link ? 'bg-s-hover' : ''
               }  hover:bg-s-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2`}
             >
               {item.icon}

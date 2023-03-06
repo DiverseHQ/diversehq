@@ -3,25 +3,29 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import { LENS_POST_LIMIT } from '../../utils/config.ts'
+import { LENS_POST_LIMIT } from '../../utils/config'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useDevice from '../Common/useDevice'
 import LensPostCard from './LensPostCard'
 
+/* tslint:disable */
+
 const LensPostsProfilePublicationsColumn = ({ profileId }) => {
-  const [posts, setPosts] = useState([])
-  const [hasMore, setHasMore] = useState(true)
-  const [cursor, setCursor] = useState(null)
-  const [nextCursor, setNextCursor] = useState(null)
   const { data: myLensProfile } = useLensUserContext()
   const { isMobile } = useDevice()
+  const [queryParams, setQueryParams] = useState({
+    cursor: null,
+    hasMore: true,
+    nextCursor: null,
+    posts: []
+  })
 
   const profilePublicationsResult = usePublicationsQuery(
     {
       request: {
         profileId: profileId,
-        cursor: cursor,
+        cursor: queryParams.cursor,
         limit: LENS_POST_LIMIT,
         publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror]
       },
@@ -35,66 +39,90 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
   )
 
   useEffect(() => {
+    if (!profileId) return
+    setQueryParams({
+      cursor: null,
+      hasMore: true,
+      nextCursor: null,
+      posts: []
+    })
+  }, [profileId])
+
+  useEffect(() => {
     if (!profilePublicationsResult?.data?.publications?.items) return
     handleUserPublications()
   }, [profilePublicationsResult?.data?.publications?.pageInfo?.next])
 
-  const handleSetPosts = async (newPosts) => {
+  const handleUserPublications = async () => {
+    let hasMore = true
+    let { nextCursor } = queryParams
+    if (!profilePublicationsResult?.data?.publications?.items) return
+    if (
+      profilePublicationsResult?.data?.publications?.items.length <
+      LENS_POST_LIMIT
+    ) {
+      hasMore = false
+    }
+    if (profilePublicationsResult?.data?.publications?.pageInfo?.next) {
+      nextCursor = profilePublicationsResult?.data?.publications?.pageInfo?.next
+    }
+    const newPosts = profilePublicationsResult.data.publications.items
     if (newPosts.length === 0) return
     const communityIds = newPosts.map((post) => {
-      if (!post?.metadata?.tags || post?.metadata?.tags?.length === 0)
-        return 'null'
-      return post.metadata.tags[0]
+      // @ts-ignore
+      if (post?.metadata?.tags?.[0]) {
+        // @ts-ignore
+        return post.metadata.tags[0]
+      }
+      if (post?.__typename === 'Mirror') {
+        // @ts-ignore
+        return post.mirrorOf?.metadata?.tags[0]
+      }
+      return 'null'
     })
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
     )
     for (let i = 0; i < newPosts.length; i++) {
       if (!communityInfoForPosts[i]?._id) {
+        // @ts-ignore
         newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
       } else {
+        if (newPosts[i]?.__typename === 'Mirror') {
+          let mirrorPost = newPosts[i]
+          // @ts-ignore
+          newPosts[i] = mirrorPost?.mirrorOf
+          // @ts-ignore
+          newPosts[i].mirroredBy = mirrorPost.profile
+        }
+        // @ts-ignore
         newPosts[i].communityInfo = communityInfoForPosts[i]
       }
     }
-    if (
-      posts.length === 0 ||
-      posts[posts.length - 1].profile.id !== newPosts[0].profile.id
-    ) {
-      setHasMore(true)
-      setPosts(newPosts)
-    } else {
-      setPosts([...posts, ...newPosts])
-    }
-  }
 
-  const handleUserPublications = async () => {
-    if (!profilePublicationsResult?.data?.publications?.items) return
-    if (
-      profilePublicationsResult?.data?.publications?.items.length <
-      LENS_POST_LIMIT
-    ) {
-      setHasMore(false)
-    }
-    if (profilePublicationsResult?.data?.publications?.pageInfo?.next) {
-      setNextCursor(
-        profilePublicationsResult?.data?.publications?.pageInfo?.next
-      )
-    }
-    await handleSetPosts(profilePublicationsResult.data.publications.items)
+    setQueryParams({
+      ...queryParams,
+      posts: [...queryParams.posts, ...newPosts],
+      hasMore,
+      nextCursor
+    })
   }
 
   const getMorePosts = async () => {
-    if (nextCursor) {
-      setCursor(nextCursor)
+    if (queryParams.nextCursor) {
+      setQueryParams({
+        ...queryParams,
+        cursor: queryParams.nextCursor
+      })
     }
   }
 
   return (
     <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border overflow-hidden">
       <InfiniteScroll
-        dataLength={posts.length}
+        dataLength={queryParams.posts.length}
         next={getMorePosts}
-        hasMore={hasMore}
+        hasMore={queryParams.hasMore}
         loader={
           isMobile ? (
             <MobileLoader />
@@ -120,7 +148,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         }
         endMessage={<></>}
       >
-        {posts.map((post) => {
+        {queryParams.posts.map((post) => {
           if (!post) return null
           return <LensPostCard key={post.id} post={post} />
         })}

@@ -9,18 +9,24 @@ const LensNotificationCommentedPostCard = ({ notification, isRead }) => {
     <CommonNotificationCardLayoutUI
       MainRow={() => (
         <div>
-          <span className="hover:underline font-bold">
+          <span
+            className="hover:underline font-bold"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Link href={`/u/${formatHandle(notification?.profile?.handle)}`}>
-              <>u/{formatHandle(notification?.profile?.handle)}</>
+              <span>u/{formatHandle(notification?.profile?.handle)}</span>
             </Link>
           </span>
           <span>
             {notification?.notificationId?.startsWith('commented-post') &&
               ' commented on your '}
             {notification?.notificationId?.startsWith('commented-comment') &&
-              ' replied to your comment of this '}
+              ' replied your comment on this '}
           </span>
-          <span className="hover:underline font-bold">
+          <span
+            className="hover:underline font-bold"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Link href={`/p/${notification?.comment?.mainPost?.id}`}>Post</Link>
           </span>
         </div>
@@ -33,6 +39,7 @@ const LensNotificationCommentedPostCard = ({ notification, isRead }) => {
       )}
       Icon={() => <BiCommentAdd />}
       isRead={isRead}
+      cardLink={`/p/${notification?.comment?.mainPost?.id}`}
     />
   )
 }

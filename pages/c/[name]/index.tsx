@@ -8,8 +8,13 @@ import LensPostsCommunityPublicationsColumn from '../../../components/Post/LensP
 import useDevice from '../../../components/Common/useDevice'
 import CommunityPageMobileTopNav from '../../../components/Community/CommunityPageMobileTopNav'
 import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info'
+import { CommunityWithCreatorProfile } from '../../../types/community'
 
-const CommunityPage = ({ community }) => {
+const CommunityPage = ({
+  community
+}: {
+  community: CommunityWithCreatorProfile
+}) => {
   const { isMobile } = useDevice()
   return (
     <div className="relative">
@@ -31,9 +36,13 @@ const CommunityPage = ({ community }) => {
   )
 }
 
-export async function getServerSideProps({ params = {} }) {
+export async function getServerSideProps({
+  params = {}
+}: {
+  params: { name?: string }
+}) {
   const { name } = params
-  const fetchCommunityInfo = async (name) => {
+  const fetchCommunityInfo = async (name: string) => {
     try {
       const res = await getCommunityInfo(name)
       if (res.status !== 200) {
@@ -47,6 +56,7 @@ export async function getServerSideProps({ params = {} }) {
     }
   }
   const community = await fetchCommunityInfo(name)
+  if (!community) return { props: { community: null } }
   const profile = await getDefaultProfileInfo({
     ethereumAddress: community?.creator
   })

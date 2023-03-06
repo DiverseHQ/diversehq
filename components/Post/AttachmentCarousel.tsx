@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { FC } from 'react'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import AttachmentSlide from './AttachmentSlide'
-// import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 import AttachmentMedia from './AttachmentMedia'
+import { Publication } from '../../graphql/generated'
 
-const AttachmentCarousel = ({ publication, medias, className }) => {
+interface Props {
+  publication: Publication
+  medias: any
+  className: string
+}
+
+const AttachmentCarousel: FC<Props> = ({ publication, medias, className }) => {
   const renderElements = ({ index }) => (
     <>
       <div className="flex flex-row justify-end absolute top-[10px] right-[10px]">

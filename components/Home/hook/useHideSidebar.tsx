@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-const Pathnames_To_Hide_Sidebar = ['/settings', '/p']
+const Pathnames_To_Hide_Sidebar = ['/settings', '/p', '/c']
 
 const useHideSidebar = () => {
   const router = useRouter()

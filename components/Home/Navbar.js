@@ -134,39 +134,31 @@ const Navbar = () => {
     <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-1.5 items-center shadow-sm gap-2 sticky top-0 bg-s-bg">
       <div className="flex flex-row items-center gap-4 lg:gap-5">
         <div>
-          <Link href={'/'}>
-            <div className="flex flex-row justify-center items-center space-x-2 h-fit w-fit cursor-pointer">
-              <img
-                src="/LogoV3TrimmedWithBG.png"
-                className="w-[25px] h-[25px] sm:w-[35px] sm:h-[35px]"
-                alt="DivrseHQ Logo"
-              />
-              <Tooltip
-                title={`The platform is in early BETA phase and things might break and change. \n Please report any bugs or issues you find on Discord.`}
-                placement="bottom"
-                arrow
-              >
-                <div className="text-p-text">BETA</div>
-              </Tooltip>
-            </div>
-          </Link>
+          <div className="flex flex-row justify-center items-center space-x-2 h-fit w-fit cursor-pointer">
+            <img
+              src="/LogoV3TrimmedWithBG.png"
+              className="w-[25px] h-[25px] sm:w-[35px] sm:h-[35px] cursor-pointer"
+              alt="DivrseHQ Logo"
+              onClick={routeToHome}
+            />
+            <Tooltip
+              title={`The platform is in early BETA phase and things might break and change. \n Please report any bugs or issues you find on Discord.`}
+              placement="bottom"
+              arrow
+            >
+              <div className="flex flex-col justify-center items-start leading-4">
+                <div className="text-s-text text-sm">Private</div>
+                <div className="text-s-text text-sm">BETA</div>
+              </div>
+            </Tooltip>
+          </div>
         </div>
         <SearchModal />
         <div className="flex flex-row space-x-3">
           <FilterButton
             title="Home"
             active={isOnHomeFeed}
-            onClick={() => {
-              if (
-                router.pathname === '/' ||
-                router.pathname.startsWith('/feed')
-              ) {
-                scrollToTop()
-              } else {
-                routeToHome()
-                return
-              }
-            }}
+            onClick={routeToHome}
           />
 
           <FilterButton
@@ -227,7 +219,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex flex-row items-center gap-2">
-        {!pathname.startsWith('/settings') && (
+        {!pathname.includes('/settings') && (
           <Tooltip title="Create Post" arrow>
             <button
               className="flex flex-row items-center rounded-full relative text-p-text hover:bg-s-hover p-1"

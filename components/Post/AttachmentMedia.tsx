@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { FC } from 'react'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-// import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import imageProxy from '../User/lib/imageProxy'
 import {
@@ -9,19 +8,21 @@ import {
   SUPPORTED_VIDEO_TYPE
 } from '../../utils/config'
 import AudioPlayer from './AudioPlayer'
-// import getIPFSLink from '../User/lib/getIPFSLink'
-// import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-// import useDevice from '../Common/useDevice'
-// import { useRouter } from 'next/router'
+import { Publication } from '../../graphql/generated'
 
-const AttachmentMedia = ({ type, url, publication, className }) => {
-  // const router = useRouter()
+interface Props {
+  type: string
+  url: string
+  publication: Publication
+  className?: string
+}
+
+const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
   const getCoverUrl = () => {
     return (
       publication?.metadata?.cover?.original.url || publication?.metadata?.image
     )
   }
-  // const { isMobile } = useDevice()
 
   return (
     <>

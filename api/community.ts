@@ -74,7 +74,7 @@ export const putLeaveCommunity = async (communityId: string) => {
 export const getAllCommunities = async (
   limit: number,
   skips: number,
-  sortBy: string
+  sortBy?: string
 ) => {
   try {
     return await fetch(
@@ -84,6 +84,28 @@ export const getAllCommunities = async (
           skips: skips.toString(),
           sortBy
         })
+    ).then((res) => res.json())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getNotJoinedCommunities = async (
+  limit: number,
+  skips: number,
+  sortBy?: string
+) => {
+  try {
+    return await fetch(
+      `${apiEndpoint}/community/getNotJoinedCommunitiesOfUser?` +
+        new URLSearchParams({
+          limit: limit.toString(),
+          skips: skips.toString(),
+          sortBy
+        }),
+      {
+        headers: getHeaders()
+      }
     ).then((res) => res.json())
   } catch (error) {
     console.log(error)
@@ -156,5 +178,52 @@ export const getCreatedCommunitiesApi = async (): Promise<CommunityType[]> => {
   } catch (error) {
     console.log(error)
     return []
+  }
+}
+
+export const isCreatorOrModeratorOfCommunity = async (name: string) => {
+  try {
+    return await fetch(
+      `${apiEndpoint}/community/${name}/isCreatorOrModeratorOfCommunity`,
+      {
+        headers: getHeaders()
+      }
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const addModeratorsToCommunity = async (
+  name: string,
+  moderators: string[]
+) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/add-moderators`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        moderators
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const removeModeratorFromCommunity = async (
+  name: string,
+  moderator: string
+) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/remove-moderator`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        moderator
+      })
+    })
+  } catch (error) {
+    console.log(error)
   }
 }

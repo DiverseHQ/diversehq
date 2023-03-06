@@ -2,7 +2,12 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 
-const MobileTopNavbarWithTitle = ({ title }) => {
+interface Props {
+  title: string
+  subtitle?: string
+}
+
+const MobileTopNavbarWithTitle = ({ title, subtitle }: Props) => {
   const router = useRouter()
   return (
     <>
@@ -14,7 +19,12 @@ const MobileTopNavbarWithTitle = ({ title }) => {
               className="w-6 h-6 rounded-full cursor-pointer"
             />
           </div>
-          <span className="font-bold text-[20px]">{title}</span>
+          <div className="flex flex-col leading-5">
+            <div className="font-bold text-2xl">{title}</div>
+            {subtitle && (
+              <div className="text-[14px] text-s-text">{subtitle}</div>
+            )}
+          </div>
         </div>
       </div>
     </>

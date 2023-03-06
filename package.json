@@ -38,6 +38,7 @@
     "ipfs-http-client": "^60.0.0",
     "javascript-time-ago": "^2.5.9",
     "lexical": "^0.8.1",
+    "link-preview-js": "^3.0.4",
     "next": "12.3.4",
     "next-pwa": "^5.6.0",
     "next-seo": "^5.15.0",

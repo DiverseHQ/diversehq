@@ -60,7 +60,7 @@ const FreeCollectPopUp = ({
   return (
     <>
       {isDesktop ? (
-        <div className="py-4  bg-s-bg shadow-sm shadow-p-border rounded-lg px-4 flex flex-row w-fit items-center justify-center space-x-6 rounded-xl border border-p-border">
+        <div className="py-4  bg-s-bg shadow shadow-s-border px-4 flex flex-row w-fit items-center justify-center space-x-6 rounded-xl">
           <div className="shrink-0">
             {!collectModule.followerOnly && (
               <div className="font-medium text-base ml-3.5">
@@ -118,7 +118,7 @@ const FreeCollectPopUp = ({
               loading || (collectModule.followerOnly && !isFollowedByMe)
                 ? 'bg-p-btn-disabled'
                 : 'bg-p-btn'
-            } text-p-btn-text mr-1.5 rounded-md py-1.5 px-2 text-center flex font-semibold text-sm  text-p-text justify-center items-center ${
+            } text-p-btn-text mr-1.5 rounded-md py-1.5 px-2 text-center flex font-semibold text-sm justify-center items-center ${
               collectModule?.__typename === 'FreeCollectModuleSettings' &&
               collectModule.followerOnly &&
               !isFollowedByMe &&
@@ -153,7 +153,7 @@ const FreeCollectPopUp = ({
                       onClick={() => {
                         handleFollowProfile(author.id)
                       }}
-                      className="bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
+                      className="bg-p-btn text-p-text rounded-full text-center flex font-semibold py-1 justify-center items-center w-full text-xl m-1"
                     >
                       {followLoading ? (
                         <div className="flex flex-row self-start space-x-2 text-p-btn-text">
@@ -180,7 +180,7 @@ const FreeCollectPopUp = ({
             disabled={
               loading || (collectModule.followerOnly && !isFollowedByMe)
             }
-            className={`bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1 ${
+            className={`bg-p-btn text-p-text rounded-full text-center flex font-semibold py-1 justify-center items-center w-full text-xl m-1 ${
               collectModule.followerOnly && !isFollowedByMe && 'hidden'
             }`}
           >

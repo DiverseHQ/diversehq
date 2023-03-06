@@ -15,7 +15,7 @@ const LensNotificationCard = ({
   isRead: boolean
 }) => {
   return (
-    <div className="sm:my-3 px-3 py-2 sm:p-2 border-b border-[#eee] dark:border-p-border w-full">
+    <div className="px-3 py-2 sm:px-2 sm:py-4 border-b border-[#eee] dark:border-p-border w-full hover:bg-s-hover cursor-pointer">
       {notification?.__typename === 'NewCommentNotification' && (
         <LensNotificationCommentedPostCard
           notification={notification}

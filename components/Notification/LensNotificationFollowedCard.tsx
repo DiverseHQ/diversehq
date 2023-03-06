@@ -20,7 +20,7 @@ const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
       MainRow={() => (
         <div className="flex flex-row">
           <div className="pr-2">
-            <span>
+            <span onClick={(e) => e.stopPropagation()}>
               <Link
                 href={`/u/${formatHandle(
                   notification?.wallet?.defaultProfile?.handle
@@ -36,7 +36,9 @@ const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
           </div>
           <div>
             {!notification?.wallet?.defaultProfile?.isFollowedByMe && (
-              <FollowButton />
+              <span onClick={(e) => e.stopPropagation()}>
+                <FollowButton />
+              </span>
             )}
           </div>
         </div>
@@ -45,6 +47,9 @@ const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
       Body={() => <></>}
       Icon={() => <SlUserFollow />}
       isRead={isRead}
+      cardLink={`/u/${formatHandle(
+        notification?.wallet?.defaultProfile?.handle
+      )}`}
     />
   )
 }

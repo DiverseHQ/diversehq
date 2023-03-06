@@ -1,15 +1,13 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState, useCallback } from 'react'
-import { getCommunityInfoUsingId } from '../../api/community'
+import React, { useEffect, useState } from 'react'
+import { isCreatorOrModeratorOfCommunity } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import EditCommunity from './EditCommunity'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 // import { getNumberOfPostsInCommunity } from '../../api/post'
 import useDevice from '../Common/useDevice'
-import { BiChevronDown, BiEdit } from 'react-icons/bi'
+import { BiChevronDown } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 // import { BsCollection } from 'react-icons/bs'
 import { RiMore2Fill } from 'react-icons/ri'
@@ -22,23 +20,20 @@ import { Tooltip } from '@mui/material'
 import { getLevelAndThresholdXP } from '../../lib/helpers'
 import { xpPerMember } from '../../utils/config'
 import JoinCommunityButton from './JoinCommunityButton'
-import { CommunityType } from '../../types/community'
-import { Profile } from '../../graphql/generated'
 import Link from 'next/link'
 import formatHandle from '../User/lib/formatHandle'
-
-interface CommunityProp extends CommunityType {
-  creatorProfile: Profile
-}
+import { CommunityWithCreatorProfile } from '../../types/community'
+import { FiSettings } from 'react-icons/fi'
 
 interface Props {
-  _community: CommunityProp
+  _community: CommunityWithCreatorProfile
 }
 const CommunityInfoCard = ({ _community }: Props) => {
   const [community, setCommunity] = useState(_community)
   const { user } = useProfile()
   const { notifyInfo } = useNotify()
-  const { showModal } = usePopUpModal()
+  // const { showModal } = usePopUpModal()
+  const [isAuth, setIsAuth] = useState(false)
   const router = useRouter()
 
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
@@ -50,51 +45,15 @@ const CommunityInfoCard = ({ _community }: Props) => {
       setCommunity(_community)
     }
   }, [_community])
-
-  const [isCreator, setIsCreator] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isExploreDrawerOpen, setIsExploreDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   // const [numberOfPosts, setNumberOfPosts] = useState(0)
   const name = community?.name
 
-  useEffect(() => {
-    if (!user || !community) return
-    if (user.walletAddress === community.creator) {
-      setIsCreator(true)
-    }
-  }, [user, community])
-
-  // get the community information using it's id
-  const getCommunityInformation = async () => {
-    try {
-      const comm = await getCommunityInfoUsingId(community._id)
-      // fetchNumberOfPosts()
-
-      setCommunity({ ...comm })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   const redirectToCommunityPage = () => {
     if (name) router.push(`/c/${name}`)
   }
-
-  const editCommunity = useCallback(() => {
-    if (!community) return
-    showModal({
-      component: (
-        <EditCommunity
-          community={community}
-          getCommunityInformation={getCommunityInformation}
-        />
-      ),
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }, [community])
 
   const { isMobile } = useDevice()
 
@@ -115,6 +74,23 @@ const CommunityInfoCard = ({ _community }: Props) => {
     }
   }
 
+  const checkIfCreatorOrModerator = async (name: string) => {
+    try {
+      const res = await isCreatorOrModeratorOfCommunity(name)
+      if (res.status === 200) {
+        setIsAuth(true)
+      } else {
+        setIsAuth(false)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    checkIfCreatorOrModerator(community?.name)
+  }, [user?.walletAddress, community?.name])
+
   return (
     <>
       {community && (
@@ -125,7 +101,11 @@ const CommunityInfoCard = ({ _community }: Props) => {
             isMobile && router.pathname.startsWith('/explore')
               ? 'rounded-[20px] mx-2'
               : ''
-          }`}
+          } ${router.pathname.startsWith('/explore') ? 'cursor-pointer' : ''}`}
+          onClick={() => {
+            if (router.pathname.startsWith('/c')) return
+            redirectToCommunityPage()
+          }}
         >
           {/* only enable the zoom on the community page not on any other page */}
           {!router.pathname.startsWith('/c') ? (
@@ -179,56 +159,67 @@ const CommunityInfoCard = ({ _community }: Props) => {
             </div>
             <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2">
               <JoinCommunityButton id={community._id} showJoined={true} />
-              <OptionsWrapper
-                OptionPopUpModal={() => (
-                  <MoreOptionsModal
-                    className="z-50"
-                    list={
-                      isCreator
-                        ? [
-                            {
-                              label: 'Edit',
-                              onClick: editCommunity,
-                              icon: () => <BiEdit className="mr-1.5 w-6 h-6" />
-                            },
-                            {
-                              label: 'Share',
-                              onClick: shareCommunity,
-                              icon: () => (
-                                <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                              )
-                            }
-                          ]
-                        : [
-                            {
-                              label: 'Share',
-                              onClick: shareCommunity,
-                              icon: () => (
-                                <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                              )
-                            }
-                          ]
-                    }
-                  />
-                )}
-                position="left"
-                showOptionsModal={showOptionsModal}
-                setShowOptionsModal={setShowOptionsModal}
-                isDrawerOpen={isExploreDrawerOpen}
-                setIsDrawerOpen={setIsExploreDrawerOpen}
-              >
-                <Tooltip enterDelay={1000} leaveDelay={200} title="More" arrow>
-                  <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                    <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                </Tooltip>
-              </OptionsWrapper>
+              <span onClick={(e) => e.stopPropagation()}>
+                <OptionsWrapper
+                  OptionPopUpModal={() => (
+                    <MoreOptionsModal
+                      className="z-50"
+                      list={
+                        isAuth
+                          ? [
+                              {
+                                label: 'Setting',
+                                onClick: () => {
+                                  router.push(`/c/${community.name}/settings`)
+                                },
+                                icon: () => (
+                                  <FiSettings className="mr-1.5 w-6 h-6" />
+                                )
+                              },
+                              {
+                                label: 'Share',
+                                onClick: shareCommunity,
+                                icon: () => (
+                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                )
+                              }
+                            ]
+                          : [
+                              {
+                                label: 'Share',
+                                onClick: shareCommunity,
+                                icon: () => (
+                                  <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                )
+                              }
+                            ]
+                      }
+                    />
+                  )}
+                  position="left"
+                  showOptionsModal={showOptionsModal}
+                  setShowOptionsModal={setShowOptionsModal}
+                  isDrawerOpen={isExploreDrawerOpen}
+                  setIsDrawerOpen={setIsExploreDrawerOpen}
+                >
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="More"
+                    arrow
+                  >
+                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                  </Tooltip>
+                </OptionsWrapper>
+              </span>
             </div>
           </div>
 
           {isMobile && (
             <>
-              {/* name row */}
+              {/* name and description row */}
               <div className="flex flex-col px-5">
                 <p
                   className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer truncate"
@@ -248,9 +239,8 @@ const CommunityInfoCard = ({ _community }: Props) => {
                   {community.description}
                 </div>
               </div>
-              {/* description row */}
 
-              {/* level and date */}
+              {/* level and date for mobile */}
               {!router.pathname.startsWith('/explore') && (
                 <div className="flex flex-row items-center py-1">
                   {/* level */}
@@ -325,6 +315,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
               </div>
             )}
 
+            {/* bottom drawer for mobile */}
             <BottomDrawerWrapper
               isDrawerOpen={isDrawerOpen}
               setIsDrawerOpen={setIsDrawerOpen}
@@ -397,23 +388,15 @@ const CommunityInfoCard = ({ _community }: Props) => {
               </div>
             </BottomDrawerWrapper>
 
+            {/* stats UI for desktop */}
             {!isMobile && (
               <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-xs md:text-[16px]">
-                {/* stats UI for desktop */}
                 <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Members: </span>
                   <span className="font-semibold">
                     {community.members?.length}
                   </span>
                 </div>
-                {router.pathname.startsWith('/c/') && (
-                  <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
-                    <span>Members: </span>
-                    <span className="font-semibold">
-                      {community.members?.length}
-                    </span>
-                  </div>
-                )}
                 {/* <div className="bg-s-h-bg dark:bg-p-bg p-1 px-2 sm:px-4 rounded-full">
                   <span>Posts: </span>
                   <span className="font-semibold">{numberOfPosts}</span>
@@ -426,7 +409,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
             )}
 
             {/* todo make dynamic from the backend */}
-
+            {/* level and date for desktop */}
             <div className="flex flex-col gap-1">
               {/* level */}
               {!isMobile && (

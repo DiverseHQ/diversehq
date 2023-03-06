@@ -20,13 +20,11 @@ import Markup from '../Lexical/Markup'
 import {
   countLinesFromMarkdown,
   deleteFirebaseStorageFile,
-  getURLsFromText,
   stringToLength,
   unpinFromIpfsInfura
 } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import ReactEmbedo from './embed/ReactEmbedo'
 import PostShareButton from './PostShareButton'
 import { RiMore2Fill } from 'react-icons/ri'
 import LensCollectButton from './Collect/LensCollectButton'
@@ -36,6 +34,7 @@ import Attachment from './Attachment'
 import MirrorButton from './MirrorButton'
 import CenteredDot from '../Common/UI/CenteredDot'
 import formatHandle from '../User/lib/formatHandle'
+import { IoIosShareAlt } from 'react-icons/io'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { postWithCommunityInfoType } from '../../types/post'
 
@@ -228,6 +227,16 @@ const LensPostCard = ({ post }: Props) => {
   const isBlur =
     !router.pathname.startsWith('/p') && postInfo?.metadata?.contentWarning
 
+  const sharePost = () => {
+    if (navigator.share) {
+      navigator.share({
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/p/${postInfo.id}`
+      })
+    } else {
+      notifyInfo('Sharing is not supported on your device')
+    }
+  }
+
   return (
     <>
       {postInfo && (
@@ -244,12 +253,19 @@ const LensPostCard = ({ post }: Props) => {
         >
           {/* top row */}
           {postInfo?.mirroredBy && (
-            <div className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text">
-              <AiOutlineRetweet className="w-3 h-3" />
-              <span className="pr-1">{'mirrored by '}</span>
-              <Link href={`u/${formatHandle(postInfo?.mirroredBy?.handle)}`}>
-                <>{`u/${formatHandle(postInfo?.mirroredBy?.handle)}`} </>
+            <div
+              className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text"
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            >
+              <AiOutlineRetweet className="w-4 h-4 pr-0.5" />
+              <Link href={`/u/${formatHandle(postInfo?.mirroredBy?.handle)}`}>
+                <div className="hover:underline">
+                  {`u/${formatHandle(postInfo?.mirroredBy?.handle)}`}{' '}
+                </div>
               </Link>
+              <span className="pl-0.5">{'mirrored'}</span>
             </div>
           )}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
@@ -399,20 +415,39 @@ const LensPostCard = ({ post }: Props) => {
                   postInfo?.communityInfo?._id && (
                     <JoinCommunityButton id={postInfo?.communityInfo?._id} />
                   )}
-                {isAuthor && (
+                {isMobile ? (
                   <OptionsWrapper
                     OptionPopUpModal={() => (
                       <MoreOptionsModal
                         className="z-50"
-                        list={[
-                          {
-                            label: 'Delete Post',
-                            onClick: handleDeletePost,
-                            icon: () => (
-                              <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                            )
-                          }
-                        ]}
+                        list={
+                          isAuthor
+                            ? [
+                                {
+                                  label: 'Share Post',
+                                  onClick: sharePost,
+                                  icon: () => (
+                                    <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                  )
+                                },
+                                {
+                                  label: 'Delete Post',
+                                  onClick: handleDeletePost,
+                                  icon: () => (
+                                    <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                                  )
+                                }
+                              ]
+                            : [
+                                {
+                                  label: 'Share Post',
+                                  onClick: sharePost,
+                                  icon: () => (
+                                    <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                  )
+                                }
+                              ]
+                        }
                       />
                     )}
                     position="left"
@@ -432,6 +467,41 @@ const LensPostCard = ({ post }: Props) => {
                       </div>
                     </Tooltip>
                   </OptionsWrapper>
+                ) : (
+                  isAuthor && (
+                    <OptionsWrapper
+                      OptionPopUpModal={() => (
+                        <MoreOptionsModal
+                          className="z-50"
+                          list={[
+                            {
+                              label: 'Delete Post',
+                              onClick: handleDeletePost,
+                              icon: () => (
+                                <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                              )
+                            }
+                          ]}
+                        />
+                      )}
+                      position="left"
+                      showOptionsModal={showOptionsModal}
+                      setShowOptionsModal={setShowOptionsModal}
+                      isDrawerOpen={isDrawerOpen}
+                      setIsDrawerOpen={setIsDrawerOpen}
+                    >
+                      <Tooltip
+                        enterDelay={1000}
+                        leaveDelay={200}
+                        title="More"
+                        arrow
+                      >
+                        <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
+                          <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                        </div>
+                      </Tooltip>
+                    </OptionsWrapper>
+                  )
                 )}
               </div>
             </span>
@@ -496,7 +566,7 @@ const LensPostCard = ({ post }: Props) => {
             {/* main content */}
             <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
-                <div className="mb-2 px-3 sm:pl-3.5 ">
+                <div className="mb-2 px-4 sm:pl-3.5 ">
                   {!router.pathname.startsWith('/p') ? (
                     <>
                       <div className="flex flex-row">
@@ -619,29 +689,20 @@ const LensPostCard = ({ post }: Props) => {
                     </>
                   )}
                 </div>
-                {postInfo?.metadata?.media.length > 0 ? (
-                  <div
-                    className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
-                      isBlur ? 'blur-xl' : ''
+                <div
+                  className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                    isBlur ? 'blur-xl' : ''
+                  }`}
+                >
+                  <Attachment
+                    publication={postInfo}
+                    className={`${
+                      router.pathname.startsWith('/p')
+                        ? 'max-h-screen'
+                        : 'max-h-[450px]'
                     }`}
-                  >
-                    <Attachment
-                      publication={postInfo}
-                      className={`${
-                        router.pathname.startsWith('/p')
-                          ? 'max-h-screen'
-                          : 'max-h-[450px]'
-                      }`}
-                    />
-                  </div>
-                ) : (
-                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
-                    <ReactEmbedo
-                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
-                    />
-                  )
-                )}
+                  />
+                </div>
               </div>
 
               {/* bottom row */}
@@ -683,7 +744,7 @@ const LensPostCard = ({ post }: Props) => {
                           e.stopPropagation()
                           handleUpvote()
                         }}
-                        className="hover:bg-s-hover cursor-pointer rounded-md p-1"
+                        className="hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md p-1"
                       >
                         <img
                           src={
@@ -709,7 +770,7 @@ const LensPostCard = ({ post }: Props) => {
                           e.stopPropagation()
                           handleDownvote()
                         }}
-                        className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
+                        className="hover:bg-s-hover active:bg-s-hover rounded-md p-1 cursor-pointer"
                       >
                         <img
                           src={
@@ -738,7 +799,7 @@ const LensPostCard = ({ post }: Props) => {
                     {postInfo?.stats?.totalAmountOfComments > 0 && (
                       <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )} */}
-                        <div className="flex flex-row items-center cursor-pointer hover:bg-s-hover rounded-md p-1 font-medium">
+                        <div className="flex flex-row items-center cursor-pointer hover:bg-s-hover active:bg-s-hover rounded-md p-1 font-medium">
                           <img
                             src="/comment.svg"
                             alt="Comment"
@@ -758,7 +819,7 @@ const LensPostCard = ({ post }: Props) => {
                     title="Comment"
                     arrow
                   >
-                    <div className="flex flex-row items-center cursor-pointer  hover:bg-s-hover rounded-md p-1 font-medium">
+                    <div className="flex flex-row items-center cursor-pointer  hover:bg-s-hover active:bg-s-hover rounded-md p-1 font-medium">
                       {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
                       <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
                     )}
@@ -794,12 +855,14 @@ const LensPostCard = ({ post }: Props) => {
                 <span onClick={(e) => e.stopPropagation()}>
                   <MirrorButton postInfo={postInfo} />
                 </span>
-                <span onClick={(e) => e.stopPropagation()}>
-                  <PostShareButton
-                    url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
-                    text={postInfo?.metadata?.name}
-                  />
-                </span>
+                {!isMobile && (
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <PostShareButton
+                      url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
+                      text={postInfo?.metadata?.name}
+                    />
+                  </span>
+                )}
               </div>
             </div>
           </div>
