@@ -23,6 +23,16 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }) => {
     posts: []
   })
 
+  useEffect(() => {
+    if (!communityInfo?._id) return
+    setQueryParams({
+      cursor: null,
+      hasMore: true,
+      nextCursor: null,
+      posts: []
+    })
+  }, [communityInfo?._id])
+
   const { data } = useExplorePublicationsQuery(
     {
       request: {
@@ -46,7 +56,6 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }) => {
       enabled: !!communityInfo._id
     }
   )
-
   useEffect(() => {
     if (!data?.explorePublications?.items) return
     console.log('data?.explorePublications', data?.explorePublications)

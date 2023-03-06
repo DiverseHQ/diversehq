@@ -24,7 +24,8 @@
     "./eslintrc.js",
     "utils/helper.ts",
     "components/Lexical/Plugins/ImagesPlugin.js",
-    "utils/emitter.js"
+    "utils/emitter.js",
+    "components/Community/Settings/Sections/ModeratorSection"
   ],
   "exclude": ["node_modules"]
 }

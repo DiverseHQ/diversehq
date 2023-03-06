@@ -153,7 +153,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                 </Link>
               </div>
             </div>
-            <div>{lensProfile.bio}</div>
+            <Markup>{lensProfile.bio}</Markup>
           </>
         )}
         <ProfileLinksRow profile={lensProfile} />

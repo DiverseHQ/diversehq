@@ -23,14 +23,6 @@ const LinkPreview = ({ url }: { url: string }) => {
 
   const fetchAndSetLinkPreview = async (url: string) => {
     try {
-      console.log('url', url)
-      //   const previewData = await linkPreview(
-      //     'https://www.youtube.com/watch?v=5WfTEZJnv_8'
-      //   ).then((r) => r)
-      // const previewData = await fetch(
-      //   `https://graph.facebook.com/v15.0/?fields=og_object&id=${'https://www.youtube.com/watch?v=5WfTEZJnv_8'}&access_token=${access_token}`
-      // ).then((r) => r.json())
-
       const previewData = await getLinkPreview(url, {
         timeout: 10000
       }).then((r) => r)

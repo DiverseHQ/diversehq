@@ -1,15 +1,14 @@
 import React from 'react'
 import { getCommunityInfo } from '../../../../api/community'
-import AuthCommunity from '../../../../components/Community/AuthCommunity'
-import CommunitySettingsIndexPage from '../../../../components/Community/Settings/CommunitySettingsIndexPage'
-import getDefaultProfileInfo from '../../../../lib/profile/get-default-profile-info'
+import AuthCreatorOfCommunity from '../../../../components/Community/AuthCreatorOfCommunity'
+import ModeratorsSettingsPage from '../../../../components/Community/Settings/ModeratorsSettingsPage'
 import { CommunityType } from '../../../../types/community'
 
-const index = ({ community }: { community: CommunityType }) => {
+const moderators = ({ community }: { community: CommunityType }) => {
   return (
-    <AuthCommunity>
-      <CommunitySettingsIndexPage community={community} />
-    </AuthCommunity>
+    <AuthCreatorOfCommunity>
+      <ModeratorsSettingsPage community={community} />
+    </AuthCreatorOfCommunity>
   )
 }
 
@@ -33,10 +32,6 @@ export async function getServerSideProps({
     }
   }
   const community = await fetchCommunityInfo(name)
-  const profile = await getDefaultProfileInfo({
-    ethereumAddress: community?.creator
-  })
-  community.creatorProfile = profile?.defaultProfile
   return {
     props: {
       community
@@ -44,4 +39,4 @@ export async function getServerSideProps({
   }
 }
 
-export default index
+export default moderators

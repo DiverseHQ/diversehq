@@ -47,6 +47,7 @@ export async function getServerSideProps({ params = {} }) {
     }
   }
   const community = await fetchCommunityInfo(name)
+  if (!community) return { props: { community: null } }
   const profile = await getDefaultProfileInfo({
     ethereumAddress: community?.creator
   })
