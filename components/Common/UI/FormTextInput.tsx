@@ -1,13 +1,25 @@
 import React, { memo } from 'react'
 
+interface Props {
+  label: string
+  className?: string
+  value: string
+  maxLength?: number
+  disabled?: boolean
+  placeholder?: string
+  onChange?: any
+}
+
 const FormTextInput = ({
   label,
   className = '',
   value,
   maxLength = null,
   disabled = false,
+  placeholder,
+  onChange,
   ...props
-}) => {
+}: Props) => {
   return (
     <label className={`${disabled ? 'cursor-not-allowed' : ''}`}>
       <div
@@ -25,6 +37,8 @@ const FormTextInput = ({
             className={`w-full ${
               disabled ? 'text-s-text cursor-not-allowed' : 'text-p-text'
             } bg-s-bg outline-none ${className}`}
+            placeholder={placeholder}
+            onChange={onChange}
             {...props}
           />
           {maxLength && (

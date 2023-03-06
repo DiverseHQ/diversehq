@@ -19,3 +19,8 @@ export type CommunityType = {
 export interface CommunityWithCreatorProfile extends CommunityType {
   creatorProfile?: Profile
 }
+
+export type Rule = {
+  title: string
+  description: string
+}

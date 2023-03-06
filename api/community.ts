@@ -1,5 +1,5 @@
 import apiEndpoint from './ApiEndpoint'
-import { CommunityType } from '../types/community'
+import { CommunityType, Rule } from '../types/community'
 import { getHeaders } from './apiHelper'
 
 export const getPostOfCommunity = async (
@@ -221,6 +221,20 @@ export const removeModeratorFromCommunity = async (
       headers: getHeaders(),
       body: JSON.stringify({
         moderator
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const setRulesOfCommunity = async (name: string, rules: Rule[]) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/set-rules`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        rules
       })
     })
   } catch (error) {

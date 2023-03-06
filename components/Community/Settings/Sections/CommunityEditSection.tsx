@@ -135,7 +135,6 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
         placeholder="Show the world what your community is..."
         value={description}
         onChange={onChangeDescription}
-        required
         maxLength={200}
       />
       <input

@@ -48,24 +48,21 @@ const CommunitySettingsIndexPage = ({
                     link: `/c/${name}/settings/moderators`,
                     icon: (
                       <MdAddModerator className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                    )
                   },
                   {
                     title: 'User Management',
                     link: `/c/${name}/settings/user-management`,
                     icon: (
                       <RiUserSettingsLine className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                    )
                   },
                   {
                     title: 'Rules',
                     link: `/c/${name}/settings/rules`,
                     icon: (
                       <BsFileRuled className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                    )
                   },
                   {
                     title: 'Verification',
@@ -82,16 +79,7 @@ const CommunitySettingsIndexPage = ({
                     link: `/c/${name}/settings/user-management`,
                     icon: (
                       <RiUserSettingsLine className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
-                  },
-                  {
-                    title: 'Rules',
-                    link: `/c/${name}/settings/rules`,
-                    icon: (
-                      <BsFileRuled className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                    )
                   }
                 ]
           }
