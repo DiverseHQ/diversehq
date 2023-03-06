@@ -1,5 +1,5 @@
 import apiEndpoint from './ApiEndpoint'
-import { CommunityType, Rule } from '../types/community'
+import { BannedUser, CommunityType, Rule } from '../types/community'
 import { getHeaders } from './apiHelper'
 
 export const getPostOfCommunity = async (
@@ -61,7 +61,7 @@ export const putJoinCommunity = async (communityId: string) => {
   return await fetch(`${apiEndpoint}/community/join/${communityId}`, {
     method: 'PUT',
     headers: getHeaders()
-  }).then((res) => res.json())
+  })
 }
 
 export const putLeaveCommunity = async (communityId: string) => {
@@ -235,6 +235,40 @@ export const setRulesOfCommunity = async (name: string, rules: Rule[]) => {
       headers: getHeaders(),
       body: JSON.stringify({
         rules
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const addBannedUserToCommunity = async (
+  name: string,
+  bannedUser: BannedUser
+) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/add-banned-user`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        bannedUser
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const removeBannedUserFromCommunity = async (
+  name: string,
+  bannedUserAddress: string
+) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/remove-banned-user`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        bannedUserAddress
       })
     })
   } catch (error) {

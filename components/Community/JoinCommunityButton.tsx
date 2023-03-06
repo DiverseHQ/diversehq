@@ -5,7 +5,12 @@ import { useNotify } from '../Common/NotifyContext'
 import useDevice from '../Common/useDevice'
 import { useProfile } from '../Common/WalletContext'
 
-const JoinCommunityButton = ({ id, showJoined = false }) => {
+interface Props {
+  id: string
+  showJoined?: boolean
+}
+
+const JoinCommunityButton = ({ id, showJoined = false }: Props) => {
   const [loading, setLoading] = useState(false)
   // const [leavingLoading, setLoading] = us
   const [joined, setJoined] = useState(false)
@@ -26,8 +31,16 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
     }
     try {
       setLoading(true)
-      await putJoinCommunity(id)
-      await refreshUserInfo()
+      const res = await putJoinCommunity(id)
+      if (res.status === 200) {
+        setJoined(true)
+      } else if (res.status === 400) {
+        const resData = await res.json()
+        notifyInfo(resData.msg)
+        setLoading(false)
+        return
+      }
+      refreshUserInfo()
     } catch (error) {
       console.log(error)
     } finally {
@@ -43,7 +56,7 @@ const JoinCommunityButton = ({ id, showJoined = false }) => {
     try {
       setLoading(true)
       await putLeaveCommunity(id)
-      await refreshUserInfo()
+      refreshUserInfo()
     } catch (error) {
       console.log(error)
     } finally {
