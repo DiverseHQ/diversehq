@@ -1,7 +1,8 @@
 import { CircularProgress, Tooltip } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import {
+  Publication,
   useCreateMirrorTypedDataMutation,
   useCreateMirrorViaDispatcherMutation
 } from '../../graphql/generated'
@@ -9,7 +10,11 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useNotify } from '../Common/NotifyContext'
 
-const MirrorButton = ({ postInfo }) => {
+interface Props {
+  postInfo: Publication
+}
+
+const MirrorButton: FC<Props> = ({ postInfo }) => {
   const isMirror = postInfo.__typename === 'Mirror'
   const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
@@ -101,8 +106,8 @@ const MirrorButton = ({ postInfo }) => {
       <Tooltip title="Mirror" arrow>
         <button
           onClick={handleMirrorPost}
-          className={`hover:bg-s-hover hover:bg-s-hover rounded-md p-0.5 cursor-pointer flex flex-row items-center ${
-            mirrored ? 'font-bold' : 'text-[#687684]'
+          className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
+            mirrored ? 'font-bold' : ''
           }`}
           disabled={loading || mirrored}
         >
