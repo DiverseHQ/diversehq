@@ -13,7 +13,7 @@ const CommunityPage = ({ community }) => {
   const { isMobile } = useDevice()
   return (
     <div className="relative">
-      {isMobile && <CommunityPageMobileTopNav />}
+      {isMobile && <CommunityPageMobileTopNav community={community} />}
       {community && <CommunityPageSeo community={community} />}
       {community && (
         <>

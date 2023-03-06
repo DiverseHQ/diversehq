@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { FC } from 'react'
 import MobileTopNavbarWithTitle from '../Common/MobileTopNavbarWithTitle'
+import { CommunityType } from '../../types/community'
 
-const CommunityPageMobileTopNav = () => {
-  return <MobileTopNavbarWithTitle title={'Community'} />
+interface Props {
+  community: CommunityType
+}
+
+const CommunityPageMobileTopNav: FC<Props> = ({ community }) => {
+  return <MobileTopNavbarWithTitle title={community?.name || 'Community'} />
 }
 
 export default CommunityPageMobileTopNav
