@@ -551,6 +551,19 @@ const CreatePostPopup = () => {
     }
   }
 
+  const closePopUp = async () => {
+    if (loading) return
+    if (firebaseUrl && !imageUpload && !result) {
+      await deleteFirebaseStorageFile(firebaseUrl)
+      console.log('File Deleted and the Popup has been closed')
+      hideModal()
+      return
+    } else if (!loading && !imageUpload && !result) {
+      console.log('Popup has been closed, No files detected')
+      hideModal()
+    }
+  }
+
   useEffect(() => {
     if (!file) return
     if (file && !firebaseUrl) upLoadFile()
@@ -568,6 +581,7 @@ const CreatePostPopup = () => {
         loading={loading}
         isDisabled={!communityId || title.length === 0 || imageUpload}
         hideTopBar={showCollectSettings}
+        closePopup={closePopUp}
       >
         <div className="flex flex-row items-center justify-between px-4 z-50">
           {showCollectSettings ? (

@@ -12,7 +12,8 @@ const PopUpWrapper = ({
   loading,
   children,
   hideTopBar = false,
-  isDisabled
+  isDisabled,
+  closePopup
 }) => {
   const { hideModal, showModal } = usePopUpModal()
   const { isDesktop } = useDevice()
@@ -41,7 +42,7 @@ const PopUpWrapper = ({
           <div className="flex flex-row justify-center items-center">
             <div
               className="cursor-pointer w-8 h-8 text-p-text  hover:bg-s-hover hover:duration-300 flex justify-center items-center rounded-full"
-              onClick={() => hideModal()}
+              onClick={() => (closePopup ? closePopup() : hideModal())}
             >
               {isDesktop && (
                 <AiOutlineClose className="w-5 h-5  items-center" />
