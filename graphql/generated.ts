@@ -376,6 +376,8 @@ export type Comment = {
   onChainContentURI: Scalars['String'];
   /** The profile ref */
   profile: Profile;
+  /** Comment ranking score */
+  rankingScore?: Maybe<Scalars['Float']>;
   reaction?: Maybe<ReactionTypes>;
   /** The reference module */
   referenceModule?: Maybe<ReferenceModule>;
@@ -419,6 +421,18 @@ export type CommentMirrorsArgs = {
 export type CommentReactionArgs = {
   request?: InputMaybe<ReactionFieldResolverRequest>;
 };
+
+/** The comment ordering types */
+export enum CommentOrderingTypes {
+  Desc = 'DESC',
+  Ranking = 'RANKING'
+}
+
+/** The comment ranking filter types */
+export enum CommentRankingFilter {
+  NoneRelevant = 'NONE_RELEVANT',
+  Relevant = 'RELEVANT'
+}
 
 /** The gated publication access criteria contract types */
 export enum ContractType {
@@ -3338,6 +3352,10 @@ export type PublicationsQueryRequest = {
   collectedBy?: InputMaybe<Scalars['EthereumAddress']>;
   /** The publication id you wish to get comments for */
   commentsOf?: InputMaybe<Scalars['InternalPublicationId']>;
+  /** The comment ordering type - only used when you use commentsOf */
+  commentsOfOrdering?: InputMaybe<CommentOrderingTypes>;
+  /** The comment ranking filter, you can use  - only used when you use commentsOf + commentsOfOrdering=ranking */
+  commentsRankingFilter?: InputMaybe<CommentRankingFilter>;
   cursor?: InputMaybe<Scalars['Cursor']>;
   customFilters?: InputMaybe<Array<CustomFiltersTypes>>;
   limit?: InputMaybe<Scalars['LimitScalar']>;
@@ -4460,6 +4478,13 @@ export type RemoveReactionMutationVariables = Exact<{
 
 
 export type RemoveReactionMutation = { __typename?: 'Mutation', removeReaction?: any | null };
+
+export type ReportPublicationMutationVariables = Exact<{
+  request: ReportPublicationRequest;
+}>;
+
+
+export type ReportPublicationMutation = { __typename?: 'Mutation', reportPublication?: any | null };
 
 export type SearchProfilesQueryVariables = Exact<{
   request: SearchQueryRequest;
@@ -6386,6 +6411,20 @@ export const useRemoveReactionMutation = <
     useMutation<RemoveReactionMutation, TError, RemoveReactionMutationVariables, TContext>(
       ['RemoveReaction'],
       (variables?: RemoveReactionMutationVariables) => fetchData<RemoveReactionMutation, RemoveReactionMutationVariables>(RemoveReactionDocument, variables)(),
+      options
+    );
+export const ReportPublicationDocument = `
+    mutation reportPublication($request: ReportPublicationRequest!) {
+  reportPublication(request: $request)
+}
+    `;
+export const useReportPublicationMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<ReportPublicationMutation, TError, ReportPublicationMutationVariables, TContext>) =>
+    useMutation<ReportPublicationMutation, TError, ReportPublicationMutationVariables, TContext>(
+      ['reportPublication'],
+      (variables?: ReportPublicationMutationVariables) => fetchData<ReportPublicationMutation, ReportPublicationMutationVariables>(ReportPublicationDocument, variables)(),
       options
     );
 export const SearchProfilesDocument = `

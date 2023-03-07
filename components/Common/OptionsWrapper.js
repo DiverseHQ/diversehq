@@ -60,7 +60,7 @@ const OptionsWrapper = ({
               position === 'top' ? ' bottom-[25px] right-0' : ''
             } ${position === 'bottom' ? 'top-[25px] right-0' : ''}
             ${position === 'top-right' ? 'bottom-[470px] left-4' : ''}
-            z-50`}
+            z-40`}
           >
             <OptionPopUpModal />
           </div>

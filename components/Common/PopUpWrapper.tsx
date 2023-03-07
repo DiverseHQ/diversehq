@@ -5,6 +5,17 @@ import { BiArrowBack } from 'react-icons/bi'
 import { usePopUpModal } from './CustomPopUpProvider'
 import useDevice from './useDevice'
 
+interface Props {
+  title: string
+  onClick?: () => void
+  label?: string
+  loading?: boolean
+  children?: React.ReactNode
+  hideTopBar?: boolean
+  isDisabled?: boolean
+  closePopup?: () => void
+}
+
 const PopUpWrapper = ({
   title,
   onClick,
@@ -14,7 +25,7 @@ const PopUpWrapper = ({
   hideTopBar = false,
   isDisabled,
   closePopup
-}) => {
+}: Props) => {
   const { hideModal, showModal } = usePopUpModal()
   const { isDesktop } = useDevice()
 

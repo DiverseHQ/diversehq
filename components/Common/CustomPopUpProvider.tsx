@@ -91,10 +91,10 @@ const CustomPopUpModalProvider = ({ children }) => {
             type={modal.type}
             component={modal.component}
             onBackBtnClick={providerVal.hideModal}
-            top={modal.extraaInfo.top ? modal.extraaInfo.top : 'auto'}
-            left={modal.extraaInfo.left ? modal.extraaInfo.left : 'auto'}
-            bottom={modal.extraaInfo.bottom ? modal.extraaInfo.bottom : 'auto'}
-            right={modal.extraaInfo.right ? modal.extraaInfo.right : 'auto'}
+            top={modal?.extraaInfo?.top ?? 'auto'}
+            left={modal?.extraaInfo?.left ?? 'auto'}
+            bottom={modal?.extraaInfo?.bottom ?? 'auto'}
+            right={modal?.extraaInfo?.right ?? 'auto'}
           />
         ))}
         {children}
