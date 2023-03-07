@@ -7,13 +7,19 @@ import {
   useExplorePublicationsQuery
 } from '../../graphql/generated'
 import LensPostCard from './LensPostCard'
-import { LENS_POST_LIMIT } from '../../utils/config.ts'
+import { LENS_POST_LIMIT } from '../../utils/config'
 import { useEffect } from 'react'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useDevice from '../Common/useDevice'
 import useSort from '../Common/Hook/useSort'
-const LensAllTopCommunityPublicationsColumn = ({ communityInfo }) => {
+import { CommunityType } from '../../types/community'
+
+interface Props {
+  communityInfo: CommunityType
+}
+
+const LensAllTopCommunityPublicationsColumn = ({ communityInfo }: Props) => {
   const { data: myLensProfile } = useLensUserContext()
   const { isMobile } = useDevice()
   const { timestamp } = useSort()
@@ -38,7 +44,10 @@ const LensAllTopCommunityPublicationsColumn = ({ communityInfo }) => {
         limit: LENS_POST_LIMIT,
         sortCriteria: PublicationSortCriteria.TopCollected,
         timestamp: timestamp,
-        noRandomize: true
+        noRandomize: true,
+        excludeProfileIds: communityInfo?.bannedUsers.map(
+          (user) => user.profileId
+        )
       },
       reactionRequest: {
         profileId: myLensProfile?.defaultProfile?.id
