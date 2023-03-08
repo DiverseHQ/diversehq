@@ -17,6 +17,12 @@ export const userRoles = {
   NORMAL_USER: 2
 }
 
+export const resolveActions = {
+  IGNORE: 'IGNORE',
+  BAN_USER: 'BAN_USER',
+  HIDE_POST: 'HIDE_POST'
+}
+
 export const notificationTypes = {
   POST: 0,
   COMMENT: 1,

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { BsFileRuled, BsPeopleFill } from 'react-icons/bs'
+import { HiOutlineDocumentReport } from 'react-icons/hi'
 import { MdAddModerator, MdGroups, MdVerified } from 'react-icons/md'
 import { RiUserSettingsLine } from 'react-icons/ri'
 import { CommunityType } from '../../../types/community'
@@ -60,6 +61,13 @@ const SettingsSidebar = ({ community }: { community: CommunityType }) => {
                   )
                 },
                 {
+                  title: 'Reported Posts',
+                  link: `/c/${name}/settings/reports`,
+                  icon: (
+                    <HiOutlineDocumentReport className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+                  )
+                },
+                {
                   title: 'Rules',
                   link: `/c/${name}/settings/rules`,
                   icon: (
@@ -81,6 +89,13 @@ const SettingsSidebar = ({ community }: { community: CommunityType }) => {
                   link: `/c/${name}/settings/user-management`,
                   icon: (
                     <RiUserSettingsLine className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+                  )
+                },
+                {
+                  title: 'Reported Posts',
+                  link: `/c/${name}/settings/reports`,
+                  icon: (
+                    <HiOutlineDocumentReport className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
                   )
                 }
               ]

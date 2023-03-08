@@ -34,13 +34,17 @@ export const getUnresolvedPublicationReportsOfCommunity = async (
 
 export const resolvePublicationReport = async (
   publicationId: string,
-  communityId: string
+  communityId: string,
+  resolveAction: string
 ) => {
   return await fetch(
     `${apiEndpoint}/report/resolve-publication-report/${publicationId}/${communityId}`,
     {
       method: 'PUT',
-      headers: getHeaders()
+      headers: getHeaders(),
+      body: JSON.stringify({
+        resolveAction
+      })
     }
   )
 }

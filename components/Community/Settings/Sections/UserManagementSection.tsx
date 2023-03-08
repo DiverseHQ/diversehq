@@ -27,7 +27,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
     community?.rules[0].title ?? null
   )
   const [extraReason, setExtraReason] = React.useState<string>('')
-  const { notifyInfo } = useNotify()
+  const { notifyInfo, notifyError } = useNotify()
 
   const { data, isLoading } = useProfilesQuery(
     {
@@ -61,7 +61,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
       }
     } catch (error) {
       console.log(error)
-      notifyInfo('Unable to ban the user at the moment')
+      notifyError('Unable to ban the user at the moment')
     }
   }
 

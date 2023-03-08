@@ -84,16 +84,19 @@ const RulesSection = ({ community }: { community: CommunityType }) => {
         ))}
       </div>
       {/* input for title */}
+      <div className="px-5 font-medium text-sm">Add a Rule</div>
       <FormTextInput
         label="Title"
         value={title}
         maxLength={100}
+        placeholder="Rule Title"
         onChange={(e) => setTitle(e.target.value)}
       />
       <FormTextArea
         label="Description"
         value={description}
         maxLength={1000}
+        placeholder="Rule Description"
         onChange={(e) => setDescription(e.target.value)}
       />
       <button
