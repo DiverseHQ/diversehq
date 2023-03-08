@@ -7,7 +7,11 @@ import { useNotificationsCreatedAtQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useProfile } from '../Common/WalletContext'
 
-const useNotificationsCount = () => {
+const useNotificationsCount = (): {
+  notificationsCount: number
+  updateNotificationCount: () => void
+  updateLastFetchedNotificationTime: () => Promise<void>
+} => {
   const [notificationsCount, setNotificationsCount] = useState(0)
   const [lensNotificationsCount, setLensNotificationsCount] = useState(0)
   const { user } = useProfile()
@@ -30,8 +34,8 @@ const useNotificationsCount = () => {
         data?.notifications?.items?.filter(
           (notification) =>
             notification.createdAt >
-            (user.lastFetchedLensNotificationsTime
-              ? user.lastFetchedLensNotificationsTime
+            (user.lastFetchedNotificationsTime
+              ? user.lastFetchedNotificationsTime
               : new Date())
         ).length
       )
@@ -40,16 +44,16 @@ const useNotificationsCount = () => {
 
   const fetchAndSetNotificationCount = async () => {
     const { count } = await getUnReadNotificationsCount()
+    console.log('count', count)
     setNotificationsCount(count)
   }
 
-  const updateNotificationCount = async () => {
+  const updateNotificationCount = () => {
     setNotificationsCount(0)
+    setLensNotificationsCount(0)
   }
 
-  const updateLensNotificationCount = async () => {
-    setLensNotificationsCount(0)
-    //  update lens notification date time in db
+  const updateLastFetchedNotificationTime = async () => {
     try {
       await putUpdateLensNotificationDate()
     } catch (error) {
@@ -66,10 +70,9 @@ const useNotificationsCount = () => {
     }
   }, [user])
   return {
-    notificationsCount,
-    lensNotificationsCount,
+    notificationsCount: notificationsCount + lensNotificationsCount,
     updateNotificationCount,
-    updateLensNotificationCount
+    updateLastFetchedNotificationTime
   }
 }
 

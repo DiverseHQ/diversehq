@@ -1,19 +1,20 @@
+import { URLSearchParams } from 'next/dist/compiled/@edge-runtime/primitives/url'
 import apiEndpoint from './ApiEndpoint'
 import { getHeaders } from './apiHelper'
 
-export const getUserInfo = async (walletAddress) => {
+export const getUserInfo = async (walletAddress: string) => {
   return await fetch(`${apiEndpoint}/user/walletaddress/${walletAddress}`).then(
     (res) => res.json()
   )
 }
 
-export const getUserFromAddressOrName = async (addressOrName) => {
+export const getUserFromAddressOrName = async (addressOrName: string) => {
   return await fetch(`${apiEndpoint}/user/nameoraddress/${addressOrName}`).then(
     (res) => res
   )
 }
 
-export const getWhitelistStatus = async (walletAddress) => {
+export const getWhitelistStatus = async (walletAddress: string) => {
   return await fetch(
     `${apiEndpoint}/user/checkWhitelist/${walletAddress}`
   ).then((res) => res)
@@ -30,18 +31,23 @@ export const postUser = async () => {
     })
 }
 
-export const getUserPosts = async (walletAddress, limit, skips, sortBy) => {
+export const getUserPosts = async (
+  walletAddress: string,
+  limit: number,
+  skips: number,
+  sortBy: string
+) => {
   return await fetch(
     `${apiEndpoint}/post/getPostsOfUser/${walletAddress}?` +
       new URLSearchParams({
-        limit,
-        skips,
+        limit: String(limit),
+        skips: String(skips),
         sortBy
       })
   ).then((res) => res.json())
 }
 
-export const putUpdateUser = async (profileData) => {
+export const putUpdateUser = async (profileData: any) => {
   return await fetch(`${apiEndpoint}/user`, {
     method: 'PUT',
     headers: getHeaders(),
@@ -56,12 +62,12 @@ export const getUnReadNotificationsCount = async () => {
   }).then((res) => res.json())
 }
 
-export const getAllNotifications = async (limit, skips) => {
+export const getAllNotifications = async (limit: number, skips: number) => {
   return await fetch(
     `${apiEndpoint}/user/get-all-notifications?` +
       new URLSearchParams({
-        limit,
-        skips
+        limit: String(limit),
+        skips: String(skips)
       }),
     {
       method: 'GET',
@@ -75,4 +81,21 @@ export const putUpdateLensNotificationDate = async () => {
     method: 'PUT',
     headers: getHeaders()
   }).then((res) => res.json())
+}
+
+export const getAllNotificationBetweenTimes = async (
+  from: string,
+  to: string
+) => {
+  return await fetch(
+    `${apiEndpoint}/user/get-all-notifications-between-time?` +
+      new URLSearchParams({
+        from,
+        to
+      }),
+    {
+      method: 'GET',
+      headers: getHeaders()
+    }
+  )
 }

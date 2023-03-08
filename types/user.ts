@@ -27,6 +27,5 @@ export type UserType = {
   createdAt?: string
   updatedAt?: string
   lastFetchedNotificationsTime?: string
-  lastFetchedLensNotificationsTime?: string
   [key: string]: any
 }

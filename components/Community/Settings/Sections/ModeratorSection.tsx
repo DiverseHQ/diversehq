@@ -35,11 +35,6 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
     }
   )
 
-  React.useEffect(() => {
-    console.log('community.moderators', community?.moderators)
-    console.log('data', data)
-  }, [data])
-
   const handleAddModerators = async () => {
     try {
       setAddingModerators(true)

@@ -79,6 +79,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
         setBannedUsers(newBannedUsers)
       } else {
         const resJson = await res.json()
+        console.log(resJson)
         notifyInfo(resJson.msg)
       }
     } catch (error) {
