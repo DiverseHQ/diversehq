@@ -15,7 +15,7 @@ import {
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Tooltip } from '@mui/material'
 
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
@@ -612,7 +612,7 @@ const CreatePostPopup = () => {
             >
               <option
                 value={null}
-                className="hidden flex flex-row space-x-1 items-center"
+                className="flex flex-row space-x-1 items-center"
               >
                 Flair
               </option>
@@ -621,20 +621,6 @@ const CreatePostPopup = () => {
               <option value="SENSITIVE">Sensitive</option>
               <option value="SPOILER">Spoiler</option>
             </select>
-            <button
-              onClick={() => {
-                if (!isMobile) {
-                  setShowCollectSettings(!showCollectSettings)
-                  return
-                } else {
-                  setIsDrawerOpen(true)
-                }
-              }}
-              disabled={loading}
-              className="rounded-full hover:bg-s-hover p-2 cursor-pointer"
-            >
-              <BsCollection className="w-5 h-5" />
-            </button>
             {/* )} */}
             {/* <img src="/lensLogoWithoutText.svg" className="w-5" /> */}
             {/* <Switch
@@ -700,11 +686,33 @@ const CreatePostPopup = () => {
               )}
             </div>
             <div
-              className="ml-6"
+              className="ml-6 flex gap-2 items-center"
               // onClick={(e) => {
               //   e.stopPropagation()
               // }}
             >
+              <Tooltip
+                placement="bottom"
+                enterDelay={1000}
+                leaveDelay={200}
+                title="Collect Setting"
+                arrow
+              >
+                <button
+                  onClick={() => {
+                    if (!isMobile) {
+                      setShowCollectSettings(!showCollectSettings)
+                      return
+                    } else {
+                      setIsDrawerOpen(true)
+                    }
+                  }}
+                  disabled={loading}
+                  className="rounded-full hover:bg-s-hover active:bg-s-hover p-2 cursor-pointer"
+                >
+                  <BsCollection className="w-5 h-5" />
+                </button>
+              </Tooltip>
               <Giphy setGifAttachment={setGifAttachment} />
             </div>
             <input
@@ -738,7 +746,7 @@ const CreatePostPopup = () => {
                 onClick={() => {
                   setIsDrawerOpen(false)
                 }}
-                className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl mb-6"
+                className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center w-full text-xl mb-6"
               >
                 Save
               </button>

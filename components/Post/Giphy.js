@@ -22,13 +22,20 @@ const Giphy = ({ setGifAttachment }) => {
           left={gifButtonRef?.current?.getBoundingClientRect().left + 'px'}
         />
       )}
-      <Tooltip placement="bottom" arrow title="Add GIF">
+      <Tooltip
+        placement="bottom"
+        arrow
+        title="Add GIF"
+        enterDelay={1000}
+        leaveDelay={200}
+      >
         <button
           type="button"
           onClick={() => setShowGiphyModal(!showGiphyModal)}
           aria-label="Choose GIFs"
           id="giphy-button"
           ref={gifButtonRef}
+          className="rounded-full hover:bg-s-hover active:bg-s-hover p-2 cursor-pointer"
         >
           <div className="fill-p-text w-full">
             <svg viewBox="0 0 24 24" className="h-5 w-5">
