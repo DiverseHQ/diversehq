@@ -279,3 +279,24 @@
   outline-offset: 0.4rem;
   outline: none;
 }
+[data-rmiz-content="found"] img {
+  cursor: pointer !important;
+}
+[data-rmiz-content="found"] svg {
+  cursor: pointer !important;
+}
+[data-rmiz-content="found"] [role="img"] {
+  cursor: pointer !important;
+}
+[data-rmiz-content="found"] [data-zoom] {
+  cursor: pointer !important;
+}
+[data-rmiz-btn-zoom] {
+  cursor: pointer;
+}
+.custom-zoom [data-rmiz-modal-img] {
+  cursor: pointer;
+}
+.custom-zoom [data-rmiz-btn-unzoom] {
+  cursor: pointer;
+}
