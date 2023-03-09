@@ -10,7 +10,7 @@ export const reportPublicationToCommunityMods = async (
 ) => {
   return await fetch(`${apiEndpoint}/report/report-publication`, {
     method: 'PUT',
-    headers: getHeaders(),
+    headers: await getHeaders(),
     body: JSON.stringify({
       publicationId,
       communityId,
@@ -27,7 +27,7 @@ export const getUnresolvedPublicationReportsOfCommunity = async (
   return await fetch(
     `${apiEndpoint}/report/unresolved-publication-reports/${communityId}`,
     {
-      headers: getHeaders()
+      headers: await getHeaders()
     }
   )
 }
@@ -41,7 +41,7 @@ export const resolvePublicationReport = async (
     `${apiEndpoint}/report/resolve-publication-report/${publicationId}/${communityId}`,
     {
       method: 'PUT',
-      headers: getHeaders(),
+      headers: await getHeaders(),
       body: JSON.stringify({
         resolveAction
       })

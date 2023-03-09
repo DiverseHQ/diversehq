@@ -23,7 +23,7 @@ export const getWhitelistStatus = async (walletAddress: string) => {
 export const postUser = async () => {
   return await fetch(`${apiEndpoint}/user`, {
     method: 'POST',
-    headers: getHeaders()
+    headers: await getHeaders()
   })
     .then((r) => r.json())
     .then((res) => {
@@ -50,7 +50,7 @@ export const getUserPosts = async (
 export const putUpdateUser = async (profileData: any) => {
   return await fetch(`${apiEndpoint}/user`, {
     method: 'PUT',
-    headers: getHeaders(),
+    headers: await getHeaders(),
     body: JSON.stringify(profileData)
   }).then((r) => r)
 }
@@ -58,7 +58,7 @@ export const putUpdateUser = async (profileData: any) => {
 export const getUnReadNotificationsCount = async () => {
   return await fetch(`${apiEndpoint}/user/unread-notification-count`, {
     method: 'GET',
-    headers: getHeaders()
+    headers: await getHeaders()
   }).then((res) => res.json())
 }
 
@@ -71,7 +71,7 @@ export const getAllNotifications = async (limit: number, skips: number) => {
       }),
     {
       method: 'GET',
-      headers: getHeaders()
+      headers: await getHeaders()
     }
   ).then((res) => res.json())
 }
@@ -79,7 +79,7 @@ export const getAllNotifications = async (limit: number, skips: number) => {
 export const putUpdateLensNotificationDate = async () => {
   return await fetch(`${apiEndpoint}/user/update-lens-notif-time`, {
     method: 'PUT',
-    headers: getHeaders()
+    headers: await getHeaders()
   }).then((res) => res.json())
 }
 
@@ -95,7 +95,7 @@ export const getAllNotificationBetweenTimes = async (
       }),
     {
       method: 'GET',
-      headers: getHeaders()
+      headers: await getHeaders()
     }
   )
 }

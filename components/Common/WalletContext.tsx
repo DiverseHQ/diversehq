@@ -1,16 +1,16 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
 import {
-  useAccount,
-  useDisconnect,
+  useAccount
+  // useDisconnect,
   //  useProvider,
-  useSigner
+  // useSigner
   //  useDisconnect
 } from 'wagmi'
-import Web3Token from 'web3-token'
+// import Web3Token from 'web3-token'
 import {
   getLocalToken,
-  removeLocalToken,
-  setLocalToken
+  removeLocalToken
+  // setLocalToken
 } from '../../utils/token'
 import { getUserInfo } from '../../api/user'
 import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
@@ -25,36 +25,34 @@ interface ContextType {
   refreshUserInfo: () => void
   user: UserType
   loading: boolean
-  // eslint-disable-next-line
-  fetchWeb3Token: (useEffectCalled?: boolean) => void
 }
 
 export const WalletContext = createContext<ContextType>(null)
 
 export const WalletProvider = ({ children }) => {
   const [user, setUser] = useState<UserType>(null)
-  const { data: signer } = useSigner()
+  // const { data: signer } = useSigner()
   const { notifyInfo } = useNotify()
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
-  const { disconnect } = useDisconnect()
+  // const { disconnect } = useDisconnect()
   const queryClient = useQueryClient()
-  const { refetch } = useLensUserContext()
+  const { refetch, isSignedIn, hasProfile } = useLensUserContext()
 
   useEffect(() => {
-    if (signer && address) {
-      if (getLocalToken()) {
-        fetchWeb3Token(true)
-      }
+    if (isSignedIn && hasProfile && address) {
+      // fetchWeb3Token(true)
+      console.log('refreshing user info')
+      refreshUserInfo()
     }
-  }, [signer, address])
+  }, [isSignedIn, hasProfile, address])
 
   const handleDisconnected = async () => {
     setUser(null)
     setLoading(false)
-    if (getLocalToken()) {
-      removeLocalToken()
-    }
+    // if (getLocalToken()) {
+    //   removeLocalToken()
+    // }
     removeAccessTokenFromStorage()
     await queryClient.invalidateQueries({
       queryKey: ['lensUser', 'defaultProfile']
@@ -92,78 +90,76 @@ export const WalletProvider = ({ children }) => {
     }
   }
 
-  const fetchWeb3Token = async (useEffectCalled = false) => {
-    try {
-      let existingTokenOnLocalStorage = null
-      existingTokenOnLocalStorage = getLocalToken()
+  // const fetchWeb3Token = async (useEffectCalled = false) => {
+  //   try {
+  //     let existingTokenOnLocalStorage = null
+  //     existingTokenOnLocalStorage = getLocalToken()
 
-      try {
-        //return if token is already in local storage and is not expired
-        if (existingTokenOnLocalStorage) {
-          const web3Token = Web3Token.verify(existingTokenOnLocalStorage)
-          if (web3Token.address.toLowerCase() !== address.toLowerCase()) {
-            removeLocalToken()
-            removeAccessTokenFromStorage()
-            setUser(null)
-            setLoading(false)
-            return
-          } else if (
-            web3Token &&
-            new Date(web3Token?.body['expiration-time']) > new Date()
-          ) {
-            await refreshUserInfo()
-            return
-          }
-        }
-      } catch (error) {
-        if (useEffectCalled) {
-          console.log('error from verfiying token', error)
-          if (getLocalToken()) {
-            removeLocalToken()
-          }
-          removeAccessTokenFromStorage()
-          await queryClient.invalidateQueries({
-            queryKey: ['lensUser', 'defaultProfile']
-          })
-          await refetch()
-          disconnect()
-        }
-        return
-      }
-      if (useEffectCalled) return
+  //     try {
+  //       //return if token is already in local storage and is not expired
+  //       if (existingTokenOnLocalStorage) {
+  //         const web3Token = Web3Token.verify(existingTokenOnLocalStorage)
+  //         if (web3Token.address.toLowerCase() !== address.toLowerCase()) {
+  //           removeLocalToken()
+  //           removeAccessTokenFromStorage()
+  //           setUser(null)
+  //           setLoading(false)
+  //           return
+  //         } else if (
+  //           web3Token &&
+  //           new Date(web3Token?.body['expiration-time']) > new Date()
+  //         ) {
+  //           await refreshUserInfo()
+  //           return
+  //         }
+  //       }
+  //     } catch (error) {
+  //       if (useEffectCalled) {
+  //         console.log('error from verfiying token', error)
+  //         if (getLocalToken()) {
+  //           removeLocalToken()
+  //         }
+  //         removeAccessTokenFromStorage()
+  //         await queryClient.invalidateQueries({
+  //           queryKey: ['lensUser', 'defaultProfile']
+  //         })
+  //         await refetch()
+  //         disconnect()
+  //       }
+  //       return
+  //     }
+  //     if (useEffectCalled) return
 
-      //if token is not in local storage or is expired, fetch a new one and save it to local storage and state
-      if (!signer) {
-        alert('No Signer but trying to sign in')
-      }
-      console.log('requesting signature from metamask')
+  //     //if token is not in local storage or is expired, fetch a new one and save it to local storage and state
+  //     if (!signer) {
+  //       alert('No Signer but trying to sign in')
+  //     }
+  //     console.log('requesting signature from metamask')
 
-      const signedToken = await Web3Token.sign(async (msg) => {
-        try {
-          return await signer.signMessage(msg)
-        } catch (err) {
-          const { reason } = err
-          if (reason === 'unknown account #0') {
-            return console.log(
-              'Have you unlocked metamask and are connected to this page?'
-            )
-          }
-          disconnect()
+  //     const signedToken = await Web3Token.sign(async (msg) => {
+  //       try {
+  //         return await signer.signMessage(msg)
+  //       } catch (err) {
+  //         const { reason } = err
+  //         if (reason === 'unknown account #0') {
+  //           return console.log(
+  //             'Have you unlocked metamask and are connected to this page?'
+  //           )
+  //         }
+  //         disconnect()
 
-          console.log(err.toString())
-        }
-      }, '7d')
+  //         console.log(err.toString())
+  //       }
+  //     }, '7d')
 
-      setLocalToken(signedToken)
-      await refreshUserInfo()
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  //     setLocalToken(signedToken)
+  //     await refreshUserInfo()
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
   return (
-    <WalletContext.Provider
-      value={{ address, refreshUserInfo, user, fetchWeb3Token, loading }}
-    >
+    <WalletContext.Provider value={{ address, refreshUserInfo, user, loading }}>
       {children}
     </WalletContext.Provider>
   )

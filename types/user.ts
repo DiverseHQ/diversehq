@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { CommunityType } from './community'
+// import { CommunityType } from './community'
 
 // eslint-disable-next-line
 enum userRole {
