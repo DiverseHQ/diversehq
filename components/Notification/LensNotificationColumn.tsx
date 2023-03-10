@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
+  Notification,
   NotificationTypes,
   useNotificationsQuery
 } from '../../graphql/generated'
@@ -11,13 +12,22 @@ import LensLoginButton from '../Common/LensLoginButton'
 import { useProfile } from '../Common/WalletContext'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useDevice from '../Common/useDevice'
+import { getAllNotificationBetweenTimes } from '../../api/user'
+import NotificationCard from './NotificationCard'
+import getProfiles from '../../lib/profile/get-profiles'
+import { NotificationSchema } from '../../types/notification'
+import useNotificationsCount from './useNotificationsCount'
 
 const LensNotificationColumn = () => {
-  const [notifications, setNotifications] = useState([])
+  const [notifications, setNotifications] = useState<
+    Notification[] | NotificationSchema[]
+  >([])
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState(null)
   const [nextCursor, setNextCursor] = useState(null)
   const { isMobile } = useDevice()
+  const { updateLastFetchedNotificationTime, updateNotificationCount } =
+    useNotificationsCount()
 
   const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   const { data } = useNotificationsQuery(
@@ -60,7 +70,49 @@ const LensNotificationColumn = () => {
 
   const handleNotifications = async () => {
     if (data.notifications.items.length > 0) {
-      setNotifications([...notifications, ...data.notifications.items])
+      const newNotifications = data.notifications.items
+      // add offchain notifications to newNotifications and sort it on createdAt
+      let from = newNotifications[newNotifications.length - 1].createdAt
+      let to = newNotifications[0].createdAt
+      if (notifications.length === 0) {
+        to = new Date().toISOString()
+      }
+      try {
+        const res = await getAllNotificationBetweenTimes(from, to)
+        if (res.status === 200) {
+          const offChainNotifications: NotificationSchema[] = await res.json()
+
+          const { profiles } = await getProfiles({
+            ownedBy: offChainNotifications.map((n) => n.sender.walletAddress)
+          })
+
+          const defaultProfiles = profiles.items.filter((p) => p.isDefault)
+          for (let i = 0; i < offChainNotifications.length; i++) {
+            // @ts-ignore
+            offChainNotifications[i].senderLensProfile = defaultProfiles.find(
+              (p) =>
+                p.ownedBy.toLowerCase() ===
+                offChainNotifications[i].sender.walletAddress.toLowerCase()
+            )
+          }
+
+          // @ts-ignore
+          newNotifications.push(...offChainNotifications)
+
+          // sort on createdAt
+          newNotifications.sort((a, b) => {
+            // @ts-ignore
+            return new Date(b.createdAt) - new Date(a.createdAt)
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
+      console.log('newNotifications', newNotifications)
+
+      // @ts-ignore
+      setNotifications([...notifications, ...newNotifications])
     }
     if (data.notifications.items.length === 0) {
       setHasMore(false)
@@ -76,9 +128,15 @@ const LensNotificationColumn = () => {
 
   const { user, refreshUserInfo } = useProfile()
 
+  const cleanUp = async () => {
+    refreshUserInfo()
+    updateNotificationCount()
+    await updateLastFetchedNotificationTime()
+  }
+
   useEffect(() => {
-    return async () => {
-      await refreshUserInfo()
+    return () => {
+      cleanUp()
     }
   }, [])
   return (
@@ -173,14 +231,19 @@ const LensNotificationColumn = () => {
               endMessage={<></>}
             >
               {notifications.map((notification, index) => {
+                if (notification?._id) {
+                  return (
+                    <NotificationCard key={index} notification={notification} />
+                  )
+                }
                 return (
                   <LensNotificationCard
                     key={index}
                     notification={notification}
                     isRead={
                       notification.createdAt <
-                      (user?.lastFetchedLensNotificationsTime
-                        ? user?.lastFetchedLensNotificationsTime
+                      (user?.lastFetchedNotificationsTime
+                        ? user?.lastFetchedNotificationsTime
                         : new Date())
                     }
                   />

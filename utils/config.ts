@@ -2,7 +2,7 @@ export const POST_LIMIT: number = 10
 export const COMMENT_LIMIT: number = 10
 export const LENS_POST_LIMIT: number = 10
 export const LENS_COMMENT_LIMIT: number = 10
-export const LENS_NOTIFICATION_LIMIT: number = 10
+export const LENS_NOTIFICATION_LIMIT: number = 8
 export const NOTIFICATION_LIMIT: number = 10
 export const COMMUNITY_LIMIT: number = 5
 export const MAX_CONTENT_LINES: number = 4
@@ -17,11 +17,25 @@ export const userRoles = {
   NORMAL_USER: 2
 }
 
+export const resolveActions = {
+  IGNORE: 'IGNORE',
+  BAN_USER: 'BAN_USER',
+  HIDE_POST: 'HIDE_POST'
+}
+
 export const notificationTypes = {
   POST: 0,
   COMMENT: 1,
   UPVOTE_POST: 2,
-  UPVOTE_COMMENT: 3
+  UPVOTE_COMMENT: 3,
+  BAN_USER: 4,
+  TIMEOUT_USER: 5,
+  BAN_PUBLICATION: 6,
+  BAN_COMMENT: 7,
+  MODERATOR_ASSIGNED: 8,
+  MODERATOR_REMOVED: 9,
+  PUBLICATION_REPORT_ACTION_TAKEN: 10,
+  UNBAN_USER: 11
 }
 
 export const sortTypes = {

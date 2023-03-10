@@ -11,7 +11,7 @@ export const STORAGE_KEY = 'LH_STORAGE_KEY'
 
 /* eslint-disable */
 
-async function getAccessToken(): Promise<string | null> {
+export async function getAccessToken(): Promise<string | null> {
   const tokenValue = readAccessTokenFromStorage()
 
   // If the token is not in localStorage, then the user is not logged in

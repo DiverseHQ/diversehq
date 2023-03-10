@@ -34,9 +34,11 @@ import Attachment from './Attachment'
 import MirrorButton from './MirrorButton'
 import CenteredDot from '../Common/UI/CenteredDot'
 import formatHandle from '../User/lib/formatHandle'
-import { IoIosShareAlt } from 'react-icons/io'
+import { IoIosFlag, IoIosShareAlt } from 'react-icons/io'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { postWithCommunityInfoType } from '../../types/post'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import ReportPopUp from './Report/ReportPopUp'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -47,6 +49,7 @@ interface Props {
 const LensPostCard = ({ post }: Props) => {
   const { isMobile } = useDevice()
   const { notifyInfo } = useNotify()
+  const { showModal } = usePopUpModal()
   const [reaction, setReaction] = useState(post?.reaction)
   const [upvoteCount, setUpvoteCount] = useState(post?.stats.totalUpvotes)
   const [downvoteCount, setDownvoteCount] = useState(post?.stats.totalDownvotes)
@@ -235,6 +238,22 @@ const LensPostCard = ({ post }: Props) => {
     } else {
       notifyInfo('Sharing is not supported on your device')
     }
+  }
+
+  const handleReportPost = () => {
+    if (!isSignedIn) {
+      notifyInfo('How about loging in lens, first?')
+      return
+    }
+    showModal({
+      component: (
+        <ReportPopUp
+          publicationId={postInfo?.id}
+          communityId={postInfo?.communityInfo?._id}
+        />
+      ),
+      type: modalType.normal
+    })
   }
 
   return (
@@ -436,6 +455,13 @@ const LensPostCard = ({ post }: Props) => {
                                   icon: () => (
                                     <HiOutlineTrash className="mr-1.5 w-6 h-6" />
                                   )
+                                },
+                                {
+                                  label: 'Report',
+                                  onClick: handleReportPost,
+                                  icon: () => (
+                                    <IoIosFlag className="mr-1.5 w-6 h-6" />
+                                  )
                                 }
                               ]
                             : [
@@ -444,6 +470,13 @@ const LensPostCard = ({ post }: Props) => {
                                   onClick: sharePost,
                                   icon: () => (
                                     <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                  )
+                                },
+                                {
+                                  label: 'Report',
+                                  onClick: handleReportPost,
+                                  icon: () => (
+                                    <IoIosFlag className="mr-1.5 w-6 h-6" />
                                   )
                                 }
                               ]
@@ -462,46 +495,63 @@ const LensPostCard = ({ post }: Props) => {
                       title="More"
                       arrow
                     >
-                      <div className="hover:bg-s-hover active:bg-s-hover  rounded-md p-1.5 cursor-pointer ml-1">
+                      <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
                         <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </Tooltip>
                   </OptionsWrapper>
                 ) : (
-                  isAuthor && (
-                    <OptionsWrapper
-                      OptionPopUpModal={() => (
-                        <MoreOptionsModal
-                          className="z-50"
-                          list={[
-                            {
-                              label: 'Delete Post',
-                              onClick: handleDeletePost,
-                              icon: () => (
-                                <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                              )
-                            }
-                          ]}
-                        />
-                      )}
-                      position="left"
-                      showOptionsModal={showOptionsModal}
-                      setShowOptionsModal={setShowOptionsModal}
-                      isDrawerOpen={isDrawerOpen}
-                      setIsDrawerOpen={setIsDrawerOpen}
+                  <OptionsWrapper
+                    OptionPopUpModal={() => (
+                      <MoreOptionsModal
+                        className="z-50"
+                        list={
+                          isAuthor
+                            ? [
+                                {
+                                  label: 'Report',
+                                  onClick: handleReportPost,
+                                  icon: () => (
+                                    <IoIosFlag className="mr-1.5 w-6 h-6" />
+                                  )
+                                },
+                                {
+                                  label: 'Delete Post',
+                                  onClick: handleDeletePost,
+                                  icon: () => (
+                                    <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                                  )
+                                }
+                              ]
+                            : [
+                                {
+                                  label: 'Report',
+                                  onClick: handleReportPost,
+                                  icon: () => (
+                                    <IoIosFlag className="mr-1.5 w-6 h-6" />
+                                  )
+                                }
+                              ]
+                        }
+                      />
+                    )}
+                    position="left"
+                    showOptionsModal={showOptionsModal}
+                    setShowOptionsModal={setShowOptionsModal}
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                  >
+                    <Tooltip
+                      enterDelay={1000}
+                      leaveDelay={200}
+                      title="More"
+                      arrow
                     >
-                      <Tooltip
-                        enterDelay={1000}
-                        leaveDelay={200}
-                        title="More"
-                        arrow
-                      >
-                        <div className="hover:bg-s-hover active:bg-s-hover rounded-md p-1.5 ml-1 cursor-pointer">
-                          <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                        </div>
-                      </Tooltip>
-                    </OptionsWrapper>
-                  )
+                      <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
+                        <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </div>
+                    </Tooltip>
+                  </OptionsWrapper>
                 )}
               </div>
             </span>

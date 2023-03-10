@@ -9,7 +9,7 @@ export const postComment = async (
 ): Promise<CommentType> => {
   return await fetch(`${apiEndpoint}/comment`, {
     method: 'POST',
-    headers: getHeaders(),
+    headers: await getHeaders(),
     body: JSON.stringify({
       content,
       postId,
@@ -21,7 +21,7 @@ export const postComment = async (
 export const putEditComment = async (commentId: string, content: string) => {
   return await fetch(`${apiEndpoint}/comment/edit/${commentId}`, {
     method: 'PUT',
-    headers: getHeaders(),
+    headers: await getHeaders(),
     body: JSON.stringify({ content })
   }).then((res) => res)
 }
@@ -29,7 +29,7 @@ export const putEditComment = async (commentId: string, content: string) => {
 export const deleteComment = async (commentId: string) => {
   return await fetch(`${apiEndpoint}/comment/${commentId}`, {
     method: 'DELETE',
-    headers: getHeaders()
+    headers: await getHeaders()
   }).then((r) => r.json())
 }
 
@@ -40,7 +40,7 @@ export const getCommentFromCommentId = async (commentId: string) => {
 export const putLikeComment = async (commentId: string) => {
   return await fetch(`${apiEndpoint}/comment/like/${commentId}`, {
     method: 'PUT',
-    headers: getHeaders()
+    headers: await getHeaders()
   }).then((res) => res)
 }
 
@@ -63,13 +63,13 @@ export const getCommentsFromPostId = async (
 export const putUpvoteComment = async (commentId: string) => {
   return await fetch(`${apiEndpoint}/comment/upvote/${commentId}`, {
     method: 'PUT',
-    headers: getHeaders()
+    headers: await getHeaders()
   }).then((res) => res)
 }
 
 export const putDownvoteComment = async (commentId: string) => {
   return await fetch(`${apiEndpoint}/comment/downvote/${commentId}`, {
     method: 'PUT',
-    headers: getHeaders()
+    headers: await getHeaders()
   })
 }

@@ -1,16 +1,17 @@
 import React from 'react'
 import { getCommunityInfo } from '../../../../api/community'
 import AuthCommunity from '../../../../components/Community/AuthCommunity'
-import RulesSettingsPage from '../../../../components/Community/Settings/RulesSettingsPage'
+import ReportsSettingsPage from '../../../../components/Community/Settings/ReportsSettingsPage'
 import { CommunityType } from '../../../../types/community'
 
-const rules = ({ community }: { community: CommunityType }) => {
+const reports = ({ community }: { community: CommunityType }) => {
   return (
     <AuthCommunity>
-      <RulesSettingsPage community={community} />
+      <ReportsSettingsPage community={community} />
     </AuthCommunity>
   )
 }
+
 export async function getServerSideProps({
   params = {}
 }: {
@@ -37,5 +38,4 @@ export async function getServerSideProps({
     }
   }
 }
-
-export default rules
+export default reports

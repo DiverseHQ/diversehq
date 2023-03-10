@@ -11,7 +11,8 @@ import useNotificationCount from './useNotificationsCount'
 const NotificationColumn = () => {
   const [notifications, setNotifications] = useState([])
   const [hasMore, setHasMore] = useState(true)
-  const { updateNotificationCount } = useNotificationCount()
+  const { updateNotificationCount, updateLastFetchedNotificationTime } =
+    useNotificationCount()
   const { user } = useProfile()
   const { isMobile } = useDevice()
 
@@ -34,6 +35,7 @@ const NotificationColumn = () => {
   useEffect(() => {
     if (user) {
       updateNotificationCount()
+      updateLastFetchedNotificationTime()
       getMoreNotifications()
     }
   }, [user])

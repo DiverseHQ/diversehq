@@ -6,8 +6,14 @@ import { MAX_CONTENT_LINES } from '../../utils/config'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { GoMention } from 'react-icons/go'
 import formatHandle from '../User/lib/formatHandle'
+import { NewMentionNotification } from '../../graphql/generated'
 
-const LensNotificationMentionCard = ({ notification, isRead }) => {
+interface Props {
+  notification: NewMentionNotification
+  isRead: boolean
+}
+
+const LensNotificationMentionCard = ({ notification, isRead }: Props) => {
   const [showMore, setShowMore] = useState(
     countLinesFromMarkdown(
       notification?.mentionPublication?.metadata?.content

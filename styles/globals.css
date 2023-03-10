@@ -124,21 +124,23 @@
     outline: none !important;
   }
 
-  input,
-  textarea,
-  button,
-  select,
-  a,
-  div,
-  p,
-  span {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  @media only screen and (max-width: 768px) {
+    input,
+    textarea,
+    button,
+    select,
+    a,
+    div,
+    p,
+    span {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
   }
 
   /* Track */
@@ -212,7 +214,7 @@
 
   /* --border-primary: #c4c4c4; */
   --border-primary: #9378d8;
-  --border-secondary: #cccccc;
+  --border-secondary: #e5e5e7;
 
   --background-pop: #00000038;
 

@@ -5,12 +5,8 @@ import useNotificationsCount from '../Notification/useNotificationsCount'
 import { scrollToTop } from '../../lib/helpers'
 
 const MobileBottomNav = () => {
-  const {
-    // notificationsCount,
-    lensNotificationsCount,
-    updateLensNotificationCount,
-    updateNotificationCount
-  } = useNotificationsCount()
+  const { notificationsCount, updateNotificationCount } =
+    useNotificationsCount()
   const [active, setActive] = useState('home')
   const router = useRouter()
   const setIsOpen = useMessageStore((state) => state.setIsOpen)
@@ -29,7 +25,6 @@ const MobileBottomNav = () => {
   }
 
   const routeToNotifications = async () => {
-    await updateLensNotificationCount()
     await updateNotificationCount()
     router.push('/notification')
   }
@@ -128,9 +123,9 @@ const MobileBottomNav = () => {
             className="w-[23px] h-[23px]"
           />
         </div>
-        {Number(lensNotificationsCount) > 0 && (
+        {Number(notificationsCount) > 0 && (
           <div className="absolute top-2 right-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg dark:border-s-bg">
-            <span>{lensNotificationsCount}</span>
+            <span>{notificationsCount}</span>
             {/* <span>10</span> */}
           </div>
         )}

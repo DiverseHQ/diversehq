@@ -5,6 +5,15 @@ import React from 'react'
 
 import ReactTimeAgo from 'react-time-ago'
 
+interface Props {
+  MainRow: React.FC
+  Body: React.FC
+  createdAt: string
+  Icon: React.FC
+  isRead: boolean
+  cardLink: string
+}
+
 const CommonNotificationCardLayoutUI = ({
   MainRow,
   Body,
@@ -12,7 +21,7 @@ const CommonNotificationCardLayoutUI = ({
   Icon,
   isRead,
   cardLink
-}) => {
+}: Props) => {
   return (
     <Link href={cardLink}>
       <div className="flex flex-col px-2 w-full relative">
@@ -27,7 +36,11 @@ const CommonNotificationCardLayoutUI = ({
             </div>
           </div>
           <div className="items-end shrink-0 text-sm sm:text-base pl-1">
-            <ReactTimeAgo timeStyle="twitter" date={createdAt} locale="en-US" />
+            <ReactTimeAgo
+              timeStyle="twitter"
+              date={new Date(createdAt)}
+              locale="en-US"
+            />
           </div>
         </div>
         {!isRead && (

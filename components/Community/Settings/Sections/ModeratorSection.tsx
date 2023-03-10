@@ -35,11 +35,6 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
     }
   )
 
-  React.useEffect(() => {
-    console.log('community.moderators', community?.moderators)
-    console.log('data', data)
-  }, [data])
-
   const handleAddModerators = async () => {
     try {
       setAddingModerators(true)
@@ -158,7 +153,8 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
       {/* list of moderators */}
       <div className="font-medium text-sm">
         Moderators (
-        {data?.profiles?.items?.filter((profile) => profile?.isDefault)?.length}
+        {data?.profiles?.items?.filter((profile) => profile?.isDefault)
+          ?.length ?? 0}
         )
       </div>
       <div>
@@ -168,43 +164,40 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
             <div className="text-sm text-s-text">Loading...</div>
           </div>
         )}
-        {data?.profiles?.items
-          ?.filter((profile) => profile?.isDefault)
-          .map((profile) => (
-            <div
-              className="flex flex-row w-full items-center justify-between space-x-2 py-2 border-b border-s-border"
-              key={profile?.id}
-            >
-              <div className="flex flex-row items-center space-x-2">
-                <ImageWithPulsingLoader
-                  className="w-8 h-8 rounded-full bg-p-bg"
-                  // @ts-ignore
-                  src={getAvatar(profile)}
-                />
-                {profile?.name && (
-                  <div className="text-sm font-medium">{profile.name}</div>
-                )}
-                <div className="text-sm text-s-text font-medium">
-                  u/{formatHandle(profile.handle)}
-                </div>
-                <MessageButton userLensProfile={profile} />
-              </div>
-              <Tooltip
-                title={`Remove u/${formatHandle(profile.handle)}`}
-                arrow
-                placement="top"
+        {data?.profiles &&
+          data?.profiles?.items
+            ?.filter((profile) => profile?.isDefault)
+            .map((profile) => (
+              <div
+                className="flex flex-row w-full items-center justify-between space-x-2 py-2 border-b border-s-border"
+                key={profile?.id}
               >
-                <div
-                  className="text-s-text cursor-pointer p-1 hover:bg-s-hover rounded-full"
-                  onClick={() => {
-                    handleRemoveModerator(profile.ownedBy)
-                  }}
-                >
-                  <CgClose className="w-5 h-5" />
+                <div className="flex flex-row items-center space-x-2">
+                  <ImageWithPulsingLoader
+                    className="w-8 h-8 rounded-full bg-p-bg"
+                    // @ts-ignore
+                    src={getAvatar(profile)}
+                  />
+                  {profile?.name && (
+                    <div className="text-sm font-medium">{profile.name}</div>
+                  )}
+                  <div className="text-sm text-s-text font-medium">
+                    u/{formatHandle(profile.handle)}
+                  </div>
+                  <MessageButton userLensProfile={profile} />
                 </div>
-              </Tooltip>
-            </div>
-          ))}
+                <Tooltip title={`Remove from mods`} arrow placement="top">
+                  <div
+                    className="text-s-text cursor-pointer p-1 hover:bg-s-hover rounded-full"
+                    onClick={() => {
+                      handleRemoveModerator(profile.ownedBy)
+                    }}
+                  >
+                    <CgClose className="w-5 h-5" />
+                  </div>
+                </Tooltip>
+              </div>
+            ))}
       </div>
     </div>
   )

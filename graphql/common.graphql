@@ -511,7 +511,7 @@ fragment ReferenceModuleFields on ReferenceModule {
   }
 }
 
-fragment Erc20OwnershipFields on Erc20OwnershipOutput {
+fragment Erc20TokenOwnershipFields on Erc20TokenOwnershipOutput {
   contractAddress
   amount
   chainID
@@ -574,7 +574,7 @@ fragment SimpleConditionFields on AccessConditionOutput {
     ...EoaOwnershipFields
   }
   token {
-    ...Erc20OwnershipFields
+    ...Erc20TokenOwnershipFields
   }
   profile {
     ...ProfileOwnershipFields

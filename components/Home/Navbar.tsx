@@ -38,15 +38,11 @@ const Navbar = () => {
   const recentCommunities =
     JSON.parse(window.localStorage.getItem('recentCommunities')) || []
 
-  const {
-    // notificationsCount,
-    lensNotificationsCount,
-    updateLensNotificationCount,
-    updateNotificationCount
-  } = useNotificationsCount()
+  const { notificationsCount, updateNotificationCount } =
+    useNotificationsCount()
 
   const routeToNotifications = async () => {
-    await updateLensNotificationCount()
+    updateNotificationCount()
     updateNotificationCount()
     router.push('/notification')
   }
@@ -261,9 +257,9 @@ const Navbar = () => {
           >
             <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
             {/* a green count dot */}
-            {Number(lensNotificationsCount) > 0 && (
+            {Number(notificationsCount) > 0 && (
               <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg dark:border-s-bg">
-                <span>{lensNotificationsCount}</span>
+                <span>{notificationsCount}</span>
               </div>
             )}
           </button>

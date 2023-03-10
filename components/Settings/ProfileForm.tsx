@@ -45,6 +45,7 @@ const ProfileForm = () => {
   const [saving, setSaving] = useState(false)
   const [profileBanner, setProfileBanner] = useState(null)
   const [profileImage, setProfileImage] = useState(
+    // @ts-ignore
     getAvatar(lensProfile?.defaultProfile)
   )
   const [profileBannerFile, setProfileBannerFile] = useState(null)
@@ -69,6 +70,7 @@ const ProfileForm = () => {
 
   useEffect(() => {
     handleSetProfileBannerFromLensProfile()
+    // @ts-ignore
     setProfileImage(getAvatar(lensProfile?.defaultProfile))
     setName(lensProfile?.defaultProfile?.name)
     setBio(lensProfile?.defaultProfile?.bio)
@@ -352,6 +354,7 @@ const ProfileForm = () => {
                   onClick={() => {
                     profileImageInputRef.current.value = ''
                     setProfileImageFile(null)
+                    // @ts-ignore
                     setProfileImage(getAvatar(lensProfile?.defaultProfile))
                   }}
                 >
@@ -386,7 +389,6 @@ const ProfileForm = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           maxLength={32}
-          required
           disabled={saving}
         />
         {/* <FormTextInput

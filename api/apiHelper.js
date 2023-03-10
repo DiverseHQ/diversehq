@@ -1,11 +1,13 @@
-import { getLocalToken } from '../utils/token'
+import { getAccessToken } from '../auth-fetcher'
+// import { getLocalToken } from '../utils/token'
 
-export const getHeaders = () => {
-  let token = getLocalToken()
+export const getHeaders = async () => {
+  // let token = getLocalToken()
+  let token = await getAccessToken()
   if (token) {
     return {
       'Content-Type': 'application/json',
-      Authorization: getLocalToken()
+      Authorization: token
     }
   } else {
     return {

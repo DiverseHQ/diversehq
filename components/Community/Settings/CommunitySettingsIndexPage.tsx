@@ -9,6 +9,7 @@ import CommunitySettingsPage from './CommunitySettingsPage'
 import { useRouter } from 'next/router'
 import useIsCreator from '../hook/useIsCreator'
 import { CommunityType } from '../../../types/community'
+import { HiOutlineDocumentReport } from 'react-icons/hi'
 // import AuthCreatorOfCommunity from '../AuthCreatorOfCommunity'
 // import AuthCommunity from '../AuthCommunity'
 
@@ -48,24 +49,28 @@ const CommunitySettingsIndexPage = ({
                     link: `/c/${name}/settings/moderators`,
                     icon: (
                       <MdAddModerator className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                    )
                   },
                   {
                     title: 'User Management',
                     link: `/c/${name}/settings/user-management`,
                     icon: (
                       <RiUserSettingsLine className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                    )
+                  },
+                  {
+                    title: 'Reported Posts',
+                    link: `/c/${name}/settings/reports`,
+                    icon: (
+                      <HiOutlineDocumentReport className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+                    )
                   },
                   {
                     title: 'Rules',
                     link: `/c/${name}/settings/rules`,
                     icon: (
                       <BsFileRuled className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                    )
                   },
                   {
                     title: 'Verification',
@@ -82,16 +87,14 @@ const CommunitySettingsIndexPage = ({
                     link: `/c/${name}/settings/user-management`,
                     icon: (
                       <RiUserSettingsLine className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                    )
                   },
                   {
-                    title: 'Rules',
-                    link: `/c/${name}/settings/rules`,
+                    title: 'Reported Posts',
+                    link: `/c/${name}/settings/reports`,
                     icon: (
-                      <BsFileRuled className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-                    ),
-                    disabled: true
+                      <HiOutlineDocumentReport className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+                    )
                   }
                 ]
           }

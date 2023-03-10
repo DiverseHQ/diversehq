@@ -38,6 +38,8 @@ import { appId, supportedMimeTypes } from '../../utils/config'
 import { IoIosArrowBack } from 'react-icons/io'
 import PublicationEditor from '../Lexical/PublicationEditor'
 import Giphy from '../Post/Giphy'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import OptionsWrapper from '../Common/OptionsWrapper'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
@@ -97,6 +99,7 @@ const CreatePostPopup = () => {
   const [selectedCommunity, setSelectedCommunity] = useState(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [gifAttachment, setGifAttachment] = useState(null)
+  const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   useEffect(() => {
     console.log('gifAttachment', gifAttachment)
@@ -455,6 +458,7 @@ const CreatePostPopup = () => {
     if (loading) return
     setFile(null)
     setImageValue(null)
+    setGifAttachment(null)
     if (firebaseUrl) {
       await deleteFirebaseStorageFile(firebaseUrl)
       setFirebaseUrl(null)
@@ -548,6 +552,19 @@ const CreatePostPopup = () => {
     }
   }
 
+  const closePopUp = async () => {
+    if (loading) return
+    if (firebaseUrl && !imageUpload && !result) {
+      await deleteFirebaseStorageFile(firebaseUrl)
+      console.log('File Deleted and the Popup has been closed')
+      hideModal()
+      return
+    } else if (!loading && !imageUpload && !result) {
+      console.log('Popup has been closed, No files detected')
+      hideModal()
+    }
+  }
+
   useEffect(() => {
     if (!file) return
     if (file && !firebaseUrl) upLoadFile()
@@ -565,6 +582,7 @@ const CreatePostPopup = () => {
         loading={loading}
         isDisabled={!communityId || title.length === 0 || imageUpload}
         hideTopBar={showCollectSettings}
+        closePopup={closePopUp}
       >
         <div className="flex flex-row items-center justify-between px-4 z-50">
           {showCollectSettings ? (
@@ -602,25 +620,71 @@ const CreatePostPopup = () => {
               showCollectSettings ? 'hidden' : ''
             }`}
           >
-            <select
-              onChange={(e) => {
-                e.preventDefault()
-                setFlair(e.target.value)
-              }}
-              className="bg-p-bg border border-s-border outline-none mr-2 px-1 py-1 rounded-md text-p-text"
-              value={flair}
+            <OptionsWrapper
+              OptionPopUpModal={() => (
+                <MoreOptionsModal
+                  className="z-50"
+                  list={[
+                    {
+                      label: 'None',
+                      onClick: () => {
+                        setFlair('None')
+                        setShowOptionsModal(false)
+                      }
+                    },
+                    {
+                      label: 'NSFW',
+                      onClick: () => {
+                        setFlair('NSFW')
+                        setShowOptionsModal(false)
+                      }
+                    },
+                    {
+                      label: 'Sensitive',
+                      onClick: () => {
+                        setFlair('SENSITIVE')
+                        setShowOptionsModal(false)
+                      }
+                    },
+                    {
+                      label: 'Spoiler',
+                      onClick: () => {
+                        setFlair('SPOILER')
+                        setShowOptionsModal(false)
+                      }
+                    }
+                  ]}
+                />
+              )}
+              position="bottom"
+              showOptionsModal={showOptionsModal}
+              setShowOptionsModal={setShowOptionsModal}
             >
-              <option
-                value={null}
-                className="flex flex-row space-x-1 items-center"
+              <button
+                onClick={() => {
+                  setShowOptionsModal(!showOptionsModal)
+                }}
+                className="flex items-center hover:cursor-pointer space-x-1 sm:space-x-2 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full border border-s-border "
               >
-                Flair
-              </option>
-              <option value="">None</option>
-              <option value="NSFW">NSFW</option>
-              <option value="SENSITIVE">Sensitive</option>
-              <option value="SPOILER">Spoiler</option>
-            </select>
+                <p>{flair ? flair : 'Flair'}</p>
+                <AiOutlineDown className="w-4 h-4 mx-1" />
+              </button>
+            </OptionsWrapper>
+
+            <button
+              onClick={() => {
+                if (!isMobile) {
+                  setShowCollectSettings(!showCollectSettings)
+                  return
+                } else {
+                  setIsDrawerOpen(true)
+                }
+              }}
+              disabled={loading}
+              className="rounded-full hover:bg-s-hover p-2 cursor-pointer"
+            >
+              <BsCollection className="w-5 h-5" />
+            </button>
             {/* )} */}
             {/* <img src="/lensLogoWithoutText.svg" className="w-5" /> */}
             {/* <Switch

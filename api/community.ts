@@ -1,5 +1,5 @@
 import apiEndpoint from './ApiEndpoint'
-import { CommunityType } from '../types/community'
+import { BannedUser, CommunityType, Rule } from '../types/community'
 import { getHeaders } from './apiHelper'
 
 export const getPostOfCommunity = async (
@@ -60,7 +60,7 @@ export const postGetCommunityInfoUsingListOfIds = async (
       `${apiEndpoint}/community/community-info-using-list-of-ids`,
       {
         method: 'POST',
-        headers: getHeaders(),
+        headers: await getHeaders(),
         body: JSON.stringify({
           communityIds: communityIds
         })
@@ -74,14 +74,14 @@ export const postGetCommunityInfoUsingListOfIds = async (
 export const putJoinCommunity = async (communityId: string) => {
   return await fetch(`${apiEndpoint}/community/join/${communityId}`, {
     method: 'PUT',
-    headers: getHeaders()
-  }).then((res) => res.json())
+    headers: await getHeaders()
+  })
 }
 
 export const putLeaveCommunity = async (communityId: string) => {
   return await fetch(`${apiEndpoint}/community/leave/${communityId}`, {
     method: 'PUT',
-    headers: getHeaders()
+    headers: await getHeaders()
   }).then((res) => res.json())
 }
 
@@ -118,7 +118,7 @@ export const getNotJoinedCommunities = async (
           sortBy
         }),
       {
-        headers: getHeaders()
+        headers: await getHeaders()
       }
     ).then((res) => res.json())
   } catch (error) {
@@ -139,7 +139,7 @@ export const getAllCommunitiesIds = async () => {
 export const postCreateCommunity = async (communityData: CommunityType) => {
   return await fetch(`${apiEndpoint}/community`, {
     method: 'POST',
-    headers: getHeaders(),
+    headers: await getHeaders(),
     body: JSON.stringify(communityData)
   }).then((res) => res)
 }
@@ -149,7 +149,7 @@ export const putEditCommunity = async (communityData: CommunityType) => {
     `${apiEndpoint}/community/edit/${communityData.communityId}`,
     {
       method: 'PUT',
-      headers: getHeaders(),
+      headers: await getHeaders(),
       body: JSON.stringify(communityData)
     }
   ).then((res) => res)
@@ -176,7 +176,7 @@ export const searchCommunityFromName = async (
 export const getJoinedCommunitiesApi = async (): Promise<CommunityType[]> => {
   try {
     return await fetch(`${apiEndpoint}/community/getJoinedCommunitiesOfUser`, {
-      headers: getHeaders()
+      headers: await getHeaders()
     }).then((res) => res.json())
   } catch (error) {
     console.log(error)
@@ -187,7 +187,7 @@ export const getJoinedCommunitiesApi = async (): Promise<CommunityType[]> => {
 export const getCreatedCommunitiesApi = async (): Promise<CommunityType[]> => {
   try {
     return await fetch(`${apiEndpoint}/community/getCreatedCommunitiesOfUser`, {
-      headers: getHeaders()
+      headers: await getHeaders()
     }).then((res) => res.json())
   } catch (error) {
     console.log(error)
@@ -200,7 +200,7 @@ export const isCreatorOrModeratorOfCommunity = async (name: string) => {
     return await fetch(
       `${apiEndpoint}/community/${name}/isCreatorOrModeratorOfCommunity`,
       {
-        headers: getHeaders()
+        headers: await getHeaders()
       }
     )
   } catch (error) {
@@ -215,7 +215,7 @@ export const addModeratorsToCommunity = async (
   try {
     return await fetch(`${apiEndpoint}/community/${name}/add-moderators`, {
       method: 'PUT',
-      headers: getHeaders(),
+      headers: await getHeaders(),
       body: JSON.stringify({
         moderators
       })
@@ -232,9 +232,57 @@ export const removeModeratorFromCommunity = async (
   try {
     return await fetch(`${apiEndpoint}/community/${name}/remove-moderator`, {
       method: 'PUT',
-      headers: getHeaders(),
+      headers: await getHeaders(),
       body: JSON.stringify({
         moderator
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const setRulesOfCommunity = async (name: string, rules: Rule[]) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/set-rules`, {
+      method: 'PUT',
+      headers: await getHeaders(),
+      body: JSON.stringify({
+        rules
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const addBannedUserToCommunity = async (
+  name: string,
+  bannedUser: BannedUser
+) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/add-banned-user`, {
+      method: 'PUT',
+      headers: await getHeaders(),
+      body: JSON.stringify({
+        bannedUser
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const removeBannedUserFromCommunity = async (
+  name: string,
+  bannedUserAddress: string
+) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/${name}/remove-banned-user`, {
+      method: 'PUT',
+      headers: await getHeaders(),
+      body: JSON.stringify({
+        bannedUserAddress
       })
     })
   } catch (error) {
