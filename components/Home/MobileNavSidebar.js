@@ -7,7 +7,7 @@ import { useProfile } from '../Common/WalletContext'
 // import { AiOutlineGift } from 'react-icons/ai'
 import { MdOutlineGroups } from 'react-icons/md'
 // import CreateCommunity from './CreateCommunity'
-import { MdCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
+// import { MdCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
 // import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
 // import { usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -180,7 +180,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <span className="text-p-text text-xl">Settings</span>
             </button>
             <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
-            <button
+            {/* <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
                 createCommunity()
@@ -190,7 +190,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <MdCreateNewFolder className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Create Community</span>
             </button>{' '}
-            */}
+             */}
             <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
