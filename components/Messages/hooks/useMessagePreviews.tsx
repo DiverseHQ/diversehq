@@ -58,7 +58,6 @@ const useMessagePreviews = () => {
 
   const getProfileFromKey = (key: string): string | null => {
     const parsed = parseConversationKey(key)
-    console.log('parsed', parsed)
     const userProfileId = lensProfile?.defaultProfile?.id
     if (!parsed || !userProfileId) {
       return null
@@ -70,7 +69,6 @@ const useMessagePreviews = () => {
     if (profilesLoading) {
       return
     }
-    console.log('profileids setting to query', profileIds)
     const toQuery = new Set(profileIds)
     // Don't both querying for already seen profiles
     // for (const profile of Array.from(messageProfiles.values())) {
@@ -87,11 +85,9 @@ const useMessagePreviews = () => {
       const chunks = chunkArray(Array.from(toQuery), MAX_PROFILES_PER_REQUEST)
       try {
         for (const chunk of chunks) {
-          console.log('chunk', chunk)
           const result = await getProfiles({
             profileIds: chunk
           })
-          console.log('result', result)
           if (!result?.profiles.items.length) {
             continue
           }
@@ -170,7 +166,6 @@ const useMessagePreviews = () => {
         )
         newConversations.set(key, convo)
         const profileId = getProfileFromKey(key)
-        console.log('new profileid from conversation', profileId)
         if (profileId && !profileIds.has(profileId)) {
           newProfileIds.add(profileId)
           setProfileIds(newProfileIds)
@@ -223,7 +218,6 @@ const useMessagePreviews = () => {
 
       for (const preview of previews) {
         const profileId = getProfileFromKey(preview.key)
-        console.log('new profileid from message', profileId)
         if (profileId) {
           newProfileIds.add(profileId)
         }
@@ -231,12 +225,9 @@ const useMessagePreviews = () => {
           newPreviewMessages.set(preview.key, preview.message)
         }
       }
-      console.log('newConversations', newConversations)
-      console.log('newPreviewMessages', newPreviewMessages)
       setPreviewMessages(newPreviewMessages)
       setConversations(newConversations)
       setMessagesLoading(false)
-      console.log('newProfileIds', newProfileIds)
       if (newProfileIds.size > profileIds.size) {
         setProfileIds(newProfileIds)
       }

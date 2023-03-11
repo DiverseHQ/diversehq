@@ -17,4 +17,13 @@ const getIPFSLink = (hash: string): string => {
     .replace('ipfs://', gateway)
 }
 
+export const isIpfsHashLink = (hash: string): boolean => {
+  if (!hash) {
+    return false
+  }
+  let regex =
+    /^((ipfs:\/\/|https:\/\/ipfs\.io\/ipfs\/)?)Qm[1-9A-HJKa-km-z]{44}$/
+  return regex.test(hash)
+}
+
 export default getIPFSLink

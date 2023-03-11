@@ -35,3 +35,14 @@ export const getLevelAndThresholdXP = (totalXP: number) => {
     thresholdXP
   }
 }
+
+export const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
+export const shortFormOfLink = (link: string) => {
+  return link.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
+}

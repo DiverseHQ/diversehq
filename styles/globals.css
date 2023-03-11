@@ -124,21 +124,23 @@
     outline: none !important;
   }
 
-  input,
-  textarea,
-  button,
-  select,
-  a,
-  div,
-  p,
-  span {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  @media only screen and (max-width: 768px) {
+    input,
+    textarea,
+    button,
+    select,
+    a,
+    div,
+    p,
+    span {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
   }
 
   /* Track */
@@ -164,16 +166,45 @@
   }
 }
 
+/** CSS overrides for audio player **/
+.plyr {
+  @apply rounded-lg;
+}
+
+.plyr__control--overlaid {
+  @apply !bg-[#9378d8];
+}
+
+.plyr--full-ui input[type='range'] {
+  @apply !text-[#fff];
+}
+
+.plyr__control {
+  @apply !bg-[#9378d8];
+}
+
+.plyr--audio .plyr__controls {
+  @apply !bg-transparent !text-white;
+}
+
+.plyr--audio .plyr__control {
+  @apply hover:!bg-transparent;
+}
+
+.plyr--audio.plyr--full-ui input[type='range'] {
+  @apply !text-white;
+}
+
 :root {
-  --background: #eef1ff;
+  --background: #f9f9f9;
   --background-secondary: #ffffff;
   /* --accent-primary: #1d9bf0; */
   --accent-primary: #9378d8;
   --accent-primary-disabled: #9c93ad;
   --accent-secondary: theme('colors.purple.600');
   /* --accent-hover: theme('colors.purple.500'); */
-  --accent-hover: #d2daff;
-  --accent-hover-secondary: #e4e4e4;
+  --accent-hover: #ede9fe;
+  --accent-hover-secondary: #f4f4f5;
 
   --text-primary: #000000;
   --text-secondary: #687684;
@@ -183,7 +214,7 @@
 
   /* --border-primary: #c4c4c4; */
   --border-primary: #9378d8;
-  --border-secondary: #cccccc;
+  --border-secondary: #e5e5e7;
 
   --background-pop: #00000038;
 
@@ -201,6 +232,12 @@
   --main-btn-text: #9378d8;
   --main-btn-hover-bg: #9378d8;
   --main-btn-hover-text: #ffffff;
+
+  --select-btn-bg: #ffffff;
+  --select-btn-text: #030303;
+  --select-btn-hover-bg: #f4f4f5;
+  --select-active-btn-bg: #030303;
+  --select-active-btn-text: #ffffff;
 }
 
 [data-theme='dark'] {
@@ -228,6 +265,12 @@
   --main-btn-text: #ffffff;
   --main-btn-hover-bg: #d7dadc;
   --main-btn-hover-text: #1a1a1b;
+
+  --select-btn-bg: #272727;
+  --select-btn-text: #fbfbfb;
+  --select-btn-hover-bg: #3b3b3b;
+  --select-active-btn-bg: #ffffff;
+  --select-active-btn-text: #464646;
 }
 
 .custom-zoom [data-rmiz-modal-overlay='visible'] {

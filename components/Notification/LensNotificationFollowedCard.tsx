@@ -4,6 +4,7 @@ import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { SlUserFollow } from 'react-icons/sl'
 import { NewFollowerNotification } from '../../graphql/generated'
 import useLensFollowButton from '../User/useLensFollowButton'
+import formatHandle from '../User/lib/formatHandle'
 
 interface Props {
   notification: NewFollowerNotification
@@ -19,26 +20,36 @@ const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
       MainRow={() => (
         <div className="flex flex-row">
           <div className="pr-2">
-            <span>
+            <span onClick={(e) => e.stopPropagation()}>
               <Link
-                href={`/u/${notification?.wallet?.defaultProfile?.handle}`}
-                className="font-bold hover:underline"
+                href={`/u/${formatHandle(
+                  notification?.wallet?.defaultProfile?.handle
+                )}`}
               >
-                u/{notification?.wallet?.defaultProfile?.handle}
+                <div className="font-bold hover:underline">
+                  u/{formatHandle(notification?.wallet?.defaultProfile?.handle)}
+                </div>
               </Link>{' '}
             </span>
             {notification?.wallet?.defaultProfile?.isFollowedByMe && 'finally '}
             followed you
           </div>
-          {!notification?.wallet?.defaultProfile?.isFollowedByMe && (
-            <FollowButton />
-          )}
+          <div>
+            {!notification?.wallet?.defaultProfile?.isFollowedByMe && (
+              <span onClick={(e) => e.stopPropagation()}>
+                <FollowButton />
+              </span>
+            )}
+          </div>
         </div>
       )}
       createdAt={notification?.createdAt}
       Body={() => <></>}
       Icon={() => <SlUserFollow />}
       isRead={isRead}
+      cardLink={`/u/${formatHandle(
+        notification?.wallet?.defaultProfile?.handle
+      )}`}
     />
   )
 }

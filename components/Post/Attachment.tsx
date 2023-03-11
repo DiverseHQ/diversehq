@@ -1,116 +1,103 @@
-import { useRouter } from 'next/router'
-import React, { FC } from 'react'
+// import { useRouter } from 'next/router'
+import React, { FC, useState } from 'react'
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 import { Publication } from '../../graphql/generated'
-import {
-  SUPPORTED_AUDIO_TYPE,
-  SUPPORTED_IMAGE_TYPE,
-  SUPPORTED_VIDEO_TYPE
-} from '../../utils/config'
-import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+import { getURLsFromText } from '../../utils/utils'
+import useDevice from '../Common/useDevice'
 import getIPFSLink from '../User/lib/getIPFSLink'
-import imageProxy from '../User/lib/imageProxy'
+import AttachmentCarousel from './AttachmentCarousel'
+import AttachmentMedia from './AttachmentMedia'
+import ReactEmbedo from './embed/ReactEmbedo'
 
 interface Props {
   publication: Publication
   className: String
-  showAll?: boolean
 }
 
-const Attachment: FC<Props> = ({ publication, className, showAll = false }) => {
+const Attachment: FC<Props> = ({ publication, className }) => {
   const medias = publication?.metadata?.media
-  const router = useRouter()
-  const getCoverUrl = () => {
-    return (
-      publication?.metadata?.cover?.original.url || publication?.metadata?.image
-    )
-  }
-  if (medias.length === 0) return <></>
 
-  if (!showAll) {
-    const media = medias[0]
-    const type = media.original.mimeType
-    const url = getIPFSLink(media.original.url)
+  const [currentMedia, setCurrentMedia] = useState(0)
 
-    return (
-      <>
-        {type === 'image/svg+xml' ? (
-          <button onClick={() => window.open(url, '_blank')}>
-            Open Image in new tab
-          </button>
-        ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
-          <VideoWithAutoPause
-            src={imageProxy(url)}
-            className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-            controls
-            muted
-            poster={getCoverUrl}
-          />
-        ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
-          <audio src={url} className={`${className}`} loop controls muted />
-        ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
-          router.pathname.startsWith('/p/') ? (
-            <ImageWithFullScreenZoom
-              src={url}
-              className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
-              alt={publication?.metadata?.content}
-            />
-          ) : (
-            <ImageWithPulsingLoader
-              src={url}
-              className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
-              alt={publication?.metadata?.content}
-            />
-          )
-        ) : (
-          <></>
-        )}
-      </>
-    )
+  const handleNextClick = () => {
+    if (currentMedia === medias.length - 1) {
+      setCurrentMedia(0)
+    } else {
+      setCurrentMedia(currentMedia + 1)
+    }
   }
+
+  const handlePrevClick = () => {
+    if (currentMedia === 0) {
+      setCurrentMedia(medias.length - 1)
+    } else {
+      setCurrentMedia(currentMedia - 1)
+    }
+  }
+
+  const { isMobile } = useDevice()
+
+  if (medias.length === 0) {
+    if (getURLsFromText(publication?.metadata?.content)?.length > 0) {
+      return (
+        <ReactEmbedo url={getURLsFromText(publication?.metadata?.content)[0]} />
+      )
+    } else return null
+  }
+
   return (
     <>
-      {medias.map((media) => {
-        const type = media.original.mimeType
-        const url = getIPFSLink(media.original.url)
-
-        return (
-          <>
-            {type === 'image/svg+xml' ? (
-              <button onClick={() => window.open(url, '_blank')}>
-                Open Image in new tab
-              </button>
-            ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
-              <VideoWithAutoPause
-                src={imageProxy(url)}
-                className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                controls
-                muted
-                poster={getCoverUrl}
-              />
-            ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
-              <audio src={url} className={`${className}`} loop controls muted />
-            ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
-              router.pathname.startsWith('/p/') ? (
-                <ImageWithFullScreenZoom
-                  src={url}
-                  className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
-                  alt={publication?.metadata?.content}
-                />
-              ) : (
-                <ImageWithPulsingLoader
-                  src={url}
-                  className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
-                  alt={publication?.metadata?.content}
-                />
-              )
-            ) : (
-              <></>
-            )}
-          </>
-        )
-      })}
+      {isMobile ? (
+        <div
+          className="relative flex flex-col justify-center items-center overflow-x-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AttachmentCarousel
+            publication={publication}
+            medias={medias}
+            className={`${medias.length > 1 ? 'h-[450px]' : className}`}
+          />
+        </div>
+      ) : (
+        <div className="relative" onClick={(e) => e.stopPropagation()}>
+          {medias.length > 1 && (
+            <>
+              {currentMedia !== 0 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handlePrevClick()
+                  }}
+                  className="absolute left-0 top-[50%] z-20 p-1 rounded-full translate-x-[50%] -translate-y-[50%] hover:bg-m-btn-bg hover:text-m-btn-text bg-m-btn-hover-bg text-m-btn-hover-text transition-all duration-300"
+                >
+                  <AiOutlineArrowLeft className="w-6 h-6" />
+                </button>
+              )}
+              {currentMedia !== medias.length - 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleNextClick()
+                  }}
+                  className="absolute right-0 top-[50%] z-20 p-1 rounded-full -translate-x-[50%] -translate-y-[50%] hover:bg-m-btn-bg hover:text-m-btn-text bg-m-btn-hover-bg text-m-btn-hover-text transition-all duration-300"
+                >
+                  <AiOutlineArrowRight className="w-6 h-6" />
+                </button>
+              )}
+              <div className="absolute top-[10px] right-[10px] z-20 bg-p-bg py-0.5 px-2 rounded-full">
+                {currentMedia + 1}/{medias.length}
+              </div>
+            </>
+          )}
+          <AttachmentMedia
+            type={medias[currentMedia].original.mimeType}
+            url={getIPFSLink(medias[currentMedia].original.url)}
+            publication={publication}
+            className={`${medias.length > 1 ? 'h-[450px]' : className}`}
+            // className={className}
+          />
+        </div>
+      )}
     </>
   )
 }

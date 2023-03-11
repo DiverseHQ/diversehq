@@ -2,12 +2,12 @@ export const POST_LIMIT: number = 10
 export const COMMENT_LIMIT: number = 10
 export const LENS_POST_LIMIT: number = 10
 export const LENS_COMMENT_LIMIT: number = 10
-export const LENS_NOTIFICATION_LIMIT: number = 10
+export const LENS_NOTIFICATION_LIMIT: number = 8
 export const NOTIFICATION_LIMIT: number = 10
 export const COMMUNITY_LIMIT: number = 5
 export const MAX_CONTENT_LINES: number = 4
 export const MAX_CONTENT_LINES_FOR_POST: number = 6
-export const LENS_SEARCH_PROFILE_LIMIT: number = 4
+export const LENS_SEARCH_PROFILE_LIMIT: number = 6
 export const LensInfuraEndpoint: string = 'https://lens.infura-ipfs.io/ipfs/'
 export const LENS_INFINITE_SCROLL_THRESHOLD: number = 0.5
 
@@ -17,11 +17,25 @@ export const userRoles = {
   NORMAL_USER: 2
 }
 
+export const resolveActions = {
+  IGNORE: 'IGNORE',
+  BAN_USER: 'BAN_USER',
+  HIDE_POST: 'HIDE_POST'
+}
+
 export const notificationTypes = {
   POST: 0,
   COMMENT: 1,
   UPVOTE_POST: 2,
-  UPVOTE_COMMENT: 3
+  UPVOTE_COMMENT: 3,
+  BAN_USER: 4,
+  TIMEOUT_USER: 5,
+  BAN_PUBLICATION: 6,
+  BAN_COMMENT: 7,
+  MODERATOR_ASSIGNED: 8,
+  MODERATOR_REMOVED: 9,
+  PUBLICATION_REPORT_ACTION_TAKEN: 10,
+  UNBAN_USER: 11
 }
 
 export const sortTypes = {
@@ -92,8 +106,70 @@ export const SUPPORTED_AUDIO_TYPE: string[] = [
   'audio/mpeg',
   'audio/ogg'
 ]
+/* eslint-disable */
 
 // XP and Level configs
 export const baseXP = 200
 export const xpMultiplier = 4
 export const xpPerMember = 10
+export const apiMode: string = 'dev'
+export const isMainnet: boolean = apiMode === 'mainnet'
+export const HANDLE_SUFFIX: string = isMainnet ? '.lens' : '.test'
+
+// Named transforms
+export const AVATAR = 'avatar'
+export const COVER = 'cover'
+export const ATTACHMENT = 'attachment'
+
+// lens appId and its information
+export const infoFromLensAppId = {
+  lenster: {
+    appId: 'lenster',
+    logoLink: 'https://lenster.xyz/logo.svg',
+    name: 'Lenster',
+    description:
+      'Lenster is a decentralized, and permissionless social media app built with Lens Protocol 🌿',
+    link: 'https://lenster.xyz'
+  },
+  orb: {
+    appId: 'orb',
+    logoLink:
+      'https://pbs.twimg.com/profile_images/1554199747560230912/uthjq-0D_400x400.jpg',
+    name: 'Orb',
+    description: 'Super App for Social Media.',
+    link: 'https://orb.ac'
+  },
+  lenstube: {
+    appId: 'lenstube',
+    logoLink: 'https://static.lenstube.xyz/images/brand/lenstube.svg',
+    name: 'Lenstube',
+    description:
+      'Decentralized, open-source video-sharing social media platform, built on Lens Protocol.',
+    link: 'https://lenstube.xyz'
+  },
+  phaver: {
+    appId: 'phaver',
+    logoLink:
+      'https://pbs.twimg.com/profile_images/1610386741931741184/JYAM_Y7T_400x400.jpg',
+    name: 'Phaver',
+    description: 'The Gateway to Web3 Social',
+    link: 'https://phaver.com'
+  },
+  wav3s: {
+    appId: 'wav3s',
+    logoLink:
+      'https://pbs.twimg.com/profile_images/1608995874255912961/d2peMxs__400x400.jpg',
+    name: 'Wav3s',
+    description: 'Your content promoted through web3 social media.',
+    link: 'https://wav3s.app/'
+  },
+  lensport: {
+    appId: 'lensport',
+    logoLink: 'https://lensport.io/static/media/lensport_icon.e4bdb518.png',
+    name: 'Lensport',
+    description: 'Discover, collect, and sell amazing posts.',
+    link: 'https://lensport.io'
+  }
+}
+
+export const appId = 'diversehq'

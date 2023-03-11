@@ -108,6 +108,12 @@ fragment MetadataOutputFields on MetadataOutput {
   description
   content
   contentWarning
+  image
+  cover {
+    original {
+      url
+    }
+  }
   media {
     original {
       ...MediaFields
@@ -173,9 +179,26 @@ fragment PostFields on Post {
   appId
   hidden
   reaction(request: $reactionRequest)
-  mirrors(by: null)
+  mirrors(by: $profileId)
   hasCollectedByMe
+  canComment(profileId: $profileId) {
+    result
+  }
+  canMirror(profileId: $profileId) {
+    result
+  }
+  canDecrypt(profileId: $profileId) {
+    result
+    reasons
+  }
   isGated
+}
+
+fragment StatsFields on PublicationStats {
+  totalUpvotes
+  totalAmountOfMirrors
+  totalAmountOfCollects
+  totalAmountOfComments
 }
 
 fragment MirrorBaseFields on Mirror {
@@ -185,6 +208,7 @@ fragment MirrorBaseFields on Mirror {
   }
   stats {
     ...PublicationStatsFields
+    ...StatsFields
   }
   metadata {
     ...MetadataOutputFields
@@ -204,15 +228,64 @@ fragment MirrorBaseFields on Mirror {
 }
 
 fragment MirrorFields on Mirror {
-  ...MirrorBaseFields
+  id
+  profile {
+    ...ProfileFields
+  }
+  reaction(request: $reactionRequest)
+  isGated
+  canComment(profileId: $profileId) {
+    result
+  }
+  canMirror(profileId: $profileId) {
+    result
+  }
+  canDecrypt(profileId: $profileId) {
+    result
+    reasons
+  }
+  collectModule {
+    ...CollectModuleFields
+  }
+  stats {
+    ...StatsFields
+  }
+  metadata {
+    ...MetadataFields
+  }
+  hidden
   mirrorOf {
     ... on Post {
       ...PostFields
     }
     ... on Comment {
-      ...CommentFields
+      id
+      profile {
+        ...ProfileFields
+      }
+      collectNftAddress
+      reaction(request: $reactionRequest)
+      mirrors(by: $profileId)
+      onChainContentURI
+      isGated
+      canComment(profileId: $profileId) {
+        result
+      }
+      canMirror(profileId: $profileId) {
+        result
+      }
+      canDecrypt(profileId: $profileId) {
+        result
+        reasons
+      }
+      stats {
+        ...StatsFields
+      }
+      createdAt
     }
   }
+  createdAt
+  appId
 }
 
 fragment CommentBaseFields on Comment {
@@ -259,6 +332,9 @@ fragment CommentFields on Comment {
         }
       }
     }
+  }
+  metadata {
+    ...MetadataFields
   }
 }
 
@@ -565,5 +641,54 @@ fragment EncryptedMediaSetFields on EncryptedMediaSet {
   }
   medium {
     ...EncryptedMediaFields
+  }
+}
+
+fragment RelayerResultFields on RelayResult {
+  ... on RelayerResult {
+    txHash
+    txId
+  }
+  ... on RelayError {
+    reason
+  }
+}
+fragment MetadataFields on MetadataOutput {
+  name
+  content
+  image
+  attributes {
+    traitType
+    value
+  }
+  cover {
+    original {
+      url
+    }
+  }
+  media {
+    original {
+      url
+      mimeType
+    }
+  }
+  encryptionParams {
+    accessCondition {
+      or {
+        criteria {
+          ...SimpleConditionFields
+          and {
+            criteria {
+              ...SimpleConditionFields
+            }
+          }
+          or {
+            criteria {
+              ...SimpleConditionFields
+            }
+          }
+        }
+      }
+    }
   }
 }

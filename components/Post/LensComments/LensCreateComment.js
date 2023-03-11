@@ -8,15 +8,20 @@ import {
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
-import { uploadToIpfsInfuraAndGetPath } from '../../../utils/utils'
+import {
+  stringToLength,
+  uploadToIpfsInfuraAndGetPath
+} from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
-import { useProfile } from '../../Common/WalletContext'
 import useDevice from '../../Common/useDevice'
 import { FiSend } from 'react-icons/fi'
-import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import getAvatar from '../../../components/User/lib/getAvatar'
 import { useCommentStore } from '../../../store/comment'
 import ReplyMobileInfo from './ReplyMobileInfo'
+import Giphy from '../Giphy'
+import { AiOutlineClose } from 'react-icons/ai'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import formatHandle from '../../User/lib/formatHandle'
 const LensCreateComment = ({ postId, addComment, postInfo }) => {
   const [focused, setFocused] = useState(false)
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -38,11 +43,11 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
 
   const commentRef = useRef()
   const [loading, setLoading] = useState(false)
+  const [gifAttachment, setGifAttachment] = useState(null)
 
   // todo: add appreciate amoount using contract
 
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
-  const { user } = useProfile()
   const { isMobile } = useDevice()
 
   const onSuccessCreateComment = async (tx, tempId) => {
@@ -55,7 +60,8 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
           }
         },
         id: lensProfile?.defaultProfile?.id,
-        handle: lensProfile?.defaultProfile?.handle
+        handle: lensProfile?.defaultProfile?.handle,
+        name: lensProfile?.defaultProfile?.name
       },
       createdAt: new Date().toISOString(),
       metadata: {
@@ -68,35 +74,59 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
       reaction: ReactionTypes.Upvote
     }
     setLoading(false)
+    if (commentRef?.current) {
+      commentRef.current.value = ''
+      commentRef.current.style.height = 'auto'
+      commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
+    }
     addComment(tx, comment)
     setCurrentReplyComment(null)
-    commentRef.current.value = ''
-    commentRef.current.style.height = 'auto'
-    commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
+    setGifAttachment(null)
   }
 
   const createComment = async () => {
     if (!lensProfile?.defaultProfile?.id) return
     const content = commentRef.current.value
-    if (!content || content === '') return
+    if (!gifAttachment && (content.trim() === '' || !content)) return
     setLoading(true)
+    let mainContentFocus = null
+
+    if (gifAttachment) {
+      mainContentFocus = PublicationMainFocus.Image
+      console.log('gifAttachment while posting', gifAttachment)
+    } else {
+      mainContentFocus = PublicationMainFocus.TextOnly
+      console.log('textOnly')
+    }
+
     try {
       const metadata_id = uuidv4()
       setTempId(tempId)
       const ipfsHash = await uploadToIpfsInfuraAndGetPath({
         version: '2.0.0',
-        mainContentFocus: PublicationMainFocus.TextOnly,
+        mainContentFocus: mainContentFocus,
         metadata_id: metadata_id,
         description: content,
         locale: 'en-US',
         content: content,
         external_url: 'https://diversehq.xyz',
-        image: null,
-        imageMimeType: null,
+        image: gifAttachment ? gifAttachment?.images?.original.url : null,
+        imageMimeType: gifAttachment ? 'image/gif' : null,
+        animation_url: gifAttachment
+          ? gifAttachment?.images?.original.url
+          : null,
         name: 'Create with DiverseHQ',
         attributes: [],
         tags: [],
-        appId: 'DiverseHQ'
+        appId: 'DiverseHQ',
+        media: gifAttachment
+          ? [
+              {
+                item: gifAttachment?.images?.original.url,
+                type: 'image/gif'
+              }
+            ]
+          : null
       })
       const createCommentRequest = {
         profileId: lensProfile?.defaultProfile?.id,
@@ -165,19 +195,22 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
       {!isMobile ? (
         <>
           {/* Desktop create comment */}
-          <div className="px-3 sm:px-5 items-center w-full bg-s-bg py-2 sm:rounded-2xl ">
+          <div className="px-3 sm:px-5 items-center w-full bg-s-bg pt-3 pb-3 sm:rounded-t-2xl">
             <div className="flex flex-row justify-between items-center w-full">
-              <div className="flex flex-row items-center">
-                <img
-                  src={
-                    user?.profileImageUrl
-                      ? user?.profileImageUrl
-                      : getStampFyiURL(user?.walletAddress)
-                  }
+              <div className="flex flex-row items-center space-x-2">
+                <ImageWithPulsingLoader
+                  src={getAvatar(lensProfile?.defaultProfile)}
                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                 />
-                <div className="ml-2 font-bold text-base">
-                  {lensProfile?.defaultProfile?.handle}
+                {lensProfile?.defaultProfile?.name && (
+                  <div className="font-bold text-base">
+                    {stringToLength(lensProfile?.defaultProfile?.name, 20)}
+                  </div>
+                )}
+                <div className="text-sm font-medium text-s-text">
+                  <span>
+                    u/{formatHandle(lensProfile?.defaultProfile?.handle)}
+                  </span>
                 </div>
               </div>
             </div>
@@ -199,8 +232,26 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                   e.target.style.height = e.target.scrollHeight + 'px'
                 }}
               />
+              {gifAttachment && (
+                <div className="flex items-center mt-2">
+                  <div className="relative w-fit">
+                    <img
+                      src={gifAttachment.images.original.url}
+                      className="max-h-80 rounded-2xl object-cover"
+                      alt={gifAttachment.title}
+                      type="image/gif"
+                    />
+
+                    <AiOutlineClose
+                      onClick={() => setGifAttachment(null)}
+                      className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="w-full flex flex-row justify-end">
+            <div className="w-full flex flex-row justify-end space-x-2 items-center">
+              <Giphy setGifAttachment={setGifAttachment} />
               <button
                 disabled={loading}
                 onClick={createComment}
@@ -230,6 +281,23 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                 toHandle={postInfo?.profile?.handle}
               />
             )}
+            {gifAttachment && isMobile && (
+              <div className="flex items-center mt-2 mb-2">
+                <div className="relative w-fit">
+                  <img
+                    src={gifAttachment.images.original.url}
+                    className="max-h-80 rounded-2xl object-cover"
+                    alt={gifAttachment.title}
+                    type="image/gif"
+                  />
+
+                  <AiOutlineClose
+                    onClick={() => setGifAttachment(null)}
+                    className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
+                  />
+                </div>
+              </div>
+            )}
             <div className="flex flex-row items-center w-full rounded-xl border-2 border-p-border">
               <div className="flex-1  relative mr-2">
                 <textarea
@@ -253,7 +321,8 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                   onBlur={() => setFocused(false)}
                 />
               </div>
-              <div className="self-end p-2">
+              <div className="self-end p-2 flex flex-row space-x-1">
+                <Giphy setGifAttachment={setGifAttachment} />
                 {!loading && (
                   <FiSend
                     onClick={createComment}

@@ -1,6 +1,7 @@
 query notifications(
   $request: NotificationRequest!
   $reactionRequest: ReactionFieldResolverRequest
+  $profileId: ProfileId
 ) {
   notifications(request: $request) {
     items {

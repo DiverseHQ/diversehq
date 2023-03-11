@@ -5,6 +5,7 @@ import CommunityPageSeo from '../../../../components/Community/CommunityPageSeo'
 import CommunityNotFound from '../../../../components/Community/Page/CommunityNotFound'
 import NavFilterCommunity from '../../../../components/Post/NavFilterCommunity'
 import PostsColumn from '../../../../components/Post/PostsColumn'
+import getDefaultProfileInfo from '../../../../lib/profile/get-default-profile-info'
 
 const newPage = ({ community }) => {
   return (
@@ -46,6 +47,11 @@ export async function getServerSideProps({ params = {} }) {
     }
   }
   const community = await fetchCommunityInfo(name)
+  if (!community) return { props: { community: null } }
+  const profile = await getDefaultProfileInfo({
+    ethereumAddress: community?.creator
+  })
+  community.creatorProfile = profile?.defaultProfile
   return {
     props: {
       community

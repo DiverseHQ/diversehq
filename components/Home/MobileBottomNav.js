@@ -2,13 +2,11 @@ import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { useMessageStore } from '../../store/message'
 import useNotificationsCount from '../Notification/useNotificationsCount'
+import { scrollToTop } from '../../lib/helpers'
 
 const MobileBottomNav = () => {
-  const {
-    notificationsCount,
-    lensNotificationsCount,
-    updateLensNotificationCount
-  } = useNotificationsCount()
+  const { notificationsCount, updateNotificationCount } =
+    useNotificationsCount()
   const [active, setActive] = useState('home')
   const router = useRouter()
   const setIsOpen = useMessageStore((state) => state.setIsOpen)
@@ -27,7 +25,7 @@ const MobileBottomNav = () => {
   }
 
   const routeToNotifications = async () => {
-    await updateLensNotificationCount()
+    await updateNotificationCount()
     router.push('/notification')
   }
 
@@ -46,13 +44,6 @@ const MobileBottomNav = () => {
       setActive('none')
     }
   }, [pathname])
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }
 
   return (
     <div className="fixed bottom-0 w-full flex flex-row justify-evenly items-center bg-s-bg border-t-[0.5px] border-s-border">
@@ -132,9 +123,9 @@ const MobileBottomNav = () => {
             className="w-[23px] h-[23px]"
           />
         </div>
-        {Number(notificationsCount + lensNotificationsCount) > 0 && (
-          <div className="absolute top-2 right-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg">
-            <span>{notificationsCount + lensNotificationsCount}</span>
+        {Number(notificationsCount) > 0 && (
+          <div className="absolute top-2 right-3 leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[2.5px] border-p-bg dark:border-s-bg">
+            <span>{notificationsCount}</span>
             {/* <span>10</span> */}
           </div>
         )}

@@ -3,8 +3,6 @@ import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
-// import ScrollToTopButton from '../Common/UI/ScrollToTopButton'
-import NewLeftSidebar from './NewLeftSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
 import useDevice from '../Common/useDevice'
@@ -22,13 +20,13 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
   React.useEffect(() => {
-    if (typeof isMobile === 'undefined' || isMobileView) return
+    if (typeof isMobile === 'undefined') return
     setMobile(isMobile)
   }, [isMobile])
-  if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
-    return null
 
   const { theme } = useTheme()
+  if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
+    return null
   return (
     <>
       <Head>
@@ -39,7 +37,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
       </Head>
 
       {mobile && (
-        <div className="text-p-text bg-p-bg min-h-screen noSelect">
+        <div className="text-p-text bg-s-bg min-h-screen noSelect">
           {mounted && <NewMobileTopNav />}
           <Box
             sx={{
@@ -75,9 +73,9 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
             {isLoading && <LinearProgress />}
           </Box>
 
-          <div className="flex flex-row">
-            <NewLeftSidebar />
-            <div className="relative flex-1 min-h-screen text-p-text">
+          <div className="flex flex-row justify-center space-x-12">
+            {/* <NewLeftSidebar /> */}
+            <div className="relative min-h-screen text-p-text">
               {/* <ScrollToTopButton /> */}
               {children}
             </div>

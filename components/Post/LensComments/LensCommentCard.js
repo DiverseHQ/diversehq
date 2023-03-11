@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
 import {
@@ -16,14 +16,21 @@ import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import { useRouter } from 'next/router'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
-import { commentIdFromIndexedResult } from '../../../utils/utils'
+import {
+  commentIdFromIndexedResult,
+  stringToLength
+} from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import { Tooltip } from '@mui/material'
 import { useCommentStore } from '../../../store/comment'
+import CenteredDot from '../../Common/UI/CenteredDot'
+import formatHandle from '../../User/lib/formatHandle'
+import AttachmentMedia from '../Attachment'
 
 const LensCommentCard = ({ comment }) => {
+  const [comments, setComments] = useState([])
   const router = useRouter()
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
@@ -63,7 +70,9 @@ const LensCommentCard = ({ comment }) => {
     setIsAuthor(lensProfile?.defaultProfile?.id === comment?.profile?.id)
   }, [comment, lensProfile])
 
-  const [comments, setComments] = useState([])
+  useEffect(() => {
+    setReaction(comment?.reaction)
+  }, [comment])
 
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
@@ -72,7 +81,7 @@ const LensCommentCard = ({ comment }) => {
   const handleUpvote = async () => {
     if (reaction === ReactionTypes.Upvote) return
     if (!comment?.id) {
-      notifyInfo('not indexed yet, try again later')
+      notifyInfo('not indexed yet, try in a moment')
       return
     }
     try {
@@ -108,7 +117,7 @@ const LensCommentCard = ({ comment }) => {
         return
       }
       if (!comment?.id) {
-        notifyInfo('not indexed yet, try again later')
+        notifyInfo('not indexed yet, try in a moment')
         return
       }
       setReaction(ReactionTypes.Downvote)
@@ -132,7 +141,7 @@ const LensCommentCard = ({ comment }) => {
 
   const handleDeleteComment = async () => {
     if (!comment?.id) {
-      notifyInfo('not indexed yet, try again later')
+      notifyInfo('not indexed yet, try in a moment')
       return
     }
     try {
@@ -156,29 +165,32 @@ const LensCommentCard = ({ comment }) => {
   }
 
   const addComment = async (tx, comment) => {
+    setCurrentReplyComment(null)
     const prevComments = comments
     const newCommentsFirstPhase = [comment, ...prevComments]
-    setComments(newCommentsFirstPhase)
-    setCurrentReplyComment(null)
-    const indexResult = await pollUntilIndexed(tx)
-    const commentId = commentIdFromIndexedResult(
-      lensProfile?.defaultProfile?.id,
-      indexResult
-    )
+    try {
+      setComments(newCommentsFirstPhase)
+      const indexResult = await pollUntilIndexed(tx)
+      const commentId = commentIdFromIndexedResult(
+        lensProfile?.defaultProfile?.id,
+        indexResult
+      )
+      await addReaction({
+        request: {
+          profileId: lensProfile.defaultProfile.id,
+          publicationId: commentId,
+          reaction: ReactionTypes.Upvote
+        }
+      })
 
-    await addReaction({
-      request: {
-        profileId: lensProfile.defaultProfile.id,
-        publicationId: commentId,
-        reaction: ReactionTypes.Upvote
-      }
-    })
-
-    const newCommentsSecondPhase = newCommentsFirstPhase.map((c) =>
-      c.tempId === comment.tempId ? { ...c, id: commentId } : c
-    )
-    // add id to that comment
-    setComments(newCommentsSecondPhase)
+      const newCommentsSecondPhase = newCommentsFirstPhase.map((c) =>
+        c.tempId === comment.tempId ? { ...c, id: commentId } : c
+      )
+      // add id to that comment
+      setComments(newCommentsSecondPhase)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -196,15 +208,29 @@ const LensCommentCard = ({ comment }) => {
                       }`
                     : getStampFyiURL(comment?.profile?.ownedBy)
                 }
-                className="w-6 h-6 rounded-full mr-1 object-cover"
+                className="w-6 h-6 rounded-full object-cover"
               />
-
-              <Link href={`/u/${comment?.profile?.handle}`} passHref>
-                <div className="hover:underline font-bold text-base">
-                  u/{comment?.profile?.handle}
+              {comment?.profile?.name && (
+                <Link
+                  href={`/u/${formatHandle(comment?.profile?.handle)}`}
+                  passHref
+                >
+                  <div className="hover:underline font-bold text-p-text cursor-pointer">
+                    {stringToLength(comment?.profile?.name, 20)}
+                  </div>
+                </Link>
+              )}
+              <Link
+                href={`/u/${formatHandle(comment?.profile?.handle)}`}
+                passHref
+              >
+                <div className="hover:underline font-medium text-s-text text-sm cursor-pointer">
+                  u/{formatHandle(comment?.profile?.handle)}
                 </div>
               </Link>
+              <CenteredDot />
               <ReactTimeAgo
+                timeStyle="twitter"
                 className="text-xs sm:text-sm text-s-text"
                 date={new Date(comment.createdAt)}
                 locale="en-US"
@@ -213,19 +239,24 @@ const LensCommentCard = ({ comment }) => {
             {!comment.id && (
               <div className="sm:mr-5 flex flex-row items-center">
                 {/* pulsing dot */}
-                <Tooltip title="Indexing" arrow>
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Indexing"
+                  arrow
+                >
                   <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
                 </Tooltip>
               </div>
             )}
-            {isAuthor && comment.id && (
+            {isAuthor && comment.id && !comment.hidden && (
               <div>
                 <OptionsWrapper
                   OptionPopUpModal={() => (
                     <MoreOptionsModal
                       list={[
                         {
-                          label: 'Delete Comment',
+                          label: 'Delete',
                           onClick: handleDeleteComment,
                           icon: () => (
                             <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
@@ -240,8 +271,13 @@ const LensCommentCard = ({ comment }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <Tooltip title="More" arrow>
-                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="More"
+                    arrow
+                  >
+                    <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
                       <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                   </Tooltip>
@@ -254,20 +290,32 @@ const LensCommentCard = ({ comment }) => {
           <div className="flex flex-row w-full">
             {/* vertical line */}
             <div className="w-7 flex flex-row items-center justify-center py-2">
-              <div className="border-l-2 border-gray-300 h-full"></div>
+              <div className="border-l-2 border-[#eee] dark:border-p-border h-full"></div>
             </div>
             <div className="w-full">
               {/* content */}
               <div className="mt-1">{comment?.metadata?.content}</div>
-
+              {/* attachemnt */}
+              {comment?.metadata?.media && (
+                <AttachmentMedia
+                  url={comment?.metadata?.media[0]?.original?.url}
+                  type={comment?.metadata?.media[0]?.type}
+                  publication={comment}
+                />
+              )}
               {/* last row */}
               <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
                 {/* upvote and downvote */}
                 <div className="flex flex-row items-center gap-x-2">
-                  <Tooltip title="Upvote" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Upvote"
+                    arrow
+                  >
                     <button
                       onClick={handleUpvote}
-                      className="hover:bg-p-btn-hover cursor-pointer rounded-md p-1"
+                      className="hover:bg-s-hover cursor-pointer rounded-md p-1"
                     >
                       <img
                         src={
@@ -280,10 +328,15 @@ const LensCommentCard = ({ comment }) => {
                     </button>
                   </Tooltip>
                   <div className="font-medium text-[#687684]">{voteCount}</div>
-                  <Tooltip title="Downvote" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Downvote"
+                    arrow
+                  >
                     <button
                       onClick={handleDownvote}
-                      className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer"
+                      className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
                     >
                       <img
                         src={
@@ -303,7 +356,7 @@ const LensCommentCard = ({ comment }) => {
                     currentReplyComment?.id === comment?.id
                       ? 'bg-p-btn-hover text-p-btn-hover-text'
                       : ''
-                  } active:bg-p-btn-hover sm:hover:bg-p-btn-hover px-2 py-0.5 rounded-md`}
+                  } active:bg-p-btn-hover sm:hover:bg-s-hover px-2 py-0.5 rounded-md`}
                   onClick={() => {
                     if (!isSignedIn || !hasProfile) {
                       notifyInfo(
@@ -312,7 +365,7 @@ const LensCommentCard = ({ comment }) => {
                       return
                     }
                     if (!comment?.id) {
-                      notifyInfo('not indexed yet, try again later')
+                      notifyInfo('not indexed yet, try in a moment')
                       return
                     }
                     if (comment?.id === currentReplyComment?.id) {
@@ -327,12 +380,13 @@ const LensCommentCard = ({ comment }) => {
               </div>
 
               {/* create comment if showCreateComment is true */}
-              {currentReplyComment?.id === comment?.id && (
-                <LensCreateComment
-                  postId={comment.id}
-                  addComment={addComment}
-                />
-              )}
+              {currentReplyComment &&
+                currentReplyComment?.id === comment?.id && (
+                  <LensCreateComment
+                    postId={comment.id}
+                    addComment={addComment}
+                  />
+                )}
 
               {/* replies */}
               {comment?.id && (
@@ -341,6 +395,7 @@ const LensCommentCard = ({ comment }) => {
                     commentId={comment.id}
                     comments={comments}
                     setComments={setComments}
+                    disableFetch={!comment?.__typename}
                   />
                 </div>
               )}
@@ -353,4 +408,4 @@ const LensCommentCard = ({ comment }) => {
   )
 }
 
-export default LensCommentCard
+export default memo(LensCommentCard)

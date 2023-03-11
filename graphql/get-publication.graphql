@@ -1,6 +1,7 @@
 query publication(
   $request: PublicationQueryRequest!
   $reactionRequest: ReactionFieldResolverRequest
+  $profileId: ProfileId
 ) {
   publication(request: $request) {
     __typename

@@ -3,6 +3,7 @@ import { BiArrowBack } from 'react-icons/bi'
 import { IoIosArrowUp } from 'react-icons/io'
 import { useMessageStore } from '../../store/message'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 
 const MessageHeader = ({ profile, open, setOpen }) => {
@@ -37,14 +38,14 @@ const MessageHeader = ({ profile, open, setOpen }) => {
           <ImageWithPulsingLoader
             src={getAvatar(profile)}
             className="w-8 h-8 rounded-full object-cover"
-            alt={profile?.handle}
+            alt={formatHandle(profile?.handle)}
           />
           <div className="flex flex-col text-sm leading-4">
             {profile?.name && (
               <div className="font-semibold tracking-wide">{profile?.name}</div>
             )}
             <div className={`${profile?.name ? 'text-s-text' : ''}`}>
-              {profile?.handle && `u/${profile?.handle}`}
+              {profile?.handle && `u/${formatHandle(profile?.handle)}`}
             </div>
           </div>
         </div>

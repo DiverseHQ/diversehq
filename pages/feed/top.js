@@ -1,7 +1,7 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import CreatePostBar from '../../components/Home/CreatePostBar'
 import useDevice from '../../components/Common/useDevice'
+import CreatePostBar from '../../components/Home/CreatePostBar'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import PostsColumn from '../../components/Post/PostsColumn'
 
@@ -19,7 +19,7 @@ const top = () => {
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
           {isDesktop && <CreatePostBar />}
-          {isDesktop && <NavFilterAllPosts />}
+          <NavFilterAllPosts />
           <PostsColumn source="all" sortBy="top" data={null} />
         </div>
       </div>

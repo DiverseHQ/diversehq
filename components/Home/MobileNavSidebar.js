@@ -7,6 +7,8 @@ import { useProfile } from '../Common/WalletContext'
 // import { AiOutlineGift } from 'react-icons/ai'
 import { MdOutlineGroups } from 'react-icons/md'
 // import CreateCommunity from './CreateCommunity'
+import { MdCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
+// import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
 // import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import LensLoginButton from '../Common/LensLoginButton'
@@ -21,9 +23,12 @@ import {
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { AiOutlineUsergroupAdd, AiOutlineDisconnect } from 'react-icons/ai'
-import { FiMoon, FiSun } from 'react-icons/fi'
 import { useTheme } from '../Common/ThemeProvider'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import getAvatar from '../User/lib/getAvatar'
+import { IoIosMoon, IoMdSettings } from 'react-icons/io'
+import { HiSun } from 'react-icons/hi'
+import formatHandle from '../User/lib/formatHandle'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -72,11 +77,11 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   // }
 
   const routeToProfile = () => {
-    if (!address) {
+    if (!myLensProfile?.defaultProfile) {
       notifyInfo('You might want to login first')
       return
     }
-    router.push(`/u/${address}`)
+    router.push(`/u/${formatHandle(myLensProfile?.defaultProfile?.handle)}`)
   }
 
   const handleWalletAddressCopy = () => {
@@ -111,11 +116,11 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
       >
         <div className="flex flex-col absolute transition ease-in-out h-full bg-s-bg dark:text-p-text w-full">
           <div className="flex flex-row justify-between px-4 pt-4 gap-2 mb-6">
-            {user && address && (
+            {isSignedIn && hasProfile && user && (
               <div className="flex flex-col">
                 <div className="flex flex-row gap-1">
-                  <img
-                    src={user?.profileImageUrl}
+                  <ImageWithPulsingLoader
+                    src={getAvatar(myLensProfile?.defaultProfile)}
                     className="w-[55px] h-[55px] bg-[#333] rounded-full"
                     onClick={() => {
                       setIsOpenSidebar(false)
@@ -123,78 +128,69 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                     }}
                   />
                   <div className="flex flex-col items-start justify-center ml-4">
-                    {/* <div className="flex flex-row items-start"> */}
-                    {!isSignedIn || !hasProfile ? (
-                      <>
-                        {user?.name ? (
-                          <div className="font-semibold">{user.name}</div>
-                        ) : (
-                          <h3 className="font-semibold">
-                            {stringToLength(user.walletAddress, 20)}
-                          </h3>
+                    {myLensProfile?.defaultProfile?.name && (
+                      <div className="font-semibold">
+                        {stringToLength(
+                          myLensProfile?.defaultProfile?.name,
+                          20
                         )}
-                      </>
-                    ) : (
-                      <>
-                        {myLensProfile?.defaultProfile?.name && (
-                          <div className="font-semibold">
-                            {myLensProfile?.defaultProfile?.name}
-                          </div>
-                        )}
-                        <div className="font-semibold">
-                          u/
-                          {stringToLength(
-                            myLensProfile?.defaultProfile?.handle,
-                            20
-                          )}
-                        </div>
-                      </>
-                    )}
-                    {/* </div> */}
-                    {isSignedIn && hasProfile && (
-                      <div className="flex flex-row gap-4 text-p-text">
-                        <div className="">
-                          <span className="font-bold mr-1">
-                            {
-                              myLensProfile?.defaultProfile?.stats
-                                ?.totalFollowers
-                            }
-                          </span>
-                          <span className="font-light">Followers</span>
-                        </div>
-                        <div className="">
-                          <span className="font-bold mr-1">
-                            {
-                              myLensProfile?.defaultProfile?.stats
-                                ?.totalFollowing
-                            }
-                          </span>
-                          <span className="font-light">Following</span>
-                        </div>
                       </div>
                     )}
+                    <div className="font-semibold">
+                      u/
+                      {stringToLength(
+                        formatHandle(myLensProfile?.defaultProfile?.handle),
+                        20
+                      )}
+                    </div>
+
+                    <div className="flex flex-row gap-4 text-p-text">
+                      <div className="">
+                        <span className="font-bold mr-1">
+                          {myLensProfile?.defaultProfile?.stats?.totalFollowers}
+                        </span>
+                        <span className="font-light">Followers</span>
+                      </div>
+                      <div className="">
+                        <span className="font-bold mr-1">
+                          {myLensProfile?.defaultProfile?.stats?.totalFollowing}
+                        </span>
+                        <span className="font-light">Following</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
           </div>
-          {(!isSignedIn || !hasProfile) && (
+          {(!isSignedIn || !hasProfile || !user) && (
             <div className="px-4 mb-2">
               <LensLoginButton />
             </div>
           )}
           <div className="flex flex-col px-4">
-            {/* <button
+            <button
+              onClick={() => {
+                setIsOpenSidebar(false)
+                router.push('/settings')
+              }}
+              className="flex flex-row items-center py-4 gap-4"
+            >
+              <IoMdSettings className="w-7 h-7 object-contain" />
+              <span className="text-p-text text-xl">Settings</span>
+            </button>
+            <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
+            <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
                 createCommunity()
                 setIsOpenSidebar(false)
               }}
             >
-              <MdOutlineCreateNewFolder className="w-7 h-7 object-contain" />
+              <MdCreateNewFolder className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Create Community</span>
-            </button> */}
-
+            </button>{' '}
+            */}
             <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
@@ -205,7 +201,6 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <AiOutlineUsergroupAdd className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Created Communities</span>
             </button>
-
             <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => setShowJoinedCommunities(true)}
@@ -214,16 +209,15 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <MdOutlineGroups className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Joined Communities</span>
             </button>
-
             <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
             <button
               className="flex flex-row items-center  py-4 gap-4"
               onClick={toggleTheme}
             >
               {theme === 'light' ? (
-                <FiMoon className="w-7 h-7 object-contain" />
+                <IoIosMoon className="w-7 h-7 object-contain" />
               ) : (
-                <FiSun className="w-7 h-7 object-contain" />
+                <HiSun className="w-7 h-7 object-contain" />
               )}
               <span className="text-p-text text-xl">
                 {theme === 'light' ? 'Dark Mode' : 'Light Mode'}

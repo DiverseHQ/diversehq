@@ -167,17 +167,17 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                 }
                 className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
               />
-              <Link
-                href={`/u/${comment.author}`}
-                className="hover:underline ml-2 font-bold text-base "
-              >
-                u/
-                {comment.authorName
-                  ? comment.authorName
-                  : comment.author.substring(0, 6) + '...'}
+              <Link href={`/u/${comment.author}`}>
+                <div className="hover:underline ml-2 font-bold text-base ">
+                  u/
+                  {comment.authorName
+                    ? comment.authorName
+                    : comment.author.substring(0, 6) + '...'}
+                </div>
               </Link>
               <div className="text-xs sm:text-sm text-s-text ml-2">
                 <ReactTimeAgo
+                  timeStyle="twitter"
                   date={new Date(comment.updatedAt || comment.createdAt)}
                   locale="en-US"
                 />
@@ -212,7 +212,12 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   isDrawerOpen={isDrawerOpen}
                   setIsDrawerOpen={setIsDrawerOpen}
                 >
-                  <Tooltip title="More" arrow>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="More"
+                    arrow
+                  >
                     <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                       <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
@@ -236,7 +241,7 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   }}
                   required
                 />
-                <Tooltip title="Save" arrow>
+                <Tooltip enterDelay={1000} leaveDelay={200} title="Save" arrow>
                   <div className="flex items-center hover:bg-p-btn-hover hover:text-[#66CD00] rounded-md p-1">
                     <AiOutlineCheck
                       className="text-base sm:text-[24px] cursor-pointer"
@@ -252,7 +257,12 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
             <div className="flex flex-row items-end space-x-14">
               {/* upvote and downvote */}
               <div className="flex flex-row items-center gap-x-2 pt-2">
-                <Tooltip title="Upvote" arrow>
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Upvote"
+                  arrow
+                >
                   <button
                     onClick={handleUpvote}
                     className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"
@@ -269,7 +279,12 @@ const SingleComment = ({ commentInfo, removeCommentIdFromComments }) => {
                   </button>
                 </Tooltip>
                 <div className="font-medium text-[#687684]">{totalCount}</div>
-                <Tooltip title="Downvote" arrow>
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Downvote"
+                  arrow
+                >
                   <button
                     onClick={handleDownvote}
                     className="flex flex-row items-center rounded-md p-1 hover:bg-p-btn-hover cursor-pointer"

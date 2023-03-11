@@ -16,26 +16,27 @@ TimeAgo.addDefaultLocale(en)
 
 const ROUTES_TO_RETAIN = [
   '/',
-  `/?sort=${sortTypes.LATEST}`,
-  `/?sort=${sortTypes.TOP_TODAY}`,
-  `/?sort=${sortTypes.TOP_WEEK}`,
-  `/?sort=${sortTypes.TOP_MONTH}`,
+  `/?sort=${sortTypes.LATEST.replace(' ', '+')}`,
+  `/?sort=${sortTypes.TOP_TODAY.replace(' ', '+')}`,
+  `/?sort=${sortTypes.TOP_WEEK.replace(' ', '+')}`,
+  `/?sort=${sortTypes.TOP_MONTH.replace(' ', '+')}`,
   '/feed/all',
-  `/feed/all?sort=${sortTypes.LATEST}`,
-  `/feed/all?sort=${sortTypes.TOP_TODAY}`,
-  `/feed/all?sort=${sortTypes.TOP_WEEK}`,
-  `/feed/all?sort=${sortTypes.TOP_MONTH}`,
+  `/feed/all?sort=${sortTypes.LATEST.replace(' ', '+')}`,
+  `/feed/all?sort=${sortTypes.TOP_TODAY.replace(' ', '+')}`,
+  `/feed/all?sort=${sortTypes.TOP_WEEK.replace(' ', '+')}`,
+  `/feed/all?sort=${sortTypes.TOP_MONTH.replace(' ', '+')}`,
   `/feed/foryou`,
-  `/feed/foryou?sort=${sortTypes.LATEST}`,
-  `/feed/foryou?sort=${sortTypes.TOP_TODAY}`,
-  `/feed/foryou?sort=${sortTypes.TOP_WEEK}`,
-  `/feed/foryou?sort=${sortTypes.TOP_MONTH}`,
+  `/feed/foryou?sort=${sortTypes.LATEST.replace(' ', '+')}`,
+  `/feed/foryou?sort=${sortTypes.TOP_TODAY.replace(' ', '+')}`,
+  `/feed/foryou?sort=${sortTypes.TOP_WEEK.replace(' ', '+')}`,
+  `/feed/foryou?sort=${sortTypes.TOP_MONTH.replace(' ', '+')}`,
   `/feed/offchain`
 ]
 
 function MyApp({ Component, pageProps, isMobileView }) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  // console.log('sortObject', sortObject)
   const retainedComponents = useRef({})
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
 
@@ -137,7 +138,6 @@ function MyApp({ Component, pageProps, isMobileView }) {
                 )
               })}
             </div>
-
             {!isRetainableRoute && <Component {...pageProps} />}
           </>
         </MainLayout>

@@ -24,6 +24,17 @@ const MainMsgModal = ({ isMobile = false }: Props) => {
     state.messageProfiles.get(conversationKey)
   )
   const { client } = useXmtpClient()
+
+  // //Check if the cursor is on the modal or not if it is on the modal Stop other scrolling and if not on the modal then scroll the other page
+  // function handleMouseEnter() {
+  //   // disable scrolling on body when mouse enters the component
+  //   document.body.style.overflow = 'hidden'
+  // }
+
+  // function handleMouseLeave() {
+  //   // enable scrolling on body when mouse leaves the component
+  //   document.body.style.overflow = 'auto'
+  // }
   return (
     <div
       className={`fixed ${
@@ -33,8 +44,10 @@ const MainMsgModal = ({ isMobile = false }: Props) => {
       } ${
         isMobile
           ? 'w-full h-full left-0 right-0'
-          : 'w-[450px] h-[550px] rounded-t-2xl shadow-2xl border-[1px] border-p-border  right-4'
+          : 'w-[450px] h-[550px] rounded-t-2xl shadow-2xl border-[1px] border-s-border  right-4'
       } duration-500 transition-all z-40 `}
+      // onMouseEnter={handleMouseEnter}
+      // onMouseLeave={handleMouseLeave}
     >
       {/* header */}
       <div className="bg-s-bg sm:rounded-t-2xl flex flex-col h-full text-p-text shadow-2xl">

@@ -1,13 +1,17 @@
 import { readAccessTokenFromStorage, isTokenExpired } from './lib/auth/helpers'
 import refreshAccessToken from './lib/auth/refreshAccessToken'
+import { apiMode } from './utils/config'
 
 //polygon mainnet
 // export const endpoint = "https://api.lens.dev/";
 //polygon mumbai
-export const endpoint = 'https://api-mumbai.lens.dev/'
+export const endpoint =
+  apiMode === 'dev' ? 'https://api-mumbai.lens.dev/' : 'https://api.lens.dev/'
 export const STORAGE_KEY = 'LH_STORAGE_KEY'
 
-async function getAccessToken(): Promise<string | null> {
+/* eslint-disable */
+
+export async function getAccessToken(): Promise<string | null> {
   const tokenValue = readAccessTokenFromStorage()
 
   // If the token is not in localStorage, then the user is not logged in

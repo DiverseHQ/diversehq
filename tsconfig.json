@@ -23,8 +23,9 @@
     "pages/notification.js",
     "./eslintrc.js",
     "utils/helper.ts",
-    "components/Lexical/ImagesPlugin.js",
-    "utils/emitter.js"
+    "components/Lexical/Plugins/ImagesPlugin.js",
+    "utils/emitter.js",
+    "components/Community/Settings/Sections/ModeratorSection"
   ],
   "exclude": ["node_modules"]
 }

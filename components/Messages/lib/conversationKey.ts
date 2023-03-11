@@ -18,11 +18,7 @@ export const parseConversationKey = (
   if (!matches || matches.length !== 4) {
     return null
   }
-  console.log('matches', matches)
   let [, peerAddress, memberA, memberB] = Array.from(matches)
-  console.log('peerAddress', peerAddress)
-  console.log('memberA', memberA)
-  console.log('memberB', memberB)
   if (memberA.includes('-')) {
     let temp = memberA
     memberA = temp.split('-')[0]

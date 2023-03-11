@@ -9,6 +9,7 @@ import {
 import { create } from 'ipfs-http-client'
 import { PublicationMetadataV2Input } from '../graphql/generated'
 import { BigNumber, utils } from 'ethers'
+import CryptoJS from 'crypto-js'
 
 export const uploadFileToIpfs = async (file: File): Promise<string> => {
   // eslint-disable-next-line
@@ -94,9 +95,7 @@ export const unpinFromIpfsInfura = async (hash: string) => {
   return result
 }
 
-export const uploadToIpfsInfuraAndGetPath = async (
-  data: PublicationMetadataV2Input
-) => {
+export const uploadToIpfsInfuraAndGetPath = async (data: any) => {
   const result = await client.add(JSON.stringify(data))
   return result.path
 }
@@ -168,4 +167,11 @@ export const deleteFirebaseStorageFile = async (url: string) => {
       console.log(error)
       // Uh-oh, an error occurred!
     })
+}
+
+export const encrypt = (message: any) => {
+  return CryptoJS.AES.encrypt(
+    message,
+    process.env.NEXT_PUBLIC_CRYPTO_SECRET
+  ).toString()
 }

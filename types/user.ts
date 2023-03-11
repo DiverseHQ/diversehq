@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { CommunityType } from './community'
+// import { CommunityType } from './community'
 
 // eslint-disable-next-line
 enum userRole {
@@ -27,6 +27,5 @@ export type UserType = {
   createdAt?: string
   updatedAt?: string
   lastFetchedNotificationsTime?: string
-  lastFetchedLensNotificationsTime?: string
   [key: string]: any
 }

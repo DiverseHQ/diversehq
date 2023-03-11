@@ -19,14 +19,14 @@ export const getSinglePostInfo = async (id) => {
 export const putLikeOnPost = async (id) => {
   return await fetch(`${apiEndpoint}/post/like/${id}`, {
     method: 'PUT',
-    headers: getHeaders()
+    headers: await getHeaders()
   })
 }
 
 export const postCreatePost = async (postData) => {
   return await fetch(`${apiEndpoint}/post`, {
     method: 'POST',
-    headers: getHeaders(),
+    headers: await getHeaders(),
     body: JSON.stringify(postData)
   }).then((r) => r)
 }
@@ -34,7 +34,7 @@ export const postCreatePost = async (postData) => {
 export const putEditPost = async (id, postData) => {
   return await fetch(`${apiEndpoint}/post/edit/${id}`, {
     method: 'PUT',
-    headers: getHeaders(),
+    headers: await getHeaders(),
     body: JSON.stringify(postData)
   }).then((r) => r)
 }
@@ -42,7 +42,7 @@ export const putEditPost = async (id, postData) => {
 export const deletePost = async (id) => {
   return await fetch(`${apiEndpoint}/post/${id}`, {
     method: 'DELETE',
-    headers: getHeaders()
+    headers: await getHeaders()
   })
 }
 
@@ -63,13 +63,13 @@ export const getNumberOfPostsUsingUserAddress = async (address) => {
 export const putUpvoteOnPost = async (id) => {
   return await fetch(`${apiEndpoint}/post/upvote/${id}`, {
     method: 'PUT',
-    headers: getHeaders()
+    headers: await getHeaders()
   })
 }
 
 export const putDownvoteOnPost = async (id) => {
   return await fetch(`${apiEndpoint}/post/downvote/${id}`, {
     method: 'PUT',
-    headers: getHeaders()
+    headers: await getHeaders()
   })
 }

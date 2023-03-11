@@ -1,7 +1,7 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import { IMAGE_KIT_ENDPOINT } from '../../utils/config'
 import { stringToLength } from '../../utils/utils'
+import getAvatar from './lib/getAvatar'
 
 const ProfilePageNextSeo = ({ profile, lensProfile }) => {
   return (
@@ -9,27 +9,24 @@ const ProfilePageNextSeo = ({ profile, lensProfile }) => {
       {profile && (
         <NextSeo
           title={`${
-            profile.name
-              ? profile.name
+            lensProfile.name
+              ? lensProfile.name
               : stringToLength(profile.walletAddress, 6)
           } ${lensProfile?.handle ? ' | ' + lensProfile?.handle : ''}`}
-          description={profile.bio}
+          description={lensProfile.bio}
           openGraph={{
-            title: `${profile.name} | ${lensProfile?.handle}`,
-            description: profile.bio,
+            title: `${lensProfile.name} | ${lensProfile?.handle}`,
+            description: lensProfile.bio,
             images: [
               {
-                url: profile?.profileImageUrl.replace(
-                  'https://firebasestorage.googleapis.com',
-                  `${IMAGE_KIT_ENDPOINT}/tr:w-1200,h-630,q-50`
-                ),
-                alt: `${profile.name} | ${lensProfile?.handle}`
+                url: getAvatar(lensProfile),
+                alt: `${lensProfile.name} | ${lensProfile?.handle}`
               }
             ]
           }}
         />
       )}
-      {!profile && (
+      {!lensProfile && (
         <NextSeo
           title="No Profile Found"
           description="This user has not created a profile yet."

@@ -34,7 +34,7 @@ const OptionsWrapper = ({
   }, [popupRef])
 
   const handleButtonClick = () => {
-    if (isMobile) {
+    if (isMobile?.isMobile) {
       setIsDrawerOpen(true)
     } else {
       setShowOptionsModal(true)
@@ -43,20 +43,24 @@ const OptionsWrapper = ({
 
   return (
     <>
-      <div
-        className="relative cursor-pointer"
-        ref={popupRef}
-        onClick={handleButtonClick}
-        id="options-wrapper"
-      >
-        {children}
+      <div className="relative">
+        <div
+          className="relative cursor-pointer"
+          ref={popupRef}
+          onClick={handleButtonClick}
+          id="options-wrapper"
+        >
+          {children}
+        </div>
         {showOptionsModal && (
           <div
-            className={`absolute min-w-[150px] ${
+            className={`absolute min-w-[150px]${
               position === 'left' ? 'top-[10px] right-[20px]' : ''
             } ${position === 'right' ? 'top-[25px] left-0' : ''} ${
-              position === 'top' ? 'bottom-[25px] right-0' : ''
-            } ${position === 'bottom' ? 'top-[25px] right-0' : ''} z-20`}
+              position === 'top' ? ' bottom-[25px] right-0' : ''
+            } ${position === 'bottom' ? 'top-[25px] right-0' : ''}
+            ${position === 'top-right' ? 'bottom-[470px] left-4' : ''}
+            z-40`}
           >
             <OptionPopUpModal />
           </div>

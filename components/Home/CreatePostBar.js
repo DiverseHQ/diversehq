@@ -1,22 +1,28 @@
 import React from 'react'
-import { CiImageOn } from 'react-icons/ci'
-import { CgProfile } from 'react-icons/cg'
+// import { CiImageOn } from 'react-icons/ci'
+// import { CgProfile } from 'react-icons/cg'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
 import CreatePostPopup from './CreatePostPopup'
 import { useNotify } from '../Common/NotifyContext'
 import { modalType } from '../Common/CustomPopUpProvider'
-import Image from 'next/image'
-import getStampFyiURL from '../User/lib/getStampFyiURL'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import getAvatar from '../User/lib/getAvatar'
+import { BsFillPersonFill } from 'react-icons/bs'
 
 const CreatePostBar = () => {
   const { user } = useProfile()
+  const { data: lensProfile, isSignedIn } = useLensUserContext()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
 
   const createPost = () => {
     if (!user) {
       notifyInfo('You might want to connect your wallet first')
+      return
+    }
+    if (!lensProfile) {
+      notifyInfo('Lets login lens before we create a post')
       return
     }
     showModal({
@@ -28,35 +34,27 @@ const CreatePostBar = () => {
   }
 
   return (
-    <div className="flex flex-row items-center bg-s-bg mt-10 mb-4 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-p-border">
+    <div className="flex flex-row items-center bg-s-bg mt-4 mb-2 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-s-border">
       <div className="flex items-center justify-center rounded-full w-[44px] h-[44px]">
-        {!user && (
+        {(!isSignedIn || !lensProfile) && (
           <div>
-            <CgProfile className="w-[32px] h-[32px]" />
+            <BsFillPersonFill className="w-[32px] h-[32px]" />
           </div>
         )}
-        {user?.profileImageUrl && (
+        {isSignedIn && lensProfile && (
           <img
-            src={user.profileImageUrl}
+            src={getAvatar(lensProfile?.defaultProfile)}
             className="w-[44px] h-[44px] rounded-full"
-          />
-        )}
-        {user && !user.profileImageUrl && (
-          <Image
-            src={getStampFyiURL(user?.profileImageUrl)}
-            width="44"
-            height="44"
-            className="rounded-full"
           />
         )}
       </div>
       <div
-        className="p-2 flex-1 bg-[#EDE7FF] dark:bg-[#272729] rounded-[15px] h-[44px] flex flex-row items-center text-[#898A8D] cursor-pointer"
+        className="p-2 flex-1 bg-s-hover rounded-[15px] h-[44px] flex flex-row items-center text-[#898A8D] cursor-pointer"
         onClick={createPost}
       >
         <span>What&apos;s up?</span>
       </div>
-      <div className="flex flex-row gap-2 items-center">
+      {/* <div className="flex flex-row gap-2 items-center">
         <CiImageOn
           className="w-[20px] h-[20px] text-[#898A8D] cursor-pointer"
           onClick={createPost}
@@ -67,7 +65,7 @@ const CreatePostBar = () => {
         >
           POST
         </button>
-      </div>
+      </div> */}
     </div>
   )
 }

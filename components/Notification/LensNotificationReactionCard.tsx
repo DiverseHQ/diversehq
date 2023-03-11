@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { ImArrowUp, ImArrowDown } from 'react-icons/im'
 import { NewReactionNotification } from '../../graphql/generated'
+import formatHandle from '../User/lib/formatHandle'
 type Props = {
   notification: NewReactionNotification
   isRead: boolean
@@ -33,16 +34,22 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
     <CommonNotificationCardLayoutUI
       MainRow={() => (
         <div>
-          <span className="hover:underline font-bold">
-            <Link href={`/u/${notification?.profile?.handle}`}>
-              u/{notification?.profile?.handle}
+          <span
+            className="hover:underline font-bold"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Link href={`/u/${formatHandle(notification?.profile?.handle)}`}>
+              <span>u/{formatHandle(notification?.profile?.handle)}</span>
             </Link>
           </span>
           <span>
             {notification?.reaction === 'UPVOTE' && ' upvoted your '}
             {notification?.reaction === 'DOWNVOTE' && ' downvoted your '}
           </span>
-          <span className="hover:underline font-bold">
+          <span
+            className="hover:underline font-bold"
+            onClick={(e) => e.stopPropagation()}
+          >
             {notification.notificationId.startsWith('reaction-post') && (
               <Link href={`/p/${notification?.publication?.id}`}>Post</Link>
             )}
@@ -87,11 +94,10 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
             </div>
           )}
           {showMore && (
-            <Link
-              href={`/p/${notification?.publication?.id}`}
-              className="text-blue-400 text-sm sm:text-base"
-            >
-              Show more
+            <Link href={`/p/${notification?.publication?.id}`}>
+              <div className="text-blue-400 text-sm sm:text-base">
+                Show more
+              </div>
             </Link>
           )}
         </div>
@@ -100,6 +106,12 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
         notification?.reaction === 'UPVOTE' ? <ImArrowUp /> : <ImArrowDown />
       }
       isRead={isRead}
+      cardLink={
+        notification.notificationId.startsWith('reaction-post')
+          ? `/p/${notification?.publication?.id}`
+          : /** @ts-ignore */
+            `/p/${notification?.publication?.mainPost?.id}`
+      }
     />
   )
 }

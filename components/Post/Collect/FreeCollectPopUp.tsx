@@ -7,6 +7,7 @@ import { CircularProgress } from '@mui/material'
 import { RiUserFollowLine } from 'react-icons/ri'
 import useDevice from '../../Common/useDevice'
 import { BsCollection } from 'react-icons/bs'
+import formatHandle from '../../User/lib/formatHandle'
 type Props = {
   setIsCollected: any
   setCollectCount: any
@@ -59,7 +60,7 @@ const FreeCollectPopUp = ({
   return (
     <>
       {isDesktop ? (
-        <div className="py-4  bg-s-bg shadow-sm shadow-p-border rounded-lg px-4 flex flex-row w-fit items-center justify-center space-x-6 rounded-xl border border-p-border">
+        <div className="py-4  bg-s-bg shadow shadow-s-border px-4 flex flex-row w-fit items-center justify-center space-x-6 rounded-xl">
           <div className="shrink-0">
             {!collectModule.followerOnly && (
               <div className="font-medium text-base ml-3.5">
@@ -94,7 +95,8 @@ const FreeCollectPopUp = ({
                           'Follow back'
                         ) : (
                           <div className="flex flex-row justify-center items-center space-x-1 ">
-                            <RiUserFollowLine /> <p>Follow {author.handle}</p>
+                            <RiUserFollowLine />{' '}
+                            <p>Follow u/{formatHandle(author.handle)}</p>
                           </div>
                         )}
                       </button>
@@ -116,7 +118,7 @@ const FreeCollectPopUp = ({
               loading || (collectModule.followerOnly && !isFollowedByMe)
                 ? 'bg-p-btn-disabled'
                 : 'bg-p-btn'
-            } text-p-btn-text mr-1.5 rounded-md py-1.5 px-2 text-center flex font-semibold text-sm  text-p-text justify-center items-center ${
+            } text-p-btn-text mr-1.5 rounded-md py-1.5 px-2 text-center flex font-semibold text-sm justify-center items-center ${
               collectModule?.__typename === 'FreeCollectModuleSettings' &&
               collectModule.followerOnly &&
               !isFollowedByMe &&
@@ -144,12 +146,14 @@ const FreeCollectPopUp = ({
               <>
                 {!isFollowedByMe && (
                   <div className="flex flex-col items-center self-start space-x-2 mb-2 font-medium w-full">
-                    <p>Follow {author.handle} to Collect for Free</p>
+                    <p>
+                      Follow {formatHandle(author.handle)} to Collect for Free
+                    </p>
                     <button
                       onClick={() => {
                         handleFollowProfile(author.id)
                       }}
-                      className="bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1"
+                      className="bg-p-btn text-p-text rounded-full text-center flex font-semibold py-1 justify-center items-center w-full text-xl m-1"
                     >
                       {followLoading ? (
                         <div className="flex flex-row self-start space-x-2 text-p-btn-text">
@@ -158,7 +162,8 @@ const FreeCollectPopUp = ({
                         </div>
                       ) : (
                         <div className="flex flex-row justify-center items-center space-x-1 text-p-btn-text">
-                          <RiUserFollowLine /> <p>Follow {author.handle}</p>
+                          <RiUserFollowLine />{' '}
+                          <p>Follow {formatHandle(author.handle)}</p>
                         </div>
                       )}
                     </button>
@@ -175,7 +180,7 @@ const FreeCollectPopUp = ({
             disabled={
               loading || (collectModule.followerOnly && !isFollowedByMe)
             }
-            className={`bg-p-btn text-p-text rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl m-1 ${
+            className={`bg-p-btn text-p-text rounded-full text-center flex font-semibold py-1 justify-center items-center w-full text-xl m-1 ${
               collectModule.followerOnly && !isFollowedByMe && 'hidden'
             }`}
           >

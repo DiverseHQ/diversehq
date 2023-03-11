@@ -4,15 +4,17 @@ import useDevice from '../Common/useDevice'
 
 import ReactTimeAgo from 'react-time-ago'
 
-import { PublicationMainFocus, ReactionTypes } from '../../graphql/generated'
+import { PublicationMainFocus } from '../../graphql/generated'
 import ReactEmbedo from './embed/ReactEmbedo'
-import { Markup } from 'interweave'
 import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
 import { BsCollection } from 'react-icons/bs'
 import Link from 'next/link'
 import Attachment from './Attachment'
 import { Tooltip } from '@mui/material'
+import formatHandle from '../User/lib/formatHandle'
+import Markup from '../Lexical/Markup'
+import { AiOutlineRetweet } from 'react-icons/ai'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
@@ -41,19 +43,19 @@ const IndexingPostCard = ({ postInfo }) => {
                     </div>
                   </Link>
 
-                  <Link
-                    href={`/u/${postInfo?.profile?.handle}`}
-                    className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
-                  >
-                    <p className="pl-1.5 font-normal"> posted by</p>
-                    <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                      u/{postInfo?.profile?.handle}
+                  <Link href={`/u/${formatHandle(postInfo?.profile?.handle)}`}>
+                    <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
+                      <p className="pl-1.5 font-normal"> posted by</p>
+                      <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                        u/{formatHandle(postInfo?.profile?.handle)}
+                      </div>
                     </div>
                   </Link>
                   <div>
                     {postInfo?.createdAt && (
                       <div className="text-xs sm:text-sm text-s-text ml-2">
                         <ReactTimeAgo
+                          timeStyle="twitter"
                           date={new Date(postInfo.createdAt)}
                           locale="en-US"
                         />
@@ -81,19 +83,21 @@ const IndexingPostCard = ({ postInfo }) => {
                     </Link>
                     <div className="flex flex-row items-center justify-start">
                       <Link
-                        href={`/u/${postInfo?.profile?.handle}`}
-                        className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm"
+                        href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
                         passHref
                       >
-                        <p className="pl-1.5 font-normal"> posted by</p>
-                        <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                          u/{postInfo?.profile?.handle}
+                        <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
+                          <p className="pl-1.5 font-normal"> posted by</p>
+                          <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
+                            u/{formatHandle(postInfo?.profile?.handle)}
+                          </div>
                         </div>
                       </Link>
                       <div>
                         {postInfo?.createdAt && (
                           <div className="text-xs sm:text-sm text-s-text ml-2">
                             <ReactTimeAgo
+                              timeStyle="twitter"
                               date={new Date(postInfo.createdAt)}
                               locale="en-US"
                             />
@@ -107,7 +111,12 @@ const IndexingPostCard = ({ postInfo }) => {
             )}
             <div className="sm:mr-5 flex flex-row items-center">
               {/* pulsing dot */}
-              <Tooltip title="Indexing" arrow>
+              <Tooltip
+                enterDelay={1000}
+                leaveDelay={200}
+                title="Indexing"
+                arrow
+              >
                 <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
               </Tooltip>
             </div>
@@ -119,11 +128,7 @@ const IndexingPostCard = ({ postInfo }) => {
                 <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
                   <img
                     //  onClick={liked ? handleUnLike : handleLike}
-                    src={
-                      postInfo.reaction === ReactionTypes.Upvote
-                        ? '/UpvotedFilled.svg'
-                        : '/upvoteGray.svg'
-                    }
+                    src={'/UpvotedFilled.svg'}
                     className="w-5 h-5"
                   />
                 </button>
@@ -138,7 +143,7 @@ const IndexingPostCard = ({ postInfo }) => {
             <div className="flex flex-col w-full justify-between min-h-[76px]">
               <div>
                 <div className="mb-2 px-3 sm:pl-3.5">
-                  {postInfo?.metadata?.name !== 'Created with DiverseHQ' && (
+                  {postInfo?.metadata?.name && (
                     <div className="font-medium text-base sm:text-lg w-full break-words">
                       {postInfo?.metadata?.name}
                     </div>
@@ -154,17 +159,15 @@ const IndexingPostCard = ({ postInfo }) => {
                           showMore ? 'line-clamp-5' : ''
                         } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                       >
-                        {postInfo?.metadata?.content}
+                        {postInfo?.metadata?.content?.startsWith(
+                          postInfo?.metadata?.name
+                        )
+                          ? postInfo?.metadata?.content?.slice(
+                              postInfo?.metadata?.name.length
+                            )
+                          : postInfo?.metadata?.content}
                       </Markup>
                     </div>
-                  )}
-                  {showMore && (
-                    <Link
-                      href={`/p/${postInfo?.id}`}
-                      className="text-blue-400 text-sm sm:text-base"
-                    >
-                      Show more
-                    </Link>
                   )}
                 </div>
                 {postInfo?.metadata?.media?.length > 0 && (
@@ -220,6 +223,13 @@ const IndexingPostCard = ({ postInfo }) => {
                 >
                   <BsCollection className="w-4 h-4 " />
                   <div className="ml-2">0</div>
+                </button>
+                <button
+                  disabled={true}
+                  className="hover:bg-p-btn-hover text-[#687684] rounded-md p-1 cursor-pointer flex flex-row items-center"
+                >
+                  <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
+                  <p className="ml-2 font-medium text-[#687684]">0</p>
                 </button>
                 <div className="hover:bg-p-btn-hover rounded-md p-1">
                   <img

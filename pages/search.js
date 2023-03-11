@@ -6,8 +6,11 @@ import RightSideCommunityComponent from '../components/Home/RightSideCommunityCo
 import { NextSeo } from 'next-seo'
 import { getAllCommunities } from '../api/community'
 import { useNotify } from '../components/Common/NotifyContext'
+import useDevice from '../components/Common/useDevice'
+import SearchModal from '../components/Search/SearchModal'
 const search = () => {
   const { notifyError } = useNotify()
+  const { isMobile } = useDevice()
 
   const [topCommunities, setTopCommunities] = useState([])
   const fetchTopCommunities = async () => {
@@ -40,6 +43,15 @@ const search = () => {
           url: 'https://app.diversehq.xyz/search'
         }}
       />
+      {isMobile && (
+        <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] bg-s-bg">
+          <div className="h-[32px] flex flex-row items-center gap-3 text-[18px] w-full">
+            <span className="font-bold text-[20px] w-full">
+              <SearchModal />
+            </span>
+          </div>
+        </div>
+      )}
       <div className="w-screen flex flex-col px-4 mt-6 gap-4">
         {/* <SearchModal /> */}
         {recentCommunities.length > 0 && (
@@ -52,6 +64,7 @@ const search = () => {
             })}
           </div>
         )}
+
         {topCommunities.length > 0 && (
           <div className="flex flex-col gap-2 md:gap-3">
             <h3 className="text-[18px] font-medium">Top Communities</h3>
