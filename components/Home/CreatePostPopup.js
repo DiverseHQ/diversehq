@@ -98,6 +98,7 @@ const CreatePostPopup = () => {
     JSON.parse(window.localStorage.getItem('recentCommunities')) || []
   const [selectedCommunity, setSelectedCommunity] = useState(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [flairDrawerOpen, setFlairDrawerOpen] = useState(false)
   const [gifAttachment, setGifAttachment] = useState(null)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
 
@@ -629,6 +630,7 @@ const CreatePostPopup = () => {
                       onClick: () => {
                         setFlair('None')
                         setShowOptionsModal(false)
+                        setFlairDrawerOpen(false)
                       }
                     },
                     {
@@ -636,6 +638,7 @@ const CreatePostPopup = () => {
                       onClick: () => {
                         setFlair('NSFW')
                         setShowOptionsModal(false)
+                        setFlairDrawerOpen(false)
                       }
                     },
                     {
@@ -643,6 +646,7 @@ const CreatePostPopup = () => {
                       onClick: () => {
                         setFlair('SENSITIVE')
                         setShowOptionsModal(false)
+                        setFlairDrawerOpen(false)
                       }
                     },
                     {
@@ -650,6 +654,7 @@ const CreatePostPopup = () => {
                       onClick: () => {
                         setFlair('SPOILER')
                         setShowOptionsModal(false)
+                        setFlairDrawerOpen(false)
                       }
                     }
                   ]}
@@ -658,13 +663,10 @@ const CreatePostPopup = () => {
               position="bottom"
               showOptionsModal={showOptionsModal}
               setShowOptionsModal={setShowOptionsModal}
+              isDrawerOpen={flairDrawerOpen}
+              setIsDrawerOpen={setFlairDrawerOpen}
             >
-              <button
-                onClick={() => {
-                  setShowOptionsModal(!showOptionsModal)
-                }}
-                className="flex items-center hover:cursor-pointer space-x-1 sm:space-x-2 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full border border-s-border "
-              >
+              <button className="flex items-center hover:cursor-pointer space-x-1 sm:space-x-2 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full border border-s-border ">
                 <p>{flair ? flair : 'Flair'}</p>
                 <AiOutlineDown className="w-4 h-4 mx-1" />
               </button>
