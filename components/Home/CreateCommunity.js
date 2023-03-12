@@ -2,7 +2,10 @@ import { useCallback, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
 import { useNotify } from '../Common/NotifyContext'
-import { postCreateCommunity, postGetCommunityExistStatus } from '../../api/community'
+import {
+  postCreateCommunity,
+  postGetCommunityExistStatus
+} from '../../api/community'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -125,7 +128,6 @@ const CreateCommunity = () => {
   const onChangeCommunityDescription = useCallback((e) => {
     setCommunityDescription(e.target.value)
   }, [])
-
 
   const [communityNameError, setCommunityNameError] = useState(null)
 
