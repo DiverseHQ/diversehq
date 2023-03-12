@@ -38,6 +38,20 @@ export const getCommunityInfoUsingId = async (communityId: string) => {
   }
 }
 
+export const postGetCommunityExistStatus = async (name: string) => {
+  try {
+    return await fetch(`${apiEndpoint}/community/community-exist-status`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        name: name
+      })
+    }).then((res) => res.json())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const postGetCommunityInfoUsingListOfIds = async (
   communityIds: string[]
 ) => {

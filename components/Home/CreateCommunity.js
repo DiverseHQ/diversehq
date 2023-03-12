@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { AiOutlineCamera, AiOutlineClose } from 'react-icons/ai'
 import { useNotify } from '../Common/NotifyContext'
-import { postCreateCommunity } from '../../api/community'
+import { postCreateCommunity, postGetCommunityExistStatus } from '../../api/community'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -44,7 +44,7 @@ const CreateCommunity = () => {
       return
     }
     if (communityName.length > 26) {
-      notifyError('Community name must be less than 16 characters')
+      notifyError('Community name must be less than 26 characters')
       setLoading(false)
       return
     }
@@ -126,6 +126,18 @@ const CreateCommunity = () => {
     setCommunityDescription(e.target.value)
   }, [])
 
+
+  const [communityNameError, setCommunityNameError] = useState(null)
+
+  const checkCommunityName = async () => {
+    const isExist = await postGetCommunityExistStatus(communityName)
+    if (isExist) {
+      setCommunityNameError('Community name already exists')
+      return
+    }
+    setCommunityNameError(null)
+  }
+
   return (
     <>
       <PopUpWrapper
@@ -197,6 +209,8 @@ const CreateCommunity = () => {
             onChange={onChangeCommunityName}
             required
             maxLength={26}
+            onBlur={() => checkCommunityName()}
+            errorMsg={communityNameError}
           />
           <FormTextInput
             label="Short Description"

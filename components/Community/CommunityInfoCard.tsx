@@ -208,7 +208,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                     title="More"
                     arrow
                   >
-                    <div className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
+                    <div className="hover:bg-p-btn-hover rounded-md p-1.5 cursor-pointer">
                       <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                   </Tooltip>

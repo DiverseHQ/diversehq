@@ -6,28 +6,11 @@ import {
 } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
-import RightSideCommunityComponent from './RightSideCommunityComponent'
 import { HiOutlineSparkles } from 'react-icons/hi'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 import useHideSidebar from './hook/useHideSidebar'
-
-const CommunitiesDiv = ({ text, communitiesList, Icon }) => {
-  /*
-    text is the heading text
-    communitiesList is the list of communities to map over
-  */
-  return (
-    <div className="flex flex-col mb-4 md:mb-6 bg-s-bg w-full rounded-[15px] border-[1px] border-s-border space-y-3 p-2">
-      <div className="flex flex-row gap-1 xl:gap-2 items-center text-p-text px-3">
-        <Icon />
-        <h3 className="text-lg leading-6 font-medium">{text}</h3>
-      </div>
-      {communitiesList?.map((community, i) => {
-        return <RightSideCommunityComponent key={i} community={community} />
-      })}
-    </div>
-  )
-}
+import CopyrightAndLinks from '../Common/UI/CopyrightAndLinks'
+import CommunitiesDiv from '../Common/UI/CommunitiesDiv'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
@@ -90,13 +73,6 @@ const RightSidebar = () => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   fetchCommunitiesAndSetState(
-  //     recommendedCommunitiesIds,
-  //     setRecommendedCommunities
-  //   )
-  // }, [])
-
   return (
     <div
       className={`relative ${
@@ -112,24 +88,6 @@ const RightSidebar = () => {
           Icon={() => <AiOutlineUsergroupAdd className="w-[20px] h-[20px]" />}
         />
       )}
-      {/* <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
-        <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
-          Most Visited Communities
-        </h3>
-        {mostVisitedCommunities.map((community, i) => {
-          return <RightSideCommunityComponent key={i} community={community} />
-        })}
-      </div> */}
-      {/* {recommendedCommunities.length > 0 && (
-        <div className="flex flex-col gap-2 md:gap-3 mb-4 md:mb-6">
-          <h3 className="text-[18px] font-medium border-b-[1px] border-[#B1B2FF]">
-            Recommended Communities
-          </h3>
-          {recommendedCommunities.map((community, i) => {
-            return <RightSideCommunityComponent key={i} community={community} />
-          })}
-        </div>
-      )} */}
       {topCommunities?.length > 0 && (
         <CommunitiesDiv
           text="Recommended Communities"
@@ -137,6 +95,7 @@ const RightSidebar = () => {
           Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
         />
       )}
+      <CopyrightAndLinks />
     </div>
   )
 }

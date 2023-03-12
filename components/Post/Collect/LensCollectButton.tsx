@@ -97,7 +97,7 @@ const LensCollectButton = ({
           title={isCollected || hasCollectedByMe ? 'Collected' : 'Collect'}
           arrow
         >
-          <div className="hover:bg-s-hover active:bg-s-hover rounded-md p-1 cursor-pointer flex flex-row items-center">
+          <div className="hover:bg-s-hover active:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center">
             {collectModule.__typename === 'FreeCollectModuleSettings' && (
               <>
                 {isCollected || hasCollectedByMe ? (

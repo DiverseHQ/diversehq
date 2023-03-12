@@ -740,7 +740,7 @@ const LensPostCard = ({ post }: Props) => {
                           e.stopPropagation()
                           handleUpvote()
                         }}
-                        className="hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md p-1"
+                        className="hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md px-2 py-1.5"
                       >
                         <img
                           src={
@@ -766,7 +766,7 @@ const LensPostCard = ({ post }: Props) => {
                           e.stopPropagation()
                           handleDownvote()
                         }}
-                        className="hover:bg-s-hover active:bg-s-hover rounded-md p-1 cursor-pointer"
+                        className="hover:bg-s-hover active:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer"
                       >
                         <img
                           src={
@@ -780,59 +780,27 @@ const LensPostCard = ({ post }: Props) => {
                     </Tooltip>
                   </div>
                 )}
-                {!router.pathname.startsWith('/p') ? (
-                  <Tooltip
-                    enterDelay={1000}
-                    leaveDelay={200}
-                    title="Comment"
-                    arrow
-                  >
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <Link href={`/p/${postInfo.id}`} passHref>
-                        {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
-                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                    )}
-                    {postInfo?.stats?.totalAmountOfComments > 0 && (
-                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                    )} */}
-                        <div className="flex flex-row items-center cursor-pointer hover:bg-s-hover active:bg-s-hover rounded-md p-1 font-medium">
-                          <img
-                            src="/comment.svg"
-                            alt="Comment"
-                            className="w-4 h-4 mr-2"
-                          />
-                          <span className="text-[#687684]">
-                            {postInfo?.stats?.totalAmountOfComments}
-                          </span>
-                        </div>
-                      </Link>
-                    </span>
-                  </Tooltip>
-                ) : (
-                  <Tooltip
-                    enterDelay={1000}
-                    leaveDelay={200}
-                    title="Comment"
-                    arrow
-                  >
-                    <div className="flex flex-row items-center cursor-pointer  hover:bg-s-hover active:bg-s-hover rounded-md p-1 font-medium">
-                      {/* {postInfo?.stats?.totalAmountOfComments === 0 && (
-                      <FaRegComment className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                    )}
-                    {postInfo?.stats?.totalAmountOfComments > 0 && (
-                      <FaRegCommentDots className="hover:cursor-pointer mr-2 w-5 h-5 sm:w-5 sm:h-5" />
-                    )} */}
-                      <img
-                        src="/comment.svg"
-                        alt="Comment"
-                        className="w-4 h-4 mr-2"
-                      />
-                      <span className="text-[#687684]">
-                        {postInfo?.stats?.totalAmountOfComments}
-                      </span>
-                    </div>
-                  </Tooltip>
-                )}
+                <Tooltip
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Comment"
+                  arrow
+                >
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <Link href={`/p/${postInfo.id}`} passHref>
+                      <div className="flex flex-row items-center cursor-pointer hover:bg-s-hover active:bg-s-hover rounded-md px-2 py-1.5 font-medium">
+                        <img
+                          src="/comment.svg"
+                          alt="Comment"
+                          className="w-4 h-4 mr-2"
+                        />
+                        <span className="text-[#687684]">
+                          {postInfo?.stats?.totalAmountOfComments}
+                        </span>
+                      </div>
+                    </Link>
+                  </span>
+                </Tooltip>
 
                 {(postInfo?.collectModule?.__typename ===
                   'FreeCollectModuleSettings' ||

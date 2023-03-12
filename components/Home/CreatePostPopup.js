@@ -15,7 +15,7 @@ import {
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Tooltip } from '@mui/material'
 
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
@@ -94,8 +94,8 @@ const CreatePostPopup = () => {
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
 
-  const recentCommunities =
-    JSON.parse(window.localStorage.getItem('recentCommunities')) || []
+  const mostPostedCommunities =
+    JSON.parse(window.localStorage.getItem('mostPostedCommunities')) || []
   const [selectedCommunity, setSelectedCommunity] = useState(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [flairDrawerOpen, setFlairDrawerOpen] = useState(false)
@@ -111,12 +111,12 @@ const CreatePostPopup = () => {
     setImageValue(gifAttachment ? gifAttachment?.images?.original?.url : null)
   }, [gifAttachment])
 
-  const storeRecentCommunities = () => {
+  const storeMostPostedCommunities = () => {
     window.localStorage.setItem(
-      'recentCommunities',
+      'mostPostedCommunities',
       JSON.stringify([
         selectedCommunity,
-        ...recentCommunities.filter(
+        ...mostPostedCommunities.filter(
           (community) => community?._id !== selectedCommunity?._id
         )
       ])
@@ -152,7 +152,7 @@ const CreatePostPopup = () => {
       return
     }
     // }
-    storeRecentCommunities()
+    storeMostPostedCommunities()
     if (gifAttachment) {
       handleCreateLensPost(title, communityId, 'image/gif', imageValue)
     }
@@ -388,12 +388,13 @@ const CreatePostPopup = () => {
     }
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
-    // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
+    // setting the joinedCommunitites with mostPostedCommunities from the localStorage at the top
     setJoinedCommunities([
-      ...recentCommunities,
-      // removing the communities in the recentCommunities from the joinedCommunities using communityId
+      ...mostPostedCommunities,
+      // removing the communities in the mostPostedCommunities from the joinedCommunities using communityId
       ...response.filter(
-        (community) => !recentCommunities.some((c) => c?._id === community?._id)
+        (community) =>
+          !mostPostedCommunities.some((c) => c?._id === community?._id)
       )
     ])
     setLoadingJoinedCommunities(false)
@@ -686,27 +687,6 @@ const CreatePostPopup = () => {
             >
               <BsCollection className="w-5 h-5" />
             </button>
-            {/* )} */}
-            {/* <img src="/lensLogoWithoutText.svg" className="w-5" /> */}
-            {/* <Switch
-              checked={isLensPost}
-              onChange={() => {
-                if (!isSignedIn || !hasProfile) {
-                  notifyInfo('You need to be logged in lens to do that')
-                  return
-                }
-                if (isLensPost) setShowCollectSettings(false)
-                setIsLensPost(!isLensPost)
-              }}
-              disabled={loading}
-              size="small"
-              sx={{
-                '& .MuiSwitch-track': {
-                  backgroundColor: 'grey',
-                  color: 'grey'
-                }
-              }}
-            /> */}
           </div>
         </div>
 
@@ -751,11 +731,33 @@ const CreatePostPopup = () => {
               )}
             </div>
             <div
-              className="ml-6"
+              className="ml-6 flex gap-2 items-center"
               // onClick={(e) => {
               //   e.stopPropagation()
               // }}
             >
+              <Tooltip
+                placement="bottom"
+                enterDelay={1000}
+                leaveDelay={200}
+                title="Collect Setting"
+                arrow
+              >
+                <button
+                  onClick={() => {
+                    if (!isMobile) {
+                      setShowCollectSettings(!showCollectSettings)
+                      return
+                    } else {
+                      setIsDrawerOpen(true)
+                    }
+                  }}
+                  disabled={loading}
+                  className="rounded-full hover:bg-s-hover active:bg-s-hover p-2 cursor-pointer"
+                >
+                  <BsCollection className="w-5 h-5" />
+                </button>
+              </Tooltip>
               <Giphy setGifAttachment={setGifAttachment} />
             </div>
             <input
@@ -789,7 +791,7 @@ const CreatePostPopup = () => {
                 onClick={() => {
                   setIsDrawerOpen(false)
                 }}
-                className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl mb-6"
+                className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center w-full text-xl mb-6"
               >
                 Save
               </button>
