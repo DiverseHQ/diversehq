@@ -275,6 +275,7 @@ const Navbar = () => {
             onClick={showMoreOptions}
           >
             <ImageWithPulsingLoader
+              // @ts-ignore
               src={getAvatar(lensProfile?.defaultProfile)}
               className="w-[40px] h-[40px] rounded-full cursor-pointer"
             />
