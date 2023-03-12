@@ -65,7 +65,7 @@ const RightSidebar = () => {
   const fetchTopNotJoinedCommunities = async () => {
     try {
       const communities = await getNotJoinedCommunities(6, 0, 'top')
-      if (communities.communities.length > 0) {
+      if (communities?.communities?.length > 0) {
         setTopCommunities(communities.communities)
       }
     } catch (error) {

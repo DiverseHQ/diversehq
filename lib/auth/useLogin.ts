@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAccount, useSigner } from 'wagmi'
 import { useGetAccessTokenMutation } from '../../graphql/generated'
+import { useLensUserContext } from '../LensUserContext'
 import generateChallenge from './generateChallenge'
 import { setAccessTokenToStorage } from './helpers'
 
@@ -14,6 +15,7 @@ export default function useLogin() {
   const { address } = useAccount()
   const { data: signer } = useSigner()
   const queryClient = useQueryClient()
+  const { refetch } = useLensUserContext()
 
   const { mutateAsync: getAccessToken } = useGetAccessTokenMutation()
   async function login() {
@@ -54,6 +56,7 @@ export default function useLogin() {
     queryClient.invalidateQueries({
       queryKey: ['lensUser']
     })
+    await refetch()
   }
 
   // Return a useMutation hook that will call the login function

@@ -4,13 +4,15 @@ import React, { useEffect, useState } from 'react'
 // import { recommendedCommunitiesIds } from '../utils/config'
 import RightSideCommunityComponent from '../components/Home/RightSideCommunityComponent'
 import { NextSeo } from 'next-seo'
-import { getAllCommunities } from '../api/community'
+import { getAllCommunities, getNotJoinedCommunities } from '../api/community'
 import { useNotify } from '../components/Common/NotifyContext'
 import useDevice from '../components/Common/useDevice'
 import SearchModal from '../components/Search/SearchModal'
+import { useProfile } from '../components/Common/WalletContext'
 const search = () => {
   const { notifyError } = useNotify()
   const { isMobile } = useDevice()
+  const { user } = useProfile()
 
   const [topCommunities, setTopCommunities] = useState([])
   const fetchTopCommunities = async () => {
@@ -25,10 +27,26 @@ const search = () => {
     }
   }
 
+  const fetchTopNotJoinedCommunities = async () => {
+    try {
+      const communities = await getNotJoinedCommunities(6, 0, 'top')
+      if (communities.communities.length > 0) {
+        setTopCommunities(communities.communities)
+      }
+    } catch (error) {
+      console.log(error)
+      notifyError("Couldn't fetch top communities")
+    }
+  }
+
   useEffect(() => {
-    if (topCommunities.length > 0) return
-    fetchTopCommunities()
-  }, [])
+    if (!user) {
+      fetchTopCommunities()
+      return
+    } else {
+      fetchTopNotJoinedCommunities()
+    }
+  }, [user])
 
   const recentCommunities = JSON.parse(
     window.localStorage.getItem('recentCommunities')
