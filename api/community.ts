@@ -42,7 +42,7 @@ export const postGetCommunityExistStatus = async (name: string) => {
   try {
     return await fetch(`${apiEndpoint}/community/community-exist-status`, {
       method: 'POST',
-      headers: getHeaders(),
+      headers: await getHeaders(),
       body: JSON.stringify({
         name: name
       })
