@@ -9,6 +9,7 @@ import useDevice from '../../../components/Common/useDevice'
 import CommunityPageMobileTopNav from '../../../components/Community/CommunityPageMobileTopNav'
 import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info'
 import { CommunityWithCreatorProfile } from '../../../types/community'
+import CommunityPageRightSidebar from '../../../components/Community/CommunityPageRightSidebar'
 
 const CommunityPage = ({
   community
@@ -22,12 +23,13 @@ const CommunityPage = ({
       {community && <CommunityPageSeo community={community} />}
       {community && (
         <>
+          <CommunityInfoCard _community={community} />
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
-              <CommunityInfoCard _community={community} />
               <NavFilterCommunity />
               <LensPostsCommunityPublicationsColumn communityInfo={community} />
             </div>
+            <CommunityPageRightSidebar communityInfo={community} />
           </div>
         </>
       )}
