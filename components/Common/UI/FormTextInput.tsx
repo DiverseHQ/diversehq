@@ -8,6 +8,7 @@ interface Props {
   disabled?: boolean
   placeholder?: string
   onChange?: any
+  errorMsg?: string
 }
 
 const FormTextInput = ({
@@ -18,6 +19,8 @@ const FormTextInput = ({
   disabled = false,
   placeholder,
   onChange,
+  // onBlur,
+  errorMsg = null,
   ...props
 }: Props) => {
   return (
@@ -25,7 +28,7 @@ const FormTextInput = ({
       <div
         className={`border rounded-xl border-s-border mx-4 py-2 px-4 my-4 text-p-text bg-s-bg ${
           disabled ? 'cursor-not-allowed' : ''
-        }`}
+        } ${errorMsg ? 'border-red-500' : 'border-s-border'} `}
       >
         <div className="pb-2">{label}</div>
         <div className="flex flex-row items-center justify-between">
@@ -39,11 +42,17 @@ const FormTextInput = ({
             } bg-s-bg outline-none ${className}`}
             placeholder={placeholder}
             onChange={onChange}
+            // onBlur={onBlur}
             {...props}
           />
           {maxLength && (
             <div className="pl-1">
               {value ? value?.length : 0}/{maxLength}
+            </div>
+          )}
+          {errorMsg && (
+            <div className="text-red-500 text-xs absolute top-[8px] right-[8px]">
+              {errorMsg}
             </div>
           )}
         </div>

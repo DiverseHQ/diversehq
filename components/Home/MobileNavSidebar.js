@@ -5,10 +5,12 @@ import { useProfile } from '../Common/WalletContext'
 // import { IoIosHelpCircleOutline } from 'react-icons/io'
 // import { BsMoon } from 'react-icons/bs'
 // import { AiOutlineGift } from 'react-icons/ai'
-import { MdCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
-import CreateCommunity from './CreateCommunity'
+import { MdOutlineGroups } from 'react-icons/md'
+// import CreateCommunity from './CreateCommunity'
+// import { MdCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
+// import CreateCommunity from './CreateCommunity'
 import { useNotify } from '../Common/NotifyContext'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+// import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import LensLoginButton from '../Common/LensLoginButton'
 import { stringToLength } from '../../utils/utils'
 import { FaDiscord, FaRegCopy } from 'react-icons/fa'
@@ -32,7 +34,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
   const { user, address } = useProfile()
   const { notifyInfo, notifyError } = useNotify()
-  const { showModal } = usePopUpModal()
+  // const { showModal } = usePopUpModal()
   const { disconnect } = useDisconnect()
   const [createdCommunities, setCreatedCommunities] = useState([])
   const [showCreatedCommunities, setShowCreatedCommunities] = useState(false)
@@ -60,19 +62,19 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     getJoinedCommunities()
   }, [user])
 
-  const createCommunity = () => {
-    // setShowOptions(!showOptions)
-    if (!user) {
-      notifyInfo('You shall not pass, without login first')
-      return
-    }
-    showModal({
-      component: <CreateCommunity />,
-      type: modalType.normal,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
+  // const createCommunity = () => {
+  //   // setShowOptions(!showOptions)
+  //   if (!user) {
+  //     notifyInfo('You shall not pass, without login first')
+  //     return
+  //   }
+  //   showModal({
+  //     component: <CreateCommunity />,
+  //     type: modalType.normal,
+  //     onAction: () => {},
+  //     extraaInfo: {}
+  //   })
+  // }
 
   const routeToProfile = () => {
     if (!myLensProfile?.defaultProfile) {
@@ -178,7 +180,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <span className="text-p-text text-xl">Settings</span>
             </button>
             <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
-            <button
+            {/* <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
                 createCommunity()
@@ -187,8 +189,8 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             >
               <MdCreateNewFolder className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Create Community</span>
-            </button>
-
+            </button>{' '}
+             */}
             <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => {
@@ -199,7 +201,6 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <AiOutlineUsergroupAdd className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Created Communities</span>
             </button>
-
             <button
               className="flex flex-row items-center   py-4 gap-4"
               onClick={() => setShowJoinedCommunities(true)}
@@ -208,7 +209,6 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
               <MdOutlineGroups className="w-7 h-7 object-contain" />
               <span className="text-p-text text-xl">Joined Communities</span>
             </button>
-
             <div className="h-[2px] bg-[#eee] dark:bg-p-border" />
             <button
               className="flex flex-row items-center  py-4 gap-4"

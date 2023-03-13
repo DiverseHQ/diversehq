@@ -161,16 +161,6 @@ const Navbar = () => {
               alt="DivrseHQ Logo"
               onClick={routeToHome}
             />
-            <Tooltip
-              title={`The platform is in early BETA phase and things might break and change. \n Please report any bugs or issues you find on Discord.`}
-              placement="bottom"
-              arrow
-            >
-              <div className="flex flex-col justify-center items-start leading-4">
-                <div className="text-s-text text-sm">Private</div>
-                <div className="text-s-text text-sm">BETA</div>
-              </div>
-            </Tooltip>
           </div>
         </div>
         <SearchModal />
@@ -285,6 +275,7 @@ const Navbar = () => {
             onClick={showMoreOptions}
           >
             <ImageWithPulsingLoader
+              // @ts-ignore
               src={getAvatar(lensProfile?.defaultProfile)}
               className="w-[40px] h-[40px] rounded-full cursor-pointer"
             />

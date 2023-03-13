@@ -12,7 +12,7 @@ interface ContextType {
 export const ThemeContext = createContext<ContextType>(null)
 // import MUITheme from './MUITheme'
 const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light')
+  const [theme, setTheme] = useState('dark')
 
   const toggleTheme = () => {
     if (theme === 'light') {

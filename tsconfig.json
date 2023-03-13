@@ -25,7 +25,8 @@
     "utils/helper.ts",
     "components/Lexical/Plugins/ImagesPlugin.js",
     "utils/emitter.js",
-    "components/Community/Settings/Sections/ModeratorSection"
+    "components/Community/Settings/Sections/ModeratorSection",
+    "api/user.js"
   ],
   "exclude": ["node_modules"]
 }

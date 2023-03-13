@@ -38,7 +38,7 @@ const FilterListWithSearch = ({ list, type, filterParam, handleSelect }) => {
         <input
           type="text"
           placeholder="Search ..."
-          className="outline-none w-full font-medium bg-transparent"
+          className="outline-none w-full font-medium bg-transparent text-p-text"
           onChange={onChangeSearch}
           autoFocus={true}
         />

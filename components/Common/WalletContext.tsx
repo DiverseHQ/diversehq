@@ -44,15 +44,15 @@ export const WalletProvider = ({ children }) => {
       // fetchWeb3Token(true)
       console.log('refreshing user info')
       refreshUserInfo()
+    } else {
+      setUser(null)
+      setLoading(false)
     }
   }, [isSignedIn, hasProfile, address])
 
   const handleDisconnected = async () => {
     setUser(null)
     setLoading(false)
-    // if (getLocalToken()) {
-    //   removeLocalToken()
-    // }
     removeAccessTokenFromStorage()
     await queryClient.invalidateQueries({
       queryKey: ['lensUser', 'defaultProfile']

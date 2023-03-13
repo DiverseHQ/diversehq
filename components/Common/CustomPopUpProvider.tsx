@@ -86,8 +86,9 @@ const CustomPopUpModalProvider = ({ children }) => {
   return (
     <CustomPopUpModalContext.Provider value={providerVal}>
       <>
-        {modals.map((modal) => (
+        {modals.map((modal, i) => (
           <Modal
+          key={i}
             type={modal.type}
             component={modal.component}
             onBackBtnClick={providerVal.hideModal}

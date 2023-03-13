@@ -2,11 +2,11 @@ import React from 'react'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import { usePopUpModal, modalType } from '../Common/CustomPopUpProvider'
-import CreateCommunity from './CreateCommunity'
+// import CreateCommunity from './CreateCommunity'
 import CreatePostPopup from './CreatePostPopup'
 
 import { AiOutlineHome } from 'react-icons/ai'
-import { userRoles } from '../../utils/config'
+// import { userRoles } from '../../utils/config'
 import { CgProfile } from 'react-icons/cg'
 import { BiGroup } from 'react-icons/bi'
 import useHideSidebar from './hook/useHideSidebar'
@@ -21,26 +21,26 @@ const NewLeftSidebar = () => {
   const { notifyInfo }: any = useNotify()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 
-  const createCommunity = () => {
-    if (!user || !isSignedIn || !hasProfile) {
-      notifyInfo('You shall not pass, without login first')
-      return
-    }
-    if (
-      user?.role >= userRoles.WHITELISTED_USER &&
-      user?.communityCreationSpells <= 0
-    ) {
-      notifyInfo('You have used all your community creation spells')
-      return
-    }
+  // const createCommunity = () => {
+  //   if (!user || !isSignedIn || !hasProfile) {
+  //     notifyInfo('You shall not pass, without login first')
+  //     return
+  //   }
+  //   if (
+  //     user?.role >= userRoles.WHITELISTED_USER &&
+  //     user?.communityCreationSpells <= 0
+  //   ) {
+  //     notifyInfo('You have used all your community creation spells')
+  //     return
+  //   }
 
-    showModal({
-      component: <CreateCommunity />,
-      type: modalType.fullscreen,
-      onAction: () => {},
-      extraaInfo: {}
-    })
-  }
+  //   showModal({
+  //     component: <CreateCommunity />,
+  //     type: modalType.fullscreen,
+  //     onAction: () => {},
+  //     extraaInfo: {}
+  //   })
+  // }
 
   const createPost = () => {
     if (!user) {
@@ -83,12 +83,12 @@ const NewLeftSidebar = () => {
           >
             Create Post
           </button>
-          <button
+          {/* <button
             className="flex flex-row items-center justify-center w-full px-2 py-2 rounded-[10px] border-[1px] border-p-btn dark:border-p-text bg-m-btn-bg text-m-btn-text hover:bg-m-btn-hover-bg hover:text-m-btn-hover-text text-[16px] font-semibold transition-all duration-400"
             onClick={createCommunity}
           >
             Create Community
-          </button>
+          </button> */}
         </div>
       </div>
       <Sidebar

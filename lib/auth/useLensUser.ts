@@ -17,7 +17,7 @@ export default function useLensUser() {
   const lensProfileQuery = useDefaultProfileQuery(
     {
       request: {
-        ethereumAddress: address
+        ethereumAddress: address || ''
       }
     },
     {
@@ -39,6 +39,8 @@ export default function useLensUser() {
     isLoading: lensProfileQuery.isLoading,
     hasProfile: !!lensProfileQuery.data?.defaultProfile,
     data: !!address && !!localStorageQuery.data ? lensProfileQuery.data : null,
-    refetch: lensProfileQuery.refetch
+    refetch: async () => {
+      await localStorageQuery.refetch()
+    }
   }
 }

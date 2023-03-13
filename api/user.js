@@ -2,19 +2,19 @@ import { URLSearchParams } from 'next/dist/compiled/@edge-runtime/primitives/url
 import apiEndpoint from './ApiEndpoint'
 import { getHeaders } from './apiHelper'
 
-export const getUserInfo = async (walletAddress: string) => {
+export const getUserInfo = async (walletAddress) => {
   return await fetch(`${apiEndpoint}/user/walletaddress/${walletAddress}`).then(
     (res) => res.json()
   )
 }
 
-export const getUserFromAddressOrName = async (addressOrName: string) => {
+export const getUserFromAddressOrName = async (addressOrName) => {
   return await fetch(`${apiEndpoint}/user/nameoraddress/${addressOrName}`).then(
     (res) => res
   )
 }
 
-export const getWhitelistStatus = async (walletAddress: string) => {
+export const getWhitelistStatus = async (walletAddress) => {
   return await fetch(
     `${apiEndpoint}/user/checkWhitelist/${walletAddress}`
   ).then((res) => res)
@@ -31,12 +31,7 @@ export const postUser = async () => {
     })
 }
 
-export const getUserPosts = async (
-  walletAddress: string,
-  limit: number,
-  skips: number,
-  sortBy: string
-) => {
+export const getUserPosts = async (walletAddress, limit, skips, sortBy) => {
   return await fetch(
     `${apiEndpoint}/post/getPostsOfUser/${walletAddress}?` +
       new URLSearchParams({
@@ -47,7 +42,7 @@ export const getUserPosts = async (
   ).then((res) => res.json())
 }
 
-export const putUpdateUser = async (profileData: any) => {
+export const putUpdateUser = async (profileData) => {
   return await fetch(`${apiEndpoint}/user`, {
     method: 'PUT',
     headers: await getHeaders(),
@@ -62,7 +57,7 @@ export const getUnReadNotificationsCount = async () => {
   }).then((res) => res.json())
 }
 
-export const getAllNotifications = async (limit: number, skips: number) => {
+export const getAllNotifications = async (limit, skips) => {
   return await fetch(
     `${apiEndpoint}/user/get-all-notifications?` +
       new URLSearchParams({
@@ -83,10 +78,7 @@ export const putUpdateLensNotificationDate = async () => {
   }).then((res) => res.json())
 }
 
-export const getAllNotificationBetweenTimes = async (
-  from: string,
-  to: string
-) => {
+export const getAllNotificationBetweenTimes = async (from, to) => {
   return await fetch(
     `${apiEndpoint}/user/get-all-notifications-between-time?` +
       new URLSearchParams({

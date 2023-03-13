@@ -1,4 +1,4 @@
-import { CircularProgress, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 import React, { FC, useEffect, useState } from 'react'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import {
@@ -111,11 +111,7 @@ const MirrorButton: FC<Props> = ({ postInfo }) => {
           }`}
           disabled={loading || mirrored}
         >
-          {loading ? (
-            <CircularProgress size="14px" color="primary" />
-          ) : (
-            <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
-          )}
+          <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
           <p className="ml-2 font-medium text-[#687684]">{mirrorCount}</p>
         </button>
       </Tooltip>
