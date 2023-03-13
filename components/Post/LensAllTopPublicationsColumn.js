@@ -60,6 +60,7 @@ const LensAllTopPublicationsColumn = () => {
   )
 
   useEffect(() => {
+    if (router.pathname !== '/' && router.pathname !== '/feed/all') return
     setExploreQueryRequestParams({
       cursor: null,
       hasMore: true,
@@ -67,6 +68,17 @@ const LensAllTopPublicationsColumn = () => {
       posts: []
     })
   }, [timestamp])
+
+  useEffect(() => {
+    if (router.pathname !== '/' && router.pathname !== '/feed/all') return
+    if (!myLensProfile?.defaultProfile?.id) return
+    setExploreQueryRequestParams({
+      cursor: null,
+      hasMore: true,
+      nextCursor: null,
+      posts: []
+    })
+  }, [myLensProfile?.defaultProfile?.id])
 
   const getMorePosts = async () => {
     if (exploreQueryRequestParams.posts.length === 0) return

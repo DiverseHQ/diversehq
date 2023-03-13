@@ -49,6 +49,20 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
   }, [profileId])
 
   useEffect(() => {
+    if (!myLensProfile?.defaultProfile?.id) return
+    setQueryParams({
+      cursor: null,
+      hasMore: true,
+      nextCursor: null,
+      posts: []
+    })
+  }, [myLensProfile?.defaultProfile?.id])
+
+  useEffect(() => {
+    profilePublicationsResult.refetch()
+  }, [queryParams.cursor])
+
+  useEffect(() => {
     if (!profilePublicationsResult?.data?.publications?.items) return
     handleUserPublications()
   }, [profilePublicationsResult?.data?.publications?.pageInfo?.next])

@@ -107,6 +107,17 @@ const LensAllLatestPublicationsColumn = () => {
     }
   }, [indexingPost])
 
+  useEffect(() => {
+    if (router.pathname !== '/' && router.pathname !== '/feed/all') return
+    if (!myLensProfile?.defaultProfile?.id) return
+    setExploreQueryRequestParams({
+      cursor: null,
+      hasMore: true,
+      nextCursor: null,
+      posts: []
+    })
+  }, [myLensProfile?.defaultProfile?.id])
+
   const { isMobile } = useDevice()
   return (
     <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border overflow-hidden border-[1px] border-s-border">

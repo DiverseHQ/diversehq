@@ -38,6 +38,16 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }: Props) => {
     })
   }, [communityInfo?._id])
 
+  useEffect(() => {
+    if (!myLensProfile?.defaultProfile?.id) return
+    setQueryParams({
+      cursor: null,
+      hasMore: true,
+      nextCursor: null,
+      posts: []
+    })
+  }, [myLensProfile?.defaultProfile?.id])
+
   const { data } = useExplorePublicationsQuery(
     {
       request: {

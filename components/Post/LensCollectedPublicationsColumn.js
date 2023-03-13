@@ -39,7 +39,7 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
   useEffect(() => {
     if (!collectPublicationResult?.data?.publications?.items) return
     handleUserPublications(collectPublicationResult?.data?.publications?.items)
-  }, [collectPublicationResult?.data?.publications?.pageInfo?.next])
+  }, [collectPublicationResult?.data?.publications?.items])
 
   const handleSetPosts = async (newPosts) => {
     if (newPosts.length === 0) return

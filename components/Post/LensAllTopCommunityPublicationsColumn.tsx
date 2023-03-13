@@ -68,6 +68,16 @@ const LensAllTopCommunityPublicationsColumn = ({ communityInfo }: Props) => {
   }, [timestamp])
 
   useEffect(() => {
+    if (!myLensProfile?.defaultProfile?.id) return
+    setQueryParams({
+      cursor: null,
+      hasMore: true,
+      nextCursor: null,
+      posts: []
+    })
+  }, [myLensProfile?.defaultProfile?.id])
+
+  useEffect(() => {
     if (!data?.explorePublications?.items) return
     console.log('data?.explorePublications', data?.explorePublications)
     let hasMore = true
