@@ -14,7 +14,7 @@ const NotificationBannedUserCard = ({
       MainRow={() => (
         <div>
           <span>A mod</span>
-          <span>{' has banned your from '}</span>
+          <span>{' has banned you from '}</span>
           <span className="hover:underline font-bold">
             <Link href={`/c/${notification?.community?.name}`}>
               <span>c/{notification?.community?.name}</span>
