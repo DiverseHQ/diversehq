@@ -102,7 +102,7 @@ const ProfileNavFilter = ({ _lensProfile }: Props) => {
         title="Collected"
         active={pathname.endsWith('/collected')}
         onClick={() => {
-          router.push(`/u/${formatHandle(_lensProfile?.handle)}/feed/collected`)
+          router.push(`/u/${formatHandle(_lensProfile?.handle)}/collected`)
         }}
         Icon={<HiCollection className="h-5 w-5" />}
       />

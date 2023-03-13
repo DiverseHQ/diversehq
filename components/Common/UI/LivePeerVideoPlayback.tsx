@@ -11,6 +11,7 @@ const LivePeerVideoPlayback = ({
   title: string
   posterUrl: string
 }) => {
+  console.log('LivePeerVideoPlayback', url, title, posterUrl)
   return (
     <Player
       title={title}
@@ -19,6 +20,7 @@ const LivePeerVideoPlayback = ({
       poster={posterUrl}
       muted
       loop={false}
+      showLoadingSpinner={true}
       autoUrlUpload={{ fallback: true, ipfsGateway: 'https://w3s.link' }}
     />
   )

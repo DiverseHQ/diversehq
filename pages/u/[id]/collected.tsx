@@ -2,12 +2,12 @@ import React from 'react'
 import {
   getProfileAndLensProfileFromHandle,
   ProfileAndLensProfileType
-} from '../../../../components/User/lib/getProfileAndLensProfileFromHandle'
-import ProfileNotFound from '../../../../components/User/Page/ProfileNotFound'
-import ProfilePage from '../../../../components/User/Page/ProfilePage'
-import ProfilePageNextSeo from '../../../../components/User/ProfilePageNextSeo'
+} from '../../../components/User/lib/getProfileAndLensProfileFromHandle'
+import ProfileNotFound from '../../../components/User/Page/ProfileNotFound'
+import ProfilePage from '../../../components/User/Page/ProfilePage'
+import ProfilePageNextSeo from '../../../components/User/ProfilePageNextSeo'
 
-const lens = ({ profile, lensProfile }: ProfileAndLensProfileType) => {
+const collected = ({ profile, lensProfile }: ProfileAndLensProfileType) => {
   return (
     <>
       <ProfilePageNextSeo profile={profile} lensProfile={lensProfile} />
@@ -40,4 +40,4 @@ export async function getServerSideProps({
   }
 }
 
-export default lens
+export default collected

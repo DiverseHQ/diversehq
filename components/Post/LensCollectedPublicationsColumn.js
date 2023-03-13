@@ -12,18 +12,21 @@ import useDevice from '../Common/useDevice'
 import LensPostCard from './LensPostCard'
 
 const LensCollectedPublicationsColumn = ({ walletAddress }) => {
-  const [cursor, setCursor] = useState(null)
-  const [posts, setPosts] = useState([])
-  const [hasMore, setHasMore] = useState(true)
-  const [nextCursor, setNextCursor] = useState(null)
   const { data: myLensProfile } = useLensUserContext()
   const { isMobile } = useDevice()
+
+  const [queryParams, setQueryParams] = useState({
+    cursor: null,
+    hasMore: true,
+    nextCursor: null,
+    posts: []
+  })
 
   const collectPublicationResult = usePublicationsQuery(
     {
       request: {
         collectedBy: walletAddress,
-        cursor: cursor,
+        cursor: queryParams.cursor,
         limit: LENS_POST_LIMIT,
         publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror]
       },
@@ -41,7 +44,19 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
     handleUserPublications(collectPublicationResult?.data?.publications?.items)
   }, [collectPublicationResult?.data?.publications?.items])
 
-  const handleSetPosts = async (newPosts) => {
+  const handleUserPublications = async (newItems) => {
+    if (!newItems) return
+    let hasMore = queryParams.hasMore
+    let nextCursor = queryParams.nextCursor
+    if (newItems.length < LENS_POST_LIMIT) {
+      hasMore = false
+    }
+    if (collectPublicationResult?.data?.publications?.pageInfo?.next) {
+      nextCursor = collectPublicationResult?.data?.publications?.pageInfo?.next
+    }
+
+    const newPosts = newItems
+
     if (newPosts.length === 0) return
     const communityIds = newPosts.map((post) => {
       if (post?.metadata?.tags?.[0]) {
@@ -68,42 +83,39 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
         newPosts[i].communityInfo = communityInfoForPosts[i]
       }
     }
-    if (
-      posts.length === 0 ||
-      posts[posts.length - 1].profile.id !== newPosts[0].profile.id
-    ) {
-      setHasMore(true)
-      setPosts(newPosts)
-    } else {
-      setPosts([...posts, ...newPosts])
-    }
+    setQueryParams({
+      ...queryParams,
+      posts: [...queryParams.posts, ...newPosts],
+      hasMore,
+      nextCursor
+    })
   }
 
-  const handleUserPublications = async (newItems) => {
-    if (!newItems) return
-    if (newItems.length < LENS_POST_LIMIT) {
-      setHasMore(false)
-    }
-    if (collectPublicationResult?.data?.publications?.pageInfo?.next) {
-      setNextCursor(
-        collectPublicationResult?.data?.publications?.pageInfo?.next
-      )
-    }
-    await handleSetPosts(newItems)
-  }
+  useEffect(() => {
+    if (!myLensProfile?.defaultProfile?.id) return
+    setQueryParams({
+      cursor: null,
+      hasMore: true,
+      nextCursor: null,
+      posts: []
+    })
+  }, [myLensProfile?.defaultProfile?.id])
 
   const getMorePosts = async () => {
-    if (nextCursor) {
-      setCursor(nextCursor)
+    if (queryParams.nextCursor) {
+      setQueryParams({
+        ...queryParams,
+        cursor: queryParams.nextCursor
+      })
     }
   }
 
   return (
     <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border overflow-hidden">
       <InfiniteScroll
-        dataLength={posts.length}
+        dataLength={queryParams.posts.length}
         next={getMorePosts}
-        hasMore={hasMore}
+        hasMore={queryParams.hasMore}
         loader={
           isMobile ? (
             <MobileLoader />
@@ -136,7 +148,7 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
         }
         endMessage={<></>}
       >
-        {posts.map((post) => {
+        {queryParams.posts.map((post) => {
           return <LensPostCard key={post.id} post={post} />
         })}
       </InfiniteScroll>
