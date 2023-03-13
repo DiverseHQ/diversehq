@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import React, { memo } from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { AiOutlineDown } from 'react-icons/ai'
 import { CgCommunity } from 'react-icons/cg'
 import { MdOutlineExplore } from 'react-icons/md'
 import { sortTypes } from '../../utils/config'
@@ -11,8 +10,7 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import FilterRow from '../Common/UI/FilterRow'
 import FilterButton from '../Common/UI/FilterButton'
 import useSort from '../Common/Hook/useSort'
-import { RiArrowDropDownLine } from 'react-icons/ri'
-import { BsChevronCompactDown, BsChevronDown } from 'react-icons/bs'
+import { BsChevronDown } from 'react-icons/bs'
 
 const NavFilterAllPosts = () => {
   const router = useRouter()
