@@ -18,12 +18,6 @@ interface Props {
 }
 
 const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
-  const getCoverUrl = () => {
-    return (
-      publication?.metadata?.cover?.original.url || publication?.metadata?.image
-    )
-  }
-
   return (
     <>
       {type === 'image/svg+xml' ? (
@@ -36,7 +30,10 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
           className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
           controls
           muted
-          poster={getCoverUrl}
+          poster={imageProxy(
+            publication?.metadata?.cover?.original.url ||
+              publication?.metadata?.image
+          )}
         />
       ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
         <AudioPlayer
