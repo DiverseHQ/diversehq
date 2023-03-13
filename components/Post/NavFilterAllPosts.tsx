@@ -11,6 +11,8 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import FilterRow from '../Common/UI/FilterRow'
 import FilterButton from '../Common/UI/FilterButton'
 import useSort from '../Common/Hook/useSort'
+import { RiArrowDropDownLine } from 'react-icons/ri'
+import { BsChevronCompactDown, BsChevronDown } from 'react-icons/bs'
 
 const NavFilterAllPosts = () => {
   const router = useRouter()
@@ -89,7 +91,7 @@ const NavFilterAllPosts = () => {
           <FilterButton
             title={String(sortType)}
             active={true}
-            IconAtEnd={<AiOutlineDown className="w-3 h-3" />}
+            IconAtEnd={<BsChevronDown className="w-3 h-3" />}
             className="item-end"
           />
         </OptionsWrapper>

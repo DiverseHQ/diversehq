@@ -21,6 +21,7 @@ import { AiFillHome, AiOutlinePlus } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
 import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
+import { BsChevronDown } from 'react-icons/bs'
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
@@ -174,7 +175,7 @@ const Navbar = () => {
           /> */}
           <div className="flex flex-col relative">
             <button
-              className={`flex items-center hover:cursor-pointer space-x-1 py-1 px-2.5 sm:py-1 sm:pl-2.5 sm:pr-0.5 rounded-full ${
+              className={`flex items-center hover:cursor-pointer space-x-1 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full ${
                 isOnHomeFeed
                   ? 'bg-select-active-btn-bg text-select-active-btn-text'
                   : 'bg-select-btn-bg text-select-btn-text sm:hover:bg-select-btn-hover-bg'
@@ -189,7 +190,13 @@ const Navbar = () => {
                   ? `c/${router.asPath.split('/')[2]}`
                   : 'Home'}
               </span>
-              <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
+              <BsChevronDown
+                className={`${
+                  isOnHomeFeed
+                    ? `text-select-active-btn-text`
+                    : `text-select-btn-text`
+                } w-3 h-3 items-center `}
+              />
             </button>
 
             <div
