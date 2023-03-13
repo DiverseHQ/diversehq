@@ -34,7 +34,6 @@ const Navbar = () => {
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
   const [fetchingJoinedCommunities, setFetchingJoinedCommunities] =
     useState(false)
-  const [mount, setMount] = useState(false)
   const { notifyError } = useNotify()
 
   useEffect(() => {
@@ -47,8 +46,6 @@ const Navbar = () => {
       }
     }
 
-    setMount(true)
-
     // Add the event listener
     document.addEventListener('click', handleClick)
 
@@ -60,8 +57,6 @@ const Navbar = () => {
 
   const { notificationsCount, updateNotificationCount } =
     useNotificationsCount()
-
-  if (!mount) return null
 
   const routeToNotifications = async () => {
     updateNotificationCount()
