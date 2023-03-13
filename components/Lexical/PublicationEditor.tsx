@@ -31,7 +31,7 @@ const PublicationEditor = ({ setContent, onPaste }: Props) => {
         }
         placeholder={
           <div className="px-4 text-gray-400 absolute top-2 left-4 pointer-events-none whitespace-nowrap">
-            <div>What's this about...? (optional | Can leave empty)</div>
+            <div>What's this about...? ( optional )</div>
             <div className="text-xs">
               Tip: type @ and profile handle to tag them{' '}
             </div>

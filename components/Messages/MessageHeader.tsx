@@ -17,7 +17,7 @@ const MessageHeader = ({ profile, open, setOpen }) => {
   }
   return (
     <div
-      className="h-[50px] flex flex-row justify-between px-4 py-2 cursor-pointer items-center"
+      className="h-[50px] flex flex-row justify-between px-4 py-0 sm:py-2 cursor-pointer items-center"
       onClick={() => {
         setOpen(!open)
       }}
@@ -29,7 +29,7 @@ const MessageHeader = ({ profile, open, setOpen }) => {
         <div className="flex flex-row items-center space-x-2">
           {open && (
             <div
-              className="hover:bg-p-btn-hover p-1.5 rounded-full flex justify-center items-center cursor-pointer"
+              className="active:bg-p-btn-hover sm:hover:bg-p-btn-hover sm:p-1.5 p-3.5 rounded-full flex justify-center items-center cursor-pointer"
               onClick={handleShowConversations}
             >
               <BiArrowBack className="w-5 h-5" />

@@ -1,6 +1,7 @@
 import React, { useState, createContext, useEffect, useContext } from 'react'
 import {
-  useAccount
+  useAccount,
+  useSigner
   // useDisconnect,
   //  useProvider,
   // useSigner
@@ -35,12 +36,13 @@ export const WalletProvider = ({ children }) => {
   const { notifyInfo } = useNotify()
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
+  const { data: signer } = useSigner()
   // const { disconnect } = useDisconnect()
   const queryClient = useQueryClient()
   const { refetch, isSignedIn, hasProfile } = useLensUserContext()
 
   useEffect(() => {
-    if (isSignedIn && hasProfile && address) {
+    if (isSignedIn && hasProfile && address && signer) {
       // fetchWeb3Token(true)
       console.log('refreshing user info')
       refreshUserInfo()

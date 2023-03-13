@@ -30,7 +30,7 @@ const LensReportPost = ({
   const [showBanUserModal, setShowBanUserModal] = React.useState(false)
   const [extraReason, setExtraReason] = React.useState<string>('')
   const [ruleViolated, setRuleViolated] = React.useState<string>(
-    community?.rules[0].title ?? null
+    community?.rules[0]?.title ?? null
   )
   if (!report) return null
   const handleIgnore = async () => {

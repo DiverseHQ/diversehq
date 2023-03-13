@@ -608,7 +608,7 @@ const CreatePostPopup = () => {
                   </div>
                 ) : (
                   <div className="flex flex-row items-center justify-center px-2">
-                    <div>Choose Community</div>
+                    <div>Select Community</div>
                     <AiOutlineDown className="w-4 h-4 mx-1" />
                   </div>
                 )}
@@ -673,7 +673,7 @@ const CreatePostPopup = () => {
               </button>
             </OptionsWrapper>
 
-            <button
+            {/* <button
               onClick={() => {
                 if (!isMobile) {
                   setShowCollectSettings(!showCollectSettings)
@@ -686,7 +686,7 @@ const CreatePostPopup = () => {
               className="rounded-full hover:bg-s-hover p-2 cursor-pointer"
             >
               <BsCollection className="w-5 h-5" />
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -723,9 +723,9 @@ const CreatePostPopup = () => {
                       <AiOutlineCamera className="h-8 w-8" />
                     </div>
                     <div>Add Image or Video</div>
-                    <div className="text-sm">
+                    {/* <div className="text-sm">
                       (Leave Empty for only text post)
-                    </div>
+                    </div> */}
                   </div>
                 </label>
               )}

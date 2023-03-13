@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSigner } from 'wagmi'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useProfile } from '../Common/WalletContext'
@@ -35,6 +35,15 @@ const MainMsgModal = ({ isMobile = false }: Props) => {
   //   // enable scrolling on body when mouse leaves the component
   //   document.body.style.overflow = 'auto'
   // }
+
+  useEffect(() => {
+    if (!isMobile) return
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isOpen])
   return (
     <div
       className={`fixed ${

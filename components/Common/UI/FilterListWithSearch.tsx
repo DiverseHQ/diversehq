@@ -8,7 +8,23 @@ import CommunitySelectDiv from '../../Community/CommunitySelectDiv'
  * handleSelect is the operation to perform when list item is clicked
  */
 
-const FilterListWithSearch = ({ list, type, filterParam, handleSelect }) => {
+/* eslint-disable */
+
+interface Props {
+  list: any[]
+  type: string
+  filterParam: string
+  handleSelect: (item: any) => void
+  firstItem?: React.ReactElement
+}
+
+const FilterListWithSearch = ({
+  list,
+  type,
+  filterParam,
+  handleSelect,
+  firstItem
+}: Props) => {
   const [filteredList, setFilteredList] = useState(list)
 
   const onChangeSearch = (e) => {
@@ -43,6 +59,7 @@ const FilterListWithSearch = ({ list, type, filterParam, handleSelect }) => {
           autoFocus={true}
         />
       </div>
+      {firstItem}
       {filteredList?.length > 0 && (
         <>
           {filteredList.map((item) => {
