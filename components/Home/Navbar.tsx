@@ -34,12 +34,34 @@ const Navbar = () => {
   const [showJoinedCommunities, setShowJoinedCommunities] = useState(false)
   const [fetchingJoinedCommunities, setFetchingJoinedCommunities] =
     useState(false)
+  const [mount, setMount] = useState(false)
   const { notifyError } = useNotify()
-  const recentCommunities =
-    JSON.parse(window.localStorage.getItem('recentCommunities')) || []
+
+  useEffect(() => {
+    const handleClick = (event) => {
+      // Check if the target element of the click is the dropdown element
+      // or a descendant of the dropdown element
+      if (!dropdownRef.current?.contains(event.target)) {
+        // Hide the dropdown
+        setShowJoinedCommunities(false)
+      }
+    }
+
+    setMount(true)
+
+    // Add the event listener
+    document.addEventListener('click', handleClick)
+
+    // Remove the event listener when the component is unmounted
+    return () => {
+      document.removeEventListener('click', handleClick)
+    }
+  }, [dropdownRef])
 
   const { notificationsCount, updateNotificationCount } =
     useNotificationsCount()
+
+  if (!mount) return null
 
   const routeToNotifications = async () => {
     updateNotificationCount()
@@ -94,6 +116,8 @@ const Navbar = () => {
   // const [selectedCommunity, setSelectedCommunity] = useState(null)
 
   const storeRecentCommunities = (community) => {
+    const recentCommunities =
+      JSON.parse(window?.localStorage?.getItem('recentCommunities')) || []
     window.localStorage.setItem(
       'recentCommunities',
       JSON.stringify([
@@ -105,25 +129,6 @@ const Navbar = () => {
     )
   }
 
-  useEffect(() => {
-    const handleClick = (event) => {
-      // Check if the target element of the click is the dropdown element
-      // or a descendant of the dropdown element
-      if (!dropdownRef.current?.contains(event.target)) {
-        // Hide the dropdown
-        setShowJoinedCommunities(false)
-      }
-    }
-
-    // Add the event listener
-    document.addEventListener('click', handleClick)
-
-    // Remove the event listener when the component is unmounted
-    return () => {
-      document.removeEventListener('click', handleClick)
-    }
-  }, [dropdownRef])
-
   const getJoinedCommunities = async () => {
     if (!user?.walletAddress) {
       notifyError('I think you are not logged in')
@@ -132,6 +137,8 @@ const Navbar = () => {
     try {
       setFetchingJoinedCommunities(true)
       const response = await getJoinedCommunitiesApi()
+      const recentCommunities =
+        JSON.parse(window?.localStorage?.getItem('recentCommunities')) || []
       // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
       setJoinedCommunities([
         ...recentCommunities,
