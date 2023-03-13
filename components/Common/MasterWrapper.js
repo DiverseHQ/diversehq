@@ -9,7 +9,7 @@ import LensUserContextProvider from '../../lib/LensUserContext'
 import LexicalWrapper from './LexicalWrapper'
 import ThemeProvider from './ThemeProvider'
 import PostIndexingWrapper from '../Post/IndexingContext/PostIndexingWrapper'
-
+import LivepeerProvider from '../Common/LivepeerProvider'
 const queryClient = new QueryClient()
 
 const MasterWrapper = ({ children }) => {
@@ -20,13 +20,15 @@ const MasterWrapper = ({ children }) => {
           <LensUserContextProvider>
             <WalletProvider>
               <ThemeProvider>
-                <LexicalWrapper>
-                  <PostIndexingWrapper>
-                    <CustomPopUpModalProvider>
-                      {children}
-                    </CustomPopUpModalProvider>
-                  </PostIndexingWrapper>
-                </LexicalWrapper>
+                <LivepeerProvider>
+                  <LexicalWrapper>
+                    <PostIndexingWrapper>
+                      <CustomPopUpModalProvider>
+                        {children}
+                      </CustomPopUpModalProvider>
+                    </PostIndexingWrapper>
+                  </LexicalWrapper>
+                </LivepeerProvider>
               </ThemeProvider>
             </WalletProvider>
           </LensUserContextProvider>

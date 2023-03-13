@@ -3,6 +3,7 @@ import getIPFSLink from '../User/lib/getIPFSLink'
 import AttachmentSlide from './AttachmentSlide'
 import AttachmentMedia from './AttachmentMedia'
 import { Publication } from '../../graphql/generated'
+import { SUPPORTED_VIDEO_TYPE } from '../../utils/config'
 
 interface Props {
   publication: Publication
@@ -36,7 +37,9 @@ const AttachmentCarousel: FC<Props> = ({ publication, medias, className }) => {
   const renderChildren = () =>
     medias.map((media, i) => {
       const type = media.original.mimeType
-      const url = getIPFSLink(media.original.url)
+      const url = SUPPORTED_VIDEO_TYPE.includes(type)
+        ? media.original.url
+        : getIPFSLink(media.original.url)
 
       return (
         <div

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+// import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import imageProxy from '../User/lib/imageProxy'
 import {
   SUPPORTED_AUDIO_TYPE,
@@ -9,6 +9,9 @@ import {
 } from '../../utils/config'
 import AudioPlayer from './AudioPlayer'
 import { Publication } from '../../graphql/generated'
+import LivePeerVideoPlayback from '../Common/UI/LivePeerVideoPlayback'
+import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+import { stringToLength } from '../../utils/utils'
 
 interface Props {
   type: string
@@ -31,13 +34,25 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
           Open Image in new tab
         </button>
       ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
-        <VideoWithAutoPause
-          src={imageProxy(url)}
-          className={`image-unselectable object-cover sm:rounded-lg w-full ${className}`}
-          controls
-          muted
-          poster={getCoverUrl}
-        />
+        url.startsWith('https://firebasestorage.googleapis.com') ? (
+          <VideoWithAutoPause
+            src={imageProxy(url)}
+            className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+            controls
+            muted
+            poster={getCoverUrl}
+          />
+        ) : (
+          <div
+            className={`image-unselectable object-cover sm:rounded-lg overflow-hidden w-full ${className}`}
+          >
+            <LivePeerVideoPlayback
+              posterUrl={getCoverUrl()}
+              title={stringToLength(publication?.metadata?.content, 30)}
+              url={url}
+            />
+          </div>
+        )
       ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
         <AudioPlayer
           src={url}
