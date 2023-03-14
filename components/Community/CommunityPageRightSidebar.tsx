@@ -46,11 +46,11 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
       className={`relative hidden lg:flex flex-col w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar space-y-3`}
     >
       {/* About Community Card */}
-      <div className="flex flex-col bg-s-bg w-full rounded-[15px] border-[1px] border-s-border text-[#fff] dark:text-p-text">
+      <div className="flex flex-col bg-s-bg w-full rounded-[15px] border-[1px] border-s-border text-[#fff]">
         <div className="bg-[#9378d8] rounded-t-[15px] font-medium px-3 py-2">
           About Community
         </div>
-        <div className="text-p-text px-3 py-2 flex flex-col text-[14px]">
+        <div className="text-p-text px-3 py-2 flex flex-col">
           <div className="mb-3">
             <span>{communityInfo.description}</span>
           </div>
@@ -76,7 +76,7 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
           </div>
           <div className="flex flex-row gap-1 w-full">
             <div className="flex flex-col w-full">
-              <div className="relative bg-[#D7D7D7] h-[35px] rounded-[10px] flex flex-row">
+              <div className="relative bg-[#7c7c7c] h-[35px] rounded-[10px] flex flex-row">
                 <div className="flex z-10 self-center justify-self-center w-full justify-center text-white dark:text-p-text text-[14px]">
                   Level {level}
                 </div>
@@ -95,7 +95,7 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
 
       {/* Community Rules */}
       {communityInfo?.rules?.length > 0 && (
-        <div className="flex flex-col bg-s-bg w-full rounded-[15px] border-[1px] border-s-border text-[#fff] dark:text-p-text">
+        <div className="flex flex-col bg-s-bg w-full rounded-[15px] border-[1px] border-s-border text-[#fff]">
           <div className="bg-[#9378d8] rounded-t-[15px] font-medium px-3 py-2">
             Community Rules
           </div>
@@ -146,7 +146,7 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
 
       {/* Moderators Card */}
       {data?.profiles && data?.profiles?.items && (
-        <div className="flex flex-col bg-s-bg w-full rounded-[15px] border-[1px] border-s-border text-[#fff] dark:text-p-text">
+        <div className="flex flex-col bg-s-bg w-full rounded-[15px] border-[1px] border-s-border text-[#fff]">
           <div className="bg-[#9378d8] rounded-t-[15px] font-medium px-3 py-2">
             Moderators
           </div>

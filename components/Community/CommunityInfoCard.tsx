@@ -103,7 +103,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                   <div
                     className={`flex flex-row gap-2 ${isMobile ? 'mx-4' : ''}`}
                   >
-                    <div className="shrink-0 rounded-[10px] -translate-y-4  md:-translate-y-2 border-2 border-[#fff] dark:border-p-border md:border-none">
+                    <div className="shrink-0 rounded-[10px] -translate-y-4  md:-translate-y-6 border-2 border-[#fff] md:border-4 dark:border-p-border">
                       <ImageWithFullScreenZoom
                         className="rounded-[10px] bg-s-bg w-[60px] h-[60px] md:w-[120px] md:h-[120px] object-cover"
                         src={community.logoImageUrl}
@@ -112,13 +112,15 @@ const CommunityInfoCard = ({ _community }: Props) => {
                     {!isMobile && (
                       <div className="flex flex-col mt-4">
                         <p
-                          className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer truncate"
+                          className="font-bold text-[18px] md:text-2xl tracking-wider truncate"
                           onClick={redirectToCommunityPage}
                         >
                           {community.name}
                         </p>
-                        <div className="text-[14px] md:text-[16px]">
-                          {community.description}
+                        <div className="text-[14px] md:text-[16px] mb-4">
+                          <div className="hover:underline cursor-pointer text-s-text">
+                            c/{community.name}
+                          </div>
                         </div>
                       </div>
                     )}
