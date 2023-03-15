@@ -24,9 +24,10 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
     isSignedIn,
     hasProfile,
     data: lensProfile,
+    isLoading,
     refetch
   } = useLensUserContext()
-  const { user } = useProfile()
+  const { user, loading } = useProfile()
   const { address } = useAccount()
   const { notifyInfo, notifySuccess } = useNotify()
   const { showModal } = usePopUpModal()
@@ -38,8 +39,12 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
   const { mutateAsync: login } = useLogin()
   const { mutateAsync: createSetDispatcher } =
     useCreateSetDispatcherTypedDataMutation()
-  const { result, type, loading, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
+  const {
+    result,
+    type,
+    loading: broadcastLoading,
+    signTypedDataAndBroadcast
+  } = useSignTypedDataAndBroadcast()
 
   async function handleLogin() {
     await login()
@@ -102,11 +107,13 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
     }
   }, [result, type])
 
+  const showLoading = loading || isLoading
+
   return (
     <div>
       {/* {user && address && ( */}
       <div className="flex flex-col gap-4 text-p-text items-start">
-        {isSignedIn && hasProfile && (
+        {isSignedIn && hasProfile && user && !showLoading && (
           <div className="flex flex-col items-start">
             {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
               <Link
@@ -125,7 +132,7 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
               </Link>
             )}
             {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
-              !loading && (
+              !broadcastLoading && (
                 <button
                   onClick={handleEnableDispatcher}
                   className="rounded-full sm:rounded-xl text-sm bg-[#62F030] px-2"
@@ -134,14 +141,14 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
                 </button>
               )}
             {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
-              loading && (
+              broadcastLoading && (
                 <div className="rounded-full sm:rounded-xl text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
                   Going...
                 </div>
               )}
           </div>
         )}
-        {isSignedIn && !hasProfile && (
+        {isSignedIn && !hasProfile && !showLoading && (
           <button
             onClick={handleCreateLensProfileAndMakeDefault}
             className="rounded-xl text-[20px] md:text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
@@ -149,17 +156,20 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
             Create Lens Handle
           </button>
         )}
-        {!isSignedIn && address && (
+        {!isSignedIn && address && !showLoading && (
           <button
             onClick={handleLogin}
-            className="rounded-xl text-[20px] space-x-3 md:text-[16px] flex flex-row items-center font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-4 sm:px-6 "
+            className="rounded-full sm:rounded-xl  sm:text-xl space-x-3 flex flex-row items-center font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-1 px-3 sm:px-4 sm:px-6 "
           >
-            <img src={'/lensLogoWithoutText.svg'} className="w-6 h-6" />
+            <img
+              src={'/lensLogoWithoutText.svg'}
+              className="sm:w-6 sm:h-6 w-5 h-5"
+            />
 
             <span>Login</span>
           </button>
         )}
-        {!isSignedIn && !address && (
+        {!isSignedIn && !address && !showLoading && (
           <button
             onClick={openConnectModal}
             className="bg-p-btn text-p-btn-text px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-bold"
@@ -168,6 +178,21 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
           </button>
         )}
       </div>
+      {showLoading && (
+        <>
+          {isMobile ? (
+            <div className="w-[35px] h-[35px] rounded-full animate-pulse bg-s-hover" />
+          ) : (
+            <div className="flex flex-row items-center space-x-2 border-s-border border py-1 px-2 rounded-full ">
+              <div className="w-[40px] h-[40px] rounded-full animate-pulse bg-s-hover" />
+              <div className="flex flex-col justify-around space-y-1">
+                <div className="w-[100px] h-4 rounded-full animate-pulse bg-s-hover" />
+                <div className="w-[80px] h-4 rounded-full animate-pulse bg-s-hover" />
+              </div>
+            </div>
+          )}
+        </>
+      )}
       {/* )} */}
       {/* {!user && (
         <ConnectWalletAndSignInButton
