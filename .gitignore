@@ -47,3 +47,5 @@ package-lock.json
 **/public/worker-*.js.map
 **/public/fallback-*.js
 
+# capacitor
+/android
