@@ -112,7 +112,7 @@ export const SUPPORTED_AUDIO_TYPE: string[] = [
 export const baseXP = 200
 export const xpMultiplier = 4
 export const xpPerMember = 10
-export const apiMode: string = 'dev'
+export const apiMode: string = process.env.NEXT_PUBLIC_LENS_API_MODE
 export const isMainnet: boolean = apiMode === 'mainnet'
 export const HANDLE_SUFFIX: string = isMainnet ? '.lens' : '.test'
 

@@ -145,7 +145,7 @@ const LensNotificationColumn = () => {
         isSignedIn &&
         hasProfile &&
         lensProfile?.defaultProfile?.id && (
-          <div className="sm:rounded-2xl bg-s-bg border-[1px] border-s-border overflow-hidden my-4">
+          <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden my-4">
             <InfiniteScroll
               dataLength={notifications.length}
               next={getMoreNotifications}

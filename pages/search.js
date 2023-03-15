@@ -13,6 +13,7 @@ const search = () => {
   const { notifyError } = useNotify()
   const { isMobile } = useDevice()
   const { user } = useProfile()
+  const [recentCommunities, setRecentCommunities] = useState([])
 
   const [topCommunities, setTopCommunities] = useState([])
   const fetchTopCommunities = async () => {
@@ -41,16 +42,17 @@ const search = () => {
 
   useEffect(() => {
     if (!user) {
+      setRecentCommunities([])
       fetchTopCommunities()
       return
     } else {
       fetchTopNotJoinedCommunities()
+      const recentCommunities = JSON.parse(
+        window.localStorage.getItem('recentCommunities')
+      )
+      setRecentCommunities(recentCommunities)
     }
   }, [user])
-
-  const recentCommunities = JSON.parse(
-    window.localStorage.getItem('recentCommunities')
-  )
 
   return (
     <>
