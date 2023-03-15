@@ -20,7 +20,9 @@ const MobileTopNavbarWithTitle = ({ title, subtitle }: Props) => {
             />
           </div>
           <div className="flex flex-col leading-5">
-            <div className="font-bold text-2xl">{title}</div>
+            <div className="font-medium sm:font-bold text-xl sm:text-2xl">
+              {title}
+            </div>
             {subtitle && (
               <div className="text-[14px] text-s-text">{subtitle}</div>
             )}
