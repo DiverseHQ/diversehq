@@ -215,16 +215,18 @@ const Navbar = () => {
                       router.push(`/c/${community?.name}`)
                     }}
                     firstItem={
-                      <div
-                        className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl text-p-text hover:bg-p-btn hover:text-p-btn-text gap-4"
-                        onClick={() => {
-                          routeToHome()
-                          setShowJoinedCommunities(false)
-                        }}
-                      >
-                        <AiFillHome className="w-9 h-9 text-p-text items-center" />
-                        <div>Home</div>
-                      </div>
+                      !isOnHomeFeed ? (
+                        <div
+                          className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl text-p-text hover:bg-p-btn hover:text-p-btn-text gap-4"
+                          onClick={() => {
+                            routeToHome()
+                            setShowJoinedCommunities(false)
+                          }}
+                        >
+                          <AiFillHome className="w-9 h-9 text-p-text items-center" />
+                          <div>Home</div>
+                        </div>
+                      ) : null
                     }
                   />
                 </>
