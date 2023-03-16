@@ -225,6 +225,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
                     <div className="text-sm text-s-text font-medium">
                       u/{formatHandle(profile.handle)}
                     </div>
+                    {/* @ts-ignore */}
                     <MessageButton userLensProfile={profile} />
                   </div>
                   {/* reason of ban */}
