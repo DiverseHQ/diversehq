@@ -107,7 +107,7 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
     }
   }, [result, type])
 
-  const showLoading = loading || isLoading
+  const showLoading = loading || (isLoading && address)
 
   return (
     <div>
