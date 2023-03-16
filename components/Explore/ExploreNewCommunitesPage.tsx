@@ -7,7 +7,7 @@ import { COMMUNITY_LIMIT } from '../../utils/config'
 import CommunityInfoCardLoader from '../Common/UI/Loaders/CommunityInfoCardLoader'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useDevice from '../Common/useDevice'
-import CommunityInfoCard from '../Community/CommunityInfoCard'
+import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
 
 interface Props {
@@ -41,7 +41,7 @@ const ExploreNewCommunitesPage: FC<Props> = ({
   return (
     <>
       <div className="w-full flex justify-center">
-        <div className="w-full md:w-[650px]">
+        <div className="w-full md:w-[850px]">
           <ExploreFeedNav
             showUnjoined={showUnjoined}
             setShowUnjoined={setShowUnjoined}
@@ -55,7 +55,10 @@ const ExploreNewCommunitesPage: FC<Props> = ({
           >
             {communities.map((community) => {
               return (
-                <CommunityInfoCard key={community._id} _community={community} />
+                <ExploreCommunityCard
+                  key={community._id}
+                  _community={community}
+                />
               )
             })}
           </InfiniteScroll>
