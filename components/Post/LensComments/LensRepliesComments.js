@@ -16,7 +16,9 @@ const LensRepliedComments = ({
   const { data } = useCommentFeedQuery(
     {
       request: {
-        commentsOf: commentId
+        commentsOf: commentId,
+        commentsOfOrdering: CommentOrderingTypes.Ranking,
+        commentsRankingFilter: CommentRankingFilter.Relevant
       },
       reactionRequest: {
         profileId: lensProfile?.defaultProfile?.id ?? null
