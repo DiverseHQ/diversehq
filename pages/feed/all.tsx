@@ -5,7 +5,6 @@ import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsE
 import { NextSeo } from 'next-seo'
 // import useDevice from '../../components/Common/useDevice'
 // import CreatePostBar from '../../components/Home/CreatePostBar'
-// import useDevice from '../../components/Common/useDevice'
 // import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
 
 const lens = () => {
