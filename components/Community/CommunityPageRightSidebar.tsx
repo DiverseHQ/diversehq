@@ -183,6 +183,7 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
                           </div>
                         </div>
                       </div>
+                      {/* @ts-ignore */}
                       <MessageButton userLensProfile={profile} />
                     </div>
                   </div>
