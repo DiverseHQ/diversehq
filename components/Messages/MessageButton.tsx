@@ -1,13 +1,19 @@
 import { CircularProgress } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { CiMail } from 'react-icons/ci'
+import { Profile } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useMessageStore } from '../../store/message'
 import useXmtpClient from './hooks/useXmtpClient'
 import buildConversationId from './lib/buildConversationId'
 import { buildConversationKey } from './lib/conversationKey'
 
-const MessageButton = ({ userLensProfile }) => {
+interface Props {
+  userLensProfile: Profile
+  className?: string
+}
+
+const MessageButton: FC<Props> = ({ userLensProfile, className }) => {
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
   const [lensProfile, setLensProfile] = useState(null)
 
@@ -48,7 +54,7 @@ const MessageButton = ({ userLensProfile }) => {
         hasProfile &&
         lensProfile.ownedBy !== myLensProfile?.defaultProfile.ownedBy && (
           <div
-            className="p-1.5 rounded-full cursor-pointer hover:bg-s-hover flex flex-row items-center space-x-1"
+            className={`p-1.5 rounded-full cursor-pointer hover:bg-s-hover flex flex-row items-center space-x-1 ${className}`}
             onClick={(e) => {
               e.stopPropagation()
               handleDmClick()

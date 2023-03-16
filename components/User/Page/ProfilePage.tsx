@@ -9,6 +9,7 @@ import ProfileNavFilter from '../ProfileNavFilter'
 import { UserType } from '../../../types/user'
 import { Profile } from '../../../graphql/generated'
 import ProfilePageMobileTopNav from '../ProfilePageMobileTopNav'
+import ProfilePageRightSidebar from '../ProfilePageRightSidebar'
 
 interface Props {
   _profile: UserType
@@ -16,16 +17,15 @@ interface Props {
 }
 
 const ProfilePage = ({ _profile, _lensProfile }: Props) => {
-  // const { notifyInfo } = useNotify()
   const { isMobile } = useDevice()
   const router = useRouter()
   return (
     <div>
       {isMobile && <ProfilePageMobileTopNav _lensProfile={_lensProfile} />}
+      <ProfileCard _profile={_profile} _lensProfile={_lensProfile} />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
-          <div className={`relative ${!isMobile ? 'mt-10' : ''}`}>
-            <ProfileCard _profile={_profile} _lensProfile={_lensProfile} />
+          <div className="relative">
             {/* lens filter */}
             <ProfileNavFilter _lensProfile={_lensProfile} />
             {!router.pathname.endsWith('/collected') ? (
@@ -39,6 +39,10 @@ const ProfilePage = ({ _profile, _lensProfile }: Props) => {
             )}
           </div>
         </div>
+        <ProfilePageRightSidebar
+          profile={_profile}
+          lensProfile={_lensProfile}
+        />
       </div>
     </div>
   )

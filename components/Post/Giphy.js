@@ -45,7 +45,13 @@ const Giphy = ({ setGifAttachment }) => {
           left={gifButtonRef?.current?.getBoundingClientRect().left + 'px'}
         />
       </BottomDrawerWrapper>
-      <Tooltip placement="bottom" arrow title="Add GIF">
+      <Tooltip
+        placement="bottom"
+        arrow
+        title="Add GIF"
+        enterDelay={1000}
+        leaveDelay={200}
+      >
         <button
           type="button"
           onClick={() => {

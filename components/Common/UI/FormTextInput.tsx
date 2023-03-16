@@ -26,7 +26,7 @@ const FormTextInput = ({
   return (
     <label className={`${disabled ? 'cursor-not-allowed' : ''}`}>
       <div
-        className={`relative border rounded-xl mx-4 py-2 px-4 my-4 text-p-text bg-s-bg ${
+        className={`border rounded-xl border-s-border mx-4 py-2 px-4 my-4 text-p-text bg-s-bg ${
           disabled ? 'cursor-not-allowed' : ''
         } ${errorMsg ? 'border-red-500' : 'border-s-border'} `}
       >

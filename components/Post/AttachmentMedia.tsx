@@ -26,7 +26,6 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
       publication?.metadata?.cover?.original.url || publication?.metadata?.image
     )
   }
-
   return (
     <>
       {type === 'image/svg+xml' ? (
@@ -40,7 +39,8 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
             className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
             controls
             muted
-            poster={getCoverUrl}
+            autoPlay={false}
+            poster={getCoverUrl()}
           />
         ) : (
           <div
