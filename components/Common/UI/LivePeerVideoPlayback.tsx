@@ -18,6 +18,7 @@ const LivePeerVideoPlayback = ({
       src={url}
       playbackId={url}
       poster={posterUrl}
+      autoPlay={false}
       muted
       loop={false}
       showLoadingSpinner={true}
