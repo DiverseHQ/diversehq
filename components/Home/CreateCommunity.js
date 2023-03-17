@@ -17,6 +17,7 @@ import {
 
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState('')
+  const [communityLabel, setCommunityLabel] = useState('')
   const [communityPfp, setCommunityPfp] = useState()
   const [communityBanner, setCommunityBanner] = useState()
   const [communityDescription, setCommunityDescription] = useState('')
@@ -51,8 +52,8 @@ const CreateCommunity = () => {
       setLoading(false)
       return
     }
-    if (hasWhiteSpace(communityName)) {
-      notifyError('Community name cannot contain spaces')
+    if (hasWhiteSpace(communityName.trim())) {
+      notifyError('Community tag cannot contain spaces')
       setLoading(false)
       return
     }
@@ -66,7 +67,8 @@ const CreateCommunity = () => {
 
   const handleCreateCommunity = async (pfp, banner) => {
     const communityData = {
-      name: communityName,
+      name: communityName.trim(),
+      label: communityLabel.trim(),
       description: communityDescription,
       bannerImageUrl: banner.uploadedToUrl,
       logoImageUrl: pfp.uploadedToUrl,
@@ -178,7 +180,7 @@ const CreateCommunity = () => {
           <div
             className={`flex relative ${
               communityPfp ? '' : 'border'
-            } h-24 w-24 border-p-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10 cursor-pointer`}
+            } h-24 w-24 border-s-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10 cursor-pointer`}
           >
             {communityPfp && (
               <label htmlFor="communityPfp">
@@ -205,14 +207,22 @@ const CreateCommunity = () => {
           </div>
 
           <FormTextInput
-            label="Name"
-            placeholder="Community Name (Cannot edit later)"
             value={communityName}
             onChange={onChangeCommunityName}
             required
             maxLength={26}
             onBlur={() => checkCommunityName()}
             errorMsg={communityNameError}
+            startingLetters="c/"
+          />
+          <FormTextInput
+            label="Name"
+            placeholder="Got a cool name ?"
+            value={communityLabel}
+            onChange={(e) => {
+              setCommunityLabel(e.target.value)
+            }}
+            maxLength={60}
           />
           <FormTextInput
             label="Short Description"

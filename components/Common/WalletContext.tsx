@@ -32,6 +32,7 @@ import { getLensCommunity } from '../../api/community'
 interface ContextType {
   address: string
   refreshUserInfo: () => void
+  fetchAndSetLensCommunity: () => void
   user: UserType
   loading: boolean
   LensCommunity: any
@@ -121,7 +122,14 @@ export const WalletProvider = ({ children }) => {
 
   return (
     <WalletContext.Provider
-      value={{ address, refreshUserInfo, user, loading, LensCommunity }}
+      value={{
+        address,
+        refreshUserInfo,
+        user,
+        loading,
+        LensCommunity,
+        fetchAndSetLensCommunity
+      }}
     >
       {children}
     </WalletContext.Provider>

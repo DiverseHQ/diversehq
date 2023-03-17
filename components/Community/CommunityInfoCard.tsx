@@ -92,10 +92,10 @@ const CommunityInfoCard = ({ _community }: Props) => {
             <ExploreCommunityCard _community={community} />
           ) : (
             <div
-              className={`relative shadow-lg z-0 bg-s-bg mb-6 text-p-text w-[calc(100vw-9px)]`}
+              className={`relative z-0 bg-s-bg mb-6 text-p-text w-[calc(100vw-9px)]`}
             >
               <ImageWithFullScreenZoom
-                className={`h-28 sm:h-48 w-full object-cover`}
+                className={`h-48 sm:h-72 w-full object-cover`}
                 src={community.bannerImageUrl}
               />
               <div className="md:w-[650px] lg:w-[950px] xl:w-[1000px] mx-auto">
@@ -103,9 +103,9 @@ const CommunityInfoCard = ({ _community }: Props) => {
                   <div
                     className={`flex flex-row gap-2 ${isMobile ? 'mx-4' : ''}`}
                   >
-                    <div className="shrink-0 rounded-[10px] -translate-y-4  md:-translate-y-6 border-2 border-[#fff] md:border-4 dark:border-p-border">
+                    <div className="shrink-0 rounded-[10px] -translate-y-4  md:-translate-y-10 border-4 border-s-bg overflow-hidden">
                       <ImageWithFullScreenZoom
-                        className="rounded-[10px] bg-s-bg w-[60px] h-[60px] md:w-[120px] md:h-[120px] object-cover"
+                        className="bg-s-bg w-[60px] h-[60px] md:w-[120px] md:h-[120px] object-cover"
                         src={community.logoImageUrl}
                       />
                     </div>
@@ -115,7 +115,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                           className="font-bold text-[18px] md:text-2xl tracking-wider truncate"
                           onClick={redirectToCommunityPage}
                         >
-                          {community.name}
+                          {community?.label || community?.name}
                         </p>
                         <div className="text-[14px] md:text-[16px] mb-4">
                           <div className="hover:underline cursor-pointer text-s-text">

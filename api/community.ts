@@ -295,3 +295,13 @@ export const getLensCommunity = async (handle: string) => {
     `${apiEndpoint}/lensCommunity/communityInfoUsingHandle/${handle}`
   )
 }
+
+export const postCreateLensCommunity = async (handle: string) => {
+  return await fetch(`${apiEndpoint}/lensCommunity/create`, {
+    method: 'POST',
+    headers: await getHeaders(),
+    body: JSON.stringify({
+      handle
+    })
+  })
+}

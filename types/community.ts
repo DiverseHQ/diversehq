@@ -4,6 +4,7 @@ export type CommunityType = {
   _id?: string
   name?: string
   description?: string
+  label?: string
   bannerImageUrl?: string
   logoImageUrl?: string
   creator?: string

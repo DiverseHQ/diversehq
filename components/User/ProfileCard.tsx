@@ -14,7 +14,7 @@ import Markup from '../Lexical/Markup'
 import MessageButton from '../Messages/MessageButton'
 import formatHandle from './lib/formatHandle'
 import getAvatar from './lib/getAvatar'
-import getIPFSLink from './lib/getIPFSLink'
+import getCoverBanner from './lib/getCoverBanner'
 import useLensFollowButton from './useLensFollowButton'
 
 interface Props {
@@ -40,10 +40,6 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
   const { FollowButton, isFollowedByMe } = useLensFollowButton({
     profileId: lensProfile?.id
   })
-  let _profileBanner =
-    lensProfile?.coverPicture?.__typename === 'NftImage'
-      ? getIPFSLink(lensProfile?.coverPicture?.uri)
-      : getIPFSLink(lensProfile?.coverPicture?.original?.url)
   const { isMobile } = useDevice()
 
   useEffect(() => {
@@ -65,8 +61,8 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
   return (
     <div className="relative shadow-lg z-0 bg-s-bg mb-6 text-p-text w-[calc(100vw-9px)]">
       <ImageWithFullScreenZoom
-        className={`h-48 w-full object-cover`}
-        src={_profileBanner ? _profileBanner : '/gradient.jpg'}
+        className={`h-48 sm:h-72 w-full object-cover`}
+        src={getCoverBanner(lensProfile)}
       />
       {isMobile ? (
         <div className="md:w-[650px] lg:w-[950px] xl:w-[1000px] mx-auto">
@@ -80,7 +76,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                 </span>
                 <span className="font-light">Followers</span>
               </div>
-              <div className="shrink-0 rounded-full -translate-y-6  md:-translate-y-6 border-2 border-[#fff] md:border-4 dark:border-p-border">
+              <div className="shrink-0 rounded-full -translate-y-6 border-2 border-[#fff] md:border-4 dark:border-p-border">
                 <ImageWithFullScreenZoom
                   className="rounded-full bg-s-bg w-[80px] h-[80px] md:w-[120px] md:h-[120px] object-cover"
                   src={getAvatar(lensProfile)}
@@ -182,7 +178,7 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
         <div className="md:w-[650px] lg:w-[950px] xl:w-[1000px] mx-auto">
           <div className="relative flex flex-row items-start justify-between">
             <div className={`flex flex-row gap-2`}>
-              <div className="shrink-0 rounded-full -translate-y-4  md:-translate-y-6 border-2 md:border-4 border-s-bg">
+              <div className="shrink-0 rounded-full -translate-y-8 border-2 md:border-4 border-s-bg">
                 <ImageWithFullScreenZoom
                   className="rounded-full bg-s-bg w-[60px] h-[60px] md:w-[120px] md:h-[120px] object-cover"
                   src={getAvatar(lensProfile)}

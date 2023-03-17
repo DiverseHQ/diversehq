@@ -18,6 +18,7 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
   const [communityBannerFile, setCommunityBannerFile] = useState(null)
   const [logoImageFile, setLogoImageFile] = useState(null)
   const [description, setDescription] = useState(community?.description)
+  const [label, setLabel] = useState(community?.label)
 
   const { notifyError, notifySuccess } = useNotify()
   const { user } = useProfile()
@@ -34,6 +35,7 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
     try {
       const communityData: CommunityType = {
         description,
+        label,
         communityId: community._id
       }
       if (logoImageFile) {
@@ -129,7 +131,16 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
           </div>
         </div>
       </div>
-      <FormTextInput label="Name" value={community?.name} disabled />
+      <FormTextInput startingLetters="c/" value={community?.name} disabled />
+      <FormTextInput
+        label="Name"
+        value={label}
+        placeholder="Community Name"
+        onChange={(e) => {
+          setLabel(e.target.value)
+        }}
+        maxLength={60}
+      />
       <FormTextInput
         label="Short Description"
         placeholder="Show the world what your community is..."
