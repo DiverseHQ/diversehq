@@ -187,7 +187,7 @@ const Navbar = () => {
             >
               <span>
                 {router.pathname.startsWith('/c')
-                  ? `c/${router.asPath.split('/')[2]}`
+                  ? `c/${router.asPath.split('/')[2].split('?')[0]}`
                   : 'Home'}
               </span>
               <BsChevronDown
