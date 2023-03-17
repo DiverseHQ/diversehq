@@ -98,14 +98,12 @@ const ExploreCommunityCard = ({ _community }: Props) => {
                 >
                   {community.name}
                 </p>
-                <div className="text-[16px] mb-6">{community.description}</div>
+                <div className="text-[16px] mb-6 w-full">
+                  {community.description.length > 130
+                    ? community.description.slice(0, 130) + '...'
+                    : community.description}
+                </div>
                 <div className="flex flex-row flex-wrap gap-8">
-                  <div className="flex flex-col">
-                    <span className="font-semibold">
-                      {community.members?.length}
-                    </span>
-                    <span className="text-[14px]">members</span>
-                  </div>
                   <div className="flex flex-col">
                     <span className="font-semibold">
                       {community.members?.length}
@@ -186,7 +184,11 @@ const ExploreCommunityCard = ({ _community }: Props) => {
                 </span>{' '}
                 Members
               </p>
-              <div className="text-[14px]">{community.description}</div>
+              <div className="text-[14px]">
+                {community.description.length > 80
+                  ? community.description.slice(0, 80) + '...'
+                  : community.description}
+              </div>
             </div>
           </>
         )}

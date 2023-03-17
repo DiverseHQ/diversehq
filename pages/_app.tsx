@@ -6,13 +6,23 @@ import { DefaultSeo } from 'next-seo'
 import MainLayout from '../components/Home/MainLayout'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-// import Loader from '../components/Loader'
 import { useRef } from 'react'
-// import { useRouter } from 'next/router'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import { sortTypes } from '../utils/config'
 TimeAgo.addDefaultLocale(en)
+
+interface MyAppProps {
+  Component: React.FC<any>
+  pageProps: any
+  isMobileView: boolean
+}
+
+interface RetainedComponent {
+  // eslint-disable-next-line no-undef
+  component: JSX.Element
+  scrollPos: number
+}
 
 const ROUTES_TO_RETAIN = [
   '/',
@@ -33,11 +43,10 @@ const ROUTES_TO_RETAIN = [
   `/feed/offchain`
 ]
 
-function MyApp({ Component, pageProps, isMobileView }) {
+function MyApp({ Component, pageProps, isMobileView }: MyAppProps) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  // console.log('sortObject', sortObject)
-  const retainedComponents = useRef({})
+  const retainedComponents = useRef<{ [path: string]: RetainedComponent }>({})
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
 
   // Add Component to retainedComponents if we haven't got it already

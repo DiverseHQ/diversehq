@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-// import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import imageProxy from '../User/lib/imageProxy'
 import {
   SUPPORTED_AUDIO_TYPE,
@@ -11,7 +10,6 @@ import AudioPlayer from './AudioPlayer'
 import { Publication } from '../../graphql/generated'
 import LivePeerVideoPlayback from '../Common/UI/LivePeerVideoPlayback'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
-import { stringToLength } from '../../utils/utils'
 
 interface Props {
   type: string
@@ -22,7 +20,7 @@ interface Props {
 
 const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
   const getCoverUrl = () => {
-    return (
+    return imageProxy(
       publication?.metadata?.cover?.original.url || publication?.metadata?.image
     )
   }
@@ -44,11 +42,11 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
           />
         ) : (
           <div
-            className={`image-unselectable object-cover sm:rounded-lg overflow-hidden w-full ${className}`}
+            className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
           >
             <LivePeerVideoPlayback
               posterUrl={getCoverUrl()}
-              title={stringToLength(publication?.metadata?.content, 30)}
+              // title={stringToLength(publication?.metadata?.content, 30)}
               url={url}
             />
           </div>
@@ -57,10 +55,7 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
         <AudioPlayer
           src={url}
           className={`${className}`}
-          coverImage={
-            imageProxy(publication?.metadata?.cover?.original?.url) ||
-            imageProxy(publication?.metadata?.image)
-          }
+          coverImage={getCoverUrl()}
           publication={publication}
         />
       ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (

@@ -559,7 +559,7 @@ const LensPostCard = ({ post }: Props) => {
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center ml-1.5 mt-1">
+              <div className="flex flex-col items-center ml-1.5 mt-1 shrink-0">
                 <Tooltip
                   enterDelay={1000}
                   leaveDelay={200}

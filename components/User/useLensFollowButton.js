@@ -111,7 +111,7 @@ const useLensFollowButton = (request) => {
     }
   }, [isSignedTx, type])
 
-  const FollowButton = () => {
+  const FollowButton = ({ className = '' }) => {
     if (!isSignedIn || !hasProfile) return null
     return (
       <>
@@ -121,7 +121,9 @@ const useLensFollowButton = (request) => {
               e.stopPropagation()
               handleUnfollowProfile(data?.profile?.id)
             }}
-            className="group/text bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn rounded-md px-3 py-1 text-sm font-semibold w-full"
+            className={`${
+              className ? className : 'rounded-md'
+            } group/text bg-s-bg text-p-btn hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn px-3 py-1 text-sm font-semibold w-full`}
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
@@ -145,7 +147,9 @@ const useLensFollowButton = (request) => {
               e.stopPropagation()
               handleFollowProfile(data?.profile?.id)
             }}
-            className="bg-p-btn text-p-btn-text rounded-md px-3 py-1 text-sm font-semibold w-full"
+            className={`${
+              className ? className : 'rounded-md'
+            } bg-p-btn text-p-btn-text px-3 py-1 text-sm font-semibold w-full`}
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">

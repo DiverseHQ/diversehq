@@ -4,17 +4,14 @@ import { Player } from '@livepeer/react'
 // import VideoWithAutoPause from './VideoWithAutoPause'
 const LivePeerVideoPlayback = ({
   url,
-  title,
   posterUrl
 }: {
   url: string
-  title: string
+  title?: string
   posterUrl: string
 }) => {
-  console.log('LivePeerVideoPlayback', url, title, posterUrl)
   return (
     <Player
-      title={title}
       src={url}
       playbackId={url}
       poster={posterUrl}

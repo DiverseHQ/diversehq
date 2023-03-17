@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import NavFilterCommunity from '../../../components/Post/NavFilterCommunity'
 import { getCommunityInfo } from '../../../api/community'
 import CommunityInfoCard from '../../../components/Community/CommunityInfoCard'
@@ -11,11 +11,11 @@ import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info
 import { CommunityWithCreatorProfile } from '../../../types/community'
 import CommunityPageRightSidebar from '../../../components/Community/CommunityPageRightSidebar'
 
-const CommunityPage = ({
-  community
-}: {
+interface Props {
   community: CommunityWithCreatorProfile
-}) => {
+}
+
+const CommunityPage: FC<Props> = ({ community }) => {
   const { isMobile } = useDevice()
   return (
     <div className="relative">

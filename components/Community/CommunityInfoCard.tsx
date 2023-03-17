@@ -125,180 +125,195 @@ const CommunityInfoCard = ({ _community }: Props) => {
                       </div>
                     )}
                   </div>
-                  <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2 mt-2 md:mt-4">
-                    <JoinCommunityButton id={community._id} showJoined={true} />
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <OptionsWrapper
-                        OptionPopUpModal={() => (
-                          <MoreOptionsModal
-                            className="z-50"
-                            list={
-                              isAuth
-                                ? [
-                                    {
-                                      label: 'Setting',
-                                      onClick: () => {
-                                        router.push(
-                                          `/c/${community.name}/settings`
-                                        )
-                                      },
-                                      icon: () => (
-                                        <FiSettings className="mr-1.5 w-6 h-6" />
-                                      )
-                                    },
-                                    {
-                                      label: 'Share',
-                                      onClick: shareCommunity,
-                                      icon: () => (
-                                        <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                      )
-                                    }
-                                  ]
-                                : [
-                                    {
-                                      label: 'Share',
-                                      onClick: shareCommunity,
-                                      icon: () => (
-                                        <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                      )
-                                    }
-                                  ]
-                            }
-                          />
-                        )}
-                        position="left"
-                        showOptionsModal={showOptionsModal}
-                        setShowOptionsModal={setShowOptionsModal}
-                        isDrawerOpen={isExploreDrawerOpen}
-                        setIsDrawerOpen={setIsExploreDrawerOpen}
-                      >
-                        <Tooltip
-                          enterDelay={1000}
-                          leaveDelay={200}
-                          title="More"
-                          arrow
-                        >
-                          <div className="hover:bg-p-btn-hover rounded-md p-1.5 cursor-pointer">
-                            <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                          </div>
-                        </Tooltip>
-                      </OptionsWrapper>
-                    </span>
-                  </div>
-                </div>
-
-                {isMobile && (
-                  <>
-                    {/* name and description row */}
-                    <div className="flex flex-col px-3 mb-2">
+                  {!isMobile && (
+                    <div className="flex flex-col mt-4">
                       <p
-                        className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer truncate"
+                        className="font-bold text-[18px] md:text-2xl tracking-wider truncate"
                         onClick={redirectToCommunityPage}
                       >
                         {community.name}
                       </p>
-                      <div className="text-[14px] md:text-[16px]">
-                        {community.description}
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                <div className="flex flex-row justify-between items-center px-5 py-1 md:px-8 pb-2">
-                  {/* stats UI for mobile */}
-                  {isMobile && (
-                    <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-[14px] items-center">
-                      <div className="flex flex-col items-center active:bg-s-h-bg active:dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
-                        <span className="font-semibold">
-                          {community.members?.length}
-                        </span>
-                        <span className="font-light">Members</span>
-                      </div>
-                      <div className="w-[1px] h-[30px] bg-[#E6E6E8]"></div>
-                      <div
-                        className="flex flex-col items-center justify-between active:bg-s-h-bg active:dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px] cursor-pointer"
-                        onClick={() => setIsDrawerOpen(true)}
-                      >
-                        <span className="font-semibold">
-                          <BiChevronDown className="text-[18px]" />
-                        </span>
-                        <span className="font-light">More</span>
+                      <div className="text-[14px] md:text-[16px] mb-4">
+                        <div className="hover:underline cursor-pointer text-s-text">
+                          c/{community.name}
+                        </div>
                       </div>
                     </div>
                   )}
-
-                  {/* bottom drawer for mobile */}
-                  <BottomDrawerWrapper
-                    isDrawerOpen={isDrawerOpen}
-                    setIsDrawerOpen={setIsDrawerOpen}
-                    showClose
-                    position="bottom"
-                  >
-                    <div className="flex flex-col gap-4 mx-4 mb-4">
-                      <h3 className="font-bold text-[20px] self-center">
-                        {community?.name}
-                      </h3>
-                      <div className="flex flex-row gap-1 w-full">
-                        <div className="flex flex-col w-full">
-                          <div className="relative bg-[#D7D7D7] h-[35px] rounded-[10px] flex flex-row">
-                            <div className="flex z-10 self-center justify-self-center w-full justify-center text-white dark:text-p-text text-[14px]">
-                              Level {level}
-                            </div>
-                            <div
-                              className="absolute h-full bg-[#9378D8] rounded-[10px] "
-                              style={{
-                                width: `${calculateBarPercentage(
-                                  thresholdXP,
-                                  currentXP
-                                )}%`,
-                                maxWidth: '100%'
-                              }}
-                            ></div>
-                          </div>
+                </div>
+                <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2 mt-2 md:mt-4">
+                  <JoinCommunityButton id={community._id} showJoined={true} />
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <OptionsWrapper
+                      OptionPopUpModal={() => (
+                        <MoreOptionsModal
+                          className="z-50"
+                          list={
+                            isAuth
+                              ? [
+                                  {
+                                    label: 'Setting',
+                                    onClick: () => {
+                                      router.push(
+                                        `/c/${community.name}/settings`
+                                      )
+                                    },
+                                    icon: () => (
+                                      <FiSettings className="mr-1.5 w-6 h-6" />
+                                    )
+                                  },
+                                  {
+                                    label: 'Share',
+                                    onClick: shareCommunity,
+                                    icon: () => (
+                                      <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                    )
+                                  }
+                                ]
+                              : [
+                                  {
+                                    label: 'Share',
+                                    onClick: shareCommunity,
+                                    icon: () => (
+                                      <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                    )
+                                  }
+                                ]
+                          }
+                        />
+                      )}
+                      position="left"
+                      showOptionsModal={showOptionsModal}
+                      setShowOptionsModal={setShowOptionsModal}
+                      isDrawerOpen={isExploreDrawerOpen}
+                      setIsDrawerOpen={setIsExploreDrawerOpen}
+                    >
+                      <Tooltip
+                        enterDelay={1000}
+                        leaveDelay={200}
+                        title="More"
+                        arrow
+                      >
+                        <div className="hover:bg-p-btn-hover rounded-md p-1.5 cursor-pointer">
+                          <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
-                      </div>
-                      <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
-                        <img
-                          src="/createdOnDate.svg"
-                          alt="created on date"
-                          className="w-5 h-5"
-                        />
-                        <span>
-                          Created{' '}
-                          {new Date(community.createdAt)
-                            .toDateString()
-                            .split(' ')
-                            .slice(1)
-                            .join(' ')}
-                        </span>
-                      </div>
-                      <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
-                        <img
-                          src="/createdByUser.svg"
-                          alt="created by user"
-                          className="w-5 h-5"
-                        />
-                        <span>
-                          Created by{' '}
-                          <span>
-                            <Link
-                              href={`u/${formatHandle(
-                                community?.creatorProfile?.handle
-                              )}`}
-                            >
-                              <span>{`u/${formatHandle(
-                                community?.creatorProfile?.handle
-                              )}`}</span>
-                            </Link>
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                  </BottomDrawerWrapper>
+                      </Tooltip>
+                    </OptionsWrapper>
+                  </span>
                 </div>
               </div>
+
+              {isMobile && (
+                <>
+                  {/* name and description row */}
+                  <div className="flex flex-col px-3 mb-2">
+                    <p
+                      className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer truncate"
+                      onClick={redirectToCommunityPage}
+                    >
+                      {community.name}
+                    </p>
+                    <div className="text-[14px] md:text-[16px]">
+                      {community.description}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div className="flex flex-row justify-between items-center px-5 py-1 md:px-8 pb-2">
+                {/* stats UI for mobile */}
+                {isMobile && (
+                  <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-[14px] items-center">
+                    <div className="flex flex-col items-center active:bg-s-h-bg active:dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
+                      <span className="font-semibold">
+                        {community.members?.length}
+                      </span>
+                      <span className="font-light">Members</span>
+                    </div>
+                    <div className="w-[1px] h-[30px] bg-[#E6E6E8]"></div>
+                    <div
+                      className="flex flex-col items-center justify-between active:bg-s-h-bg active:dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px] cursor-pointer"
+                      onClick={() => setIsDrawerOpen(true)}
+                    >
+                      <span className="font-semibold">
+                        <BiChevronDown className="text-[18px]" />
+                      </span>
+                      <span className="font-light">More</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* bottom drawer for mobile */}
+                <BottomDrawerWrapper
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                  showClose
+                  position="bottom"
+                >
+                  <div className="flex flex-col gap-4 mx-4 mb-4">
+                    <h3 className="font-bold text-[20px] self-center">
+                      {community?.name}
+                    </h3>
+                    <div className="flex flex-row gap-1 w-full">
+                      <div className="flex flex-col w-full">
+                        <div className="relative bg-[#D7D7D7] h-[35px] rounded-[10px] flex flex-row">
+                          <div className="flex z-10 self-center justify-self-center w-full justify-center text-white dark:text-p-text text-[14px]">
+                            Level {level}
+                          </div>
+                          <div
+                            className="absolute h-full bg-[#9378D8] rounded-[10px] "
+                            style={{
+                              width: `${calculateBarPercentage(
+                                thresholdXP,
+                                currentXP
+                              )}%`,
+                              maxWidth: '100%'
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                      <img
+                        src="/createdOnDate.svg"
+                        alt="created on date"
+                        className="w-5 h-5"
+                      />
+                      <span>
+                        Created{' '}
+                        {new Date(community.createdAt)
+                          .toDateString()
+                          .split(' ')
+                          .slice(1)
+                          .join(' ')}
+                      </span>
+                    </div>
+                    <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                      <img
+                        src="/createdByUser.svg"
+                        alt="created by user"
+                        className="w-5 h-5"
+                      />
+                      <span>
+                        Created by{' '}
+                        <span>
+                          <Link
+                            href={`u/${formatHandle(
+                              community?.creatorProfile?.handle
+                            )}`}
+                          >
+                            <span>{`u/${formatHandle(
+                              community?.creatorProfile?.handle
+                            )}`}</span>
+                          </Link>
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </BottomDrawerWrapper>
+              </div>
             </div>
-          )}
+          </div>
         </>
       )}
       {!community && <div>Loading...</div>}

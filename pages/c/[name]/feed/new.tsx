@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { getCommunityInfo } from '../../../../api/community'
 import useDevice from '../../../../components/Common/useDevice'
 import CommunityInfoCard from '../../../../components/Community/CommunityInfoCard'
@@ -8,13 +8,18 @@ import CommunityNotFound from '../../../../components/Community/Page/CommunityNo
 import NavFilterCommunity from '../../../../components/Post/NavFilterCommunity'
 import PostsColumn from '../../../../components/Post/PostsColumn'
 import getDefaultProfileInfo from '../../../../lib/profile/get-default-profile-info'
+import { CommunityWithCreatorProfile } from '../../../../types/community'
 
-const top = ({ community }) => {
+interface Props {
+  community: CommunityWithCreatorProfile
+}
+
+const newPage: FC<Props> = ({ community }) => {
   const { isMobile } = useDevice()
 
   return (
     <div className="relative">
-      {isMobile && <CommunityPageMobileTopNav />}
+      {isMobile && <CommunityPageMobileTopNav community={community} />}
 
       {community && <CommunityPageSeo community={community} />}
       {community && (
@@ -22,10 +27,10 @@ const top = ({ community }) => {
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
               <CommunityInfoCard _community={community} />
-              <NavFilterCommunity name={community.name} />
+              <NavFilterCommunity />
               <PostsColumn
                 source="community"
-                sortBy="top"
+                sortBy="new"
                 data={community.name}
               />
             </div>
@@ -37,9 +42,13 @@ const top = ({ community }) => {
   )
 }
 
-export async function getServerSideProps({ params = {} }) {
+export async function getServerSideProps({
+  params = {}
+}: {
+  params: { name?: string }
+}) {
   const { name } = params
-  const fetchCommunityInfo = async (name) => {
+  const fetchCommunityInfo = async (name: string) => {
     try {
       const res = await getCommunityInfo(name)
       if (res.status !== 200) {
@@ -65,4 +74,4 @@ export async function getServerSideProps({ params = {} }) {
   }
 }
 
-export default top
+export default newPage

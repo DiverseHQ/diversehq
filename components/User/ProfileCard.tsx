@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { AiOutlineRetweet } from 'react-icons/ai'
 import { BiChevronDown, BiRepost } from 'react-icons/bi'
 import { BsCollection } from 'react-icons/bs'
 import { MdOutlineGroups } from 'react-icons/md'
@@ -15,6 +16,7 @@ import MessageButton from '../Messages/MessageButton'
 import formatHandle from './lib/formatHandle'
 import getAvatar from './lib/getAvatar'
 import getCoverBanner from './lib/getCoverBanner'
+import ProfileLinksRow from './ProfileLinksRow'
 import useLensFollowButton from './useLensFollowButton'
 
 interface Props {
@@ -120,14 +122,14 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                 lensProfile.ownedBy?.toLowerCase() !==
                   myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() && (
                   <div className="mx-2">
-                    <FollowButton />
+                    <FollowButton className="px-8 py-2 rounded-full" />
                   </div>
                 )}
               {myLensProfile &&
                 myLensProfile?.defaultProfile?.ownedBy.toLowerCase() ===
                   lensProfile?.ownedBy.toLowerCase() && (
                   <Link href={isMobile ? '/settings/profile' : '/settings'}>
-                    <div className="text-base text-p-btn-text bg-p-btn px-3 py-0.5 mx-2 rounded-md cursor-pointer">
+                    <div className="mx-2 rounded-full cursor-pointer bg-p-btn text-p-btn-text px-8 py-2 text-sm font-semibold">
                       Edit
                     </div>
                   </Link>
@@ -155,6 +157,12 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                   {lensProfile?.name ?? `u/${formatHandle(lensProfile.handle)}`}
                 </h3>
                 <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
+                  <MdOutlineGroups />
+                  <span>
+                    Joined Communities: {profile?.communities?.length}
+                  </span>
+                </div>
+                <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
                   <BiRepost />
                   <span>Posts: {lensProfile?.stats?.totalPosts}</span>
                 </div>
@@ -165,11 +173,12 @@ const ProfileCard = ({ _profile, _lensProfile }: Props) => {
                   </span>
                 </div>
                 <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
-                  <MdOutlineGroups />
+                  <AiOutlineRetweet />
                   <span>
-                    Joined Communities: {profile?.communities?.length}
+                    Mirrored Posts: {lensProfile?.stats?.totalMirrors}
                   </span>
                 </div>
+                <ProfileLinksRow profile={lensProfile} />
               </div>
             </BottomDrawerWrapper>
           </div>

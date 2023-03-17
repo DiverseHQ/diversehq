@@ -13,7 +13,7 @@ const ProfileLink = ({ link, icon }: { link: string; icon: any }) => (
     href={link}
     target="_blank"
     rel="noopener noreferrer"
-    className="text-s-text text-sm leading-5 flex flex-row items-center space-x-1 cursor-pointer rounded-full hover:bg-s-hover pl-1 pr-2"
+    className="text-s-text text-sm leading-5 flex flex-row items-center space-x-1 cursor-pointer rounded-full hover:bg-s-hover active:bg-s-hover pl-1 pr-2"
   >
     <div>{icon}</div>
     <div>{shortFormOfLink(link)}</div>
@@ -24,7 +24,7 @@ const ProfileLinksRow = ({ profile }: { profile: Profile }) => {
   const { websiteLink, twitterLink, instagramLink } =
     getWebsiteLinksFromProfile(profile)
   return (
-    <div className="flex flex-row gap-x-4 flex-wrap w-full">
+    <div className="flex flex-row gap-x-4 gap-y-2 flex-wrap w-full">
       {websiteLink && (
         <ProfileLink link={websiteLink} icon={<AiOutlineLink />} />
       )}

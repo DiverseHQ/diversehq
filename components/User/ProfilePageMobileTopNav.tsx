@@ -36,7 +36,7 @@ const ProfilePageMobileTopNav: FC<Props> = ({ _lensProfile }) => {
           title={`u/${formatHandle(_lensProfile?.handle)}` || 'Profile'}
         />
       ) : (
-        <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm absolute top-0 w-full z-30 min-h-[50px]">
+        <div className="flex flex-row justify-between px-3 py-1 items-center absolute top-0 w-full z-30 min-h-[50px]">
           <div className="flex items-center justify-center w-8 h-8 bg-p-btn-hover rounded-full">
             <BiArrowBack
               onClick={() => router.back()}
