@@ -313,7 +313,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                 </BottomDrawerWrapper>
               </div>
             </div>
-          </div>
+          )}
         </>
       )}
       {!community && <div>Loading...</div>}
