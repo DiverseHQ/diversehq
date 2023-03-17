@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react'
 import { memo } from 'react'
 import { useState } from 'react'
-import { useCommentFeedQuery } from '../../../graphql/generated'
+import {
+  CommentOrderingTypes,
+  CommentRankingFilter,
+  useCommentFeedQuery
+} from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import LensCommentCard from './LensCommentCard'
 

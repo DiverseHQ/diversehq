@@ -17,7 +17,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import getAvatar from '../User/lib/getAvatar'
 import { scrollToTop } from '../../lib/helpers'
 import FilterButton from '../Common/UI/FilterButton'
-import { AiFillHome, AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlinePlus } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
 import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
@@ -175,11 +175,7 @@ const Navbar = () => {
           /> */}
           <div className="flex flex-col relative">
             <button
-              className={`flex items-center hover:cursor-pointer space-x-1 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full ${
-                isOnHomeFeed
-                  ? 'bg-select-active-btn-bg text-select-active-btn-text'
-                  : 'bg-select-btn-bg text-select-btn-text sm:hover:bg-select-btn-hover-bg'
-              }`}
+              className={`flex items-center hover:cursor-pointer space-x-1 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full bg-select-btn-bg text-select-btn-text sm:hover:bg-select-btn-hover-bg`}
               onClick={(e) => {
                 e.stopPropagation()
                 getJoinedCommunities()
@@ -191,11 +187,7 @@ const Navbar = () => {
                   : 'Home'}
               </span>
               <BsChevronDown
-                className={`${
-                  isOnHomeFeed
-                    ? `text-select-active-btn-text`
-                    : `text-select-btn-text`
-                } w-3 h-3 items-center `}
+                className={'text-select-btn-text w-3 h-3 items-center'}
               />
             </button>
 
@@ -214,20 +206,6 @@ const Navbar = () => {
                       storeRecentCommunities(community)
                       router.push(`/c/${community?.name}`)
                     }}
-                    firstItem={
-                      !isOnHomeFeed ? (
-                        <div
-                          className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl text-p-text hover:bg-p-btn hover:text-p-btn-text gap-4"
-                          onClick={() => {
-                            routeToHome()
-                            setShowJoinedCommunities(false)
-                          }}
-                        >
-                          <AiFillHome className="w-9 h-9 text-p-text items-center" />
-                          <div>Home</div>
-                        </div>
-                      ) : null
-                    }
                   />
                 </>
               )}
