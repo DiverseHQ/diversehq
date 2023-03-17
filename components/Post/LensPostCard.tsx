@@ -273,7 +273,7 @@ const LensPostCard = ({ post }: Props) => {
           {/* top row */}
           {postInfo?.mirroredBy && (
             <div
-              className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text"
+              className="flex flex-row space-x-1 items-center ml-4 md:ml-1 mb-1 text-xs text-s-text"
               onClick={(e) => {
                 e.stopPropagation()
               }}

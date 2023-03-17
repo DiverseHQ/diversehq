@@ -159,7 +159,7 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
         {!isSignedIn && address && !showLoading && (
           <button
             onClick={handleLogin}
-            className="rounded-full sm:rounded-xl  sm:text-xl space-x-3 flex flex-row items-center font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-1 px-3 sm:px-4 sm:px-6 "
+            className="rounded-full sm:rounded-xl  sm:text-xl space-x-3 flex flex-row items-center font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-1 px-3 sm:px-6 "
           >
             <img
               src={'/lensLogoWithoutText.svg'}

@@ -7,13 +7,13 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { AiOutlineDisconnect } from 'react-icons/ai'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { MdCreateNewFolder } from 'react-icons/md'
-import { useTheme } from '../Common/ThemeProvider'
+// import { useTheme } from '../Common/ThemeProvider'
 import { useNotify } from '../Common/NotifyContext'
 import { userRoles } from '../../utils/config'
 import CreateCommunity from './CreateCommunity'
 import { BsFillPersonFill } from 'react-icons/bs'
-import { IoIosMoon, IoMdSettings } from 'react-icons/io'
-import { HiSun } from 'react-icons/hi'
+import { IoMdSettings } from 'react-icons/io'
+// import { HiSun } from 'react-icons/hi'
 import formatHandle from '../User/lib/formatHandle'
 
 const ClickOption = () => {
@@ -21,7 +21,7 @@ const ClickOption = () => {
   const { user } = useProfile()
   const { disconnect } = useDisconnect()
   const { hideModal, showModal } = usePopUpModal()
-  const { theme, toggleTheme } = useTheme()
+  // const { theme, toggleTheme } = useTheme()
   const { notifyInfo } = useNotify()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
 
@@ -93,20 +93,20 @@ const ClickOption = () => {
           icon: () => (
             <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
           )
-        },
-        {
-          label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
-          onClick: toggleTheme,
-          icon: () => (
-            <>
-              {theme === 'light' ? (
-                <IoIosMoon className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-              ) : (
-                <HiSun className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-              )}
-            </>
-          )
         }
+        // {
+        //   label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
+        //   onClick: toggleTheme,
+        //   icon: () => (
+        //     <>
+        //       {theme === 'light' ? (
+        //         <IoIosMoon className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+        //       ) : (
+        //         <HiSun className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+        //       )}
+        //     </>
+        //   )
+        // }
       ]}
     />
   )
