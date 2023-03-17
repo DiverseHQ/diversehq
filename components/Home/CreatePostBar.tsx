@@ -1,6 +1,4 @@
 import React from 'react'
-// import { CiImageOn } from 'react-icons/ci'
-// import { CgProfile } from 'react-icons/cg'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
 import CreatePostPopup from './CreatePostPopup'
@@ -43,6 +41,7 @@ const CreatePostBar = () => {
         )}
         {isSignedIn && lensProfile && (
           <img
+            // @ts-ignore
             src={getAvatar(lensProfile?.defaultProfile)}
             className="w-[44px] h-[44px] rounded-full"
           />
@@ -54,18 +53,6 @@ const CreatePostBar = () => {
       >
         <span>What&apos;s up?</span>
       </div>
-      {/* <div className="flex flex-row gap-2 items-center">
-        <CiImageOn
-          className="w-[20px] h-[20px] text-[#898A8D] cursor-pointer"
-          onClick={createPost}
-        />
-        <button
-          className="bg-p-btn text-p-btn-text font-semibold rounded-[10px] py-1 px-3 cursor-pointer"
-          onClick={createPost}
-        >
-          POST
-        </button>
-      </div> */}
     </div>
   )
 }
