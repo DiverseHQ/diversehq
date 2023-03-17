@@ -289,3 +289,9 @@ export const removeBannedUserFromCommunity = async (
     console.log(error)
   }
 }
+
+export const getLensCommunity = async (handle: string) => {
+  return await fetch(
+    `${apiEndpoint}/lensCommunity/communityInfoUsingHandle/${handle}`
+  )
+}

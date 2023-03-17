@@ -11,10 +11,14 @@ import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 import useHideSidebar from './hook/useHideSidebar'
 import CopyrightAndLinks from '../Common/UI/CopyrightAndLinks'
 import CommunitiesDiv from '../Common/UI/CommunitiesDiv'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import getAvatar from '../User/lib/getAvatar'
+import formatHandle from '../User/lib/formatHandle'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
-  const { user } = useProfile()
+  const { user, LensCommunity } = useProfile()
+  const { data: lensProfile } = useLensUserContext()
   const { notifyError } = useNotify()
 
   const [createdCommunities, setCreatedCommunities] = useState([])
@@ -79,6 +83,21 @@ const RightSidebar = () => {
         hide ? 'hidden' : 'lg:flex flex-col'
       } w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
     >
+      {LensCommunity && (
+        <CommunitiesDiv
+          text="Lens Community"
+          communitiesList={[
+            {
+              name: formatHandle(lensProfile?.defaultProfile?.handle),
+              // @ts-ignore
+              logoImageUrl: getAvatar(lensProfile?.defaultProfile),
+              isLensCommunity: true
+            }
+          ]}
+          Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
+        />
+      )}
+
       {user && createdCommunities?.length > 0 && (
         <CommunitiesDiv
           text={`Created ${

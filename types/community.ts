@@ -32,3 +32,11 @@ export type BannedUser = {
   profileId: string
   reason: string
 }
+
+export type LensCommunity = {
+  _id: string
+  handle: string
+  creator: string
+  bannedUsers?: BannedUser[]
+  rules?: Rule[]
+}

@@ -206,7 +206,7 @@ const CreateCommunity = () => {
 
           <FormTextInput
             label="Name"
-            placeholder="Community Name (Choose wisely, cannot edit later)"
+            placeholder="Community Name (Cannot edit later)"
             value={communityName}
             onChange={onChangeCommunityName}
             required
@@ -216,7 +216,7 @@ const CreateCommunity = () => {
           />
           <FormTextInput
             label="Short Description"
-            placeholder="Show the world what your community is..."
+            placeholder="What your community is about ?"
             value={communityDescription}
             onChange={onChangeCommunityDescription}
             required

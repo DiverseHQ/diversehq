@@ -1,4 +1,10 @@
-import React, { useState, createContext, useEffect, useContext } from 'react'
+import React, {
+  useState,
+  createContext,
+  useEffect,
+  useContext,
+  useCallback
+} from 'react'
 import {
   useAccount,
   useSigner
@@ -21,12 +27,14 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { UserType } from '../../types/user'
 import { sleep } from '../../lib/helpers'
+import { getLensCommunity } from '../../api/community'
 
 interface ContextType {
   address: string
   refreshUserInfo: () => void
   user: UserType
   loading: boolean
+  LensCommunity: any
 }
 
 export const WalletContext = createContext<ContextType>(null)
@@ -37,19 +45,27 @@ export const WalletProvider = ({ children }) => {
   const { notifyInfo } = useNotify()
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
+  const [LensCommunity, setLensCommunity] = useState(null)
   const { data: signer } = useSigner()
   // const { disconnect } = useDisconnect()
   const queryClient = useQueryClient()
-  const { refetch, isSignedIn, hasProfile } = useLensUserContext()
+  const {
+    refetch,
+    isSignedIn,
+    hasProfile,
+    data: lensProfile
+  } = useLensUserContext()
 
   useEffect(() => {
-    if (isSignedIn && hasProfile && address && signer) {
+    if (isSignedIn && hasProfile && address) {
       // fetchWeb3Token(true)
       console.log('refreshing user info')
       refreshUserInfo()
+      fetchAndSetLensCommunity()
     } else {
       setUser(null)
       setLoading(false)
+      setLensCommunity(null)
     }
   }, [isSignedIn, hasProfile, address, signer])
 
@@ -68,6 +84,15 @@ export const WalletProvider = ({ children }) => {
       handleDisconnected()
     }
   }, [isDisconnected])
+
+  const fetchAndSetLensCommunity = useCallback(async () => {
+    const res = await getLensCommunity(lensProfile?.defaultProfile?.handle)
+    if (res.status !== 200) return
+    if (res.status === 200) {
+      const resJson = await res.json()
+      setLensCommunity(resJson)
+    }
+  }, [lensProfile?.defaultProfile?.handle])
 
   const refreshUserInfo = async () => {
     try {
@@ -95,7 +120,9 @@ export const WalletProvider = ({ children }) => {
   }
 
   return (
-    <WalletContext.Provider value={{ address, refreshUserInfo, user, loading }}>
+    <WalletContext.Provider
+      value={{ address, refreshUserInfo, user, loading, LensCommunity }}
+    >
       {children}
     </WalletContext.Provider>
   )
