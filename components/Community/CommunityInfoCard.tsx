@@ -91,9 +91,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
           {router.pathname.startsWith('/explore') ? (
             <ExploreCommunityCard _community={community} />
           ) : (
-            <div
-              className={`relative shadow-lg z-0 bg-s-bg mb-6 text-p-text w-[calc(100vw-9px)]`}
-            >
+            <div className="relative shadow-lg z-0 bg-s-bg mb-6 text-p-text w-[calc(100vw-9px)]">
               <ImageWithFullScreenZoom
                 className={`h-28 sm:h-48 w-full object-cover`}
                 src={community.bannerImageUrl}
