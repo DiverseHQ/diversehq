@@ -11,7 +11,7 @@ const useDevice = () => {
   // eslint-disable-next-line
   const [windowHeight, windowWidth] = useWindowSize()
   console.log('windowWidth: ', windowWidth)
-  const isMobile = windowWidth < 950
+  const isMobile = windowWidth ? windowWidth < 950 : false
   return { isMobile, isDesktop: !isMobile }
 }
 
