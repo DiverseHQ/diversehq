@@ -97,7 +97,6 @@ const Navbar = () => {
   }
 
   const showMoreOptions = (e) => {
-    // setShowOptions(!showOptions)
     showModal({
       component: <ClickOption />,
       type: modalType.customposition,
@@ -108,8 +107,6 @@ const Navbar = () => {
       }
     })
   }
-
-  // const [selectedCommunity, setSelectedCommunity] = useState(null)
 
   const storeRecentCommunities = (community) => {
     const recentCommunities =
