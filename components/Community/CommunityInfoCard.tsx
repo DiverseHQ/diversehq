@@ -123,81 +123,66 @@ const CommunityInfoCard = ({ _community }: Props) => {
                       </div>
                     )}
                   </div>
-                  {!isMobile && (
-                    <div className="flex flex-col mt-4">
-                      <p
-                        className="font-bold text-[18px] md:text-2xl tracking-wider truncate"
-                        onClick={redirectToCommunityPage}
-                      >
-                        {community.name}
-                      </p>
-                      <div className="text-[14px] md:text-[16px] mb-4">
-                        <div className="hover:underline cursor-pointer text-s-text">
-                          c/{community.name}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2 mt-2 md:mt-4">
-                  <JoinCommunityButton id={community._id} showJoined={true} />
-                  <span onClick={(e) => e.stopPropagation()}>
-                    <OptionsWrapper
-                      OptionPopUpModal={() => (
-                        <MoreOptionsModal
-                          className="z-50"
-                          list={
-                            isAuth
-                              ? [
-                                  {
-                                    label: 'Setting',
-                                    onClick: () => {
-                                      router.push(
-                                        `/c/${community.name}/settings`
+                  <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2 mt-2 md:mt-4">
+                    <JoinCommunityButton id={community._id} showJoined={true} />
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <OptionsWrapper
+                        OptionPopUpModal={() => (
+                          <MoreOptionsModal
+                            className="z-50"
+                            list={
+                              isAuth
+                                ? [
+                                    {
+                                      label: 'Setting',
+                                      onClick: () => {
+                                        router.push(
+                                          `/c/${community.name}/settings`
+                                        )
+                                      },
+                                      icon: () => (
+                                        <FiSettings className="mr-1.5 w-6 h-6" />
                                       )
                                     },
-                                    icon: () => (
-                                      <FiSettings className="mr-1.5 w-6 h-6" />
-                                    )
-                                  },
-                                  {
-                                    label: 'Share',
-                                    onClick: shareCommunity,
-                                    icon: () => (
-                                      <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                    )
-                                  }
-                                ]
-                              : [
-                                  {
-                                    label: 'Share',
-                                    onClick: shareCommunity,
-                                    icon: () => (
-                                      <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                    )
-                                  }
-                                ]
-                          }
-                        />
-                      )}
-                      position="left"
-                      showOptionsModal={showOptionsModal}
-                      setShowOptionsModal={setShowOptionsModal}
-                      isDrawerOpen={isExploreDrawerOpen}
-                      setIsDrawerOpen={setIsExploreDrawerOpen}
-                    >
-                      <Tooltip
-                        enterDelay={1000}
-                        leaveDelay={200}
-                        title="More"
-                        arrow
+                                    {
+                                      label: 'Share',
+                                      onClick: shareCommunity,
+                                      icon: () => (
+                                        <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                      )
+                                    }
+                                  ]
+                                : [
+                                    {
+                                      label: 'Share',
+                                      onClick: shareCommunity,
+                                      icon: () => (
+                                        <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                      )
+                                    }
+                                  ]
+                            }
+                          />
+                        )}
+                        position="left"
+                        showOptionsModal={showOptionsModal}
+                        setShowOptionsModal={setShowOptionsModal}
+                        isDrawerOpen={isExploreDrawerOpen}
+                        setIsDrawerOpen={setIsExploreDrawerOpen}
                       >
-                        <div className="hover:bg-p-btn-hover rounded-md p-1.5 cursor-pointer">
-                          <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                        </div>
-                      </Tooltip>
-                    </OptionsWrapper>
-                  </span>
+                        <Tooltip
+                          enterDelay={1000}
+                          leaveDelay={200}
+                          title="More"
+                          arrow
+                        >
+                          <div className="hover:bg-p-btn-hover rounded-md p-1.5 cursor-pointer">
+                            <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                          </div>
+                        </Tooltip>
+                      </OptionsWrapper>
+                    </span>
+                  </div>
                 </div>
               </div>
 

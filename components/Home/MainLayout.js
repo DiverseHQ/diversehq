@@ -13,11 +13,9 @@ import { useTheme } from '../Common/ThemeProvider'
 // import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
-  console.log('isMobileView: ', isMobileView)
   const [mobile, setMobile] = useState(isMobileView)
   // only show if mounted
   const { isMobile } = useDevice()
-  console.log('isMobile: ', isMobile)
   const router = useRouter()
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
