@@ -99,18 +99,13 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
           <div className="bg-[#9378d8] rounded-t-[15px] font-medium px-3 py-2">
             Community Rules
           </div>
-          <div className="text-p-text flex flex-col text-[14px]">
+          <div className="text-p-text flex flex-col text-[14px] rounded-b-[15px] overflow-hidden">
             {communityInfo?.rules?.map((rule, index) => {
               return (
                 <Accordion
                   key={index}
+                  disableGutters={true}
                   sx={{
-                    '& .MuiPaper-root.MuiAccordion-root': {
-                      margin: '0px 0px'
-                    },
-                    '& .MuiAccordion-root': {
-                      borderRadius: '15px'
-                    },
                     '& .MuiAccordionDetails-root': {
                       backgroundColor: theme === 'dark' ? '#1a1a1b' : '#fff',
                       color: theme === 'dark' ? '#d7dadc' : '#000'

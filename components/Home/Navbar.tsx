@@ -4,7 +4,7 @@ import Link from 'next/link'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useRouter } from 'next/router'
 import useNotificationsCount from '../Notification/useNotificationsCount'
-import { IoMdNotificationsOutline } from 'react-icons/io'
+import { IoIosMoon, IoMdNotificationsOutline } from 'react-icons/io'
 import ClickOption from './ClickOption'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
@@ -22,6 +22,8 @@ import CreatePostPopup from './CreatePostPopup'
 import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
 import { BsChevronDown } from 'react-icons/bs'
+import { useTheme } from '../Common/ThemeProvider'
+import { HiSun } from 'react-icons/hi'
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
@@ -29,6 +31,7 @@ const Navbar = () => {
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
+  const { theme, toggleTheme } = useTheme()
 
   const dropdownRef = useRef(null)
   const [joinedCommunities, setJoinedCommunities] = useState([])
@@ -151,7 +154,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-1.5 items-center shadow-sm gap-2 sticky top-0 bg-s-bg">
+    <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-1.5 items-center shadow-sm gap-2 sticky top-0 bg-s-bg min-h-[62px]">
       <div className="flex flex-row items-center gap-4 lg:gap-5">
         <div>
           <div className="flex flex-row justify-center items-center space-x-2 h-fit w-fit cursor-pointer">
@@ -308,16 +311,18 @@ const Navbar = () => {
             )}
           </button>
         </Tooltip>
-        {/* <button
-          className="text-p-text hover:bg-s-hover p-1 rounded-full"
-          onClick={toggleTheme}
-        >
-          {theme === 'light' ? (
-            <FiMoon className="w-[25px] h-[25px] cursor-pointer" />
-          ) : (
-            <FiSun className="w-[25px] h-[25px] cursor-pointer" />
-          )}
-        </button> */}
+        <Tooltip title={theme === 'light' ? 'Dark mode' : 'Light mode'} arrow>
+          <button
+            className="text-p-text hover:bg-s-hover p-1 rounded-full"
+            onClick={toggleTheme}
+          >
+            {theme === 'light' ? (
+              <IoIosMoon className="w-[25px] h-[25px] cursor-pointer" />
+            ) : (
+              <HiSun className="w-[25px] h-[25px] cursor-pointer" />
+            )}
+          </button>
+        </Tooltip>
         {!isSignedIn ||
         !hasProfile ||
         !user ||
