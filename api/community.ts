@@ -256,6 +256,20 @@ export const setRulesOfCommunity = async (name: string, rules: Rule[]) => {
   }
 }
 
+export const setRulesOfLensCommunity = async (id: string, rules: Rule[]) => {
+  try {
+    return await fetch(`${apiEndpoint}/lensCommunity/set-rules/${id}`, {
+      method: 'PUT',
+      headers: await getHeaders(),
+      body: JSON.stringify({
+        rules
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const addBannedUserToCommunity = async (
   name: string,
   bannedUser: BannedUser

@@ -28,6 +28,7 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import { UserType } from '../../types/user'
 import { sleep } from '../../lib/helpers'
 import { getLensCommunity } from '../../api/community'
+import { LensCommunity } from '../../types/community'
 
 interface ContextType {
   address: string
@@ -35,7 +36,7 @@ interface ContextType {
   fetchAndSetLensCommunity: () => void
   user: UserType
   loading: boolean
-  LensCommunity: any
+  LensCommunity: LensCommunity
 }
 
 export const WalletContext = createContext<ContextType>(null)
