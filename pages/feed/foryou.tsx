@@ -7,6 +7,7 @@ import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import LensPostJoinedCommunitiesPublications from '../../components/Post/LensPostJoinedCommunitiesPublications'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useDevice from '../../components/Common/useDevice'
+import { appLink } from '../../utils/config'
 const foryou = () => {
   const { isSignedIn, hasProfile } = useLensUserContext()
   const { user } = useProfile()
@@ -17,7 +18,7 @@ const foryou = () => {
         title="For Your Feed / DiverseHQ"
         description="Lens Feed from diverse communities on DiverseHQ."
         openGraph={{
-          url: 'https://app.diversehq.xyz/feed/lens'
+          url: `${appLink}/feed/lens`
         }}
       />
       <div className="w-full flex justify-center">

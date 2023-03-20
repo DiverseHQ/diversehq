@@ -4,7 +4,7 @@ import Link from 'next/link'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useRouter } from 'next/router'
 import useNotificationsCount from '../Notification/useNotificationsCount'
-import { IoIosMoon, IoMdNotificationsOutline } from 'react-icons/io'
+import { IoMdNotificationsOutline } from 'react-icons/io'
 import ClickOption from './ClickOption'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useProfile } from '../Common/WalletContext'
@@ -22,8 +22,6 @@ import CreatePostPopup from './CreatePostPopup'
 import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
 import { BsChevronDown } from 'react-icons/bs'
-import { useTheme } from '../Common/ThemeProvider'
-import { HiSun } from 'react-icons/hi'
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
@@ -31,7 +29,6 @@ const Navbar = () => {
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
-  const { theme, toggleTheme } = useTheme()
 
   const dropdownRef = useRef(null)
   const [joinedCommunities, setJoinedCommunities] = useState([])
@@ -168,11 +165,6 @@ const Navbar = () => {
         </div>
         <SearchModal />
         <div className="flex flex-row space-x-3">
-          {/* <FilterButton
-            title="Home"
-            active={isOnHomeFeed}
-            onClick={routeToHome}
-          /> */}
           <div className="flex flex-col relative">
             <button
               className={`flex items-center hover:cursor-pointer space-x-1 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full bg-select-btn-bg text-select-btn-text sm:hover:bg-select-btn-hover-bg`}
@@ -240,50 +232,6 @@ const Navbar = () => {
               }
             }}
           />
-          {/* <div className="flex flex-col">
-            <FilterButton
-              title="Joined Communities"
-              IconAtEnd={
-                <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
-              }
-              onClick={getJoinedCommunities}
-            />
-            <div
-              className="bg-white/70 font-medium dark:bg-black/70 backdrop-blur-lg rounded-md absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
-              ref={dropdownRef}
-            >
-              {showJoinedCommunities && (
-                <>
-                  <FilterListWithSearch
-                    list={joinedCommunities}
-                    type="community"
-                    filterParam="name"
-                    handleSelect={(community) => {
-                      setShowJoinedCommunities(false)
-                      storeRecentCommunities(community)
-                      router.push(`/c/${community?.name}`)
-                    }}
-                  />
-                </>
-              )}
-              {fetchingJoinedCommunities && (
-                <>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                </>
-              )}
-            </div>
-          </div> */}
         </div>
       </div>
       <div className="flex flex-row items-center gap-2">
@@ -311,18 +259,7 @@ const Navbar = () => {
             )}
           </button>
         </Tooltip>
-        <Tooltip title={theme === 'light' ? 'Dark mode' : 'Light mode'} arrow>
-          <button
-            className="text-p-text hover:bg-s-hover p-1 rounded-full"
-            onClick={toggleTheme}
-          >
-            {theme === 'light' ? (
-              <IoIosMoon className="w-[25px] h-[25px] cursor-pointer" />
-            ) : (
-              <HiSun className="w-[25px] h-[25px] cursor-pointer" />
-            )}
-          </button>
-        </Tooltip>
+
         {!isSignedIn ||
         !hasProfile ||
         !user ||

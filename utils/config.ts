@@ -173,3 +173,4 @@ export const infoFromLensAppId = {
 }
 
 export const appId = 'diversehq'
+export const appLink = 'https://app.diversehq.xyz'

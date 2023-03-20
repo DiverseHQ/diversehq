@@ -4,6 +4,7 @@ import useDevice from '../../components/Common/useDevice'
 import CreatePostBar from '../../components/Home/CreatePostBar'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import PostsColumn from '../../components/Post/PostsColumn'
+import { appLink } from '../../utils/config'
 
 const newPage = () => {
   const { isDesktop } = useDevice()
@@ -13,7 +14,7 @@ const newPage = () => {
         title="OffChain Feed / DiverseHQ"
         description="Stay up to date with the freshest perspectives and stories from diverse communities on DiverseHQ."
         openGraph={{
-          url: 'https://app.diversehq.xyz/feed/new'
+          url: `${appLink}/feed/new`
         }}
       />
       <div className="w-full flex justify-center">

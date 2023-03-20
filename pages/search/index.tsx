@@ -6,6 +6,7 @@ import useDevice from '../../components/Common/useDevice'
 import { useProfile } from '../../components/Common/WalletContext'
 import RightSideCommunityComponent from '../../components/Home/RightSideCommunityComponent'
 import SearchModal from '../../components/Search/SearchModal'
+import { appLink } from '../../utils/config'
 
 const index = () => {
   const { notifyError } = useNotify()
@@ -58,7 +59,7 @@ const index = () => {
         title="DiverseHQ / Search"
         description="Search and connect with communities that reflect your interests and values on DiverseHQ!"
         openGraph={{
-          url: 'https://app.diversehq.xyz/search'
+          url: `${appLink}/search`
         }}
       />
       <div className="w-full flex justify-center">

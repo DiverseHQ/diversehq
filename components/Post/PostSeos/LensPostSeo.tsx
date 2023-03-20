@@ -1,6 +1,7 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
 import { Publication } from '../../../graphql/generated'
+import { appLink } from '../../../utils/config'
 // import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 import imageProxy from '../../User/lib/imageProxy'
@@ -14,7 +15,7 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
         handle: '@useDiverseHQ'
       }}
       openGraph={{
-        url: `https://app.diversehq.xyz/p/${post?.id}`,
+        url: `${appLink}/p/${post?.id}`,
         title: `${stringToLength(post?.metadata?.content, 40)} \n | ${
           post?.stats?.totalAmountOfCollects
         } Collects | ${post?.stats?.totalUpvotes} Upvotes | \n by ${

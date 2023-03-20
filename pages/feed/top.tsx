@@ -4,6 +4,7 @@ import useDevice from '../../components/Common/useDevice'
 import CreatePostBar from '../../components/Home/CreatePostBar'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import PostsColumn from '../../components/Post/PostsColumn'
+import { appLink } from '../../utils/config'
 
 const top = () => {
   const { isDesktop } = useDevice()
@@ -13,7 +14,7 @@ const top = () => {
         title="Top Feed / DiverseHQ"
         description="Find the best and most popular content from diverse communities all in one place on DiverseHQ's top posts faeed."
         openGraph={{
-          url: 'https://app.diversehq.xyz/feed/top'
+          url: `${appLink}/feed/top`
         }}
       />
       <div className="w-full flex justify-center">

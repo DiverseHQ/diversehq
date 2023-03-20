@@ -5,6 +5,7 @@ import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsE
 import { NextSeo } from 'next-seo'
 import useDevice from '../../components/Common/useDevice'
 import CreatePostBar from '../../components/Home/CreatePostBar'
+import { appLink } from '../../utils/config'
 // import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
 
 const lens = () => {
@@ -16,7 +17,7 @@ const lens = () => {
         title="Lens Feed / DiverseHQ"
         description="Lens Feed from diverse communities on DiverseHQ."
         openGraph={{
-          url: 'https://app.diversehq.xyz/feed/lens'
+          url: `${appLink}/feed/lens`
         }}
       />
       <div className="w-full flex justify-center">

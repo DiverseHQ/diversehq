@@ -10,6 +10,7 @@ import getIPFSLink from './getIPFSLink'
 // eslint-disable-next-line no-unused-vars
 const imageProxy = (url: string, tr: string = '', name?: string): string => {
   // for now, returning the original url
+  if (!url) return ''
   // return url
   if (url?.startsWith('https://firebasestorage.googleapis.com/')) {
     return url

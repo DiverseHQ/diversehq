@@ -4,6 +4,7 @@ import LensPostsExplorePublicationsColumn from '../components/Post/LensPostsExpl
 import NavFilterAllPosts from '../components/Post/NavFilterAllPosts'
 import CreatePostBar from '../components/Home/CreatePostBar'
 import useDevice from '../components/Common/useDevice'
+import { appLink } from '../utils/config'
 
 const Home = () => {
   const { isDesktop } = useDevice()
@@ -13,7 +14,7 @@ const Home = () => {
         title="Home / DiverseHQ"
         description="Building next Reddit, where anyone can easily grow their audience."
         openGraph={{
-          url: 'https://app.diversehq.xyz'
+          url: appLink
         }}
       />
       <div className="w-full flex justify-center">

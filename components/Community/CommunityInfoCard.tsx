@@ -4,7 +4,6 @@ import { isCreatorOrModeratorOfCommunity } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import useDevice from '../Common/useDevice'
-import { BiChevronDown } from 'react-icons/bi'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { RiMore2Fill } from 'react-icons/ri'
 import { IoIosShareAlt } from 'react-icons/io'
@@ -13,13 +12,14 @@ import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { Tooltip } from '@mui/material'
 import { getLevelAndThresholdXP } from '../../lib/helpers'
-import { xpPerMember } from '../../utils/config'
+import { appLink, xpPerMember } from '../../utils/config'
 import JoinCommunityButton from './JoinCommunityButton'
 import Link from 'next/link'
 import formatHandle from '../User/lib/formatHandle'
 import { CommunityWithCreatorProfile } from '../../types/community'
-import { FiSettings } from 'react-icons/fi'
+import { FiInfo, FiSettings } from 'react-icons/fi'
 import ExploreCommunityCard from './ExploreCommunityCard'
+import { BsPeopleFill } from 'react-icons/bs'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -52,9 +52,9 @@ const CommunityInfoCard = ({ _community }: Props) => {
   const shareCommunity = () => {
     if (navigator.share) {
       navigator.share({
-        title: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
-        text: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/c/${community?.name}`
+        title: `Join ${community?.name} on DiverseHQ`,
+        text: `Join ${community?.name} on DiverseHQ`,
+        url: `${appLink}/c/${community?.name}`
       })
     } else {
       notifyInfo('Sharing is not supported on your device')
@@ -91,7 +91,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
           {router.pathname.startsWith('/explore') ? (
             <ExploreCommunityCard _community={community} />
           ) : (
-            <div className="relative shadow-lg z-0 bg-s-bg mb-6 text-p-text w-[calc(100vw-9px)]">
+            <div className="relative z-0 bg-s-bg text-p-text w-[calc(100vw-9px)]">
               <ImageWithFullScreenZoom
                 className={`h-48 sm:h-72 w-full object-cover`}
                 src={community.bannerImageUrl}
@@ -101,24 +101,42 @@ const CommunityInfoCard = ({ _community }: Props) => {
                   <div
                     className={`flex flex-row gap-2 ${isMobile ? 'mx-4' : ''}`}
                   >
-                    <div className="shrink-0 rounded-[10px] -translate-y-4  md:-translate-y-10 border-4 border-s-bg overflow-hidden">
+                    <div className="shrink-0 rounded-xl -translate-y-5  md:-translate-y-10 border-4 border-s-bg overflow-hidden">
                       <ImageWithFullScreenZoom
                         className="bg-s-bg w-[60px] h-[60px] md:w-[120px] md:h-[120px] object-cover"
                         src={community.logoImageUrl}
                       />
                     </div>
-                    {!isMobile && (
-                      <div className="flex flex-col mt-4">
+                    {!isMobile ? (
+                      <div className="flex flex-col mt-3">
                         <p
                           className="font-bold text-[18px] md:text-2xl tracking-wider truncate"
                           onClick={redirectToCommunityPage}
                         >
                           {community?.label || community?.name}
                         </p>
-                        <div className="text-[14px] md:text-[16px] mb-4">
+                        <div className="text-[14px] md:text-[16px]">
                           <div className="hover:underline cursor-pointer text-s-text">
                             c/{community.name}
                           </div>
+                        </div>
+                        <div className="flex flex-row items-center pt-0.5">
+                          <BsPeopleFill className="w-4 h-4 mr-1" />
+                          <span>{community?.members?.length}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col">
+                        <div className="px-2">
+                          <div className="hover:underline cursor-pointer text-s-text">
+                            c/{community.name}
+                          </div>
+                        </div>
+                        <div className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px]">
+                          <BsPeopleFill className="w-4 h-4 mr-1" />
+                          <span className="font-bold">
+                            {community?.members?.length || 0}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -131,7 +149,56 @@ const CommunityInfoCard = ({ _community }: Props) => {
                           <MoreOptionsModal
                             className="z-50"
                             list={
-                              isAuth
+                              isMobile
+                                ? isAuth
+                                  ? [
+                                      {
+                                        label: 'Setting',
+                                        onClick: () => {
+                                          router.push(
+                                            `/c/${community.name}/settings`
+                                          )
+                                        },
+                                        icon: () => (
+                                          <FiSettings className="mr-1.5 w-6 h-6" />
+                                        )
+                                      },
+                                      {
+                                        label: 'More Info',
+                                        onClick: () => {
+                                          setIsDrawerOpen(true)
+                                        },
+                                        icon: () => (
+                                          <FiInfo className="mr-1.5 w-6 h-6" />
+                                        )
+                                      },
+                                      {
+                                        label: 'Share',
+                                        onClick: shareCommunity,
+                                        icon: () => (
+                                          <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                        )
+                                      }
+                                    ]
+                                  : [
+                                      {
+                                        label: 'More Info',
+                                        onClick: () => {
+                                          setIsDrawerOpen(true)
+                                        },
+                                        icon: () => (
+                                          <FiInfo className="mr-1.5 w-6 h-6" />
+                                        )
+                                      },
+                                      {
+                                        label: 'Share',
+                                        onClick: shareCommunity,
+                                        icon: () => (
+                                          <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                        )
+                                      }
+                                    ]
+                                : isAuth
                                 ? [
                                     {
                                       label: 'Setting',
@@ -191,10 +258,10 @@ const CommunityInfoCard = ({ _community }: Props) => {
                   {/* name and description row */}
                   <div className="flex flex-col px-3 mb-2">
                     <p
-                      className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer truncate"
+                      className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer"
                       onClick={redirectToCommunityPage}
                     >
-                      {community.name}
+                      {community?.label || community?.name}
                     </p>
                     <div className="text-[14px] md:text-[16px]">
                       {community.description}
@@ -202,99 +269,74 @@ const CommunityInfoCard = ({ _community }: Props) => {
                   </div>
                 </>
               )}
-
-              <div className="flex flex-row justify-between items-center px-5 py-1 md:px-8 pb-2">
-                {/* stats UI for mobile */}
-                {isMobile && (
-                  <div className="flex flex-row flex-wrap gap-2 md:gap-4 text-[14px] items-center">
-                    <div className="flex flex-col items-center active:bg-s-h-bg active:dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px]">
-                      <span className="font-semibold">
-                        {community.members?.length}
-                      </span>
-                      <span className="font-light">Members</span>
-                    </div>
-                    <div className="w-[1px] h-[30px] bg-[#E6E6E8]"></div>
-                    <div
-                      className="flex flex-col items-center justify-between active:bg-s-h-bg active:dark:bg-p-bg py-1 px-2 sm:px-4 rounded-[10px] cursor-pointer"
-                      onClick={() => setIsDrawerOpen(true)}
-                    >
-                      <span className="font-semibold">
-                        <BiChevronDown className="text-[18px]" />
-                      </span>
-                      <span className="font-light">More</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* bottom drawer for mobile */}
-                <BottomDrawerWrapper
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                  showClose
-                  position="bottom"
-                >
-                  <div className="flex flex-col gap-4 mx-4 mb-4">
-                    <h3 className="font-bold text-[20px] self-center">
-                      {community?.name}
-                    </h3>
-                    <div className="flex flex-row gap-1 w-full">
-                      <div className="flex flex-col w-full">
-                        <div className="relative bg-[#D7D7D7] h-[35px] rounded-[10px] flex flex-row">
-                          <div className="flex z-10 self-center justify-self-center w-full justify-center text-white dark:text-p-text text-[14px]">
-                            Level {level}
-                          </div>
-                          <div
-                            className="absolute h-full bg-[#9378D8] rounded-[10px] "
-                            style={{
-                              width: `${calculateBarPercentage(
-                                thresholdXP,
-                                currentXP
-                              )}%`,
-                              maxWidth: '100%'
-                            }}
-                          ></div>
+              {/* bottom drawer for mobile */}
+              <BottomDrawerWrapper
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
+                showClose
+                position="bottom"
+              >
+                <div className="flex flex-col gap-4 mx-4 mb-4">
+                  <h3 className="font-bold text-[20px] self-center">
+                    {community?.name}
+                  </h3>
+                  <div className="flex flex-row gap-1 w-full">
+                    <div className="flex flex-col w-full">
+                      <div className="relative bg-[#D7D7D7] h-[35px] rounded-[10px] flex flex-row">
+                        <div className="flex z-10 self-center justify-self-center w-full justify-center text-white dark:text-p-text text-[14px]">
+                          Level {level}
                         </div>
+                        <div
+                          className="absolute h-full bg-[#9378D8] rounded-[10px] "
+                          style={{
+                            width: `${calculateBarPercentage(
+                              thresholdXP,
+                              currentXP
+                            )}%`,
+                            maxWidth: '100%'
+                          }}
+                        ></div>
                       </div>
                     </div>
-                    <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
-                      <img
-                        src="/createdOnDate.svg"
-                        alt="created on date"
-                        className="w-5 h-5"
-                      />
-                      <span>
-                        Created{' '}
-                        {new Date(community.createdAt)
-                          .toDateString()
-                          .split(' ')
-                          .slice(1)
-                          .join(' ')}
-                      </span>
-                    </div>
-                    <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
-                      <img
-                        src="/createdByUser.svg"
-                        alt="created by user"
-                        className="w-5 h-5"
-                      />
-                      <span>
-                        Created by{' '}
-                        <span>
-                          <Link
-                            href={`u/${formatHandle(
-                              community?.creatorProfile?.handle
-                            )}`}
-                          >
-                            <span>{`u/${formatHandle(
-                              community?.creatorProfile?.handle
-                            )}`}</span>
-                          </Link>
-                        </span>
-                      </span>
-                    </div>
                   </div>
-                </BottomDrawerWrapper>
-              </div>
+                  <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                    <img
+                      src="/createdOnDate.svg"
+                      alt="created on date"
+                      className="w-5 h-5"
+                    />
+                    <span>
+                      Created{' '}
+                      {new Date(community.createdAt)
+                        .toDateString()
+                        .split(' ')
+                        .slice(1)
+                        .join(' ')}
+                    </span>
+                  </div>
+                  <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#687684]">
+                    <img
+                      src="/createdByUser.svg"
+                      alt="created by user"
+                      className="w-5 h-5"
+                    />
+                    <span>
+                      Created by{' '}
+                      <span>
+                        <Link
+                          href={`u/${formatHandle(
+                            community?.creatorProfile?.handle
+                          )}`}
+                        >
+                          <span>{`u/${formatHandle(
+                            community?.creatorProfile?.handle
+                          )}`}</span>
+                        </Link>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </BottomDrawerWrapper>
             </div>
           )}
         </>

@@ -1,5 +1,6 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
+import { appLink } from '../../utils/config'
 
 const ExploreTopCommunitiesSeo = () => {
   return (
@@ -9,7 +10,7 @@ const ExploreTopCommunitiesSeo = () => {
       openGraph={{
         title: 'Explore / DiverseHQ',
         description: 'Discover the top communities on DiverseHQ.',
-        url: 'https://app.diversehq.xyz/explore/top'
+        url: `${appLink}/explore/top`
       }}
     />
   )

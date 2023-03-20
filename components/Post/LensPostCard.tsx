@@ -9,7 +9,7 @@ import {
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
-import { appId, MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
+import { appId, appLink, MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
@@ -876,7 +876,7 @@ const LensPostCard = ({ post }: Props) => {
                 {!isMobile && (
                   <span onClick={(e) => e.stopPropagation()}>
                     <PostShareButton
-                      url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
+                      url={`${appLink}/p/${postInfo?.id}`}
                       text={postInfo?.metadata?.name}
                     />
                   </span>

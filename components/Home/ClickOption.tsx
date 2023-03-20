@@ -7,22 +7,22 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { AiOutlineDisconnect } from 'react-icons/ai'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { MdCreateNewFolder } from 'react-icons/md'
-// import { useTheme } from '../Common/ThemeProvider'
 import { useNotify } from '../Common/NotifyContext'
 import { userRoles } from '../../utils/config'
 import CreateCommunity from './CreateCommunity'
 import { BsFillPersonFill } from 'react-icons/bs'
-import { IoMdSettings } from 'react-icons/io'
-// import { HiSun } from 'react-icons/hi'
+import { IoIosMoon, IoMdSettings } from 'react-icons/io'
+import { HiSun } from 'react-icons/hi'
 import formatHandle from '../User/lib/formatHandle'
 import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
+import { useTheme } from '../Common/ThemeProvider'
 
 const ClickOption = () => {
   const router = useRouter()
   const { user, LensCommunity } = useProfile()
   const { disconnect } = useDisconnect()
   const { hideModal, showModal } = usePopUpModal()
-  // const { theme, toggleTheme } = useTheme()
+  const { theme, toggleTheme } = useTheme()
   const { notifyInfo } = useNotify()
   const { data: lensProfile } = useLensUserContext()
 

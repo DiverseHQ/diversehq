@@ -29,6 +29,7 @@ const NewMobileTopNav = () => {
     if (
       router.pathname.startsWith('/p/') ||
       router.pathname.startsWith('/c/') ||
+      router.pathname.startsWith('/l/') ||
       router.pathname.startsWith('/search') ||
       router.pathname.startsWith('/u/') ||
       router.pathname.startsWith('/settings')

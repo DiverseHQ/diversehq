@@ -40,4 +40,7 @@ export type LensCommunity = {
   creator: string
   bannedUsers?: BannedUser[]
   rules?: Rule[]
+  Profile?: Profile
+  createdAt?: string
+  updatedAt?: string
 }

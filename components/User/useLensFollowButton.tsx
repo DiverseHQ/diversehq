@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri'
 import { SlUserFollowing } from 'react-icons/sl'
 import {
+  SingleProfileQueryRequest,
   useCreateUnfollowTypedDataMutation,
   useProfileQuery,
   useProxyActionMutation
@@ -12,7 +13,33 @@ import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast
 import { useNotify } from '../Common/NotifyContext'
 import formatHandle from './lib/formatHandle'
 
-const useLensFollowButton = (request) => {
+interface followSteps {
+  UnFollow: string
+  Follow: string
+  Following: string
+  FollowBack: string
+}
+
+const useLensFollowButton = (
+  request: SingleProfileQueryRequest,
+  label: string = 'follow'
+) => {
+  const FOLLOW_STATUS: {
+    [key: string]: followSteps
+  } = {
+    follow: {
+      UnFollow: 'UnFollow',
+      Follow: 'Follow',
+      Following: 'Following',
+      FollowBack: 'Follow back'
+    } as followSteps,
+    join: {
+      UnFollow: 'Leave',
+      Follow: 'Join',
+      Following: 'Joined',
+      FollowBack: 'Join'
+    } as followSteps
+  }
   const { mutateAsync: proxyAction } = useProxyActionMutation()
   const { mutateAsync: unFollow } = useCreateUnfollowTypedDataMutation()
   const { isSignedTx, error, result, type, signTypedDataAndBroadcast } =
@@ -49,13 +76,11 @@ const useLensFollowButton = (request) => {
         }
       })
       setIsFollowedByMe(true)
-      notifySuccess(
-        `Following ${
-          data?.profile?.name
-            ? data?.profile?.name
-            : `u/${formatHandle(data?.profile?.handle)}`
-        }`
-      )
+      if (label === 'follow') {
+        notifySuccess(`Following u/${formatHandle(data?.profile?.handle)}`)
+      } else {
+        notifySuccess(`Joined l/${formatHandle(data?.profile?.handle)}`)
+      }
       setLoading(false)
     } catch (e) {
       console.log(e)
@@ -101,16 +126,15 @@ const useLensFollowButton = (request) => {
     if (isSignedTx && type === 'unfollow') {
       setLoading(false)
       setIsFollowedByMe(false)
-      notifySuccess(
-        `UnFollowed ${
-          data?.profile?.name
-            ? data?.profile?.name
-            : `u/${formatHandle(data?.profile?.handle)}`
-        }`
-      )
+      if (label === 'follow') {
+        notifySuccess(`UnFollowed u/${formatHandle(data?.profile?.handle)}`)
+      } else {
+        notifySuccess(`Left l/${formatHandle(data?.profile?.handle)}`)
+      }
     }
   }, [isSignedTx, type])
 
+  // label options 'follow' & 'join'
   const FollowButton = ({ className = '' }) => {
     if (!isSignedIn || !hasProfile) return null
     return (
@@ -128,15 +152,15 @@ const useLensFollowButton = (request) => {
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
                 <CircularProgress size="18px" color="primary" />
-                <p>UnFollow</p>
+                <p>{FOLLOW_STATUS[label].UnFollow}</p>
               </div>
             ) : (
               <>
                 <div className="hidden group-hover/text:flex flex-row justify-center items-center space-x-2">
-                  <RiUserUnfollowLine /> <p>UnFollow</p>
+                  <RiUserUnfollowLine /> <p>{FOLLOW_STATUS[label].UnFollow}</p>
                 </div>
                 <div className="group-hover/text:hidden flex flex-row justify-center items-center space-x-2 ">
-                  <SlUserFollowing /> <p>Following</p>
+                  <SlUserFollowing /> <p>{FOLLOW_STATUS[label].Following}</p>
                 </div>
               </>
             )}
@@ -154,13 +178,13 @@ const useLensFollowButton = (request) => {
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
                 <CircularProgress size="18px" color="primary" />
-                <p>Follow</p>
+                <p>{FOLLOW_STATUS[label].Follow}</p>
               </div>
             ) : data?.profile?.isFollowing ? (
-              'Follow back'
+              <>{FOLLOW_STATUS[label].FollowBack}</>
             ) : (
               <div className="flex flex-row justify-center items-center space-x-1 ">
-                <RiUserFollowLine /> <p>Follow</p>
+                <RiUserFollowLine /> <p>{FOLLOW_STATUS[label].Follow}</p>
               </div>
             )}
           </button>

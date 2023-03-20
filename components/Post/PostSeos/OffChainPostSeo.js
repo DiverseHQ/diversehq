@@ -1,6 +1,6 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import { IMAGE_KIT_ENDPOINT } from '../../../utils/config'
+import { appLink, IMAGE_KIT_ENDPOINT } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 
 const OffChainPostSeo = ({ post }) => {
@@ -8,7 +8,7 @@ const OffChainPostSeo = ({ post }) => {
     <NextSeo
       title={stringToLength(post?.title, 60)}
       openGraph={{
-        url: `https://app.diversehq.xyz/p/${post?._id}`,
+        url: `${appLink}/p/${post?._id}`,
         title: stringToLength(post?.title, 60),
         images: post?.postImageUrl
           ? [

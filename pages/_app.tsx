@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import { useRef } from 'react'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
-import { sortTypes } from '../utils/config'
+import { appLink, sortTypes } from '../utils/config'
 TimeAgo.addDefaultLocale(en)
 
 interface MyAppProps {
@@ -122,7 +122,7 @@ function MyApp({ Component, pageProps, isMobileView }: MyAppProps) {
         openGraph={{
           type: 'website',
           locale: 'en_IE',
-          url: 'https://app.diversehq.xyz',
+          url: appLink,
           siteName: 'DiverseHQ'
         }}
         twitter={{
