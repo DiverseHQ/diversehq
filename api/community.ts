@@ -320,3 +320,14 @@ export const postCreateLensCommunity = async (handle: string) => {
     })
   })
 }
+
+export const getAllLensCommunitiesHandle = async (): Promise<
+  {
+    _id: string
+    handle: string
+  }[]
+> => {
+  return await fetch(`${apiEndpoint}/lensCommunity/get-all-lens-communities`, {
+    headers: await getHeaders()
+  }).then((res) => res.json())
+}

@@ -15,8 +15,11 @@ const CommunitySelectDiv = ({ community, handleSelect }) => {
         alt="community logo"
         className="rounded-full object-cover w-9 h-9"
       />
-
-      <div id={community._id}>{community.name}</div>
+      {community?.isLensCommunity ? (
+        <div id={community._id}>l/{community.name}</div>
+      ) : (
+        <div id={community._id}>{community.name}</div>
+      )}
     </div>
   )
 }

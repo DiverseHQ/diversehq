@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
 
 @layer uitilities {
   @keyframes enteranimation {
@@ -26,6 +27,10 @@
       opacity: 0;
     }
   }
+
+  /* body {
+    font-family: 'Nunito Sans', sans-serif;
+  } */
 
   /* span a {
     color: #1d9bf0;
@@ -281,16 +286,16 @@
   outline-offset: 0.4rem;
   outline: none;
 }
-[data-rmiz-content="found"] img {
+[data-rmiz-content='found'] img {
   cursor: pointer !important;
 }
-[data-rmiz-content="found"] svg {
+[data-rmiz-content='found'] svg {
   cursor: pointer !important;
 }
-[data-rmiz-content="found"] [role="img"] {
+[data-rmiz-content='found'] [role='img'] {
   cursor: pointer !important;
 }
-[data-rmiz-content="found"] [data-zoom] {
+[data-rmiz-content='found'] [data-zoom] {
   cursor: pointer !important;
 }
 [data-rmiz-btn-zoom] {

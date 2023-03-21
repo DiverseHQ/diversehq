@@ -25,7 +25,7 @@ import { BsChevronDown } from 'react-icons/bs'
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
-  const { user } = useProfile()
+  const { user, joinedLensCommunities, LensCommunity } = useProfile()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
@@ -133,8 +133,36 @@ const Navbar = () => {
       const recentCommunities =
         JSON.parse(window?.localStorage?.getItem('recentCommunities')) || []
       // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
+      const myLensCommunity = []
+      if (
+        LensCommunity &&
+        !recentCommunities.some((c) => c?._id === LensCommunity?._id)
+      ) {
+        myLensCommunity.push({
+          _id: LensCommunity?._id,
+          name: formatHandle(LensCommunity?.Profile?.handle),
+          logoImageUrl: getAvatar(LensCommunity?.Profile),
+          isLensCommunity: true
+        })
+      }
       setJoinedCommunities([
         ...recentCommunities,
+        ...myLensCommunity,
+        ...joinedLensCommunities
+          .map((community) => ({
+            _id: community._id,
+            name: formatHandle(community?.Profile?.handle),
+            logoImageUrl: getAvatar(community?.Profile),
+            isLensCommunity: true
+          }))
+          .filter(
+            (community) =>
+              !recentCommunities.some((c) => c?._id === community?._id)
+          )
+          .filter(
+            (community) =>
+              !myLensCommunity.some((c) => c?._id === community?._id)
+          ),
         // removing the communities in the recentCommunities from the joinedCommunities using communityId
         ...response.filter(
           (community) =>
@@ -196,7 +224,12 @@ const Navbar = () => {
                     handleSelect={(community) => {
                       setShowJoinedCommunities(false)
                       storeRecentCommunities(community)
-                      router.push(`/c/${community?.name}`)
+
+                      if (community?.isLensCommunity) {
+                        router.push(`/l/${community?.name}`)
+                      } else {
+                        router.push(`/c/${community?.name}`)
+                      }
                     }}
                   />
                 </>

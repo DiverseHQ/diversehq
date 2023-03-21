@@ -1,0 +1,10 @@
+query bulkIsFollowedByMe($request: ProfileQueryRequest!) {
+  profiles(request: $request) {
+    items {
+      isFollowedByMe
+    }
+    pageInfo {
+      ...CommonPaginatedResultInfoFields
+    }
+  }
+}
