@@ -6,6 +6,7 @@ const UserManagementSettingsPage = ({
 }: {
   community: LensCommunity
 }) => {
+  console.log(community)
   return <div>UserManagementSettingsPage</div>
 }
 

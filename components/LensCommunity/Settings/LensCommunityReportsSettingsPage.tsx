@@ -6,6 +6,7 @@ const LensCommunityReportsSettingsPage = ({
 }: {
   community: LensCommunity
 }) => {
+  console.log(community)
   return <div>LensCommunityReportsSettingsPage</div>
 }
 
