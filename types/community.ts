@@ -16,6 +16,8 @@ export type CommunityType = {
   creatorProfile?: Profile
   rules?: Rule[]
   bannedUsers?: BannedUser[]
+  // hack to allow any other property
+  handle?: string
   [key: string]: any
 }
 

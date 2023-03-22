@@ -10,6 +10,7 @@ const index = () => {
   const { data: profile } = useLensUserContext()
   const LensCommunity: LensCommunity = {
     ...l,
+    //@ts-ignore
     Profile: profile?.defaultProfile
   }
   return (

@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { Profile, useProfileQuery } from '../../../graphql/generated'
@@ -15,9 +16,14 @@ import useLensFollowButton from '../../User/useLensFollowButton'
 interface Props {
   _profile?: Profile
   profileHandle?: string
+  isLensCommunity?: boolean
 }
 
-const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
+const LensPageProfileCard = ({
+  _profile,
+  profileHandle,
+  isLensCommunity
+}: Props) => {
   const router = useRouter()
   const [profile, setProfile] = useState<Profile>(_profile)
 
@@ -39,10 +45,13 @@ const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
   }, [data])
 
   const { isSignedIn, hasProfile } = useLensUserContext()
-  const { FollowButton, isFollowedByMe } = useLensFollowButton({
-    profileId: _profile?.id || null,
-    handle: profileHandle || null
-  })
+  const { FollowButton, isFollowedByMe } = useLensFollowButton(
+    {
+      profileId: _profile?.id || null,
+      handle: profileHandle || null
+    },
+    isLensCommunity ? 'join' : 'follow'
+  )
   let _profileBanner =
     profile?.coverPicture?.__typename === 'NftImage'
       ? getIPFSLink(profile?.coverPicture?.uri)
@@ -51,7 +60,11 @@ const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
     <div
       className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3 cursor-pointer"
       onClick={() => {
-        router.push(`/u/${formatHandle(profile?.handle)}`)
+        if (isLensCommunity) {
+          router.push(`/l/${formatHandle(profile?.handle)}`)
+        } else {
+          router.push(`/u/${formatHandle(profile?.handle)}`)
+        }
       }}
     >
       <span onClick={(e) => e.stopPropagation()}>
@@ -69,15 +82,22 @@ const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
             >
               <ImageWithFullScreenZoom
                 src={getAvatar(profile)}
-                className="rounded-full w-[70px] h-[70px] object-cover  border-s-bg border-4"
+                className={clsx(
+                  isLensCommunity ? 'rounded-xl' : 'rounded-full',
+                  'w-[70px] h-[70px] object-cover  border-s-bg border-4'
+                )}
               />
             </div>
             <div className="flex flex-row">
               <div>
                 <div
-                  className="font-bold leading-4 text-p-text text-lg  hover:underline cursor-pointer truncate"
+                  className="font-bold break-words leading-4 text-p-text text-lg  hover:underline cursor-pointer truncate"
                   onClick={() => {
-                    router.push(`/u/${formatHandle(profile?.handle)}`)
+                    if (isLensCommunity) {
+                      router.push(`/l/${formatHandle(profile?.handle)}`)
+                    } else {
+                      router.push(`/u/${formatHandle(profile?.handle)}`)
+                    }
                   }}
                 >
                   {stringToLength(profile?.name, 20)}
@@ -85,16 +105,22 @@ const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
                 <div
                   className="font-medium text text-s-text  hover:underline cursor-pointer truncate mb-3"
                   onClick={() => {
-                    router.push(`/u/${formatHandle(profile?.handle)}`)
+                    if (isLensCommunity) {
+                      router.push(`/l/${formatHandle(profile?.handle)}`)
+                    } else {
+                      router.push(`/u/${formatHandle(profile?.handle)}`)
+                    }
                   }}
                 >
-                  u/{formatHandle(profile?.handle)}
+                  {isLensCommunity
+                    ? `l/${formatHandle(profile?.handle)}`
+                    : `u/${formatHandle(profile?.handle)}`}
                 </div>
               </div>
             </div>
           </div>
           <div className="self-start">
-            {isFollowedByMe && hasProfile && isSignedIn && (
+            {isFollowedByMe && !isLensCommunity && hasProfile && isSignedIn && (
               <MessageButton userLensProfile={profile} />
             )}
           </div>
@@ -102,23 +128,37 @@ const LensPageProfileCard = ({ _profile, profileHandle }: Props) => {
         <p className="text-p-text leading-5 -mt-4 pb-2">
           <Markup>{stringToLength(profile?.bio, 200)}</Markup>
         </p>
-        <div className="pb-2">
-          <ProfileLinksRow profile={profile} />
-        </div>
-        <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
-          <span>
-            Followers:{' '}
-            <span className="font-semibold">
-              {profile?.stats?.totalFollowers}
+        {!isLensCommunity && (
+          <div className="pb-2">
+            <ProfileLinksRow profile={profile} />
+          </div>
+        )}
+        {!isLensCommunity ? (
+          <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
+            <span>
+              Followers:{' '}
+              <span className="font-semibold">
+                {profile?.stats?.totalFollowers}
+              </span>
             </span>
-          </span>
-          <span>
-            Following:{' '}
-            <span className="font-semibold">
-              {profile?.stats?.totalFollowing}
+            <span>
+              Following:{' '}
+              <span className="font-semibold">
+                {profile?.stats?.totalFollowing}
+              </span>
             </span>
-          </span>
-        </div>
+          </div>
+        ) : (
+          <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
+            <span>
+              Members:{' '}
+              <span className="font-semibold">
+                {profile?.stats?.totalFollowers}
+              </span>
+            </span>
+          </div>
+        )}
+        {isLensCommunity}
         <FollowButton />
       </div>
     </div>

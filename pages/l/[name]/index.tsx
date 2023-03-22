@@ -5,7 +5,9 @@ import CommunityNotFound from '../../../components/Community/Page/CommunityNotFo
 import LensCommunityMobileTopNav from '../../../components/LensCommunity/LensCommunityMobileTopNav'
 import LensCommunityPageRightSidebar from '../../../components/LensCommunity/LensCommunityPageRightSidebar'
 import LensCommunitySeo from '../../../components/LensCommunity/LensCommunitySeo'
-import LensPostsProfilePublicationsColumn from '../../../components/Post/LensPostsProfilePublicationsColumn'
+import LensPostsCommunityPublicationsColumn from '../../../components/Post/LensPostsCommunityPublicationsColumn'
+// import LensPostsProfilePublicationsColumn from '../../../components/Post/LensPostsProfilePublicationsColumn'
+import NavFilterCommunity from '../../../components/Post/NavFilterCommunity'
 import ProfileCard from '../../../components/User/ProfileCard'
 import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import { LensCommunity } from '../../../types/community'
@@ -17,6 +19,7 @@ interface Props {
 
 const index = ({ community }: Props) => {
   const { isMobile } = useDevice()
+  console.log('community', community)
   return (
     <>
       {community && (
@@ -26,9 +29,11 @@ const index = ({ community }: Props) => {
           <ProfileCard _lensProfile={community?.Profile} isLensCommunity />
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
-              <LensPostsProfilePublicationsColumn
+              {/* <LensPostsProfilePublicationsColumn
                 profileId={community?.Profile?.id}
-              />
+              /> */}
+              <NavFilterCommunity />
+              <LensPostsCommunityPublicationsColumn communityInfo={community} />
             </div>
             <LensCommunityPageRightSidebar community={community} />
           </div>

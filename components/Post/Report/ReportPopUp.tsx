@@ -12,10 +12,12 @@ import Reason from './Reason'
 
 const ReportPopUp = ({
   publicationId,
-  communityId
+  communityId,
+  isLensCommunityPost
 }: {
   publicationId: string
   communityId?: string
+  isLensCommunityPost?: boolean
 }) => {
   const [isLoading, setIsLoading] = React.useState(false)
   const [type, setType] = React.useState('')
@@ -45,13 +47,14 @@ const ReportPopUp = ({
         notifySuccess('Reported to Lens.')
       }
       if (communityId) {
-        await reportPublicationToCommunityMods(
+        await reportPublicationToCommunityMods({
           publicationId,
-          communityId,
-          type.replace('Reason', '').toUpperCase(),
+          [isLensCommunityPost ? 'lensCommunityId' : 'communityId']:
+            communityId,
+          reason: type.replace('Reason', '').toUpperCase(),
           subReason,
           additionalComments
-        )
+        })
         notifySuccess('Reported to Lens and to community mods.')
       }
       hideModal()

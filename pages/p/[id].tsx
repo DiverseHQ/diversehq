@@ -74,7 +74,11 @@ export async function getServerSideProps({ params }) {
             return { newId: newId, type: 'lens', post }
           }
           const communityInfo = await getCommunityInfoUsingId(communityId)
-          if (communityInfo?._id) {
+          if (communityInfo?.handle) {
+            post.communityInfo = communityInfo
+            post.isLensCommunityPost = true
+            return { newId: newId, type: 'lens', post }
+          } else if (communityInfo?._id) {
             post.communityInfo = communityInfo
             return { newId: newId, type: 'lens', post }
           } else {

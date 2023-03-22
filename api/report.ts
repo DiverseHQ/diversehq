@@ -1,23 +1,11 @@
 import apiEndpoint from './ApiEndpoint'
 import { getHeaders } from './apiHelper'
 
-export const reportPublicationToCommunityMods = async (
-  publicationId: string,
-  communityId: string,
-  reason: string,
-  subReason: string,
-  additionalComments?: string
-) => {
+export const reportPublicationToCommunityMods = async (data) => {
   return await fetch(`${apiEndpoint}/report/report-publication`, {
     method: 'PUT',
     headers: await getHeaders(),
-    body: JSON.stringify({
-      publicationId,
-      communityId,
-      reason,
-      subReason,
-      additionalComments
-    })
+    body: JSON.stringify(data)
   })
 }
 

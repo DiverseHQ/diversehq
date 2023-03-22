@@ -5,6 +5,7 @@ import { BsFileRuled, BsPeopleFill } from 'react-icons/bs'
 import { HiOutlineDocumentReport } from 'react-icons/hi'
 import { MdGroups, MdVerified } from 'react-icons/md'
 import { RiUserSettingsLine } from 'react-icons/ri'
+import { VscOpenPreview } from 'react-icons/vsc'
 import { LensCommunity } from '../../../types/community'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import Sidebar from '../../Settings/Sidebar'
@@ -15,7 +16,6 @@ const SettingsSidebar = ({ community }: { community: LensCommunity }) => {
   const router = useRouter()
   const { name } = router.query
 
-  console.log(community)
   return (
     <>
       <div className="w-full flex flex-row items-center my-2 p-2 bg-s-bg rounded-xl border border-s-border">
@@ -53,6 +53,13 @@ const SettingsSidebar = ({ community }: { community: LensCommunity }) => {
               <RiUserSettingsLine className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             ),
             disabled: true
+          },
+          {
+            title: 'Review Post Requests',
+            link: `/l/${name}/settings/review-posts`,
+            icon: (
+              <VscOpenPreview className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+            )
           },
           {
             title: 'Reported Posts',

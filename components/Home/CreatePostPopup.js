@@ -221,7 +221,7 @@ const CreatePostPopup = () => {
       content:
         `${
           isLensCommunitySelected && selectedCommunity._id !== LensCommunity._id
-            ? `Post by @${lensProfile.defaultProfile.handle}`
+            ? `Post by @${lensProfile.defaultProfile.handle} \n`
             : ''
         }` +
         title +
@@ -308,7 +308,6 @@ const CreatePostPopup = () => {
     setPostMetadataForIndexing(postForIndexing)
 
     // dispatch or broadcast
-
     try {
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
         //gasless using dispatcher

@@ -76,7 +76,6 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }: Props) => {
   )
   useEffect(() => {
     if (!data?.explorePublications?.items) return
-    console.log('data?.explorePublications', data?.explorePublications)
     let hasMore = true
     let nextCursor = null
     const newPosts = data?.explorePublications?.items
@@ -139,7 +138,11 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }: Props) => {
           return (
             <LensPostCard
               key={post.id}
-              post={{ ...post, communityInfo: communityInfo }}
+              post={{
+                ...post,
+                communityInfo: communityInfo,
+                isLensCommunityPost: !!communityInfo?.handle
+              }}
             />
           )
         })}

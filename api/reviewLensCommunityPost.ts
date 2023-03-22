@@ -18,8 +18,9 @@ export const submitPostForReview = async (
 export const getAllUnResolvedLensCommunityPostsForReview = async (
   lensCommunityId: string
 ) => {
+  if (!lensCommunityId) return
   return await fetch(
-    `${apiEndpoint}/review-lens-community-post/unresolved-posts/${lensCommunityId}`,
+    `${apiEndpoint}/review-lens-community-posts/unresolved-posts/${lensCommunityId}`,
     {
       headers: await getHeaders()
     }
@@ -29,15 +30,18 @@ export const getAllUnResolvedLensCommunityPostsForReview = async (
 export const putResolveLensCommunityPost = async (
   reviewPostId: string,
   resolveAction: string,
-  publicationId: string
+  publicationId?: string
 ) => {
-  return await fetch(`${apiEndpoint}/review-lens-community-post/resolve-post`, {
-    method: 'PUT',
-    headers: await getHeaders(),
-    body: JSON.stringify({
-      reviewPostId,
-      resolveAction,
-      publicationId
-    })
-  })
+  return await fetch(
+    `${apiEndpoint}/review-lens-community-posts/resolve-post`,
+    {
+      method: 'PUT',
+      headers: await getHeaders(),
+      body: JSON.stringify({
+        reviewPostId,
+        resolveAction,
+        publicationId
+      })
+    }
+  )
 }
