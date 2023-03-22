@@ -10,7 +10,7 @@ import useDevice from '../../components/Common/useDevice'
 import { appLink } from '../../utils/config'
 const foryou = () => {
   const { isSignedIn, hasProfile } = useLensUserContext()
-  const { user } = useProfile()
+  const { user, LensCommunity, joinedLensCommunities } = useProfile()
   const { isDesktop } = useDevice()
   return (
     <>
@@ -27,7 +27,11 @@ const foryou = () => {
           <NavFilterAllPosts />
           {user && isSignedIn && hasProfile && (
             <LensPostJoinedCommunitiesPublications
-              communityIds={user.communities}
+              communityIds={[
+                ...user.communities,
+                LensCommunity?._id,
+                ...joinedLensCommunities?.map((c) => c._id)
+              ]}
             />
           )}
           {(!user || !isSignedIn || !hasProfile) && (
