@@ -60,7 +60,6 @@ export const WalletProvider = ({ children }) => {
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
   const [LensCommunity, setLensCommunity] = useState(null)
-  console.log('LensCommunity', LensCommunity)
   const [joinedLensCommunities, setJoinedLensCommunties] = useState<
     {
       _id: string
@@ -141,6 +140,8 @@ export const WalletProvider = ({ children }) => {
         })
         cursor = profiles.pageInfo.next
       }
+
+      // remove communities from where user in banned
 
       cursor = null
       for (let i = 0; i < _joinedLensCommunities.length; i += 50) {

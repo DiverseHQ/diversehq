@@ -16,7 +16,7 @@ const NotificationReviewPostResolve = ({
   return (
     <CommonNotificationCardLayoutUI
       MainRow={() => (
-        <div>
+        <div className="flex flex-row flex-wrap space-x-2">
           <span>{'Your post has been accepted and posted on '}</span>
           <span
             className="hover:underline font-bold"

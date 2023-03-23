@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, memo, useCallback } from 'react'
 import { postGetCommunityInfoUsingListOfIds } from '../../../api/community'
 import getSinglePublicationInfo from '../../../lib/post/get-single-publication-info'
 import { postWithCommunityInfoType } from '../../../types/post'
@@ -14,7 +14,8 @@ const LensPostCardFromPublicationId = ({
   const [post, setPost] = React.useState<postWithCommunityInfoType>(null)
   const [isLoading, setLoading] = React.useState(true)
 
-  const getPost = async () => {
+  const getPost = useCallback(async () => {
+    if (!publicationId || post) return
     try {
       setLoading(true)
       const { publication } = await getSinglePublicationInfo({
@@ -55,7 +56,7 @@ const LensPostCardFromPublicationId = ({
     } finally {
       setLoading(false)
     }
-  }
+  }, [publicationId])
 
   useEffect(() => {
     if (!publicationId) return
@@ -89,4 +90,4 @@ const LensPostCardFromPublicationId = ({
   )
 }
 
-export default LensPostCardFromPublicationId
+export default memo(LensPostCardFromPublicationId)

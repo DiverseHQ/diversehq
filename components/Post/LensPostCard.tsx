@@ -270,7 +270,6 @@ const LensPostCard = ({ post }: Props) => {
   let content = postInfo?.metadata?.content || ''
 
   if (content) {
-    console.log(postInfo?.isLensCommunityPost)
     if (postInfo?.isLensCommunityPost) {
       content = content.split('\n', 2)[1]
     }

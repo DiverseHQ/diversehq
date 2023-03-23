@@ -17,10 +17,10 @@ import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
 
 const UserManagementSection = ({ community }: { community: LensCommunity }) => {
+  console.log('community', community)
   const [bannedUsers, setBannedUsers] = React.useState<BannedUser[]>(
     community?.bannedUsers ?? []
   )
-  console.log(bannedUsers)
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [searchTerm, setSearchTerm] = React.useState<string>('')
   const [selectedProfile, setSelectedProfile] = React.useState<Profile>(null)
