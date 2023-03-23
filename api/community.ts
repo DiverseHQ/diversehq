@@ -303,31 +303,3 @@ export const removeBannedUserFromCommunity = async (
     console.log(error)
   }
 }
-
-// handle with suffix
-export const getLensCommunity = async (handle: string) => {
-  return await fetch(
-    `${apiEndpoint}/lensCommunity/communityInfoUsingHandle/${handle}`
-  )
-}
-
-export const postCreateLensCommunity = async (handle: string) => {
-  return await fetch(`${apiEndpoint}/lensCommunity/create`, {
-    method: 'POST',
-    headers: await getHeaders(),
-    body: JSON.stringify({
-      handle
-    })
-  })
-}
-
-export const getAllLensCommunitiesHandle = async (): Promise<
-  {
-    _id: string
-    handle: string
-  }[]
-> => {
-  return await fetch(`${apiEndpoint}/lensCommunity/get-all-lens-communities`, {
-    headers: await getHeaders()
-  }).then((res) => res.json())
-}

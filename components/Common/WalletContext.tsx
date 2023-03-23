@@ -27,14 +27,15 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { UserType } from '../../types/user'
 import { sleep } from '../../lib/helpers'
-import {
-  getAllLensCommunitiesHandle,
-  getLensCommunity
-} from '../../api/community'
+
 import { LensCommunity } from '../../types/community'
 import { getBulkIsFollowedByMe } from '../../lib/profile/get-bulk-is-followed-by-me'
 import getProfiles from '../../lib/profile/get-profiles'
 import { Profile } from '../../graphql/generated'
+import {
+  getAllLensCommunitiesHandle,
+  getLensCommunity
+} from '../../api/lensCommunity'
 
 interface ContextType {
   address: string
@@ -59,6 +60,7 @@ export const WalletProvider = ({ children }) => {
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
   const [LensCommunity, setLensCommunity] = useState(null)
+  console.log('LensCommunity', LensCommunity)
   const [joinedLensCommunities, setJoinedLensCommunties] = useState<
     {
       _id: string

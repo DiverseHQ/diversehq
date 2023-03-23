@@ -4,11 +4,11 @@ import React from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { CgClose } from 'react-icons/cg'
 import {
-  addBannedUserToCommunity,
-  removeBannedUserFromCommunity
-} from '../../../../api/community'
+  addBannedUserToLensCommunity,
+  removeBannedUserFromLensCommunity
+} from '../../../../api/lensCommunity'
 import { Profile, useProfilesQuery } from '../../../../graphql/generated'
-import { BannedUser, CommunityType } from '../../../../types/community'
+import { BannedUser, LensCommunity } from '../../../../types/community'
 import { useNotify } from '../../../Common/NotifyContext'
 import ImageWithPulsingLoader from '../../../Common/UI/ImageWithPulsingLoader'
 import MessageButton from '../../../Messages/MessageButton'
@@ -16,10 +16,11 @@ import LensProfilesSearchModal from '../../../Search/LensProfilesSearchModal'
 import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
 
-const UserManagementSection = ({ community }: { community: CommunityType }) => {
+const UserManagementSection = ({ community }: { community: LensCommunity }) => {
   const [bannedUsers, setBannedUsers] = React.useState<BannedUser[]>(
     community?.bannedUsers ?? []
   )
+  console.log(bannedUsers)
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [searchTerm, setSearchTerm] = React.useState<string>('')
   const [selectedProfile, setSelectedProfile] = React.useState<Profile>(null)
@@ -49,7 +50,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
         profileId: selectedProfile.id,
         reason: `Violated rule : ${ruleViolated} \n Other Reason : ${extraReason}`
       }
-      const res = await addBannedUserToCommunity(community?.name, bannedUser)
+      const res = await addBannedUserToLensCommunity(community?._id, bannedUser)
       if (res.status === 200) {
         setBannedUsers([...bannedUsers, bannedUser])
         setSelectedProfile(null)
@@ -68,8 +69,8 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
   const handleRemoveBan = async (address: string) => {
     if (!address) return
     try {
-      const res = await removeBannedUserFromCommunity(
-        community?.name,
+      const res = await removeBannedUserFromLensCommunity(
+        community?._id,
         address.toLowerCase()
       )
       if (res.status === 200) {

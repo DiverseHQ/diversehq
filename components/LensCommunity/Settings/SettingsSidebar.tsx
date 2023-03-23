@@ -51,8 +51,7 @@ const SettingsSidebar = ({ community }: { community: LensCommunity }) => {
             link: `/l/${name}/settings/user-management`,
             icon: (
               <RiUserSettingsLine className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-            ),
-            disabled: true
+            )
           },
           {
             title: 'Review Post Requests',
@@ -66,8 +65,7 @@ const SettingsSidebar = ({ community }: { community: LensCommunity }) => {
             link: `/l/${name}/settings/reports`,
             icon: (
               <HiOutlineDocumentReport className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
-            ),
-            disabled: true
+            )
           },
           {
             title: 'Rules',
