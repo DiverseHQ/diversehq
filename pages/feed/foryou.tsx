@@ -30,6 +30,7 @@ const foryou = () => {
               communityIds={[
                 ...user.communities,
                 LensCommunity?._id,
+                // eslint-disable-next-line
                 ...joinedLensCommunities?.map((c) => c._id)
               ]}
             />
