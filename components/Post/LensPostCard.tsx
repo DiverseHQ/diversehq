@@ -524,7 +524,7 @@ const LensPostCard = ({ post }: Props) => {
                   postInfo?.communityInfo?._id && (
                     <>
                       {postInfo?.isLensCommunityPost ? (
-                        <FollowButton />
+                        <FollowButton hideIfFollow={true} />
                       ) : (
                         <JoinCommunityButton
                           id={postInfo?.communityInfo?._id}

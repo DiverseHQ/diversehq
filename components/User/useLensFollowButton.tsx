@@ -135,8 +135,16 @@ const useLensFollowButton = (
   }, [isSignedTx, type])
 
   // label options 'follow' & 'join'
-  const FollowButton = ({ className = '' }) => {
+  const FollowButton = ({
+    className = '',
+    hideIfFollow = false
+  }: {
+    className?: string
+    hideIfFollow?: boolean
+  }) => {
     if (!isSignedIn || !hasProfile) return null
+
+    if (data?.profile && isFollowedByMe && hideIfFollow) return null
     return (
       <>
         {data?.profile && isFollowedByMe ? (
