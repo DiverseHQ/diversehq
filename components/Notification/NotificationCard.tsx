@@ -9,6 +9,10 @@ import NotificationModeratorAssignedCard from './NotificationModeratorAssignedCa
 import NotificationModeratorRemoveCard from './NotificationModeratorRemoveCard'
 import NotificationBannedUserCard from './NotificationBannedUserCard'
 import NotificationUnbannedUserCard from './NotificationUnbannedUserCard'
+import NotificationBannedUserLensCommunityCard from './NotificationBannedUserLensCommunityCard'
+import NotificationUnbannedUserLensCommunityCard from './NotificationUnbannedUserLensCommunityCard'
+import NotificationReviewPostCard from './NotificationReviewPostCard'
+import NotificationReviewPostResolve from './NotificationReviewPostResolve'
 
 const NotificationCard = ({
   notification
@@ -40,11 +44,37 @@ const NotificationCard = ({
       {notification.type === notificationTypes.MODERATOR_REMOVED && (
         <NotificationModeratorRemoveCard notification={notification} />
       )}
-      {notification.type === notificationTypes.BAN_USER && (
-        <NotificationBannedUserCard notification={notification} />
+      {notification.type === notificationTypes.BAN_USER &&
+        notification?.community && (
+          <NotificationBannedUserCard notification={notification} />
+        )}
+      {notification.type === notificationTypes.UNBAN_USER &&
+        notification?.community && (
+          <NotificationUnbannedUserCard notification={notification} />
+        )}
+
+      {notification.type === notificationTypes.BAN_USER &&
+        notification?.lensCommunity && (
+          <NotificationBannedUserLensCommunityCard
+            notification={notification}
+          />
+        )}
+
+      {notification.type === notificationTypes.UNBAN_USER &&
+        notification?.lensCommunity && (
+          <NotificationUnbannedUserLensCommunityCard
+            notification={notification}
+          />
+        )}
+
+      {notification.type ===
+        notificationTypes.REVIEW_POST_FOR_LENS_COMMUNITY && (
+        <NotificationReviewPostCard notification={notification} />
       )}
-      {notification.type === notificationTypes.UNBAN_USER && (
-        <NotificationUnbannedUserCard notification={notification} />
+
+      {notification.type ===
+        notificationTypes.RESOLVED_POST_FOR_LENS_COMMUNITY && (
+        <NotificationReviewPostResolve notification={notification} />
       )}
     </div>
   )

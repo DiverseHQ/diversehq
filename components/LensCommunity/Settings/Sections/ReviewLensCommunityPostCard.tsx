@@ -82,7 +82,7 @@ const ReviewLensCommunityPostCard = ({
         publicationId
       )
       if (res.status === 200) {
-        fetchAndSetUnResolvedReviewPosts()
+        await fetchAndSetUnResolvedReviewPosts()
         notifySuccess('Post has been accepted')
       } else {
         const { msg } = await res.json()

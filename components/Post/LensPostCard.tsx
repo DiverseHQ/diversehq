@@ -49,6 +49,8 @@ interface Props {
   post: postWithCommunityInfoType
 }
 
+// post?.isLensCommunityPost makes sure that the post is a post from a lens community
+
 const LensPostCard = ({ post }: Props) => {
   const { isMobile } = useDevice()
   const { notifyInfo } = useNotify()
@@ -258,8 +260,7 @@ const LensPostCard = ({ post }: Props) => {
       component: (
         <ReportPopUp
           publicationId={postInfo?.id}
-          communityId={postInfo?.communityInfo?._id}
-          isLensCommunityPost={postInfo?.isLensCommunityPost}
+          communityId={postInfo?.metadata?.tags[0]}
         />
       ),
       type: modalType.normal
@@ -267,12 +268,15 @@ const LensPostCard = ({ post }: Props) => {
   }
 
   let content = postInfo?.metadata?.content || ''
-  if (postInfo?.isLensCommunityPost) {
-    content = content.split('\n', 2)[1]
-  }
 
-  if (content.startsWith(postInfo?.metadata?.name)) {
-    content = content.slice(postInfo?.metadata?.name.length)
+  if (content) {
+    console.log(postInfo?.isLensCommunityPost)
+    if (postInfo?.isLensCommunityPost) {
+      content = content.split('\n', 2)[1]
+    }
+    if (content?.startsWith(postInfo?.metadata?.name)) {
+      content = content.slice(postInfo?.metadata?.name.length)
+    }
   }
 
   return (

@@ -1,8 +1,11 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import { addBannedUserToCommunity } from '../../../../api/community'
+import { addBannedUserToLensCommunity } from '../../../../api/lensCommunity'
 import { resolvePublicationReport } from '../../../../api/report'
+import { Profile } from '../../../../graphql/generated'
+import getLensProfileInfo from '../../../../lib/profile/get-profile-info'
 import { BannedUser, CommunityType } from '../../../../types/community'
 import { postWithCommunityInfoType } from '../../../../types/post'
 import { PostReportType } from '../../../../types/report'
@@ -10,6 +13,7 @@ import { resolveActions } from '../../../../utils/config'
 import { useNotify } from '../../../Common/NotifyContext'
 import ImageWithPulsingLoader from '../../../Common/UI/ImageWithPulsingLoader'
 import LensPostCard from '../../../Post/LensPostCard'
+import { getAllMentionsHandlFromContent } from '../../../Post/PostPageMentionsColumn'
 import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
 
@@ -18,19 +22,24 @@ interface Props {
   publication: postWithCommunityInfoType
   fetchAndSetUnResolvedReprots: () => void
   community: CommunityType
+  isLensCommunity?: boolean
 }
 
 const LensReportPost = ({
   report,
   publication,
   fetchAndSetUnResolvedReprots,
-  community
+  community,
+  isLensCommunity
 }: Props) => {
   const { notifyInfo, notifyError } = useNotify()
   const [showBanUserModal, setShowBanUserModal] = React.useState(false)
   const [extraReason, setExtraReason] = React.useState<string>('')
   const [ruleViolated, setRuleViolated] = React.useState<string>(
     community?.rules[0]?.title ?? null
+  )
+  const [profileToBan, setProfileToBan] = React.useState<Profile>(
+    publication?.profile
   )
   if (!report) return null
   const handleIgnore = async () => {
@@ -45,11 +54,16 @@ const LensReportPost = ({
   const handleBanUser = async () => {
     try {
       const bannedUser: BannedUser = {
-        address: publication.profile.ownedBy,
-        profileId: publication.profile.id,
+        address: profileToBan.ownedBy,
+        profileId: profileToBan.id,
         reason: `Violated rule : ${ruleViolated} \n Other Reason : ${extraReason}`
       }
-      const res = await addBannedUserToCommunity(community?.name, bannedUser)
+      let res = null
+      if (isLensCommunity) {
+        res = await addBannedUserToLensCommunity(community?._id, bannedUser)
+      } else {
+        res = await addBannedUserToCommunity(community?.name, bannedUser)
+      }
       if (res.status === 200) {
         setShowBanUserModal(false)
         fetchAndSetUnResolvedReprots()
@@ -77,6 +91,24 @@ const LensReportPost = ({
     //   resolveActions.HIDE_POST
     // )
   }
+
+  const setBanProfileIfLensCommunity = async () => {
+    if (!isLensCommunity) return
+    const profileHandle = getAllMentionsHandlFromContent(
+      publication.metadata.content
+    )[0]
+    if (!profileHandle) return
+    const { profile } = await getLensProfileInfo({
+      handle: profileHandle
+    })
+    // @ts-ignore
+    setProfileToBan(profile)
+  }
+
+  useEffect(() => {
+    if (!isLensCommunity) return
+    setBanProfileIfLensCommunity()
+  }, [isLensCommunity])
   return (
     <div key={publication.id}>
       <div className="pt-6 mx-6">
@@ -132,14 +164,14 @@ const LensReportPost = ({
 
               <ImageWithPulsingLoader
                 className="w-6 h-6 rounded-full"
-                src={getAvatar(publication.profile)}
+                src={getAvatar(profileToBan)}
               />
-              {publication.profile?.name && (
-                <div className="font-medium">{publication.profile.name}</div>
+              {profileToBan?.name && (
+                <div className="font-medium">{profileToBan.name}</div>
               )}
-              <Link href={`/u/${formatHandle(publication.profile.handle)}`}>
+              <Link href={`/u/${formatHandle(profileToBan.handle)}`}>
                 <span className="cursor-pointer hover:underline text-s-text">
-                  u/{formatHandle(publication.profile.handle)}
+                  u/{formatHandle(profileToBan.handle)}
                 </span>
               </Link>
             </div>
@@ -156,7 +188,7 @@ const LensReportPost = ({
                 }}
                 value={ruleViolated}
                 placeholder="Select rule violated"
-                className="w-full p-2 border border-s-border rounded-xl mt-2 text-sm"
+                className="w-full bg-s-bg p-2 border border-s-border rounded-xl mt-2 text-sm"
               >
                 {community?.rules?.map((rule, index) => (
                   <option
@@ -175,7 +207,7 @@ const LensReportPost = ({
               <input
                 type="text"
                 placeholder="(Optional) Any addition reason or last words of advice.. ?"
-                className="w-full p-2 border border-s-border rounded-xl mt-2 text-sm"
+                className="w-full bg-s-bg p-2 border border-s-border rounded-xl mt-2 text-sm"
                 onChange={(e) => setExtraReason(e.target.value)}
               />
             </div>
@@ -200,7 +232,10 @@ const LensReportPost = ({
           </div>
         )}
       </div>
-      <LensPostCard key={publication.id} post={publication} />
+      <LensPostCard
+        key={publication.id}
+        post={{ ...publication, isLensCommunityPost: isLensCommunity }}
+      />
     </div>
   )
 }

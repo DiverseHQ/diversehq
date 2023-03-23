@@ -51,7 +51,9 @@ export async function getServerSideProps({ params }) {
   const getPost = async (id: string): Promise<ReutrnProps> => {
     if (id?.includes('-')) {
       try {
-        const response = await getSinglePublicationInfo(id)
+        const response = await getSinglePublicationInfo({
+          publicationId: id
+        })
 
         if (response?.publication) {
           let newId = id

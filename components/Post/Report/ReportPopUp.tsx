@@ -12,12 +12,10 @@ import Reason from './Reason'
 
 const ReportPopUp = ({
   publicationId,
-  communityId,
-  isLensCommunityPost
+  communityId
 }: {
   publicationId: string
   communityId?: string
-  isLensCommunityPost?: boolean
 }) => {
   const [isLoading, setIsLoading] = React.useState(false)
   const [type, setType] = React.useState('')
@@ -49,8 +47,7 @@ const ReportPopUp = ({
       if (communityId) {
         await reportPublicationToCommunityMods({
           publicationId,
-          [isLensCommunityPost ? 'lensCommunityId' : 'communityId']:
-            communityId,
+          communityId,
           reason: type.replace('Reason', '').toUpperCase(),
           subReason,
           additionalComments
