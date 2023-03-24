@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useAccount } from 'wagmi'
 import { STORAGE_KEY } from '../../auth-fetcher'
 import { useDefaultProfileQuery } from '../../graphql/generated'
+import { parseJwt, removeAccessTokenFromStorage } from './helpers'
 
 /**
  * DON'T USE THIS DIRECTLY! Use useLensUserContext.
@@ -29,6 +30,14 @@ export default function useLensUser() {
   // When result.data is available, we can read the user from it (or null).
   useEffect(() => {
     // Re-run the lensProfileQuery if the address changes.
+    if (!address) return
+    if (localStorageQuery?.data?.accessToken) {
+      const data = parseJwt(localStorageQuery.data.accessToken)
+      if (data?.id?.toLowerCase() !== address?.toLowerCase()) {
+        removeAccessTokenFromStorage()
+        localStorageQuery.refetch()
+      }
+    }
     if (address) {
       lensProfileQuery.refetch()
     }

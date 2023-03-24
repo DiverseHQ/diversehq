@@ -29,7 +29,7 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
   } = useLensUserContext()
   const { user, loading } = useProfile()
   const { address } = useAccount()
-  const { notifyInfo, notifySuccess } = useNotify()
+  const { notifyInfo, notifySuccess, notifyError } = useNotify()
   const { showModal } = usePopUpModal()
   const { isMobile } = useDevice()
   const { openConnectModal } = useConnectModal()
@@ -42,9 +42,10 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
   const {
     result,
     type,
+    error,
     loading: broadcastLoading,
     signTypedDataAndBroadcast
-  } = useSignTypedDataAndBroadcast()
+  } = useSignTypedDataAndBroadcast(true)
 
   async function handleLogin() {
     await login()
@@ -69,20 +70,30 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
 
   const handleEnableDispatcher = async () => {
     try {
-      const createSetDispatcherResult = (
-        await createSetDispatcher({
-          request: {
-            profileId: lensProfile?.defaultProfile?.id,
-            enable: true
-          }
-        })
-      ).createSetDispatcherTypedData
-
-      signTypedDataAndBroadcast(createSetDispatcherResult?.typedData, {
-        id: createSetDispatcherResult?.id,
-        type: 'createSetDispatcher'
+      console.log('handleEnableDispatcher')
+      const createSetDispatcherResult = await createSetDispatcher({
+        request: {
+          profileId: lensProfile?.defaultProfile?.id,
+          enable: true
+        }
       })
+
+      console.log('createSetDispatcherResult', createSetDispatcherResult)
+
+      if (!createSetDispatcherResult?.createSetDispatcherTypedData) {
+        notifyError('Something went wrong')
+        return
+      }
+
+      signTypedDataAndBroadcast(
+        createSetDispatcherResult?.createSetDispatcherTypedData?.typedData,
+        {
+          id: createSetDispatcherResult?.createSetDispatcherTypedData?.id,
+          type: 'createSetDispatcher'
+        }
+      )
     } catch (e) {
+      notifyError('Something went wrong')
       console.log(e)
     }
   }
@@ -106,6 +117,12 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
       onSetDispatcherSuccess()
     }
   }, [result, type])
+
+  useEffect(() => {
+    if (error && type === 'createSetDispatcher') {
+      notifyError('Something went wrong')
+    }
+  }, [error, type])
 
   const showLoading = loading || (isLoading && address)
 
@@ -135,14 +152,14 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
               !broadcastLoading && (
                 <button
                   onClick={handleEnableDispatcher}
-                  className="rounded-full sm:rounded-xl text-sm bg-[#62F030] px-2"
+                  className="rounded-full sm:rounded-xl text-s-bg font-semibold bg-[#62F030]  py-1 px-2 sm:px-6"
                 >
                   <span>Go Signless</span>
                 </button>
               )}
             {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
               broadcastLoading && (
-                <div className="rounded-full sm:rounded-xl text-sm bg-[#62F030]  py-2 px-2 sm:px-6">
+                <div className="rounded-full sm:rounded-xl text-sm text-s-bg font-semibold bg-[#62F030]  py-1 px-2 sm:px-6">
                   Going...
                 </div>
               )}
@@ -151,7 +168,7 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
         {isSignedIn && !hasProfile && !showLoading && (
           <button
             onClick={handleCreateLensProfileAndMakeDefault}
-            className="rounded-xl text-[20px] md:text-[16px] font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-2 px-2 sm:px-6"
+            className="rounded-xl text-[20px] md:text-[16px] font-semibold text-s-bg bg-[#62F030] py-1 px-2 sm:px-6"
           >
             Create Lens Handle
           </button>
@@ -159,7 +176,7 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
         {!isSignedIn && address && !showLoading && (
           <button
             onClick={handleLogin}
-            className="rounded-full sm:rounded-xl  sm:text-xl space-x-3 flex flex-row items-center font-semibold text-p-btn-text dark:text-s-bg bg-[#62F030] py-1 px-3 sm:px-6 "
+            className="rounded-full sm:rounded-xl  sm:text-xl space-x-3 flex flex-row items-center font-semibold text-s-bg bg-[#62F030] py-1 px-3 sm:px-6 "
           >
             <img
               src={'/lensLogoWithoutText.svg'}
