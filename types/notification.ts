@@ -1,5 +1,4 @@
 import { Profile } from '../graphql/generated'
-import { lensCommunityPostsResolveActions } from '../utils/config'
 import { CommunityType, LensCommunity } from './community'
 import { UserType } from './user'
 
