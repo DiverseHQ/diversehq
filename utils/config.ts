@@ -11,6 +11,10 @@ export const LENS_SEARCH_PROFILE_LIMIT: number = 6
 export const LensInfuraEndpoint: string = 'https://lens.infura-ipfs.io/ipfs/'
 export const LENS_INFINITE_SCROLL_THRESHOLD: number = 0.5
 
+export const apiMode: string = process.env.NEXT_PUBLIC_LENS_API_MODE
+export const isMainnet: boolean = apiMode === 'mainnet'
+export const HANDLE_SUFFIX: string = isMainnet ? '.lens' : '.test'
+
 export const userRoles = {
   ADMIN_USER: 0,
   WHITELISTED_USER: 1,
@@ -58,7 +62,7 @@ export const DISCORD_INVITE_LINK = 'https://discord.gg/x7jByQKpYF'
 export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/kopveel8c'
 
 export const XMTP_PREFIX = 'lens.dev/dm'
-export const XMTP_ENV = 'dev'
+export const XMTP_ENV = isMainnet ? 'production' : 'dev'
 export const MAX_PROFILES_PER_REQUEST = 50
 export const MESSAGE_PAGE_LIMIT = 30
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
@@ -112,9 +116,6 @@ export const SUPPORTED_AUDIO_TYPE: string[] = [
 export const baseXP = 200
 export const xpMultiplier = 4
 export const xpPerMember = 10
-export const apiMode: string = process.env.NEXT_PUBLIC_LENS_API_MODE
-export const isMainnet: boolean = apiMode === 'mainnet'
-export const HANDLE_SUFFIX: string = isMainnet ? '.lens' : '.test'
 
 // Named transforms
 export const AVATAR = 'avatar'
