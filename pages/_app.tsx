@@ -94,6 +94,7 @@ function MyApp({ Component, pageProps, isMobileView }: MyAppProps) {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
         <meta name="twitter:creator" content="@useDiverseHQ" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* @ts-ignore */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
