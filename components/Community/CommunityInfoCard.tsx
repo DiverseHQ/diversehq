@@ -52,9 +52,9 @@ const CommunityInfoCard = ({ _community }: Props) => {
   const shareCommunity = () => {
     if (navigator.share) {
       navigator.share({
-        title: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
-        text: `Join ${community?.name} on ${process.env.NEXT_PUBLIC_APP_NAME}`,
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/c/${community?.name}`
+        title: `Join c/${community?.name} on DiverseHQ`,
+        text: `Join c/${community?.name} on DiverseHQ`,
+        url: `https://diversehq.xyz/c/${community?.name}`
       })
     } else {
       notifyInfo('Sharing is not supported on your device')
