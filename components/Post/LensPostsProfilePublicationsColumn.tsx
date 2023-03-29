@@ -89,8 +89,14 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         return post.metadata.tags[0]
       }
       if (post?.__typename === 'Mirror') {
+        console.log(
+          'postMirrorOf',
+          post.mirrorOf?.__typename === 'Post'
+            ? post.mirrorOf?.metadata?.tags[0]
+            : null
+        )
         // @ts-ignore
-        return post.mirrorOf?.metadata?.tags[0]
+        return post.mirrorOf?.metadata?.tags[0] || 'null'
       }
       return 'null'
     })
@@ -99,10 +105,18 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     )
     for (let i = 0; i < newPosts.length; i++) {
       if (!communityInfoForPosts[i]?._id) {
+        if (newPosts[i]?.__typename === 'Mirror') {
+          let mirrorPost = newPosts[i]
+          // @ts-ignore
+          newPosts[i] = mirrorPost?.mirrorOf
+          // @ts-ignore
+          newPosts[i].mirroredBy = mirrorPost.profile
+        }
         // @ts-ignore
         newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
       } else {
         if (newPosts[i]?.__typename === 'Mirror') {
+          console.log('newPosts[i] Mirror', newPosts[i])
           let mirrorPost = newPosts[i]
           // @ts-ignore
           newPosts[i] = mirrorPost?.mirrorOf

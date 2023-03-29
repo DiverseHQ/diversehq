@@ -38,7 +38,7 @@ const Attachment: FC<Props> = ({ publication, className }) => {
 
   const { isMobile } = useDevice()
 
-  if (medias.length === 0) {
+  if (medias?.length === 0) {
     if (getURLsFromText(publication?.metadata?.content)?.length > 0) {
       return (
         <ReactEmbedo url={getURLsFromText(publication?.metadata?.content)[0]} />

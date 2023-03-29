@@ -49,7 +49,7 @@ const MainMsgModal = ({ isMobile = false }: Props) => {
       className={`fixed ${
         isOpen
           ? 'bottom-0'
-          : `${isMobile ? 'bottom-[-100vh]' : 'bottom-[-500px]'}`
+          : `${isMobile ? 'bottom-[-120vh]' : 'bottom-[-500px]'}`
       } ${
         isMobile
           ? 'w-full h-full left-0 right-0'

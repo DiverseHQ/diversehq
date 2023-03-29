@@ -290,30 +290,28 @@ const ProfileCard = ({
                 </div>
               </div>
             ) : (
-              <>
-                <div
-                  className={`flex flex-row gap-2 w-full justify-between mx-8 mt-2`}
-                >
-                  <div className="flex flex-col items-center py-1 px-2 sm:px-4 rounded-[10px]">
-                    <span className="font-bold">
-                      {lensProfile?.stats?.totalFollowers}
-                    </span>
-                    <span className="font-light">Followers</span>
-                  </div>
-                  <div className="shrink-0 rounded-full -translate-y-6 border-2 border-[#fff] md:border-4 dark:border-p-border">
-                    <ImageWithFullScreenZoom
-                      className="rounded-full bg-s-bg w-[80px] h-[80px] md:w-[120px] md:h-[120px] object-cover"
-                      src={getAvatar(lensProfile)}
-                    />
-                  </div>
-                  <div className="flex flex-col items-center py-1 px-2 sm:px-4 rounded-[10px]">
-                    <span className="font-bold">
-                      {lensProfile?.stats?.totalFollowing}
-                    </span>
-                    <span className="font-light">Following</span>
-                  </div>
+              <div
+                className={`flex flex-row gap-2 w-full justify-between px-8 pt-2`}
+              >
+                <div className="flex flex-col items-center py-1 px-2 sm:px-4 rounded-[10px]">
+                  <span className="font-bold">
+                    {lensProfile?.stats?.totalFollowers}
+                  </span>
+                  <span className="font-light">Followers</span>
                 </div>
-              </>
+                <div className="shrink-0 rounded-full -translate-y-6 border-2 border-[#fff] md:border-4 dark:border-p-border">
+                  <ImageWithFullScreenZoom
+                    className="rounded-full bg-s-bg w-[80px] h-[80px] md:w-[120px] md:h-[120px] object-cover"
+                    src={getAvatar(lensProfile)}
+                  />
+                </div>
+                <div className="flex flex-col items-center py-1 px-2 sm:px-4 rounded-[10px]">
+                  <span className="font-bold">
+                    {lensProfile?.stats?.totalFollowing}
+                  </span>
+                  <span className="font-light">Following</span>
+                </div>
+              </div>
             )}
           </div>
 

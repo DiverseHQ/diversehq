@@ -42,6 +42,7 @@ import ReportPopUp from './Report/ReportPopUp'
 import getAvatar from '../User/lib/getAvatar'
 import { getAllMentionsHandlFromContent } from './PostPageMentionsColumn'
 import useLensFollowButton from '../User/useLensFollowButton'
+import clsx from 'clsx'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -657,7 +658,7 @@ const LensPostCard = ({ post }: Props) => {
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center ml-1.5 mt-1 shrink-0">
+              <div className="flex flex-col items-center w-[40px]  shrink-0">
                 <Tooltip
                   enterDelay={1000}
                   leaveDelay={200}
@@ -670,7 +671,7 @@ const LensPostCard = ({ post }: Props) => {
                       e.stopPropagation()
                       handleUpvote()
                     }}
-                    className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
+                    className="hover:bg-s-hover rounded-md py-1 cursor-pointer"
                   >
                     <img
                       //  onClick={liked ? handleUnLike : handleLike}
@@ -683,7 +684,7 @@ const LensPostCard = ({ post }: Props) => {
                     />
                   </button>
                 </Tooltip>
-                <div className="font-bold leading-5">{voteCount}</div>
+                <div className="font-bold leading-5 text-sm">{voteCount}</div>
                 <Tooltip
                   enterDelay={1000}
                   leaveDelay={200}
@@ -696,7 +697,7 @@ const LensPostCard = ({ post }: Props) => {
                       e.stopPropagation()
                       handleDownvote()
                     }}
-                    className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
+                    className="hover:bg-s-hover rounded-md py-1 cursor-pointer"
                   >
                     <img
                       src={
@@ -821,20 +822,23 @@ const LensPostCard = ({ post }: Props) => {
                     </>
                   )}
                 </div>
-                <div
-                  className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
-                    isBlur ? 'blur-xl' : ''
-                  }`}
-                >
-                  <Attachment
-                    publication={postInfo}
-                    className={`${
-                      router.pathname.startsWith('/p')
-                        ? 'max-h-screen'
-                        : 'max-h-[450px]'
-                    }`}
-                  />
-                </div>
+                {postInfo?.metadata?.media &&
+                  postInfo?.metadata?.media.length > 0 && (
+                    <div
+                      className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                        isBlur ? 'blur-xl' : ''
+                      }`}
+                    >
+                      <Attachment
+                        publication={postInfo}
+                        className={`${
+                          router.pathname.startsWith('/p')
+                            ? 'max-h-screen'
+                            : 'max-h-[450px]'
+                        }`}
+                      />
+                    </div>
+                  )}
               </div>
 
               {/* bottom row */}
@@ -859,12 +863,22 @@ const LensPostCard = ({ post }: Props) => {
                 </div>
               )}
               <div
-                className={`text-p-text flex flex-row items-center px-3 sm:px-4.5 py-1 justify-between sm:justify-start sm:space-x-28  ${
-                  isMobile ? 'pb-1' : ''
-                }`}
+                className={clsx(
+                  'text-p-text flex flex-row items-center px-3 sm:px-6 py-1',
+                  isMobile
+                    ? 'pb-1 justify-between'
+                    : clsx(
+                        postInfo?.collectModule?.__typename ===
+                          'FreeCollectModuleSettings' ||
+                          postInfo?.collectModule?.__typename ===
+                            'FeeCollectModuleSettings'
+                          ? 'justify-between'
+                          : 'justify-start space-x-24'
+                      )
+                )}
               >
                 {isMobile && (
-                  <div className="flex flex-row items-center gap-x-1">
+                  <div className="flex flex-row items-center gap-x-2">
                     <Tooltip
                       enterDelay={1000}
                       leaveDelay={200}
@@ -876,7 +890,7 @@ const LensPostCard = ({ post }: Props) => {
                           e.stopPropagation()
                           handleUpvote()
                         }}
-                        className="hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md px-2 py-1.5"
+                        className="hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md py-1.5"
                       >
                         <img
                           src={
@@ -902,7 +916,7 @@ const LensPostCard = ({ post }: Props) => {
                           e.stopPropagation()
                           handleDownvote()
                         }}
-                        className="hover:bg-s-hover active:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer"
+                        className="hover:bg-s-hover active:bg-s-hover rounded-md py-1.5 cursor-pointer"
                       >
                         <img
                           src={
