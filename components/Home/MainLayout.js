@@ -37,7 +37,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
       </Head>
 
       {mobile && (
-        <div className="text-p-text bg-s-bg min-h-screen noSelect">
+        <div className="text-p-text bg-s-bg min-h-screen noSelect ">
           {mounted && <NewMobileTopNav />}
           <Box
             sx={{
@@ -59,7 +59,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
         </div>
       )}
       {!mobile && (
-        <div className="relative min-h-screen bg-p-bg">
+        <div className="relative min-h-screen bg-p-bg ">
           <Navbar />
 
           <Box

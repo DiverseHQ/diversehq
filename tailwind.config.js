@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 // eslint-disable-next-line no-undef
 module.exports = {
   darkMode: 'class',
@@ -43,6 +45,9 @@ module.exports = {
         top: '0px -2px 1px 1px rgba(0, 0, 0, 0.1)',
         nav: '0px 4px 4px rgba(0, 0, 0, 0.25)'
       }
+    },
+    fontFamily: {
+      nunito: ['Nunito Sans', 'sans-serif', ...defaultTheme.fontFamily.sans]
     }
   }
 }
