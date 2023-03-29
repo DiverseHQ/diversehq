@@ -658,7 +658,7 @@ const LensPostCard = ({ post }: Props) => {
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center w-[40px]  shrink-0">
+              <div className="flex flex-col items-center w-[40px] pt-2 shrink-0">
                 <Tooltip
                   enterDelay={1000}
                   leaveDelay={200}
@@ -720,7 +720,9 @@ const LensPostCard = ({ post }: Props) => {
                     <>
                       <div className="flex flex-row">
                         {postInfo?.metadata?.name &&
-                          postInfo?.appId === appId && (
+                          (postInfo?.appId === appId ||
+                            (postInfo?.metadata?.name.length > 0 &&
+                              content.trim().length === 0)) && (
                             <Markup
                               className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
                             >
@@ -771,7 +773,9 @@ const LensPostCard = ({ post }: Props) => {
                     <>
                       <div className="flex flex-row">
                         {postInfo?.metadata?.name &&
-                          postInfo?.appId === appId && (
+                          (postInfo?.appId === appId ||
+                            (postInfo?.metadata?.name.length > 0 &&
+                              content.trim().length === 0)) && (
                             <Markup
                               className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
                             >

@@ -8,7 +8,7 @@ const LivePeerVideoPlayback = ({
 }: {
   url: string
   title?: string
-  posterUrl: string
+  posterUrl: string | null
 }) => {
   return (
     <Player

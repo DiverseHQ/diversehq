@@ -10,6 +10,7 @@ import AudioPlayer from './AudioPlayer'
 import { Publication } from '../../graphql/generated'
 import LivePeerVideoPlayback from '../Common/UI/LivePeerVideoPlayback'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+import { stringToLength } from '../../utils/utils'
 
 interface Props {
   type: string
@@ -19,11 +20,10 @@ interface Props {
 }
 
 const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
-  const getCoverUrl = () => {
-    return imageProxy(
-      publication?.metadata?.cover?.original.url || publication?.metadata?.image
-    )
-  }
+  const getCoverUrl = imageProxy(
+    publication?.metadata?.cover?.original.url || publication?.metadata?.image
+  )
+
   return (
     <>
       {type === 'image/svg+xml' ? (
@@ -38,15 +38,15 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
             controls
             muted
             autoPlay={false}
-            poster={getCoverUrl()}
+            poster={getCoverUrl || null}
           />
         ) : (
           <div
             className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
           >
             <LivePeerVideoPlayback
-              posterUrl={getCoverUrl()}
-              // title={stringToLength(publication?.metadata?.content, 30)}
+              posterUrl={null}
+              title={stringToLength(publication?.metadata?.content, 30)}
               url={url}
             />
           </div>
@@ -55,7 +55,7 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
         <AudioPlayer
           src={url}
           className={`${className}`}
-          coverImage={getCoverUrl()}
+          coverImage={getCoverUrl || null}
           publication={publication}
         />
       ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (

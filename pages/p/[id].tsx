@@ -55,11 +55,14 @@ export async function getServerSideProps({ params }) {
           publicationId: id
         })
 
+        console.log(response)
+
         if (response?.publication) {
           let newId = id
           // @ts-ignore
           let post: postWithCommunityInfoType
           if (response?.publication?.__typename === 'Post') {
+            console.log('post', response.publication)
             // @ts-ignore
             post = response.publication
           } else if (response?.publication?.__typename === 'Mirror') {
@@ -68,6 +71,9 @@ export async function getServerSideProps({ params }) {
             post = response.publication.mirrorOf
             // @ts-ignore
             post.mirroredBy = response.publication.profile
+          } else if (response?.publication?.__typename === 'Comment') {
+            // @ts-ignore
+            post = response.publication
           }
 
           const communityId = post?.metadata?.tags?.[0]

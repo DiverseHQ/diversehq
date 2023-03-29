@@ -95,6 +95,10 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
             ? post.mirrorOf?.metadata?.tags[0]
             : null
         )
+
+        if (post.mirrorOf.__typename === 'Comment') {
+          console.log('postMirrorOf Comment', post.mirrorOf)
+        }
         // @ts-ignore
         return post.mirrorOf?.metadata?.tags[0] || 'null'
       }
@@ -106,9 +110,16 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     for (let i = 0; i < newPosts.length; i++) {
       if (!communityInfoForPosts[i]?._id) {
         if (newPosts[i]?.__typename === 'Mirror') {
+          console.log('newPosts[i] Mirror', newPosts[i])
           let mirrorPost = newPosts[i]
           // @ts-ignore
           newPosts[i] = mirrorPost?.mirrorOf
+          console.log('newPosts[i] MirrorOf', newPosts[i])
+
+          if (newPosts[i]?.__typename === 'Comment') {
+            console.log('newPosts[i] MirrorOf Comment', newPosts[i])
+          }
+
           // @ts-ignore
           newPosts[i].mirroredBy = mirrorPost.profile
         }
