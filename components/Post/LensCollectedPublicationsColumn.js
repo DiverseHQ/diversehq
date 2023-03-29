@@ -81,6 +81,9 @@ const LensCollectedPublicationsColumn = ({ walletAddress }) => {
           newPosts[i].mirroredBy = mirrorPost.profile
         }
         newPosts[i].communityInfo = communityInfoForPosts[i]
+        if (communityInfoForPosts[i]?.handle) {
+          newPosts[i].isLensCommunityPost = true
+        }
       }
     }
     setQueryParams({

@@ -1,32 +1,38 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { getCommunityInfo } from '../../../../api/community'
 import useDevice from '../../../../components/Common/useDevice'
 import CommunityInfoCard from '../../../../components/Community/CommunityInfoCard'
 import CommunityPageMobileTopNav from '../../../../components/Community/CommunityPageMobileTopNav'
 import CommunityPageSeo from '../../../../components/Community/CommunityPageSeo'
 import CommunityNotFound from '../../../../components/Community/Page/CommunityNotFound'
-import LensPostsCommunityPublicationsColumn from '../../../../components/Post/LensPostsCommunityPublicationsColumn'
 import NavFilterCommunity from '../../../../components/Post/NavFilterCommunity'
+import PostsColumn from '../../../../components/Post/PostsColumn'
 import getDefaultProfileInfo from '../../../../lib/profile/get-default-profile-info'
+import { CommunityWithCreatorProfile } from '../../../../types/community'
 
-const lens = ({ community }) => {
+interface Props {
+  community: CommunityWithCreatorProfile
+}
+
+const top: FC<Props> = ({ community }) => {
   const { isMobile } = useDevice()
 
   return (
     <div className="relative">
-      {isMobile && <CommunityPageMobileTopNav />}
+      {isMobile && <CommunityPageMobileTopNav community={community} />}
+
       {community && <CommunityPageSeo community={community} />}
       {community && (
         <>
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
               <CommunityInfoCard _community={community} />
-              <NavFilterCommunity name={community.name} />
-              {community && (
-                <LensPostsCommunityPublicationsColumn
-                  communityInfo={community}
-                />
-              )}
+              <NavFilterCommunity />
+              <PostsColumn
+                source="community"
+                sortBy="top"
+                data={community.name}
+              />
             </div>
           </div>
         </>
@@ -36,9 +42,13 @@ const lens = ({ community }) => {
   )
 }
 
-export async function getServerSideProps({ params = {} }) {
+export async function getServerSideProps({
+  params = {}
+}: {
+  params: { name?: string }
+}) {
   const { name } = params
-  const fetchCommunityInfo = async (name) => {
+  const fetchCommunityInfo = async (name: string) => {
     try {
       const res = await getCommunityInfo(name)
       if (res.status !== 200) {
@@ -64,4 +74,4 @@ export async function getServerSideProps({ params = {} }) {
   }
 }
 
-export default lens
+export default top

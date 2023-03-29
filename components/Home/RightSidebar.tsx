@@ -11,10 +11,14 @@ import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 import useHideSidebar from './hook/useHideSidebar'
 import CopyrightAndLinks from '../Common/UI/CopyrightAndLinks'
 import CommunitiesDiv from '../Common/UI/CommunitiesDiv'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import getAvatar from '../User/lib/getAvatar'
+import formatHandle from '../User/lib/formatHandle'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
-  const { user } = useProfile()
+  const { user, LensCommunity } = useProfile()
+  const { data: lensProfile } = useLensUserContext()
   const { notifyError } = useNotify()
 
   const [createdCommunities, setCreatedCommunities] = useState([])
@@ -81,6 +85,18 @@ const RightSidebar = () => {
     >
       {user && createdCommunities?.length > 0 && (
         <CommunitiesDiv
+          showFirstCommunities={
+            LensCommunity
+              ? [
+                  {
+                    name: formatHandle(lensProfile?.defaultProfile?.handle),
+                    // @ts-ignore
+                    logoImageUrl: getAvatar(lensProfile?.defaultProfile),
+                    isLensCommunity: true
+                  }
+                ]
+              : []
+          }
           text={`Created ${
             createdCommunities.length > 1 ? 'Communities' : 'Community'
           }`}

@@ -17,7 +17,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import getAvatar from '../User/lib/getAvatar'
 import { scrollToTop } from '../../lib/helpers'
 import FilterButton from '../Common/UI/FilterButton'
-import { AiFillHome, AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlinePlus } from 'react-icons/ai'
 import CreatePostPopup from './CreatePostPopup'
 import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
@@ -25,7 +25,7 @@ import { BsChevronDown } from 'react-icons/bs'
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
-  const { user } = useProfile()
+  const { user, joinedLensCommunities, LensCommunity } = useProfile()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
@@ -133,8 +133,36 @@ const Navbar = () => {
       const recentCommunities =
         JSON.parse(window?.localStorage?.getItem('recentCommunities')) || []
       // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
+      const myLensCommunity = []
+      if (
+        LensCommunity &&
+        !recentCommunities.some((c) => c?._id === LensCommunity?._id)
+      ) {
+        myLensCommunity.push({
+          _id: LensCommunity?._id,
+          name: formatHandle(LensCommunity?.Profile?.handle),
+          logoImageUrl: getAvatar(LensCommunity?.Profile),
+          isLensCommunity: true
+        })
+      }
       setJoinedCommunities([
         ...recentCommunities,
+        ...myLensCommunity,
+        ...joinedLensCommunities
+          .map((community) => ({
+            _id: community._id,
+            name: formatHandle(community?.Profile?.handle),
+            logoImageUrl: getAvatar(community?.Profile),
+            isLensCommunity: true
+          }))
+          .filter(
+            (community) =>
+              !recentCommunities.some((c) => c?._id === community?._id)
+          )
+          .filter(
+            (community) =>
+              !myLensCommunity.some((c) => c?._id === community?._id)
+          ),
         // removing the communities in the recentCommunities from the joinedCommunities using communityId
         ...response.filter(
           (community) =>
@@ -151,7 +179,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-1.5 items-center shadow-sm gap-2 sticky top-0 bg-s-bg">
+    <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-1.5 items-center shadow-sm gap-2 sticky top-0 bg-s-bg min-h-[62px]">
       <div className="flex flex-row items-center gap-4 lg:gap-5">
         <div>
           <div className="flex flex-row justify-center items-center space-x-2 h-fit w-fit cursor-pointer">
@@ -165,18 +193,9 @@ const Navbar = () => {
         </div>
         <SearchModal />
         <div className="flex flex-row space-x-3">
-          {/* <FilterButton
-            title="Home"
-            active={isOnHomeFeed}
-            onClick={routeToHome}
-          /> */}
           <div className="flex flex-col relative">
             <button
-              className={`flex items-center hover:cursor-pointer space-x-1 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full ${
-                isOnHomeFeed
-                  ? 'bg-select-active-btn-bg text-select-active-btn-text'
-                  : 'bg-select-btn-bg text-select-btn-text sm:hover:bg-select-btn-hover-bg'
-              }`}
+              className={`flex items-center hover:cursor-pointer space-x-1 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full bg-select-btn-bg text-select-btn-text sm:hover:bg-select-btn-hover-bg`}
               onClick={(e) => {
                 e.stopPropagation()
                 getJoinedCommunities()
@@ -184,15 +203,11 @@ const Navbar = () => {
             >
               <span>
                 {router.pathname.startsWith('/c')
-                  ? `c/${router.asPath.split('/')[2]}`
+                  ? `c/${router.asPath.split('/')[2].split('?')[0]}`
                   : 'Home'}
               </span>
               <BsChevronDown
-                className={`${
-                  isOnHomeFeed
-                    ? `text-select-active-btn-text`
-                    : `text-select-btn-text`
-                } w-3 h-3 items-center `}
+                className={'text-select-btn-text w-3 h-3 items-center'}
               />
             </button>
 
@@ -209,22 +224,13 @@ const Navbar = () => {
                     handleSelect={(community) => {
                       setShowJoinedCommunities(false)
                       storeRecentCommunities(community)
-                      router.push(`/c/${community?.name}`)
+
+                      if (community?.isLensCommunity) {
+                        router.push(`/l/${community?.name}`)
+                      } else {
+                        router.push(`/c/${community?.name}`)
+                      }
                     }}
-                    firstItem={
-                      !isOnHomeFeed ? (
-                        <div
-                          className="flex flex-row items-center cursor-pointer p-2 m-2 rounded-2xl text-p-text hover:bg-p-btn hover:text-p-btn-text gap-4"
-                          onClick={() => {
-                            routeToHome()
-                            setShowJoinedCommunities(false)
-                          }}
-                        >
-                          <AiFillHome className="w-9 h-9 text-p-text items-center" />
-                          <div>Home</div>
-                        </div>
-                      ) : null
-                    }
                   />
                 </>
               )}
@@ -259,50 +265,6 @@ const Navbar = () => {
               }
             }}
           />
-          {/* <div className="flex flex-col">
-            <FilterButton
-              title="Joined Communities"
-              IconAtEnd={
-                <RiArrowDropDownLine className="w-6 h-6 text-p-btn items-center" />
-              }
-              onClick={getJoinedCommunities}
-            />
-            <div
-              className="bg-white/70 font-medium dark:bg-black/70 backdrop-blur-lg rounded-md absolute mt-7 z-30 max-h-[500px] overflow-y-auto overflow-x-hidden"
-              ref={dropdownRef}
-            >
-              {showJoinedCommunities && (
-                <>
-                  <FilterListWithSearch
-                    list={joinedCommunities}
-                    type="community"
-                    filterParam="name"
-                    handleSelect={(community) => {
-                      setShowJoinedCommunities(false)
-                      storeRecentCommunities(community)
-                      router.push(`/c/${community?.name}`)
-                    }}
-                  />
-                </>
-              )}
-              {fetchingJoinedCommunities && (
-                <>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                  <div className="flex flex-row items-center justify-center p-2 m-2">
-                    <div className="animate-pulse rounded-full bg-p-bg w-9 h-9" />
-                    <div className="animate-pulse rounded-full bg-p-bg w-32 h-4 ml-4" />
-                  </div>
-                </>
-              )}
-            </div>
-          </div> */}
         </div>
       </div>
       <div className="flex flex-row items-center gap-2">
@@ -330,16 +292,7 @@ const Navbar = () => {
             )}
           </button>
         </Tooltip>
-        {/* <button
-          className="text-p-text hover:bg-s-hover p-1 rounded-full"
-          onClick={toggleTheme}
-        >
-          {theme === 'light' ? (
-            <FiMoon className="w-[25px] h-[25px] cursor-pointer" />
-          ) : (
-            <FiSun className="w-[25px] h-[25px] cursor-pointer" />
-          )}
-        </button> */}
+
         {!isSignedIn ||
         !hasProfile ||
         !user ||

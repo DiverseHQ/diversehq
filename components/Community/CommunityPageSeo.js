@@ -1,6 +1,6 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import { IMAGE_KIT_ENDPOINT } from '../../utils/config'
+import { appLink, IMAGE_KIT_ENDPOINT } from '../../utils/config'
 
 const CommunityPageSeo = ({ community }) => {
   return (
@@ -10,7 +10,7 @@ const CommunityPageSeo = ({ community }) => {
       openGraph={{
         title: community?.name,
         description: community?.description,
-        url: `https://diversehq.xyz/c/${community?.name}`,
+        url: `${appLink}/c/${community?.name}`,
         images: [
           {
             url: community?.logoImageUrl.replace(

@@ -45,13 +45,13 @@ const ReportPopUp = ({
         notifySuccess('Reported to Lens.')
       }
       if (communityId) {
-        await reportPublicationToCommunityMods(
+        await reportPublicationToCommunityMods({
           publicationId,
           communityId,
-          type.replace('Reason', '').toUpperCase(),
+          reason: type.replace('Reason', '').toUpperCase(),
           subReason,
           additionalComments
-        )
+        })
         notifySuccess('Reported to Lens and to community mods.')
       }
       hideModal()

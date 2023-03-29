@@ -5,9 +5,15 @@ interface Props {
   text: string
   communitiesList: any[]
   Icon: React.FC
+  showFirstCommunities?: any[]
 }
 
-const CommunitiesDiv: FC<Props> = ({ text, communitiesList, Icon }) => {
+const CommunitiesDiv: FC<Props> = ({
+  text,
+  communitiesList,
+  Icon,
+  showFirstCommunities
+}) => {
   /*
       text is the heading text
       communitiesList is the list of communities to map over
@@ -19,6 +25,9 @@ const CommunitiesDiv: FC<Props> = ({ text, communitiesList, Icon }) => {
         <Icon />
         <h3 className="text-lg leading-6 font-medium">{text}</h3>
       </div>
+      {showFirstCommunities?.map((community, i) => {
+        return <RightSideCommunityComponent key={i} community={community} />
+      })}
       {communitiesList?.map((community, i) => {
         return <RightSideCommunityComponent key={i} community={community} />
       })}

@@ -51,7 +51,9 @@ export async function getServerSideProps({ params }) {
   const getPost = async (id: string): Promise<ReutrnProps> => {
     if (id?.includes('-')) {
       try {
-        const response = await getSinglePublicationInfo(id)
+        const response = await getSinglePublicationInfo({
+          publicationId: id
+        })
 
         if (response?.publication) {
           let newId = id
@@ -74,7 +76,11 @@ export async function getServerSideProps({ params }) {
             return { newId: newId, type: 'lens', post }
           }
           const communityInfo = await getCommunityInfoUsingId(communityId)
-          if (communityInfo?._id) {
+          if (communityInfo?.handle) {
+            post.communityInfo = communityInfo
+            post.isLensCommunityPost = true
+            return { newId: newId, type: 'lens', post }
+          } else if (communityInfo?._id) {
             post.communityInfo = communityInfo
             return { newId: newId, type: 'lens', post }
           } else {

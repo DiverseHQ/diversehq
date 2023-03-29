@@ -12,7 +12,7 @@ interface item {
   disabled?: boolean
 }
 
-const Sidebar = ({ items }) => {
+const Sidebar = ({ items }: { items: item[] }) => {
   const { asPath } = useRouter()
   const { notifyInfo }: any = useNotify()
   return (

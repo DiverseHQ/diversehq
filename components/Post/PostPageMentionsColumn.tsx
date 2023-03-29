@@ -2,7 +2,7 @@ import React from 'react'
 import LensPageProfileCard from './Cards/LensPageProfileCard'
 
 // return words that are starting with @ and ending with .lens or .test
-const getAllMentionsHandlFromContent = (content: string): string[] => {
+export const getAllMentionsHandlFromContent = (content: string): string[] => {
   const mentions = content
     .match(/@[a-zA-Z0-9_]+(\.lens|\.test)/g)
     ?.map((mention) => {
@@ -14,8 +14,17 @@ const getAllMentionsHandlFromContent = (content: string): string[] => {
   return Array.from(uniqueHandles)
 }
 
-const PostPageMentionsColumn = ({ content }: { content: string }) => {
-  const handles = getAllMentionsHandlFromContent(content)
+const PostPageMentionsColumn = ({
+  content,
+  isLensCommunityPost
+}: {
+  content: string
+  isLensCommunityPost?: boolean
+}) => {
+  let handles = getAllMentionsHandlFromContent(content)
+  if (isLensCommunityPost) {
+    handles = handles.slice(1)
+  }
   return (
     <>
       {handles && handles?.length > 0 && (

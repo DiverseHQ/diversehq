@@ -10,7 +10,9 @@ import { IoMdClose } from 'react-icons/io'
 import LensPageProfileCard from '../Cards/LensPageProfileCard'
 import { postWithCommunityInfoType } from '../../../types/post'
 import LensPostPageCommunityCard from '../Cards/LensPostPageCommunityCard'
-import PostPageMentionsColumn from '../PostPageMentionsColumn'
+import PostPageMentionsColumn, {
+  getAllMentionsHandlFromContent
+} from '../PostPageMentionsColumn'
 
 interface Props {
   id: string
@@ -86,13 +88,33 @@ const LensPostPage = ({ id, post }: Props) => {
                 </div>
               </div>
               <div className="px-5 font-medium">Community</div>
-              <LensPostPageCommunityCard
-                communityInfo={postInfo?.communityInfo}
-              />
+              {postInfo?.isLensCommunityPost ? (
+                <LensPageProfileCard
+                  isLensCommunity={!!postInfo?.isLensCommunityPost}
+                  _profile={postInfo?.profile}
+                />
+              ) : (
+                <LensPostPageCommunityCard
+                  communityInfo={postInfo?.communityInfo}
+                />
+              )}
               <div className="px-5 mt-6 font-medium">Creator</div>
-              <LensPageProfileCard _profile={postInfo?.profile} />
+              {postInfo?.isLensCommunityPost ? (
+                <LensPageProfileCard
+                  profileHandle={
+                    getAllMentionsHandlFromContent(
+                      postInfo?.metadata?.content
+                    )[0]
+                  }
+                />
+              ) : (
+                <LensPageProfileCard _profile={postInfo?.profile} />
+              )}
 
-              <PostPageMentionsColumn content={postInfo?.metadata?.content} />
+              <PostPageMentionsColumn
+                isLensCommunityPost={postInfo?.isLensCommunityPost}
+                content={postInfo?.metadata?.content}
+              />
             </div>
           </>
         )}

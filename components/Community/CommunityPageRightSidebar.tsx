@@ -66,14 +66,14 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
             </span>
           </div>
           <div className="bg-[#7c7c7c] h-[1px] mb-3"></div>
-          <div className="flex flex-wrap mb-2 gap-x-6 gap-y-2">
+          {/* <div className="flex flex-wrap mb-2 gap-x-6 gap-y-2">
             <div className="flex flex-col">
               <span className="font-semibold text-[16px]">
                 {communityInfo.members?.length}
               </span>
               <span className="font-light text-[#7c7c7c]">members</span>
             </div>
-          </div>
+          </div> */}
           <div className="flex flex-row gap-1 w-full">
             <div className="flex flex-col w-full">
               <div className="relative bg-[#7c7c7c] h-[35px] rounded-[10px] flex flex-row">
@@ -99,18 +99,13 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
           <div className="bg-[#9378d8] rounded-t-[15px] font-medium px-3 py-2">
             Community Rules
           </div>
-          <div className="text-p-text flex flex-col text-[14px]">
+          <div className="text-p-text flex flex-col text-[14px] rounded-b-[15px] overflow-hidden">
             {communityInfo?.rules?.map((rule, index) => {
               return (
                 <Accordion
                   key={index}
+                  disableGutters={true}
                   sx={{
-                    '& .MuiPaper-root.MuiAccordion-root': {
-                      margin: '0px 0px'
-                    },
-                    '& .MuiAccordion-root': {
-                      borderRadius: '15px'
-                    },
                     '& .MuiAccordionDetails-root': {
                       backgroundColor: theme === 'dark' ? '#1a1a1b' : '#fff',
                       color: theme === 'dark' ? '#d7dadc' : '#000'

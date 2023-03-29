@@ -4,6 +4,7 @@ export type CommunityType = {
   _id?: string
   name?: string
   description?: string
+  label?: string
   bannerImageUrl?: string
   logoImageUrl?: string
   creator?: string
@@ -15,6 +16,8 @@ export type CommunityType = {
   creatorProfile?: Profile
   rules?: Rule[]
   bannedUsers?: BannedUser[]
+  // hack to allow any other property
+  handle?: string
   [key: string]: any
 }
 
@@ -31,4 +34,15 @@ export type BannedUser = {
   address: string
   profileId: string
   reason: string
+}
+
+export type LensCommunity = {
+  _id: string
+  handle: string
+  creator?: string
+  bannedUsers?: BannedUser[]
+  rules?: Rule[]
+  Profile?: Profile
+  createdAt?: string
+  updatedAt?: string
 }

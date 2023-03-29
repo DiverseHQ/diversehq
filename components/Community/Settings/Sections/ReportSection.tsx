@@ -8,7 +8,13 @@ import { useNotify } from '../../../Common/NotifyContext'
 import usePublicationWithCommunityInfo from '../../hook/usePublicationWithCommunityInfo'
 import LensReportPost from './LensReportPost'
 
-const ReportSection = ({ community }: { community: CommunityType }) => {
+const ReportSection = ({
+  community,
+  isLensCommunity = false
+}: {
+  community: CommunityType
+  isLensCommunity?: boolean
+}) => {
   const { data: lensProfile } = useLensUserContext()
   const [rawReports, setRawReports] = React.useState<PostReportType[]>([])
   const { notifyError } = useNotify()
@@ -62,6 +68,7 @@ const ReportSection = ({ community }: { community: CommunityType }) => {
               )}
               fetchAndSetUnResolvedReprots={fetchAndSetUnResolvedReprots}
               community={community}
+              isLensCommunity={isLensCommunity}
             />
           ))}
       </div>

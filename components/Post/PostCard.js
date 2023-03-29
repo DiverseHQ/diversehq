@@ -18,7 +18,7 @@ import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 
 import Markup from '../Lexical/Markup'
 import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
-import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
+import { appLink, MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import ReactEmbedo from './embed/ReactEmbedo'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
@@ -613,7 +613,7 @@ const PostCard = ({ _post, setPosts }) => {
             )}
             <span onClick={(e) => e.stopPropagation()}>
               <PostShareButton
-                url={`https://diversehq.xyz/p/${post?._id}`}
+                url={`${appLink}/p/${post?._id}`}
                 text={post?.title}
               />
             </span>

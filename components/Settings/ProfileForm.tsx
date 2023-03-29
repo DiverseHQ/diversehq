@@ -22,7 +22,7 @@ import { useNotify } from '../Common/NotifyContext'
 import FormRichTextInput from '../Common/UI/FormRichTextInput'
 import FormTextInput from '../Common/UI/FormTextInput'
 import getAvatar from '../User/lib/getAvatar'
-import getIPFSLink from '../User/lib/getIPFSLink'
+import getCoverBanner from '../User/lib/getCoverBanner'
 import {
   AttributeData,
   MetadataVersions,
@@ -103,11 +103,10 @@ const ProfileForm = () => {
   }, [lensProfile?.defaultProfile])
 
   const handleSetProfileBannerFromLensProfile = () => {
-    let _profileBanner =
-      lensProfile?.defaultProfile?.coverPicture?.__typename === 'NftImage'
-        ? getIPFSLink(lensProfile?.defaultProfile?.coverPicture?.uri)
-        : getIPFSLink(lensProfile?.defaultProfile?.coverPicture?.original?.url)
-    setProfileBanner(_profileBanner)
+    // @ts-ignore
+    console.log('coverbanned', getCoverBanner(lensProfile?.defaultProfile))
+    // @ts-ignore
+    setProfileBanner(getCoverBanner(lensProfile?.defaultProfile))
   }
 
   const handleProfileImageChange = (e) => {

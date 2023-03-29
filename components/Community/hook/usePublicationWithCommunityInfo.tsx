@@ -47,6 +47,9 @@ const usePublicationWithCommunityInfo = ({
         posts[i].communityInfo = getCommunityInfoFromAppId(posts[i].appId)
       } else {
         posts[i].communityInfo = communityInfoForPosts[i]
+        if (communityInfoForPosts[i]?.handle) {
+          posts[i].isLensCommunityPost = true
+        }
       }
     }
     setPublications(posts)

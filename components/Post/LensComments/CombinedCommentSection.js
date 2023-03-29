@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
+  CommentOrderingTypes,
+  CommentRankingFilter,
   ReactionTypes,
   useAddReactionMutation,
   useCommentFeedQuery
@@ -29,7 +31,9 @@ const CombinedCommentSection = ({ postId, postInfo }) => {
       request: {
         cursor: cursor,
         commentsOf: postId,
-        limit: LENS_COMMENT_LIMIT
+        limit: LENS_COMMENT_LIMIT,
+        commentsOfOrdering: CommentOrderingTypes.Ranking,
+        commentsRankingFilter: CommentRankingFilter.Relevant
       },
       reactionRequest: {
         profileId: lensProfile?.defaultProfile?.id

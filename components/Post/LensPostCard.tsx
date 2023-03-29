@@ -9,7 +9,7 @@ import {
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
-import { appId, MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
+import { appId, appLink, MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
@@ -39,12 +39,17 @@ import { AiOutlineRetweet } from 'react-icons/ai'
 import { postWithCommunityInfoType } from '../../types/post'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import ReportPopUp from './Report/ReportPopUp'
+import getAvatar from '../User/lib/getAvatar'
+import { getAllMentionsHandlFromContent } from './PostPageMentionsColumn'
+import useLensFollowButton from '../User/useLensFollowButton'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
 interface Props {
   post: postWithCommunityInfoType
 }
+
+// post?.isLensCommunityPost makes sure that the post is a post from a lens community
 
 const LensPostCard = ({ post }: Props) => {
   const { isMobile } = useDevice()
@@ -84,6 +89,12 @@ const LensPostCard = ({ post }: Props) => {
   }, [post, lensProfile])
 
   const { mutateAsync: removePost } = useHidePublicationMutation()
+  const { FollowButton } = useLensFollowButton(
+    {
+      profileId: post?.profile?.id
+    },
+    'join'
+  )
 
   const handleUpvote = async () => {
     if (reaction === ReactionTypes.Upvote) {
@@ -249,11 +260,22 @@ const LensPostCard = ({ post }: Props) => {
       component: (
         <ReportPopUp
           publicationId={postInfo?.id}
-          communityId={postInfo?.communityInfo?._id}
+          communityId={postInfo?.metadata?.tags[0]}
         />
       ),
       type: modalType.normal
     })
+  }
+
+  let content = postInfo?.metadata?.content || ''
+
+  if (content) {
+    if (postInfo?.isLensCommunityPost) {
+      content = content.split('\n', 2)[1]
+    }
+    if (content?.startsWith(postInfo?.metadata?.name)) {
+      content = content.slice(postInfo?.metadata?.name.length)
+    }
   }
 
   return (
@@ -273,7 +295,7 @@ const LensPostCard = ({ post }: Props) => {
           {/* top row */}
           {postInfo?.mirroredBy && (
             <div
-              className="flex flex-row space-x-1 items-center ml-1 mb-1 text-xs text-s-text"
+              className="flex flex-row space-x-1 items-center ml-4 md:ml-1 mb-1 text-xs text-s-text"
               onClick={(e) => {
                 e.stopPropagation()
               }}
@@ -290,12 +312,18 @@ const LensPostCard = ({ post }: Props) => {
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
               <>
-                <div className="flex flex-row w-full items-center">
+                <div className="flex flex-row flex-wrap w-full items-center">
                   <span onClick={(e) => e.stopPropagation()}>
                     <div
                       onClick={() => {
                         if (postInfo?.communityInfo?._id) {
-                          router.push(`/c/${postInfo?.communityInfo?.name}`)
+                          if (postInfo?.isLensCommunityPost) {
+                            router.push(
+                              `/l/${formatHandle(postInfo?.profile?.handle)}`
+                            )
+                          } else {
+                            router.push(`/c/${postInfo?.communityInfo?.name}`)
+                          }
                         } else {
                           window.open(postInfo?.communityInfo?.link, '_blank')
                         }
@@ -303,7 +331,9 @@ const LensPostCard = ({ post }: Props) => {
                     >
                       <ImageWithPulsingLoader
                         src={
-                          postInfo?.communityInfo?.logoImageUrl
+                          postInfo?.isLensCommunityPost
+                            ? getAvatar(postInfo?.profile)
+                            : postInfo?.communityInfo?.logoImageUrl
                             ? postInfo?.communityInfo?.logoImageUrl
                             : '/gradient.jpg'
                         }
@@ -316,14 +346,25 @@ const LensPostCard = ({ post }: Props) => {
                     <div
                       onClick={() => {
                         if (postInfo?.communityInfo?._id) {
-                          router.push(`/c/${postInfo?.communityInfo?.name}`)
+                          if (postInfo?.isLensCommunityPost) {
+                            router.push(
+                              `/l/${formatHandle(postInfo?.profile?.handle)}`
+                            )
+                          } else {
+                            router.push(`/c/${postInfo?.communityInfo?.name}`)
+                          }
                         } else {
                           window.open(postInfo?.communityInfo?.link, '_blank')
                         }
                       }}
                     >
                       <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                        {stringToLength(postInfo?.communityInfo?.name, 18)}
+                        {postInfo?.isLensCommunityPost
+                          ? `l/${formatHandle(postInfo?.profile?.handle)}`
+                          : `${stringToLength(
+                              postInfo?.communityInfo?.name,
+                              18
+                            )}`}
                       </div>
                     </div>
                   </span>
@@ -332,10 +373,24 @@ const LensPostCard = ({ post }: Props) => {
                     <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
                       <p className="pl-1.5 font-normal">{' posted by'}</p>
                       <Link
-                        href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
+                        href={
+                          postInfo?.isLensCommunityPost
+                            ? `/u/${formatHandle(
+                                getAllMentionsHandlFromContent(
+                                  postInfo?.metadata?.content
+                                )[0]
+                              )}`
+                            : `/u/${formatHandle(postInfo?.profile?.handle)}`
+                        }
                       >
                         <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                          u/{formatHandle(postInfo?.profile?.handle)}
+                          {postInfo?.isLensCommunityPost
+                            ? `u/${formatHandle(
+                                getAllMentionsHandlFromContent(
+                                  postInfo?.metadata?.content
+                                )[0]
+                              )}`
+                            : `u/${formatHandle(postInfo?.profile?.handle)}`}
                         </div>
                       </Link>
                     </div>
@@ -363,7 +418,13 @@ const LensPostCard = ({ post }: Props) => {
                     <div
                       onClick={() => {
                         if (postInfo?.communityInfo?._id) {
-                          router.push(`/c/${postInfo?.communityInfo?.name}`)
+                          if (postInfo?.isLensCommunityPost) {
+                            router.push(
+                              `/l/${formatHandle(postInfo?.profile?.handle)}`
+                            )
+                          } else {
+                            router.push(`/c/${postInfo?.communityInfo?.name}`)
+                          }
                         } else {
                           window.open(postInfo?.communityInfo?.link, '_blank')
                         }
@@ -371,7 +432,9 @@ const LensPostCard = ({ post }: Props) => {
                     >
                       <ImageWithPulsingLoader
                         src={
-                          postInfo?.communityInfo?.logoImageUrl
+                          postInfo?.isLensCommunityPost
+                            ? getAvatar(postInfo?.profile)
+                            : postInfo?.communityInfo?.logoImageUrl
                             ? postInfo?.communityInfo?.logoImageUrl
                             : '/gradient.jpg'
                         }
@@ -384,14 +447,25 @@ const LensPostCard = ({ post }: Props) => {
                       <div
                         onClick={() => {
                           if (postInfo?.communityInfo?._id) {
-                            router.push(`/c/${postInfo?.communityInfo?.name}`)
+                            if (postInfo?.isLensCommunityPost) {
+                              router.push(
+                                `/l/${formatHandle(postInfo?.profile?.handle)}`
+                              )
+                            } else {
+                              router.push(`/c/${postInfo?.communityInfo?.name}`)
+                            }
                           } else {
                             window.open(postInfo?.communityInfo?.link, '_blank')
                           }
                         }}
                       >
                         <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
-                          {postInfo?.communityInfo?.name}
+                          {postInfo?.isLensCommunityPost
+                            ? `l/${formatHandle(postInfo?.profile?.handle)}`
+                            : `${stringToLength(
+                                postInfo?.communityInfo?.name,
+                                18
+                              )}`}
                         </div>
                       </div>
                     </span>
@@ -400,13 +474,29 @@ const LensPostCard = ({ post }: Props) => {
                         <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
                           <p className="pl-1.5 font-normal">{' posted by '}</p>
                           <Link
-                            href={`/u/${formatHandle(
-                              postInfo?.profile?.handle
-                            )}`}
+                            href={
+                              postInfo?.isLensCommunityPost
+                                ? `/u/${formatHandle(
+                                    getAllMentionsHandlFromContent(
+                                      postInfo?.metadata?.content
+                                    )[0]
+                                  )}`
+                                : `/u/${formatHandle(
+                                    postInfo?.profile?.handle
+                                  )}`
+                            }
                             passHref
                           >
                             <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                              u/{formatHandle(postInfo?.profile?.handle)}
+                              {postInfo?.isLensCommunityPost
+                                ? `u/${formatHandle(
+                                    getAllMentionsHandlFromContent(
+                                      postInfo?.metadata?.content
+                                    )[0]
+                                  )}`
+                                : `u/${formatHandle(
+                                    postInfo?.profile?.handle
+                                  )}`}
                             </div>
                           </Link>
                         </div>
@@ -429,10 +519,18 @@ const LensPostCard = ({ post }: Props) => {
             )}
             <span onClick={(e) => e.stopPropagation()}>
               <div className="sm:mr-5 flex flex-row items-center">
-                {!router.pathname.startsWith('/p/') &&
-                  !router.pathname.startsWith('/c/') &&
+                {!router.pathname.startsWith('/c/') &&
+                  !router.pathname.startsWith('/l/') &&
                   postInfo?.communityInfo?._id && (
-                    <JoinCommunityButton id={postInfo?.communityInfo?._id} />
+                    <>
+                      {postInfo?.isLensCommunityPost ? (
+                        <FollowButton hideIfFollow={true} />
+                      ) : (
+                        <JoinCommunityButton
+                          id={postInfo?.communityInfo?._id}
+                        />
+                      )}
+                    </>
                   )}
                 {isMobile ? (
                   <OptionsWrapper
@@ -559,7 +657,7 @@ const LensPostCard = ({ post }: Props) => {
 
           <div className="flex flex-row w-full">
             {!isMobile && (
-              <div className="flex flex-col items-center ml-1.5 mt-1">
+              <div className="flex flex-col items-center ml-1.5 mt-1 shrink-0">
                 <Tooltip
                   enterDelay={1000}
                   leaveDelay={200}
@@ -645,9 +743,7 @@ const LensPostCard = ({ post }: Props) => {
                           </div>
                         )}
                       </div>
-                      {(postInfo?.metadata?.name !==
-                        postInfo?.metadata?.content ||
-                        postInfo?.appId !== appId) && (
+                      {(!!content || postInfo?.appId !== appId) && (
                         <div
                           className={`${
                             showMore ? 'h-[150px]' : ''
@@ -658,13 +754,7 @@ const LensPostCard = ({ post }: Props) => {
                               showMore ? 'line-clamp-5' : ''
                             } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                           >
-                            {postInfo?.metadata?.content?.startsWith(
-                              postInfo?.metadata?.name
-                            )
-                              ? postInfo?.metadata?.content?.slice(
-                                  postInfo?.metadata?.name.length
-                                )
-                              : postInfo?.metadata?.content}
+                            {content}
                           </Markup>
                         </div>
                       )}
@@ -704,9 +794,7 @@ const LensPostCard = ({ post }: Props) => {
                           </div>
                         )}
                       </div>
-                      {(postInfo?.metadata?.name !==
-                        postInfo?.metadata?.content ||
-                        postInfo?.appId !== appId) && (
+                      {(!!content || postInfo?.appId !== appId) && (
                         <div
                           className={`${
                             showMore ? 'h-[150px]' : ''
@@ -717,13 +805,7 @@ const LensPostCard = ({ post }: Props) => {
                               showMore ? 'line-clamp-5' : ''
                             } linkify whitespace-pre-wrap break-words text sm:text-base`}
                           >
-                            {postInfo?.metadata?.content?.startsWith(
-                              postInfo?.metadata?.name
-                            )
-                              ? postInfo?.metadata?.content?.slice(
-                                  postInfo?.metadata?.name.length
-                                )
-                              : postInfo?.metadata?.content}
+                            {content}
                           </Markup>
                         </div>
                       )}
@@ -876,7 +958,7 @@ const LensPostCard = ({ post }: Props) => {
                 {!isMobile && (
                   <span onClick={(e) => e.stopPropagation()}>
                     <PostShareButton
-                      url={`https://diversehq.xyz/p/${postInfo?.id}`}
+                      url={`${appLink}/p/${postInfo?.id}`}
                       text={postInfo?.metadata?.name}
                     />
                   </span>

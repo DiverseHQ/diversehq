@@ -26,21 +26,23 @@ const CommonNotificationCardLayoutUI = ({
     <Link href={cardLink}>
       <div className="flex flex-col px-2 w-full relative">
         <div className="flex flex-row items-start justify-between">
-          <div className="flex flex-row gap-4 items-start">
+          <div className="flex flex-row w-full gap-4 items-start">
             <div className="pt-1.5 text-[16px]">
               {typeof Icon === 'function' && <Icon />}
             </div>
-            <div className="flex flex-col">
-              <MainRow />
+            <div className="flex flex-col w-full">
+              <div className="flex flex-row justify-between w-full pb-2">
+                <MainRow />
+                <div className="items-end shrink-0 text-sm sm:text-base pl-1">
+                  <ReactTimeAgo
+                    timeStyle="twitter"
+                    date={new Date(createdAt)}
+                    locale="en-US"
+                  />
+                </div>
+              </div>
               <Body />
             </div>
-          </div>
-          <div className="items-end shrink-0 text-sm sm:text-base pl-1">
-            <ReactTimeAgo
-              timeStyle="twitter"
-              date={new Date(createdAt)}
-              locale="en-US"
-            />
           </div>
         </div>
         {!isRead && (

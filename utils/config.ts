@@ -27,6 +27,11 @@ export const resolveActions = {
   HIDE_POST: 'HIDE_POST'
 }
 
+export const lensCommunityPostsResolveActions = {
+  IGNORE: 'IGNORE',
+  ALLOW: 'ALLOW'
+}
+
 export const notificationTypes = {
   POST: 0,
   COMMENT: 1,
@@ -39,7 +44,9 @@ export const notificationTypes = {
   MODERATOR_ASSIGNED: 8,
   MODERATOR_REMOVED: 9,
   PUBLICATION_REPORT_ACTION_TAKEN: 10,
-  UNBAN_USER: 11
+  UNBAN_USER: 11,
+  REVIEW_POST_FOR_LENS_COMMUNITY: 12,
+  RESOLVED_POST_FOR_LENS_COMMUNITY: 13
 }
 
 export const sortTypes = {
@@ -174,3 +181,4 @@ export const infoFromLensAppId = {
 }
 
 export const appId = 'diversehq'
+export const appLink = 'https://app.diversehq.xyz'

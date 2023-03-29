@@ -24,7 +24,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
   const [searchTerm, setSearchTerm] = React.useState<string>('')
   const [selectedProfile, setSelectedProfile] = React.useState<Profile>(null)
   const [ruleViolated, setRuleViolated] = React.useState<string>(
-    community?.rules[0].title ?? null
+    community?.rules?.[0].title ?? null
   )
   const [extraReason, setExtraReason] = React.useState<string>('')
   const { notifyInfo, notifyError } = useNotify()
@@ -149,7 +149,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
                 }}
                 value={ruleViolated}
                 placeholder="Select rule violated"
-                className="w-full p-2 border border-s-border rounded-xl mt-2 text-sm"
+                className="w-full bg-s-bg p-2 border border-s-border rounded-xl mt-2 text-sm"
               >
                 {community?.rules?.map((rule, index) => (
                   <option
@@ -168,7 +168,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
               <input
                 type="text"
                 placeholder="(Optional) Any addition reason or last words of advice.. ?"
-                className="w-full p-2 border border-s-border rounded-xl mt-2 text-sm"
+                className="w-full bg-s-bg p-2 border border-s-border rounded-xl mt-2 text-sm"
                 onChange={(e) => setExtraReason(e.target.value)}
               />
             </div>

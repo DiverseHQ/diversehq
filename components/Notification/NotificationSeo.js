@@ -1,5 +1,6 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
+import { appLink } from '../../utils/config'
 
 const NotificationSeo = () => {
   return (
@@ -10,7 +11,7 @@ const NotificationSeo = () => {
         title: 'Notifications',
         description:
           'Stay up-to-date with the latest updates and notifications!',
-        url: 'https://diversehq.xyz/notifications'
+        url: `${appLink}/notifications`
       }}
     />
   )

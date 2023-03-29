@@ -18,22 +18,22 @@ const LensNotificationFollowedCard = ({ notification, isRead }: Props) => {
   return (
     <CommonNotificationCardLayoutUI
       MainRow={() => (
-        <div className="flex flex-row">
-          <div className="pr-2">
-            <span onClick={(e) => e.stopPropagation()}>
-              <Link
-                href={`/u/${formatHandle(
-                  notification?.wallet?.defaultProfile?.handle
-                )}`}
-              >
-                <div className="font-bold hover:underline">
-                  u/{formatHandle(notification?.wallet?.defaultProfile?.handle)}
-                </div>
-              </Link>{' '}
-            </span>
+        <div className="flex flex-row pr-2 space-x-2">
+          <span onClick={(e) => e.stopPropagation()}>
+            <Link
+              href={`/u/${formatHandle(
+                notification?.wallet?.defaultProfile?.handle
+              )}`}
+            >
+              <div className="font-bold hover:underline">
+                u/{formatHandle(notification?.wallet?.defaultProfile?.handle)}
+              </div>
+            </Link>{' '}
+          </span>
+          <span>
             {notification?.wallet?.defaultProfile?.isFollowedByMe && 'finally '}
             followed you
-          </div>
+          </span>
           <div>
             {!notification?.wallet?.defaultProfile?.isFollowedByMe && (
               <span onClick={(e) => e.stopPropagation()}>

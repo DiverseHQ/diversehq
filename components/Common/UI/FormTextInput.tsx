@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 interface Props {
-  label: string
+  label?: string
   className?: string
   value: string
   maxLength?: number
@@ -9,6 +9,7 @@ interface Props {
   placeholder?: string
   onChange?: any
   errorMsg?: string
+  startingLetters?: string
 }
 
 const FormTextInput = ({
@@ -18,6 +19,7 @@ const FormTextInput = ({
   maxLength = null,
   disabled = false,
   placeholder,
+  startingLetters = '',
   onChange,
   // onBlur,
   errorMsg = null,
@@ -30,8 +32,11 @@ const FormTextInput = ({
           disabled ? 'cursor-not-allowed' : ''
         } ${errorMsg ? 'border-red-500' : 'border-s-border'} `}
       >
-        <div className="pb-2">{label}</div>
+        {label && <div className="pb-2">{label}</div>}
         <div className="flex flex-row items-center justify-between">
+          {startingLetters && (
+            <div className="text-s-text">{startingLetters}</div>
+          )}
           <input
             type="text"
             value={value}

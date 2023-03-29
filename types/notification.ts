@@ -1,5 +1,5 @@
 import { Profile } from '../graphql/generated'
-import { CommunityType } from './community'
+import { CommunityType, LensCommunity } from './community'
 import { UserType } from './user'
 
 export interface NotificationSchema {
@@ -13,7 +13,21 @@ export interface NotificationSchema {
   isRead?: boolean
   senderLensProfile?: Profile
   extraInfo?: string
+  community?: CommunityType
+  lensCommunity?: LensCommunity
+  reviewLensCommunityPost?: ReviewLensCommunityPost
   [key: string]: any
+}
+
+export interface ReviewLensCommunityPost {
+  _id: string
+  contentUri: string
+  createdAt: string
+  updatedAt: string
+  isResolved?: boolean
+  lensCommunityId?: string
+  resolveActions?: 'IGNORE' | 'ALLOW'
+  publicationId?: string
 }
 
 export interface CommunityNotificationType extends NotificationSchema {

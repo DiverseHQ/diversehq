@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react'
 import { memo } from 'react'
 import { useState } from 'react'
-import { useCommentFeedQuery } from '../../../graphql/generated'
+import {
+  CommentOrderingTypes,
+  CommentRankingFilter,
+  useCommentFeedQuery
+} from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import LensCommentCard from './LensCommentCard'
 
@@ -16,7 +20,9 @@ const LensRepliedComments = ({
   const { data } = useCommentFeedQuery(
     {
       request: {
-        commentsOf: commentId
+        commentsOf: commentId,
+        commentsOfOrdering: CommentOrderingTypes.Ranking,
+        commentsRankingFilter: CommentRankingFilter.Relevant
       },
       reactionRequest: {
         profileId: lensProfile?.defaultProfile?.id ?? null

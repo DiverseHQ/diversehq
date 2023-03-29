@@ -111,6 +111,10 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         }
         // @ts-ignore
         newPosts[i].communityInfo = communityInfoForPosts[i]
+        if (communityInfoForPosts[i]?.handle) {
+          // @ts-ignore
+          newPosts[i].isLensCommunityPost = true
+        }
       }
     }
 

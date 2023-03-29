@@ -3,13 +3,13 @@ import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsExplorePublicationsColumn'
 import { NextSeo } from 'next-seo'
-// import useDevice from '../../components/Common/useDevice'
-// import CreatePostBar from '../../components/Home/CreatePostBar'
-// import useDevice from '../../components/Common/useDevice'
+import useDevice from '../../components/Common/useDevice'
+import CreatePostBar from '../../components/Home/CreatePostBar'
+import { appLink } from '../../utils/config'
 // import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
 
 const lens = () => {
-  // const { isDesktop } = useDevice()
+  const { isDesktop } = useDevice()
   // const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   return (
     <>
@@ -17,12 +17,12 @@ const lens = () => {
         title="Lens Feed / DiverseHQ"
         description="Lens Feed from diverse communities on DiverseHQ."
         openGraph={{
-          url: 'https://diversehq.xyz/feed/lens'
+          url: `${appLink}/feed/lens`
         }}
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
-          {/* {isDesktop && <CreatePostBar />} */}
+          {isDesktop && <CreatePostBar />}
           <NavFilterAllPosts />
           {/* {lensProfile &&
       isSignedIn &&

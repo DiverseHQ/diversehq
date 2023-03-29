@@ -40,6 +40,9 @@ import PublicationEditor from '../Lexical/PublicationEditor'
 import Giphy from '../Post/Giphy'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import formatHandle from '../User/lib/formatHandle'
+import getAvatar from '../User/lib/getAvatar'
+import { submitPostForReview } from '../../api/reviewLensCommunityPost'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
@@ -47,7 +50,7 @@ const CreatePostPopup = () => {
   const [file, setFile] = useState(null)
   const [content, setContent] = useState('')
   const [communityId, setCommunityId] = useState(null)
-  const { user, address } = useProfile()
+  const { user, address, joinedLensCommunities, LensCommunity } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [loadingJoinedCommunities, setLoadingJoinedCommunities] =
@@ -59,27 +62,14 @@ const CreatePostPopup = () => {
     top: '0px'
   })
   const { data: lensProfile } = useLensUserContext()
-  // const [isLensPost, setIsLensPost] = useState(
-  //   (isSignedIn && hasProfile) || false
-  // )
-  // const [editor] = useLexicalComposerContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
   const [collectSettings, setCollectSettings] = useState({
     freeCollectModule: { followerOnly: false }
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
-  // const [IPFSHash, setIPFSHash] = useState(null)
   const [imageUpload, setImageUpload] = useState(false)
-  // useEffect(() => {
-  //   return () => {
-  //     editor?.update(() => {
-  //       $getRoot().clear()
-  //     })
-  //   }
-  // }, [])
-
-  const { notifyError, notifyInfo } = useNotify()
+  const { notifyError, notifyInfo, notifySuccess } = useNotify()
   // const router = useRouter()
   const { hideModal } = usePopUpModal()
   const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
@@ -101,13 +91,9 @@ const CreatePostPopup = () => {
   const [flairDrawerOpen, setFlairDrawerOpen] = useState(false)
   const [gifAttachment, setGifAttachment] = useState(null)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
+  const [isLensCommunitySelected, setIsLensCommunitySelected] = useState(false)
 
   useEffect(() => {
-    console.log('gifAttachment', gifAttachment)
-    console.log(
-      'gifAttachment?.images?.original?.url',
-      gifAttachment?.images?.original?.url
-    )
     setImageValue(gifAttachment ? gifAttachment?.images?.original?.url : null)
   }, [gifAttachment])
 
@@ -232,7 +218,15 @@ const CreatePostPopup = () => {
       contentWarning: contentWarning,
       description: 'Created with DiverseHQ',
       locale: 'en-US',
-      content: title + '\n' + content.trim(),
+      content:
+        `${
+          isLensCommunitySelected && selectedCommunity._id !== LensCommunity._id
+            ? `Post by @${lensProfile.defaultProfile.handle} \n`
+            : ''
+        }` +
+        title +
+        '\n' +
+        content.trim(),
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
       imageMimeType: mimeType.startsWith('image') ? mimeType : null,
@@ -253,6 +247,26 @@ const CreatePostPopup = () => {
       appId: appId
     }
     const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
+
+    if (isLensCommunitySelected) {
+      try {
+        const res = await submitPostForReview(communityId, `ipfs://${ipfsHash}`)
+        if (res.status === 200) {
+          notifySuccess('Post submitted for review')
+          hideModal()
+        } else if (res.status === 400) {
+          const resJson = await res.json()
+          notifyError(resJson.msg)
+        }
+        return
+      } catch (error) {
+        notifyError('Error submitting post for review')
+      } finally {
+        setLoading(false)
+      }
+      return
+    }
+
     const createPostRequest = {
       profileId: lensProfile?.defaultProfile?.id,
       contentURI: `ipfs://${ipfsHash}`,
@@ -294,7 +308,6 @@ const CreatePostPopup = () => {
     setPostMetadataForIndexing(postForIndexing)
 
     // dispatch or broadcast
-
     try {
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
         //gasless using dispatcher
@@ -375,6 +388,7 @@ const CreatePostPopup = () => {
     const id = community._id
     const name = community.name
     const logoImageUrl = community.logoImageUrl
+    setIsLensCommunitySelected(community?.isLensCommunity || false)
     setShowCommunityOptions(false)
     setCommunityId(id)
     setShowCommunity({ name, image: logoImageUrl })
@@ -389,8 +403,38 @@ const CreatePostPopup = () => {
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
     // setting the joinedCommunitites with mostPostedCommunities from the localStorage at the top
+    const myLensCommunity = []
+    if (
+      LensCommunity &&
+      !mostPostedCommunities.some((c) => c?._id === LensCommunity?._id)
+    ) {
+      myLensCommunity.push({
+        _id: LensCommunity?._id,
+        name: formatHandle(LensCommunity?.Profile?.handle),
+        logoImageUrl: getAvatar(LensCommunity?.Profile),
+        isLensCommunity: true
+      })
+    }
+
+    console.log('myLensCommunity', myLensCommunity)
+    console.log('joinedLensCommunities', joinedLensCommunities)
     setJoinedCommunities([
       ...mostPostedCommunities,
+      ...myLensCommunity,
+      ...joinedLensCommunities
+        .map((community) => ({
+          _id: community._id,
+          name: formatHandle(community?.Profile?.handle),
+          logoImageUrl: getAvatar(community?.Profile),
+          isLensCommunity: true
+        }))
+        .filter(
+          (community) =>
+            !mostPostedCommunities.some((c) => c?._id === community?._id)
+        )
+        .filter(
+          (community) => !myLensCommunity.some((c) => c?._id === community?._id)
+        ),
       // removing the communities in the mostPostedCommunities from the joinedCommunities using communityId
       ...response.filter(
         (community) =>
@@ -541,11 +585,7 @@ const CreatePostPopup = () => {
         // file should be less than 2mb
         const fileObj = await uploadFileToFirebaseAndGetUrl(file, address)
         setFirebaseUrl(fileObj.uploadedToUrl)
-        // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
-        // setIPFSHash(ipfsHash)
         setImageUpload(false)
-        // }
-        // setImageUpload(false)
       }
     } catch (e) {
       console.log(e)
@@ -672,21 +712,6 @@ const CreatePostPopup = () => {
                 <AiOutlineDown className="w-4 h-4 mx-1" />
               </button>
             </OptionsWrapper>
-
-            {/* <button
-              onClick={() => {
-                if (!isMobile) {
-                  setShowCollectSettings(!showCollectSettings)
-                  return
-                } else {
-                  setIsDrawerOpen(true)
-                }
-              }}
-              disabled={loading}
-              className="rounded-full hover:bg-s-hover p-2 cursor-pointer"
-            >
-              <BsCollection className="w-5 h-5" />
-            </button> */}
           </div>
         </div>
 
@@ -723,41 +748,35 @@ const CreatePostPopup = () => {
                       <AiOutlineCamera className="h-8 w-8" />
                     </div>
                     <div>Add Image or Video</div>
-                    {/* <div className="text-sm">
-                      (Leave Empty for only text post)
-                    </div> */}
                   </div>
                 </label>
               )}
             </div>
-            <div
-              className="ml-6 flex gap-2 items-center"
-              // onClick={(e) => {
-              //   e.stopPropagation()
-              // }}
-            >
-              <Tooltip
-                placement="bottom"
-                enterDelay={1000}
-                leaveDelay={200}
-                title="Collect Setting"
-                arrow
-              >
-                <button
-                  onClick={() => {
-                    if (!isMobile) {
-                      setShowCollectSettings(!showCollectSettings)
-                      return
-                    } else {
-                      setIsDrawerOpen(true)
-                    }
-                  }}
-                  disabled={loading}
-                  className="rounded-full hover:bg-s-hover active:bg-s-hover p-2 cursor-pointer"
+            <div className="ml-6 flex gap-2 items-center">
+              {!isLensCommunitySelected && (
+                <Tooltip
+                  placement="bottom"
+                  enterDelay={1000}
+                  leaveDelay={200}
+                  title="Collect Setting"
+                  arrow
                 >
-                  <BsCollection className="w-5 h-5" />
-                </button>
-              </Tooltip>
+                  <button
+                    onClick={() => {
+                      if (!isMobile) {
+                        setShowCollectSettings(!showCollectSettings)
+                        return
+                      } else {
+                        setIsDrawerOpen(true)
+                      }
+                    }}
+                    disabled={loading}
+                    className="rounded-full hover:bg-s-hover active:bg-s-hover p-2 cursor-pointer"
+                  >
+                    <BsCollection className="w-5 h-5" />
+                  </button>
+                </Tooltip>
+              )}
               <Giphy setGifAttachment={setGifAttachment} />
             </div>
             <input
