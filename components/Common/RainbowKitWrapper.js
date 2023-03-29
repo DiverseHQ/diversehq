@@ -15,12 +15,13 @@ import {
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
-import { polygonMumbai } from 'wagmi/chains'
+import { polygon, polygonMumbai } from 'wagmi/chains'
+import { isMainnet } from '../../utils/config'
 
 // import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 
 const { chains, provider } = configureChains(
-  [polygonMumbai],
+  isMainnet ? [polygon] : [polygonMumbai],
   [
     // process.env.NEXT_PUBLIC_ALCHEMY_ID
     // ignore this line, it's just to make the linter happy

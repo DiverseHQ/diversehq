@@ -11,7 +11,7 @@ const OnlyAdmins = ({ children }) => {
   }
 
   return (
-    <div className="flex flex-col space-y-10 justify-center items-center w-full h-[100vh]">
+    <div className="flex flex-col space-y-10 justify-center items-center w-full h-[100vh] bg-p-bg text-p-text">
       <div>
         {' '}
         {` 
