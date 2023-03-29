@@ -34,6 +34,11 @@ const ThemeProvider = ({ children }) => {
       document.body.classList.add(theme)
       document.documentElement.setAttribute('data-theme', theme)
       setTheme(theme)
+    } else {
+      document.body.classList.add('dark')
+      document.documentElement.setAttribute('data-theme', 'dark')
+      window.localStorage.setItem('data-theme', 'dark')
+      setTheme('dark')
     }
   }, [])
   return (
