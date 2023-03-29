@@ -13,7 +13,7 @@ const Home = () => {
         title="Home / DiverseHQ"
         description="Building next Reddit, where anyone can easily grow their audience."
         openGraph={{
-          url: 'https://app.diversehq.xyz'
+          url: 'https://diversehq.xyz'
         }}
       />
       <div className="w-full flex justify-center">

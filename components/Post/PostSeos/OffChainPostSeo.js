@@ -8,7 +8,7 @@ const OffChainPostSeo = ({ post }) => {
     <NextSeo
       title={stringToLength(post?.title, 60)}
       openGraph={{
-        url: `https://app.diversehq.xyz/p/${post?._id}`,
+        url: `https://diversehq.xyz/p/${post?._id}`,
         title: stringToLength(post?.title, 60),
         images: post?.postImageUrl
           ? [

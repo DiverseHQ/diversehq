@@ -60,7 +60,7 @@ const search = () => {
         title="DiverseHQ / Search"
         description="Search and connect with communities that reflect your interests and values on DiverseHQ!"
         openGraph={{
-          url: 'https://app.diversehq.xyz/search'
+          url: 'https://diversehq.xyz/search'
         }}
       />
       {isMobile && (

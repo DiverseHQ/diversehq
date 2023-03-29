@@ -14,7 +14,7 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
         handle: '@useDiverseHQ'
       }}
       openGraph={{
-        url: `https://app.diversehq.xyz/p/${post?.id}`,
+        url: `https://diversehq.xyz/p/${post?.id}`,
         title: `${stringToLength(post?.metadata?.content, 40)} \n | ${
           post?.stats?.totalAmountOfCollects
         } Collects | ${post?.stats?.totalUpvotes} Upvotes | \n by ${

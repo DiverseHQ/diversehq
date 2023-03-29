@@ -10,7 +10,7 @@ const CommunityPageSeo = ({ community }) => {
       openGraph={{
         title: community?.name,
         description: community?.description,
-        url: `https://app.diversehq.xyz/c/${community?.name}`,
+        url: `https://diversehq.xyz/c/${community?.name}`,
         images: [
           {
             url: community?.logoImageUrl.replace(

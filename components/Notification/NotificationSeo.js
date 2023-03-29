@@ -10,7 +10,7 @@ const NotificationSeo = () => {
         title: 'Notifications',
         description:
           'Stay up-to-date with the latest updates and notifications!',
-        url: 'https://app.diversehq.xyz/notifications'
+        url: 'https://diversehq.xyz/notifications'
       }}
     />
   )

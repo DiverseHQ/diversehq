@@ -9,7 +9,7 @@ const ExploreTopCommunitiesSeo = () => {
       openGraph={{
         title: 'Explore / DiverseHQ',
         description: 'Discover the top communities on DiverseHQ.',
-        url: 'https://app.diversehq.xyz/explore/top'
+        url: 'https://diversehq.xyz/explore/top'
       }}
     />
   )

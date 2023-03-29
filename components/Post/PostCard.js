@@ -613,7 +613,7 @@ const PostCard = ({ _post, setPosts }) => {
             )}
             <span onClick={(e) => e.stopPropagation()}>
               <PostShareButton
-                url={`https://app.diversehq.xyz/p/${post?._id}`}
+                url={`https://diversehq.xyz/p/${post?._id}`}
                 text={post?.title}
               />
             </span>

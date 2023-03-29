@@ -100,12 +100,12 @@ function MyApp({ Component, pageProps, isMobileView }) {
       </Script>
       <script
         defer
-        data-domain="app.diversehq.xyz,lensverse.web"
+        data-domain="diversehq.xyz,lensverse.web"
         src="https://plausible.io/js/script.js"
       ></script>
       <Script
         defer
-        data-domain="app.diversehq.xyz,lensverse.web"
+        data-domain="diversehq.xyz,lensverse.web"
         src="https://plausible.io/js/script.js"
       ></Script>
       <DefaultSeo
@@ -113,7 +113,7 @@ function MyApp({ Component, pageProps, isMobileView }) {
         openGraph={{
           type: 'website',
           locale: 'en_IE',
-          url: 'https://app.diversehq.xyz',
+          url: 'https://diversehq.xyz',
           siteName: 'DiverseHQ'
         }}
         twitter={{

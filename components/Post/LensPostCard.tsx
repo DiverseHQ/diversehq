@@ -876,7 +876,7 @@ const LensPostCard = ({ post }: Props) => {
                 {!isMobile && (
                   <span onClick={(e) => e.stopPropagation()}>
                     <PostShareButton
-                      url={`https://app.diversehq.xyz/p/${postInfo?.id}`}
+                      url={`https://diversehq.xyz/p/${postInfo?.id}`}
                       text={postInfo?.metadata?.name}
                     />
                   </span>

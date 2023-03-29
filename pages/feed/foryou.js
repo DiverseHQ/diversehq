@@ -17,7 +17,7 @@ const foryou = () => {
         title="For Your Feed / DiverseHQ"
         description="Lens Feed from diverse communities on DiverseHQ."
         openGraph={{
-          url: 'https://app.diversehq.xyz/feed/lens'
+          url: 'https://diversehq.xyz/feed/lens'
         }}
       />
       <div className="w-full flex justify-center">

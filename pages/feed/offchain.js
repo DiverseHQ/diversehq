@@ -13,7 +13,7 @@ const newPage = () => {
         title="OffChain Feed / DiverseHQ"
         description="Stay up to date with the freshest perspectives and stories from diverse communities on DiverseHQ."
         openGraph={{
-          url: 'https://app.diversehq.xyz/feed/new'
+          url: 'https://diversehq.xyz/feed/new'
         }}
       />
       <div className="w-full flex justify-center">
