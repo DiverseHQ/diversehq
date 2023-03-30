@@ -9,6 +9,7 @@ import Markup from '../../Lexical/Markup'
 import MessageButton from '../../Messages/MessageButton'
 import formatHandle from '../../User/lib/formatHandle'
 import getAvatar from '../../User/lib/getAvatar'
+import getCoverBanner from '../../User/lib/getCoverBanner'
 import getIPFSLink from '../../User/lib/getIPFSLink'
 import ProfileLinksRow from '../../User/ProfileLinksRow'
 import useLensFollowButton from '../../User/useLensFollowButton'
@@ -52,10 +53,6 @@ const LensPageProfileCard = ({
     },
     isLensCommunity ? 'join' : 'follow'
   )
-  let _profileBanner =
-    profile?.coverPicture?.__typename === 'NftImage'
-      ? getIPFSLink(profile?.coverPicture?.uri)
-      : getIPFSLink(profile?.coverPicture?.original?.url)
   return (
     <div
       className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3 cursor-pointer"
@@ -69,7 +66,7 @@ const LensPageProfileCard = ({
     >
       <span onClick={(e) => e.stopPropagation()}>
         <ImageWithFullScreenZoom
-          src={_profileBanner || '/gradient.jpg'}
+          src={getCoverBanner(profile)}
           className="h-[80px] rounded-t-[15px] w-full object-cover"
         />
       </span>
