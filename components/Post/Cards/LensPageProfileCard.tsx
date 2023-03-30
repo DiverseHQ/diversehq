@@ -10,7 +10,6 @@ import MessageButton from '../../Messages/MessageButton'
 import formatHandle from '../../User/lib/formatHandle'
 import getAvatar from '../../User/lib/getAvatar'
 import getCoverBanner from '../../User/lib/getCoverBanner'
-import getIPFSLink from '../../User/lib/getIPFSLink'
 import ProfileLinksRow from '../../User/ProfileLinksRow'
 import useLensFollowButton from '../../User/useLensFollowButton'
 

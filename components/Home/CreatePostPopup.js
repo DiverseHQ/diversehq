@@ -9,7 +9,7 @@ import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
 import { BsCollection } from 'react-icons/bs'
 import {
   deleteFirebaseStorageFile,
-  uploadFileToFirebaseAndGetUrl,
+  // uploadFileToFirebaseAndGetUrl,
   uploadFileToIpfsInfuraAndGetPath,
   uploadToIpfsInfuraAndGetPath
   // uploadFileToIpfs
@@ -51,7 +51,7 @@ const CreatePostPopup = () => {
   const [file, setFile] = useState(null)
   const [content, setContent] = useState('')
   const [communityId, setCommunityId] = useState(null)
-  const { user, address, joinedLensCommunities, LensCommunity } = useProfile()
+  const { user, joinedLensCommunities, LensCommunity } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [loadingJoinedCommunities, setLoadingJoinedCommunities] =
