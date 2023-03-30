@@ -137,7 +137,7 @@ export const WalletProvider = ({ children }) => {
 
         console.log('profiles', profiles)
 
-        profiles.items.forEach((profile, index) => {
+        profiles.items.forEach((profile) => {
           if (profile.isFollowedByMe) {
             const corrospondingCommunity = allLensCommunities.find(
               (c) => c.handle === profile.handle
