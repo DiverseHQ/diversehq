@@ -41,7 +41,7 @@ const LensAllTopPublicationsColumn = () => {
         cursor: exploreQueryRequestParams.cursor,
         publicationTypes: [PublicationTypes.Post],
         limit: LENS_POST_LIMIT,
-        sortCriteria: PublicationSortCriteria.TopCollected,
+        sortCriteria: PublicationSortCriteria.TopMirrored,
         noRandomize: true,
         timestamp: timestamp,
         sources: ['diversehq']

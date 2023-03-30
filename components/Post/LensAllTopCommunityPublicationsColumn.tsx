@@ -42,7 +42,7 @@ const LensAllTopCommunityPublicationsColumn = ({ communityInfo }: Props) => {
         cursor: queryParams.cursor,
         publicationTypes: [PublicationTypes.Post],
         limit: LENS_POST_LIMIT,
-        sortCriteria: PublicationSortCriteria.TopCollected,
+        sortCriteria: PublicationSortCriteria.TopMirrored,
         timestamp: timestamp,
         noRandomize: true,
         excludeProfileIds: communityInfo?.bannedUsers.map(

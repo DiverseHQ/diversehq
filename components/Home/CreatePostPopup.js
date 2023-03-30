@@ -10,6 +10,7 @@ import { BsCollection } from 'react-icons/bs'
 import {
   deleteFirebaseStorageFile,
   uploadFileToFirebaseAndGetUrl,
+  uploadFileToIpfsInfuraAndGetPath,
   uploadToIpfsInfuraAndGetPath
   // uploadFileToIpfs
 } from '../../utils/utils'
@@ -583,8 +584,11 @@ const CreatePostPopup = () => {
 
         // if (isLensPost) {
         // file should be less than 2mb
-        const fileObj = await uploadFileToFirebaseAndGetUrl(file, address)
-        setFirebaseUrl(fileObj.uploadedToUrl)
+        // const fileObj = await uploadFileToFirebaseAndGetUrl(file, address)
+        const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
+        const ipfsPath = `ipfs://${ipfsHash}`
+        // setFirebaseUrl(fileObj.uploadedToUrl)
+        setFirebaseUrl(ipfsPath)
         setImageUpload(false)
       }
     } catch (e) {
@@ -595,14 +599,19 @@ const CreatePostPopup = () => {
 
   const closePopUp = async () => {
     if (loading) return
-    if (firebaseUrl && !imageUpload && !result) {
-      await deleteFirebaseStorageFile(firebaseUrl)
-      console.log('File Deleted and the Popup has been closed')
-      hideModal()
-      return
-    } else if (!loading && !imageUpload && !result) {
-      console.log('Popup has been closed, No files detected')
-      hideModal()
+    try {
+      if (firebaseUrl && !imageUpload && !result) {
+        // todo delete the file from ipfs infura
+        // await deleteFirebaseStorageFile(firebaseUrl)
+        // console.log('File Deleted and the Popup has been closed')
+        hideModal()
+        return
+      } else if (!loading && !imageUpload && !result) {
+        console.log('Popup has been closed, No files detected')
+        hideModal()
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
 

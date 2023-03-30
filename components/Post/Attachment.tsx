@@ -6,6 +6,7 @@ import { SUPPORTED_VIDEO_TYPE } from '../../utils/config'
 import { getURLsFromText } from '../../utils/utils'
 import useDevice from '../Common/useDevice'
 import getIPFSLink from '../User/lib/getIPFSLink'
+import imageProxy from '../User/lib/imageProxy'
 import AttachmentCarousel from './AttachmentCarousel'
 import AttachmentMedia from './AttachmentMedia'
 import ReactEmbedo from './embed/ReactEmbedo'
@@ -97,7 +98,7 @@ const Attachment: FC<Props> = ({ publication, className }) => {
                 medias[currentMedia].original.mimeType
               )
                 ? medias[currentMedia].original.url
-                : getIPFSLink(medias[currentMedia].original.url)
+                : imageProxy(getIPFSLink(medias[currentMedia].original.url))
             }
             publication={publication}
             className={`${medias.length > 1 ? 'h-[450px]' : className}`}

@@ -25,7 +25,7 @@ const UserManagementSection = ({ community }: { community: LensCommunity }) => {
   const [searchTerm, setSearchTerm] = React.useState<string>('')
   const [selectedProfile, setSelectedProfile] = React.useState<Profile>(null)
   const [ruleViolated, setRuleViolated] = React.useState<string>(
-    community?.rules?.[0].title ?? null
+    community?.rules?.[0]?.title ?? null
   )
   const [extraReason, setExtraReason] = React.useState<string>('')
   const { notifyInfo, notifyError } = useNotify()
