@@ -9,7 +9,12 @@ import {
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
-import { appId, appLink, MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
+import {
+  appId,
+  appLink,
+  MAX_CONTENT_LINES_FOR_POST,
+  showNameForThisAppIds
+} from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
 import useDevice from '../Common/useDevice'
@@ -720,7 +725,7 @@ const LensPostCard = ({ post }: Props) => {
                     <>
                       <div className="flex flex-row">
                         {postInfo?.metadata?.name &&
-                          (postInfo?.appId === appId ||
+                          (showNameForThisAppIds.includes(postInfo?.appId) ||
                             (postInfo?.metadata?.name.length > 0 &&
                               content.trim().length === 0)) && (
                             <Markup

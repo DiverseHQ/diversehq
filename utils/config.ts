@@ -109,7 +109,8 @@ export const SUPPORTED_VIDEO_TYPE: string[] = [
   'video/mp4',
   'video/x-m4v',
   'video/ogv',
-  'video/ogg'
+  'video/ogg',
+  'video/quicktime'
 ]
 
 export const SUPPORTED_AUDIO_TYPE: string[] = [
@@ -155,6 +156,14 @@ export const infoFromLensAppId = {
       'Decentralized, open-source video-sharing social media platform, built on Lens Protocol.',
     link: 'https://lenstube.xyz'
   },
+  'lenstube-bytes': {
+    appId: 'lenstube',
+    logoLink: 'https://static.lenstube.xyz/images/brand/lenstube.svg',
+    name: 'Lenstube',
+    description:
+      'Decentralized, open-source video-sharing social media platform, built on Lens Protocol.',
+    link: 'https://lenstube.xyz'
+  },
   phaver: {
     appId: 'phaver',
     logoLink:
@@ -181,4 +190,5 @@ export const infoFromLensAppId = {
 }
 
 export const appId = 'diversehq'
+export const showNameForThisAppIds = ['diversehq', 'lenstube', 'lenstube-bytes']
 export const appLink = 'https://diversehq.xyz'
