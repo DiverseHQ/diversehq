@@ -53,7 +53,8 @@ export const sortTypes = {
   LATEST: 'Latest',
   TOP_TODAY: 'Top Today',
   TOP_WEEK: 'Top Week',
-  TOP_MONTH: 'Top Month'
+  TOP_MONTH: 'Top Month',
+  TOP_YEAR: 'Top Year'
 }
 
 export const recommendedCommunitiesIds = [

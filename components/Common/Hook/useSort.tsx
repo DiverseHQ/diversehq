@@ -25,6 +25,9 @@ function getTopSortAndTimestamp(sortType: string | string[]) {
       } else if (sortType === sortTypes.TOP_MONTH) {
         // set newTimestamp to 30 days ago
         newTimestamp = Date.now() - 2592000000
+      } else if (sortType === sortTypes.TOP_YEAR) {
+        // set newTimestamp to 365 days ago
+        newTimestamp = Date.now() - 31536000000
       }
       if (Math.abs(newTimestamp - timestamp) > 1000) {
         timestamp = newTimestamp

@@ -42,6 +42,9 @@ export const useSortStore = create<SortState>((set) => ({
         } else if (sortType === sortTypes.TOP_MONTH) {
           // set timestamp to 30 days ago
           timestamp = Date.now() - 2592000000
+        } else if (sortType === sortTypes.TOP_YEAR) {
+          // set timestamp to 365 days ago
+          timestamp = Date.now() - 31536000000
         }
         if (
           state.sortObject.timestamp &&

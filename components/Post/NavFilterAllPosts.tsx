@@ -76,6 +76,14 @@ const NavFilterAllPosts = () => {
                     setIsDrawerOpen(false)
                     setShowOptionsModal(false)
                   }
+                },
+                {
+                  label: sortTypes.TOP_YEAR,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.TOP_YEAR)
+                    setIsDrawerOpen(false)
+                    setShowOptionsModal(false)
+                  }
                 }
               ]}
             />

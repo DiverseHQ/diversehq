@@ -72,6 +72,12 @@ const NavFilterCommunity = () => {
                   onClick: () => {
                     addQueryParam('sort', sortTypes.TOP_MONTH)
                   }
+                },
+                {
+                  label: sortTypes.TOP_YEAR,
+                  onClick: () => {
+                    addQueryParam('sort', sortTypes.TOP_YEAR)
+                  }
                 }
               ]}
             />
