@@ -32,7 +32,7 @@ const foryou = () => {
                 LensCommunity?._id,
                 // eslint-disable-next-line
                 ...joinedLensCommunities?.map((c) => c._id)
-              ]}
+              ].filter((c) => c)}
             />
           )}
           {(!user || !isSignedIn || !hasProfile) && (

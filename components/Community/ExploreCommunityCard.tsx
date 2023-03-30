@@ -13,6 +13,8 @@ import { Tooltip } from '@mui/material'
 import JoinCommunityButton from './JoinCommunityButton'
 import { CommunityWithCreatorProfile } from '../../types/community'
 import { FiSettings } from 'react-icons/fi'
+import { BsPeopleFill } from 'react-icons/bs'
+import { stringToLength } from '../../utils/utils'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -70,7 +72,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
 
   return (
     <div
-      className={`relative shadow-lg z-0 bg-s-bg mb-6 text-[#FFF] dark:text-p-text cursor-pointer h-60 sm:min-h-72 sm:h-72 rounded-[15px] ${
+      className={`relative overflow-hidden shadow-lg z-0 bg-s-bg mb-6 text-[#FFF] dark:text-p-text cursor-pointer h-60 sm:min-h-72 sm:h-72 rounded-[15px] ${
         !isMobile ? '' : 'mx-2'
       }`}
       onClick={() => {
@@ -81,7 +83,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
         className={`h-full w-full object-cover rounded-[15px]`}
         src={community.bannerImageUrl}
       />
-      <div className="absolute bg-[#ccc] bottom-0 w-full rounded-b-[15px] bg-black/70 backdrop-blur-md py-4 px-2 md:px-4">
+      <div className="absolute bg-[#ccc] bottom-0 w-full bg-black/70 backdrop-blur-md py-4 px-2 md:px-4">
         <div className="relative flex flex-row items-start justify-between">
           <div className="flex flex-row gap-4">
             <div className="shrink-0 rounded-[10px]">
@@ -98,17 +100,15 @@ const ExploreCommunityCard = ({ _community }: Props) => {
                 >
                   {community.name}
                 </p>
-                <div className="text-[16px] mb-6 w-full">
-                  {community.description.length > 130
-                    ? community.description.slice(0, 130) + '...'
-                    : community.description}
+                <div className=" mb-1 w-full">
+                  {stringToLength(community.description, 130)}
                 </div>
                 <div className="flex flex-row flex-wrap gap-8">
-                  <div className="flex flex-col">
+                  <div className="flex flex-row items-center space-x-2">
+                    <BsPeopleFill />
                     <span className="font-semibold">
                       {community.members?.length}
                     </span>
-                    <span className="text-[14px]">members</span>
                   </div>
                 </div>
               </div>

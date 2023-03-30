@@ -5,6 +5,8 @@ import useSort from '../Common/Hook/useSort'
 const LensPostJoinedCommunitiesPublications = ({ communityIds }) => {
   const { isTop } = useSort()
 
+  console.log('communityIds', communityIds)
+
   if (isTop) {
     return <LensJoinedTopPublicationsColumn communityIds={communityIds} />
   }

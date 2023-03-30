@@ -48,7 +48,7 @@ const LensPostPageCommunityCard = ({
                   ? communityInfo?.logoImageUrl
                   : '/gradient.jpg'
               }
-              className="rounded-2xl w-[70px] h-[70px] object-cover border-s-bg border-4"
+              className="rounded-2xl w-[70px] h-[70px] object-cover border-s-bg border-4 bg-s-bg"
             />
           </div>
           <div
