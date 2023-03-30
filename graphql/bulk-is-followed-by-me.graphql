@@ -2,6 +2,7 @@ query bulkIsFollowedByMe($request: ProfileQueryRequest!) {
   profiles(request: $request) {
     items {
       isFollowedByMe
+      handle
     }
     pageInfo {
       ...CommonPaginatedResultInfoFields

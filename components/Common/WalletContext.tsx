@@ -123,6 +123,8 @@ export const WalletProvider = ({ children }) => {
       // todo optimize this, currently fetching all communities and then filtering
       const allLensCommunities = await getAllLensCommunitiesHandle()
 
+      console.log('allLensCommunities', allLensCommunities)
+
       // loop through all communities in group of 50 and check if lens user follows them
       const _joinedLensCommunities = []
       let cursor = null
@@ -133,9 +135,14 @@ export const WalletProvider = ({ children }) => {
           limit: 50
         })
 
+        console.log('profiles', profiles)
+
         profiles.items.forEach((profile, index) => {
           if (profile.isFollowedByMe) {
-            _joinedLensCommunities.push(allLensCommunities[i + index])
+            const corrospondingCommunity = allLensCommunities.find(
+              (c) => c.handle === profile.handle
+            )
+            _joinedLensCommunities.push(corrospondingCommunity)
           }
         })
         cursor = profiles.pageInfo.next

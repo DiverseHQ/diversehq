@@ -4338,7 +4338,7 @@ export type BulkIsFollowedByMeQueryVariables = Exact<{
 }>;
 
 
-export type BulkIsFollowedByMeQuery = { __typename?: 'Query', profiles: { __typename?: 'PaginatedProfileResult', items: Array<{ __typename?: 'Profile', isFollowedByMe: boolean }>, pageInfo: { __typename?: 'PaginatedResultInfo', prev?: any | null, next?: any | null, totalCount?: number | null } } };
+export type BulkIsFollowedByMeQuery = { __typename?: 'Query', profiles: { __typename?: 'PaginatedProfileResult', items: Array<{ __typename?: 'Profile', isFollowedByMe: boolean, handle: any }>, pageInfo: { __typename?: 'PaginatedResultInfo', prev?: any | null, next?: any | null, totalCount?: number | null } } };
 
 export type ChallengeQueryVariables = Exact<{
   request: ChallengeRequest;
@@ -5733,6 +5733,7 @@ export const BulkIsFollowedByMeDocument = `
   profiles(request: $request) {
     items {
       isFollowedByMe
+      handle
     }
     pageInfo {
       ...CommonPaginatedResultInfoFields
