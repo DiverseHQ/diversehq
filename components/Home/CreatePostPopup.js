@@ -221,7 +221,8 @@ const CreatePostPopup = () => {
       locale: 'en-US',
       content:
         `${
-          isLensCommunitySelected && selectedCommunity._id !== LensCommunity._id
+          isLensCommunitySelected &&
+          selectedCommunity._id !== LensCommunity?._id
             ? `Post by @${lensProfile.defaultProfile.handle} \n`
             : ''
         }` +
