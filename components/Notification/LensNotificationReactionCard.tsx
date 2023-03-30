@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Markup from '../Lexical/Markup'
-import { countLinesFromMarkdown } from '../../utils/utils'
+import { countLinesFromMarkdown, stringToLength } from '../../utils/utils'
 import { MAX_CONTENT_LINES } from '../../utils/config'
 import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
@@ -14,22 +14,6 @@ type Props = {
 }
 
 const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
-  const router = useRouter()
-  const [showMore, setShowMore] = useState(
-    (countLinesFromMarkdown(notification?.publication?.metadata?.content) >
-      MAX_CONTENT_LINES ||
-      notification?.publication?.metadata?.content.length > 400) &&
-      router.pathname !== '/p/[id]'
-  )
-
-  useEffect(() => {
-    setShowMore(
-      (countLinesFromMarkdown(notification?.publication?.metadata?.content) >
-        MAX_CONTENT_LINES ||
-        notification?.publication?.metadata?.content.length > 400) &&
-        router.pathname !== '/p/[id]'
-    )
-  }, [notification?.publication])
   return (
     <CommonNotificationCardLayoutUI
       MainRow={() => (
@@ -64,42 +48,12 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
       )}
       createdAt={notification?.createdAt}
       Body={() => (
-        <div>
-          {notification?.publication?.metadata?.name !==
-            'Created with DiverseHQ' && (
-            <div className="font-medium text-base sm:text-lg w-full">
-              {notification?.publication?.metadata?.name}
-            </div>
-          )}
-          {notification?.publication?.metadata?.name !==
-            notification?.publication?.metadata?.content && (
-            <div
-              className={`${
-                showMore ? 'h-[100px]' : ''
-              } overflow-hidden break-words`}
-            >
-              <Markup
-                className={`${
-                  showMore ? 'line-clamp-5' : ''
-                } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
-              >
-                {notification?.publication?.metadata?.content?.startsWith(
-                  notification?.publication?.metadata?.name
-                )
-                  ? notification?.publication?.metadata?.content?.slice(
-                      notification?.publication?.metadata?.name?.length
-                    )
-                  : notification?.publication?.metadata?.content}
-              </Markup>
-            </div>
-          )}
-          {showMore && (
-            <Link href={`/p/${notification?.publication?.id}`}>
-              <div className="text-blue-400 text-sm sm:text-base">
-                Show more
-              </div>
-            </Link>
-          )}
+        <div className={`overflow-hidden break-words`}>
+          <Markup
+            className={`linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+          >
+            {stringToLength(notification?.publication?.metadata?.content, 70)}
+          </Markup>
         </div>
       )}
       Icon={() =>

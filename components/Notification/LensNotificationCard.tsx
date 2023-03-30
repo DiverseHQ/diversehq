@@ -5,6 +5,7 @@ import LensNotificationMentionCard from './LensNotificationMentionCard'
 import { Notification } from '../../graphql/generated'
 import LensNotificationCollectCard from './LensNotificationCollectCard'
 import LensNotificationReactionCard from './LensNotificationReactionCard'
+import NotificationMirroredCard from './NotificationMirroredCard'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 
 const LensNotificationCard = ({
@@ -46,6 +47,9 @@ const LensNotificationCard = ({
           notification={notification}
           isRead={isRead}
         />
+      )}
+      {notification?.__typename === 'NewMirrorNotification' && (
+        <NotificationMirroredCard notification={notification} isRead={isRead} />
       )}
     </div>
   )

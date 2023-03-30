@@ -45,7 +45,8 @@ const LensNotificationColumn = () => {
           NotificationTypes.MentionPost,
           NotificationTypes.MentionComment,
           NotificationTypes.CollectedComment,
-          NotificationTypes.CollectedPost
+          NotificationTypes.CollectedPost,
+          NotificationTypes.MirroredPost
         ]
       },
       reactionRequest: {
@@ -108,8 +109,6 @@ const LensNotificationColumn = () => {
       } catch (error) {
         console.log(error)
       }
-
-      console.log('newNotifications', newNotifications)
 
       // @ts-ignore
       setNotifications([...notifications, ...newNotifications])

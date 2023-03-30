@@ -2,6 +2,8 @@ import Link from 'next/link'
 import React from 'react'
 import { BiCommentAdd } from 'react-icons/bi'
 import { NewCommentNotification } from '../../graphql/generated'
+import { stringToLength } from '../../utils/utils'
+import Markup from '../Lexical/Markup'
 import formatHandle from '../User/lib/formatHandle'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 
@@ -39,8 +41,12 @@ const LensNotificationCommentedPostCard = ({ notification, isRead }: Props) => {
       )}
       createdAt={notification?.createdAt}
       Body={() => (
-        <div className="text-sm sm:text-base">
-          {notification?.comment?.metadata?.content}
+        <div className={`overflow-hidden break-words`}>
+          <Markup
+            className={`linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+          >
+            {stringToLength(notification?.comment?.metadata?.content, 70)}
+          </Markup>
         </div>
       )}
       Icon={() => <BiCommentAdd />}
