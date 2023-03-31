@@ -43,7 +43,7 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
   return (
     <>
       <div className="w-full flex justify-center">
-        <div className="w-full md:w-[850px]">
+        <div className="w-full md:w-[800px]">
           <ExploreFeedNav
             showUnjoined={showUnjoined}
             setShowUnjoined={setShowUnjoined}

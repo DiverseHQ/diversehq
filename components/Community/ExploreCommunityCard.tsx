@@ -72,7 +72,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
 
   return (
     <div
-      className={`relative overflow-hidden shadow-lg z-0 bg-s-bg mb-6 text-[#FFF] dark:text-p-text cursor-pointer h-60 sm:min-h-72 sm:h-72 rounded-[15px] ${
+      className={`relative overflow-hidden shadow-lg z-0 bg-s-bg mb-6 text-[#FFF] dark:text-p-text cursor-pointer h-60 sm:min-h-72 sm:h-72 rounded-2xl ${
         !isMobile ? '' : 'mx-2'
       }`}
       onClick={() => {
