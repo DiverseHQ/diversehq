@@ -4,10 +4,11 @@ import LensLoginButton from '../../components/Common/LensLoginButton'
 import { useProfile } from '../../components/Common/WalletContext'
 import CreatePostBar from '../../components/Home/CreatePostBar'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
-import LensPostJoinedCommunitiesPublications from '../../components/Post/LensPostJoinedCommunitiesPublications'
+// import LensPostJoinedCommunitiesPublications from '../../components/Post/LensPostJoinedCommunitiesPublications'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useDevice from '../../components/Common/useDevice'
 import { appLink } from '../../utils/config'
+import LensPostJoinedCommunitiesPublicationsNew from '../../components/Post/LensPostJoinedCommunitiesPublicationsNew'
 const foryou = () => {
   const { isSignedIn, hasProfile } = useLensUserContext()
   const { user, LensCommunity, joinedLensCommunities } = useProfile()
@@ -26,7 +27,7 @@ const foryou = () => {
           {isDesktop && <CreatePostBar />}
           <NavFilterAllPosts />
           {user && isSignedIn && hasProfile && (
-            <LensPostJoinedCommunitiesPublications
+            <LensPostJoinedCommunitiesPublicationsNew
               communityIds={[
                 ...user.communities,
                 LensCommunity?._id,
