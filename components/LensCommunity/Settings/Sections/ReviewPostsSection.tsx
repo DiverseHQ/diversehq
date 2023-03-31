@@ -23,10 +23,8 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
       const res = await getAllUnResolvedLensCommunityPostsForReview(
         community._id
       )
-      console.log('res', res)
       if (res.status === 200) {
         const resData: ReviewPostType[] = await res.json()
-        console.log('resData', resData)
 
         if (!resData.length) {
           setRawReviewPosts([])
@@ -59,7 +57,6 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
           )
         })
 
-        console.log('_rawPosts', _rawPosts)
         setRawReviewPosts(_rawPosts)
       } else {
         const resData = await res.json()
@@ -77,10 +74,6 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
     if (!community?._id) return
     fetchAndSetUnResolvedReviewPosts()
   }, [community?._id])
-
-  useEffect(() => {
-    console.log('rawReviewPosts', rawReviewPosts)
-  }, [rawReviewPosts])
 
   return (
     <div className="p-2 w-full sm:p-3 space-y-2 min-h-[500px]">

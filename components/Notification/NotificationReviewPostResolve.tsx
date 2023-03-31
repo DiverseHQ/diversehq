@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, { useEffect, memo } from 'react'
 import { MdOutlineCelebration } from 'react-icons/md'
 import { NotificationSchema } from '../../types/notification'
 import { useProfile } from '../Common/WalletContext'
@@ -30,8 +30,9 @@ const NotificationReviewPostResolve = ({
   }
 
   useEffect(() => {
-    if (notification?.reviewLensCommunityPost?.resolveAction === 'ALLOW') return
-    fetchContentFromContentUriAndSetTitle()
+    if (notification?.reviewLensCommunityPost?.resolveAction === 'IGNORE') {
+      fetchContentFromContentUriAndSetTitle()
+    }
   }, [notification?._id])
 
   if (notification?.reviewLensCommunityPost?.resolveAction === 'ALLOW') {
@@ -117,4 +118,4 @@ const NotificationReviewPostResolve = ({
   )
 }
 
-export default NotificationReviewPostResolve
+export default memo(NotificationReviewPostResolve)

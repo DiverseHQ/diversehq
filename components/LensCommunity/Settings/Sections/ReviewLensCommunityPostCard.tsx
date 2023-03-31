@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
+import ReactTimeAgo from 'react-time-ago'
 import { putResolveLensCommunityPost } from '../../../../api/reviewLensCommunityPost'
 import {
   useCreatePostTypedDataMutation,
@@ -61,10 +62,7 @@ const ReviewLensCommunityPostCard = ({
         post._id,
         lensCommunityPostsResolveActions.IGNORE
       )
-
-      console.log('res on OnRejectCLick', res)
       if (res.status === 200) {
-        console.log('calling fetchAndSetUnResolvedReviewPosts')
         await fetchAndSetUnResolvedReviewPosts()
       } else {
         const { msg } = await res.json()
@@ -78,7 +76,6 @@ const ReviewLensCommunityPostCard = ({
 
   const acceptedPost = async (publicationId: string) => {
     try {
-      setLoadingStatus('confirming...')
       const res = await putResolveLensCommunityPost(
         post._id,
         lensCommunityPostsResolveActions.ALLOW,
@@ -98,8 +95,6 @@ const ReviewLensCommunityPostCard = ({
       setLoadingStatus(null)
     }
   }
-
-  console.log('post.contendData', post?.contentData)
 
   const onAcceptClick = async () => {
     try {
@@ -172,7 +167,6 @@ const ReviewLensCommunityPostCard = ({
         lensProfile?.defaultProfile?.id,
         result
       )
-      console.log('publicationId', publicationId)
       acceptedPost(publicationId)
     }
   }, [result, signType])
@@ -206,22 +200,31 @@ const ReviewLensCommunityPostCard = ({
   const coverUrl = imageProxy(post?.contentData?.image)
 
   return (
-    <div className="p-2 sm:p-4">
+    <div className="p-2 sm:p-4 border-b border-s-border">
       {/* author profile and name row */}
-      <div className="flex flex-row items-center space-x-2">
-        <ImageWithPulsingLoader
-          src={getAvatar(post?.authorProfile)}
-          className="w-10 h-10 rounded-full"
-        />
-        <div className="flex flex-col">
-          <div className="text-p-text font-medium">
-            {post?.authorProfile?.name}
-          </div>
-          <Link href={`/u/${formatHandle(post?.authorProfile?.handle)}`}>
-            <div className="text-xs text-s-text hover:underline cursor-pointer">
-              u/{formatHandle(post?.authorProfile?.handle)}
+      <div className="flex flex-row justify-between items-center w-full">
+        <div className="flex flex-row items-center space-x-2">
+          <ImageWithPulsingLoader
+            src={getAvatar(post?.authorProfile)}
+            className="w-10 h-10 rounded-full"
+          />
+          <div className="flex flex-col">
+            <div className="text-p-text font-medium">
+              {post?.authorProfile?.name}
             </div>
-          </Link>
+            <Link href={`/u/${formatHandle(post?.authorProfile?.handle)}`}>
+              <div className="text-xs text-s-text hover:underline cursor-pointer">
+                u/{formatHandle(post?.authorProfile?.handle)}
+              </div>
+            </Link>
+          </div>
+        </div>
+        <div className="text-s-text text-sm">
+          <ReactTimeAgo
+            timeStyle="twitter"
+            date={new Date(post?.createdAt)}
+            locale="en-US"
+          />
         </div>
       </div>
 
