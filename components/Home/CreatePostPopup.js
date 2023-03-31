@@ -321,7 +321,7 @@ const CreatePostPopup = () => {
 
         setLoading(false)
         hideModal()
-        addPost({ txId: dispatcherResult.txId }, postForIndexing)
+        addPost({ txHash: dispatcherResult.txHash }, postForIndexing)
       } else {
         //gasless using signed broadcast
         const postTypedResult = (

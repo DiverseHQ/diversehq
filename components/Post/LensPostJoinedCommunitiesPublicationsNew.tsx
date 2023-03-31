@@ -44,7 +44,7 @@ const LensPostJoinedCommunitiesPublicationsNew = ({
     // make list of list of community ids of lenght 4
     const grounpOfBunchOfCommunityIds = []
     let bunchOfCommunityIds = []
-    for (const communityId of communityIds.slice(0, 20)) {
+    for (const communityId of communityIds.slice(0, 15)) {
       bunchOfCommunityIds.push(communityId)
       if (bunchOfCommunityIds.length === 3) {
         grounpOfBunchOfCommunityIds.push(bunchOfCommunityIds)
