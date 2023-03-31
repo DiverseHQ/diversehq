@@ -380,12 +380,12 @@ const ProfileCard = ({
                       </Link>
                     )}
                   <div
-                    className="flex items-center border border-p-border cursor-pointer text-p-btn-text rounded-full px-8 py-2 text-sm font-semibold"
+                    className="flex items-center border-2 border-p-border cursor-pointer text-p-text rounded-full px-5 py-2 text-sm font-semibold"
                     onClick={() => setIsDrawerOpen(true)}
                   >
-                    <span className="font-light">More</span>
+                    <span className="font-light text-[#898a8d]">More</span>
                     <span className="font-semibold">
-                      <BiChevronDown className="text-[18px]" />
+                      <BiChevronDown className="text-[18px] text-[#898a8d]" />
                     </span>
                   </div>
                 </div>

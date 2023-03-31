@@ -264,7 +264,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
         </>
       ) : (
         <>
-          <div className="px-2 sm:px-5 w-full bg-s-bg pt-2 pb-1.5 fixed z-30 border-t border-s-border  bottom-0 left-0 right-0 flex flex-col items-center">
+          <div className="w-full bg-s-bg fixed z-30 border-t pt-2 border-s-border bottom-0 left-0 right-0 flex flex-col items-center">
             {!postInfo && currentReplyComment && focused && (
               <ReplyMobileInfo
                 fromAvatarUrl={getAvatar(lensProfile?.defaultProfile)}
@@ -298,7 +298,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                 </div>
               </div>
             )}
-            <div className="flex flex-row items-center w-full rounded-xl border-2 border-p-border">
+            <div className="flex flex-row items-center w-full rounded-xl">
               <div className="flex-1  relative mr-2">
                 <textarea
                   type="text"
@@ -321,7 +321,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                   onBlur={() => setFocused(false)}
                 />
               </div>
-              <div className="self-end p-2 flex flex-row space-x-1">
+              <div className="self-end p-2 flex flex-row items-center space-x-1">
                 <Giphy setGifAttachment={setGifAttachment} />
                 {!loading && (
                   <FiSend

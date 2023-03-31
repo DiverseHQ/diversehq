@@ -74,7 +74,7 @@ const index = () => {
             </div>
           )}
           <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden my-4">
-            {recentCommunities.length > 0 && (
+            {recentCommunities?.length > 0 && (
               <div className="flex flex-col gap-2 md:gap-3 my-2">
                 <h3 className="text-[18px] font-medium mx-4">
                   Recent Communities

@@ -2,7 +2,7 @@ import React from 'react'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import LensLoginButton from '../LensLoginButton'
 
-const ALLOWED_PROFILE_IDS = [
+export const ALLOWED_PROFILE_IDS = [
   '0x5ec3',
   '0x0161ba',
   '0x01abf2',

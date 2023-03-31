@@ -49,7 +49,7 @@ const NewMobileTopNav = () => {
           transition: 'top 0.5s ease-in-out'
         }}
       >
-        <>
+        <div className="flex flex-row items-center justify-between w-full">
           <div className="flex flex-row items-center justify-center space-x-4">
             {(!isSignedIn || !hasProfile) && <LensLoginButton />}
             {isSignedIn && hasProfile && (
@@ -70,7 +70,19 @@ const NewMobileTopNav = () => {
                 'Home'}
             </span>
           </div>
-        </>
+          <div
+            className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
+            onClick={() => {
+              router.push('/search')
+            }}
+          >
+            <img
+              src={'/mobileNavSearch.svg'}
+              alt="Search"
+              className="w-5.5 h-5.5"
+            />
+          </div>
+        </div>
       </div>
       <MobileNavSidebar
         isOpenSidebar={isOpenSidebar}

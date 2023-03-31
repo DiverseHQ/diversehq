@@ -20,9 +20,9 @@ const MobileBottomNav = () => {
     router.push('/explore')
   }
 
-  const routeToSearch = () => {
-    router.push('/search')
-  }
+  // const routeToSearch = () => {
+  //   router.push('/search')
+  // }
 
   const routeToNotifications = async () => {
     await updateNotificationCount()
@@ -88,7 +88,7 @@ const MobileBottomNav = () => {
           className="w-5.5 h-5.5"
         />
       </div>
-      <div
+      {/* <div
         className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={routeToSearch}
       >
@@ -101,7 +101,7 @@ const MobileBottomNav = () => {
           alt="Search"
           className="w-5.5 h-5.5"
         />
-      </div>
+      </div> */}
       <div
         className="relative"
         onClick={() => {
