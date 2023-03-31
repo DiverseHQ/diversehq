@@ -97,13 +97,6 @@ const ClickOption = () => {
                 )
               },
               {
-                label: 'Disconnect',
-                onClick: disconnectAndClear,
-                icon: () => (
-                  <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
                 label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
                 onClick: toggleTheme,
                 icon: () => (
@@ -114,6 +107,13 @@ const ClickOption = () => {
                       <HiSun className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
                     )}
                   </>
+                )
+              },
+              {
+                label: 'Disconnect',
+                onClick: disconnectAndClear,
+                icon: () => (
+                  <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
                 )
               }
             ]
@@ -150,13 +150,6 @@ const ClickOption = () => {
                 )
               },
               {
-                label: 'Disconnect',
-                onClick: disconnectAndClear,
-                icon: () => (
-                  <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
                 label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
                 onClick: toggleTheme,
                 icon: () => (
@@ -167,6 +160,13 @@ const ClickOption = () => {
                       <HiSun className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
                     )}
                   </>
+                )
+              },
+              {
+                label: 'Disconnect',
+                onClick: disconnectAndClear,
+                icon: () => (
+                  <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
                 )
               }
             ]

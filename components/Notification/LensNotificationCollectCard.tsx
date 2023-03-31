@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { BsCollectionFill } from 'react-icons/bs'
+import { BsCollection } from 'react-icons/bs'
 import { Notification } from '../../graphql/generated'
 import { stringToLength } from '../../utils/utils'
 import Markup from '../Lexical/Markup'
@@ -65,7 +65,7 @@ const LensNotificationCollectCard = ({
         </div>
       )}
       createdAt={notification.createdAt}
-      Icon={() => <BsCollectionFill />}
+      Icon={() => <BsCollection />}
       isRead={isRead}
       cardLink={
         notification?.collectedPublication?.__typename === 'Comment'

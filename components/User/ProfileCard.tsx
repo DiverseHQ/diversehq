@@ -81,7 +81,7 @@ const ProfileCard = ({
   }, [_profile?._id, _lensProfile?.id])
 
   return (
-    <div className="relative shadow-lg z-0 bg-s-bg mb-6 text-p-text w-[calc(100vw-9px)]">
+    <div className="relative z-0 bg-s-bg border-b-[1px] border-s-border text-p-text w-full sm:w-[calc(100vw-9px)]">
       <ImageWithFullScreenZoom
         className={`h-48 sm:h-72 w-full object-cover`}
         src={getCoverBanner(lensProfile)}
@@ -315,10 +315,10 @@ const ProfileCard = ({
             )}
           </div>
 
-          <div className="flex flex-row items-start justify-center space-x-10 px-3 mb-2 -mt-2">
-            <div className="flex flex-col font-bold text-base sm:text-base gap-y-1.5">
+          <div className="flex flex-row w-full space-x-10 px-3 mb-2 -mt-2">
+            <div className="flex flex-col w-full font-bold text-base sm:text-base gap-y-1.5">
               {!isLensCommunity && (
-                <div className="flex flex-row items-center justify-center gap-x-2 flex-wrap">
+                <div className="flex flex-row items-center gap-x-2 flex-wrap">
                   {lensProfile.name && (
                     <span className="text-[22px]">{lensProfile.name}</span>
                   )}
@@ -339,12 +339,12 @@ const ProfileCard = ({
                 </div>
               )}
 
-              <div className="font-normal text-sm">
+              <div className="font-normal text">
                 <Markup>{lensProfile.bio}</Markup>
               </div>
               <ProfileLinksRow profile={lensProfile} />
               {!isLensCommunity && (
-                <div className="flex flex-row justify-center w-full flex-wrap gap-x-2 gap-y-2 items-center text-[14px]">
+                <div className="flex flex-row justify-center w-full flex-wrap pt-2 gap-x-2 gap-y-2 items-center text-[14px]">
                   {/* onchain lens data */}
                   {hasProfile &&
                     isSignedIn &&
@@ -380,7 +380,7 @@ const ProfileCard = ({
                       </Link>
                     )}
                   <div
-                    className="flex items-center border-2 border-p-border cursor-pointer text-p-text rounded-full px-5 py-2 text-sm font-semibold"
+                    className="flex items-center border border-p-btn cursor-pointer text-p-text rounded-full px-5 py-2 text-sm font-semibold"
                     onClick={() => setIsDrawerOpen(true)}
                   >
                     <span className="font-light text-[#898a8d]">More</span>

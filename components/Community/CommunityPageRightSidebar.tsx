@@ -65,7 +65,7 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
                 .join(' ')}
             </span>
           </div>
-          <div className="bg-[#7c7c7c] h-[1px] mb-3"></div>
+          <div className="bg-s-border h-[1px] mb-3"></div>
           {/* <div className="flex flex-wrap mb-2 gap-x-6 gap-y-2">
             <div className="flex flex-col">
               <span className="font-semibold text-[16px]">

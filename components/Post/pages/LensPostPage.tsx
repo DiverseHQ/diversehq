@@ -80,11 +80,11 @@ const LensPostPage = ({ id, post }: Props) => {
             <div className="flex flex-col sticky top-[64px] mb-20">
               <div className="flex flex-row items-center ml-4 mt-3 justify-end">
                 <div
-                  className="flex hover:bg-s-hover rounded-full p-1 cursor-pointer items-center gap-2"
+                  className="flex hover:bg-s-hover text-s-text hover:text-p-text rounded-full px-3 py-1 cursor-pointer items-center gap-2"
                   onClick={() => router.back()}
                 >
-                  <IoMdClose className="w-6 h-6" />
                   <span className="text-[18px]">Close</span>
+                  <IoMdClose className="w-5 h-5 " />
                 </div>
               </div>
               <div className="px-5 font-medium">Community</div>

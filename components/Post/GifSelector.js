@@ -73,7 +73,7 @@ const GifSelector = ({
             />
             <div
               onClick={handleClick}
-              className={`absolute z-40 bg-p-bg text-p-text sm:rounded-xl  p-3 sm:w-[550px]`}
+              className={`absolute z-40 bg-s-bg text-p-text sm:rounded-xl  p-3 sm:w-[550px] border border-s-border`}
               style={{
                 bottom: bottom,
                 left: left,
@@ -81,16 +81,16 @@ const GifSelector = ({
                 right: 'auto'
               }}
             >
-              <div className={`m-2 ${className}`}>
+              <div className={`pb-2 ${className}`}>
                 <input
                   type="text"
                   placeholder={`Search for GIFs`}
                   value={debouncedGifInput}
                   onChange={handleSearch}
-                  className="w-full border border-gray-300 rounded-md p-2"
+                  className="w-full border border-gray-300 outline-none rounded-md p-2"
                 />
               </div>
-              <div className="flex h-[45vh] overflow-y-auto overflow-x-hidden">
+              <div className="flex h-[45vh] overflow-y-auto overflow-x-hidden rounded-lg">
                 {debouncedGifInput ? (
                   <Grid
                     onGifClick={(item) => onSelectGif(item)}

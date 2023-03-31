@@ -75,7 +75,7 @@ const LensPostJoinedCommunitiesPublicationsNew = ({
           publicationTypes: [PublicationTypes.Post],
           limit: 5,
           sortCriteria: PublicationSortCriteria.Latest,
-          noRandomize: true
+          noRandomize: false
         },
         profileId: myLensProfile?.defaultProfile?.id,
         reactionRequest: {

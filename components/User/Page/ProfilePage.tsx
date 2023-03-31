@@ -39,10 +39,12 @@ const ProfilePage = ({ _profile, _lensProfile }: Props) => {
             )}
           </div>
         </div>
-        <ProfilePageRightSidebar
-          profile={_profile}
-          lensProfile={_lensProfile}
-        />
+        <div className="mt-6">
+          <ProfilePageRightSidebar
+            profile={_profile}
+            lensProfile={_lensProfile}
+          />
+        </div>
       </div>
     </div>
   )

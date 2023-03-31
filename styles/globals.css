@@ -208,6 +208,8 @@
 :root {
   --background: #f9f9f9;
   --background-secondary: #ffffff;
+  --background-secondary-hover: #fcfcfc;
+
   /* --accent-primary: #1d9bf0; */
   --accent-primary: #9378d8;
   --accent-primary-disabled: #9c93ad;
@@ -253,6 +255,9 @@
 [data-theme='dark'] {
   --background: #030303;
   --background-secondary: #1a1a1b;
+
+  --background-secondary-hover: #1e1e1e;
+
   --accent-primary: #9378d8;
   --accent-secondary: theme('colors.purple.600');
   --accent-hover: #272729;

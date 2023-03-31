@@ -3,9 +3,9 @@ import Link from 'next/link'
 import Markup from '../Lexical/Markup'
 import { stringToLength } from '../../utils/utils'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
-import { ImArrowUp, ImArrowDown } from 'react-icons/im'
 import { NewReactionNotification } from '../../graphql/generated'
 import formatHandle from '../User/lib/formatHandle'
+import { BiDownvote, BiUpvote } from 'react-icons/bi'
 type Props = {
   notification: NewReactionNotification
   isRead: boolean
@@ -55,7 +55,7 @@ const LensNotificationReactionCard = ({ notification, isRead }: Props) => {
         </div>
       )}
       Icon={() =>
-        notification?.reaction === 'UPVOTE' ? <ImArrowUp /> : <ImArrowDown />
+        notification?.reaction === 'UPVOTE' ? <BiUpvote /> : <BiDownvote />
       }
       isRead={isRead}
       cardLink={

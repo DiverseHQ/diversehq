@@ -40,67 +40,69 @@ const NavFilterAllPosts = () => {
   return (
     <FilterRow
       EndButton={
-        <OptionsWrapper
-          OptionPopUpModal={() => (
-            <MoreOptionsModal
-              className="z-50"
-              list={[
-                {
-                  label: sortTypes.LATEST,
-                  onClick: () => {
-                    addQueryParam('sort', sortTypes.LATEST)
-                    setIsDrawerOpen(false)
-                    setShowOptionsModal(false)
+        active !== 'foryou' && (
+          <OptionsWrapper
+            OptionPopUpModal={() => (
+              <MoreOptionsModal
+                className="z-50"
+                list={[
+                  {
+                    label: sortTypes.LATEST,
+                    onClick: () => {
+                      addQueryParam('sort', sortTypes.LATEST)
+                      setIsDrawerOpen(false)
+                      setShowOptionsModal(false)
+                    }
+                  },
+                  {
+                    label: sortTypes.TOP_TODAY,
+                    onClick: () => {
+                      addQueryParam('sort', sortTypes.TOP_TODAY)
+                      setIsDrawerOpen(false)
+                      setShowOptionsModal(false)
+                    }
+                  },
+                  {
+                    label: sortTypes.TOP_WEEK,
+                    onClick: () => {
+                      addQueryParam('sort', sortTypes.TOP_WEEK)
+                      setIsDrawerOpen(false)
+                      setShowOptionsModal(false)
+                    }
+                  },
+                  {
+                    label: sortTypes.TOP_MONTH,
+                    onClick: () => {
+                      addQueryParam('sort', sortTypes.TOP_MONTH)
+                      setIsDrawerOpen(false)
+                      setShowOptionsModal(false)
+                    }
+                  },
+                  {
+                    label: sortTypes.TOP_YEAR,
+                    onClick: () => {
+                      addQueryParam('sort', sortTypes.TOP_YEAR)
+                      setIsDrawerOpen(false)
+                      setShowOptionsModal(false)
+                    }
                   }
-                },
-                {
-                  label: sortTypes.TOP_TODAY,
-                  onClick: () => {
-                    addQueryParam('sort', sortTypes.TOP_TODAY)
-                    setIsDrawerOpen(false)
-                    setShowOptionsModal(false)
-                  }
-                },
-                {
-                  label: sortTypes.TOP_WEEK,
-                  onClick: () => {
-                    addQueryParam('sort', sortTypes.TOP_WEEK)
-                    setIsDrawerOpen(false)
-                    setShowOptionsModal(false)
-                  }
-                },
-                {
-                  label: sortTypes.TOP_MONTH,
-                  onClick: () => {
-                    addQueryParam('sort', sortTypes.TOP_MONTH)
-                    setIsDrawerOpen(false)
-                    setShowOptionsModal(false)
-                  }
-                },
-                {
-                  label: sortTypes.TOP_YEAR,
-                  onClick: () => {
-                    addQueryParam('sort', sortTypes.TOP_YEAR)
-                    setIsDrawerOpen(false)
-                    setShowOptionsModal(false)
-                  }
-                }
-              ]}
+                ]}
+              />
+            )}
+            position="right"
+            showOptionsModal={showOptionsModal}
+            setShowOptionsModal={setShowOptionsModal}
+            isDrawerOpen={isDrawerOpen}
+            setIsDrawerOpen={setIsDrawerOpen}
+          >
+            <FilterButton
+              title={String(sortType)}
+              active={true}
+              IconAtEnd={<BsChevronDown className="w-3 h-3" />}
+              className="item-end"
             />
-          )}
-          position="right"
-          showOptionsModal={showOptionsModal}
-          setShowOptionsModal={setShowOptionsModal}
-          isDrawerOpen={isDrawerOpen}
-          setIsDrawerOpen={setIsDrawerOpen}
-        >
-          <FilterButton
-            title={String(sortType)}
-            active={true}
-            IconAtEnd={<BsChevronDown className="w-3 h-3" />}
-            className="item-end"
-          />
-        </OptionsWrapper>
+          </OptionsWrapper>
+        )
       }
     >
       <FilterButton

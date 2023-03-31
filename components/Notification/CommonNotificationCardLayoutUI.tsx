@@ -33,7 +33,7 @@ const CommonNotificationCardLayoutUI = ({
             <div className="flex flex-col w-full">
               <div className="flex flex-row justify-between w-full pb-2">
                 <MainRow />
-                <div className="items-end shrink-0 text-sm sm:text-base pl-1">
+                <div className="items-end shrink-0 text-sm text-s-text sm:text-base pl-1">
                   <ReactTimeAgo
                     timeStyle="twitter"
                     date={new Date(createdAt)}

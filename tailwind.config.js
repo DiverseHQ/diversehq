@@ -14,6 +14,7 @@ module.exports = {
       colors: {
         'p-bg': 'var(--background)', // background for the whole app
         's-bg': 'var(--background-secondary)', // background for important elements like post comments to make them stand out
+        's-bg-hover': 'var(--background-secondary-hover)', // background for important elements like post comments to make them stand out when hovered
         's-h-bg': 'var(--background-secondary-highlight)', // secondary highligth color
         'p-h-bg': 'var(--background-primary-highlight)', // primary highlight color for most most importatn elements
         't-bg': 'var(--background-pop)', // backdrop for popups
