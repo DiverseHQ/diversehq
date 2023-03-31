@@ -17,16 +17,21 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
   const { notifyError } = useNotify()
 
   const fetchAndSetUnResolvedReviewPosts = async () => {
-    if (!community || !community?._id) return
     try {
+      console.log('fetching')
       setIsLoading(true)
       const res = await getAllUnResolvedLensCommunityPostsForReview(
         community._id
       )
+      console.log('res', res)
       if (res.status === 200) {
         const resData: ReviewPostType[] = await res.json()
+        console.log('resData', resData)
 
-        if (!resData.length) return
+        if (!resData.length) {
+          setRawReviewPosts([])
+          return
+        }
         // loops over the posts and fetch the post data from post.contentUri
         const _rawPosts = await Promise.all(
           resData.map(async (post) => {
@@ -53,10 +58,13 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
               getAllMentionsHandlFromContent(post.contentData?.content)[0]
           )
         })
+
+        console.log('_rawPosts', _rawPosts)
         setRawReviewPosts(_rawPosts)
       } else {
         const resData = await res.json()
         notifyError(resData.msg)
+        setRawReviewPosts([])
       }
     } catch (err) {
       notifyError(err.message)
@@ -66,8 +74,13 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
   }
 
   useEffect(() => {
+    if (!community?._id) return
     fetchAndSetUnResolvedReviewPosts()
-  }, [])
+  }, [community?._id])
+
+  useEffect(() => {
+    console.log('rawReviewPosts', rawReviewPosts)
+  }, [rawReviewPosts])
 
   return (
     <div className="p-2 w-full sm:p-3 space-y-2 min-h-[500px]">
@@ -77,12 +90,16 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
         your lens handle <br />
         Reject : Author will be notified that the post has been rejected
       </div>
+      <button className="text-sm" onClick={fetchAndSetUnResolvedReviewPosts}>
+        Refresh
+      </button>
       {isLoading && (
         <div className="flex flex-row items-center justify-center space-x-2">
           <div className="w-4 h-4 border-t-2 border-p-btn rounded-full animate-spin" />
           <div className="text-sm text-s-text">Loading...</div>
         </div>
       )}
+
       <div
         className={clsx(
           'sm:rounded-2xl bg-s-bg border-s-border overflow-hidden',

@@ -26,7 +26,7 @@ export interface ReviewLensCommunityPost {
   updatedAt: string
   isResolved?: boolean
   lensCommunityId?: string
-  resolveActions?: 'IGNORE' | 'ALLOW'
+  resolveAction?: 'IGNORE' | 'ALLOW'
   publicationId?: string
 }
 

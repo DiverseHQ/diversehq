@@ -29,7 +29,7 @@ import getAvatar from '../../../User/lib/getAvatar'
 import imageProxy from '../../../User/lib/imageProxy'
 
 interface Props {
-  fetchAndSetUnResolvedReviewPosts: () => void
+  fetchAndSetUnResolvedReviewPosts: () => Promise<void>
   post: ReviewPostType
 }
 
@@ -61,8 +61,11 @@ const ReviewLensCommunityPostCard = ({
         post._id,
         lensCommunityPostsResolveActions.IGNORE
       )
+
+      console.log('res on OnRejectCLick', res)
       if (res.status === 200) {
-        fetchAndSetUnResolvedReviewPosts()
+        console.log('calling fetchAndSetUnResolvedReviewPosts')
+        await fetchAndSetUnResolvedReviewPosts()
       } else {
         const { msg } = await res.json()
         notifyError(msg)

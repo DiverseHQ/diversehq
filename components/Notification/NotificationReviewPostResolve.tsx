@@ -30,12 +30,11 @@ const NotificationReviewPostResolve = ({
   }
 
   useEffect(() => {
-    if (notification?.reviewLensCommunityPost?.resolveActions === 'ALLOW')
-      return
+    if (notification?.reviewLensCommunityPost?.resolveAction === 'ALLOW') return
     fetchContentFromContentUriAndSetTitle()
   }, [notification?._id])
 
-  if (notification?.reviewLensCommunityPost?.resolveActions === 'ALLOW') {
+  if (notification?.reviewLensCommunityPost?.resolveAction === 'ALLOW') {
     return (
       <CommonNotificationCardLayoutUI
         MainRow={() => (

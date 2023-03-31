@@ -42,7 +42,7 @@ export const pollUntilIndexed = async (
         }
       }
       // sleep for a second before trying again
-      await sleep(1000)
+      await sleep(5000)
     } else {
       // it got reverted and failed!
       throw new Error(response.reason)
