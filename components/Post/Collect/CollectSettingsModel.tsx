@@ -7,50 +7,7 @@ import {
   createTheme
 } from '@mui/material/styles'
 import { useTheme } from '../../Common/ThemeProvider'
-// change this later and fetch from https://docs.lens.xyz/docs/enabled-modules-currencies
-const CurrencyOptions = [
-  {
-    chainId: 80001,
-    address: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
-    symbol: 'WMATIC',
-    name: 'Wrapped Matic',
-    decimals: 18,
-    logoURI: 'https://polygonscan.com/token/images/wMatic_32.png'
-  },
-  {
-    chainId: 80001,
-    address: '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e',
-    symbol: 'USDC',
-    name: 'USD Coin',
-    decimals: 6,
-    logoURI: 'ipfs://QmXfzKRvjZz3u5JRgC4v5mGVbm9ahrUiB4DgzHBsnWbTMM'
-  },
-  {
-    chainId: 80001,
-    address: '0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F',
-    symbol: 'DAI',
-    name: 'Dai Stablecoin',
-    decimals: 18,
-    logoURI:
-      'https://assets.coingecko.com/coins/images/9956/thumb/4943.png?1636636734'
-  },
-  {
-    chainId: 80001,
-    address: '0x3C68CE8504087f89c640D02d133646d98e64ddd9',
-    symbol: 'WETH',
-    name: 'Wrapped Ether',
-    decimals: 18,
-    logoURI: 'https://polygonscan.com/token/images/wETH_32.png'
-  },
-  {
-    chainId: 80001,
-    address: '0x7beCBA11618Ca63Ead5605DE235f6dD3b25c530E',
-    symbol: 'NCT',
-    name: 'Nature Carbon Tonne',
-    decimals: 18,
-    logoURI: 'https://polygonscan.com/token/images/toucannct_32.png'
-  }
-]
+import { useEnabledModulesQuery } from '../../../graphql/generated'
 
 const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   const { isMobile } = useDevice()
@@ -72,9 +29,10 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
       : 0.01
   )
   const [currency, setCurrency] = useState<string>(
-    collectSettings?.feeCollectModule?.amount?.currency ||
-      '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889'
+    collectSettings?.feeCollectModule?.amount?.currency
   ) // default to WMATIC
+
+  const { data } = useEnabledModulesQuery()
   const { data: lensProfile } = useLensUserContext()
   const { theme }: any = useTheme()
 
@@ -155,7 +113,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                   className={` text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
                   value={currency}
                 >
-                  {CurrencyOptions.map((currency) => (
+                  {data?.enabledModuleCurrencies.map((currency) => (
                     <MenuItem key={currency.address} value={currency.address}>
                       {currency.symbol}
                     </MenuItem>
@@ -164,11 +122,11 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               </MUIThemeProvider>
             </div>
             <div className="flex flex-row items-center">
-              <div>Price (min 0.01)</div>
+              <div>Price (min 0.001)</div>
               <input
                 type="number"
                 value={price}
-                min={0.01}
+                min={0.001}
                 onChange={(e) => setPrice(Number(e.target.value))}
                 className={`border  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md ${
                   !isMobile ? 'w-20' : 'w-16'

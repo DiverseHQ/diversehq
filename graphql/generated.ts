@@ -4289,6 +4289,11 @@ export type CreateMirrorViaDispatcherMutationVariables = Exact<{
 
 export type CreateMirrorViaDispatcherMutation = { __typename?: 'Mutation', createMirrorViaDispatcher: { __typename?: 'RelayError', reason: RelayErrorReasons } | { __typename?: 'RelayerResult', txHash: any, txId: any } };
 
+export type EnabledModulesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EnabledModulesQuery = { __typename?: 'Query', enabledModules: { __typename?: 'EnabledModules', collectModules: Array<{ __typename?: 'EnabledModule', moduleName: string, contractAddress: any }> }, enabledModuleCurrencies: Array<{ __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any }> };
+
 export type HidePublicationMutationVariables = Exact<{
   request: HidePublicationRequest;
 }>;
@@ -5574,6 +5579,34 @@ export const useCreateMirrorViaDispatcherMutation = <
     useMutation<CreateMirrorViaDispatcherMutation, TError, CreateMirrorViaDispatcherMutationVariables, TContext>(
       ['CreateMirrorViaDispatcher'],
       (variables?: CreateMirrorViaDispatcherMutationVariables) => fetchData<CreateMirrorViaDispatcherMutation, CreateMirrorViaDispatcherMutationVariables>(CreateMirrorViaDispatcherDocument, variables)(),
+      options
+    );
+export const EnabledModulesDocument = `
+    query EnabledModules {
+  enabledModules {
+    collectModules {
+      moduleName
+      contractAddress
+    }
+  }
+  enabledModuleCurrencies {
+    name
+    symbol
+    decimals
+    address
+  }
+}
+    `;
+export const useEnabledModulesQuery = <
+      TData = EnabledModulesQuery,
+      TError = unknown
+    >(
+      variables?: EnabledModulesQueryVariables,
+      options?: UseQueryOptions<EnabledModulesQuery, TError, TData>
+    ) =>
+    useQuery<EnabledModulesQuery, TError, TData>(
+      variables === undefined ? ['EnabledModules'] : ['EnabledModules', variables],
+      fetchData<EnabledModulesQuery, EnabledModulesQueryVariables>(EnabledModulesDocument, variables),
       options
     );
 export const HidePublicationDocument = `

@@ -65,7 +65,7 @@ const CreatePostPopup = () => {
   const { data: lensProfile } = useLensUserContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
   const [collectSettings, setCollectSettings] = useState({
-    freeCollectModule: { followerOnly: false }
+    freeCollectModule: { followerOnly: true }
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
@@ -132,9 +132,9 @@ const CreatePostPopup = () => {
     // console.log('collectSettings', collectSettings)
     if (
       collectSettings?.feeCollectModule &&
-      Number(collectSettings?.feeCollectModule?.amount?.value) < 0.01
+      Number(collectSettings?.feeCollectModule?.amount?.value) < 0.001
     ) {
-      notifyError(`Price should be atleast 0.01`)
+      notifyError(`Price should be atleast 0.001`)
       setLoading(false)
       return
     }
@@ -274,7 +274,7 @@ const CreatePostPopup = () => {
       contentURI: `ipfs://${ipfsHash}`,
       collectModule: collectSettings,
       referenceModule: {
-        followerOnlyReferenceModule: false
+        followerOnlyReferenceModule: true
       }
     }
 

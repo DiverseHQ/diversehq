@@ -25,7 +25,7 @@ const IndexingPostCard = ({ postInfo }) => {
   return (
     <>
       {postInfo && (
-        <div className="relative sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 sm:my-3 sm:rounded-2xl shadow-sm">
+        <div className="relative sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 sm:my-3 border-b border-s-border">
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             {!isMobile && (
