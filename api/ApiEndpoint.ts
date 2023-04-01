@@ -1,5 +1,5 @@
 //eslint-disable-next-line
-const mode = process.env.NEXT_PUBLIC_NODE_MODE
+const mode = process.env.NEXT_PUBLIC_NODE_API_MODE
 // const mode = 'production'
 let apiEndpoint: string = ''
 switch (mode) {
