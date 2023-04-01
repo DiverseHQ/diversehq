@@ -7,7 +7,7 @@ import buildConversationId from './lib/buildConversationId'
 import { buildConversationKey } from './lib/conversationKey'
 import Preview from './Preview'
 import Search from './Search'
-import { IoMailOpenOutline, IoMailOutline } from 'react-icons/io5'
+import { IoMailOpenOutline } from 'react-icons/io5'
 import { BiArrowBack } from 'react-icons/bi'
 
 interface Props {
