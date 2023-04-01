@@ -55,6 +55,11 @@ const useMessagePreviews = () => {
   const setMessageProfiles = useMessageStore(
     (state) => state.setMessageProfiles
   )
+  const selectedTab = useMessageStore((state) => state.selectedTab)
+  const [profilesToShow, setProfilesToShow] = useState<Map<string, Profile>>(
+    new Map()
+  )
+  const [requestedCount, setRequestedCount] = useState(0)
 
   const getProfileFromKey = (key: string): string | null => {
     const parsed = parseConversationKey(key)
@@ -239,12 +244,37 @@ const useMessagePreviews = () => {
       closeConversationStream()
     }
   }, [client])
+
+  useEffect(() => {
+    const partitionedProfiles = Array.from(messageProfiles).reduce(
+      (result, [key, profile]) => {
+        const message = previewMessages.get(key)
+        if (message) {
+          if (profile.isFollowedByMe) {
+            result[0].set(key, profile)
+          } else {
+            result[1].set(key, profile)
+          }
+        }
+        return result
+      },
+      [new Map<string, Profile>(), new Map<string, Profile>()]
+    )
+    setProfilesToShow(
+      selectedTab === 'Following'
+        ? partitionedProfiles[0]
+        : partitionedProfiles[1]
+    )
+    setRequestedCount(partitionedProfiles[1].size)
+  }, [previewMessages, messageProfiles, selectedTab])
+
   return {
     authenticating: creatingXmtpClient,
     loading: messagesLoading || profilesLoading,
     messages: previewMessages,
-    profilesToShow: messageProfiles,
-    profilesError: profilesError
+    profilesToShow,
+    profilesError: profilesError,
+    requestedCount
   }
 }
 

@@ -6,7 +6,7 @@ import getUniqueMessages from '../components/Messages/lib/getUniqueMessages'
 import { Profile } from '../graphql/generated'
 /* eslint-disable */
 
-// type TabValues = 'Following' | 'Requested'
+type TabValues = 'Following' | 'Requested'
 
 interface MessageState {
   client: Client | undefined
@@ -30,8 +30,8 @@ interface MessageState {
   setConversationKey: (conversationKey: string) => void
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  //   selectedTab: TabValues
-  //   setSelectedTab: (selectedTab: TabValues) => void
+  selectedTab: TabValues
+  setSelectedTab: (selectedTab: TabValues) => void
 }
 
 export const useMessageStore = create<MessageState>((set) => ({
@@ -75,10 +75,10 @@ export const useMessageStore = create<MessageState>((set) => ({
       } else {
         profiles = state.messageProfiles
       }
-      //   const selectedTab: TabValues = profile.isFollowedByMe
-      //     ? 'Following'
-      //     : 'Requested'
-      return { messageProfiles: profiles }
+      const selectedTab: TabValues = profile.isFollowedByMe
+        ? 'Following'
+        : 'Requested'
+      return { messageProfiles: profiles, selectedTab: selectedTab }
     }),
   previewMessages: new Map(),
   setPreviewMessage: (key: string, message: DecodedMessage) =>
@@ -95,8 +95,8 @@ export const useMessageStore = create<MessageState>((set) => ({
   setConversationKey: (conversationKey) => set(() => ({ conversationKey })),
   isOpen: false,
   setIsOpen: (isOpen) => set(() => ({ isOpen })),
-  //   selectedTab: 'Following',
-  //   setSelectedTab: (selectedTab) => set(() => ({ selectedTab })),
+  selectedTab: 'Following',
+  setSelectedTab: (selectedTab) => set(() => ({ selectedTab })),
   reset: () =>
     set((state) => {
       return {

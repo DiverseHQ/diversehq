@@ -7,6 +7,8 @@ import buildConversationId from './lib/buildConversationId'
 import { buildConversationKey } from './lib/conversationKey'
 import Preview from './Preview'
 import Search from './Search'
+import { IoMailOpenOutline, IoMailOutline } from 'react-icons/io5'
+import { BiArrowBack } from 'react-icons/bi'
 
 interface Props {
   className?: string
@@ -19,9 +21,17 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
   const setConversationKey = useMessageStore(
     (state) => state.setConversationKey
   )
+  const selectedTab = useMessageStore((state) => state.selectedTab)
+  const setSelectedTab = useMessageStore((state) => state.setSelectedTab)
   const currentProfile = lensProfile?.defaultProfile
-  const { authenticating, loading, messages, profilesToShow, profilesError } =
-    useMessagePreviews()
+  const {
+    authenticating,
+    loading,
+    messages,
+    profilesToShow,
+    profilesError,
+    requestedCount
+  } = useMessagePreviews()
   const sortedProfiles = Array.from(profilesToShow).sort(([keyA], [keyB]) => {
     const messageA = messages.get(keyA)
     const messageB = messages.get(keyB)
@@ -68,6 +78,35 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
       )}
       {!showAuthenticating && !showLoading && !profilesError && (
         <div className="flex flex-col h-full sm:h-[450px] overflow-y-auto">
+          {selectedTab === 'Following' && (
+            <button
+              className="start-row py-2 pl-2 space-x-2 hover:bg-s-bg-hover"
+              onClick={() => {
+                setSelectedTab('Requested')
+              }}
+            >
+              <div className="p-2">
+                <IoMailOpenOutline className="w-4 h-4 rounded-full" />
+              </div>
+              <div className="text-s-text">
+                View <span className="font-semibold">{requestedCount}</span>{' '}
+                Requested messages
+              </div>
+            </button>
+          )}
+          {selectedTab === 'Requested' && (
+            <button
+              className="start-row py-2 pl-2 space-x-2 hover:bg-s-bg-hover"
+              onClick={() => {
+                setSelectedTab('Following')
+              }}
+            >
+              <div className="p-2.5">
+                <BiArrowBack className="w-4 h-4 rounded-full" />
+              </div>
+              <div className=" text-s-text">Go back to Following messages</div>
+            </button>
+          )}
           {sortedProfiles?.map(([key, profile]) => {
             const message = messages.get(key)
             if (!message) {

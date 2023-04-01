@@ -8,6 +8,26 @@
   }
 }
 
+/* a classname for row centered using  tailwinds css*/
+
+@layer components {
+  .centered-row {
+    @apply flex flex-row items-center justify-center;
+  }
+
+  .start-row {
+    @apply flex flex-row items-center justify-start;
+  }
+
+  .space-between-row {
+    @apply flex flex-row items-center justify-between;
+  }
+
+  .spinner {
+    @apply animate-spin rounded-full h-5 w-5 border border-t-2 border-r-2;
+  }
+}
+
 @layer uitilities {
   @keyframes enteranimation {
     0% {
