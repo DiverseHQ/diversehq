@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import {
+  ExplorePublicationsQuery,
   PublicationSortCriteria,
   PublicationTypes
 } from '../../graphql/generated'
@@ -61,72 +62,138 @@ const LensPostJoinedCommunitiesPublicationsNew = ({
     let nextCursors = exploreQueryRequestParams.cursors
     let startedWithPosts = exploreQueryRequestParams.posts
 
+    const promiseList = []
+
     for (let i = 0; i < grounpOfBunchOfCommunityIds.length; i++) {
-      console.log('i', i)
-      const data = await getExplorePublications({
-        request: {
-          metadata: {
-            locale: 'en-US',
-            tags: {
-              oneOf: grounpOfBunchOfCommunityIds[i]
-            }
+      promiseList.push(
+        getExplorePublications({
+          request: {
+            metadata: {
+              locale: 'en-US',
+              tags: {
+                oneOf: grounpOfBunchOfCommunityIds[i]
+              }
+            },
+            cursor: exploreQueryRequestParams?.cursors[i] ?? null,
+            publicationTypes: [PublicationTypes.Post],
+            limit: 5,
+            sortCriteria: PublicationSortCriteria.Latest,
+            noRandomize: false
           },
-          cursor: exploreQueryRequestParams?.cursors[i] ?? null,
-          publicationTypes: [PublicationTypes.Post],
-          limit: 5,
-          sortCriteria: PublicationSortCriteria.Latest,
-          noRandomize: false
-        },
-        profileId: myLensProfile?.defaultProfile?.id,
-        reactionRequest: {
-          profileId: myLensProfile?.defaultProfile?.id
-        }
-      })
+          profileId: myLensProfile?.defaultProfile?.id,
+          reactionRequest: {
+            profileId: myLensProfile?.defaultProfile?.id
+          }
+        })
+      )
+    }
 
-      console.log('data', data)
+    console.log('promiseList', promiseList)
 
-      if (!data) {
+    const data: ExplorePublicationsQuery[] = await Promise.all(promiseList)
+
+    console.log('data', data)
+
+    for (let i = 0; i < data.length; i++) {
+      if (!data[i]) {
         continue
       }
 
-      const _newPosts = data.explorePublications.items
+      const _newPosts = data[i].explorePublications.items
       // @ts-ignore
       const communityIds = _newPosts.map((post) => post.metadata.tags[0])
       const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
         communityIds
       )
 
-      for (let i = 0; i < _newPosts.length; i++) {
-        if (!communityInfoForPosts[i]?._id) {
+      for (let j = 0; j < _newPosts.length; j++) {
+        if (!communityInfoForPosts[j]?._id) {
           // @ts-ignore
-          _newPosts[i].communityInfo = getCommunityInfoFromAppId(
-            _newPosts[i].appId
+          _newPosts[j].communityInfo = getCommunityInfoFromAppId(
+            _newPosts[j].appId
           )
         } else {
           // @ts-ignore
-          _newPosts[i].communityInfo = communityInfoForPosts[i]
-          if (communityInfoForPosts[i]?.handle) {
+          _newPosts[j].communityInfo = communityInfoForPosts[j]
+          if (communityInfoForPosts[j]?.handle) {
             // @ts-ignore
-            _newPosts[i].isLensCommunityPost = true
+            _newPosts[j].isLensCommunityPost = true
           }
         }
       }
 
-      console.log('_newPosts', _newPosts)
-      console.log('exploreQueryRequestParams', exploreQueryRequestParams.posts)
-
       startedWithPosts = [...startedWithPosts, ..._newPosts]
-      setExploreQueryRequestParams({
-        ...exploreQueryRequestParams,
-        posts: startedWithPosts
-      })
-
-      if (nextCursors.length === 0) {
-        nextCursors.push(data?.explorePublications?.pageInfo?.next)
-      } else {
-        nextCursors[i] = data?.explorePublications?.pageInfo?.next
-      }
+      nextCursors[i] = data[i]?.explorePublications?.pageInfo?.next
     }
+
+    console.log('startedWithPosts', startedWithPosts)
+
+    // for (let i = 0; i < grounpOfBunchOfCommunityIds.length; i++) {
+    //   console.log('i', i)
+    //   const data = await getExplorePublications({
+    //     request: {
+    //       metadata: {
+    //         locale: 'en-US',
+    //         tags: {
+    //           oneOf: grounpOfBunchOfCommunityIds[i]
+    //         }
+    //       },
+    //       cursor: exploreQueryRequestParams?.cursors[i] ?? null,
+    //       publicationTypes: [PublicationTypes.Post],
+    //       limit: 5,
+    //       sortCriteria: PublicationSortCriteria.Latest,
+    //       noRandomize: false
+    //     },
+    //     profileId: myLensProfile?.defaultProfile?.id,
+    //     reactionRequest: {
+    //       profileId: myLensProfile?.defaultProfile?.id
+    //     }
+    //   })
+
+    //   console.log('data', data)
+
+    //   if (!data) {
+    //     continue
+    //   }
+
+    //   const _newPosts = data.explorePublications.items
+    //   // @ts-ignore
+    //   const communityIds = _newPosts.map((post) => post.metadata.tags[0])
+    //   const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
+    //     communityIds
+    //   )
+
+    //   for (let i = 0; i < _newPosts.length; i++) {
+    //     if (!communityInfoForPosts[i]?._id) {
+    //       // @ts-ignore
+    //       _newPosts[i].communityInfo = getCommunityInfoFromAppId(
+    //         _newPosts[i].appId
+    //       )
+    //     } else {
+    //       // @ts-ignore
+    //       _newPosts[i].communityInfo = communityInfoForPosts[i]
+    //       if (communityInfoForPosts[i]?.handle) {
+    //         // @ts-ignore
+    //         _newPosts[i].isLensCommunityPost = true
+    //       }
+    //     }
+    //   }
+
+    //   console.log('_newPosts', _newPosts)
+    //   console.log('exploreQueryRequestParams', exploreQueryRequestParams.posts)
+
+    //   startedWithPosts = [...startedWithPosts, ..._newPosts]
+    //   // setExploreQueryRequestParams({
+    //   //   ...exploreQueryRequestParams,
+    //   //   posts: startedWithPosts
+    //   // })
+
+    //   if (nextCursors.length === 0) {
+    //     nextCursors.push(data?.explorePublications?.pageInfo?.next)
+    //   } else {
+    //     nextCursors[i] = data?.explorePublications?.pageInfo?.next
+    //   }
+    // }
 
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
