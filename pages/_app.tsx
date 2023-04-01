@@ -43,7 +43,8 @@ const ROUTES_TO_RETAIN = [
   `/feed/foryou?sort=${sortTypes.TOP_WEEK.replace(' ', '+')}`,
   `/feed/foryou?sort=${sortTypes.TOP_MONTH.replace(' ', '+')}`,
   `/feed/foryou?sort=${sortTypes.TOP_YEAR.replace(' ', '+')}`,
-  `/feed/offchain`
+  `/feed/offchain`,
+  '/feed/timeline'
 ]
 
 function MyApp({ Component, pageProps, isMobileView }: MyAppProps) {

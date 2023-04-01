@@ -16,14 +16,14 @@ const useBroadcastSignatureForTx = (waitForTxIndex = true) => {
     if (broadcastResult.reason) {
       throw new Error(broadcastResult.reason)
     }
-    if (!broadcastResult.txHash) {
+    if (!broadcastResult.txId) {
       throw new Error('broadcastResult.txHash is undefined')
     }
     if (!waitForTxIndex) {
       return broadcastResult
     }
     const indexedResult = await pollUntilIndexed({
-      txHash: broadcastResult.txHash
+      txId: broadcastResult.txId
     })
     return indexedResult
   }

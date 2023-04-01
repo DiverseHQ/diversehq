@@ -1,6 +1,6 @@
 export const POST_LIMIT: number = 10
 export const COMMENT_LIMIT: number = 10
-export const LENS_POST_LIMIT: number = 10
+export const LENS_POST_LIMIT: number = 30
 export const LENS_COMMENT_LIMIT: number = 10
 export const LENS_NOTIFICATION_LIMIT: number = 8
 export const NOTIFICATION_LIMIT: number = 10
@@ -187,9 +187,37 @@ export const infoFromLensAppId = {
     name: 'Lensport',
     description: 'Discover, collect, and sell amazing posts.',
     link: 'https://lensport.io'
+  },
+  buttrfly: {
+    appId: 'buttrfly',
+    logoLink: 'https://buttrfly.app/buttrfly-icon-rounded.png',
+    name: 'Buttrfly',
+    description: 'Web3 Social Explorer',
+    link: 'https://buttrfly.app'
+  },
+  soclly: {
+    appId: 'soclly',
+    logoLink:
+      'https://pbs.twimg.com/profile_images/1610906791080255500/CptAXIco_400x400.jpg',
+    name: 'Soclly',
+    description: 'A Decentralized Social Network with a difference.',
+    link: 'https://soclly.com'
+  },
+  chainjet: {
+    appId: 'chainjet',
+    logoLink:
+      'https://pbs.twimg.com/profile_images/1567155757761679361/k_EIJBD5_400x400.jpg',
+    name: 'Chainjet',
+    description: 'Build web3 automation easily',
+    link: 'https://chainjet.io'
   }
 }
 
 export const appId = 'diversehq'
-export const showNameForThisAppIds = ['diversehq', 'lenstube', 'lenstube-bytes']
+export const showNameForThisAppIds = [
+  'diversehq',
+  'lenstube',
+  'lenstube-bytes',
+  'phaver'
+]
 export const appLink = 'https://diversehq.xyz'

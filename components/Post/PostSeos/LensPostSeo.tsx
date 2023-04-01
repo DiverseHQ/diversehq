@@ -5,6 +5,7 @@ import { appLink } from '../../../utils/config'
 // import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
 import imageProxy from '../../User/lib/imageProxy'
+import formatHandle from '../../User/lib/formatHandle'
 
 const LensPostSeo = ({ post }: { post: Publication }) => {
   return (
@@ -18,9 +19,9 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
         url: `${appLink}/p/${post?.id}`,
         title: `${stringToLength(post?.metadata?.content, 40)} \n | ${
           post?.stats?.totalAmountOfCollects
-        } Collects | ${post?.stats?.totalUpvotes} Upvotes | \n by ${
-          post?.profile?.handle
-        }`,
+        } Collects | ${
+          post?.stats?.totalUpvotes
+        } Upvotes | \n by u/${formatHandle(post?.profile?.handle)}`,
         images:
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [

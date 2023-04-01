@@ -10,7 +10,7 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import FilterRow from '../Common/UI/FilterRow'
 import FilterButton from '../Common/UI/FilterButton'
 import useSort from '../Common/Hook/useSort'
-import { BsChevronDown } from 'react-icons/bs'
+import { BsChevronDown, BsPerson } from 'react-icons/bs'
 
 const NavFilterAllPosts = () => {
   const router = useRouter()
@@ -32,6 +32,8 @@ const NavFilterAllPosts = () => {
       setActive('all')
     } else if (pathname.endsWith('/foryou')) {
       setActive('foryou')
+    } else if (pathname.endsWith('/timeline')) {
+      setActive('timeline')
     } else {
       setActive('all')
     }
@@ -40,7 +42,7 @@ const NavFilterAllPosts = () => {
   return (
     <FilterRow
       EndButton={
-        active !== 'foryou' && (
+        !(active === 'foryou' || active === 'timeline') && (
           <OptionsWrapper
             OptionPopUpModal={() => (
               <MoreOptionsModal
@@ -122,6 +124,15 @@ const NavFilterAllPosts = () => {
           router.push('/feed/foryou')
         }}
         tooltipTitle="Posts from communities you joined"
+      />
+      <FilterButton
+        Icon={<BsPerson className="h-5 w-5" />}
+        title="Timeline"
+        active={active === 'timeline'}
+        onClick={() => {
+          router.push('/feed/timeline')
+        }}
+        tooltipTitle="Timeline feed from all lens apps"
       />
     </FilterRow>
   )

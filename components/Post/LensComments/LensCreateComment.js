@@ -169,7 +169,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
 
   useEffect(() => {
     if (result && type === 'createComment') {
-      onSuccessCreateComment({ txHash: result.txHash }, tempId)
+      onSuccessCreateComment({ txId: result.txId }, tempId)
     }
   }, [result, type])
 

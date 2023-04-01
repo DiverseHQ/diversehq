@@ -131,7 +131,7 @@ const ReviewLensCommunityPostCard = ({
 
           setLoadingStatus('indexing...')
           const indexedResult = await pollUntilIndexed({
-            txHash: dispatcherResult.txHash
+            txId: dispatcherResult.txId
           })
           const publicationId = postIdFromIndexedResult(
             lensProfile?.defaultProfile?.id,
