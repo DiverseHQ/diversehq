@@ -10,7 +10,8 @@ switch (mode) {
     apiEndpoint = 'https://diverse-hq-api-alpha.vercel.app/apiv1'
     break
   case 'testnet':
-    apiEndpoint = 'https://diverse-hq-api-testnet.vercel.app/apiv1'
+    apiEndpoint =
+      'https://diverse-hq-api-git-dev-diversehq-xyz.vercel.app/apiv1'
     break
   default:
     apiEndpoint = 'https://diverse-hq-api-diversehq.vercel.app/apiv1'
