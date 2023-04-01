@@ -38,6 +38,7 @@ import {
 } from '../../api/lensCommunity'
 import { ProfileMedia } from '../../graphql/generated'
 export interface IsFollowedLensCommunityType {
+  _id: string
   handle: string
   isFollowedByMe: boolean
   picture: ProfileMedia
@@ -150,7 +151,10 @@ export const WalletProvider = ({ children }) => {
 
       const _allLensCommunitiesInDetail = await Promise.all(promiseList)
       const allLensCommunitiesInDetail = _allLensCommunitiesInDetail
-        .map((c) => c.profiles.items)
+        .map((c) => ({
+          ...c.profiles.items,
+          _id: allLensCommunities.find((l) => l.handle === c.handle)?._id
+        }))
         .flat(Infinity)
       console.log('allLensCommunitiesInDetail', allLensCommunitiesInDetail)
 
