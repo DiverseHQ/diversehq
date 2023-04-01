@@ -4,6 +4,7 @@ import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
 import formatHandle from '../User/lib/formatHandle'
 import CommunitiesSearchModal from './CommunitiesSearchModal'
 import LensProfilesSearchModal from './LensProfilesSearchModal'
+import LensCommunitiesSearchModal from './LensCommunitiesSearchModal'
 
 const SearchModal = () => {
   const inputRef = useRef()
@@ -33,6 +34,14 @@ const SearchModal = () => {
           setSearchTerm={setSearchTerm}
           onCommunitySelect={(community) => {
             router.push(`/c/${community.name}`)
+          }}
+        />
+        <LensCommunitiesSearchModal
+          inputRef={inputRef}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          onCommunitySelect={(community) => {
+            router.push(`/l/${formatHandle(community.handle)}`)
           }}
         />
         <LensProfilesSearchModal

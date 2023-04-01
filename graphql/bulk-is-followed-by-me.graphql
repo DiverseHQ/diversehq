@@ -3,6 +3,24 @@ query bulkIsFollowedByMe($request: ProfileQueryRequest!) {
     items {
       isFollowedByMe
       handle
+      picture {
+        ... on NftImage {
+          contractAddress
+          tokenId
+          uri
+          verified
+        }
+        ... on MediaSet {
+          original {
+            url
+            mimeType
+          }
+        }
+        __typename
+      }
+      stats {
+        totalFollowers
+      }
     }
     pageInfo {
       ...CommonPaginatedResultInfoFields

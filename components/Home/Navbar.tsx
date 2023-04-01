@@ -147,12 +147,12 @@ const Navbar = () => {
       }
       setJoinedCommunities([
         ...recentCommunities,
-        ...myLensCommunity,
         ...joinedLensCommunities
           .map((community) => ({
-            _id: community._id,
-            name: formatHandle(community?.Profile?.handle),
-            logoImageUrl: getAvatar(community?.Profile),
+            _id: community.handle,
+            name: formatHandle(community?.handle),
+            // @ts-ignore
+            logoImageUrl: getAvatar(community),
             isLensCommunity: true
           }))
           .filter(

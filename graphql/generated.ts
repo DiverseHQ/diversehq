@@ -4343,7 +4343,7 @@ export type BulkIsFollowedByMeQueryVariables = Exact<{
 }>;
 
 
-export type BulkIsFollowedByMeQuery = { __typename?: 'Query', profiles: { __typename?: 'PaginatedProfileResult', items: Array<{ __typename?: 'Profile', isFollowedByMe: boolean, handle: any }>, pageInfo: { __typename?: 'PaginatedResultInfo', prev?: any | null, next?: any | null, totalCount?: number | null } } };
+export type BulkIsFollowedByMeQuery = { __typename?: 'Query', profiles: { __typename?: 'PaginatedProfileResult', items: Array<{ __typename?: 'Profile', isFollowedByMe: boolean, handle: any, picture?: { __typename: 'MediaSet', original: { __typename?: 'Media', url: any, mimeType?: any | null } } | { __typename: 'NftImage', contractAddress: any, tokenId: string, uri: any, verified: boolean } | null, stats: { __typename?: 'ProfileStats', totalFollowers: number } }>, pageInfo: { __typename?: 'PaginatedResultInfo', prev?: any | null, next?: any | null, totalCount?: number | null } } };
 
 export type ChallengeQueryVariables = Exact<{
   request: ChallengeRequest;
@@ -5767,6 +5767,24 @@ export const BulkIsFollowedByMeDocument = `
     items {
       isFollowedByMe
       handle
+      picture {
+        ... on NftImage {
+          contractAddress
+          tokenId
+          uri
+          verified
+        }
+        ... on MediaSet {
+          original {
+            url
+            mimeType
+          }
+        }
+        __typename
+      }
+      stats {
+        totalFollowers
+      }
     }
     pageInfo {
       ...CommonPaginatedResultInfoFields

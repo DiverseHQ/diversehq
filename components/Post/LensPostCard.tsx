@@ -729,7 +729,7 @@ const LensPostCard = ({ post }: Props) => {
                             (postInfo?.metadata?.name.length > 0 &&
                               content.trim().length === 0)) && (
                             <Markup
-                              className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                              className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg font-[600] w-full`}
                             >
                               {/* remove title text from content */}
 

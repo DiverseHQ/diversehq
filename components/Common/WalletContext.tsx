@@ -30,12 +30,21 @@ import { sleep } from '../../lib/helpers'
 
 import { LensCommunity } from '../../types/community'
 import { getBulkIsFollowedByMe } from '../../lib/profile/get-bulk-is-followed-by-me'
-import getProfiles from '../../lib/profile/get-profiles'
-import { Profile } from '../../graphql/generated'
+// import getProfiles from '../../lib/profile/get-profiles'
+// import { Profile } from '../../graphql/generated'
 import {
   getAllLensCommunitiesHandle,
   getLensCommunity
 } from '../../api/lensCommunity'
+import { ProfileMedia } from '../../graphql/generated'
+export interface IsFollowedLensCommunityType {
+  handle: string
+  isFollowedByMe: boolean
+  picture: ProfileMedia
+  stats: {
+    totalFollowers: number
+  }
+}
 
 interface ContextType {
   address: string
@@ -44,11 +53,8 @@ interface ContextType {
   user: UserType
   loading: boolean
   LensCommunity: LensCommunity
-  joinedLensCommunities: {
-    _id: string
-    handle: string
-    Profile: Profile
-  }[]
+  joinedLensCommunities: IsFollowedLensCommunityType[]
+  allLensCommunities: IsFollowedLensCommunityType[]
 }
 
 export const WalletContext = createContext<ContextType>(null)
@@ -60,12 +66,11 @@ export const WalletProvider = ({ children }) => {
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
   const [LensCommunity, setLensCommunity] = useState(null)
+  const [allLensCommunities, setAllLensCommunities] = useState<
+    IsFollowedLensCommunityType[]
+  >([])
   const [joinedLensCommunities, setJoinedLensCommunties] = useState<
-    {
-      _id: string
-      handle: string
-      Profile: Profile
-    }[]
+    IsFollowedLensCommunityType[]
   >([])
   const { data: signer } = useSigner()
   // const { disconnect } = useDisconnect()
@@ -121,53 +126,84 @@ export const WalletProvider = ({ children }) => {
     useCallback(async () => {
       if (!user || !lensProfile?.defaultProfile?.id) return
       // todo optimize this, currently fetching all communities and then filtering
-      const allLensCommunities = await getAllLensCommunitiesHandle()
+      const _allLensCommunities = await getAllLensCommunitiesHandle()
 
-      console.log('allLensCommunities', allLensCommunities)
+      console.log('allLensCommunities', _allLensCommunities)
 
       // loop through all communities in group of 50 and check if lens user follows them
-      const _joinedLensCommunities = []
+      // const _joinedLensCommunities = []
       let cursor = null
-      for (let i = 0; i < allLensCommunities.length; i += 50) {
-        const { profiles } = await getBulkIsFollowedByMe({
-          cursor: cursor,
-          handles: allLensCommunities.slice(i, i + 50).map((c) => c.handle),
-          limit: 50
-        })
 
-        console.log('profiles', profiles)
+      const promiseList = []
 
-        profiles.items.forEach((profile) => {
-          if (profile.isFollowedByMe) {
-            const corrospondingCommunity = allLensCommunities.find(
-              (c) => c.handle === profile.handle
-            )
-            _joinedLensCommunities.push(corrospondingCommunity)
-          }
-        })
-        cursor = profiles.pageInfo.next
+      for (let i = 0; i < _allLensCommunities.length; i += 50) {
+        promiseList.push(
+          getBulkIsFollowedByMe({
+            cursor: cursor,
+            handles: _allLensCommunities.slice(i, i + 50).map((c) => c.handle),
+            limit: 50
+          })
+        )
       }
 
-      // remove communities from where user in banned
+      console.log('promiseList', promiseList)
 
-      cursor = null
-      for (let i = 0; i < _joinedLensCommunities.length; i += 50) {
-        const { profiles } = await getProfiles({
-          cursor: cursor,
-          handles: _joinedLensCommunities.slice(i, i + 50).map((c) => c.handle),
-          limit: 50
-        })
+      const _allLensCommunitiesInDetail = await Promise.all(promiseList)
+      const allLensCommunitiesInDetail = _allLensCommunitiesInDetail
+        .map((c) => c.profiles.items)
+        .flat(Infinity)
+      console.log('allLensCommunitiesInDetail', allLensCommunitiesInDetail)
 
-        profiles.items.forEach((profile, index) => {
-          _joinedLensCommunities[i + index] = {
-            ..._joinedLensCommunities[i + index],
-            Profile: profile
-          }
-        })
-        cursor = profiles.pageInfo.next
-      }
+      const _joinedLensCommunities: IsFollowedLensCommunityType[] =
+        allLensCommunitiesInDetail.filter((c) => c.isFollowedByMe)
 
+      console.log('_joinedLensCommunities', _joinedLensCommunities)
+
+      setAllLensCommunities(allLensCommunitiesInDetail)
+
+      console.log('_joinedLensCommunities', _joinedLensCommunities)
       setJoinedLensCommunties(_joinedLensCommunities)
+
+      // for (let i = 0; i < allLensCommunities.length; i += 50) {
+      //   const { profiles } = await getBulkIsFollowedByMe({
+      //     cursor: cursor,
+      //     handles: allLensCommunities.slice(i, i + 50).map((c) => c.handle),
+      //     limit: 50
+      //   })
+
+      //   console.log('profiles', profiles)
+
+      //   profiles.items.forEach((profile) => {
+      //     if (profile.isFollowedByMe) {
+      //       const corrospondingCommunity = allLensCommunities.find(
+      //         (c) => c.handle === profile.handle
+      //       )
+      //       _joinedLensCommunities.push(corrospondingCommunity)
+      //     }
+      //   })
+      //   cursor = profiles.pageInfo.next
+      // }
+
+      // // remove communities from where user in banned
+
+      // cursor = null
+      // for (let i = 0; i < _joinedLensCommunities.length; i += 50) {
+      //   const { profiles } = await getProfiles({
+      //     cursor: cursor,
+      //     handles: _joinedLensCommunities.slice(i, i + 50).map((c) => c.handle),
+      //     limit: 50
+      //   })
+
+      //   profiles.items.forEach((profile, index) => {
+      //     _joinedLensCommunities[i + index] = {
+      //       ..._joinedLensCommunities[i + index],
+      //       Profile: profile
+      //     }
+      //   })
+      //   cursor = profiles.pageInfo.next
+      // }
+
+      // setJoinedLensCommunties(_joinedLensCommunities)
     }, [user, lensProfile?.defaultProfile?.id])
 
   useEffect(() => {
@@ -212,7 +248,8 @@ export const WalletProvider = ({ children }) => {
         loading,
         LensCommunity,
         fetchAndSetLensCommunity,
-        joinedLensCommunities
+        joinedLensCommunities,
+        allLensCommunities
       }}
     >
       {children}

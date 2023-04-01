@@ -19,7 +19,11 @@ const RightSideCommunityComponent = ({ community }) => {
           src={community?.logoImageUrl}
           className="w-[40px] h-[40px] object-cover rounded-full"
         />
-        <span>{community?.name}</span>
+        <span>
+          {community?.isLensCommunity
+            ? `l/${community?.name}`
+            : community?.name}
+        </span>
       </div>
     </Link>
   )

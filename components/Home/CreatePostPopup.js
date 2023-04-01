@@ -227,7 +227,7 @@ const CreatePostPopup = () => {
             : ''
         }` +
         title +
-        '\n' +
+        '\n ' +
         content.trim(),
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
@@ -422,12 +422,12 @@ const CreatePostPopup = () => {
     console.log('joinedLensCommunities', joinedLensCommunities)
     setJoinedCommunities([
       ...mostPostedCommunities,
-      ...myLensCommunity,
       ...joinedLensCommunities
         .map((community) => ({
-          _id: community._id,
-          name: formatHandle(community?.Profile?.handle),
-          logoImageUrl: getAvatar(community?.Profile),
+          _id: community.handle,
+          name: formatHandle(community?.handle),
+          // @ts-ignore
+          logoImageUrl: getAvatar(community),
           isLensCommunity: true
         }))
         .filter(

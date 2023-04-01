@@ -17,7 +17,7 @@ import formatHandle from '../User/lib/formatHandle'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
-  const { user, LensCommunity } = useProfile()
+  const { user, LensCommunity, allLensCommunities } = useProfile()
   const { data: lensProfile } = useLensUserContext()
   const { notifyError } = useNotify()
 
@@ -77,6 +77,13 @@ const RightSidebar = () => {
     }
   }, [])
 
+  // sort alllenscommunities by followers
+  const sortedLensCommunities = allLensCommunities?.sort(
+    (a, b) => b.stats.totalFollowers - a.stats.totalFollowers
+  )
+
+  console.log('sortedLensCommunities: ', sortedLensCommunities)
+
   return (
     <div
       className={`relative ${
@@ -106,6 +113,16 @@ const RightSidebar = () => {
       )}
       {topCommunities?.length > 0 && (
         <CommunitiesDiv
+          showFirstCommunities={
+            sortedLensCommunities.length > 0
+              ? sortedLensCommunities.map((c) => ({
+                  name: formatHandle(c.handle),
+                  // @ts-ignore
+                  logoImageUrl: getAvatar(c),
+                  isLensCommunity: true
+                }))
+              : []
+          }
           text="Recommended Communities"
           communitiesList={topCommunities}
           Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
