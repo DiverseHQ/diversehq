@@ -2,10 +2,10 @@ import React from 'react'
 
 const CopyrightAndLinks = () => {
   return (
-    <div className="flex flex-wrap gap-2 text-p-text text-[14px]">
+    <div className="flex flex-wrap gap-2 text-p-text text-sm">
       <span className="font-semibold">&copy; 2023 DiverseHQ</span>
-      <span className="cursor-pointer">Terms</span>
-      <span className="cursor-pointer">Privacy</span>
+      {/* <span className="cursor-pointer">Terms</span>
+      <span className="cursor-pointer">Privacy</span> */}
       <a
         className="cursor-pointer"
         href="https://discord.gg/hrxYJcXPMm"
@@ -22,8 +22,8 @@ const CopyrightAndLinks = () => {
       >
         Twitter
       </a>
-      <span className="cursor-pointer">Feedback</span>
-      <span className="cursor-pointer">Thanks</span>
+      {/* <span className="cursor-pointer">Feedback</span>
+      <span className="cursor-pointer">Thanks</span> */}
     </div>
   )
 }

@@ -14,6 +14,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import formatHandle from '../User/lib/formatHandle'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { isMainnet } from '../../utils/config'
 
 interface Props {
   connectWalletLabel?: string
@@ -165,7 +166,7 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
               )}
           </div>
         )}
-        {isSignedIn && !hasProfile && !showLoading && (
+        {isSignedIn && !hasProfile && !showLoading && !isMainnet && (
           <button
             onClick={handleCreateLensProfileAndMakeDefault}
             className="rounded-xl text-[20px] md:text-[16px] font-semibold text-s-bg bg-[#62F030] py-1 px-2 sm:px-6"

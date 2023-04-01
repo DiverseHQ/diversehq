@@ -6,8 +6,7 @@ import ReactTimeAgo from 'react-time-ago'
 
 import { PublicationMainFocus } from '../../graphql/generated'
 import ReactEmbedo from './embed/ReactEmbedo'
-import { MAX_CONTENT_LINES_FOR_POST } from '../../utils/config'
-import { countLinesFromMarkdown, getURLsFromText } from '../../utils/utils'
+import { getURLsFromText } from '../../utils/utils'
 import { BsCollection } from 'react-icons/bs'
 import Link from 'next/link'
 import Attachment from './Attachment'
@@ -18,9 +17,6 @@ import { AiOutlineRetweet } from 'react-icons/ai'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
-  const showMore =
-    countLinesFromMarkdown(postInfo?.metadata?.content) >
-      MAX_CONTENT_LINES_FOR_POST || postInfo?.metadata?.content?.length > 400
 
   return (
     <>
@@ -150,14 +146,10 @@ const IndexingPostCard = ({ postInfo }) => {
                   )}
                   {postInfo?.metadata?.name !== postInfo?.metadata?.content && (
                     <div
-                      className={`${
-                        showMore ? 'h-[150px]' : ''
-                      } sm:max-w-[550px] overflow-hidden break-words`}
+                      className={`sm:max-w-[550px] overflow-hidden break-words`}
                     >
                       <Markup
-                        className={`${
-                          showMore ? 'line-clamp-5' : ''
-                        } linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
+                        className={`linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                       >
                         {postInfo?.metadata?.content?.startsWith(
                           postInfo?.metadata?.name
@@ -189,7 +181,7 @@ const IndexingPostCard = ({ postInfo }) => {
 
               {/* bottom row */}
               <div
-                className={`text-p-text flex flex-row items-center px-3 sm:px-4.5 py-1 justify-between sm:justify-start sm:space-x-28 ${
+                className={`text-p-text flex flex-row items-center px-3 sm:px-6 py-1 justify-between sm:justify-start sm:space-x-28 ${
                   isMobile
                     ? 'border-b-[1px] border-[#eee] dark:border-p-border pb-2'
                     : ''
