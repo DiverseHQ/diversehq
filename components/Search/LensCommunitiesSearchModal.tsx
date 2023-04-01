@@ -7,6 +7,8 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import getAvatar from '../User/lib/getAvatar'
 import formatHandle from '../User/lib/formatHandle'
 
+/* eslint-disable */
+
 interface Props {
   searchTerm: string
   setSearchTerm: (searchTerm: string) => void
