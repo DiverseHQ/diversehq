@@ -149,7 +149,7 @@ const Navbar = () => {
         ...recentCommunities,
         ...joinedLensCommunities
           .map((community) => ({
-            _id: community.handle,
+            _id: community._id,
             name: formatHandle(community?.handle),
             // @ts-ignore
             logoImageUrl: getAvatar(community),

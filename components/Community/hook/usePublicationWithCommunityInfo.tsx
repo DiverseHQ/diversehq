@@ -12,12 +12,14 @@ interface Props {
   request: PublicationsQueryRequest
   reactionRequest: ReactionFieldResolverRequest
   profileId: string
+  enabled?: boolean
 }
 
 const usePublicationWithCommunityInfo = ({
   request,
   reactionRequest,
-  profileId
+  profileId,
+  enabled = true
 }: Props): {
   publications: postWithCommunityInfoType[]
   isLoading: boolean
@@ -28,7 +30,7 @@ const usePublicationWithCommunityInfo = ({
   const { data, isLoading } = usePublicationsQuery(
     { request, reactionRequest, profileId },
     {
-      enabled: !!request
+      enabled: !!request && enabled
     }
   )
 

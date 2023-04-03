@@ -31,7 +31,9 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
     profileId: myLensProfile?.defaultProfile?.id,
     reactionRequest: {
       profileId: myLensProfile?.defaultProfile?.id
-    }
+    },
+    enabled:
+      !!publicationIds.length && !!myLensProfile?.defaultProfile?.id && hasMore
   })
 
   React.useEffect(() => {
@@ -47,7 +49,7 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
         publications.length,
         joinedLensCommunities.map((c) => c._id)
       ).then((res) => res.json())
-      setPublicationIds(newPublicationIds)
+      setPublicationIds(newPublicationIds.map((p) => p.publicationId))
 
       if (newPublicationIds.length < LENS_POST_LIMIT) {
         setHasMore(false)
@@ -56,6 +58,13 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
       console.log('error', error)
     }
   }
+
+  React.useEffect(() => {
+    if (router.pathname === '/feed/foryou') {
+      console.log('fetching more')
+      fetchMoreLensPosts()
+    }
+  }, [])
 
   return (
     <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden">
