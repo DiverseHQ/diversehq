@@ -8,10 +8,11 @@ import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useDevice from '../../components/Common/useDevice'
 import { appLink } from '../../utils/config'
-import LensPostJoinedCommunitiesPublicationsNew from '../../components/Post/LensPostJoinedCommunitiesPublicationsNew'
+// import LensPostJoinedCommunitiesPublicationsNew from '../../components/Post/LensPostJoinedCommunitiesPublicationsNew'
+import LensPostJoinedCommunitiesPublicationsFromDB from '../../components/Post/LensPostJoinedCommunitiesPublicationsFromDB'
 const foryou = () => {
   const { isSignedIn, hasProfile } = useLensUserContext()
-  const { user, LensCommunity, joinedLensCommunities } = useProfile()
+  const { user } = useProfile()
   const { isDesktop } = useDevice()
   return (
     <>
@@ -27,14 +28,16 @@ const foryou = () => {
           {isDesktop && <CreatePostBar />}
           <NavFilterAllPosts />
           {user && isSignedIn && hasProfile && (
-            <LensPostJoinedCommunitiesPublicationsNew
-              communityIds={[
-                ...user.communities,
-                LensCommunity?._id,
-                // eslint-disable-next-line
-                ...joinedLensCommunities?.map((c) => c._id)
-              ].filter((c) => c)}
-            />
+            // <LensPostJoinedCommunitiesPublicationsNew
+            //   communityIds={[
+            //     ...user.communities,
+            //     LensCommunity?._id,
+            //     // eslint-disable-next-line
+            //     ...joinedLensCommunities?.map((c) => c._id)
+            //   ].filter((c) => c)}
+            // />
+
+            <LensPostJoinedCommunitiesPublicationsFromDB />
           )}
           {(!user || !isSignedIn || !hasProfile) && (
             <div className="w-full flex items-center flex-row justify-center">

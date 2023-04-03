@@ -26,11 +26,7 @@ const usePublicationWithCommunityInfo = ({
     postWithCommunityInfoType[]
   >([])
   const { data, isLoading } = usePublicationsQuery(
-    {
-      request,
-      reactionRequest,
-      profileId
-    },
+    { request, reactionRequest, profileId },
     {
       enabled: !!request
     }

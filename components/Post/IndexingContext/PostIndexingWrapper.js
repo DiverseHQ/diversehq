@@ -7,6 +7,7 @@ import {
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { postIdFromIndexedResult } from '../../../utils/utils'
+import { putAddLensPublication } from '../../../api/lensPublication'
 export const PostIndexingContext = React.createContext({})
 const PostIndexingWrapper = ({ children }) => {
   const [posts, setPosts] = React.useState([])
@@ -14,7 +15,7 @@ const PostIndexingWrapper = ({ children }) => {
   const { data: lensProfile } = useLensUserContext()
   const router = useRouter()
 
-  const onSuccessIndex = async (result) => {
+  const onSuccessIndex = async (result, post) => {
     try {
       const postId = postIdFromIndexedResult(
         lensProfile?.defaultProfile?.id,
@@ -27,6 +28,9 @@ const PostIndexingWrapper = ({ children }) => {
           reaction: ReactionTypes.Upvote
         }
       })
+
+      // adding lens post to db , for indexing at for you feed
+      await putAddLensPublication(post.communityInfo._id, postId)
 
       // remove from ui
       // setPosts(posts.filter((p) => p.id !== postId))
@@ -43,7 +47,9 @@ const PostIndexingWrapper = ({ children }) => {
     // indexing
     try {
       const indexResult = await pollUntilIndexed(tx)
-      await onSuccessIndex(indexResult)
+      console.log('indexResult', indexResult)
+      console.log('index success')
+      await onSuccessIndex(indexResult, post)
     } catch (err) {
       console.log(err)
     }

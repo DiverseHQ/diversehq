@@ -227,7 +227,7 @@ const CreatePostPopup = () => {
             : ''
         }` +
         title +
-        '\n ' +
+        '\n \n' +
         content.trim(),
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,

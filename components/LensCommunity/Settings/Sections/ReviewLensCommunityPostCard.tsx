@@ -28,6 +28,7 @@ import Markup from '../../../Lexical/Markup'
 import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
 import imageProxy from '../../../User/lib/imageProxy'
+import { putAddLensPublication } from '../../../../api/lensPublication'
 
 interface Props {
   fetchAndSetUnResolvedReviewPosts: () => Promise<void>
@@ -81,6 +82,7 @@ const ReviewLensCommunityPostCard = ({
         lensCommunityPostsResolveActions.ALLOW,
         publicationId
       )
+      await putAddLensPublication(post.lensCommunityId, publicationId)
       if (res.status === 200) {
         await fetchAndSetUnResolvedReviewPosts()
         notifySuccess('Post has been accepted')
