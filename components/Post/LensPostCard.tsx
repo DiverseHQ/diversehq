@@ -48,6 +48,7 @@ import getAvatar from '../User/lib/getAvatar'
 import { getAllMentionsHandlFromContent } from './PostPageMentionsColumn'
 import useLensFollowButton from '../User/useLensFollowButton'
 import clsx from 'clsx'
+import { deleteLensPublication } from '../../api/lensPublication'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -212,6 +213,12 @@ const LensPostCard = ({ post }: Props) => {
 
   const handleDeletePost = async () => {
     try {
+      try {
+        await deleteLensPublication(post?.id)
+      } catch (error) {
+        console.log(error)
+      }
+
       if (post?.metadata?.media?.length > 0) {
         const medias = post?.metadata?.media
         for (const media of medias) {

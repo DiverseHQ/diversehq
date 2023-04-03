@@ -7,7 +7,6 @@ import { useNotify } from '../../../Common/NotifyContext'
 
 import usePublicationWithCommunityInfo from '../../hook/usePublicationWithCommunityInfo'
 import LensReportPost from './LensReportPost'
-
 const ReportSection = ({
   community,
   isLensCommunity = false

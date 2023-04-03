@@ -35,3 +35,13 @@ export const putAddLensPublication = async (
     })
   })
 }
+
+export const deleteLensPublication = async (publicationdId: string) => {
+  return await fetch(
+    `${apiEndpoint}/lensPublication/delete-lens-publication?publicationId=${publicationdId}`,
+    {
+      method: 'DELETE',
+      headers: await getHeaders()
+    }
+  )
+}
