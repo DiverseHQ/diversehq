@@ -16,7 +16,7 @@ import { HiSun } from 'react-icons/hi'
 import formatHandle from '../User/lib/formatHandle'
 import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
 import { useTheme } from '../Common/ThemeProvider'
-import { ALLOWED_PROFILE_IDS } from '../Common/UI/OnlyAdmins'
+import { specialProfileIds } from '../../utils/profileIds'
 
 const ClickOption = () => {
   const router = useRouter()
@@ -72,105 +72,57 @@ const ClickOption = () => {
 
   return (
     <MoreOptionsModal
-      list={
-        LensCommunity
-          ? [
-              {
-                label: 'View Profile',
-                onClick: routeToUserProfile,
-                icon: () => (
-                  <BsFillPersonFill className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
-                label: 'Settings',
-                onClick: routeToSettings,
-                icon: () => (
-                  <IoMdSettings className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
-                label: 'Create Community',
-                onClick: createCommunity,
-                icon: () => (
-                  <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
-                label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
-                onClick: toggleTheme,
-                icon: () => (
-                  <>
-                    {theme === 'light' ? (
-                      <IoIosMoon className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <HiSun className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                    )}
-                  </>
-                )
-              },
-              {
-                label: 'Disconnect',
-                onClick: disconnectAndClear,
-                icon: () => (
-                  <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              }
-            ]
-          : [
-              {
-                label: 'View Profile',
-                onClick: routeToUserProfile,
-                icon: () => (
-                  <BsFillPersonFill className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
-                label: 'Settings',
-                onClick: routeToSettings,
-                icon: () => (
-                  <IoMdSettings className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
-                label: 'Create Community',
-                onClick: createCommunity,
-                icon: () => (
-                  <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
-                label: 'Create Lens Community',
-                onClick: createLensCommunity,
-                hidden: !ALLOWED_PROFILE_IDS.includes(
-                  lensProfile?.defaultProfile?.id
-                ),
-                icon: () => (
-                  <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              },
-              {
-                label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
-                onClick: toggleTheme,
-                icon: () => (
-                  <>
-                    {theme === 'light' ? (
-                      <IoIosMoon className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <HiSun className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                    )}
-                  </>
-                )
-              },
-              {
-                label: 'Disconnect',
-                onClick: disconnectAndClear,
-                icon: () => (
-                  <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-                )
-              }
-            ]
-      }
+      list={[
+        {
+          label: 'View Profile',
+          onClick: routeToUserProfile,
+          icon: () => (
+            <BsFillPersonFill className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+          )
+        },
+        {
+          label: 'Settings',
+          onClick: routeToSettings,
+          icon: () => <IoMdSettings className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+        },
+        {
+          label: 'Create Community',
+          onClick: createCommunity,
+          icon: () => (
+            <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+          )
+        },
+        {
+          label: 'Create Lens Community',
+          onClick: createLensCommunity,
+          hidden:
+            !!LensCommunity ||
+            !specialProfileIds.includes(lensProfile?.defaultProfile?.id),
+          icon: () => (
+            <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+          )
+        },
+        {
+          label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
+          onClick: toggleTheme,
+          icon: () => (
+            <>
+              {theme === 'light' ? (
+                <IoIosMoon className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+              ) : (
+                <HiSun className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+              )}
+            </>
+          )
+        },
+        {
+          label: 'Disconnect',
+          onClick: disconnectAndClear,
+          icon: () => (
+            <AiOutlineDisconnect className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+          )
+        }
+      ]}
     />
   )
 }
