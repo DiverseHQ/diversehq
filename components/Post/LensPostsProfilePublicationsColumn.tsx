@@ -110,15 +110,9 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     for (let i = 0; i < newPosts.length; i++) {
       if (!communityInfoForPosts[i]?._id) {
         if (newPosts[i]?.__typename === 'Mirror') {
-          console.log('newPosts[i] Mirror', newPosts[i])
           let mirrorPost = newPosts[i]
           // @ts-ignore
           newPosts[i] = mirrorPost?.mirrorOf
-          console.log('newPosts[i] MirrorOf', newPosts[i])
-
-          if (newPosts[i]?.__typename === 'Comment') {
-            console.log('newPosts[i] MirrorOf Comment', newPosts[i])
-          }
 
           // @ts-ignore
           newPosts[i].mirroredBy = mirrorPost.profile
@@ -127,7 +121,6 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
       } else {
         if (newPosts[i]?.__typename === 'Mirror') {
-          console.log('newPosts[i] Mirror', newPosts[i])
           let mirrorPost = newPosts[i]
           // @ts-ignore
           newPosts[i] = mirrorPost?.mirrorOf

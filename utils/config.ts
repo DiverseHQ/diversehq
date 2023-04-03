@@ -173,6 +173,14 @@ export const infoFromLensAppId = {
     description: 'The Gateway to Web3 Social',
     link: 'https://phaver.com'
   },
+  memester: {
+    appId: 'memester',
+    logoLink:
+      'https://pbs.twimg.com/profile_images/1569120124065423361/skbWGFHt_400x400.jpg',
+    name: 'Memester',
+    description: 'The NFT Meme Platform on LensProtocol',
+    link: 'https://memester.xyz'
+  },
   wav3s: {
     appId: 'wav3s',
     logoLink:
