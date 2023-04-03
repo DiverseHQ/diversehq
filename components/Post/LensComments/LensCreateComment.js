@@ -22,6 +22,7 @@ import Giphy from '../Giphy'
 import { AiOutlineClose } from 'react-icons/ai'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../../User/lib/formatHandle'
+import clsx from 'clsx'
 const LensCreateComment = ({ postId, addComment, postInfo }) => {
   const [focused, setFocused] = useState(false)
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -264,7 +265,12 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
         </>
       ) : (
         <>
-          <div className="w-full bg-s-bg fixed z-30 border-t pt-2 border-s-border bottom-0 left-0 right-0 flex flex-col items-center">
+          <div
+            className={clsx(
+              'w-full bg-s-bg fixed z-30 border-t border-s-border bottom-0 left-0 right-0 flex flex-col items-center',
+              focused && 'pt-2'
+            )}
+          >
             {!postInfo && currentReplyComment && focused && (
               <ReplyMobileInfo
                 fromAvatarUrl={getAvatar(lensProfile?.defaultProfile)}
