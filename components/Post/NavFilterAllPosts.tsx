@@ -108,7 +108,7 @@ const NavFilterAllPosts = () => {
       }
     >
       <FilterButton
-        Icon={<MdOutlineExplore className="h-5 w-5" />}
+        Icon={<MdOutlineExplore className="h-4 w-4" />}
         title="All"
         active={active === 'all'}
         onClick={() => {
@@ -117,7 +117,7 @@ const NavFilterAllPosts = () => {
         tooltipTitle="Posts from all communities"
       />
       <FilterButton
-        Icon={<CgCommunity className="h-6 w-6" />}
+        Icon={<CgCommunity className="h-5 w-5" />}
         title="For You"
         active={active === 'foryou'}
         onClick={() => {
