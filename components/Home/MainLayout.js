@@ -21,7 +21,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   React.useEffect(() => setMounted(true), [])
   React.useEffect(() => {
     if (typeof isMobile === 'undefined') return
-    if (!mobile) {
+    if (!mobile || !isMobile) {
       setMobile(isMobile)
     }
   }, [isMobile])
