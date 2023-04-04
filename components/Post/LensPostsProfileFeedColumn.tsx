@@ -11,6 +11,8 @@ import { useRouter } from 'next/router'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
+import { usePublicationStore } from '../../store/publication'
+import { useProfileStore } from '../../store/profile'
 
 const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   const router = useRouter()
@@ -22,6 +24,8 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   })
   const { isMobile } = useDevice()
   const { loading: routeLoading } = useRouterLoading()
+  const addPublications = usePublicationStore((state) => state.addPublications)
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { data: profileFeed } = useProfileFeedQuery(
     {
@@ -79,6 +83,21 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       hasMore,
       posts: [...exploreQueryRequestParams.posts, ...newPosts]
     })
+
+    // addProfiles & addPublications to store
+    // profile to be added is a set of handle as key and profile as value
+    // publication to be added is a set of id as key and publication as value
+
+    let newProfiles = new Map()
+    let newPublications = new Map()
+
+    for (const newPost of newPosts) {
+      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newPublications.set(newPost.id, newPost)
+    }
+
+    addProfiles(newProfiles)
+    addPublications(newPublications)
   }
 
   useEffect(() => {

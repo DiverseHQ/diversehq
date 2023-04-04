@@ -7,7 +7,7 @@ import {
   PublicationTypes,
   useExplorePublicationsQuery
 } from '../../graphql/generated'
-import { LENS_POST_LIMIT } from '../../utils/config.ts'
+import { LENS_POST_LIMIT, appId } from '../../utils/config'
 import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import LensPostCard from './LensPostCard'
 import { useLensUserContext } from '../../lib/LensUserContext'
@@ -22,11 +22,16 @@ import useDevice from '../Common/useDevice'
 import MobileLoader from '../Common/UI/MobileLoader'
 import useSort from '../Common/Hook/useSort'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
+import { usePublicationStore } from '../../store/publication'
+import { useProfileStore } from '../../store/profile'
+import { postWithCommunityInfoType } from '../../types/post'
 const LensAllTopPublicationsColumn = () => {
   const router = useRouter()
   const { data: myLensProfile } = useLensUserContext()
   const { posts: indexingPost } = usePostIndexing()
   const { timestamp } = useSort()
+  const addPublications = usePublicationStore((state) => state.addPublications)
+  const addProfiles = useProfileStore((state) => state.addProfiles)
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
     cursor: null,
     hasMore: true,
@@ -44,7 +49,7 @@ const LensAllTopPublicationsColumn = () => {
         sortCriteria: PublicationSortCriteria.TopMirrored,
         noRandomize: true,
         timestamp: timestamp,
-        sources: ['diversehq']
+        sources: [appId]
       },
       reactionRequest: {
         profileId: myLensProfile?.defaultProfile?.id
@@ -95,7 +100,8 @@ const LensAllTopPublicationsColumn = () => {
     if (data?.explorePublications?.pageInfo?.next) {
       nextCursor = data.explorePublications.pageInfo.next
     }
-    const newPosts = data.explorePublications.items
+    // @ts-ignore
+    const newPosts: postWithCommunityInfoType[] = data.explorePublications.items
     if (newPosts.length < LENS_POST_LIMIT) {
       hasMore = false
     }
@@ -113,6 +119,7 @@ const LensAllTopPublicationsColumn = () => {
         }
       }
     }
+
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       nextCursor,
@@ -120,6 +127,21 @@ const LensAllTopPublicationsColumn = () => {
       posts: [...exploreQueryRequestParams.posts, ...newPosts]
     })
     // await handleSetPosts(data.explorePublications.items)
+
+    // addProfiles & addPublications to store
+    // profile to be added is a set of handle as key and profile as value
+    // publication to be added is a set of id as key and publication as value
+
+    let newProfiles = new Map()
+    let newPublications = new Map()
+
+    for (const newPost of newPosts) {
+      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newPublications.set(newPost.id, newPost)
+    }
+
+    addProfiles(newProfiles)
+    addPublications(newPublications)
   }
 
   useEffect(() => {

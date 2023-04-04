@@ -7,7 +7,7 @@ import {
   PublicationTypes,
   useExplorePublicationsQuery
 } from '../../graphql/generated'
-import { LENS_POST_LIMIT } from '../../utils/config.ts'
+import { LENS_POST_LIMIT } from '../../utils/config'
 import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import LensPostCard from './LensPostCard'
 import { useLensUserContext } from '../../lib/LensUserContext'
@@ -21,10 +21,15 @@ import useRouterLoading from '../Common/Hook/useRouterLoading'
 import useDevice from '../Common/useDevice'
 import MobileLoader from '../Common/UI/MobileLoader'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
+import { postWithCommunityInfoType } from '../../types/post'
+import { usePublicationStore } from '../../store/publication'
+import { useProfileStore } from '../../store/profile'
 const LensAllLatestPublicationsColumn = () => {
   const router = useRouter()
   const { data: myLensProfile } = useLensUserContext()
   const { posts: indexingPost } = usePostIndexing()
+  const addPublications = usePublicationStore((state) => state.addPublications)
+  const addProfiles = useProfileStore((state) => state.addProfiles)
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
     cursor: null,
     hasMore: true,
@@ -70,7 +75,8 @@ const LensAllLatestPublicationsColumn = () => {
     if (data?.explorePublications?.pageInfo?.next) {
       nextCursor = data.explorePublications.pageInfo.next
     }
-    const newPosts = data.explorePublications.items
+    // @ts-ignore
+    const newPosts: postWithCommunityInfoType[] = data.explorePublications.items
     if (newPosts.length < LENS_POST_LIMIT) {
       hasMore = false
     }
@@ -95,6 +101,17 @@ const LensAllLatestPublicationsColumn = () => {
       posts: [...exploreQueryRequestParams.posts, ...newPosts]
     })
     // await handleSetPosts(data.explorePublications.items)
+
+    let newProfiles = new Map()
+    let newPublications = new Map()
+
+    for (const newPost of newPosts) {
+      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newPublications.set(newPost.id, newPost)
+    }
+
+    addProfiles(newProfiles)
+    addPublications(newPublications)
   }
 
   useEffect(() => {

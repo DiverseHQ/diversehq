@@ -38,7 +38,6 @@ const RightSidebar = () => {
 
   const fetchTopCommunities = async () => {
     try {
-      console.log('fetching top communities')
       const communities = await getAllCommunities(6, 0, 'top')
       if (communities.communities.length > 0) {
         setTopCommunities(communities.communities)
@@ -81,8 +80,6 @@ const RightSidebar = () => {
   const sortedLensCommunities = allLensCommunities?.sort(
     (a, b) => b.stats.totalFollowers - a.stats.totalFollowers
   )
-
-  console.log('sortedLensCommunities: ', sortedLensCommunities)
 
   return (
     <div

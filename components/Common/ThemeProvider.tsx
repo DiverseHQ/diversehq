@@ -1,6 +1,6 @@
 import React from 'react'
 import { useContext } from 'react'
-import { useLayoutEffect } from 'react'
+import { useEffect } from 'react'
 import { useState } from 'react'
 import { createContext } from 'react'
 
@@ -28,7 +28,7 @@ const ThemeProvider = ({ children }) => {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const theme = window.localStorage.getItem('data-theme')
     if (theme) {
       document.body.classList.add(theme)

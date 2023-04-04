@@ -27,7 +27,7 @@ const ProfilePageRightSidebar: FC<Props> = ({ profile, lensProfile }) => {
             <img src="/communityCreatedOnDate.svg" alt="cake" />
             <span className="text-[#7c7c7c]">
               Joined{' '}
-              {new Date(profile.createdAt)
+              {new Date(profile?.createdAt)
                 .toDateString()
                 .split(' ')
                 .slice(1)

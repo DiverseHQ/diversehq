@@ -53,6 +53,10 @@ function MyApp({ Component, pageProps, isMobileView }: MyAppProps) {
   const retainedComponents = useRef<{ [path: string]: RetainedComponent }>({})
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
 
+  useEffect(() => {
+    document.cookie = 'isClient=true; path=/'
+  }, [])
+
   // Add Component to retainedComponents if we haven't got it already
   if (isRetainableRoute && !retainedComponents.current[router.asPath]) {
     const MemoComponent = memo(Component)

@@ -8,7 +8,20 @@ import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-inde
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { postIdFromIndexedResult } from '../../../utils/utils'
 import { putAddLensPublication } from '../../../api/lensPublication'
-export const PostIndexingContext = React.createContext({})
+
+/* eslint-disable */
+
+interface ContextType {
+  posts: any[]
+  addPost: (tx: { txHash: string } | { txId: string }, post: any) => void
+}
+
+export const PostIndexingContext = React.createContext<ContextType>({
+  posts: [],
+  addPost(tx, post) {
+    console.log(tx, post)
+  }
+})
 const PostIndexingWrapper = ({ children }) => {
   const [posts, setPosts] = React.useState([])
   const { mutateAsync: addReaction } = useAddReactionMutation()
@@ -39,7 +52,7 @@ const PostIndexingWrapper = ({ children }) => {
     }
   }
 
-  const addPost = async (tx, post) => {
+  const addPost = async (tx: { txHash: string } | { txId: string }, post) => {
     router.push('/')
     // show for ui
     setPosts([post, ...posts])

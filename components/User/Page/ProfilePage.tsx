@@ -10,15 +10,32 @@ import { UserType } from '../../../types/user'
 import { Profile } from '../../../graphql/generated'
 import ProfilePageMobileTopNav from '../ProfilePageMobileTopNav'
 import ProfilePageRightSidebar from '../ProfilePageRightSidebar'
+import { getUserInfo } from '../../../api/user'
 
 interface Props {
-  _profile: UserType
   _lensProfile: Profile
 }
 
-const ProfilePage = ({ _profile, _lensProfile }: Props) => {
+const ProfilePage = ({ _lensProfile }: Props) => {
   const { isMobile } = useDevice()
   const router = useRouter()
+  const [_profile, _setProfile] = React.useState<UserType>(null)
+
+  const fetchAndSetOffChainProfileInfo = async () => {
+    try {
+      const userInfo = await getUserInfo(_lensProfile?.ownedBy)
+      if (userInfo) {
+        _setProfile(userInfo)
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  React.useEffect(() => {
+    fetchAndSetOffChainProfileInfo()
+  }, [_lensProfile?.ownedBy])
+
   return (
     <div>
       {isMobile && <ProfilePageMobileTopNav _lensProfile={_lensProfile} />}

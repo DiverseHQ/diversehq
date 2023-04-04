@@ -1,18 +1,15 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import { stringToLength } from '../../utils/utils'
 import getAvatar from './lib/getAvatar'
 
-const ProfilePageNextSeo = ({ profile, lensProfile }) => {
+const ProfilePageNextSeo = ({ lensProfile }) => {
   return (
     <>
-      {profile && (
+      {!lensProfile && (
         <NextSeo
-          title={`${
-            lensProfile.name
-              ? lensProfile.name
-              : stringToLength(profile.walletAddress, 6)
-          } ${lensProfile?.handle ? ' | ' + lensProfile?.handle : ''}`}
+          title={`${lensProfile.name} ${
+            lensProfile?.handle ? ' | ' + lensProfile?.handle : ''
+          }`}
           description={lensProfile.bio}
           openGraph={{
             title: `${lensProfile.name} | ${lensProfile?.handle}`,

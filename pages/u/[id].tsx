@@ -1,42 +1,88 @@
+import { GetServerSidePropsContext } from 'next'
 import ProfileNotFound from '../../components/User/Page/ProfileNotFound'
 import ProfilePage from '../../components/User/Page/ProfilePage'
 import ProfilePageNextSeo from '../../components/User/ProfilePageNextSeo'
-import { getProfileAndLensProfileFromHandle } from '../../components/User/lib/getProfileAndLensProfileFromHandle'
-import { ProfileAndLensProfileType } from '../../components/User/lib/getProfileAndLensProfileFromHandle'
+import { Profile } from '../../graphql/generated'
+import getLensProfileInfo from '../../lib/profile/get-profile-info'
+import { apiMode } from '../../utils/config'
+import { useState } from 'react'
+import { useProfileStore } from '../../store/profile'
+import React from 'react'
+import MobileLoader from '../../components/Common/UI/MobileLoader'
 
-const Profile = ({ profile, lensProfile }: ProfileAndLensProfileType) => {
+const profile = ({
+  _lensProfile,
+  handle
+}: {
+  _lensProfile: Profile
+  handle: string
+}) => {
+  const [lensProfile, setLensProfile] = useState<Profile | null>(_lensProfile)
+  const profiles = useProfileStore((state) => state.profiles)
+  const addProfile = useProfileStore((state) => state.addProfile)
+  const [loading, setLoading] = useState(true)
+
+  const fetchAndSetLensProfile = async () => {
+    try {
+      const lensProfileRes = await getLensProfileInfo({
+        handle: handle
+      })
+      // @ts-ignore
+      setLensProfile(lensProfileRes.profile)
+      // @ts-ignore
+      addProfile(lensProfileRes.profile.handle, lensProfileRes.profile)
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  React.useEffect(() => {
+    if (!handle || _lensProfile) return
+    if (profiles.get(handle) && profiles) {
+      setLensProfile(profiles.get(handle))
+      setLoading(false)
+    } else {
+      fetchAndSetLensProfile()
+    }
+  }, [profiles, handle])
+
   return (
     <>
-      <ProfilePageNextSeo profile={profile} lensProfile={lensProfile} />
-      {!lensProfile && <ProfileNotFound />}
-      {lensProfile && (
-        <ProfilePage _profile={profile} _lensProfile={lensProfile} />
-      )}
+      {lensProfile && <ProfilePageNextSeo lensProfile={lensProfile} />}
+      {!lensProfile && !loading && <ProfileNotFound />}
+      {lensProfile && !loading && <ProfilePage _lensProfile={lensProfile} />}
+      {loading && <MobileLoader />}
     </>
   )
 }
 
-interface paramsType {
-  params: {
-    id?: string
-  }
-}
-
-interface returnPropsType {
-  props: ProfileAndLensProfileType
-}
-
-export async function getServerSideProps({
-  params
-}: paramsType): Promise<returnPropsType> {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { req, params } = context
   const { id } = params
-  const { profile, lensProfile } = await getProfileAndLensProfileFromHandle(id)
+
+  const isClient = Boolean(req.cookies.isClient)
+
+  if (isClient) {
+    return {
+      props: {
+        _lensProfile: null,
+        handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
+      }
+    }
+  }
+
+  const lensProfileRes = await getLensProfileInfo({
+    handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
+  })
+
   return {
     props: {
-      profile,
-      lensProfile
+      _lensProfile: lensProfileRes.profile,
+      handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
     }
   }
 }
 
-export default Profile
+export default profile

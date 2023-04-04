@@ -13,6 +13,8 @@ import LensPostCard from './LensPostCard'
 import { getJoinedLensPublication } from '../../api/lensPublication'
 import { useProfile } from '../Common/WalletContext'
 import usePublicationWithCommunityInfo from '../Community/hook/usePublicationWithCommunityInfo'
+import { usePublicationStore } from '../../store/publication'
+import { useProfileStore } from '../../store/profile'
 
 const LensPostJoinedCommunitiesPublicationsFromDB = () => {
   const router = useRouter()
@@ -23,6 +25,8 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
   const { loading: routeLoading } = useRouterLoading()
   const [publicationIds, setPublicationIds] = useState<string[]>([])
   const { joinedLensCommunities } = useProfile()
+  const addPublications = usePublicationStore((state) => state.addPublications)
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { publications: rawPublications } = usePublicationWithCommunityInfo({
     request: {
@@ -39,6 +43,17 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
   React.useEffect(() => {
     if (!rawPublications) return
     setPublications((prev) => [...prev, ...rawPublications])
+
+    let newProfiles = new Map()
+    let newPublications = new Map()
+
+    for (const newPost of rawPublications) {
+      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newPublications.set(newPost.id, newPost)
+    }
+
+    addProfiles(newProfiles)
+    addPublications(newPublications)
   }, [rawPublications])
 
   const fetchMoreLensPosts = async () => {
