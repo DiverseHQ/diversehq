@@ -20,8 +20,8 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
   React.useEffect(() => {
-    if (typeof isMobile === 'undefined') return
-    if (!mobile || !isMobile) {
+    if (typeof window === 'undefined') return
+    if (!mobile) {
       setMobile(isMobile)
     }
   }, [isMobile])
