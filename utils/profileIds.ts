@@ -1,6 +1,7 @@
 export const specialProfileIds = ['0x0161ba', '0x01abf2', '0xd478', '0x0150b2']
 
 export const whitelistedAddresses = [
+  '0xc2b96df49da778bfca0cc6c4416e40e2d17f72ff',
   '0x4b139bfd2e7178334446ec9ca43c04e4d512e61f',
   '0x4b1604170abe3e47edce597052afbce1303caf3c',
   '0x4b2253c9a0fabe52c978b2bfe96773138b858182',
