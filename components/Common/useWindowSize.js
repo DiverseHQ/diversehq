@@ -7,11 +7,12 @@ const useWindowSize = () => {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 0
   )
-  const onResize = () => {
-    setWindowHeight(window.innerHeight)
-    setWindowWidth(window.innerWidth)
-  }
+
   useLayoutEffect(() => {
+    const onResize = () => {
+      setWindowHeight(window.innerHeight)
+      setWindowWidth(window.innerWidth)
+    }
     onResize()
     window.addEventListener('resize', onResize)
     return () => {

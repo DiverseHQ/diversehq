@@ -1,4 +1,4 @@
-import useWindowSize from './useWindowSize'
+import React from 'react'
 /*
 default below 576px (portrait phones)
 576px = landscape phones
@@ -8,9 +8,21 @@ default below 576px (portrait phones)
 1600px - Extra Large Desktops
 */
 const useDevice = () => {
+  const [isMobile, setIsMobile] = React.useState(true)
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true)
+      } else {
+        setIsMobile(false)
+      }
+    }
+    handleResize() // Initial set
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   // eslint-disable-next-line
-  const [windowHeight, windowWidth] = useWindowSize()
-  const isMobile = windowWidth ? windowWidth < 950 : true
   return { isMobile, isDesktop: !isMobile }
 }
 

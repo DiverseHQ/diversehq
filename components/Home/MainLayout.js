@@ -21,7 +21,9 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   React.useEffect(() => setMounted(true), [])
   React.useEffect(() => {
     if (typeof isMobile === 'undefined') return
-    setMobile(isMobile)
+    if (!mobile) {
+      setMobile(isMobile)
+    }
   }, [isMobile])
 
   const { theme } = useTheme()
