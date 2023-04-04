@@ -24,9 +24,9 @@ import { useRouter } from 'next/router'
 import Markup from '../Lexical/Markup'
 import {
   countLinesFromMarkdown,
-  deleteFirebaseStorageFile,
-  stringToLength,
-  unpinFromIpfsInfura
+  // deleteFirebaseStorageFile,
+  stringToLength
+  // unpinFromIpfsInfura
 } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
@@ -213,41 +213,39 @@ const LensPostCard = ({ post }: Props) => {
 
   const handleDeletePost = async () => {
     try {
-      try {
-        await deleteLensPublication(post?.id)
-      } catch (error) {
-        console.log(error)
-      }
-
-      if (post?.metadata?.media?.length > 0) {
-        const medias = post?.metadata?.media
-        for (const media of medias) {
-          if (media?.original?.url?.startsWith('ipfs://')) {
-            try {
-              const hash = media?.original?.url?.split('ipfs://')[1]
-              await unpinFromIpfsInfura(hash)
-            } catch (error) {
-              console.log(error)
-            }
-          } else if (
-            media?.original?.url?.startsWith(
-              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com'
-            )
-          ) {
-            await deleteFirebaseStorageFile(media?.original?.url)
-          }
-        }
-      }
-
       await removePost({
         request: {
           publicationId: post?.id
         }
       })
+      await deleteLensPublication(post?.id)
+
+      // if (post?.metadata?.media?.length > 0) {
+      //   const medias = post?.metadata?.media
+      //   for (const media of medias) {
+      //     if (media?.original?.url?.startsWith('ipfs://')) {
+      //       try {
+      //         const hash = media?.original?.url?.split('ipfs://')[1]
+      //         await unpinFromIpfsInfura(hash)
+      //       } catch (error) {
+      //         console.log(error)
+      //       }
+      //     } else if (
+      //       media?.original?.url?.startsWith(
+      //         'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com'
+      //       )
+      //     ) {
+      //       await deleteFirebaseStorageFile(media?.original?.url)
+      //     }
+      //   }
+      // }
     } catch (error) {
       console.log(error)
+      console.log('error')
+      window.location.reload()
     } finally {
-      router.reload()
+      console.log('finally')
+      window.location.reload()
     }
   }
 

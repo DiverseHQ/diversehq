@@ -112,7 +112,7 @@ const NavFilterAllPosts = () => {
         title="All"
         active={active === 'all'}
         onClick={() => {
-          router.push('/feed/all')
+          router.push('/')
         }}
         tooltipTitle="Posts from all communities"
       />

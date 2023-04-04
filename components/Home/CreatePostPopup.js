@@ -142,6 +142,7 @@ const CreatePostPopup = () => {
     storeMostPostedCommunities()
     if (gifAttachment) {
       handleCreateLensPost(title, communityId, 'image/gif', imageValue)
+      return
     }
     if (file) {
       if (!supportedMimeTypes.includes(file.type)) {
@@ -187,6 +188,11 @@ const CreatePostPopup = () => {
   }
 
   const handleCreateLensPost = async (title, communityId, mimeType, url) => {
+    console.log('handleCreateLensPost')
+    console.log('title', title)
+    console.log('communityId', communityId)
+    console.log('mimeType', mimeType)
+    console.log('url', url)
     let mainContentFocus = null
     let contentWarning = null
     //todo handle other file types and link content

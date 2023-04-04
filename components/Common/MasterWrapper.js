@@ -10,7 +10,7 @@ import LexicalWrapper from './LexicalWrapper'
 import ThemeProvider from './ThemeProvider'
 import PostIndexingWrapper from '../Post/IndexingContext/PostIndexingWrapper'
 import LivepeerProvider from '../Common/LivepeerProvider'
-import OnlyAdmins from '../Common/UI/OnlyAdmins'
+// import OnlyAdmins from '../Common/UI/OnlyAdmins'
 
 const queryClient = new QueryClient()
 
@@ -26,7 +26,9 @@ const MasterWrapper = ({ children }) => {
                   <LexicalWrapper>
                     <PostIndexingWrapper>
                       <CustomPopUpModalProvider>
-                        <OnlyAdmins>{children}</OnlyAdmins>
+                        {/* <OnlyAdmins> */}
+                        {children}
+                        {/* </OnlyAdmins> */}
                       </CustomPopUpModalProvider>
                     </PostIndexingWrapper>
                   </LexicalWrapper>
