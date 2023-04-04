@@ -86,7 +86,6 @@ export const WalletProvider = ({ children }) => {
   useEffect(() => {
     if (isSignedIn && hasProfile && address) {
       // fetchWeb3Token(true)
-      console.log('refreshing user info')
       refreshUserInfo()
       fetchAndSetLensCommunity()
     } else {
@@ -128,7 +127,6 @@ export const WalletProvider = ({ children }) => {
       if (!user || !lensProfile?.defaultProfile?.id) return
       // todo optimize this, currently fetching all communities and then filtering
       const _allLensCommunities = await getAllLensCommunitiesHandle()
-      console.log('_allLensCommunities', _allLensCommunities)
 
       // loop through all communities in group of 50 and check if lens user follows them
       // const _joinedLensCommunities = []
@@ -146,71 +144,22 @@ export const WalletProvider = ({ children }) => {
         )
       }
 
-      console.log('promiseList', promiseList)
-
       const _allLensCommunitiesInDetail = (await Promise.all(promiseList))
         .flat(Infinity)
         .map((a) => a.profiles.items)
         .flat(Infinity)
-      console.log('_allLensCommunitiesInDetail', _allLensCommunitiesInDetail)
       const allLensCommunitiesInDetail = _allLensCommunitiesInDetail.map(
         (c) => ({
           ...c,
           _id: _allLensCommunities.find((l) => l.handle === c.handle)?._id
         })
       )
-      console.log('allLensCommunitiesInDetail', allLensCommunitiesInDetail)
 
       const _joinedLensCommunities: IsFollowedLensCommunityType[] =
         allLensCommunitiesInDetail.filter((c) => c.isFollowedByMe)
 
-      console.log('_joinedLensCommunities', _joinedLensCommunities)
-
       setAllLensCommunities(allLensCommunitiesInDetail)
-
-      console.log('_joinedLensCommunities', _joinedLensCommunities)
       setJoinedLensCommunties(_joinedLensCommunities)
-
-      // for (let i = 0; i < allLensCommunities.length; i += 50) {
-      //   const { profiles } = await getBulkIsFollowedByMe({
-      //     cursor: cursor,
-      //     handles: allLensCommunities.slice(i, i + 50).map((c) => c.handle),
-      //     limit: 50
-      //   })
-
-      //   console.log('profiles', profiles)
-
-      //   profiles.items.forEach((profile) => {
-      //     if (profile.isFollowedByMe) {
-      //       const corrospondingCommunity = allLensCommunities.find(
-      //         (c) => c.handle === profile.handle
-      //       )
-      //       _joinedLensCommunities.push(corrospondingCommunity)
-      //     }
-      //   })
-      //   cursor = profiles.pageInfo.next
-      // }
-
-      // // remove communities from where user in banned
-
-      // cursor = null
-      // for (let i = 0; i < _joinedLensCommunities.length; i += 50) {
-      //   const { profiles } = await getProfiles({
-      //     cursor: cursor,
-      //     handles: _joinedLensCommunities.slice(i, i + 50).map((c) => c.handle),
-      //     limit: 50
-      //   })
-
-      //   profiles.items.forEach((profile, index) => {
-      //     _joinedLensCommunities[i + index] = {
-      //       ..._joinedLensCommunities[i + index],
-      //       Profile: profile
-      //     }
-      //   })
-      //   cursor = profiles.pageInfo.next
-      // }
-
-      // setJoinedLensCommunties(_joinedLensCommunities)
     }, [user, lensProfile?.defaultProfile?.id])
 
   useEffect(() => {

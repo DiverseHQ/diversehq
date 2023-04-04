@@ -59,11 +59,9 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       hasMore = false
     }
     const communityIds = newPosts.map((post) => post.metadata.tags[0])
-    console.log('communityIds', communityIds)
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
     )
-    console.log('communityInfoForPosts', communityInfoForPosts)
     for (let i = 0; i < newPosts.length; i++) {
       if (!communityInfoForPosts[i]?._id) {
         // @ts-ignore
