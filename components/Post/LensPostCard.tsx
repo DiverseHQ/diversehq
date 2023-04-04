@@ -282,7 +282,8 @@ const LensPostCard = ({ post }: Props) => {
 
   if (content) {
     if (postInfo?.isLensCommunityPost) {
-      content = content.split('\n', 2)[1]
+      content = content.split('\n').slice(2).join('\n')
+      console.log(content)
     }
     if (content?.startsWith(postInfo?.metadata?.name)) {
       content = content.slice(postInfo?.metadata?.name.length)
@@ -734,7 +735,7 @@ const LensPostCard = ({ post }: Props) => {
                             (postInfo?.metadata?.name.length > 0 &&
                               content.trim().length === 0)) && (
                             <Markup
-                              className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg font-[600] w-full`}
+                              className={`whitespace-pre-wrap break-words text-base sm:text-lg font-semibold w-full`}
                             >
                               {/* remove title text from content */}
 
@@ -787,7 +788,7 @@ const LensPostCard = ({ post }: Props) => {
                             (postInfo?.metadata?.name.length > 0 &&
                               content.trim().length === 0)) && (
                             <Markup
-                              className={`whitespace-pre-wrap break-words font-medium text-base sm:text-lg w-full`}
+                              className={`whitespace-pre-wrap break-words font-semibold text-base sm:text-lg w-full`}
                             >
                               {/* remove title text from content */}
 
