@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
-import useDevice from '../Common/useDevice'
+// import useDevice from '../Common/useDevice'
 import MainMsgModal from '../Messages/MainMsgModal'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
@@ -13,18 +13,19 @@ import { useTheme } from '../Common/ThemeProvider'
 // import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
-  const [mobile, setMobile] = useState(isMobileView)
+  const mobile = isMobileView
+  // const [mobile, setMobile] = useState(isMobileView)
   // only show if mounted
-  const { isMobile } = useDevice()
+  // const { isMobile } = useDevice()
   const router = useRouter()
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (!mobile) {
-      setMobile(isMobile)
-    }
-  }, [isMobile])
+  // React.useEffect(() => {
+  //   if (typeof window === 'undefined') return
+  //   if (!mobile) {
+  //     setMobile(isMobile)
+  //   }
+  // }, [isMobile])
 
   const { theme } = useTheme()
   if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
