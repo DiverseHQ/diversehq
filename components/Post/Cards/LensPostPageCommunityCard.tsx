@@ -64,11 +64,11 @@ const LensPostPageCommunityCard = ({
             }}
           >
             <div className="font-bold text-p-text text-lg  hover:underline cursor-pointer truncate">
-              {communityInfo?.name}
+              {stringToLength(communityInfo?.name, 19)}
             </div>
           </div>
         </div>
-        <p className="mb-2 leading-5 text-p-text">
+        <p className="mb-2 leading-5 text-sm text-p-text">
           <Markup>{stringToLength(communityInfo?.description, 200)}</Markup>
         </p>
         {communityInfo?._id && (

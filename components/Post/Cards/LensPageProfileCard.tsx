@@ -121,7 +121,7 @@ const LensPageProfileCard = ({
             )}
           </div>
         </div>
-        <p className="text-p-text leading-5 -mt-4 pb-2">
+        <p className="text-p-text text-sm leading-5 -mt-4 pb-2">
           <Markup>{stringToLength(profile?.bio, 200)}</Markup>
         </p>
         {!isLensCommunity && (
