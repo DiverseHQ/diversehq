@@ -44,7 +44,10 @@ const MirrorButton: FC<Props> = ({ postInfo }) => {
         return
       }
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
-        const postTypedResult = await mirrorPostViaDispatcher({
+        console.log('using dispatcher')
+        console.log('postInfo.id', postInfo.id)
+
+        const { createMirrorViaDispatcher } = await mirrorPostViaDispatcher({
           request: {
             profileId: lensProfile?.defaultProfile?.id,
             publicationId: postInfo.id,
@@ -53,8 +56,18 @@ const MirrorButton: FC<Props> = ({ postInfo }) => {
             }
           }
         })
-        if (postTypedResult) {
+
+        console.log(
+          'createMirrorViaDispatcher',
+          createMirrorViaDispatcher.__typename
+        )
+        if (createMirrorViaDispatcher.__typename === 'RelayerResult') {
           setIsSuccessful(true)
+        } else if (
+          !createMirrorViaDispatcher.__typename ||
+          createMirrorViaDispatcher.__typename === 'RelayError'
+        ) {
+          notifyError(createMirrorViaDispatcher.reason)
         }
         setLoading(false)
         return
