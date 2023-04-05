@@ -87,7 +87,7 @@ const RightSidebar = () => {
         hide ? 'hidden' : 'lg:flex flex-col'
       } w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-4 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
     >
-      {user && createdCommunities?.length > 0 && (
+      {user && (createdCommunities?.length > 0 || LensCommunity) && (
         <CommunitiesDiv
           showFirstCommunities={
             LensCommunity

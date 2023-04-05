@@ -186,15 +186,10 @@ const ReviewLensCommunityPostCard = ({
     }
   }, [error])
 
-  const contentAfterRemovingPostBy = post?.contentData?.content?.split(
-    '\n',
-    2
-  )[1]
-  const contentAfterRemovingName = contentAfterRemovingPostBy?.startsWith(
-    post?.contentData?.name
-  )
-    ? contentAfterRemovingPostBy?.slice(post?.contentData?.name.length)
-    : contentAfterRemovingPostBy
+  const contentAfterRemovingName = post?.contentData?.content
+    ?.split('\n')
+    .slice(2)
+    .join('\n')
 
   // todo allow multiple media
   const type = post?.contentData?.media?.[0]?.type
@@ -231,11 +226,11 @@ const ReviewLensCommunityPostCard = ({
       </div>
 
       {/* post title */}
-      <div className="text-p-text font-medium text-md mt-2">
+      <div className="text-p-text font-semibold text-lg mt-2">
         {post?.contentData?.name}
       </div>
       {/* post content */}
-      <div>
+      <div className="text-sm">
         <Markup>{contentAfterRemovingName}</Markup>{' '}
       </div>
       {/* image or video or audio it any media */}
