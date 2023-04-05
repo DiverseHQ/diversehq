@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  AiOutlineGithub,
   AiOutlineInstagram,
   AiOutlineLink,
   AiOutlineTwitter
@@ -10,7 +11,7 @@ import { getWebsiteLinksFromProfile } from './lib/getWebsiteLinksFromProfile'
 
 const ProfileLink = ({ link, icon }: { link: string; icon: any }) => (
   <a
-    href={link}
+    href={link.startsWith('http') ? link : `https://${link}`}
     target="_blank"
     rel="noopener noreferrer"
     className="text-s-text text-sm leading-5 flex flex-row items-center space-x-1 cursor-pointer rounded-full hover:bg-s-hover active:bg-s-hover pl-1 pr-2 truncate"
@@ -21,7 +22,7 @@ const ProfileLink = ({ link, icon }: { link: string; icon: any }) => (
 )
 
 const ProfileLinksRow = ({ profile }: { profile: Profile }) => {
-  const { websiteLink, twitterLink, instagramLink } =
+  const { websiteLink, twitterLink, instagramLink, githubLink } =
     getWebsiteLinksFromProfile(profile)
   return (
     <div className="flex flex-row gap-x-4 gap-y-2 flex-wrap break-words w-full">
@@ -33,6 +34,9 @@ const ProfileLinksRow = ({ profile }: { profile: Profile }) => {
       )}
       {instagramLink && (
         <ProfileLink link={instagramLink} icon={<AiOutlineInstagram />} />
+      )}
+      {githubLink && (
+        <ProfileLink link={githubLink} icon={<AiOutlineGithub />} />
       )}
     </div>
   )
