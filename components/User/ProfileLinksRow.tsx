@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  AiFillLinkedin,
   AiOutlineGithub,
   AiOutlineInstagram,
   AiOutlineLink,
@@ -22,7 +23,7 @@ const ProfileLink = ({ link, icon }: { link: string; icon: any }) => (
 )
 
 const ProfileLinksRow = ({ profile }: { profile: Profile }) => {
-  const { websiteLink, twitterLink, instagramLink, githubLink } =
+  const { websiteLink, twitterLink, instagramLink, githubLink, linkedInLink } =
     getWebsiteLinksFromProfile(profile)
   return (
     <div className="flex flex-row gap-x-4 gap-y-2 flex-wrap break-words w-full">
@@ -37,6 +38,9 @@ const ProfileLinksRow = ({ profile }: { profile: Profile }) => {
       )}
       {githubLink && (
         <ProfileLink link={githubLink} icon={<AiOutlineGithub />} />
+      )}
+      {linkedInLink && (
+        <ProfileLink link={linkedInLink} icon={<AiFillLinkedin />} />
       )}
     </div>
   )

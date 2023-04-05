@@ -8,13 +8,15 @@ export const getWebsiteLinksFromProfile = (
   twitterLink: string | null
   instagramLink: string | null
   githubLink: string | null
+  linkedInLink: string | null
 } => {
   if (!profile)
     return {
       websiteLink: null,
       twitterLink: null,
       instagramLink: null,
-      githubLink: null
+      githubLink: null,
+      linkedInLink: null
     }
   const attributes = profile.attributes
   const websiteLink = attributes.find(
@@ -31,8 +33,16 @@ export const getWebsiteLinksFromProfile = (
     (attribute) => attribute.key === 'github'
   )
 
+  const linkdInHandle = attributes.find(
+    (attribute) => attribute.key === 'linkedin'
+  )
+
   const githubLink = githubHandle
     ? `https://github.com/${githubHandle.value}`
+    : null
+
+  const linkedInLink = linkdInHandle
+    ? `https://linkedin.com/in/${linkdInHandle.value}`
     : null
 
   const twitterLink = twitterHandle
@@ -41,10 +51,12 @@ export const getWebsiteLinksFromProfile = (
   const instagramLink = instagramHandle
     ? `https://instagram.com/${instagramHandle.value}`
     : null
+
   return {
     websiteLink: websiteLink ? websiteLink.value : null,
     twitterLink,
     instagramLink,
-    githubLink
+    githubLink,
+    linkedInLink
   }
 }
