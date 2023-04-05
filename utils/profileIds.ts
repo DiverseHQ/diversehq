@@ -1,4 +1,10 @@
-export const specialProfileIds = ['0x0161ba', '0x01abf2', '0xd478', '0x0150b2']
+export const specialProfileIds = [
+  '0x0161ba',
+  '0x01abf2',
+  '0xd478',
+  '0x0150b2',
+  '0x011990' // you meme
+]
 
 export const whitelistedAddresses = [
   '0xc2b96df49da778bfca0cc6c4416e40e2d17f72ff',
