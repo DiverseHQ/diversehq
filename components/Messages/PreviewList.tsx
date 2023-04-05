@@ -77,7 +77,7 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
         </div>
       )}
       {!showAuthenticating && !showLoading && !profilesError && (
-        <div className="flex flex-col h-full sm:h-[450px] overflow-y-auto">
+        <div className="flex flex-col h-full pb-20 sm:h-[450px] overflow-y-auto">
           {selectedTab === 'Following' && (
             <button
               className="start-row py-2 pl-2 space-x-2 hover:bg-s-bg-hover"

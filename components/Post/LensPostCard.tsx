@@ -284,7 +284,10 @@ const LensPostCard = ({ post }: Props) => {
     if (postInfo?.isLensCommunityPost) {
       content = content.split('\n').slice(2).join('\n')
     }
-    if (content?.startsWith(postInfo?.metadata?.name)) {
+    if (
+      content?.startsWith(postInfo?.metadata?.name) &&
+      showNameForThisAppIds.includes(postInfo?.appId)
+    ) {
       content = content.slice(postInfo?.metadata?.name.length)
     }
   }
@@ -730,9 +733,7 @@ const LensPostCard = ({ post }: Props) => {
                     <>
                       <div className="flex flex-row">
                         {postInfo?.metadata?.name &&
-                          (showNameForThisAppIds.includes(postInfo?.appId) ||
-                            (postInfo?.metadata?.name.length > 0 &&
-                              content.trim().length === 0)) && (
+                          showNameForThisAppIds.includes(postInfo?.appId) && (
                             <Markup
                               className={`whitespace-pre-wrap break-words text-base sm:text-lg font-semibold w-full`}
                             >
