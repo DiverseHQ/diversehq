@@ -65,7 +65,7 @@ const CreatePostPopup = () => {
   const { data: lensProfile } = useLensUserContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
   const [collectSettings, setCollectSettings] = useState({
-    freeCollectModule: { followerOnly: true }
+    freeCollectModule: { followerOnly: false }
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
@@ -188,11 +188,6 @@ const CreatePostPopup = () => {
   }
 
   const handleCreateLensPost = async (title, communityId, mimeType, url) => {
-    console.log('handleCreateLensPost')
-    console.log('title', title)
-    console.log('communityId', communityId)
-    console.log('mimeType', mimeType)
-    console.log('url', url)
     let mainContentFocus = null
     let contentWarning = null
     //todo handle other file types and link content
@@ -280,7 +275,7 @@ const CreatePostPopup = () => {
       contentURI: `ipfs://${ipfsHash}`,
       collectModule: collectSettings,
       referenceModule: {
-        followerOnlyReferenceModule: true
+        followerOnlyReferenceModule: false
       }
     }
 
