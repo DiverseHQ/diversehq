@@ -222,10 +222,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                   loading ? 'text-s-text' : 'text-p-text'
                 }`}
                 placeholder="Say it..."
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') createComment()
-                }}
-                disabled={loading}
+                disabled={loading || !postInfo?.canComment?.result}
                 rows={1}
                 style={{ resize: 'none' }}
                 onInput={(e) => {
@@ -252,13 +249,24 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
               )}
             </div>
             <div className="w-full flex flex-row justify-end space-x-2 items-center">
-              <Giphy setGifAttachment={setGifAttachment} />
+              {postInfo?.canComment?.result && (
+                <Giphy setGifAttachment={setGifAttachment} />
+              )}
               <button
-                disabled={loading}
+                disabled={loading || !postInfo?.canComment?.result}
                 onClick={createComment}
-                className="text-p-btn-text font-bold bg-p-btn px-3 py-0.5 rounded-full text-sm mr-2"
+                className={clsx(
+                  'text-p-btn-text font-bold px-3 py-0.5 rounded-full text-sm mr-2',
+                  postInfo?.canComment?.result
+                    ? 'bg-p-btn'
+                    : 'bg-p-btn-disabled'
+                )}
               >
-                {loading ? 'Sending...' : 'Send'}
+                {loading
+                  ? 'Sending...'
+                  : postInfo?.canComment?.result
+                  ? 'Send'
+                  : 'Only followers can comment'}
               </button>
             </div>
           </div>
