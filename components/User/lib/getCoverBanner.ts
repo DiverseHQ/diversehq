@@ -5,7 +5,7 @@ import imageProxy from './imageProxy'
 const getCoverBanner = (profile: Profile): string => {
   if (profile?.coverPicture?.__typename === 'NftImage') {
     return profile?.coverPicture?.uri
-      ? getIPFSLink(profile?.coverPicture?.uri)
+      ? imageProxy(getIPFSLink(profile?.coverPicture?.uri))
       : '/defaultBanner.png'
   }
 

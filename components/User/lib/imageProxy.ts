@@ -17,7 +17,7 @@ const imageProxy = (url: string, tr: string = '', name?: string): string => {
   }
   return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,${
     name ? `n-${name}` : ''
-  },${tr}/${getIPFSLink(url)}`
+  },${tr ? tr : ''}/${getIPFSLink(url)}`
 }
 
 export default imageProxy
