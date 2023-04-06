@@ -49,6 +49,7 @@ import useLensFollowButton from '../User/useLensFollowButton'
 import clsx from 'clsx'
 import { deleteLensPublication } from '../../api/lensPublication'
 import { useDevice } from '../Common/DeviceWrapper'
+import { MdOutlineVerified } from 'react-icons/md'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -383,6 +384,10 @@ const LensPostCard = ({ post }: Props) => {
                     </div>
                   </span>
 
+                  {postInfo?.communityInfo?.verified && (
+                    <MdOutlineVerified className="w-4 h-4 text-p-text ml-1" />
+                  )}
+
                   <span onClick={(e) => e.stopPropagation()} className="mr-1">
                     <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
                       <p className="pl-1.5 font-normal">{' posted by'}</p>
@@ -457,7 +462,10 @@ const LensPostCard = ({ post }: Props) => {
                     </div>
                   </span>
                   <div className="flex flex-col justify-center items-start text-p-text">
-                    <span onClick={(e) => e.stopPropagation()}>
+                    <span
+                      onClick={(e) => e.stopPropagation()}
+                      className="start-row"
+                    >
                       <div
                         onClick={() => {
                           if (postInfo?.communityInfo?._id) {
@@ -482,6 +490,9 @@ const LensPostCard = ({ post }: Props) => {
                               )}`}
                         </div>
                       </div>
+                      {postInfo?.communityInfo?.verified && (
+                        <MdOutlineVerified className="w-3 h-3 text-p-text ml-1" />
+                      )}
                     </span>
                     <div className="flex flex-row items-center justify-start">
                       <span onClick={(e) => e.stopPropagation()}>
