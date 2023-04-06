@@ -57,11 +57,7 @@ const AttachmentCarousel: FC<Props> = ({ publication, medias, className }) => {
     })
   return (
     <div>
-      <AttachmentSlide
-        renderElements={renderElements}
-        transition="0.8s"
-        className="overflow-x-hidden"
-      >
+      <AttachmentSlide renderElements={renderElements} transition="0.8s">
         {renderChildren}
       </AttachmentSlide>
     </div>

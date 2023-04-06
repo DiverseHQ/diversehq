@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import SwipeableViews from 'react-swipeable-views'
+// import SwipeableViews from 'react-swipeable-views'
 
 const calculateMargin = (selfIndex, slideIndex, speed = 50) => {
   const diff = selfIndex - slideIndex
@@ -8,12 +8,7 @@ const calculateMargin = (selfIndex, slideIndex, speed = 50) => {
   return `${diff * speed}%`
 }
 
-const AttachmentSlide = ({
-  transition,
-  children,
-  renderElements,
-  ...props
-}) => {
+const AttachmentSlide = ({ transition, children, renderElements }) => {
   const [index, setIndex] = useState(0)
   const [fineIndex, setFineIndex] = useState(index)
   const onChangeIndex = (i) => {
@@ -33,7 +28,7 @@ const AttachmentSlide = ({
 
   return (
     <>
-      <SwipeableViews
+      {/* <SwipeableViews
         disabled={isSingleView}
         resistance
         springConfig={{
@@ -52,7 +47,7 @@ const AttachmentSlide = ({
         containerStyle={{ alignItems: 'center' }}
       >
         {views}
-      </SwipeableViews>
+      </SwipeableViews> */}
       {!isSingleView && renderElements({ index, onChangeIndex })}
     </>
   )
