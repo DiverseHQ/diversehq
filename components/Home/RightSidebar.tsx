@@ -38,7 +38,6 @@ const RightSidebar = () => {
   const fetchTopCommunities = async () => {
     try {
       const communities = await getAllCommunities(6, 0, 'top', true)
-      console.log('topcommunities', communities)
 
       if (communities?.communities?.length > 0) {
         setTopCommunities(communities.communities)

@@ -32,8 +32,10 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
     const fetchedCommunities = await getAllCommunities(
       COMMUNITY_LIMIT,
       communities.length,
-      'top'
+      'top',
+      false
     )
+    console.log(fetchedCommunities)
     setCommunities([...communities, ...fetchedCommunities.communities])
     if (fetchedCommunities.communities.length < COMMUNITY_LIMIT) {
       setHasMore(false)

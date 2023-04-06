@@ -15,6 +15,7 @@ import { FiSettings } from 'react-icons/fi'
 import { BsPeopleFill } from 'react-icons/bs'
 import { stringToLength } from '../../utils/utils'
 import { useDevice } from '../Common/DeviceWrapper'
+import { MdOutlineVerified } from 'react-icons/md'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -94,12 +95,17 @@ const ExploreCommunityCard = ({ _community }: Props) => {
             </div>
             {!isMobile && (
               <div className="flex flex-col">
-                <p
-                  className="font-bold text-2xl tracking-wider hover:underline cursor-pointer truncate"
+                <div
+                  className="start-row gap-x-2 font-bold text-2xl tracking-wider hover:underline cursor-pointer truncate"
                   onClick={redirectToCommunityPage}
                 >
-                  {community.name}
-                </p>
+                  <div>{community.name}</div>
+                  {community?.verified && (
+                    <Tooltip title="Verified">
+                      <MdOutlineVerified className="text-p-text" />
+                    </Tooltip>
+                  )}
+                </div>
                 <div className=" mb-1 w-full">
                   {stringToLength(community.description, 130)}
                 </div>
