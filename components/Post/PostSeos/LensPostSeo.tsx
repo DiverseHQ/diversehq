@@ -17,11 +17,10 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
       }}
       openGraph={{
         url: `${appLink}/p/${post?.id}`,
-        title: `${stringToLength(post?.metadata?.content, 40)} \n | ${
-          post?.stats?.totalAmountOfCollects
-        } Collects | ${
-          post?.stats?.totalUpvotes
-        } Upvotes | \n by u/${formatHandle(post?.profile?.handle)}`,
+        title: `${stringToLength(
+          post?.metadata?.content,
+          100
+        )} \n by u/${formatHandle(post?.profile?.handle)}`,
         images:
           post?.metadata?.mainContentFocus === 'IMAGE'
             ? [
