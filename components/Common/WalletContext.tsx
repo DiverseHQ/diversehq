@@ -37,7 +37,7 @@ import {
   getLensCommunity
 } from '../../api/lensCommunity'
 import { ProfileMedia } from '../../graphql/generated'
-import { whitelistedAddresses } from '../../utils/profileIds'
+// import { whitelistedAddresses } from '../../utils/profileIds'
 export interface IsFollowedLensCommunityType {
   _id: string
   handle: string
@@ -177,11 +177,7 @@ export const WalletProvider = ({ children }) => {
       await sleep(2000)
       if (!address) return
       const userInfo = await getUserInfo(address)
-      if (
-        userInfo &&
-        userInfo.role <= userRoles.NORMAL_USER &&
-        whitelistedAddresses.includes(address.toLowerCase())
-      ) {
+      if (userInfo && userInfo.role <= userRoles.NORMAL_USER) {
         setUser(userInfo)
       } else {
         notifyInfo('You are not whitelisted. DiverseHQ is in closed beta.')
