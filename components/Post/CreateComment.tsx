@@ -2,10 +2,20 @@ import React, { useRef, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { postComment } from '../../api/comment'
 import { FiSend } from 'react-icons/fi'
-import useDevice from '../Common/useDevice'
 import getStampFyiURL from '../User/lib/getStampFyiURL'
+import { useDevice } from '../Common/DeviceWrapper'
 
-const CreateComment = ({ postId, setComments, authorAddress }) => {
+/* eslint-disable */
+
+const CreateComment = ({
+  postId,
+  setComments,
+  authorAddress
+}: {
+  postId: string
+  setComments: (comments: any) => void
+  authorAddress: string
+}) => {
   const { user } = useProfile()
   const commentRef = useRef()
   const [loading, setLoading] = useState(false)
@@ -13,7 +23,9 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
   const { isMobile } = useDevice()
 
   const createComment = async () => {
-    const comment = commentRef.current.value
+    if (!commentRef?.current) return
+    // @ts-ignore
+    const comment = commentRef?.current?.value
     if (!comment || comment === '') return
     const content = comment
     try {
@@ -22,6 +34,7 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
       setComments((comments) => [comment, ...comments])
 
       // clear the comment input field after submit
+      // @ts-ignore
       commentRef.current.value = ''
     } catch (error) {
       console.log(error)
@@ -56,14 +69,13 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
                 ref={commentRef}
                 className="border-none outline-none w-full mt-1 text-base bg-s-bg"
                 placeholder="Say it.."
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') createComment()
-                }}
                 disabled={loading}
                 rows={1}
                 style={{ resize: 'none' }}
                 onInput={(e) => {
+                  // @ts-ignore
                   e.target.style.height = 'auto'
+                  // @ts-ignore
                   e.target.style.height = e.target.scrollHeight + 'px'
                 }}
               />
@@ -94,15 +106,13 @@ const CreateComment = ({ postId, setComments, authorAddress }) => {
                 </div>
                 <div className="flex-1">
                   <textarea
-                    type="text"
                     ref={commentRef}
                     className="border-none outline-none w-full text-base sm:text-[18px] py-1 px-4 sm:py-2 rounded-xl bg-p-bg font-medium"
                     placeholder="Comment..."
-                    onKeyUp={(e) => {
-                      if (e.key === 'Enter') createComment()
-                    }}
                     onInput={(e) => {
+                      // @ts-ignore
                       e.target.style.height = 'auto'
+                      // @ts-ignore
                       e.target.style.height = e.target.scrollHeight + 'px'
                     }}
                     disabled={loading}

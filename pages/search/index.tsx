@@ -1,15 +1,13 @@
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
 import { getAllCommunities, getNotJoinedCommunities } from '../../api/community'
-import { useNotify } from '../../components/Common/NotifyContext'
-import useDevice from '../../components/Common/useDevice'
 import { useProfile } from '../../components/Common/WalletContext'
 import RightSideCommunityComponent from '../../components/Home/RightSideCommunityComponent'
 import SearchModal from '../../components/Search/SearchModal'
 import { appLink } from '../../utils/config'
+import { useDevice } from '../../components/Common/DeviceWrapper'
 
 const index = () => {
-  const { notifyError } = useNotify()
   const { isMobile } = useDevice()
   const { user } = useProfile()
   const [recentCommunities, setRecentCommunities] = useState([])
@@ -23,7 +21,6 @@ const index = () => {
       }
     } catch (error) {
       console.log(error)
-      notifyError("Couldn't fetch top communities")
     }
   }
 
@@ -35,7 +32,6 @@ const index = () => {
       }
     } catch (error) {
       console.log(error)
-      notifyError("Couldn't fetch top communities")
     }
   }
 

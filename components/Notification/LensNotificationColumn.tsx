@@ -11,12 +11,12 @@ import LensNotificationCard from './LensNotificationCard'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useProfile } from '../Common/WalletContext'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useDevice from '../Common/useDevice'
 import { getAllNotificationBetweenTimes } from '../../api/user'
 import NotificationCard from './NotificationCard'
 import getProfiles from '../../lib/profile/get-profiles'
 import { NotificationSchema } from '../../types/notification'
 import useNotificationsCount from './useNotificationsCount'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const LensNotificationColumn = () => {
   const [notifications, setNotifications] = useState<

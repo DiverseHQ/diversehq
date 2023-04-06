@@ -3,11 +3,17 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { getCommentsFromPostId } from '../../api/comment'
 import { COMMENT_LIMIT } from '../../utils/config'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useDevice from '../Common/useDevice'
 import CreateComment from '../Post/CreateComment'
 import SingleComment from '../Post/SingleComment'
+import { useDevice } from '../Common/DeviceWrapper'
 
-const CombinedCommentSectionApiTop = ({ postId, authorAddress }) => {
+const CombinedCommentSectionApiTop = ({
+  postId,
+  authorAddress
+}: {
+  postId: string
+  authorAddress: string
+}) => {
   const [comments, setComments] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const { isMobile } = useDevice()

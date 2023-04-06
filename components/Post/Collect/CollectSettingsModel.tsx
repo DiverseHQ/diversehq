@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { MenuItem, Select, Switch } from '@mui/material'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import useDevice from '../../Common/useDevice'
 import {
   ThemeProvider as MUIThemeProvider,
   createTheme
 } from '@mui/material/styles'
 import { useTheme } from '../../Common/ThemeProvider'
 import { useEnabledModulesQuery } from '../../../graphql/generated'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   const { isMobile } = useDevice()

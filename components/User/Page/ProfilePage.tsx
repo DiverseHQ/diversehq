@@ -1,6 +1,5 @@
 import React from 'react'
 import LensPostsProfilePublicationsColumn from '../../Post/LensPostsProfilePublicationsColumn'
-import useDevice from '../../Common/useDevice'
 import LensCollectedPublicationsColumn from '../../Post/LensCollectedPublicationsColumn'
 import { useRouter } from 'next/router'
 
@@ -11,6 +10,7 @@ import { Profile } from '../../../graphql/generated'
 import ProfilePageMobileTopNav from '../ProfilePageMobileTopNav'
 import ProfilePageRightSidebar from '../ProfilePageRightSidebar'
 import { getUserInfo } from '../../../api/user'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 interface Props {
   _lensProfile: Profile

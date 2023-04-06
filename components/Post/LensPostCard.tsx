@@ -17,7 +17,6 @@ import {
 } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
-import useDevice from '../Common/useDevice'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 // import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
@@ -49,6 +48,7 @@ import { getAllMentionsHandlFromContent } from './PostPageMentionsColumn'
 import useLensFollowButton from '../User/useLensFollowButton'
 import clsx from 'clsx'
 import { deleteLensPublication } from '../../api/lensPublication'
+import { useDevice } from '../Common/DeviceWrapper'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 

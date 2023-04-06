@@ -1,6 +1,5 @@
 // import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import useDevice from '../../components/Common/useDevice'
 import LensPostPage from '../../components/Post/pages/LensPostPage'
 import LensPostSeo from '../../components/Post/PostSeos/LensPostSeo'
 import PostPageMobileTopNav from '../../components/Post/PostPageMobileTopNav'
@@ -11,6 +10,7 @@ import { GetServerSidePropsContext } from 'next'
 import { useProfileStore } from '../../store/profile'
 import MobileLoader from '../../components/Common/UI/MobileLoader'
 import PostNotFound from '../../components/Post/pages/PostNotFound'
+import { useDevice } from '../../components/Common/DeviceWrapper'
 // types are post, lens, notFound
 // post is a offchain post
 // lens is a onchain lens post

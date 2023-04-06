@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useSendTransaction, useWaitForTransaction } from 'wagmi'
 import { useGenerateModuleCurrencyApprovalDataQuery } from '../../../graphql/generated'
-import useDevice from '../../Common/useDevice'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 // todo : make a allowance button component
 // todo: addd a revoke button

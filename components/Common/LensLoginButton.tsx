@@ -8,13 +8,12 @@ import CreateTestLensHandle from '../User/CreateTestLensHandle'
 import { modalType, usePopUpModal } from './CustomPopUpProvider'
 import { useNotify } from './NotifyContext'
 import { useProfile } from './WalletContext'
-// import ConnectWalletAndSignInButton from './ConnectWalletAndSignInButton'
-import useDevice from './useDevice'
 import { useQueryClient } from '@tanstack/react-query'
 import formatHandle from '../User/lib/formatHandle'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { isMainnet } from '../../utils/config'
+import { useDevice } from './DeviceWrapper'
 
 interface Props {
   connectWalletLabel?: string

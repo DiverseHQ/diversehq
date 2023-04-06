@@ -8,10 +8,14 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useDevice from '../Common/useDevice'
 import LensPostCard from './LensPostCard'
+import { useDevice } from '../Common/DeviceWrapper'
 
-const LensCollectedPublicationsColumn = ({ walletAddress }) => {
+const LensCollectedPublicationsColumn = ({
+  walletAddress
+}: {
+  walletAddress: string
+}) => {
   const { data: myLensProfile } = useLensUserContext()
   const { isMobile } = useDevice()
 

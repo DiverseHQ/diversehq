@@ -33,7 +33,6 @@ import FormTextInput from '../Common/UI/FormTextInput'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
-import useDevice from '../Common/useDevice'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import { appId, supportedMimeTypes } from '../../utils/config'
 import { IoIosArrowBack } from 'react-icons/io'
@@ -44,6 +43,7 @@ import OptionsWrapper from '../Common/OptionsWrapper'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 import { submitPostForReview } from '../../api/reviewLensCommunityPost'
+import { useDevice } from '../Common/DeviceWrapper'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
@@ -64,7 +64,7 @@ const CreatePostPopup = () => {
   })
   const { data: lensProfile } = useLensUserContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
-  const [collectSettings, setCollectSettings] = useState({
+  const [collectSettings, setCollectSettings] = useState<any>({
     freeCollectModule: { followerOnly: false }
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
@@ -208,7 +208,7 @@ const CreatePostPopup = () => {
     } else if (flair === 'SPOILER') {
       contentWarning = PublicationContentWarning.Spoiler
     } else {
-      contentWarning = PublicationContentWarning.null
+      contentWarning = null
     }
 
     //todo map to community id, so that can be identified by community
@@ -321,8 +321,12 @@ const CreatePostPopup = () => {
         ).createPostViaDispatcher
 
         setLoading(false)
-        hideModal()
-        addPost({ txId: dispatcherResult.txId }, postForIndexing)
+        if (dispatcherResult?.__typename === 'RelayError') {
+          notifyError(dispatcherResult.reason)
+        } else {
+          addPost({ txId: dispatcherResult.txId }, postForIndexing)
+          hideModal()
+        }
       } else {
         //gasless using signed broadcast
         const postTypedResult = (

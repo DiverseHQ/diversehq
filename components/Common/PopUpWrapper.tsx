@@ -3,11 +3,13 @@ import React, { useEffect } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
 import { usePopUpModal } from './CustomPopUpProvider'
-import useDevice from './useDevice'
+import { useDevice } from './DeviceWrapper'
+
+/* eslint-disable */
 
 interface Props {
   title: string
-  onClick?: () => void
+  onClick?: (e?: any) => void | Promise<void>
   label?: string
   loading?: boolean
   children?: React.ReactNode

@@ -13,8 +13,8 @@ import { LENS_INFINITE_SCROLL_THRESHOLD } from '../../utils/config'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useDevice from '../Common/useDevice'
 import LensPostCard from './LensPostCard'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const LensPostJoinedCommunitiesPublicationsNew = ({
   communityIds

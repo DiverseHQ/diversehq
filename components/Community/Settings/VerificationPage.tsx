@@ -1,9 +1,9 @@
 import React from 'react'
 import { CommunityType } from '../../../types/community'
 import MobileTopNavbarWithTitle from '../../Common/MobileTopNavbarWithTitle'
-import useDevice from '../../Common/useDevice'
 import VerificationSection from './Sections/VerificationSection'
 import SettingsSidebar from './SettingsSidebar'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 const VerificationPage = ({ community }: { community: CommunityType }) => {
   const { isMobile } = useDevice()

@@ -1,10 +1,10 @@
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import useDevice from '../../components/Common/useDevice'
 import CreatePostBar from '../../components/Home/CreatePostBar'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import PostsColumn from '../../components/Post/PostsColumn'
 import { appLink } from '../../utils/config'
+import { useDevice } from '../../components/Common/DeviceWrapper'
 
 const top = () => {
   const { isDesktop } = useDevice()

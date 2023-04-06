@@ -2,11 +2,16 @@ import { Tooltip } from '@mui/material'
 // import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
-import useDevice from '../Common/useDevice'
 // import OptionsWrapper from '../Common/OptionsWrapper'
 import GifSelector from './GifSelector'
+import { useDevice } from '../Common/DeviceWrapper'
 
-const Giphy = ({ setGifAttachment }) => {
+const Giphy = ({
+  setGifAttachment
+}: {
+  // eslint-disable-next-line
+  setGifAttachment: (item: any) => void
+}) => {
   const [showGiphyModal, setShowGiphyModal] = useState(false)
   const gifButtonRef = useRef(null)
   const { isMobile } = useDevice()

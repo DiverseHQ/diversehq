@@ -1,8 +1,8 @@
 import React from 'react'
 import MobileTopNavbarWithTitle from '../Common/MobileTopNavbarWithTitle'
-import useDevice from '../Common/useDevice'
 import CommonSidebar from './CommonSidebar'
 import ProfileForm from './ProfileForm'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const ProfilePage = () => {
   const { isMobile } = useDevice()

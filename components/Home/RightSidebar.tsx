@@ -32,7 +32,6 @@ const RightSidebar = () => {
       }
     } catch (error) {
       console.log(error)
-      notifyError("Couldn't fetch created communities")
     }
   }
 
@@ -44,7 +43,6 @@ const RightSidebar = () => {
       }
     } catch (error) {
       console.log(error)
-      notifyError("Couldn't fetch top communities")
     }
   }
 

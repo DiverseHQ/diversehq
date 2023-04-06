@@ -1,6 +1,5 @@
 import React from 'react'
 import { getLensCommunity } from '../../../api/lensCommunity'
-import useDevice from '../../../components/Common/useDevice'
 import CommunityNotFound from '../../../components/Community/Page/CommunityNotFound'
 import LensCommunityMobileTopNav from '../../../components/LensCommunity/LensCommunityMobileTopNav'
 import LensCommunityPageRightSidebar from '../../../components/LensCommunity/LensCommunityPageRightSidebar'
@@ -12,6 +11,7 @@ import ProfileCard from '../../../components/User/ProfileCard'
 import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import { LensCommunity } from '../../../types/community'
 import { HANDLE_SUFFIX } from '../../../utils/config'
+import { useDevice } from '../../../components/Common/DeviceWrapper'
 
 interface Props {
   community: LensCommunity
@@ -19,7 +19,6 @@ interface Props {
 
 const index = ({ community }: Props) => {
   const { isMobile } = useDevice()
-  console.log('community', community)
   return (
     <>
       {community && (

@@ -8,7 +8,6 @@ import CombinedCommentSectionApiTop from '../../Comment/CombinedCommentSectionAp
 import CommentFilterNav from '../../Comment/CommentFilterNav'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 import MobileLoader from '../../Common/UI/MobileLoader'
-import useDevice from '../../Common/useDevice'
 import PostCard from '../PostCard'
 import { xpPerMember } from '../../../utils/config'
 import { getLevelAndThresholdXP } from '../../../lib/helpers'
@@ -18,12 +17,13 @@ import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import MessageButton from '../../Messages/MessageButton'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 const PostPage = ({ post }) => {
   const [active, setActive] = useState('top')
   const { isMobile } = useDevice()
   const router = useRouter()
-  const [communityInfo, setCommunityInfo] = useState({})
+  const [communityInfo, setCommunityInfo] = useState<any>({})
 
   const fetchCommunityInfo = async () => {
     try {
@@ -41,6 +41,7 @@ const PostPage = ({ post }) => {
   console.log('community info', communityInfo)
 
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
+    // @ts-ignore
     communityInfo?.members?.length * xpPerMember || 0
   )
 
@@ -58,7 +59,7 @@ const PostPage = ({ post }) => {
     }
   }, [post])
 
-  const [profile, setProfile] = useState({})
+  const [profile, setProfile] = useState<any>({})
   const [lensProfile, setLensProfile] = useState(null)
   console.log('profile', profile)
   console.log('lens profile', lensProfile)
@@ -136,6 +137,7 @@ const PostPage = ({ post }) => {
             ))}
           {post && (
             <div>
+              {/* @ts-ignore */}
               <PostCard _post={post} />
               <CommentFilterNav active={active} setActive={setActive} />
               {active === 'top' && (
@@ -167,8 +169,10 @@ const PostPage = ({ post }) => {
             <div className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3">
               <ImageWithFullScreenZoom
                 src={
+                  // @ts-ignore
                   communityInfo.bannerImageUrl
-                    ? communityInfo?.bannerImageUrl
+                    ? // @ts-ignore
+                      communityInfo?.bannerImageUrl
                     : '/gradient.jpg'
                 }
                 className="h-[80px] rounded-t-[15px] w-full object-cover"
@@ -178,8 +182,10 @@ const PostPage = ({ post }) => {
                   <div className="flex items-center justify-center rounded-full bg-[#000] w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] -translate-y-6">
                     <ImageWithFullScreenZoom
                       src={
+                        // @ts-ignore
                         communityInfo?.logoImageUrl
-                          ? communityInfo?.logoImageUrl
+                          ? // @ts-ignore
+                            communityInfo?.logoImageUrl
                           : '/gradient.jpg'
                       }
                       className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"

@@ -1,11 +1,11 @@
 import React from 'react'
 import { CgProfile } from 'react-icons/cg'
-import useDevice from '../../components/Common/useDevice'
 import MobileSidebar from '../../components/Settings/MobileSidebar'
 import ProfilePage from '../../components/Settings/ProfilePage'
 import { FiSettings } from 'react-icons/fi'
 import { MdVerified } from 'react-icons/md'
 import MobileTopNavbarWithTitle from '../../components/Common/MobileTopNavbarWithTitle'
+import { useDevice } from '../../components/Common/DeviceWrapper'
 const index = () => {
   const { isMobile } = useDevice()
   return (

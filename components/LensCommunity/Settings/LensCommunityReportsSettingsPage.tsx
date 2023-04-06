@@ -1,9 +1,9 @@
 import React from 'react'
 import { LensCommunity } from '../../../types/community'
 import MobileTopNavbarWithTitle from '../../Common/MobileTopNavbarWithTitle'
-import useDevice from '../../Common/useDevice'
 import ReportSection from '../../Community/Settings/Sections/ReportSection'
 import SettingsSidebar from './SettingsSidebar'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 const LensCommunityReportsSettingsPage = ({
   community

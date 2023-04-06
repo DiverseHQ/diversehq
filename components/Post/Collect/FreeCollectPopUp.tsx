@@ -5,9 +5,9 @@ import useLensFollowButton from '../../User/useLensFollowButton'
 import { useNotify } from '../../Common/NotifyContext'
 import { CircularProgress } from '@mui/material'
 import { RiUserFollowLine } from 'react-icons/ri'
-import useDevice from '../../Common/useDevice'
 import { BsCollection } from 'react-icons/bs'
 import formatHandle from '../../User/lib/formatHandle'
+import { useDevice } from '../../Common/DeviceWrapper'
 type Props = {
   setIsCollected: any
   setCollectCount: any

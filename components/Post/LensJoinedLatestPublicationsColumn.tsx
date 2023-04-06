@@ -13,12 +13,11 @@ import {
   LENS_POST_LIMIT
 } from '../../utils/config'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
-import LensPostCard from '../Post/LensPostCard'
-import useDevice from '../Common/useDevice'
+import LensPostCard from './LensPostCard'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useSort from '../Common/Hook/useSort'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
-const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
+import { useDevice } from '../Common/DeviceWrapper'
+const LensJoinedLatestPublicationsColumn = ({ communityIds }) => {
   const router = useRouter()
   const { data: myLensProfile } = useLensUserContext()
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
@@ -29,7 +28,6 @@ const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
   })
   const { loading: routeLoading } = useRouterLoading()
   const { isMobile } = useDevice()
-  const { timestamp } = useSort()
 
   const { data } = useExplorePublicationsQuery(
     {
@@ -43,9 +41,8 @@ const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
         cursor: exploreQueryRequestParams.cursor,
         publicationTypes: [PublicationTypes.Post],
         limit: LENS_POST_LIMIT,
-        sortCriteria: PublicationSortCriteria.TopMirrored,
-        noRandomize: true,
-        timestamp: timestamp
+        sortCriteria: PublicationSortCriteria.Latest,
+        noRandomize: true
       },
       reactionRequest: {
         profileId: myLensProfile?.defaultProfile?.id
@@ -78,16 +75,20 @@ const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
     if (newPosts.length < LENS_POST_LIMIT) {
       hasMore = false
     }
+    // @ts-ignore
     const communityIds = newPosts.map((post) => post.metadata.tags[0])
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
     )
     for (let i = 0; i < newPosts.length; i++) {
       if (!communityInfoForPosts[i]?._id) {
+        // @ts-ignore
         newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
       } else {
+        // @ts-ignore
         newPosts[i].communityInfo = communityInfoForPosts[i]
         if (communityInfoForPosts[i]?.handle) {
+          // @ts-ignore
           newPosts[i].isLensCommunityPost = true
         }
       }
@@ -161,11 +162,11 @@ const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
             </>
           )}
         {exploreQueryRequestParams.posts.map((post, index) => {
-          return <LensPostCard key={index} post={post} loading={false} />
+          return <LensPostCard key={index} post={post} />
         })}
       </InfiniteScroll>
     </div>
   )
 }
 
-export default memo(LensJoinedTopPublicationsColumn)
+export default memo(LensJoinedLatestPublicationsColumn)

@@ -18,12 +18,12 @@ import { LENS_INFINITE_SCROLL_THRESHOLD } from '../../utils/config'
 import { memo } from 'react'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
-import useDevice from '../Common/useDevice'
 import MobileLoader from '../Common/UI/MobileLoader'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
 import { postWithCommunityInfoType } from '../../types/post'
 import { usePublicationStore } from '../../store/publication'
 import { useProfileStore } from '../../store/profile'
+import { useDevice } from '../Common/DeviceWrapper'
 const LensAllLatestPublicationsColumn = () => {
   const router = useRouter()
   const { data: myLensProfile } = useLensUserContext()

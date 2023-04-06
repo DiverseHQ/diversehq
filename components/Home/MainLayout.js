@@ -5,11 +5,11 @@ import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
 import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
-// import useDevice from '../Common/useDevice'
 import MainMsgModal from '../Messages/MainMsgModal'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useTheme } from '../Common/ThemeProvider'
+import { useDevice } from '../Common/DeviceWrapper'
 // import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
@@ -19,6 +19,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   // const { isMobile } = useDevice()
   const router = useRouter()
   const [mounted, setMounted] = React.useState(false)
+  const { setIsMobile } = useDevice()
   React.useEffect(() => setMounted(true), [])
   // React.useEffect(() => {
   //   if (typeof window === 'undefined') return
@@ -26,6 +27,10 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   //     setMobile(isMobile)
   //   }
   // }, [isMobile])
+
+  React.useEffect(() => {
+    setIsMobile(isMobileView)
+  }, [isMobileView])
 
   const { theme } = useTheme()
   if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')

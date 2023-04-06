@@ -6,10 +6,10 @@ import CreatePostBar from '../../components/Home/CreatePostBar'
 import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 // import LensPostJoinedCommunitiesPublications from '../../components/Post/LensPostJoinedCommunitiesPublications'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import useDevice from '../../components/Common/useDevice'
 import { appLink } from '../../utils/config'
 // import LensPostJoinedCommunitiesPublicationsNew from '../../components/Post/LensPostJoinedCommunitiesPublicationsNew'
 import LensPostJoinedCommunitiesPublicationsFromDB from '../../components/Post/LensPostJoinedCommunitiesPublicationsFromDB'
+import { useDevice } from '../../components/Common/DeviceWrapper'
 const foryou = () => {
   const { isSignedIn, hasProfile } = useLensUserContext()
   const { user } = useProfile()

@@ -5,11 +5,11 @@ import CommunityInfoCard from '../../../components/Community/CommunityInfoCard'
 import CommunityNotFound from '../../../components/Community/Page/CommunityNotFound'
 import CommunityPageSeo from '../../../components/Community/CommunityPageSeo'
 import LensPostsCommunityPublicationsColumn from '../../../components/Post/LensPostsCommunityPublicationsColumn'
-import useDevice from '../../../components/Common/useDevice'
 import CommunityPageMobileTopNav from '../../../components/Community/CommunityPageMobileTopNav'
 import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info'
 import { CommunityWithCreatorProfile } from '../../../types/community'
 import CommunityPageRightSidebar from '../../../components/Community/CommunityPageRightSidebar'
+import { useDevice } from '../../../components/Common/DeviceWrapper'
 
 interface Props {
   community: CommunityWithCreatorProfile

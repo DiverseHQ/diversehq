@@ -18,7 +18,6 @@ import { useNotify } from '../Common/NotifyContext'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import useDevice from '../Common/useDevice'
 import Markup from '../Lexical/Markup'
 import MessageButton from '../Messages/MessageButton'
 import formatHandle from './lib/formatHandle'
@@ -26,6 +25,7 @@ import getAvatar from './lib/getAvatar'
 import getCoverBanner from './lib/getCoverBanner'
 import ProfileLinksRow from './ProfileLinksRow'
 import useLensFollowButton from './useLensFollowButton'
+import { useDevice } from '../Common/DeviceWrapper'
 
 interface Props {
   _profile?: UserType

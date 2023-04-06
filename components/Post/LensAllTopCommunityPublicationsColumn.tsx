@@ -11,9 +11,9 @@ import { LENS_POST_LIMIT } from '../../utils/config'
 import { useEffect } from 'react'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useDevice from '../Common/useDevice'
 import useSort from '../Common/Hook/useSort'
 import { CommunityType } from '../../types/community'
+import { useDevice } from '../Common/DeviceWrapper'
 
 interface Props {
   communityInfo: CommunityType

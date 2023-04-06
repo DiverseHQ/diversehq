@@ -2,8 +2,8 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { putJoinCommunity, putLeaveCommunity } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
-import useDevice from '../Common/useDevice'
 import { useProfile } from '../Common/WalletContext'
+import { useDevice } from '../Common/DeviceWrapper'
 
 interface Props {
   id: string

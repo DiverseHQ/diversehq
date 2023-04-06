@@ -6,9 +6,9 @@ import { getNotJoinedCommunities } from '../../api/community'
 import { COMMUNITY_LIMIT } from '../../utils/config'
 import CommunityInfoCardLoader from '../Common/UI/Loaders/CommunityInfoCardLoader'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useDevice from '../Common/useDevice'
 import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const ExploreNewUnjoinedCommunitiesPage = ({
   showUnjoined,

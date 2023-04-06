@@ -14,9 +14,16 @@ import { commentIdFromIndexedResult } from '../../../utils/utils'
 import LensCommentCard from './LensCommentCard'
 import LensCreateComment from './LensCreateComment'
 import MobileLoader from '../../Common/UI/MobileLoader'
-import useDevice from '../../Common/useDevice'
+import { useDevice } from '../../Common/DeviceWrapper'
+import { postWithCommunityInfoType } from '../../../types/post'
 
-const CombinedCommentSection = ({ postId, postInfo }) => {
+const CombinedCommentSection = ({
+  postId,
+  postInfo
+}: {
+  postId: string
+  postInfo: postWithCommunityInfoType
+}) => {
   const [comments, setComments] = useState([])
   const [uniqueComments, setUniqueComments] = useState([])
   const [hasMore, setHasMore] = useState(true)

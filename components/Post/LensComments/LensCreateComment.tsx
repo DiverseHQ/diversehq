@@ -13,9 +13,8 @@ import {
   uploadToIpfsInfuraAndGetPath
 } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
-import useDevice from '../../Common/useDevice'
 import { FiSend } from 'react-icons/fi'
-import getAvatar from '../../../components/User/lib/getAvatar'
+import getAvatar from '../../User/lib/getAvatar'
 import { useCommentStore } from '../../../store/comment'
 import ReplyMobileInfo from './ReplyMobileInfo'
 import Giphy from '../Giphy'
@@ -23,6 +22,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../../User/lib/formatHandle'
 import clsx from 'clsx'
+import { useDevice } from '../../Common/DeviceWrapper'
 const LensCreateComment = ({ postId, addComment, postInfo }) => {
   const [focused, setFocused] = useState(false)
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -57,6 +57,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
       profile: {
         picture: {
           original: {
+            // @ts-ignore
             url: lensProfile?.defaultProfile?.picture?.original?.url
           }
         },
@@ -66,6 +67,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
       },
       createdAt: new Date().toISOString(),
       metadata: {
+        // @ts-ignore
         content: commentRef.current.value
       },
       stats: {
@@ -76,8 +78,11 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
     }
     setLoading(false)
     if (commentRef?.current) {
+      // @ts-ignore
       commentRef.current.value = ''
+      // @ts-ignore
       commentRef.current.style.height = 'auto'
+      // @ts-ignore
       commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
     }
     addComment(tx, comment)
@@ -87,6 +92,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
 
   const createComment = async () => {
     if (!lensProfile?.defaultProfile?.id) return
+    // @ts-ignore
     const content = commentRef.current.value
     if (!gifAttachment && (content.trim() === '' || !content)) return
     setLoading(true)
@@ -147,7 +153,13 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
               request: createCommentRequest
             })
           ).createCommentViaDispatcher
-          onSuccessCreateComment({ txId: dispatcherResult.txId }, metadata_id)
+          if (dispatcherResult.__typename === 'RelayError') {
+            setLoading(false)
+            notifyError(dispatcherResult.reason)
+            return
+          } else {
+            onSuccessCreateComment({ txId: dispatcherResult.txId }, metadata_id)
+          }
         } else {
           const commentTypedResult = (
             await createCommentWithSign({
@@ -184,6 +196,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
   useEffect(() => {
     if (postInfo) return
     setFocused(!!currentReplyComment)
+    // @ts-ignore
     if (currentReplyComment) commentRef?.current?.focus()
   }, [currentReplyComment])
 
@@ -200,6 +213,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex flex-row items-center space-x-2">
                 <ImageWithPulsingLoader
+                  // @ts-ignore
                   src={getAvatar(lensProfile?.defaultProfile)}
                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                 />
@@ -226,7 +240,9 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                 rows={1}
                 style={{ resize: 'none' }}
                 onInput={(e) => {
+                  // @ts-ignore
                   e.target.style.height = 'auto'
+                  // @ts-ignore
                   e.target.style.height = e.target.scrollHeight + 'px'
                 }}
               />
@@ -237,6 +253,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                       src={gifAttachment.images.original.url}
                       className="max-h-80 rounded-2xl object-cover"
                       alt={gifAttachment.title}
+                      // @ts-ignore
                       type="image/gif"
                     />
 
@@ -281,6 +298,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
           >
             {!postInfo && currentReplyComment && focused && (
               <ReplyMobileInfo
+                // @ts-ignore
                 fromAvatarUrl={getAvatar(lensProfile?.defaultProfile)}
                 toAvatarUrl={getAvatar(currentReplyComment?.profile)}
                 toContent={currentReplyComment?.metadata?.content}
@@ -289,6 +307,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
             )}
             {postInfo && focused && (
               <ReplyMobileInfo
+                // @ts-ignore
                 fromAvatarUrl={getAvatar(lensProfile?.defaultProfile)}
                 toAvatarUrl={getAvatar(postInfo?.profile)}
                 toContent={postInfo?.metadata?.content}
@@ -302,7 +321,6 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                     src={gifAttachment.images.original.url}
                     className="max-h-80 rounded-2xl object-cover"
                     alt={gifAttachment.title}
-                    type="image/gif"
                   />
 
                   <AiOutlineClose
@@ -315,17 +333,19 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
             <div className="flex flex-row items-center w-full rounded-xl">
               <div className="flex-1  relative mr-2">
                 <textarea
-                  type="text"
                   ref={commentRef}
                   className={`flex flex-row items-center w-full no-scrollbar outline-none text-base sm:text-[18px] py-2 px-4 rounded-xl bg-s-bg font-medium ${
                     loading ? 'text-s-text' : 'text-p-text'
                   }`}
                   placeholder="What do you think?"
                   onInput={(e) => {
+                    // @ts-ignore
                     if (e.target.value.trim() === '') {
                       setFocused(false)
                     }
+                    // @ts-ignore
                     e.target.style.height = 'auto'
+                    // @ts-ignore
                     e.target.style.height = `${e.target.scrollHeight}px`
                   }}
                   disabled={loading}

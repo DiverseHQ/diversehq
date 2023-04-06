@@ -7,7 +7,6 @@ import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import JoinCommunityButton from '../Community/JoinCommunityButton'
-import useDevice from '../Common/useDevice'
 import { ReactionTypes } from '../../graphql/generated'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
@@ -26,8 +25,8 @@ import PostShareButton from './PostShareButton'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import { Tooltip } from '@mui/material'
+import { useDevice } from '../Common/DeviceWrapper'
 // import MarkdownPreview from '@uiw/react-markdown-preview'
-// import useDevice from '../Common/useDevice'
 
 const PostCard = ({ _post, setPosts }) => {
   // const createdAt = new Date(post.createdAt)

@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import useDevice from '../Common/useDevice'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
   LENS_INFINITE_SCROLL_THRESHOLD,
@@ -15,6 +14,7 @@ import { useProfile } from '../Common/WalletContext'
 import usePublicationWithCommunityInfo from '../Community/hook/usePublicationWithCommunityInfo'
 import { usePublicationStore } from '../../store/publication'
 import { useProfileStore } from '../../store/profile'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const LensPostJoinedCommunitiesPublicationsFromDB = () => {
   const router = useRouter()

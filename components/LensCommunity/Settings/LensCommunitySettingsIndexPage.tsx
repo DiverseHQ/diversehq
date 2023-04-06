@@ -7,9 +7,9 @@ import { RiUserSettingsLine } from 'react-icons/ri'
 import { VscOpenPreview } from 'react-icons/vsc'
 import { LensCommunity } from '../../../types/community'
 import MobileTopNavbarWithTitle from '../../Common/MobileTopNavbarWithTitle'
-import useDevice from '../../Common/useDevice'
 import MobileSidebar from '../../Settings/MobileSidebar'
 import LensCommunitySettingsPage from './LensCommunitySettingsPage'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 const LensCommunitySettingsIndexPage = ({
   community

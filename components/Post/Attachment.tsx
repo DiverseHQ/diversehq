@@ -4,16 +4,16 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 import { Publication } from '../../graphql/generated'
 import { SUPPORTED_VIDEO_TYPE } from '../../utils/config'
 import { getURLsFromText } from '../../utils/utils'
-import useDevice from '../Common/useDevice'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import imageProxy from '../User/lib/imageProxy'
 import AttachmentCarousel from './AttachmentCarousel'
 import AttachmentMedia from './AttachmentMedia'
 import ReactEmbedo from './embed/ReactEmbedo'
+import { useDevice } from '../Common/DeviceWrapper'
 
 interface Props {
   publication: Publication
-  className: String
+  className?: String
 }
 
 const Attachment: FC<Props> = ({ publication, className }) => {

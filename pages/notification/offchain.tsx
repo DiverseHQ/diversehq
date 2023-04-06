@@ -1,11 +1,9 @@
 import React from 'react'
-// import useDevice from '../../components/Common/useDevice'
 import NotificationColumn from '../../components/Notification/NotificationColumn'
 // import NotificationFilterNav from '../../components/Notification/NotificationFilterNav'
 import NotificationSeo from '../../components/Notification/NotificationSeo'
 
 const offchain = () => {
-  // const { isDesktop } = useDevice()
   return (
     <>
       <NotificationSeo />

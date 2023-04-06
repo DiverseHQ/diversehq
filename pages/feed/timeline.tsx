@@ -1,5 +1,4 @@
 import React from 'react'
-import useDevice from '../../components/Common/useDevice'
 import { appLink } from '../../utils/config'
 import { NextSeo } from 'next-seo'
 import CreatePostBar from '../../components/Home/CreatePostBar'
@@ -7,6 +6,7 @@ import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import LensLoginButton from '../../components/Common/LensLoginButton'
 import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
+import { useDevice } from '../../components/Common/DeviceWrapper'
 
 const timeline = () => {
   const { isDesktop } = useDevice()

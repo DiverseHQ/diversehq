@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react'
 import PostCard from './PostCard'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getUserPosts } from '../../api/user'
-import { POST_LIMIT } from '../../utils/config.ts'
-import { isValidEthereumAddress } from '../../utils/helper.ts'
+import { POST_LIMIT } from '../../utils/config'
+import { isValidEthereumAddress } from '../../utils/helper'
 import { getPostOfCommunity } from '../../api/community'
 import { getAllPosts } from '../../api/post'
 import { useRouter } from 'next/router'
-import useDevice from '../Common/useDevice'
 import MobileLoader from '../Common/UI/MobileLoader'
+import { useDevice } from '../Common/DeviceWrapper'
 
 /**
  * sources are user, community, all
@@ -18,7 +18,15 @@ import MobileLoader from '../Common/UI/MobileLoader'
  * for all, data is null
  */
 
-const PostsColumn = ({ source, sortBy, data }) => {
+const PostsColumn = ({
+  source,
+  sortBy,
+  data
+}: {
+  source: 'user' | 'community' | 'all'
+  sortBy: 'new' | 'top'
+  data: string
+}) => {
   const router = useRouter()
   const [hasMore, setHasMore] = useState(true)
   const [posts, setPosts] = useState([])

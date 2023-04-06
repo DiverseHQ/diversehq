@@ -1,9 +1,19 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
-import useDevice from '../useDevice'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import BottomDrawerWrapper from '../BottomDrawerWrapper'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../NotifyContext'
-const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
+import { useDevice } from '../DeviceWrapper'
+const HoverModalWrapper = ({
+  disabled,
+  children,
+  HoverModal,
+  position
+}: {
+  disabled: boolean
+  children: any
+  HoverModal: any
+  position: string
+}) => {
   const { isMobile } = useDevice()
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -29,20 +39,17 @@ const HoverModalWrapper = ({ disabled, children, HoverModal, position }) => {
     }
   }
 
-  const handleClick = useCallback(
-    (e) => {
-      if (
-        !!popupRef.current &&
-        !isMobile &&
-        (!e.target?.id || popupRef.current.id !== e.target.id) &&
-        !popupRef.current.contains(e.target) &&
-        !isCollecting
-      ) {
-        setShowOptionsModal(false)
-      }
-    },
-    [popupRef, isMobile, isCollecting]
-  )
+  const handleClick = (e) => {
+    if (
+      !!popupRef.current &&
+      !isMobile &&
+      (!e.target?.id || popupRef.current.id !== e.target.id) &&
+      !popupRef.current.contains(e.target) &&
+      !isCollecting
+    ) {
+      setShowOptionsModal(false)
+    }
+  }
 
   useEffect(() => {
     document.addEventListener('click', handleClick)

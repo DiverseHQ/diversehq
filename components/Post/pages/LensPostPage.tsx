@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { usePublicationQuery } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import MobileLoader from '../../Common/UI/MobileLoader'
-import useDevice from '../../Common/useDevice'
 import CombinedCommentSection from '../LensComments/CombinedCommentSection'
 import LensPostCard from '../LensPostCard'
 import { IoMdClose } from 'react-icons/io'
@@ -13,6 +12,7 @@ import LensPostPageCommunityCard from '../Cards/LensPostPageCommunityCard'
 import PostPageMentionsColumn, {
   getAllMentionsHandlFromContent
 } from '../PostPageMentionsColumn'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 interface Props {
   id: string

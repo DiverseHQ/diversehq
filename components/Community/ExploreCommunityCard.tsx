@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { isCreatorOrModeratorOfCommunity } from '../../api/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
-import useDevice from '../Common/useDevice'
 import { RiMore2Fill } from 'react-icons/ri'
 import { IoIosShareAlt } from 'react-icons/io'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
@@ -15,6 +14,7 @@ import { CommunityWithCreatorProfile } from '../../types/community'
 import { FiSettings } from 'react-icons/fi'
 import { BsPeopleFill } from 'react-icons/bs'
 import { stringToLength } from '../../utils/utils'
+import { useDevice } from '../Common/DeviceWrapper'
 
 interface Props {
   _community: CommunityWithCreatorProfile

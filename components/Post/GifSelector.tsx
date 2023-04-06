@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Grid } from '@giphy/react-components'
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { useDebounce } from '../Common/Hook/useDebounce'
-import useDevice from '../Common/useDevice'
+import { useDevice } from '../Common/DeviceWrapper'
 // import { useRouter } from 'next/router'
 
 const giphyFetch = new GiphyFetch('sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh')
+
+/* eslint-disable */
 
 const GifSelector = ({
   setGifAttachment,
@@ -14,6 +16,13 @@ const GifSelector = ({
   bottom,
   setShowGiphyDrawer,
   left
+}: {
+  setGifAttachment: (item: any) => void
+  setShowModal: (show: boolean) => void
+  className?: string
+  bottom: string
+  setShowGiphyDrawer?: (show: boolean) => void
+  left: string
 }) => {
   const [categories, setCategories] = useState([])
   const [debouncedGifInput, setDebouncedGifInput] = useState('')

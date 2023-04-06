@@ -4,10 +4,10 @@ import { getAllNotifications } from '../../api/user'
 import { NOTIFICATION_LIMIT } from '../../utils/config'
 import LensLoginButton from '../Common/LensLoginButton'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useDevice from '../Common/useDevice'
 import { useProfile } from '../Common/WalletContext'
 import NotificationCard from './NotificationCard'
 import useNotificationCount from './useNotificationsCount'
+import { useDevice } from '../Common/DeviceWrapper'
 const NotificationColumn = () => {
   const [notifications, setNotifications] = useState([])
   const [hasMore, setHasMore] = useState(true)

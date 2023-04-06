@@ -3,9 +3,9 @@ import NavFilterAllPosts from '../../components/Post/NavFilterAllPosts'
 // import { useLensUserContext } from '../../lib/LensUserContext'
 import LensPostsExplorePublicationsColumn from '../../components/Post/LensPostsExplorePublicationsColumn'
 import { NextSeo } from 'next-seo'
-import useDevice from '../../components/Common/useDevice'
 import CreatePostBar from '../../components/Home/CreatePostBar'
 import { appLink } from '../../utils/config'
+import { useDevice } from '../../components/Common/DeviceWrapper'
 // import LensPostsProfileFeedColumn from '../../components/Post/LensPostsProfileFeedColumn'
 
 const lens = () => {

@@ -3,8 +3,8 @@ import React from 'react'
 import LensPostsExplorePublicationsColumn from '../components/Post/LensPostsExplorePublicationsColumn'
 import NavFilterAllPosts from '../components/Post/NavFilterAllPosts'
 import CreatePostBar from '../components/Home/CreatePostBar'
-import useDevice from '../components/Common/useDevice'
 import { appLink } from '../utils/config'
+import { useDevice } from '../components/Common/DeviceWrapper'
 
 const Home = () => {
   const { isDesktop } = useDevice()

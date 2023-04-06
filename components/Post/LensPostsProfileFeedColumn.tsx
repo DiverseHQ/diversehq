@@ -6,13 +6,13 @@ import { FeedEventItemType, useProfileFeedQuery } from '../../graphql/generated'
 import LensPostCard from './LensPostCard'
 import { LENS_POST_LIMIT } from '../../utils/config'
 import MobileLoader from '../Common/UI/MobileLoader'
-import useDevice from '../Common/useDevice'
 import { useRouter } from 'next/router'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
 import { usePublicationStore } from '../../store/publication'
 import { useProfileStore } from '../../store/profile'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   const router = useRouter()

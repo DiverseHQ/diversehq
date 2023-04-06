@@ -1,6 +1,5 @@
 import React from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import useDevice from '../Common/useDevice'
 
 import ReactTimeAgo from 'react-time-ago'
 
@@ -14,6 +13,7 @@ import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
 import Markup from '../Lexical/Markup'
 import { AiOutlineRetweet } from 'react-icons/ai'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()

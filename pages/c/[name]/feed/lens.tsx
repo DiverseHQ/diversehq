@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { getCommunityInfo } from '../../../../api/community'
-import useDevice from '../../../../components/Common/useDevice'
 import CommunityInfoCard from '../../../../components/Community/CommunityInfoCard'
 import CommunityPageMobileTopNav from '../../../../components/Community/CommunityPageMobileTopNav'
 import CommunityPageSeo from '../../../../components/Community/CommunityPageSeo'
@@ -9,6 +8,7 @@ import LensPostsCommunityPublicationsColumn from '../../../../components/Post/Le
 import NavFilterCommunity from '../../../../components/Post/NavFilterCommunity'
 import getDefaultProfileInfo from '../../../../lib/profile/get-default-profile-info'
 import { CommunityWithCreatorProfile } from '../../../../types/community'
+import { useDevice } from '../../../../components/Common/DeviceWrapper'
 
 interface Props {
   community: CommunityWithCreatorProfile

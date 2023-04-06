@@ -2,7 +2,9 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 import BottomDrawerWrapper from './BottomDrawerWrapper'
-import useDevice from './useDevice'
+import { useDevice } from './DeviceWrapper'
+
+/* eslint-disable */
 
 const OptionsWrapper = ({
   children,
@@ -12,6 +14,14 @@ const OptionsWrapper = ({
   setShowOptionsModal,
   isDrawerOpen,
   setIsDrawerOpen
+}: {
+  children: any
+  OptionPopUpModal: any
+  position: string
+  showOptionsModal: boolean
+  setShowOptionsModal: (showOptionsModal: boolean) => void
+  isDrawerOpen: boolean
+  setIsDrawerOpen: (isDrawerOpen: boolean) => void
 }) => {
   const { isMobile } = useDevice()
   const popupRef = useRef(null)

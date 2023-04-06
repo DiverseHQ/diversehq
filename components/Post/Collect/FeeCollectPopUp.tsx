@@ -11,13 +11,13 @@ import {
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../../Common/NotifyContext'
-import useDevice from '../../Common/useDevice'
 import formatHandle from '../../User/lib/formatHandle'
 // import PopUpWrapper from '../../Common/PopUpWrapper'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import AllowanceButton from './AllowanceButton'
 import Uniswap from './Uniswap'
 import useCollectPublication from './useCollectPublication'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 type Props = {
   setIsCollected: any
