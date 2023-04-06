@@ -126,53 +126,6 @@ const RightSidebar = () => {
           Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
         />
       )}
-      {/* <CommunitiesDiv
-        text="Recommended Communities"
-        showFirstCommunities={
-          sortedLensCommunities.length > 0
-            ? sortedLensCommunities.map((c) => ({
-                name: formatHandle(c.handle),
-                // @ts-ignore
-                logoImageUrl: getAvatar(c),
-                verified: c?.verified,
-                isLensCommunity: true
-              }))
-            : []
-        }
-        communitiesList={[
-          {
-            name: 'DiverseHQ',
-            logoImageUrl:
-              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com/o/image%2F0xb522133dbd9c8b424429d89d821aeb2a115db678%2Fpwa_icon.png?alt=media&token=299048f9-9722-4427-8ccf-21b9bb713953'
-          },
-          {
-            name: 'photography',
-            logoImageUrl:
-              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com/o/image%2F0xf2c42d45511d33ac0940c5a3160aad847f3010c0%2FInShot_%DB%B2%DB%B0%DB%B2%DB%B1%DB%B0%DB%B7%DB%B0%DB%B3_%DB%B1%DB%B6%DB%B2%DB%B3%DB%B0%DB%B0%DB%B6%DB%B2%DB%B5.jpg?alt=media&token=8fb4ad3f-5186-4f10-855b-4475acd6a832'
-          },
-          {
-            name: 'crypto',
-            logoImageUrl:
-              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com/o/image%2F0xB522133dBd9C8B424429D89d821aeb2a115dB678%2F1024px-Bitcoin.svg.png?alt=media&token=0c1a96bf-5f22-4500-8d2c-a974f12aceaf'
-          },
-          {
-            name: 'DankMeems',
-            logoImageUrl:
-              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com/o/image%2F0x9054E37Eac6D11791caF5b3a4fd9ec4Bc1B4dfD8%2Fpepe_emoji.jpg?alt=media&token=3b046b12-41df-4463-bda8-53232aa68544'
-          },
-          {
-            name: 'gaming',
-            logoImageUrl:
-              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com/o/image%2F0xB522133dBd9C8B424429D89d821aeb2a115dB678%2Fgod-of-war-walkthrough-guide-5004-1642178551828.jpg?alt=media&token=80ca3af2-0573-4e1a-9b23-2541b17eaa93'
-          },
-          {
-            name: 'anime',
-            logoImageUrl:
-              'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com/o/image%2F0xB522133dBd9C8B424429D89d821aeb2a115dB678%2FEren_Jaeger_(Anime)_character_image_(850).png?alt=media&token=72a4402b-c439-4b4f-9cc8-d4ee42b202c1'
-          }
-        ]}
-        Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
-      /> */}
       <CopyrightAndLinks />
     </div>
   )
