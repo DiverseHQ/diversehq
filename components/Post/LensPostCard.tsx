@@ -309,7 +309,7 @@ const LensPostCard = ({ post }: Props) => {
           {/* top row */}
           {postInfo?.mirroredBy && (
             <div
-              className="flex flex-row space-x-1 items-center ml-4 md:ml-1 mb-1 text-xs text-s-text"
+              className="flex flex-row w-full space-x-1 items-center ml-4 md:ml-1 mb-1 text-xs text-s-text"
               onClick={(e) => {
                 e.stopPropagation()
               }}
@@ -727,7 +727,7 @@ const LensPostCard = ({ post }: Props) => {
 
             {/* main content */}
             <div className="flex flex-col w-full justify-between min-h-[76px]">
-              <div>
+              <div className="flex flex-col">
                 <div className="mb-2 px-4 sm:pl-2 ">
                   {!router.pathname.startsWith('/p') ? (
                     <>
@@ -838,17 +838,17 @@ const LensPostCard = ({ post }: Props) => {
                   )}
                 </div>
                 <div
-                  className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                  className={`sm:pl-5 w-full   sm:pr-6 sm:pb-1 ${
                     isBlur ? 'blur-xl' : ''
                   }`}
                 >
                   <Attachment
                     publication={postInfo}
-                    className={`${
+                    className={clsx(
                       router.pathname.startsWith('/p')
                         ? 'max-h-screen'
                         : 'max-h-[450px]'
-                    }`}
+                    )}
                   />
                 </div>
               </div>

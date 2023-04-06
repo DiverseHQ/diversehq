@@ -75,7 +75,7 @@ const ReactEmbedo = ({ url, ...props }) => {
     <>
       {isEmbedable(url) ? (
         <div
-          className="sm:rounded-lg overflow-hidden"
+          className="sm:rounded-lg sm:w-[525px] overflow-hidden"
           ref={embedoRef}
           id={uuidv4()}
           {...props}
