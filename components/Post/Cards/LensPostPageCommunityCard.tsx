@@ -1,17 +1,32 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CommunityType } from '../../../types/community'
 import { stringToLength } from '../../../utils/utils'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 import JoinCommunityButton from '../../Community/JoinCommunityButton'
 import Markup from '../../Lexical/Markup'
+import { getCommunityInfoUsingId } from '../../../api/community'
 
 const LensPostPageCommunityCard = ({
-  communityInfo
+  communityInfo: _community
 }: {
   communityInfo: CommunityType
 }) => {
+  const [communityInfo, setCommunityInfo] =
+    React.useState<CommunityType>(_community)
+  console.log('communityInfo', communityInfo)
   const router = useRouter()
+
+  const fetchAndSetCommunityInfo = async () => {
+    const res = await getCommunityInfoUsingId(_community?._id)
+    setCommunityInfo(res)
+  }
+
+  useEffect(() => {
+    if (!_community?._id) return
+    fetchAndSetCommunityInfo()
+  }, [_community?._id])
+
   return (
     <div
       className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] bg-s-bg ml-4 mt-3 cursor-pointer"

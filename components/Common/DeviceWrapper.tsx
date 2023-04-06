@@ -16,11 +16,10 @@ export const DeviceContext = React.createContext<ContextType>({
 
 const DeviceWrapper = ({ children }) => {
   const [isMobile, setIsMobile] = React.useState(true)
-
   return (
     <DeviceContext.Provider
       value={{
-        isMobile,
+        isMobile: isMobile,
         isDesktop: !isMobile,
         setIsMobile
       }}
