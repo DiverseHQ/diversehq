@@ -23,6 +23,8 @@ export const getAllLensCommunitiesHandle = async (): Promise<
   {
     _id: string
     handle: string
+    createdAt?: string
+    verified?: boolean
   }[]
 > => {
   return await fetch(`${apiEndpoint}/lensCommunity/get-all-lens-communities`, {

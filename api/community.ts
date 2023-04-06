@@ -88,7 +88,8 @@ export const putLeaveCommunity = async (communityId: string) => {
 export const getAllCommunities = async (
   limit: number,
   skips: number,
-  sortBy?: string
+  sortBy?: string,
+  verified?: boolean
 ) => {
   try {
     return await fetch(
@@ -96,7 +97,8 @@ export const getAllCommunities = async (
         new URLSearchParams({
           limit: limit.toString(),
           skips: skips.toString(),
-          sortBy
+          sortBy,
+          verified: verified ? verified.toString() : 'false'
         })
     ).then((res) => res.json())
   } catch (error) {

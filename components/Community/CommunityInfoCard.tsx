@@ -20,6 +20,7 @@ import { FiInfo, FiSettings } from 'react-icons/fi'
 import ExploreCommunityCard from './ExploreCommunityCard'
 import { BsPeopleFill } from 'react-icons/bs'
 import { useDevice } from '../Common/DeviceWrapper'
+import { MdOutlineVerified } from 'react-icons/md'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -109,12 +110,24 @@ const CommunityInfoCard = ({ _community }: Props) => {
                     </div>
                     {!isMobile ? (
                       <div className="flex flex-col mt-3">
-                        <p
-                          className="font-bold text-[18px] md:text-2xl tracking-wider truncate"
+                        <div
+                          className="font-bold start-row gap-x-2 text-[18px] md:text-2xl tracking-wider truncate"
                           onClick={redirectToCommunityPage}
                         >
-                          {community?.label || community?.name}
-                        </p>
+                          <span>{community?.label || community?.name}</span>
+                          <div>
+                            {community?.verified && (
+                              <Tooltip
+                                title="Verified"
+                                arrow
+                                enterDelay={1000}
+                                leaveDelay={200}
+                              >
+                                <MdOutlineVerified className="text-p-text w-5 h-5" />
+                              </Tooltip>
+                            )}
+                          </div>
+                        </div>
                         <div className="text-[14px] md:text-[16px]">
                           <div className="hover:underline cursor-pointer text-s-text">
                             c/{community.name}
@@ -127,10 +140,18 @@ const CommunityInfoCard = ({ _community }: Props) => {
                       </div>
                     ) : (
                       <div className="flex flex-col">
-                        <div className="px-2">
+                        <div className="px-2 start-row gap-x-1 py-1">
                           <div className="hover:underline cursor-pointer text-s-text">
                             c/{community.name}
                           </div>
+                          <Tooltip
+                            title="Verified"
+                            arrow
+                            enterDelay={1000}
+                            leaveDelay={200}
+                          >
+                            <MdOutlineVerified className="text-p-text w-4 h-4 text-p-text" />
+                          </Tooltip>
                         </div>
                         <div className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px]">
                           <BsPeopleFill className="w-4 h-4 mr-1" />

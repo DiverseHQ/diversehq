@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import {
   getAllCommunities,
-  getCreatedCommunitiesApi,
-  getNotJoinedCommunities
+  getCreatedCommunitiesApi
+  // getNotJoinedCommunities
 } from '../../api/community'
-import { useNotify } from '../Common/NotifyContext'
+// import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import { HiOutlineSparkles } from 'react-icons/hi'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
@@ -19,7 +19,7 @@ const RightSidebar = () => {
   const hide = useHideSidebar()
   const { user, LensCommunity, allLensCommunities } = useProfile()
   const { data: lensProfile } = useLensUserContext()
-  const { notifyError } = useNotify()
+  // const { notifyError } = useNotify()
 
   const [createdCommunities, setCreatedCommunities] = useState([])
   const [topCommunities, setTopCommunities] = useState([])
@@ -37,34 +37,37 @@ const RightSidebar = () => {
 
   const fetchTopCommunities = async () => {
     try {
-      const communities = await getAllCommunities(6, 0, 'top')
-      if (communities.communities.length > 0) {
-        setTopCommunities(communities.communities)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+      const communities = await getAllCommunities(6, 0, 'top', true)
+      console.log('topcommunities', communities)
 
-  const fetchTopNotJoinedCommunities = async () => {
-    try {
-      const communities = await getNotJoinedCommunities(6, 0, 'top')
       if (communities?.communities?.length > 0) {
         setTopCommunities(communities.communities)
       }
     } catch (error) {
       console.log(error)
-      notifyError("Couldn't fetch top communities")
     }
   }
 
+  // const fetchTopNotJoinedCommunities = async () => {
+  //   try {
+  //     const communities = await getNotJoinedCommunities(6, 0, 'top')
+  //     if (communities?.communities?.length > 0) {
+  //       setTopCommunities(communities.communities)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //     notifyError("Couldn't fetch top communities")
+  //   }
+  // }
+
   useEffect(() => {
-    if (!user) {
-      fetchTopCommunities()
-      return
-    }
+    console.log('user', user)
+    // if (!user) {
+    fetchTopCommunities()
+    //   return
+    // }
     fetchAndSetCreatedCommunities()
-    fetchTopNotJoinedCommunities()
+    // fetchTopNotJoinedCommunities()
   }, [user])
 
   useEffect(() => {
@@ -75,9 +78,9 @@ const RightSidebar = () => {
   }, [])
 
   // sort alllenscommunities by followers
-  const sortedLensCommunities = allLensCommunities?.sort(
-    (a, b) => b.stats.totalFollowers - a.stats.totalFollowers
-  )
+  const sortedLensCommunities = allLensCommunities
+    ?.sort((a, b) => b.stats.totalFollowers - a.stats.totalFollowers)
+    .slice(0, 6)
 
   return (
     <div
@@ -106,7 +109,7 @@ const RightSidebar = () => {
           Icon={() => <AiOutlineUsergroupAdd className="w-[20px] h-[20px]" />}
         />
       )}
-      {/* {topCommunities?.length > 0 && (
+      {topCommunities?.length > 0 && (
         <CommunitiesDiv
           showFirstCommunities={
             sortedLensCommunities.length > 0
@@ -114,7 +117,8 @@ const RightSidebar = () => {
                   name: formatHandle(c.handle),
                   // @ts-ignore
                   logoImageUrl: getAvatar(c),
-                  isLensCommunity: true
+                  isLensCommunity: true,
+                  verified: c?.verified
                 }))
               : []
           }
@@ -122,8 +126,8 @@ const RightSidebar = () => {
           communitiesList={topCommunities}
           Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
         />
-      )} */}
-      <CommunitiesDiv
+      )}
+      {/* <CommunitiesDiv
         text="Recommended Communities"
         showFirstCommunities={
           sortedLensCommunities.length > 0
@@ -131,6 +135,7 @@ const RightSidebar = () => {
                 name: formatHandle(c.handle),
                 // @ts-ignore
                 logoImageUrl: getAvatar(c),
+                verified: c?.verified,
                 isLensCommunity: true
               }))
             : []
@@ -168,7 +173,7 @@ const RightSidebar = () => {
           }
         ]}
         Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
-      />
+      /> */}
       <CopyrightAndLinks />
     </div>
   )

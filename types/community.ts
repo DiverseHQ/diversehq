@@ -16,6 +16,7 @@ export type CommunityType = {
   creatorProfile?: Profile
   rules?: Rule[]
   bannedUsers?: BannedUser[]
+  verified?: boolean
   // hack to allow any other property
   handle?: string
   [key: string]: any
@@ -41,6 +42,7 @@ export type LensCommunity = {
   handle: string
   creator?: string
   bannedUsers?: BannedUser[]
+  verified?: boolean
   rules?: Rule[]
   Profile?: Profile
   createdAt?: string

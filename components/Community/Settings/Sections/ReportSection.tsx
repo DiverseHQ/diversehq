@@ -29,11 +29,19 @@ const ReportSection = ({
   })
 
   const fetchAndSetUnResolvedReprots = async () => {
-    const res = await getUnresolvedPublicationReportsOfCommunity(community?._id)
-    if (res.status === 200) {
-      const result = await res.json()
-      setRawReports(result)
-    } else {
+    try {
+      const res = await getUnresolvedPublicationReportsOfCommunity(
+        community?._id
+      )
+      console.log('res', res)
+      if (res.status === 200) {
+        const result = await res.json()
+        setRawReports(result)
+      } else {
+        notifyError('Something went wrong')
+      }
+    } catch (error) {
+      console.log(error)
       notifyError('Something went wrong')
     }
   }
