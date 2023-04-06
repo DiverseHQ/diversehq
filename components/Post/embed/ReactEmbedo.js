@@ -74,7 +74,12 @@ const ReactEmbedo = ({ url, ...props }) => {
   return (
     <>
       {isEmbedable(url) ? (
-        <div ref={embedoRef} id={uuidv4()} {...props}></div>
+        <div
+          className="sm:rounded-lg overflow-hidden"
+          ref={embedoRef}
+          id={uuidv4()}
+          {...props}
+        ></div>
       ) : (
         <LinkPreview url={url} />
       )}

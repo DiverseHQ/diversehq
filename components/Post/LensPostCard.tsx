@@ -837,23 +837,20 @@ const LensPostCard = ({ post }: Props) => {
                     </>
                   )}
                 </div>
-                {postInfo?.metadata?.media &&
-                  postInfo?.metadata?.media.length > 0 && (
-                    <div
-                      className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
-                        isBlur ? 'blur-xl' : ''
-                      }`}
-                    >
-                      <Attachment
-                        publication={postInfo}
-                        className={`${
-                          router.pathname.startsWith('/p')
-                            ? 'max-h-screen'
-                            : 'max-h-[450px]'
-                        }`}
-                      />
-                    </div>
-                  )}
+                <div
+                  className={`sm:pl-5  sm:pr-6 sm:pb-1 ${
+                    isBlur ? 'blur-xl' : ''
+                  }`}
+                >
+                  <Attachment
+                    publication={postInfo}
+                    className={`${
+                      router.pathname.startsWith('/p')
+                        ? 'max-h-screen'
+                        : 'max-h-[450px]'
+                    }`}
+                  />
+                </div>
               </div>
 
               {/* bottom row */}
