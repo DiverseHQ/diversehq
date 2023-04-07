@@ -45,7 +45,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
   const name = community?.name
   const { isMobile } = useDevice()
   // const { showModal } = usePopUpModal()
-  const { JoinCommunityButton, joined } = useJoinCommunityButton({
+  const { JoinCommunityButton } = useJoinCommunityButton({
     id: community?._id,
     showJoined: true
   })
