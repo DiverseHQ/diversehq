@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import {
   getAllCommunities,
-  getCreatedCommunitiesApi
-  // getNotJoinedCommunities
+  getCreatedCommunitiesApi,
+  getNotJoinedCommunities
 } from '../../api/community'
 // import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
@@ -14,11 +14,14 @@ import CommunitiesDiv from '../Common/UI/CommunitiesDiv'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import getAvatar from '../User/lib/getAvatar'
 import formatHandle from '../User/lib/formatHandle'
+import { useAccount } from 'wagmi'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
-  const { user, LensCommunity, allLensCommunities } = useProfile()
-  const { data: lensProfile } = useLensUserContext()
+  const { user, LensCommunity, allLensCommunities, loading } = useProfile()
+  const { data: lensProfile, isLoading } = useLensUserContext()
+  const { address } = useAccount()
+
   // const { notifyError } = useNotify()
 
   const [createdCommunities, setCreatedCommunities] = useState([])
@@ -40,6 +43,7 @@ const RightSidebar = () => {
       const communities = await getAllCommunities(6, 0, 'top', true)
 
       if (communities?.communities?.length > 0) {
+        console.log('communities', communities.communities)
         setTopCommunities(communities.communities)
       }
     } catch (error) {
@@ -47,27 +51,27 @@ const RightSidebar = () => {
     }
   }
 
-  // const fetchTopNotJoinedCommunities = async () => {
-  //   try {
-  //     const communities = await getNotJoinedCommunities(6, 0, 'top')
-  //     if (communities?.communities?.length > 0) {
-  //       setTopCommunities(communities.communities)
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //     notifyError("Couldn't fetch top communities")
-  //   }
-  // }
+  const fetchTopNotJoinedCommunities = async () => {
+    try {
+      const communities = await getNotJoinedCommunities(6, 0, 'top', true)
+      if (communities?.communities?.length > 0) {
+        setTopCommunities(communities.communities)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
+    if (loading || (isLoading && address)) return
     console.log('user', user)
-    // if (!user) {
-    fetchTopCommunities()
-    //   return
-    // }
+    if (!user) {
+      fetchTopCommunities()
+      return
+    }
     fetchAndSetCreatedCommunities()
-    // fetchTopNotJoinedCommunities()
-  }, [user])
+    fetchTopNotJoinedCommunities()
+  }, [user, loading, isLoading, address])
 
   useEffect(() => {
     if (topCommunities.length > 0) return
@@ -108,6 +112,8 @@ const RightSidebar = () => {
           Icon={() => <AiOutlineUsergroupAdd className="w-[20px] h-[20px]" />}
         />
       )}
+
+      {/* show in card form */}
       {topCommunities?.length > 0 && (
         <CommunitiesDiv
           showFirstCommunities={

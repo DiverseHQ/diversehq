@@ -144,14 +144,16 @@ const CommunityInfoCard = ({ _community }: Props) => {
                           <div className="hover:underline cursor-pointer text-s-text">
                             c/{community.name}
                           </div>
-                          <Tooltip
-                            title="Verified"
-                            arrow
-                            enterDelay={1000}
-                            leaveDelay={200}
-                          >
-                            <MdOutlineVerified className="text-p-text w-4 h-4 text-p-text" />
-                          </Tooltip>
+                          {community?.verified && (
+                            <Tooltip
+                              title="Verified"
+                              arrow
+                              enterDelay={1000}
+                              leaveDelay={200}
+                            >
+                              <MdOutlineVerified className="text-p-text w-4 h-4 text-p-text" />
+                            </Tooltip>
+                          )}
                         </div>
                         <div className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px]">
                           <BsPeopleFill className="w-4 h-4 mr-1" />

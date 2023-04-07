@@ -109,7 +109,8 @@ export const getAllCommunities = async (
 export const getNotJoinedCommunities = async (
   limit: number,
   skips: number,
-  sortBy?: string
+  sortBy?: string,
+  verified?: boolean
 ) => {
   try {
     return await fetch(
@@ -117,7 +118,8 @@ export const getNotJoinedCommunities = async (
         new URLSearchParams({
           limit: limit.toString(),
           skips: skips.toString(),
-          sortBy
+          sortBy,
+          verified: verified ? verified.toString() : 'false'
         }),
       {
         headers: await getHeaders()
