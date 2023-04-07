@@ -20,11 +20,11 @@ import ExploreCommunityCard from './ExploreCommunityCard'
 import { BsPeopleFill } from 'react-icons/bs'
 import { useDevice } from '../Common/DeviceWrapper'
 import { MdVerified } from 'react-icons/md'
-import { useCommunityStore } from '../../store/community'
+// import { useCommunityStore } from '../../store/community'
 // import CreatePostPopup from '../Home/CreatePostPopup'
 // import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import useJoinCommunityButton from './hook/useJoinCommunityButton'
-import CreatePostBar from '../Home/CreatePostBar'
+// import CreatePostBar from '../Home/CreatePostBar'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -50,9 +50,9 @@ const CommunityInfoCard = ({ _community }: Props) => {
     showJoined: true
   })
 
-  const selectCommunityForPost = useCommunityStore(
-    (state) => state.selectCommunityForPost
-  )
+  // const selectCommunityForPost = useCommunityStore(
+  //   (state) => state.selectCommunityForPost
+  // )
 
   const redirectToCommunityPage = () => {
     if (name) router.push(`/c/${name}`)
@@ -273,7 +273,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                     <div className="text-[14px] md:text-[16px]">
                       {community.description}
                     </div>
-                    {joined && (
+                    {/* {joined && (
                       <CreatePostBar
                         title="Create Post"
                         beforeOpen={() => {
@@ -281,7 +281,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                         }}
                         className="-mb-2 mt-2"
                       />
-                    )}
+                    )} */}
                   </div>
                 </>
               )}
