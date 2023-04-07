@@ -22,7 +22,7 @@ const timeline = () => {
       />
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
-          {isDesktop && <CreatePostBar />}
+          {isDesktop && <CreatePostBar className="mt-4" />}
           <NavFilterAllPosts />
           {lensProfile &&
           isSignedIn &&
