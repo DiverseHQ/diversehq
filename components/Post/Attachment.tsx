@@ -2,7 +2,7 @@
 import React, { FC, useState } from 'react'
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 import { Publication } from '../../graphql/generated'
-import { SUPPORTED_VIDEO_TYPE } from '../../utils/config'
+import { SUPPORTED_IMAGE_TYPE, SUPPORTED_VIDEO_TYPE } from '../../utils/config'
 import { getURLsFromText } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import imageProxy from '../User/lib/imageProxy'
@@ -98,7 +98,11 @@ const Attachment: FC<Props> = ({ publication, className }) => {
               medias[currentMedia].original.mimeType
             )
               ? medias[currentMedia].original.url
-              : imageProxy(getIPFSLink(medias[currentMedia].original.url))
+              : SUPPORTED_IMAGE_TYPE.includes(
+                  medias[currentMedia].original.mimeType
+                )
+              ? imageProxy(getIPFSLink(medias[currentMedia].original.url))
+              : getIPFSLink(medias[currentMedia].original.url)
           }
           publication={publication}
           className={`${medias.length > 1 ? 'h-[450px]' : className}`}
