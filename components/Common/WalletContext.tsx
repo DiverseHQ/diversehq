@@ -129,8 +129,6 @@ export const WalletProvider = ({ children }) => {
       if (!user || !lensProfile?.defaultProfile?.id) return
       // todo optimize this, currently fetching all communities and then filtering
       const _allLensCommunities = await getAllLensCommunitiesHandle()
-      console.log('_allLensCommunities', _allLensCommunities)
-
       // loop through all communities in group of 50 and check if lens user follows them
       // const _joinedLensCommunities = []
       let cursor = null
@@ -159,9 +157,6 @@ export const WalletProvider = ({ children }) => {
             .verified
         })
       )
-
-      console.log('allLensCommunitiesInDetail', allLensCommunitiesInDetail)
-
       const _joinedLensCommunities: IsFollowedLensCommunityType[] =
         allLensCommunitiesInDetail.filter((c) => c.isFollowedByMe)
 

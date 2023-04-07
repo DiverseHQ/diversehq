@@ -59,15 +59,33 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     // if (newPosts.length < LENS_POST_LIMIT) {
     //   hasMore = false
     // }
-    const communityIds = newPosts.map((post) => post.metadata.tags[0])
+    const communityIds = newPosts.map((post) => {
+      // @ts-ignore
+      if (post?.metadata?.tags?.[0]) {
+        // @ts-ignore
+        return post.metadata.tags[0]
+      }
+      // if (post?.__typename === '') {
+      //   console.log(
+      //     'postMirrorOf',
+      //     post.mirrorOf?.__typename === 'Post'
+      //       ? post.mirrorOf?.metadata?.tags[0]
+      //       : null
+      //   )
+
+      //   if (post.mirrorOf.__typename === 'Comment') {
+      //     console.log('postMirrorOf Comment', post.mirrorOf)
+      //   }
+      //   // @ts-ignore
+      //   return post.mirrorOf?.metadata?.tags[0] || 'null'
+      // }
+      return 'null'
+    })
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
     )
     for (let i = 0; i < newPosts.length; i++) {
-      if (!communityInfoForPosts[i]?._id) {
-        // @ts-ignore
-        // newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
-      } else {
+      if (communityInfoForPosts[i]?._id) {
         // @ts-ignore
         newPosts[i].communityInfo = communityInfoForPosts[i]
         if (communityInfoForPosts[i]?.handle) {
@@ -99,7 +117,6 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   }
 
   useEffect(() => {
-    console.log('profileFeed?.feed?.items', profileFeed?.feed?.items)
     if (!profileFeed?.feed?.items) return
     hanldeProfileFeed()
   }, [profileFeed?.feed?.pageInfo?.next])
@@ -112,8 +129,6 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       cursor: exploreQueryRequestParams.nextCursor
     })
   }
-
-  console.log('exploreQueryRequestParams', exploreQueryRequestParams)
 
   return (
     <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden">

@@ -111,9 +111,7 @@ const NavFilterAllPosts = () => {
         Icon={<BsPerson className="h-5 w-5" />}
         title="Timeline"
         active={active === 'timeline'}
-        onClick={() => {
-          router.push('/')
-        }}
+        link="/"
         tooltipTitle="Timeline feed from all lens apps"
       />
 
@@ -121,18 +119,14 @@ const NavFilterAllPosts = () => {
         Icon={<CgCommunity className="h-5 w-5" />}
         title="For You"
         active={active === 'foryou'}
-        onClick={() => {
-          router.push('/feed/foryou')
-        }}
+        link="/feed/foryou"
         tooltipTitle="Posts from communities you joined"
       />
       <FilterButton
         Icon={<MdOutlineExplore className="h-4 w-4" />}
         title="All"
         active={active === 'all'}
-        onClick={() => {
-          router.push('/feed/all')
-        }}
+        link="/feed/all"
         tooltipTitle="Posts from all communities"
       />
     </FilterRow>

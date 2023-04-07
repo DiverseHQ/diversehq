@@ -76,7 +76,6 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
 
   React.useEffect(() => {
     if (router.pathname === '/feed/foryou') {
-      console.log('fetching more')
       fetchMoreLensPosts()
     }
   }, [])

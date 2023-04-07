@@ -110,9 +110,7 @@ const LensAllTopPublicationsColumn = () => {
       communityIds
     )
     for (let i = 0; i < newPosts.length; i++) {
-      if (!communityInfoForPosts[i]?._id) {
-        newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
-      } else {
+      if (communityInfoForPosts[i]?._id) {
         newPosts[i].communityInfo = communityInfoForPosts[i]
         if (communityInfoForPosts[i]?.handle) {
           newPosts[i].isLensCommunityPost = true

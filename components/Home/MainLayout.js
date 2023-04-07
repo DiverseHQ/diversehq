@@ -3,7 +3,7 @@ import MobileBottomNav from './MobileBottomNav'
 import Navbar from './Navbar'
 import NewMobileTopNav from './NewMobileTopNav'
 import RightSidebar from './RightSidebar'
-import { Box } from '@mui/material'
+import { Box, LinearProgress } from '@mui/material'
 import CreatePostButton from '../Common/UI/CreatePostButton'
 import MainMsgModal from '../Messages/MainMsgModal'
 import { useRouter } from 'next/router'
@@ -55,7 +55,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               zIndex: '49'
             }}
           >
-            {isLoading && <></>}
+            {isLoading && <LinearProgress />}
           </Box>
           {/* <MobileTopNav /> */}
           <div className={'pb-16'}>
@@ -78,7 +78,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               zIndex: '100'
             }}
           >
-            {isLoading && <></>}
+            {isLoading && <LinearProgress />}
           </Box>
 
           <div className="flex flex-row justify-center space-x-12">
