@@ -14,7 +14,7 @@ const useJoinCommunityButton = ({
 }): {
   joined: boolean
   // eslint-disable-next-line
-  JoinCommunityButton: JSX.Element
+  JoinCommunityButton: (props: any) => JSX.Element
 } => {
   const [loading, setLoading] = useState(false)
   // const [leavingLoading, setLoading] = us
@@ -23,8 +23,6 @@ const useJoinCommunityButton = ({
   const { notifyInfo } = useNotify()
   const { isMobile } = useDevice()
   const router = useRouter()
-  console.log('user', user)
-  console.log('id', id)
 
   useEffect(() => {
     if (!user || !id) return
@@ -71,7 +69,7 @@ const useJoinCommunityButton = ({
     }
   }
 
-  const JoinCommunityButton = (
+  const JoinCommunityButton = () => (
     <>
       {!joined && !loading && (
         <>

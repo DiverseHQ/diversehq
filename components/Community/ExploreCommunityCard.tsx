@@ -126,7 +126,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
             )}
           </div>
           <div className="flex justify-end items-center gap-1 sm:gap-2">
-            {JoinCommunityButton}
+            <JoinCommunityButton />
             <span onClick={(e) => e.stopPropagation()}>
               <OptionsWrapper
                 OptionPopUpModal={() => (

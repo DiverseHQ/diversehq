@@ -184,7 +184,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                   </div>
                   <div className="flex flex-col">
                     <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2 mt-2 md:mt-4">
-                      {JoinCommunityButton}
+                      <JoinCommunityButton />
                       <span onClick={(e) => e.stopPropagation()}>
                         <OptionsWrapper
                           OptionPopUpModal={() => (

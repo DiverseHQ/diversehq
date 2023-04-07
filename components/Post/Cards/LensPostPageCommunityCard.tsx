@@ -97,7 +97,7 @@ const LensPostPageCommunityCard = ({
                 {communityInfo?.members?.length}
               </span>
             </div>
-            {JoinCommunityButton}
+            <JoinCommunityButton />
           </>
         )}
       </div>
