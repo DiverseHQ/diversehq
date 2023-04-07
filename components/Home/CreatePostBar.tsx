@@ -7,8 +7,17 @@ import { modalType } from '../Common/CustomPopUpProvider'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import getAvatar from '../User/lib/getAvatar'
 import { BsFillPersonFill } from 'react-icons/bs'
+import clsx from 'clsx'
 
-const CreatePostBar = () => {
+const CreatePostBar = ({
+  title,
+  beforeOpen,
+  className = ''
+}: {
+  title?: string
+  beforeOpen?: () => void
+  className?: string
+}) => {
   const { user } = useProfile()
   const { data: lensProfile, isSignedIn } = useLensUserContext()
   const { showModal } = usePopUpModal()
@@ -23,6 +32,9 @@ const CreatePostBar = () => {
       notifyInfo('Lets login lens before we create a post')
       return
     }
+    if (beforeOpen) {
+      beforeOpen()
+    }
     showModal({
       component: <CreatePostPopup />,
       type: modalType.normal,
@@ -32,7 +44,12 @@ const CreatePostBar = () => {
   }
 
   return (
-    <div className="flex flex-row items-center bg-s-bg mt-4 mb-2 py-2 px-4 rounded-[15px] gap-2 border-[1px] border-s-border">
+    <div
+      className={clsx(
+        'flex flex-row items-center bg-s-bg py-2 px-2 sm:px-4 sm:rounded-[15px] gap-2 sm:border-[1px] sm:border-s-border',
+        className
+      )}
+    >
       <div className="flex items-center justify-center rounded-full w-[44px] h-[44px]">
         {(!isSignedIn || !lensProfile) && (
           <div>
@@ -43,15 +60,15 @@ const CreatePostBar = () => {
           <img
             // @ts-ignore
             src={getAvatar(lensProfile?.defaultProfile)}
-            className="w-[44px] h-[44px] rounded-full"
+            className="sm:w-[44px] sm:h-[44px] w-[30px] h-[30px] rounded-full"
           />
         )}
       </div>
       <div
-        className="p-2 flex-1 bg-s-hover rounded-[15px] h-[44px] flex flex-row items-center text-[#898A8D] cursor-pointer"
+        className="p-2 flex-1 bg-s-hover rounded-lg sm:rounded-[15px] h-[30px] sm:h-[44px] flex flex-row items-center text-[#898A8D] cursor-pointer"
         onClick={createPost}
       >
-        <span>What&apos;s up?</span>
+        <span>{title ? title : "What's up?"}</span>
       </div>
     </div>
   )

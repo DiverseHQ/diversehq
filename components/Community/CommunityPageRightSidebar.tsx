@@ -13,6 +13,9 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import Typography from '@mui/material/Typography'
 import { MdExpandMore } from 'react-icons/md'
 import { useTheme } from '../Common/ThemeProvider'
+import CreatePostBar from '../Home/CreatePostBar'
+import useJoinCommunityButton from './hook/useJoinCommunityButton'
+import { useCommunityStore } from '../../store/community'
 
 interface Props {
   communityInfo: CommunityType
@@ -21,6 +24,9 @@ interface Props {
 const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
     communityInfo?.members?.length * xpPerMember || 0
+  )
+  const selectCommunityForPost = useCommunityStore(
+    (state) => state.selectCommunityForPost
   )
 
   const calculateBarPercentage = (currentXP, threshold) => {
@@ -41,10 +47,22 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
   )
   const { theme } = useTheme()
 
+  const { joined } = useJoinCommunityButton({
+    id: communityInfo?._id
+  })
+
   return (
     <div
       className={`relative pt-14 hidden lg:flex flex-col w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar space-y-3`}
     >
+      {joined && (
+        <CreatePostBar
+          title="Create Post"
+          beforeOpen={() => {
+            selectCommunityForPost(communityInfo)
+          }}
+        />
+      )}
       {/* About Community Card */}
       <div className="flex flex-col bg-s-bg w-full rounded-[15px] border-[1px] border-s-border text-[#fff]">
         <div className="bg-[#9378d8] rounded-t-[15px] font-medium px-3 py-2">

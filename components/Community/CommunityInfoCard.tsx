@@ -20,11 +20,11 @@ import ExploreCommunityCard from './ExploreCommunityCard'
 import { BsPeopleFill } from 'react-icons/bs'
 import { useDevice } from '../Common/DeviceWrapper'
 import { MdVerified } from 'react-icons/md'
-import { AiOutlinePlus } from 'react-icons/ai'
 import { useCommunityStore } from '../../store/community'
 import CreatePostPopup from '../Home/CreatePostPopup'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import useJoinCommunityButton from './hook/useJoinCommunityButton'
+import CreatePostBar from '../Home/CreatePostBar'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -45,7 +45,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
   const name = community?.name
   const { isMobile } = useDevice()
   const { showModal } = usePopUpModal()
-  const { JoinCommunityButton } = useJoinCommunityButton({
+  const { JoinCommunityButton, joined } = useJoinCommunityButton({
     id: community?._id,
     showJoined: true
   })
@@ -135,23 +135,21 @@ const CommunityInfoCard = ({ _community }: Props) => {
                           onClick={redirectToCommunityPage}
                         >
                           <span>{community?.label || community?.name}</span>
-                          <div>
-                            {community?.verified && (
-                              <Tooltip
-                                title="Verified"
-                                arrow
-                                enterDelay={1000}
-                                leaveDelay={200}
-                              >
-                                <MdVerified className="text-p-text w-5 h-5" />
-                              </Tooltip>
-                            )}
-                          </div>
                         </div>
-                        <div className="text-[14px] md:text-[16px]">
+                        <div className="text-[14px] md:text-[16px] start-row space-x-2">
                           <div className="hover:underline cursor-pointer text-s-text">
                             c/{community.name}
                           </div>
+                          {community?.verified && (
+                            <Tooltip
+                              title="Verified"
+                              arrow
+                              enterDelay={1000}
+                              leaveDelay={200}
+                            >
+                              <MdVerified className="text-p-text w-4 h-4" />
+                            </Tooltip>
+                          )}
                         </div>
                         <div className="flex flex-row items-center pt-0.5">
                           <BsPeopleFill className="w-4 h-4 mr-1" />
@@ -243,19 +241,21 @@ const CommunityInfoCard = ({ _community }: Props) => {
                       </span>
                     </div>
                     {/* create  post button */}
-                    <button
-                      onClick={() => {
-                        // select community and open create post pop up
-                        selectCommunityForPost(community)
-                        showCreatePostPopup()
-                      }}
-                      className={
-                        'start-row space-x-2 py-1 mt-4 text-xs sm:text-base px-2 sm:px-3 rounded-md text-p-btn bg-s-bg hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn transition-all ease-in-out duration-300'
-                      }
-                    >
-                      <AiOutlinePlus />
-                      <div>Create Post</div>
-                    </button>
+                    {/* {joined && (
+                      <button
+                        onClick={() => {
+                          // select community and open create post pop up
+                          selectCommunityForPost(community)
+                          showCreatePostPopup()
+                        }}
+                        className={
+                          'start-row w-fit space-x-1 py-1 mt-4 text-xs sm:text-base px-2 sm:px-3 rounded-md text-p-btn bg-s-bg hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn transition-all ease-in-out duration-300'
+                        }
+                      >
+                        <AiOutlinePlus />
+                        <div>Post</div>
+                      </button>
+                    )} */}
                   </div>
                 </div>
               </div>
@@ -273,6 +273,15 @@ const CommunityInfoCard = ({ _community }: Props) => {
                     <div className="text-[14px] md:text-[16px]">
                       {community.description}
                     </div>
+                    {joined && (
+                      <CreatePostBar
+                        title="Create Post"
+                        beforeOpen={() => {
+                          selectCommunityForPost(community)
+                        }}
+                        className="-mb-2 mt-2"
+                      />
+                    )}
                   </div>
                 </>
               )}
