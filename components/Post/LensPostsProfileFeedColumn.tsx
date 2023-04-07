@@ -13,6 +13,8 @@ import { getCommunityInfoFromAppId } from '../../utils/helper'
 import { usePublicationStore } from '../../store/publication'
 import { useProfileStore } from '../../store/profile'
 import { useDevice } from '../Common/DeviceWrapper'
+import { usePostIndexing } from './IndexingContext/PostIndexingWrapper'
+import IndexingPostCard from './IndexingPostCard'
 
 const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   const router = useRouter()
@@ -25,6 +27,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   const { loading: routeLoading } = useRouterLoading()
   const addPublications = usePublicationStore((state) => state.addPublications)
   const addProfiles = useProfileStore((state) => state.addProfiles)
+  const { posts: indexingPost } = usePostIndexing()
 
   const { data: profileFeed } = useProfileFeedQuery(
     {
@@ -184,6 +187,10 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
             )}
           </>
         )}
+        {indexingPost &&
+          indexingPost.map((post, index) => {
+            return <IndexingPostCard key={index} postInfo={post} />
+          })}
         {exploreQueryRequestParams.posts.map((post, index) => {
           return <LensPostCard key={index} post={post} />
         })}

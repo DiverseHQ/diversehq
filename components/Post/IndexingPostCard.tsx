@@ -21,8 +21,13 @@ const IndexingPostCard = ({ postInfo }) => {
   let content = postInfo?.metadata?.content
 
   if (content) {
-    content = content.split('\n').slice(1).join('\n')
-
+    if (content.startsWith('Posted on')) {
+      content = content.split('\n').slice(1).join('\n')
+    }
+    const regex = /Posted on c\/\w+/
+    if (regex.test(content)) {
+      content = content.replace(regex, '')
+    }
     if (content?.startsWith(postInfo?.metadata?.name)) {
       content = content.slice(postInfo?.metadata?.name.length)
     }

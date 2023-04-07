@@ -292,6 +292,11 @@ const LensPostCard = ({ post }: Props) => {
     if (content.startsWith('Posted on')) {
       content = content.split('\n').slice(1).join('\n')
     }
+    const regex = /Posted on c\/\w+/
+
+    if (regex.test(content)) {
+      content = content.replace(regex, '')
+    }
     if (
       content?.startsWith(postInfo?.metadata?.name) &&
       showNameForThisAppIds.includes(postInfo?.appId)

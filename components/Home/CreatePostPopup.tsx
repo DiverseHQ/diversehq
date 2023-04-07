@@ -238,11 +238,16 @@ const CreatePostPopup = () => {
           selectedCommunity?.isLensCommunity &&
           selectedCommunity?._id !== LensCommunity?._id
             ? `Post by @${lensProfile.defaultProfile.handle} \n`
-            : `Posted on c/${selectedCommunity?.name} \n`
+            : ``
         }` +
         title +
         '\n' +
-        content.trim(),
+        content.trim() +
+        `${
+          !selectedCommunity?.isLensCommunity && selectedCommunity?.name
+            ? `\n\n Posted on c/${selectedCommunity?.name}`
+            : ``
+        }`,
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
       imageMimeType: mimeType.startsWith('image') ? mimeType : null,
