@@ -4,10 +4,11 @@ import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config'
-import { getCommunityInfoFromAppId } from '../../utils/helper'
 import MobileLoader from '../Common/UI/MobileLoader'
 import LensPostCard from './LensPostCard'
 import { useDevice } from '../Common/DeviceWrapper'
+import { usePublicationStore } from '../../store/publication'
+import { useProfileStore } from '../../store/profile'
 
 /* tslint:disable */
 
@@ -20,6 +21,8 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     nextCursor: null,
     posts: []
   })
+  const addPublications = usePublicationStore((state) => state.addPublications)
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const profilePublicationsResult = usePublicationsQuery(
     {
@@ -117,8 +120,6 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
           // @ts-ignore
           newPosts[i].mirroredBy = mirrorPost.profile
         }
-        // @ts-ignore
-        newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
       } else {
         if (newPosts[i]?.__typename === 'Mirror') {
           let mirrorPost = newPosts[i]
@@ -142,6 +143,16 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
       hasMore,
       nextCursor
     })
+
+    let newProfiles = new Map()
+    let newPublications = new Map()
+
+    for (const newPost of newPosts) {
+      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newPublications.set(newPost.id, newPost)
+    }
+    addProfiles(newProfiles)
+    addPublications(newPublications)
   }
 
   const getMorePosts = async () => {

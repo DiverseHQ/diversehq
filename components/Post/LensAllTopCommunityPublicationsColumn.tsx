@@ -14,6 +14,8 @@ import MobileLoader from '../Common/UI/MobileLoader'
 import useSort from '../Common/Hook/useSort'
 import { CommunityType } from '../../types/community'
 import { useDevice } from '../Common/DeviceWrapper'
+import { usePublicationStore } from '../../store/publication'
+import { useProfileStore } from '../../store/profile'
 
 interface Props {
   communityInfo: CommunityType
@@ -29,6 +31,8 @@ const LensAllTopCommunityPublicationsColumn = ({ communityInfo }: Props) => {
     nextCursor: null,
     posts: []
   })
+  const addPublications = usePublicationStore((state) => state.addPublications)
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { data } = useExplorePublicationsQuery(
     {
@@ -94,6 +98,20 @@ const LensAllTopCommunityPublicationsColumn = ({ communityInfo }: Props) => {
       nextCursor,
       posts: [...queryParams.posts, ...newPosts]
     })
+
+    let newProfiles = new Map()
+    let newPublications = new Map()
+
+    for (const newPost of newPosts) {
+      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newPublications.set(newPost.id, {
+        ...newPost,
+        communityInfo: communityInfo,
+        isLensCommunityPost: !!communityInfo?.handle
+      })
+    }
+    addProfiles(newProfiles)
+    addPublications(newPublications)
   }, [data?.explorePublications?.pageInfo?.next])
 
   const getMorePosts = async () => {
