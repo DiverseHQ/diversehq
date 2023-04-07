@@ -20,7 +20,7 @@ import { FiInfo, FiSettings } from 'react-icons/fi'
 import ExploreCommunityCard from './ExploreCommunityCard'
 import { BsPeopleFill } from 'react-icons/bs'
 import { useDevice } from '../Common/DeviceWrapper'
-import { MdOutlineVerified } from 'react-icons/md'
+import { MdVerified } from 'react-icons/md'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -123,7 +123,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                                 enterDelay={1000}
                                 leaveDelay={200}
                               >
-                                <MdOutlineVerified className="text-p-text w-5 h-5" />
+                                <MdVerified className="text-p-text w-5 h-5" />
                               </Tooltip>
                             )}
                           </div>
@@ -151,7 +151,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                               enterDelay={1000}
                               leaveDelay={200}
                             >
-                              <MdOutlineVerified className="text-p-text w-4 h-4 text-p-text" />
+                              <MdVerified className="text-p-text w-4 h-4 text-p-text" />
                             </Tooltip>
                           )}
                         </div>

@@ -15,7 +15,7 @@ import { FiSettings } from 'react-icons/fi'
 import { BsPeopleFill } from 'react-icons/bs'
 import { stringToLength } from '../../utils/utils'
 import { useDevice } from '../Common/DeviceWrapper'
-import { MdOutlineVerified } from 'react-icons/md'
+import { MdVerified } from 'react-icons/md'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -102,7 +102,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
                   <div>{community.name}</div>
                   {community?.verified && (
                     <Tooltip title="Verified">
-                      <MdOutlineVerified className="text-p-text" />
+                      <MdVerified className="text-p-text" />
                     </Tooltip>
                   )}
                 </div>

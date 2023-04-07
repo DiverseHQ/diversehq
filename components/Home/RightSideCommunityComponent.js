@@ -2,7 +2,7 @@ import Link from 'next/link'
 // import { useRouter } from 'next/router'
 import React from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import { MdOutlineVerified } from 'react-icons/md'
+import { MdVerified } from 'react-icons/md'
 import { Tooltip } from '@mui/material'
 
 const RightSideCommunityComponent = ({ community }) => {
@@ -28,7 +28,7 @@ const RightSideCommunityComponent = ({ community }) => {
         </span>
         {community?.verified && (
           <Tooltip title="Verified">
-            <MdOutlineVerified className="text-p-text" />
+            <MdVerified className="text-p-text" />
           </Tooltip>
         )}
       </div>
