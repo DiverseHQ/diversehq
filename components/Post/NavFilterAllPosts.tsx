@@ -35,7 +35,7 @@ const NavFilterAllPosts = () => {
     } else if (pathname.endsWith('/timeline')) {
       setActive('timeline')
     } else {
-      setActive('all')
+      setActive('timeline')
     }
   }, [pathname])
 
@@ -108,14 +108,15 @@ const NavFilterAllPosts = () => {
       }
     >
       <FilterButton
-        Icon={<MdOutlineExplore className="h-4 w-4" />}
-        title="All"
-        active={active === 'all'}
+        Icon={<BsPerson className="h-5 w-5" />}
+        title="Timeline"
+        active={active === 'timeline'}
         onClick={() => {
           router.push('/')
         }}
-        tooltipTitle="Posts from all communities"
+        tooltipTitle="Timeline feed from all lens apps"
       />
+
       <FilterButton
         Icon={<CgCommunity className="h-5 w-5" />}
         title="For You"
@@ -126,13 +127,13 @@ const NavFilterAllPosts = () => {
         tooltipTitle="Posts from communities you joined"
       />
       <FilterButton
-        Icon={<BsPerson className="h-5 w-5" />}
-        title="Timeline"
-        active={active === 'timeline'}
+        Icon={<MdOutlineExplore className="h-4 w-4" />}
+        title="All"
+        active={active === 'all'}
         onClick={() => {
-          router.push('/feed/timeline')
+          router.push('/feed/all')
         }}
-        tooltipTitle="Timeline feed from all lens apps"
+        tooltipTitle="Posts from all communities"
       />
     </FilterRow>
   )

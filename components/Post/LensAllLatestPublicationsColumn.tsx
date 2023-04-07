@@ -55,9 +55,7 @@ const LensAllLatestPublicationsColumn = () => {
       }
     },
     {
-      enabled:
-        (router.pathname === '/' || router.pathname === '/feed/all') &&
-        !routeLoading
+      enabled: router.pathname === '/feed/all' && !routeLoading
     }
   )
 
@@ -115,7 +113,7 @@ const LensAllLatestPublicationsColumn = () => {
   }
 
   useEffect(() => {
-    if (router.pathname !== '/' && router.pathname !== '/feed/all') return
+    if (router.pathname !== '/feed/all') return
     if (!data?.explorePublications?.items) return
     handleExplorePublications()
   }, [data?.explorePublications?.pageInfo?.next])
@@ -128,7 +126,7 @@ const LensAllLatestPublicationsColumn = () => {
   }, [indexingPost])
 
   useEffect(() => {
-    if (router.pathname !== '/' && router.pathname !== '/feed/all') return
+    if (router.pathname !== '/feed/all') return
     if (!myLensProfile?.defaultProfile?.id) return
     setExploreQueryRequestParams({
       cursor: null,
@@ -148,7 +146,7 @@ const LensAllLatestPublicationsColumn = () => {
         hasMore={
           exploreQueryRequestParams.hasMore &&
           !routeLoading &&
-          (router.pathname === '/' || router.pathname === '/feed/all')
+          router.pathname === '/feed/all'
         }
         loader={
           isMobile ? (

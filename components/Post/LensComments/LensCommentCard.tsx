@@ -31,7 +31,6 @@ import formatHandle from '../../User/lib/formatHandle'
 import AttachmentMedia from '../Attachment'
 
 const LensCommentCard = ({ comment }: { comment: Comment }) => {
-  console.log('comment', comment)
   const [comments, setComments] = useState([])
   const router = useRouter()
   const { notifyInfo } = useNotify()

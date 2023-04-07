@@ -5,9 +5,13 @@ import NavFilterAllPosts from '../components/Post/NavFilterAllPosts'
 import CreatePostBar from '../components/Home/CreatePostBar'
 import { appLink } from '../utils/config'
 import { useDevice } from '../components/Common/DeviceWrapper'
+import LensPostsProfileFeedColumn from '../components/Post/LensPostsProfileFeedColumn'
+import { useLensUserContext } from '../lib/LensUserContext'
 
 const Home = () => {
   const { isDesktop } = useDevice()
+  const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
+
   return (
     <>
       <NextSeo
@@ -22,17 +26,16 @@ const Home = () => {
           {isDesktop && <CreatePostBar className="mt-4" />}
           <NavFilterAllPosts />
           {/* latter make this a feed of posts from the user's default profile */}
-          {/* {lensProfile &&
-      isSignedIn &&
-      hasProfile &&
-      lensProfile?.defaultProfile?.id ? (
-        <LensPostsProfileFeedColumn
-          profileId={lensProfile?.defaultProfile?.id}
-        />
-      ) : ( */}
-
-          <LensPostsExplorePublicationsColumn />
-          {/* )} */}
+          {lensProfile &&
+          isSignedIn &&
+          hasProfile &&
+          lensProfile?.defaultProfile?.id ? (
+            <LensPostsProfileFeedColumn
+              profileId={lensProfile?.defaultProfile?.id}
+            />
+          ) : (
+            <LensPostsExplorePublicationsColumn />
+          )}
         </div>
       </div>
     </>

@@ -347,13 +347,16 @@ const LensPostCard = ({ post }: Props) => {
                             router.push(`/c/${postInfo?.communityInfo?.name}`)
                           }
                         } else {
-                          window.open(postInfo?.communityInfo?.link, '_blank')
+                          router.push(
+                            `/u/${formatHandle(postInfo?.profile?.handle)}`
+                          )
                         }
                       }}
                     >
                       <ImageWithPulsingLoader
                         src={
-                          postInfo?.isLensCommunityPost
+                          postInfo?.isLensCommunityPost ||
+                          !postInfo?.communityInfo
                             ? getAvatar(postInfo?.profile)
                             : postInfo?.communityInfo?.logoImageUrl
                             ? postInfo?.communityInfo?.logoImageUrl
@@ -376,17 +379,21 @@ const LensPostCard = ({ post }: Props) => {
                             router.push(`/c/${postInfo?.communityInfo?.name}`)
                           }
                         } else {
-                          window.open(postInfo?.communityInfo?.link, '_blank')
+                          router.push(
+                            `/u/${formatHandle(postInfo?.profile?.handle)}`
+                          )
                         }
                       }}
                     >
                       <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
                         {postInfo?.isLensCommunityPost
                           ? `l/${formatHandle(postInfo?.profile?.handle)}`
-                          : `${stringToLength(
+                          : postInfo?.communityInfo?.name
+                          ? `${stringToLength(
                               postInfo?.communityInfo?.name,
                               18
-                            )}`}
+                            )}`
+                          : stringToLength(postInfo?.profile?.name, 18)}
                       </div>
                     </div>
                   </span>
@@ -397,7 +404,9 @@ const LensPostCard = ({ post }: Props) => {
 
                   <span onClick={(e) => e.stopPropagation()} className="mr-1">
                     <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
-                      <p className="pl-1.5 font-normal">{' posted by'}</p>
+                      {postInfo?.communityInfo && (
+                        <p className="pl-1.5 font-normal">{' posted by'}</p>
+                      )}
                       <Link
                         href={
                           postInfo?.isLensCommunityPost
@@ -452,13 +461,16 @@ const LensPostCard = ({ post }: Props) => {
                             router.push(`/c/${postInfo?.communityInfo?.name}`)
                           }
                         } else {
-                          window.open(postInfo?.communityInfo?.link, '_blank')
+                          router.push(
+                            `/u/${formatHandle(postInfo?.profile?.handle)}`
+                          )
                         }
                       }}
                     >
                       <ImageWithPulsingLoader
                         src={
-                          postInfo?.isLensCommunityPost
+                          postInfo?.isLensCommunityPost ||
+                          !postInfo?.communityInfo
                             ? getAvatar(postInfo?.profile)
                             : postInfo?.communityInfo?.logoImageUrl
                             ? postInfo?.communityInfo?.logoImageUrl
@@ -484,17 +496,21 @@ const LensPostCard = ({ post }: Props) => {
                               router.push(`/c/${postInfo?.communityInfo?.name}`)
                             }
                           } else {
-                            window.open(postInfo?.communityInfo?.link, '_blank')
+                            router.push(
+                              `/u/${formatHandle(postInfo?.profile?.handle)}`
+                            )
                           }
                         }}
                       >
                         <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
                           {postInfo?.isLensCommunityPost
                             ? `l/${formatHandle(postInfo?.profile?.handle)}`
-                            : `${stringToLength(
+                            : postInfo?.communityInfo?.name
+                            ? `${stringToLength(
                                 postInfo?.communityInfo?.name,
                                 18
-                              )}`}
+                              )}`
+                            : stringToLength(postInfo?.profile?.name, 18)}
                         </div>
                       </div>
                       {postInfo?.communityInfo?.verified && (
@@ -504,7 +520,11 @@ const LensPostCard = ({ post }: Props) => {
                     <div className="flex flex-row items-center justify-start">
                       <span onClick={(e) => e.stopPropagation()}>
                         <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
-                          <p className="pl-1.5 font-normal">{' posted by '}</p>
+                          {postInfo?.communityInfo && (
+                            <p className="pl-1.5 font-normal">
+                              {' posted by '}
+                            </p>
+                          )}
                           <Link
                             href={
                               postInfo?.isLensCommunityPost
@@ -776,7 +796,7 @@ const LensPostCard = ({ post }: Props) => {
                       {(!!content || postInfo?.appId !== appId) && (
                         <div
                           className={`${
-                            showMore ? 'h-[150px]' : ''
+                            showMore ? 'h-[100px] sm:h-[150px]' : ''
                           } sm:max-w-[550px] overflow-hidden break-words`}
                         >
                           <Markup

@@ -18,7 +18,6 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   const router = useRouter()
   const [exploreQueryRequestParams, setExploreQueryRequestParams] = useState({
     cursor: null,
-    hasMore: true,
     nextCursor: null,
     posts: []
   })
@@ -36,28 +35,30 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
         feedEventItemTypes: [
           FeedEventItemType.CollectPost,
           FeedEventItemType.Post,
-          FeedEventItemType.ReactionPost
+          FeedEventItemType.ReactionPost,
+          FeedEventItemType.Mirror
         ]
       },
       reactionRequest: {
         profileId: profileId
-      }
+      },
+      profileId: profileId
     },
     {
-      enabled: router.pathname === '/feed/timeline' && !routeLoading
+      enabled: router.pathname === '/' && !routeLoading && !!profileId
     }
   )
 
   const hanldeProfileFeed = async () => {
     let nextCursor = null
-    let hasMore = true
     if (profileFeed?.feed?.pageInfo?.next) {
       nextCursor = profileFeed?.feed.pageInfo.next
+      console.log('nextCursor', nextCursor)
     }
     const newPosts = profileFeed?.feed.items.map((item) => item.root)
-    if (newPosts.length < LENS_POST_LIMIT) {
-      hasMore = false
-    }
+    // if (newPosts.length < LENS_POST_LIMIT) {
+    //   hasMore = false
+    // }
     const communityIds = newPosts.map((post) => post.metadata.tags[0])
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
@@ -65,7 +66,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     for (let i = 0; i < newPosts.length; i++) {
       if (!communityInfoForPosts[i]?._id) {
         // @ts-ignore
-        newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
+        // newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
       } else {
         // @ts-ignore
         newPosts[i].communityInfo = communityInfoForPosts[i]
@@ -77,8 +78,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     }
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
-      nextCursor,
-      hasMore,
+      nextCursor: nextCursor,
       posts: [...exploreQueryRequestParams.posts, ...newPosts]
     })
 
@@ -99,11 +99,13 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   }
 
   useEffect(() => {
+    console.log('profileFeed?.feed?.items', profileFeed?.feed?.items)
     if (!profileFeed?.feed?.items) return
     hanldeProfileFeed()
   }, [profileFeed?.feed?.pageInfo?.next])
 
   const getMorePosts = async () => {
+    console.log('getMorePosts')
     if (exploreQueryRequestParams.posts.length === 0) return
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
@@ -111,16 +113,14 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     })
   }
 
+  console.log('exploreQueryRequestParams', exploreQueryRequestParams)
+
   return (
     <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden">
       <InfiniteScroll
         dataLength={exploreQueryRequestParams?.posts?.length || 0}
         next={getMorePosts}
-        hasMore={
-          exploreQueryRequestParams.hasMore &&
-          !routeLoading &&
-          router.pathname === '/feed/timeline'
-        }
+        hasMore={!routeLoading && router.pathname === '/'}
         loader={
           isMobile ? (
             <MobileLoader />
@@ -146,9 +146,11 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
         }
         endMessage={<></>}
       >
-        {exploreQueryRequestParams.posts.length === 0 &&
-          exploreQueryRequestParams.hasMore && (
-            <>
+        {exploreQueryRequestParams.posts.length === 0 && (
+          <>
+            {isMobile ? (
+              <MobileLoader />
+            ) : (
               <div className="w-full sm:rounded-2xl h-[300px] sm:h-[450px] bg-s-bg dark:bg-s-bg my-3 sm:my-6">
                 <div className="w-full flex flex-row items-center space-x-4 p-2 px-4 animate-pulse">
                   <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-300 dark:bg-p-bg rounded-full " />
@@ -164,8 +166,9 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
                   <div className="w-full rounded-2xl bg-gray-300 dark:bg-p-bg h-[200px] sm:h-[300px]" />
                 </div>
               </div>
-            </>
-          )}
+            )}
+          </>
+        )}
         {exploreQueryRequestParams.posts.map((post, index) => {
           return <LensPostCard key={index} post={post} />
         })}
