@@ -13,6 +13,7 @@ const useJoinCommunityButton = ({
   showJoined?: boolean
 }): {
   joined: boolean
+  // eslint-disable-next-line
   JoinCommunityButton: JSX.Element
 } => {
   const [loading, setLoading] = useState(false)

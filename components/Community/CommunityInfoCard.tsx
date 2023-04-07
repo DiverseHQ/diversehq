@@ -21,8 +21,8 @@ import { BsPeopleFill } from 'react-icons/bs'
 import { useDevice } from '../Common/DeviceWrapper'
 import { MdVerified } from 'react-icons/md'
 import { useCommunityStore } from '../../store/community'
-import CreatePostPopup from '../Home/CreatePostPopup'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+// import CreatePostPopup from '../Home/CreatePostPopup'
+// import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import useJoinCommunityButton from './hook/useJoinCommunityButton'
 import CreatePostBar from '../Home/CreatePostBar'
 
@@ -44,7 +44,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const name = community?.name
   const { isMobile } = useDevice()
-  const { showModal } = usePopUpModal()
+  // const { showModal } = usePopUpModal()
   const { JoinCommunityButton, joined } = useJoinCommunityButton({
     id: community?._id,
     showJoined: true
@@ -88,12 +88,12 @@ const CommunityInfoCard = ({ _community }: Props) => {
     }
   }
 
-  const showCreatePostPopup = () => {
-    showModal({
-      component: <CreatePostPopup />,
-      type: modalType.normal
-    })
-  }
+  // const showCreatePostPopup = () => {
+  //   showModal({
+  //     component: <CreatePostPopup />,
+  //     type: modalType.normal
+  //   })
+  // }
 
   useEffect(() => {
     if (community) {
