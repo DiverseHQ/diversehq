@@ -16,7 +16,6 @@ import {
   showNameForThisAppIds
 } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import JoinCommunityButton from '../Community/JoinCommunityButton'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 // import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
@@ -50,6 +49,7 @@ import clsx from 'clsx'
 import { deleteLensPublication } from '../../api/lensPublication'
 import { useDevice } from '../Common/DeviceWrapper'
 import { MdVerified } from 'react-icons/md'
+import useJoinCommunityButton from '../Community/hook/useJoinCommunityButton'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -72,6 +72,10 @@ const LensPostCard = ({ post }: Props) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const [postInfo, setPostInfo] = useState<postWithCommunityInfoType>(post)
+  const { JoinCommunityButton } = useJoinCommunityButton({
+    id: postInfo?.communityInfo?._id,
+    showJoined: false
+  })
   useEffect(() => {
     setVoteCount(upvoteCount - downvoteCount)
   }, [upvoteCount, downvoteCount])
@@ -554,9 +558,7 @@ const LensPostCard = ({ post }: Props) => {
                       {postInfo?.isLensCommunityPost ? (
                         <FollowButton hideIfFollow={true} />
                       ) : (
-                        <JoinCommunityButton
-                          id={postInfo?.communityInfo?._id}
-                        />
+                        { JoinCommunityButton }
                       )}
                     </>
                   )}

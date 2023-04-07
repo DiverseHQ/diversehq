@@ -9,13 +9,13 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { Tooltip } from '@mui/material'
-import JoinCommunityButton from './JoinCommunityButton'
 import { CommunityWithCreatorProfile } from '../../types/community'
 import { FiSettings } from 'react-icons/fi'
 import { BsPeopleFill } from 'react-icons/bs'
 import { stringToLength } from '../../utils/utils'
 import { useDevice } from '../Common/DeviceWrapper'
 import { MdVerified } from 'react-icons/md'
+import useJoinCommunityButton from './hook/useJoinCommunityButton'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -31,6 +31,11 @@ const ExploreCommunityCard = ({ _community }: Props) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const { isMobile } = useDevice()
   const name = community?.name
+
+  const { JoinCommunityButton } = useJoinCommunityButton({
+    id: community?._id,
+    showJoined: true
+  })
 
   useEffect(() => {
     if (community) {
@@ -121,7 +126,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
             )}
           </div>
           <div className="flex justify-end items-center gap-1 sm:gap-2">
-            <JoinCommunityButton id={community._id} showJoined={true} />
+            {JoinCommunityButton}
             <span onClick={(e) => e.stopPropagation()}>
               <OptionsWrapper
                 OptionPopUpModal={() => (

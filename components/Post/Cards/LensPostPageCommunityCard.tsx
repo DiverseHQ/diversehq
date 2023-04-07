@@ -3,9 +3,9 @@ import React, { useEffect } from 'react'
 import { CommunityType } from '../../../types/community'
 import { stringToLength } from '../../../utils/utils'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
-import JoinCommunityButton from '../../Community/JoinCommunityButton'
 import Markup from '../../Lexical/Markup'
 import { getCommunityInfoUsingId } from '../../../api/community'
+import useJoinCommunityButton from '../../Community/hook/useJoinCommunityButton'
 
 const LensPostPageCommunityCard = ({
   communityInfo: _community
@@ -14,8 +14,11 @@ const LensPostPageCommunityCard = ({
 }) => {
   const [communityInfo, setCommunityInfo] =
     React.useState<CommunityType>(_community)
-  console.log('communityInfo', communityInfo)
   const router = useRouter()
+  const { JoinCommunityButton } = useJoinCommunityButton({
+    id: communityInfo?._id,
+    showJoined: true
+  })
 
   const fetchAndSetCommunityInfo = async () => {
     const res = await getCommunityInfoUsingId(_community?._id)
@@ -94,7 +97,7 @@ const LensPostPageCommunityCard = ({
                 {communityInfo?.members?.length}
               </span>
             </div>
-            <JoinCommunityButton id={communityInfo?._id} showJoined />
+            {JoinCommunityButton}
           </>
         )}
       </div>

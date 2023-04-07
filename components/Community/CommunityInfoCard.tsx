@@ -12,7 +12,6 @@ import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import { Tooltip } from '@mui/material'
 import { getLevelAndThresholdXP } from '../../lib/helpers'
 import { xpPerMember } from '../../utils/config'
-import JoinCommunityButton from './JoinCommunityButton'
 import Link from 'next/link'
 import formatHandle from '../User/lib/formatHandle'
 import { CommunityWithCreatorProfile } from '../../types/community'
@@ -21,6 +20,11 @@ import ExploreCommunityCard from './ExploreCommunityCard'
 import { BsPeopleFill } from 'react-icons/bs'
 import { useDevice } from '../Common/DeviceWrapper'
 import { MdVerified } from 'react-icons/md'
+import { AiOutlinePlus } from 'react-icons/ai'
+import { useCommunityStore } from '../../store/community'
+import CreatePostPopup from '../Home/CreatePostPopup'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import useJoinCommunityButton from './hook/useJoinCommunityButton'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -40,6 +44,15 @@ const CommunityInfoCard = ({ _community }: Props) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const name = community?.name
   const { isMobile } = useDevice()
+  const { showModal } = usePopUpModal()
+  const { JoinCommunityButton } = useJoinCommunityButton({
+    id: community?._id,
+    showJoined: true
+  })
+
+  const selectCommunityForPost = useCommunityStore(
+    (state) => state.selectCommunityForPost
+  )
 
   const redirectToCommunityPage = () => {
     if (name) router.push(`/c/${name}`)
@@ -73,6 +86,13 @@ const CommunityInfoCard = ({ _community }: Props) => {
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const showCreatePostPopup = () => {
+    showModal({
+      component: <CreatePostPopup />,
+      type: modalType.normal
+    })
   }
 
   useEffect(() => {
@@ -164,114 +184,78 @@ const CommunityInfoCard = ({ _community }: Props) => {
                       </div>
                     )}
                   </div>
-                  <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2 mt-2 md:mt-4">
-                    <JoinCommunityButton id={community._id} showJoined={true} />
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <OptionsWrapper
-                        OptionPopUpModal={() => (
-                          <MoreOptionsModal
-                            className="z-50"
-                            list={
-                              isMobile
-                                ? isAuth
-                                  ? [
-                                      {
-                                        label: 'Setting',
-                                        onClick: () => {
-                                          router.push(
-                                            `/c/${community.name}/settings`
-                                          )
-                                        },
-                                        icon: () => (
-                                          <FiSettings className="mr-1.5 w-6 h-6" />
-                                        )
-                                      },
-                                      {
-                                        label: 'More Info',
-                                        onClick: () => {
-                                          setIsDrawerOpen(true)
-                                        },
-                                        icon: () => (
-                                          <FiInfo className="mr-1.5 w-6 h-6" />
-                                        )
-                                      },
-                                      {
-                                        label: 'Share',
-                                        onClick: shareCommunity,
-                                        icon: () => (
-                                          <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                        )
-                                      }
-                                    ]
-                                  : [
-                                      {
-                                        label: 'More Info',
-                                        onClick: () => {
-                                          setIsDrawerOpen(true)
-                                        },
-                                        icon: () => (
-                                          <FiInfo className="mr-1.5 w-6 h-6" />
-                                        )
-                                      },
-                                      {
-                                        label: 'Share',
-                                        onClick: shareCommunity,
-                                        icon: () => (
-                                          <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                        )
-                                      }
-                                    ]
-                                : isAuth
-                                ? [
-                                    {
-                                      label: 'Setting',
-                                      onClick: () => {
-                                        router.push(
-                                          `/c/${community.name}/settings`
-                                        )
-                                      },
-                                      icon: () => (
-                                        <FiSettings className="mr-1.5 w-6 h-6" />
-                                      )
-                                    },
-                                    {
-                                      label: 'Share',
-                                      onClick: shareCommunity,
-                                      icon: () => (
-                                        <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                      )
-                                    }
-                                  ]
-                                : [
-                                    {
-                                      label: 'Share',
-                                      onClick: shareCommunity,
-                                      icon: () => (
-                                        <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                      )
-                                    }
-                                  ]
-                            }
-                          />
-                        )}
-                        position="left"
-                        showOptionsModal={showOptionsModal}
-                        setShowOptionsModal={setShowOptionsModal}
-                        isDrawerOpen={isExploreDrawerOpen}
-                        setIsDrawerOpen={setIsExploreDrawerOpen}
-                      >
-                        <Tooltip
-                          enterDelay={1000}
-                          leaveDelay={200}
-                          title="More"
-                          arrow
+                  <div className="flex flex-col">
+                    <div className="flex justify-end items-center gap-1 sm:gap-2 pt-2 mt-2 md:mt-4">
+                      {JoinCommunityButton}
+                      <span onClick={(e) => e.stopPropagation()}>
+                        <OptionsWrapper
+                          OptionPopUpModal={() => (
+                            <MoreOptionsModal
+                              className="z-50"
+                              list={[
+                                {
+                                  label: 'Setting',
+                                  onClick: () => {
+                                    router.push(`/c/${community.name}/settings`)
+                                  },
+                                  icon: () => (
+                                    <FiSettings className="mr-1.5 w-6 h-6" />
+                                  ),
+                                  hidden: !isAuth
+                                },
+                                {
+                                  label: 'More Info',
+                                  onClick: () => {
+                                    setIsDrawerOpen(true)
+                                  },
+                                  icon: () => (
+                                    <FiInfo className="mr-1.5 w-6 h-6" />
+                                  ),
+                                  hidden: !isMobile
+                                },
+                                {
+                                  label: 'Share',
+                                  onClick: shareCommunity,
+                                  icon: () => (
+                                    <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                                  )
+                                }
+                              ]}
+                            />
+                          )}
+                          position="left"
+                          showOptionsModal={showOptionsModal}
+                          setShowOptionsModal={setShowOptionsModal}
+                          isDrawerOpen={isExploreDrawerOpen}
+                          setIsDrawerOpen={setIsExploreDrawerOpen}
                         >
-                          <div className="hover:bg-p-btn-hover rounded-md p-1.5 cursor-pointer">
-                            <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                          </div>
-                        </Tooltip>
-                      </OptionsWrapper>
-                    </span>
+                          <Tooltip
+                            enterDelay={1000}
+                            leaveDelay={200}
+                            title="More"
+                            arrow
+                          >
+                            <div className="hover:bg-p-btn-hover rounded-md p-1.5 cursor-pointer">
+                              <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                            </div>
+                          </Tooltip>
+                        </OptionsWrapper>
+                      </span>
+                    </div>
+                    {/* create  post button */}
+                    <button
+                      onClick={() => {
+                        // select community and open create post pop up
+                        selectCommunityForPost(community)
+                        showCreatePostPopup()
+                      }}
+                      className={
+                        'start-row space-x-2 py-1 mt-4 text-xs sm:text-base px-2 sm:px-3 rounded-md text-p-btn bg-s-bg hover:bg-p-btn hover:text-p-btn-text hover:border-bg-p-btn border-[1px] border-p-btn transition-all ease-in-out duration-300'
+                      }
+                    >
+                      <AiOutlinePlus />
+                      <div>Create Post</div>
+                    </button>
                   </div>
                 </div>
               </div>
