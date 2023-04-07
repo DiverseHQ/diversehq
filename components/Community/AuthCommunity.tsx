@@ -11,8 +11,8 @@ const AuthCommunity = ({ children }) => {
   const [isAuth, setIsAuth] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(true)
   useEffect(() => {
-    if (!router?.query?.name) return null
-    if (!user?.walletAddress) return null
+    if (!router?.query?.name) return
+    if (!user?.walletAddress) return
     setIsLoading(true)
     checkIfCreatorOrModerator(String(router?.query?.name))
   }, [user?.walletAddress, router?.query?.name])

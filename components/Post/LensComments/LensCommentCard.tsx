@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
 import {
+  Comment,
   ReactionTypes,
   useAddReactionMutation,
   useHidePublicationMutation
@@ -29,7 +30,8 @@ import CenteredDot from '../../Common/UI/CenteredDot'
 import formatHandle from '../../User/lib/formatHandle'
 import AttachmentMedia from '../Attachment'
 
-const LensCommentCard = ({ comment }) => {
+const LensCommentCard = ({ comment }: { comment: Comment }) => {
+  console.log('comment', comment)
   const [comments, setComments] = useState([])
   const router = useRouter()
   const { notifyInfo } = useNotify()
@@ -202,8 +204,10 @@ const LensCommentCard = ({ comment }) => {
             <div className="flex flex-row items-center gap-2">
               <ImageWithPulsingLoader
                 src={
+                  // @ts-ignore
                   comment?.profile?.picture?.original?.url?.startsWith('ipfs')
                     ? `${LensInfuraEndpoint}${
+                        // @ts-ignore
                         comment?.profile?.picture?.original?.url.split('//')[1]
                       }`
                     : getStampFyiURL(comment?.profile?.ownedBy)
@@ -298,7 +302,9 @@ const LensCommentCard = ({ comment }) => {
               {/* attachemnt */}
               {comment?.metadata?.media && (
                 <AttachmentMedia
+                  // @ts-ignore
                   url={comment?.metadata?.media[0]?.original?.url}
+                  // @ts-ignore
                   type={comment?.metadata?.media[0]?.type}
                   publication={comment}
                 />
@@ -385,6 +391,7 @@ const LensCommentCard = ({ comment }) => {
                   <LensCreateComment
                     postId={comment.id}
                     addComment={addComment}
+                    canCommnet={comment?.canComment?.result}
                   />
                 )}
 

@@ -20,7 +20,7 @@ import getAvatar from '../../../User/lib/getAvatar'
 interface Props {
   report: PostReportType
   publication: postWithCommunityInfoType
-  fetchAndSetUnResolvedReprots: () => void
+  fetchAndSetUnResolvedReprots: () => Promise<void>
   community: CommunityType
   isLensCommunity?: boolean
 }
@@ -41,14 +41,13 @@ const LensReportPost = ({
   const [profileToBan, setProfileToBan] = React.useState<Profile>(
     publication?.profile
   )
-  if (!report) return null
   const handleIgnore = async () => {
     await resolvePublicationReport(
       report._id,
       publication?.communityInfo?._id,
       resolveActions.IGNORE
     )
-    fetchAndSetUnResolvedReprots()
+    await fetchAndSetUnResolvedReprots()
   }
 
   const handleBanUser = async () => {
@@ -66,7 +65,7 @@ const LensReportPost = ({
       }
       if (res.status === 200) {
         setShowBanUserModal(false)
-        fetchAndSetUnResolvedReprots()
+        await fetchAndSetUnResolvedReprots()
       } else {
         const resJson = await res.json()
         notifyInfo(resJson.msg)
@@ -109,6 +108,8 @@ const LensReportPost = ({
     if (!isLensCommunity) return
     setBanProfileIfLensCommunity()
   }, [isLensCommunity])
+
+  if (!report) return null
   return (
     <div key={publication.id}>
       <div className="pt-6 mx-6">

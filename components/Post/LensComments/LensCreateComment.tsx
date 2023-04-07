@@ -23,7 +23,18 @@ import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../../User/lib/formatHandle'
 import clsx from 'clsx'
 import { useDevice } from '../../Common/DeviceWrapper'
-const LensCreateComment = ({ postId, addComment, postInfo }) => {
+const LensCreateComment = ({
+  postId,
+  addComment,
+  postInfo,
+  canCommnet
+}: {
+  postId: string
+  // eslint-disable-next-line no-unused-vars
+  addComment: (tx: string, comment: any) => void
+  postInfo?: any
+  canCommnet?: boolean
+}) => {
   const [focused, setFocused] = useState(false)
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
@@ -236,7 +247,7 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
                   loading ? 'text-s-text' : 'text-p-text'
                 }`}
                 placeholder="Say it..."
-                disabled={loading || !postInfo?.canComment?.result}
+                disabled={loading || !canCommnet}
                 rows={1}
                 style={{ resize: 'none' }}
                 onInput={(e) => {
@@ -266,24 +277,16 @@ const LensCreateComment = ({ postId, addComment, postInfo }) => {
               )}
             </div>
             <div className="w-full flex flex-row justify-end space-x-2 items-center">
-              {postInfo?.canComment?.result && (
-                <Giphy setGifAttachment={setGifAttachment} />
-              )}
+              {canCommnet && <Giphy setGifAttachment={setGifAttachment} />}
               <button
-                disabled={loading || !postInfo?.canComment?.result}
+                disabled={loading || !canCommnet}
                 onClick={createComment}
                 className={clsx(
                   'text-p-btn-text font-bold px-3 py-0.5 rounded-full text-sm mr-2',
-                  postInfo?.canComment?.result
-                    ? 'bg-p-btn'
-                    : 'bg-p-btn-disabled'
+                  canCommnet ? 'bg-p-btn' : 'bg-p-btn-disabled'
                 )}
               >
-                {loading
-                  ? 'Sending...'
-                  : postInfo?.canComment?.result
-                  ? 'Send'
-                  : 'Only followers can comment'}
+                {loading ? 'Sending...' : canCommnet ? 'Send' : `Can't reply`}
               </button>
             </div>
           </div>

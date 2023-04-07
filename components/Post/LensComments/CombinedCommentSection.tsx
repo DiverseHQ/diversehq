@@ -44,7 +44,8 @@ const CombinedCommentSection = ({
       },
       reactionRequest: {
         profileId: lensProfile?.defaultProfile?.id
-      }
+      },
+      profileId: lensProfile?.defaultProfile?.id
     },
     {
       enabled: !!postId
@@ -128,6 +129,7 @@ const CombinedCommentSection = ({
           postId={postId}
           addComment={addComment}
           postInfo={postInfo}
+          canCommnet={postInfo?.canComment?.result}
           // setComments={setComments}
         />
       )}
