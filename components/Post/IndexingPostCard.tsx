@@ -18,6 +18,16 @@ import { useDevice } from '../Common/DeviceWrapper'
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
 
+  let content = postInfo?.metadata?.content
+
+  if (content) {
+    content = content.split('\n').slice(1).join('\n')
+
+    if (content?.startsWith(postInfo?.metadata?.name)) {
+      content = content.slice(postInfo?.metadata?.name.length)
+    }
+  }
+
   return (
     <>
       {postInfo && (
@@ -144,20 +154,14 @@ const IndexingPostCard = ({ postInfo }) => {
                       {postInfo?.metadata?.name}
                     </div>
                   )}
-                  {postInfo?.metadata?.name !== postInfo?.metadata?.content && (
+                  {!!content && (
                     <div
                       className={`sm:max-w-[550px] overflow-hidden break-words`}
                     >
                       <Markup
                         className={`linkify whitespace-pre-wrap break-words text-sm sm:text-base`}
                       >
-                        {postInfo?.metadata?.content?.startsWith(
-                          postInfo?.metadata?.name
-                        )
-                          ? postInfo?.metadata?.content?.slice(
-                              postInfo?.metadata?.name.length
-                            )
-                          : postInfo?.metadata?.content}
+                        {content}
                       </Markup>
                     </div>
                   )}
