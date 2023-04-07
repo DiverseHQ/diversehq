@@ -6,7 +6,6 @@ import {
   usePublicationsQuery
 } from '../../../graphql/generated'
 import { postWithCommunityInfoType } from '../../../types/post'
-import { getCommunityInfoFromAppId } from '../../../utils/helper'
 
 interface Props {
   request: PublicationsQueryRequest
