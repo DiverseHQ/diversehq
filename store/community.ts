@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { CommunityType } from '../types/community'
+import { CommunityType, LensCommunity } from '../types/community'
 
 /* eslint-disable */
 
@@ -11,6 +11,14 @@ interface CommunityState {
   reset: () => void
   selectCommunityForPost: (community: CommunityType) => void
   selectedCommunity: CommunityType | null
+}
+
+interface LensCommunityState {
+  communities: Map<string, LensCommunity>
+  setCommunities: (communities: Map<string, LensCommunity>) => void
+  addCommunity: (key: string, community: LensCommunity) => void
+  addCommunities: (communities: Map<string, LensCommunity>) => void
+  reset: () => void
 }
 
 // Map<> key is community name & value is community object
@@ -44,4 +52,26 @@ export const useCommunityStore = create<CommunityState>((set) => ({
       return { selectedCommunity: community }
     }),
   selectedCommunity: null
+}))
+
+export const useLensCommunityStore = create<LensCommunityState>((set) => ({
+  communities: new Map(),
+  setCommunities: (communities) => set(() => ({ communities })),
+  addCommunity: (key, community) => {
+    set((state) => {
+      const communities = new Map(state.communities)
+      communities.set(key, community)
+      return { communities }
+    })
+  },
+  addCommunities: (communities) => {
+    set((state) => {
+      const newCommunities = new Map(state.communities)
+      communities.forEach((community, key) => {
+        newCommunities.set(key, community)
+      })
+      return { communities: newCommunities }
+    })
+  },
+  reset: () => set(() => ({ communities: new Map() }))
 }))
