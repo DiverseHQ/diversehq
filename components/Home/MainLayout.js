@@ -55,7 +55,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               zIndex: '49'
             }}
           >
-            {isLoading && <LinearProgress />}
+            {isLoading && <></>}
           </Box>
           {/* <MobileTopNav /> */}
           <div className={'pb-16'}>
@@ -78,7 +78,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               zIndex: '100'
             }}
           >
-            {isLoading && <LinearProgress />}
+            {isLoading && <></>}
           </Box>
 
           <div className="flex flex-row justify-center space-x-12">

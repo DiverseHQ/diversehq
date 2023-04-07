@@ -285,6 +285,9 @@ const LensPostCard = ({ post }: Props) => {
     if (postInfo?.isLensCommunityPost) {
       content = content.split('\n').slice(2).join('\n')
     }
+    if (content.startsWith('Posted on')) {
+      content = content.split('\n').slice(1).join('\n')
+    }
     if (
       content?.startsWith(postInfo?.metadata?.name) &&
       showNameForThisAppIds.includes(postInfo?.appId)

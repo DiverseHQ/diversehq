@@ -44,13 +44,13 @@ import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 import { submitPostForReview } from '../../api/reviewLensCommunityPost'
 import { useDevice } from '../Common/DeviceWrapper'
+import { useCommunityStore } from '../../store/community'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
   const [title, setTitle] = useState('')
   const [file, setFile] = useState(null)
   const [content, setContent] = useState('')
-  const [communityId, setCommunityId] = useState(null)
   const { user, joinedLensCommunities, LensCommunity } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
@@ -73,7 +73,6 @@ const CreatePostPopup = () => {
   const { notifyError, notifyInfo, notifySuccess } = useNotify()
   // const router = useRouter()
   const { hideModal } = usePopUpModal()
-  const [showCommunity, setShowCommunity] = useState({ name: '', image: '' })
   const { isMobile } = useDevice()
   const [flair, setFlair] = useState(null)
   const [firebaseUrl, setFirebaseUrl] = useState(null)
@@ -87,12 +86,16 @@ const CreatePostPopup = () => {
 
   const mostPostedCommunities =
     JSON.parse(window.localStorage.getItem('mostPostedCommunities')) || []
-  const [selectedCommunity, setSelectedCommunity] = useState(null)
+  const selectedCommunity = useCommunityStore(
+    (state) => state.selectedCommunity
+  )
+  const selectCommunityForPost = useCommunityStore(
+    (state) => state.selectCommunityForPost
+  )
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [flairDrawerOpen, setFlairDrawerOpen] = useState(false)
   const [gifAttachment, setGifAttachment] = useState(null)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
-  const [isLensCommunitySelected, setIsLensCommunitySelected] = useState(false)
 
   useEffect(() => {
     setImageValue(gifAttachment ? gifAttachment?.images?.original?.url : null)
@@ -110,15 +113,10 @@ const CreatePostPopup = () => {
     )
   }
 
-  // const closeModal = async () => {
-  //   setShowCommunity({ name: '', image: '' })
-  //   hideModal()
-  // }
-
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
-    if (!communityId) {
+    if (!selectedCommunity?._id) {
       notifyError('Please select a community')
       setLoading(false)
       return
@@ -141,7 +139,12 @@ const CreatePostPopup = () => {
     // }
     storeMostPostedCommunities()
     if (gifAttachment) {
-      handleCreateLensPost(title, communityId, 'image/gif', imageValue)
+      handleCreateLensPost(
+        title,
+        selectedCommunity?._id,
+        'image/gif',
+        imageValue
+      )
       return
     }
     if (file) {
@@ -166,7 +169,12 @@ const CreatePostPopup = () => {
       if (!firebaseUrl) {
         return
       }
-      handleCreateLensPost(title, communityId, file.type, firebaseUrl)
+      handleCreateLensPost(
+        title,
+        selectedCommunity?._id,
+        file.type,
+        firebaseUrl
+      )
       return
       // }
 
@@ -180,14 +188,19 @@ const CreatePostPopup = () => {
     } else {
       // if (isLensPost) {
       console.log('lenspost with media')
-      handleCreateLensPost(title, communityId, 'text', null)
+      handleCreateLensPost(title, selectedCommunity?._id, 'text', null)
       return
       // }
       // handleCreatePost(title, 'text')
     }
   }
 
-  const handleCreateLensPost = async (title, communityId, mimeType, url) => {
+  const handleCreateLensPost = async (
+    title: string,
+    communityId: string,
+    mimeType: string,
+    url: string
+  ) => {
     let mainContentFocus = null
     let contentWarning = null
     //todo handle other file types and link content
@@ -222,13 +235,13 @@ const CreatePostPopup = () => {
       locale: 'en-US',
       content:
         `${
-          isLensCommunitySelected &&
-          selectedCommunity._id !== LensCommunity?._id
+          selectedCommunity?.isLensCommunity &&
+          selectedCommunity?._id !== LensCommunity?._id
             ? `Post by @${lensProfile.defaultProfile.handle} \n`
-            : ''
+            : `Posted on c/${selectedCommunity?.name} \n`
         }` +
         title +
-        '\n \n' +
+        '\n' +
         content.trim(),
       external_url: 'https://diversehq.xyz',
       image: mimeType.startsWith('image') ? url : null,
@@ -251,7 +264,7 @@ const CreatePostPopup = () => {
     }
     const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
 
-    if (isLensCommunitySelected) {
+    if (selectedCommunity?.isLensCommunity) {
       try {
         const res = await submitPostForReview(communityId, `ipfs://${ipfsHash}`)
         if (res.status === 200) {
@@ -283,8 +296,8 @@ const CreatePostPopup = () => {
       tempId: metadataId,
       communityInfo: {
         _id: communityId,
-        name: showCommunity.name,
-        image: showCommunity.image
+        name: selectedCommunity?.name,
+        image: selectedCommunity.logoImageUrl
       },
       createdAt: new Date().toISOString(),
       hasCollectedByMe: false,
@@ -392,14 +405,9 @@ const CreatePostPopup = () => {
   // }
 
   const handleSelect = (community) => {
-    const id = community._id
-    const name = community.name
-    const logoImageUrl = community.logoImageUrl
-    setIsLensCommunitySelected(community?.isLensCommunity || false)
     setShowCommunityOptions(false)
-    setCommunityId(id)
-    setShowCommunity({ name, image: logoImageUrl })
-    setSelectedCommunity(community)
+    console.log('community', community)
+    selectCommunityForPost(community)
   }
 
   const getJoinedCommunities = async () => {
@@ -636,7 +644,9 @@ const CreatePostPopup = () => {
         onClick={handleSubmit}
         label="POST"
         loading={loading}
-        isDisabled={!communityId || title.length === 0 || imageUpload}
+        isDisabled={
+          !selectedCommunity?._id || title.length === 0 || imageUpload
+        }
         hideTopBar={showCollectSettings}
         closePopup={closePopUp}
       >
@@ -652,13 +662,16 @@ const CreatePostPopup = () => {
           ) : (
             <div className="flex justify-center items-center border border-s-border rounded-full text-p-text w-fit h-[45px] bg-s-bg">
               <button className="" onClick={showJoinedCommunities}>
-                {showCommunity.name ? (
+                {selectedCommunity?._id ? (
                   <div className="flex justify-center items-center p-2">
                     <img
-                      src={showCommunity.image}
+                      src={selectedCommunity.logoImageUrl}
                       className="rounded-full w-10 h-10"
                     />
-                    <h1 className="ml-2">{showCommunity.name}</h1>
+                    <h1 className="ml-2">
+                      {selectedCommunity?.isLensCommunity && 'l/'}
+                      {selectedCommunity.name}
+                    </h1>
                     <AiOutlineDown className="w-4 h-4 mx-1" />
                   </div>
                 ) : (
@@ -768,7 +781,7 @@ const CreatePostPopup = () => {
               )}
             </div>
             <div className="ml-6 flex gap-2 items-center">
-              {!isLensCommunitySelected && (
+              {!selectedCommunity?.isLensCommunity && (
                 <Tooltip
                   placement="bottom"
                   enterDelay={1000}

@@ -17,8 +17,10 @@ export type CommunityType = {
   rules?: Rule[]
   bannedUsers?: BannedUser[]
   verified?: boolean
-  // hack to allow any other property
   handle?: string
+  Profile?: Profile
+  isLensCommunity?: boolean
+  // hack to allow any other property
   [key: string]: any
 }
 
