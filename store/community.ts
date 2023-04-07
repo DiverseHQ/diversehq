@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { CommunityType } from '../types/community'
 
+/* eslint-disable */
+
 interface CommunityState {
   communities: Map<string, CommunityType>
   setCommunities: (communities: Map<string, CommunityType>) => void
@@ -11,6 +13,7 @@ interface CommunityState {
   selectedCommunity: CommunityType | null
 }
 
+// Map<> key is community name & value is community object
 export const useCommunityStore = create<CommunityState>((set) => ({
   communities: new Map(),
   setCommunities: (communities) => set(() => ({ communities })),

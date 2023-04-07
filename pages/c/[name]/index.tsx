@@ -10,18 +10,63 @@ import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info
 import { CommunityWithCreatorProfile } from '../../../types/community'
 import CommunityPageRightSidebar from '../../../components/Community/CommunityPageRightSidebar'
 import { useDevice } from '../../../components/Common/DeviceWrapper'
+import { GetServerSidePropsContext } from 'next'
+import { useCommunityStore } from '../../../store/community'
+import MobileLoader from '../../../components/Common/UI/MobileLoader'
 
 interface Props {
-  community: CommunityWithCreatorProfile
+  _community: CommunityWithCreatorProfile
+  name?: string
 }
 
-const CommunityPage: FC<Props> = ({ community }) => {
+const CommunityPage: FC<Props> = ({ _community, name }) => {
   const { isMobile } = useDevice()
+  const communities = useCommunityStore((state) => state.communities)
+  const addCommunity = useCommunityStore((state) => state.addCommunity)
+  const [community, setCommunity] =
+    React.useState<CommunityWithCreatorProfile | null>(_community)
+
+  const [loading, setLoading] = React.useState(true)
+
+  const fetchAndSetCommunity = async () => {
+    try {
+      setLoading(true)
+      const res = await getCommunityInfo(name)
+      if (res.status !== 200) {
+        return null
+      }
+      const result = await res.json()
+
+      const profile = await getDefaultProfileInfo({
+        ethereumAddress: result?.creator
+      })
+      let community: CommunityWithCreatorProfile = result
+      // @ts-ignore
+      community.creatorProfile = profile?.defaultProfile
+
+      setCommunity(community)
+      addCommunity(name, community)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  React.useEffect(() => {
+    if (!name || community || _community) return
+    if (communities.get(name) && communities) {
+      setCommunity(communities.get(name))
+    } else {
+      fetchAndSetCommunity()
+    }
+  }, [name, communities])
+
   return (
     <div className="relative">
       {isMobile && <CommunityPageMobileTopNav community={community} />}
       {community && <CommunityPageSeo community={community} />}
-      {community && (
+      {community && !loading && (
         <>
           <CommunityInfoCard _community={community} />
           <div className="w-full flex justify-center">
@@ -33,17 +78,27 @@ const CommunityPage: FC<Props> = ({ community }) => {
           </div>
         </>
       )}
-      {!community && <CommunityNotFound />}
+      {!community && !loading && <CommunityNotFound />}
+      {loading && !community && <MobileLoader />}
     </div>
   )
 }
 
-export async function getServerSideProps({
-  params = {}
-}: {
-  params: { name?: string }
-}) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { req, params } = context
   const { name } = params
+
+  const isClient = Boolean(req.cookies.isClient)
+
+  if (isClient) {
+    return {
+      props: {
+        _community: null,
+        name: name
+      }
+    }
+  }
+
   const fetchCommunityInfo = async (name: string) => {
     try {
       const res = await getCommunityInfo(name)
@@ -57,15 +112,16 @@ export async function getServerSideProps({
       return null
     }
   }
-  const community = await fetchCommunityInfo(name)
-  if (!community) return { props: { community: null } }
+  const community = await fetchCommunityInfo(String(name))
+  if (!community) return { props: { _community: null, name: name } }
   const profile = await getDefaultProfileInfo({
     ethereumAddress: community?.creator
   })
   community.creatorProfile = profile?.defaultProfile
   return {
     props: {
-      community
+      _community: community,
+      name: name
     }
   }
 }

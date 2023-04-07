@@ -33,10 +33,8 @@ const ReportSection = ({
       const res = await getUnresolvedPublicationReportsOfCommunity(
         community?._id
       )
-      console.log('res', res)
       if (res.status === 200) {
         const result = await res.json()
-        console.log('result', result)
         setRawReports(result)
       } else {
         notifyError('Something went wrong')

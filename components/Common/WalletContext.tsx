@@ -37,6 +37,7 @@ import {
   getLensCommunity
 } from '../../api/lensCommunity'
 import { ProfileMedia } from '../../graphql/generated'
+import { useProfileStore } from '../../store/profile'
 // import { whitelistedAddresses } from '../../utils/profileIds'
 export interface IsFollowedLensCommunityType {
   _id: string
@@ -76,6 +77,7 @@ export const WalletProvider = ({ children }) => {
     IsFollowedLensCommunityType[]
   >([])
   const { data: signer } = useSigner()
+  const addProfile = useProfileStore((state) => state.addProfile)
   // const { disconnect } = useDisconnect()
   const queryClient = useQueryClient()
   const {
@@ -88,6 +90,8 @@ export const WalletProvider = ({ children }) => {
   useEffect(() => {
     if (isSignedIn && hasProfile && address) {
       // fetchWeb3Token(true)
+      // @ts-ignore
+      addProfile(lensProfile?.defaultProfile?.id, lensProfile?.defaultProfile)
       refreshUserInfo()
       fetchAndSetLensCommunity()
     } else {

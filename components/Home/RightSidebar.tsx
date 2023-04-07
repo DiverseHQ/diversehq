@@ -43,7 +43,6 @@ const RightSidebar = () => {
       const communities = await getAllCommunities(6, 0, 'top', true)
 
       if (communities?.communities?.length > 0) {
-        console.log('communities', communities.communities)
         setTopCommunities(communities.communities)
       }
     } catch (error) {
@@ -64,7 +63,6 @@ const RightSidebar = () => {
 
   useEffect(() => {
     if (loading || (isLoading && address)) return
-    console.log('user', user)
     if (!user) {
       fetchTopCommunities()
       return
