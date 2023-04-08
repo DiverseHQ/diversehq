@@ -94,7 +94,7 @@ const LensPostPageCommunityCard = ({
             <div className="mb-2 text-s-text text-sm leading-5">
               <span>Members: </span>
               <span className="font-semibold">
-                {communityInfo?.members?.length}
+                {communityInfo?.membersCount}
               </span>
             </div>
             <JoinCommunityButton />

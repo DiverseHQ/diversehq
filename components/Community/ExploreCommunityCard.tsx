@@ -118,7 +118,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
                   <div className="flex flex-row items-center space-x-2">
                     <BsPeopleFill />
                     <span className="font-semibold">
-                      {community.members?.length}
+                      {community.membersCount}
                     </span>
                   </div>
                 </div>
@@ -190,9 +190,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
                 {community.name}
               </p>
               <p className="text-[14px]">
-                <span className="font-semibold">
-                  {community.members?.length}
-                </span>{' '}
+                <span className="font-semibold">{community.membersCount}</span>{' '}
                 Members
               </p>
               <div className="text-[14px]">

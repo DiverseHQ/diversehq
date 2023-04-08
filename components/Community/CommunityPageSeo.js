@@ -13,7 +13,7 @@ const CommunityPageSeo = ({ community }) => {
         url: `${appLink}/c/${community?.name}`,
         images: [
           {
-            url: community?.logoImageUrl.replace(
+            url: community?.logoImageUrl?.replace(
               'https://firebasestorage.googleapis.com',
               `${IMAGE_KIT_ENDPOINT}/tr:w-1200,h-630,q-50`
             ),

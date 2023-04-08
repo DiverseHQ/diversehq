@@ -2,6 +2,7 @@ export const specialProfileIds = [
   '0x0161ba',
   '0x01abf2',
   '0xd478',
+  // '0x5ec3', // testnet deven
   '0x0150b2',
   '0x011990' // you meme
 ]

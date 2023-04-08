@@ -20,6 +20,7 @@ export type CommunityType = {
   handle?: string
   Profile?: Profile
   isLensCommunity?: boolean
+  membersCount?: number
   // hack to allow any other property
   [key: string]: any
 }

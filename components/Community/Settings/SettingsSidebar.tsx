@@ -31,7 +31,7 @@ const SettingsSidebar = ({ community }: { community: CommunityType }) => {
           </Link>
           <div className="text-s-text text-xs flex flex-row items-center">
             <BsPeopleFill className="w-4 h-4 mr-1" />
-            <div>{community?.members?.length}</div>
+            <div>{community?.membersCount}</div>
           </div>
         </div>
       </div>

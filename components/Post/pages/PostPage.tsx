@@ -42,7 +42,7 @@ const PostPage = ({ post }) => {
 
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
     // @ts-ignore
-    communityInfo?.members?.length * xpPerMember || 0
+    communityInfo?.membersCount * xpPerMember || 0
   )
 
   const calculateBarPercentage = (currentXP, threshold) => {
@@ -239,7 +239,7 @@ const PostPage = ({ post }) => {
                 <div className="mb-2 text-p-text">
                   <span>Members: </span>
                   <span className="font-semibold">
-                    {communityInfo?.members?.length}
+                    {communityInfo?.membersCount}
                   </span>
                 </div>
                 <JoinCommunityButton id={communityInfo?._id} />

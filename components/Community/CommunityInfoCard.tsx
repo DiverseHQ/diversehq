@@ -37,7 +37,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
   const [isAuth, setIsAuth] = useState(false)
   const router = useRouter()
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
-    community?.members?.length * xpPerMember || 0
+    community?.membersCount * xpPerMember || 0
   )
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isExploreDrawerOpen, setIsExploreDrawerOpen] = useState(false)
@@ -153,7 +153,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                         </div>
                         <div className="flex flex-row items-center pt-0.5">
                           <BsPeopleFill className="w-4 h-4 mr-1" />
-                          <span>{community?.members?.length}</span>
+                          <span>{community?.membersCount}</span>
                         </div>
                       </div>
                     ) : (
@@ -176,7 +176,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                         <div className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px]">
                           <BsPeopleFill className="w-4 h-4 mr-1" />
                           <span className="font-bold">
-                            {community?.members?.length || 0}
+                            {community?.membersCount || 0}
                           </span>
                         </div>
                       </div>

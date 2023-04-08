@@ -54,20 +54,20 @@ const CommunityPage: FC<Props> = ({ _community, name }) => {
   }
 
   React.useEffect(() => {
-    console.log('name', name)
     console.log('community', community)
     if (!name || community || _community) {
       setLoading(false)
       return
     }
     if (communities.get(name) && communities) {
-      console.log('communities.get(name)', communities.get(name))
       setCommunity(communities.get(name))
       setLoading(false)
     } else {
       fetchAndSetCommunity()
     }
   }, [name, communities])
+
+  console.log('community', community)
 
   return (
     <div className="relative">

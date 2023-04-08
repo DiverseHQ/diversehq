@@ -23,7 +23,7 @@ interface Props {
 
 const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
-    communityInfo?.members?.length * xpPerMember || 0
+    communityInfo?.membersCount * xpPerMember || 0
   )
   const selectCommunityForPost = useCommunityStore(
     (state) => state.selectCommunityForPost
@@ -84,14 +84,6 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
             </span>
           </div>
           <div className="bg-s-border h-[1px] mb-3"></div>
-          {/* <div className="flex flex-wrap mb-2 gap-x-6 gap-y-2">
-            <div className="flex flex-col">
-              <span className="font-semibold text-[16px]">
-                {communityInfo.members?.length}
-              </span>
-              <span className="font-light text-[#7c7c7c]">members</span>
-            </div>
-          </div> */}
           <div className="flex flex-row gap-1 w-full">
             <div className="flex flex-col w-full">
               <div className="relative bg-[#7c7c7c] h-[35px] rounded-[10px] flex flex-row">
