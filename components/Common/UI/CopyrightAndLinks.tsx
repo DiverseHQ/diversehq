@@ -23,6 +23,14 @@ const CopyrightAndLinks = () => {
         >
           Twitter
         </a>
+        <a
+          className="cursor-pointer"
+          href="https://github.com/DiverseHQ"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Github
+        </a>
         {/* <span className="cursor-pointer">Feedback</span>
       <span className="cursor-pointer">Thanks</span> */}
       </div>

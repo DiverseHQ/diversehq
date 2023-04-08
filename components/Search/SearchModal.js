@@ -16,8 +16,8 @@ const SearchModal = () => {
     }
   }, [router])
   return (
-    <div className="relative flex flex-row items-center sm:border-[1px] sm:border-s-border dark:border-0 p-1 rounded-[14px] bg-s-bg dark:bg-[#272729] w-full sm:w-[300px] gap-2 md:gap-4">
-      <div className="text-p-text rounded-[12px] py-1">
+    <div className="relative flex flex-row items-center sm:border-[1px] sm:border-s-border dark:border-0 p-1 pl-2 rounded-xl bg-s-bg dark:bg-[#272729] w-full sm:w-[300px] gap-2 md:gap-4">
+      <div className="text-p-text rounded-lg py-1">
         <AiOutlineSearch className="w-[23px] h-[23px] text-s-text" />
       </div>
       <input
@@ -27,7 +27,7 @@ const SearchModal = () => {
         ref={inputRef}
         onChange={() => setSearchTerm(inputRef.current.value)}
       />
-      <div className="bg-s-bg rounded-2xl absolute w-full top-[50px] text-p-text shadow-nav">
+      <div className="bg-s-bg rounded-lg absolute w-full top-[50px] text-p-text shadow-nav">
         <CommunitiesSearchModal
           searchTerm={searchTerm}
           inputRef={inputRef}

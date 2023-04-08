@@ -246,10 +246,8 @@ const LensPostCard = ({ post }: Props) => {
       // }
     } catch (error) {
       console.log(error)
-      console.log('error')
       window.location.reload()
     } finally {
-      console.log('finally')
       window.location.reload()
     }
   }
@@ -587,125 +585,52 @@ const LensPostCard = ({ post }: Props) => {
                       )}
                     </>
                   )}
-                {isMobile ? (
-                  <OptionsWrapper
-                    OptionPopUpModal={() => (
-                      <MoreOptionsModal
-                        className="z-50"
-                        list={
-                          isAuthor
-                            ? [
-                                {
-                                  label: 'Share Post',
-                                  onClick: sharePost,
-                                  icon: () => (
-                                    <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                  )
-                                },
-                                {
-                                  label: 'Delete Post',
-                                  onClick: handleDeletePost,
-                                  icon: () => (
-                                    <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                                  )
-                                },
-                                {
-                                  label: 'Report',
-                                  onClick: handleReportPost,
-                                  icon: () => (
-                                    <IoIosFlag className="mr-1.5 w-6 h-6" />
-                                  )
-                                }
-                              ]
-                            : [
-                                {
-                                  label: 'Share Post',
-                                  onClick: sharePost,
-                                  icon: () => (
-                                    <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                  )
-                                },
-                                {
-                                  label: 'Report',
-                                  onClick: handleReportPost,
-                                  icon: () => (
-                                    <IoIosFlag className="mr-1.5 w-6 h-6" />
-                                  )
-                                }
-                              ]
+                <OptionsWrapper
+                  OptionPopUpModal={() => (
+                    <MoreOptionsModal
+                      className="z-50"
+                      list={[
+                        {
+                          label: 'Share Post',
+                          onClick: sharePost,
+                          icon: () => (
+                            <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                          ),
+                          hidden: !isMobile
+                        },
+                        {
+                          label: 'Delete Post',
+                          onClick: handleDeletePost,
+                          icon: () => (
+                            <HiOutlineTrash className="mr-1.5 w-6 h-6" />
+                          ),
+                          hidden: !isAuthor
+                        },
+                        {
+                          label: 'Report',
+                          onClick: handleReportPost,
+                          icon: () => <IoIosFlag className="mr-1.5 w-6 h-6" />
                         }
-                      />
-                    )}
-                    position="left"
-                    showOptionsModal={showOptionsModal}
-                    setShowOptionsModal={setShowOptionsModal}
-                    isDrawerOpen={isDrawerOpen}
-                    setIsDrawerOpen={setIsDrawerOpen}
+                      ]}
+                    />
+                  )}
+                  position="left"
+                  showOptionsModal={showOptionsModal}
+                  setShowOptionsModal={setShowOptionsModal}
+                  isDrawerOpen={isDrawerOpen}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                >
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="More"
+                    arrow
                   >
-                    <Tooltip
-                      enterDelay={1000}
-                      leaveDelay={200}
-                      title="More"
-                      arrow
-                    >
-                      <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
-                        <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </div>
-                    </Tooltip>
-                  </OptionsWrapper>
-                ) : (
-                  <OptionsWrapper
-                    OptionPopUpModal={() => (
-                      <MoreOptionsModal
-                        className="z-50"
-                        list={
-                          isAuthor
-                            ? [
-                                {
-                                  label: 'Report',
-                                  onClick: handleReportPost,
-                                  icon: () => (
-                                    <IoIosFlag className="mr-1.5 w-6 h-6" />
-                                  )
-                                },
-                                {
-                                  label: 'Delete Post',
-                                  onClick: handleDeletePost,
-                                  icon: () => (
-                                    <HiOutlineTrash className="mr-1.5 w-6 h-6" />
-                                  )
-                                }
-                              ]
-                            : [
-                                {
-                                  label: 'Report',
-                                  onClick: handleReportPost,
-                                  icon: () => (
-                                    <IoIosFlag className="mr-1.5 w-6 h-6" />
-                                  )
-                                }
-                              ]
-                        }
-                      />
-                    )}
-                    position="left"
-                    showOptionsModal={showOptionsModal}
-                    setShowOptionsModal={setShowOptionsModal}
-                    isDrawerOpen={isDrawerOpen}
-                    setIsDrawerOpen={setIsDrawerOpen}
-                  >
-                    <Tooltip
-                      enterDelay={1000}
-                      leaveDelay={200}
-                      title="More"
-                      arrow
-                    >
-                      <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
-                        <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </div>
-                    </Tooltip>
-                  </OptionsWrapper>
-                )}
+                    <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
+                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                  </Tooltip>
+                </OptionsWrapper>
               </div>
             </span>
           </div>
