@@ -74,9 +74,9 @@ const index = ({ _community, name }: Props) => {
 
   return (
     <>
+      <LensCommunitySeo community={community} />
       {community && !loading && (
         <div>
-          <LensCommunitySeo community={community} />
           {isMobile && <LensCommunityMobileTopNav community={community} />}
           <ProfileCard _lensProfile={community?.Profile} isLensCommunity />
           <div className="w-full flex justify-center">
