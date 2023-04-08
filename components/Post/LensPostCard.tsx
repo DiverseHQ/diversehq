@@ -592,7 +592,11 @@ const LensPostCard = ({ post }: Props) => {
                       list={[
                         {
                           label: 'Share Post',
-                          onClick: sharePost,
+                          onClick: async () => {
+                            sharePost()
+                            setShowOptionsModal(false)
+                            setIsDrawerOpen(false)
+                          },
                           icon: () => (
                             <IoIosShareAlt className="mr-1.5 w-6 h-6" />
                           ),
@@ -600,7 +604,11 @@ const LensPostCard = ({ post }: Props) => {
                         },
                         {
                           label: 'Delete Post',
-                          onClick: handleDeletePost,
+                          onClick: async () => {
+                            await handleDeletePost()
+                            setShowOptionsModal(false)
+                            setIsDrawerOpen(false)
+                          },
                           icon: () => (
                             <HiOutlineTrash className="mr-1.5 w-6 h-6" />
                           ),
@@ -608,7 +616,11 @@ const LensPostCard = ({ post }: Props) => {
                         },
                         {
                           label: 'Report',
-                          onClick: handleReportPost,
+                          onClick: async () => {
+                            handleReportPost()
+                            setShowOptionsModal(false)
+                            setIsDrawerOpen(false)
+                          },
                           icon: () => <IoIosFlag className="mr-1.5 w-6 h-6" />
                         }
                       ]}
