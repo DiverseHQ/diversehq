@@ -87,16 +87,20 @@ const LensPostPage = ({ id, post }: Props) => {
                   <IoMdClose className="w-5 h-5 " />
                 </div>
               </div>
-              <div className="px-5 font-medium">Community</div>
-              {postInfo?.isLensCommunityPost ? (
-                <LensPageProfileCard
-                  isLensCommunity={!!postInfo?.isLensCommunityPost}
-                  _profile={postInfo?.profile}
-                />
-              ) : (
-                <LensPostPageCommunityCard
-                  communityInfo={postInfo?.communityInfo}
-                />
+              {postInfo?.communityInfo?._id && (
+                <>
+                  <div className="px-5 font-medium">Community</div>
+                  {postInfo?.isLensCommunityPost ? (
+                    <LensPageProfileCard
+                      isLensCommunity={!!postInfo?.isLensCommunityPost}
+                      _profile={postInfo?.profile}
+                    />
+                  ) : (
+                    <LensPostPageCommunityCard
+                      communityInfo={postInfo?.communityInfo}
+                    />
+                  )}
+                </>
               )}
               <div className="px-5 mt-6 font-medium">Creator</div>
               {postInfo?.isLensCommunityPost ? (
