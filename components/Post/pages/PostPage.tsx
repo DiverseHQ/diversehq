@@ -38,8 +38,6 @@ const PostPage = ({ post }) => {
     }
   }
 
-  console.log('community info', communityInfo)
-
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
     // @ts-ignore
     communityInfo?.membersCount * xpPerMember || 0

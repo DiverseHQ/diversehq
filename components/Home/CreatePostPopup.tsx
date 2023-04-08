@@ -411,7 +411,6 @@ const CreatePostPopup = () => {
 
   const handleSelect = (community) => {
     setShowCommunityOptions(false)
-    console.log('community', community)
     selectCommunityForPost(community)
   }
 

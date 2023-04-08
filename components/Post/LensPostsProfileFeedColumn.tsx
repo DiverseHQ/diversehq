@@ -55,7 +55,6 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     let nextCursor = null
     if (profileFeed?.feed?.pageInfo?.next) {
       nextCursor = profileFeed?.feed.pageInfo.next
-      console.log('nextCursor', nextCursor)
     }
     const newPosts = profileFeed?.feed.items.map((item) => item.root)
     // if (newPosts.length < LENS_POST_LIMIT) {
@@ -86,13 +85,11 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
       communityIds
     )
-    console.log('communityInfoForPosts', communityInfoForPosts)
     for (let i = 0; i < newPosts.length; i++) {
       if (communityInfoForPosts[i]?._id) {
         // @ts-ignore
         newPosts[i].communityInfo = communityInfoForPosts[i]
         if (communityInfoForPosts[i]?.handle) {
-          console.log('communityInfoForPosts', communityInfoForPosts[i])
           // @ts-ignore
           newPosts[i].isLensCommunityPost = true
         }
