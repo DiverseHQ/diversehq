@@ -5,6 +5,9 @@ import { useMessageStore } from '../../store/message'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
+import Link from 'next/link'
+import clsx from 'clsx'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const MessageHeader = ({ profile, open, setOpen }) => {
   const setConversationKey = useMessageStore(
@@ -15,6 +18,7 @@ const MessageHeader = ({ profile, open, setOpen }) => {
     e.stopPropagation()
     setConversationKey('')
   }
+  const { isMobile } = useDevice()
   return (
     <div
       className="h-[50px] flex flex-row justify-between px-4 py-0 sm:py-2 cursor-pointer items-center"
@@ -29,24 +33,46 @@ const MessageHeader = ({ profile, open, setOpen }) => {
         <div className="flex flex-row items-center space-x-2">
           {open && (
             <div
-              className="active:bg-p-btn-hover sm:hover:bg-p-btn-hover sm:p-1.5 p-3.5 rounded-full flex justify-center items-center cursor-pointer"
+              className="active:bg-p-btn-hover sm:hover:bg-p-btn-hover sm:p-1.5 px-1.5 py-4 rounded-full flex justify-center items-center cursor-pointer"
               onClick={handleShowConversations}
             >
               <BiArrowBack className="w-5 h-5" />
             </div>
           )}
-          <ImageWithPulsingLoader
-            src={getAvatar(profile)}
-            className="w-8 h-8 rounded-full object-cover"
-            alt={formatHandle(profile?.handle)}
-          />
+          <span
+            onClick={(e) => {
+              if (isMobile) return
+              e.stopPropagation()
+            }}
+          >
+            <Link href={`/u/${formatHandle(profile?.handle)}`}>
+              <ImageWithPulsingLoader
+                src={getAvatar(profile)}
+                className="w-8 h-8 rounded-full object-cover"
+                alt={formatHandle(profile?.handle)}
+              />
+            </Link>
+          </span>
           <div className="flex flex-col text-sm leading-4">
             {profile?.name && (
               <div className="font-semibold tracking-wide">{profile?.name}</div>
             )}
-            <div className={`${profile?.name ? 'text-s-text' : ''}`}>
-              {profile?.handle && `u/${formatHandle(profile?.handle)}`}
-            </div>
+            <span
+              onClick={(e) => {
+                if (isMobile) return
+                e.stopPropagation()
+              }}
+            >
+              <Link
+                href={`/u/${formatHandle(profile?.handle)}`}
+                className={clsx(
+                  profile?.name && 'text-s-text',
+                  'hover:underline'
+                )}
+              >
+                {profile?.handle && `u/${formatHandle(profile?.handle)}`}
+              </Link>
+            </span>
           </div>
         </div>
       )}
