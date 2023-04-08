@@ -13,7 +13,6 @@ const LivePeerVideoPlayback = ({
   return (
     <Player
       src={url}
-      playbackId={url}
       poster={posterUrl}
       autoPlay={false}
       muted
