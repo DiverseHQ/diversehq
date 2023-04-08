@@ -18,7 +18,6 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
 
   const fetchAndSetUnResolvedReviewPosts = async () => {
     try {
-      console.log('fetching')
       setIsLoading(true)
       const res = await getAllUnResolvedLensCommunityPostsForReview(
         community._id

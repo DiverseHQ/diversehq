@@ -120,6 +120,8 @@ export const WalletProvider = ({ children }) => {
 
   const fetchAndSetLensCommunity = useCallback(async () => {
     const res = await getLensCommunity(lensProfile?.defaultProfile?.handle)
+    // const res = await getLensCommunity('youmemeworld.lens')
+    console.log('res', res)
     if (res.status !== 200) return
     if (res.status === 200) {
       const resJson = await res.json()
