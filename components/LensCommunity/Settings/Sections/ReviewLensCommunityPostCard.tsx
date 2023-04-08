@@ -291,7 +291,7 @@ const ReviewLensCommunityPostCard = ({
         >
           {loadingStatus ? (
             <div className="flex flex-row items-center space-x-2">
-              <div className="animate-spin text-p-btn-text" />{' '}
+              <div className="spinner border-p-btn-text" />{' '}
               <div>{loadingStatus}</div>{' '}
             </div>
           ) : (

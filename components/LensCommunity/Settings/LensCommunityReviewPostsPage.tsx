@@ -14,7 +14,7 @@ const LensCommunityReviewPostsPage = ({
 
   return (
     <>
-      {isMobile && <MobileTopNavbarWithTitle title="Set Rules" />}
+      {isMobile && <MobileTopNavbarWithTitle title="Review Posts" />}
 
       <div className="sm:mx-20 sm:my-12 flex flex-row space-x-20">
         {!isMobile && (

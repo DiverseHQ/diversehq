@@ -25,7 +25,7 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
       if (res.status === 200) {
         const resData: ReviewPostType[] = await res.json()
 
-        if (!resData.length) {
+        if (!resData?.length) {
           setRawReviewPosts([])
           return
         }
@@ -78,9 +78,10 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
     <div className="p-2 w-full sm:p-3 space-y-2 min-h-[500px]">
       <div className="font-medium leading-3">Review Submitted Posts</div>
       <div className="text-xs text-s-text leading-4">
-        Allow : Approve the post and make it visible to the community through
+        Accept : Approve the post and make it visible to the community through
         your lens handle <br />
-        Reject : Author will be notified that the post has been rejected
+        Reject : Author will be notified that the post has been rejected <br />
+        Stay on this page after hitting Accept button untill confirmation.
       </div>
       <button className="text-sm" onClick={fetchAndSetUnResolvedReviewPosts}>
         Refresh
