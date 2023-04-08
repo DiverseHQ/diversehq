@@ -16,6 +16,7 @@ import LensPostCard from '../../../Post/LensPostCard'
 import { getAllMentionsHandlFromContent } from '../../../Post/PostPageMentionsColumn'
 import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
+import { deleteLensPublication } from '../../../../api/lensPublication'
 
 interface Props {
   report: PostReportType
@@ -57,15 +58,17 @@ const LensReportPost = ({
         profileId: profileToBan.id,
         reason: `Violated rule : ${ruleViolated} \n Other Reason : ${extraReason}`
       }
+      console.log('bannedUser', bannedUser)
       let res = null
       if (isLensCommunity) {
         res = await addBannedUserToLensCommunity(community?._id, bannedUser)
       } else {
         res = await addBannedUserToCommunity(community?.name, bannedUser)
       }
+      await deleteLensPublication(publication.id)
       if (res.status === 200) {
-        setShowBanUserModal(false)
         await fetchAndSetUnResolvedReprots()
+        setShowBanUserModal(false)
       } else {
         const resJson = await res.json()
         notifyInfo(resJson.msg)

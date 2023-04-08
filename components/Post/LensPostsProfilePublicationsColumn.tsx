@@ -92,16 +92,6 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         return post.metadata.tags[0]
       }
       if (post?.__typename === 'Mirror') {
-        console.log(
-          'postMirrorOf',
-          post.mirrorOf?.__typename === 'Post'
-            ? post.mirrorOf?.metadata?.tags[0]
-            : null
-        )
-
-        if (post.mirrorOf.__typename === 'Comment') {
-          console.log('postMirrorOf Comment', post.mirrorOf)
-        }
         // @ts-ignore
         return post.mirrorOf?.metadata?.tags[0] || 'null'
       }

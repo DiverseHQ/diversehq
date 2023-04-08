@@ -26,7 +26,6 @@ import { useNotify } from './NotifyContext'
 import { useQueryClient } from '@tanstack/react-query'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { UserType } from '../../types/user'
-import { sleep } from '../../lib/helpers'
 
 import { LensCommunity } from '../../types/community'
 import { getBulkIsFollowedByMe } from '../../lib/profile/get-bulk-is-followed-by-me'
@@ -179,7 +178,6 @@ export const WalletProvider = ({ children }) => {
   const refreshUserInfo = async () => {
     try {
       setLoading(true)
-      await sleep(2000)
       if (!address) return
       const userInfo = await getUserInfo(address)
       if (userInfo && userInfo.role <= userRoles.NORMAL_USER) {
