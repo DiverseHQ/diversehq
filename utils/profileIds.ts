@@ -4,7 +4,8 @@ export const specialProfileIds = [
   '0xd478',
   // '0x5ec3', // testnet deven
   '0x0150b2',
-  '0x011990' // you meme
+  '0x011990', // youmemeworld
+  '0x012b8f' // letjoellive
 ]
 
 export const whitelistedAddresses = [
