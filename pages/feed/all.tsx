@@ -32,7 +32,7 @@ const lens = () => {
           profileId={lensProfile?.defaultProfile?.id}
         />
       ) : ( */}
-          <LensPostsExplorePublicationsColumn />
+          <LensPostsExplorePublicationsColumn pathnameToShow="/feed/all" />
           {/* )} */}
         </div>
       </div>

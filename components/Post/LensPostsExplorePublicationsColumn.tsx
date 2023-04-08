@@ -3,7 +3,11 @@ import useSort from '../Common/Hook/useSort'
 import LensAllLatestPublicationsColumn from './LensAllLatestPublicationsColumn'
 import LensAllTopPublicationsColumn from './LensAllTopPublicationsColumn'
 
-const LensPostsExplorePublicationsColumn = () => {
+const LensPostsExplorePublicationsColumn = ({
+  pathnameToShow
+}: {
+  pathnameToShow: string
+}) => {
   const { isTop } = useSort()
   return (
     <>
@@ -11,7 +15,7 @@ const LensPostsExplorePublicationsColumn = () => {
         <LensAllTopPublicationsColumn />
       </div>
       <div className={`${isTop ? 'hidden' : 'block'}`}>
-        <LensAllLatestPublicationsColumn />
+        <LensAllLatestPublicationsColumn pathnameToShow={pathnameToShow} />
       </div>
     </>
   )

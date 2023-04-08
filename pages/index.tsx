@@ -34,7 +34,7 @@ const Home = () => {
               profileId={lensProfile?.defaultProfile?.id}
             />
           ) : (
-            <LensPostsExplorePublicationsColumn />
+            <LensPostsExplorePublicationsColumn pathnameToShow="/" />
           )}
         </div>
       </div>
