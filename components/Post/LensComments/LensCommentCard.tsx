@@ -29,6 +29,7 @@ import { useCommentStore } from '../../../store/comment'
 import CenteredDot from '../../Common/UI/CenteredDot'
 import formatHandle from '../../User/lib/formatHandle'
 import AttachmentMedia from '../Attachment'
+import Markup from '../../Lexical/Markup'
 
 const LensCommentCard = ({ comment }: { comment: Comment }) => {
   const [comments, setComments] = useState([])
@@ -297,7 +298,9 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
             </div>
             <div className="w-full">
               {/* content */}
-              <div className="mt-1">{comment?.metadata?.content}</div>
+              <div className="mt-1">
+                <Markup>{comment?.metadata?.content}</Markup>
+              </div>
               {/* attachemnt */}
               {comment?.metadata?.media && (
                 <AttachmentMedia
