@@ -59,7 +59,7 @@ const index = ({ _community, name }: Props) => {
   }
 
   React.useEffect(() => {
-    if (!name || community || _community) {
+    if (!name || _community) {
       setLoading(false)
       return
     }
