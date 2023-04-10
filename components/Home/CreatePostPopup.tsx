@@ -593,9 +593,9 @@ const CreatePostPopup = () => {
           setImageUpload(false)
           return
         }
-        // file size should be less than 8mb
-        if (file.size > 8000000) {
-          notifyError('File size should be less than 8mb')
+        // file size should be less than 50mb
+        if (file.size > 50000000) {
+          notifyError('File size should be less than 50mb')
           setImageUpload(false)
           return
         }
