@@ -54,7 +54,7 @@ const CommunityPage: FC<Props> = ({ _community, name }) => {
   }
 
   React.useEffect(() => {
-    if (!name || community || _community) {
+    if (!name || _community) {
       setLoading(false)
       return
     }

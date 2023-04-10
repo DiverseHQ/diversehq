@@ -42,7 +42,7 @@ const LinkPreview = ({ url }: { url: string }) => {
 
   return (
     <a href={url} target="_blank" rel="noreferrer">
-      <div className="mx-3 sm:mx-0 rounded-xl bg-s-bg border border-s-border hover:bg-s-hover cursor-pointer">
+      <div className="mx-3 sm:w-[525px] sm:mx-0 rounded-xl bg-s-bg border border-s-border hover:bg-s-hover cursor-pointer">
         {linkDetails?.videos?.length > 0 ? (
           <VideoWithAutoPause
             src={linkDetails?.videos[0]}
@@ -67,7 +67,7 @@ const LinkPreview = ({ url }: { url: string }) => {
                 className="w-4 h-4 rounded-full object-cover"
               />
             )}
-            <span>
+            <span className="truncate">
               {url
                 .replace('https://', '')
                 .replace('http://', '')

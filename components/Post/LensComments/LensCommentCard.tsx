@@ -212,7 +212,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                       }`
                     : getStampFyiURL(comment?.profile?.ownedBy)
                 }
-                className="w-6 h-6 rounded-full object-cover"
+                className="w-7 h-7 rounded-full object-cover"
               />
               {comment?.profile?.name && (
                 <Link
