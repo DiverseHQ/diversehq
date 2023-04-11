@@ -21,6 +21,16 @@ interface LensCommunityState {
   reset: () => void
 }
 
+interface AuthCommunityState {
+  isCreator: Map<string, boolean>
+  isModerator: Map<string, boolean>
+  setIsCreator: (isCreator: Map<string, boolean>) => void
+  setIsModerator: (isModerator: Map<string, boolean>) => void
+  addIsCreator: (key: string, isCreator: boolean) => void
+  addIsModerator: (key: string, isModerator: boolean) => void
+  reset: () => void
+}
+
 // Map<> key is community name & value is community object
 export const useCommunityStore = create<CommunityState>((set) => ({
   communities: new Map(),
@@ -74,4 +84,34 @@ export const useLensCommunityStore = create<LensCommunityState>((set) => ({
     })
   },
   reset: () => set(() => ({ communities: new Map() }))
+}))
+
+// map of community and clearance for example
+// Map of community name to isCreator
+// Map of community name to isModerator or isCreator
+export const useAuthCommunityStore = create<AuthCommunityState>((set) => ({
+  isCreator: new Map(),
+  isModerator: new Map(),
+  setIsCreator: (isCreator) => set(() => ({ isCreator })),
+  setIsModerator: (isModerator) => set(() => ({ isModerator })),
+  addIsCreator: (key, isCreator) => {
+    set((state) => {
+      const isCreatorMap = new Map(state.isCreator)
+      isCreatorMap.set(key, isCreator)
+
+      const isModeratorMap = new Map(state.isModerator)
+      if (isCreator) {
+        isModeratorMap.set(key, isCreator)
+      }
+      return { isCreator: isCreatorMap, isModerator: isModeratorMap }
+    })
+  },
+  addIsModerator: (key, isModerator) => {
+    set((state) => {
+      const isModeratorMap = new Map(state.isModerator)
+      isModeratorMap.set(key, isModerator)
+      return { isModerator: isModeratorMap }
+    })
+  },
+  reset: () => set(() => ({ isCreator: new Map(), isModerator: new Map() }))
 }))
