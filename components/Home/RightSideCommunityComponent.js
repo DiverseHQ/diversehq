@@ -21,7 +21,7 @@ const RightSideCommunityComponent = ({ community }) => {
           src={community?.logoImageUrl}
           className="w-[40px] h-[40px] object-cover rounded-full"
         />
-        <span className="pl-3 pr-1">
+        <span className="pl-3 pr-1 truncate">
           {community?.isLensCommunity
             ? `l/${community?.name}`
             : community?.name}

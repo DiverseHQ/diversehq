@@ -37,7 +37,9 @@ const AudioPlayer: FC<Props> = ({
 
   return (
     <div className={`flex items-center ${className}`}>
-      <div className={`bg-[#9378d8] overflow-hidden rounded-xl`}>
+      <div
+        className={`bg-p-btn overflow-hidden mx-4 rounded-lg sm:rounded-xl `}
+      >
         <div className="flex flex-nowrap space-x-2">
           <CoverImage coverImage={coverImage} />
           <div className="flex w-full flex-col justify-between truncate py-1 md:px-3">

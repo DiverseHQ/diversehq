@@ -825,7 +825,8 @@ const LensPostCard = ({ post }: Props) => {
                     className={clsx(
                       router.pathname.startsWith('/p')
                         ? 'max-h-screen'
-                        : 'max-h-[450px]'
+                        : 'max-h-[450px]',
+                      'sm:w-[530px]'
                     )}
                   />
                 </div>

@@ -16,6 +16,8 @@ import Markup from '../Lexical/Markup'
 import MessageButton from '../Messages/MessageButton'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
+import CreatePostBar from '../Home/CreatePostBar'
+import { useCommunityStore } from '../../store/community'
 
 const LensCommunityPageRightSidebar = ({
   community
@@ -26,15 +28,31 @@ const LensCommunityPageRightSidebar = ({
   const { currentXP, level, thresholdXP } = getLevelAndThresholdXP(
     community?.Profile?.stats?.totalFollowers * xpPerMember || 0
   )
+  const selectCommunityForPost = useCommunityStore(
+    (state) => state.selectCommunityForPost
+  )
 
   const calculateBarPercentage = (currentXP: number, threshold: number) => {
     const percentage = Math.round((threshold * 100) / currentXP)
     return percentage
   }
   return (
-    <div className="relative hidden lg:flex flex-col w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar space-y-3">
-      {/* About Community Card */}
+    <div className="relative pt-14 hidden lg:flex flex-col w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar space-y-3">
+      {community?.Profile?.isFollowedByMe && (
+        <CreatePostBar
+          title="Create Post"
+          beforeOpen={() => {
+            selectCommunityForPost({
+              _id: community._id,
+              name: formatHandle(community?.handle),
+              logoImageUrl: getAvatar(community?.Profile),
+              isLensCommunity: true
+            })
+          }}
+        />
+      )}
 
+      {/* About Community Card */}
       <div className="flex flex-col bg-s-bg w-full rounded-[15px] border-[1px] border-s-border text-[#fff]">
         <div className="bg-[#9378d8] rounded-t-[15px] font-medium px-3 py-2">
           About Community
