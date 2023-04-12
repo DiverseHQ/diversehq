@@ -1,8 +1,8 @@
 import React from 'react'
 import { CgProfile } from 'react-icons/cg'
 import { FiSettings } from 'react-icons/fi'
-import { MdVerified } from 'react-icons/md'
 import Sidebar from './Sidebar'
+import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 
 const CommonSidebar = () => {
   return (
@@ -27,7 +27,7 @@ const CommonSidebar = () => {
           title: 'Verification',
           link: '/settings/verification',
           icon: (
-            <MdVerified className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+            <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
           ),
           disabled: true
         }

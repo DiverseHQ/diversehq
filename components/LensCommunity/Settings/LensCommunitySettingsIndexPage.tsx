@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { BsFileRuled } from 'react-icons/bs'
 import { HiOutlineDocumentReport } from 'react-icons/hi'
-import { MdGroups, MdVerified } from 'react-icons/md'
+import { MdGroups } from 'react-icons/md'
 import { RiUserSettingsLine } from 'react-icons/ri'
 import { VscOpenPreview } from 'react-icons/vsc'
 import { LensCommunity } from '../../../types/community'
@@ -10,6 +10,7 @@ import MobileTopNavbarWithTitle from '../../Common/MobileTopNavbarWithTitle'
 import MobileSidebar from '../../Settings/MobileSidebar'
 import LensCommunitySettingsPage from './LensCommunitySettingsPage'
 import { useDevice } from '../../Common/DeviceWrapper'
+import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 const LensCommunitySettingsIndexPage = ({
   community
@@ -64,7 +65,7 @@ const LensCommunitySettingsIndexPage = ({
               title: 'Verification',
               link: `/l/${name}/settings/verification`,
               icon: (
-                <MdVerified className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+                <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
               ),
               disabled: true
             }

@@ -29,7 +29,7 @@ const MessageTile: FC<MessageTileProps> = ({ message, currentProfile }) => {
     >
       <div className="flex flex-col space-y-0.5">
         <div
-          className={`px-4 py-2 max-w-[370px] rounded-2xl break-words ${
+          className={`px-4 py-2 max-w-[300px] sm:max-w-[370px] rounded-2xl break-words ${
             isSender
               ? ' bg-[#d5d6f7] dark:bg-[#19416b] rounded-br-sm'
               : 'bg-s-hover rounded-bl-sm'

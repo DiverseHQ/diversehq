@@ -49,7 +49,7 @@ const LensAllTopCommunityPublicationsColumn = ({ communityInfo }: Props) => {
         sortCriteria: PublicationSortCriteria.TopMirrored,
         timestamp: timestamp,
         noRandomize: true,
-        excludeProfileIds: communityInfo?.bannedUsers.map(
+        excludeProfileIds: communityInfo?.bannedUsers?.map(
           (user) => user.profileId
         )
       },

@@ -1,7 +1,7 @@
 import React from 'react'
 import MobileTopNavbarWithTitle from '../../Common/MobileTopNavbarWithTitle'
 import MobileSidebar from '../../Settings/MobileSidebar'
-import { MdAddModerator, MdGroups, MdVerified } from 'react-icons/md'
+import { MdAddModerator, MdGroups } from 'react-icons/md'
 import { RiUserSettingsLine } from 'react-icons/ri'
 import { BsFileRuled } from 'react-icons/bs'
 import CommunitySettingsPage from './CommunitySettingsPage'
@@ -10,6 +10,7 @@ import useIsCreator from '../hook/useIsCreator'
 import { CommunityType } from '../../../types/community'
 import { HiOutlineDocumentReport } from 'react-icons/hi'
 import { useDevice } from '../../Common/DeviceWrapper'
+import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 // import AuthCreatorOfCommunity from '../AuthCreatorOfCommunity'
 // import AuthCommunity from '../AuthCommunity'
 
@@ -76,7 +77,7 @@ const CommunitySettingsIndexPage = ({
                     title: 'Verification',
                     link: `/c/${name}/settings/verification`,
                     icon: (
-                      <MdVerified className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+                      <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
                     ),
                     disabled: true
                   }

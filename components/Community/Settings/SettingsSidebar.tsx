@@ -3,12 +3,13 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { BsFileRuled, BsPeopleFill } from 'react-icons/bs'
 import { HiOutlineDocumentReport } from 'react-icons/hi'
-import { MdAddModerator, MdGroups, MdVerified } from 'react-icons/md'
+import { MdAddModerator, MdGroups } from 'react-icons/md'
 import { RiUserSettingsLine } from 'react-icons/ri'
 import { CommunityType } from '../../../types/community'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import Sidebar from '../../Settings/Sidebar'
 import useIsCreator from '../hook/useIsCreator'
+import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 const SettingsSidebar = ({ community }: { community: CommunityType }) => {
   const router = useRouter()
@@ -78,7 +79,7 @@ const SettingsSidebar = ({ community }: { community: CommunityType }) => {
                   title: 'Verification',
                   link: `/c/${name}/settings/verification`,
                   icon: (
-                    <MdVerified className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
+                    <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
                   ),
                   disabled: true
                 }

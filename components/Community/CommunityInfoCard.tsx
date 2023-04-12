@@ -19,11 +19,11 @@ import { FiInfo, FiSettings } from 'react-icons/fi'
 import ExploreCommunityCard from './ExploreCommunityCard'
 import { BsPeopleFill } from 'react-icons/bs'
 import { useDevice } from '../Common/DeviceWrapper'
-import { MdVerified } from 'react-icons/md'
 // import { useCommunityStore } from '../../store/community'
 // import CreatePostPopup from '../Home/CreatePostPopup'
 // import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import useJoinCommunityButton from './hook/useJoinCommunityButton'
+import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 // import CreatePostBar from '../Home/CreatePostBar'
 
 interface Props {
@@ -141,14 +141,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                             c/{community.name}
                           </div>
                           {community?.verified && (
-                            <Tooltip
-                              title="Verified"
-                              arrow
-                              enterDelay={1000}
-                              leaveDelay={200}
-                            >
-                              <MdVerified className="text-p-text w-4 h-4" />
-                            </Tooltip>
+                            <VerifiedBadge className="w-4 h-4" />
                           )}
                         </div>
                         <div className="flex flex-row items-center pt-0.5">
@@ -163,14 +156,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                             c/{community.name}
                           </div>
                           {community?.verified && (
-                            <Tooltip
-                              title="Verified"
-                              arrow
-                              enterDelay={1000}
-                              leaveDelay={200}
-                            >
-                              <MdVerified className="text-p-text w-4 h-4 text-p-text" />
-                            </Tooltip>
+                            <VerifiedBadge className="w-4 h-4" />
                           )}
                         </div>
                         <div className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px]">

@@ -165,6 +165,7 @@ export const WalletProvider = ({ children }) => {
         allLensCommunitiesInDetail.filter((c) => c.isFollowedByMe)
 
       setAllLensCommunities(allLensCommunitiesInDetail)
+      console.log('_joinedLensCommunities', _joinedLensCommunities)
       setJoinedLensCommunties(_joinedLensCommunities)
     }, [user, lensProfile?.defaultProfile?.id])
 

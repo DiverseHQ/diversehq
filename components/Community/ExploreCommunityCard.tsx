@@ -14,8 +14,8 @@ import { FiSettings } from 'react-icons/fi'
 import { BsPeopleFill } from 'react-icons/bs'
 import { stringToLength } from '../../utils/utils'
 import { useDevice } from '../Common/DeviceWrapper'
-import { MdVerified } from 'react-icons/md'
 import useJoinCommunityButton from './hook/useJoinCommunityButton'
+import { VerifiedBadge } from '@giphy/react-components'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -105,11 +105,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
                   onClick={redirectToCommunityPage}
                 >
                   <div>{community.name}</div>
-                  {community?.verified && (
-                    <Tooltip title="Verified">
-                      <MdVerified className="text-p-text" />
-                    </Tooltip>
-                  )}
+                  {community?.verified && <VerifiedBadge className="w-4 h-4" />}
                 </div>
                 <div className=" mb-1 w-full">
                   {stringToLength(community.description, 130)}

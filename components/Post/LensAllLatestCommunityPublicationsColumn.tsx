@@ -66,7 +66,7 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }: Props) => {
         limit: LENS_POST_LIMIT,
         sortCriteria: PublicationSortCriteria.Latest,
         noRandomize: true,
-        excludeProfileIds: communityInfo?.bannedUsers.map(
+        excludeProfileIds: communityInfo?.bannedUsers?.map(
           (user) => user.profileId
         )
       },

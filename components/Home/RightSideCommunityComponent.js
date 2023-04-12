@@ -2,8 +2,7 @@ import Link from 'next/link'
 // import { useRouter } from 'next/router'
 import React from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import { MdVerified } from 'react-icons/md'
-import { Tooltip } from '@mui/material'
+import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 
 const RightSideCommunityComponent = ({ community }) => {
   // const router = useRouter()
@@ -26,11 +25,7 @@ const RightSideCommunityComponent = ({ community }) => {
             ? `l/${community?.name}`
             : community?.name}
         </span>
-        {community?.verified && (
-          <Tooltip title="Verified">
-            <MdVerified className="text-p-text" />
-          </Tooltip>
-        )}
+        {community?.verified && <VerifiedBadge className="w-4 h-4" />}
       </div>
     </Link>
   )
