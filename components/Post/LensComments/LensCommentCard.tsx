@@ -299,7 +299,9 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
             <div className="w-full">
               {/* content */}
               <div className="mt-1">
-                <Markup>{comment?.metadata?.content}</Markup>
+                <Markup className="break-words">
+                  {comment?.metadata?.content}
+                </Markup>
               </div>
               {/* attachemnt */}
               {comment?.metadata?.media && (

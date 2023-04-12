@@ -5,6 +5,7 @@ import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 // import OptionsWrapper from '../Common/OptionsWrapper'
 import GifSelector from './GifSelector'
 import { useDevice } from '../Common/DeviceWrapper'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 
 const Giphy = ({
   setGifAttachment
@@ -12,25 +13,20 @@ const Giphy = ({
   // eslint-disable-next-line
   setGifAttachment: (item: any) => void
 }) => {
-  const [showGiphyModal, setShowGiphyModal] = useState(false)
   const gifButtonRef = useRef(null)
   const { isMobile } = useDevice()
   const [showGiphyDrawer, setShowGiphyDrawer] = useState(false)
+  const { showModal } = usePopUpModal()
+
+  const showGiphModal = () => {
+    showModal({
+      component: <GifSelector setGifAttachment={setGifAttachment} />,
+      type: modalType.normal
+    })
+  }
+
   return (
     <>
-      {showGiphyModal && (
-        <GifSelector
-          setGifAttachment={setGifAttachment}
-          setShowModal={setShowGiphyModal}
-          bottom={
-            window.innerHeight -
-            gifButtonRef?.current?.getBoundingClientRect().top +
-            10 +
-            'px'
-          }
-          left={gifButtonRef?.current?.getBoundingClientRect().left + 'px'}
-        />
-      )}
       <BottomDrawerWrapper
         isDrawerOpen={showGiphyDrawer}
         setIsDrawerOpen={setShowGiphyDrawer}
@@ -39,15 +35,7 @@ const Giphy = ({
       >
         <GifSelector
           setGifAttachment={setGifAttachment}
-          setShowModal={setShowGiphyModal}
-          bottom={
-            window.innerHeight -
-            gifButtonRef?.current?.getBoundingClientRect().top +
-            10 +
-            'px'
-          }
           setShowGiphyDrawer={(value) => setShowGiphyDrawer(value)}
-          left={gifButtonRef?.current?.getBoundingClientRect().left + 'px'}
         />
       </BottomDrawerWrapper>
       <Tooltip
@@ -63,7 +51,7 @@ const Giphy = ({
             if (isMobile) {
               setShowGiphyDrawer(!showGiphyDrawer)
             } else {
-              setShowGiphyModal(!showGiphyModal)
+              showGiphModal()
             }
           }}
           aria-label="Choose GIFs"
