@@ -78,7 +78,11 @@ const index = ({ _community, name }: Props) => {
       {community && !loading && (
         <div>
           {isMobile && <LensCommunityMobileTopNav community={community} />}
-          <ProfileCard _lensProfile={community?.Profile} isLensCommunity />
+          <ProfileCard
+            _lensProfile={community?.Profile}
+            verified={community?.verified}
+            isLensCommunity
+          />
           <div className="w-full flex justify-center">
             <div className="w-full md:w-[650px]">
               {/* <LensPostsProfilePublicationsColumn

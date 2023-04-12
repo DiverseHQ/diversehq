@@ -26,17 +26,20 @@ import getCoverBanner from './lib/getCoverBanner'
 import ProfileLinksRow from './ProfileLinksRow'
 import useLensFollowButton from './useLensFollowButton'
 import { useDevice } from '../Common/DeviceWrapper'
+import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 
 interface Props {
   _profile?: UserType
   _lensProfile?: Profile
   isLensCommunity?: boolean
+  verified?: boolean
 }
 
 const ProfileCard = ({
   _profile,
   _lensProfile,
-  isLensCommunity = false
+  isLensCommunity = false,
+  verified = false
 }: Props) => {
   const [profile, setProfile] = useState(_profile)
   const [lensProfile, setLensProfile] = useState(_lensProfile)
@@ -103,10 +106,11 @@ const ProfileCard = ({
                     />
                   </div>
                   <div className="flex flex-col">
-                    <div className="px-2">
+                    <div className="start-row gap-x-1 px-2">
                       <div className="hover:underline cursor-pointer text-s-text">
                         l/{formatHandle(lensProfile?.handle)}
                       </div>
+                      {verified && <VerifiedBadge className="w-4 h-4" />}
                     </div>
                     <div className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px]">
                       <BsPeopleFill className="w-4 h-4 mr-1" />
@@ -461,6 +465,7 @@ const ProfileCard = ({
                         ? `/l/${formatHandle(lensProfile?.handle)}`
                         : `/u/${formatHandle(lensProfile?.handle)}`
                     }
+                    className="start-row gap-x-1"
                     passHref
                   >
                     <div className="hover:underline cursor-pointer text-s-text">
@@ -468,6 +473,7 @@ const ProfileCard = ({
                         ? `l/${formatHandle(lensProfile?.handle)}`
                         : `u/${formatHandle(lensProfile?.handle)}`}
                     </div>
+                    {verified && <VerifiedBadge className="w-4 h-4" />}
                   </Link>
                 </div>
                 <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-0.5 items-center text-[16px]">
