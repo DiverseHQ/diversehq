@@ -13,7 +13,6 @@ import {
   uploadToIpfsInfuraAndGetPath
 } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
-import { FiSend } from 'react-icons/fi'
 import getAvatar from '../../User/lib/getAvatar'
 import { useCommentStore } from '../../../store/comment'
 import ReplyMobileInfo from './ReplyMobileInfo'
@@ -295,8 +294,8 @@ const LensCreateComment = ({
         <>
           <div
             className={clsx(
-              'w-full bg-s-bg fixed z-30 border-t border-s-border bottom-0 left-0 right-0 flex flex-col items-center',
-              focused && 'pt-2'
+              'w-full bg-s-bg fixed z-30 bottom-0 left-0 right-0 flex flex-col items-center pt-3',
+              focused ? 'pb-2' : 'pb-3'
             )}
           >
             {!postInfo && currentReplyComment && focused && (
@@ -333,13 +332,22 @@ const LensCreateComment = ({
                 </div>
               </div>
             )}
-            <div className="flex flex-row items-center w-full rounded-xl">
-              <div className="flex-1  relative mr-2">
+            <div className="flex flex-row items-center w-full rounded-xl px-4">
+              {!focused && (
+                <ImageWithPulsingLoader
+                  // @ts-ignore
+                  src={getAvatar(lensProfile?.defaultProfile)}
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+                />
+              )}
+              <div className="flex-1 relative">
                 <textarea
                   ref={commentRef}
-                  className={`flex flex-row items-center w-full no-scrollbar outline-none text-base sm:text-[18px] py-2 px-4 rounded-xl bg-s-bg font-medium ${
-                    loading ? 'text-s-text' : 'text-p-text'
-                  }`}
+                  className={clsx(
+                    'flex px-2 flex-row items-center w-full no-scrollbar outline-none text-base sm:text-[18px] py-2 border-p-border border-[1px] rounded-xl bg-s-bg font-medium',
+                    loading ? 'text-s-text' : 'text-p-text',
+                    focused ? 'mx-0' : 'mx-2'
+                  )}
                   placeholder="What do you think?"
                   onInput={(e) => {
                     // @ts-ignore
@@ -351,30 +359,29 @@ const LensCreateComment = ({
                     // @ts-ignore
                     e.target.style.height = `${e.target.scrollHeight}px`
                   }}
-                  disabled={loading}
+                  disabled={loading || !canCommnet}
                   rows={1}
                   style={{ resize: 'none' }}
                   onFocus={() => setFocused(true)}
                   onBlur={() => setFocused(false)}
                 />
               </div>
-              <div className="self-end p-2 flex flex-row items-center space-x-1">
-                <Giphy setGifAttachment={setGifAttachment} />
-                {!loading && (
-                  <FiSend
-                    onClick={createComment}
-                    className="w-5 h-5 sm:w-6 sm:h-6 text-p-text cursor-pointer"
-                  />
-                )}
-                {loading && (
-                  <img
-                    src="/loading.svg"
-                    alt="loading"
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  />
-                )}
-              </div>
             </div>
+            {focused && (
+              <div className="flex flex-row items-center justify-between w-full px-4">
+                {canCommnet && <Giphy setGifAttachment={setGifAttachment} />}
+                <button
+                  disabled={loading || !canCommnet}
+                  onClick={createComment}
+                  className={clsx(
+                    'text-p-btn-text font-bold px-3 py-0.5 rounded-full text-sm mr-2',
+                    canCommnet ? 'bg-p-btn' : 'bg-p-btn-disabled'
+                  )}
+                >
+                  {loading ? 'Sending...' : canCommnet ? 'Send' : `Can't reply`}
+                </button>
+              </div>
+            )}
             {/* </div> */}
           </div>
         </>
