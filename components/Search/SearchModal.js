@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
 import formatHandle from '../User/lib/formatHandle'
 import CommunitiesSearchModal from './CommunitiesSearchModal'
+import LensProfilesSearchModal from './LensProfilesSearchModal'
 
 const SearchModal = () => {
   const inputRef = useRef()
@@ -46,14 +47,14 @@ const SearchModal = () => {
             router.push(`/l/${formatHandle(community.handle)}`)
           }}
         /> */}
-        {/* <LensProfilesSearchModal
+        <LensProfilesSearchModal
           searchTerm={searchTerm}
           inputRef={inputRef}
           setSearchTerm={setSearchTerm}
           onProfileSelect={(profile) => {
             router.push(`/u/${formatHandle(profile?.handle)}`)
           }}
-        /> */}
+        />
       </div>
       {searchTerm !== '' && (
         <div

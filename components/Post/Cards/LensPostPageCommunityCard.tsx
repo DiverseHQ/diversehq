@@ -6,6 +6,7 @@ import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
 import Markup from '../../Lexical/Markup'
 import { getCommunityInfoUsingId } from '../../../api/community'
 import useJoinCommunityButton from '../../Community/hook/useJoinCommunityButton'
+import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 const LensPostPageCommunityCard = ({
   communityInfo: _community
@@ -81,8 +82,11 @@ const LensPostPageCommunityCard = ({
               }
             }}
           >
-            <div className="font-bold text-p-text text-lg  hover:underline cursor-pointer truncate">
-              {stringToLength(communityInfo?.name, 19)}
+            <div className="start-row gap-x-1">
+              <div className="font-bold text-p-text text-lg  hover:underline cursor-pointer truncate">
+                {stringToLength(communityInfo?.name, 19)}
+              </div>
+              {communityInfo?.verified && <VerifiedBadge className="w-4 h-4" />}
             </div>
           </div>
         </div>

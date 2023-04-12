@@ -12,17 +12,20 @@ import getAvatar from '../../User/lib/getAvatar'
 import getCoverBanner from '../../User/lib/getCoverBanner'
 import ProfileLinksRow from '../../User/ProfileLinksRow'
 import useLensFollowButton from '../../User/useLensFollowButton'
+import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 interface Props {
   _profile?: Profile
   profileHandle?: string
   isLensCommunity?: boolean
+  verified?: boolean
 }
 
 const LensPageProfileCard = ({
   _profile,
   profileHandle,
-  isLensCommunity
+  isLensCommunity,
+  verified = false
 }: Props) => {
   const router = useRouter()
   const [profile, setProfile] = useState<Profile>(_profile)
@@ -99,7 +102,7 @@ const LensPageProfileCard = ({
                   {stringToLength(profile?.name, 20)}
                 </div>
                 <div
-                  className="font-medium text text-s-text  hover:underline cursor-pointer truncate mb-3"
+                  className="font-medium start-row gap-x-1 text text-s-text  hover:underline cursor-pointer truncate mb-3"
                   onClick={() => {
                     if (isLensCommunity) {
                       router.push(`/l/${formatHandle(profile?.handle)}`)
@@ -108,9 +111,12 @@ const LensPageProfileCard = ({
                     }
                   }}
                 >
-                  {isLensCommunity
-                    ? `l/${formatHandle(profile?.handle)}`
-                    : `u/${formatHandle(profile?.handle)}`}
+                  <div>
+                    {isLensCommunity
+                      ? `l/${formatHandle(profile?.handle)}`
+                      : `u/${formatHandle(profile?.handle)}`}
+                  </div>
+                  {verified && <VerifiedBadge className="w-4 h-4" />}
                 </div>
               </div>
             </div>

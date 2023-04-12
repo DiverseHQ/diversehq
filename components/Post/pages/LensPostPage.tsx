@@ -94,6 +94,7 @@ const LensPostPage = ({ id, post }: Props) => {
                     <LensPageProfileCard
                       isLensCommunity={!!postInfo?.isLensCommunityPost}
                       _profile={postInfo?.profile}
+                      verified={postInfo?.communityInfo?.verified}
                     />
                   ) : (
                     <LensPostPageCommunityCard
@@ -102,7 +103,7 @@ const LensPostPage = ({ id, post }: Props) => {
                   )}
                 </>
               )}
-              <div className="px-5 mt-6 font-medium">Creator</div>
+              <div className="px-5 mt-6 font-medium">Related Profiles</div>
               {postInfo?.isLensCommunityPost ? (
                 <LensPageProfileCard
                   profileHandle={

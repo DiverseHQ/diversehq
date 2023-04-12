@@ -29,7 +29,7 @@ const PostPageMentionsColumn = ({
     <>
       {handles && handles?.length > 0 && (
         <>
-          <div className="px-5 mt-6 font-medium">Mentions</div>
+          {/* <div className="px-5 mt-6 font-medium">Mentions</div> */}
           {handles.map((handle) => {
             return <LensPageProfileCard profileHandle={handle} key={handle} />
           })}
