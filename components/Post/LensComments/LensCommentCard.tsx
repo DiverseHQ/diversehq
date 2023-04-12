@@ -393,7 +393,11 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                   <LensCreateComment
                     postId={comment.id}
                     addComment={addComment}
-                    canCommnet={comment?.canComment?.result}
+                    canCommnet={
+                      comment?.canComment?.result === false
+                        ? comment?.canComment?.result
+                        : true
+                    }
                   />
                 )}
 

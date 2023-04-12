@@ -53,6 +53,7 @@ const LensCreateComment = ({
   const { notifyError } = useNotify()
 
   const commentRef = useRef()
+  const createCommentComposerRef = useRef()
   const [loading, setLoading] = useState(false)
   const [gifAttachment, setGifAttachment] = useState(null)
 
@@ -78,7 +79,20 @@ const LensCreateComment = ({
       createdAt: new Date().toISOString(),
       metadata: {
         // @ts-ignore
-        content: commentRef.current.value
+        content: commentRef.current.value,
+        mainContentFocus: gifAttachment
+          ? PublicationMainFocus.Image
+          : PublicationMainFocus.TextOnly,
+        media: gifAttachment
+          ? [
+              {
+                original: {
+                  url: gifAttachment?.images?.original.url,
+                  mimeType: 'image/gif'
+                }
+              }
+            ]
+          : null
       },
       stats: {
         totalUpvotes: 1,
@@ -210,6 +224,24 @@ const LensCreateComment = ({
     if (currentReplyComment) commentRef?.current?.focus()
   }, [currentReplyComment])
 
+  const handleClickOutside = (e) => {
+    // @ts-ignore
+    if (createCommentComposerRef?.current?.contains(e.target)) {
+      // inside click
+      return
+    }
+    setFocused(false)
+    // outside click
+    // setCurrentReplyComment(null)
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside)
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [])
+
   if (!hasProfile || !isSignedIn || !lensProfile?.defaultProfile?.id) {
     return <></>
   }
@@ -291,7 +323,13 @@ const LensCreateComment = ({
           </div>
         </>
       ) : (
-        <>
+        <div
+          id="create-comment-card"
+          onClick={() => {
+            if (!focused) setFocused(true)
+          }}
+          ref={createCommentComposerRef}
+        >
           <div
             className={clsx(
               'w-full bg-s-bg fixed z-30 bottom-0 left-0 right-0 flex flex-col items-center pt-3',
@@ -317,11 +355,11 @@ const LensCreateComment = ({
               />
             )}
             {gifAttachment && isMobile && (
-              <div className="flex items-center mt-2 mb-2">
+              <div className="flex items-center mx-4 mb-2">
                 <div className="relative w-fit">
                   <img
                     src={gifAttachment.images.original.url}
-                    className="max-h-80 rounded-2xl object-cover"
+                    className="max-h-80 rounded-xl object-cover"
                     alt={gifAttachment.title}
                   />
 
@@ -351,10 +389,6 @@ const LensCreateComment = ({
                   placeholder="What do you think?"
                   onInput={(e) => {
                     // @ts-ignore
-                    if (e.target.value.trim() === '') {
-                      setFocused(false)
-                    }
-                    // @ts-ignore
                     e.target.style.height = 'auto'
                     // @ts-ignore
                     e.target.style.height = `${e.target.scrollHeight}px`
@@ -362,19 +396,21 @@ const LensCreateComment = ({
                   disabled={loading || !canCommnet}
                   rows={1}
                   style={{ resize: 'none' }}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setFocused(false)}
                 />
               </div>
             </div>
             {focused && (
-              <div className="flex flex-row items-center justify-between w-full px-4">
-                {canCommnet && <Giphy setGifAttachment={setGifAttachment} />}
+              <div className="flex flex-row items-center justify-between w-full px-5 pt-2 pb-1">
+                {canCommnet ? (
+                  <Giphy setGifAttachment={setGifAttachment} />
+                ) : (
+                  <div />
+                )}
                 <button
                   disabled={loading || !canCommnet}
                   onClick={createComment}
                   className={clsx(
-                    'text-p-btn-text font-bold px-3 py-0.5 rounded-full text-sm mr-2',
+                    'text-p-btn-text font-bold px-3 py-0.5 rounded-full text-sm',
                     canCommnet ? 'bg-p-btn' : 'bg-p-btn-disabled'
                   )}
                 >
@@ -384,7 +420,7 @@ const LensCreateComment = ({
             )}
             {/* </div> */}
           </div>
-        </>
+        </div>
       )}
     </div>
   )
