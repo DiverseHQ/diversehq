@@ -20,7 +20,7 @@ const profile = ({
   const [lensProfile, setLensProfile] = useState<Profile | null>(_lensProfile)
   const profiles = useProfileStore((state) => state.profiles)
   const addProfile = useProfileStore((state) => state.addProfile)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const fetchAndSetLensProfile = async () => {
     try {
@@ -63,6 +63,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = params
 
   const isClient = Boolean(req.cookies.isClient)
+  // const isClient = false
 
   if (isClient) {
     return {

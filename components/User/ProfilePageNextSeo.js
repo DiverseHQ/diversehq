@@ -7,9 +7,7 @@ const ProfilePageNextSeo = ({ lensProfile }) => {
     <>
       {lensProfile && (
         <NextSeo
-          title={`${lensProfile.name} ${
-            lensProfile?.handle ? ' | ' + lensProfile?.handle : ''
-          }`}
+          title={`${lensProfile.name} ${lensProfile?.handle}`}
           description={lensProfile.bio}
           openGraph={{
             title: `${lensProfile.name} | ${lensProfile?.handle}`,
