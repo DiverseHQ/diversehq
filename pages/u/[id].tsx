@@ -4,7 +4,7 @@ import ProfilePage from '../../components/User/Page/ProfilePage'
 import ProfilePageNextSeo from '../../components/User/ProfilePageNextSeo'
 import { Profile } from '../../graphql/generated'
 import getLensProfileInfo from '../../lib/profile/get-profile-info'
-import { apiMode } from '../../utils/config'
+import { HANDLE_SUFFIX } from '../../utils/config'
 import { useState } from 'react'
 import { useProfileStore } from '../../store/profile'
 import React from 'react'
@@ -50,7 +50,7 @@ const profile = ({
 
   return (
     <>
-      {lensProfile && <ProfilePageNextSeo lensProfile={lensProfile} />}
+      <ProfilePageNextSeo lensProfile={_lensProfile || lensProfile} />
       {!lensProfile && !loading && <ProfileNotFound />}
       {lensProfile && !loading && <ProfilePage _lensProfile={lensProfile} />}
       {loading && <MobileLoader />}
@@ -68,19 +68,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         _lensProfile: null,
-        handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
+        handle: `${id}${HANDLE_SUFFIX}`
       }
     }
   }
 
   const lensProfileRes = await getLensProfileInfo({
-    handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
+    handle: `${id}${HANDLE_SUFFIX}`
   })
 
   return {
     props: {
       _lensProfile: lensProfileRes.profile,
-      handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
+      handle: `${id}${HANDLE_SUFFIX}`
     }
   }
 }
