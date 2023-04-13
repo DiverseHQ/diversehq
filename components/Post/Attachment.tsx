@@ -44,25 +44,13 @@ const Attachment: FC<Props> = ({
     (state) => state.removeAttachments
   )
   const getCoverUrl = () => {
-    console.log(
-      'coverUrl',
-      imageProxy(getIPFSLink(publication?.metadata?.cover?.original?.url))
-    )
     return imageProxy(getIPFSLink(publication?.metadata?.cover?.original?.url))
   }
-
-  const slicedAttachments = isNew
-    ? attachments?.slice(0, 4)
-    : attachments?.some((e: any) =>
-        SUPPORTED_VIDEO_TYPE.includes(e?.original?.mimeType)
-      )
-    ? attachments?.slice(0, 1)
-    : attachments?.slice(0, 4)
 
   const [currentMedia, setCurrentMedia] = useState(0)
 
   const handleNextClick = () => {
-    if (currentMedia === slicedAttachments.length - 1) {
+    if (currentMedia === attachments.length - 1) {
       setCurrentMedia(0)
     } else {
       setCurrentMedia(currentMedia + 1)
@@ -71,7 +59,7 @@ const Attachment: FC<Props> = ({
 
   const handlePrevClick = () => {
     if (currentMedia === 0) {
-      setCurrentMedia(slicedAttachments.length - 1)
+      setCurrentMedia(attachments.length - 1)
     } else {
       setCurrentMedia(currentMedia - 1)
     }
@@ -79,7 +67,7 @@ const Attachment: FC<Props> = ({
 
   // const { isMobile } = useDevice()
 
-  if (slicedAttachments?.length === 0) {
+  if (attachments?.length === 0) {
     if (getURLsFromText(publication?.metadata?.content)?.length > 0) {
       return (
         <ReactEmbedo url={getURLsFromText(publication?.metadata?.content)[0]} />
@@ -102,7 +90,7 @@ const Attachment: FC<Props> = ({
         </div>
       ) : ( */}
       <div className="relative" onClick={(e) => e.stopPropagation()}>
-        {slicedAttachments.length > 1 && (
+        {attachments.length > 1 && (
           <>
             {currentMedia !== 0 && (
               <button
@@ -138,8 +126,8 @@ const Attachment: FC<Props> = ({
           </>
         )}
 
-        {slicedAttachments.length > 0 &&
-          slicedAttachments.map(
+        {attachments.length > 0 &&
+          attachments.map(
             (attachment: AttachmentType & MediaSet, index: number) => {
               const type = isNew
                 ? attachment?.type

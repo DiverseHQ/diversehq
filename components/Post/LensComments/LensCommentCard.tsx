@@ -28,8 +28,9 @@ import { Tooltip } from '@mui/material'
 import { useCommentStore } from '../../../store/comment'
 import CenteredDot from '../../Common/UI/CenteredDot'
 import formatHandle from '../../User/lib/formatHandle'
-import AttachmentMedia from '../Attachment'
+// import AttachmentMedia from '../Attachment'
 import Markup from '../../Lexical/Markup'
+import Attachment from '../Attachment'
 
 const LensCommentCard = ({ comment }: { comment: Comment }) => {
   const [comments, setComments] = useState([])
@@ -305,11 +306,15 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
               </div>
               {/* attachemnt */}
               {comment?.metadata?.media && (
-                <AttachmentMedia
-                  // @ts-ignore
-                  url={comment?.metadata?.media[0]?.original?.url}
-                  // @ts-ignore
-                  type={comment?.metadata?.media[0]?.type}
+                // <AttachmentMedia
+                //   // @ts-ignore
+                //   url={comment?.metadata?.media[0]?.original?.url}
+                //   // @ts-ignore
+                //   type={comment?.metadata?.media[0]?.type}
+                //   publication={comment}
+                // />
+                <Attachment
+                  attachments={comment?.metadata?.media}
                   publication={comment}
                 />
               )}
