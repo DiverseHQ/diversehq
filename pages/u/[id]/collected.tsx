@@ -50,7 +50,7 @@ const collected = ({
   }, [profiles, handle])
   return (
     <>
-      {lensProfile && <ProfilePageNextSeo lensProfile={lensProfile} />}
+      <ProfilePageNextSeo lensProfile={lensProfile} />
       {!lensProfile && !loading && <ProfileNotFound />}
       {lensProfile && !loading && <ProfilePage _lensProfile={lensProfile} />}
       {loading && <MobileLoader />}

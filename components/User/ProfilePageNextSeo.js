@@ -5,7 +5,7 @@ import getAvatar from './lib/getAvatar'
 const ProfilePageNextSeo = ({ lensProfile }) => {
   return (
     <>
-      {!lensProfile && (
+      {lensProfile && (
         <NextSeo
           title={`${lensProfile.name} ${
             lensProfile?.handle ? ' | ' + lensProfile?.handle : ''
