@@ -44,10 +44,11 @@ const Attachment: FC<Props> = ({
     (state) => state.removeAttachments
   )
   const getCoverUrl = () => {
-    return (
-      publication?.metadata?.cover?.original?.url ||
-      publication?.metadata?.image
+    console.log(
+      'coverUrl',
+      imageProxy(getIPFSLink(publication?.metadata?.cover?.original?.url))
     )
+    return imageProxy(getIPFSLink(publication?.metadata?.cover?.original?.url))
   }
 
   const slicedAttachments = isNew
