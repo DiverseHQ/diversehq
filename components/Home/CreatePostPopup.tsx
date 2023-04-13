@@ -164,11 +164,6 @@ const CreatePostPopup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
-    if (!selectedCommunity?._id) {
-      notifyError('Please select a community')
-      setLoading(false)
-      return
-    }
     if (!title || title.trim() === '') {
       notifyError('Please enter a title')
       setLoading(false)
@@ -189,7 +184,6 @@ const CreatePostPopup = () => {
 
   const handleCreateLensPost = async () => {
     let contentWarning = null
-    const communityId = selectedCommunity?._id
 
     // textNftImage url if collectmodule
 
@@ -263,14 +257,17 @@ const CreatePostPopup = () => {
       media: attachmentsInput,
       animation_url: getAnimationUrl(),
       attributes,
-      tags: [communityId],
+      tags: selectedCommunity?._id ? [selectedCommunity?._id] : [],
       appId: appId
     }
     const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
 
     if (selectedCommunity?.isLensCommunity) {
       try {
-        const res = await submitPostForReview(communityId, `ipfs://${ipfsHash}`)
+        const res = await submitPostForReview(
+          selectedCommunity?._id,
+          `ipfs://${ipfsHash}`
+        )
         if (res.status === 200) {
           notifySuccess('Post submitted for review')
           hideModal()
@@ -298,11 +295,13 @@ const CreatePostPopup = () => {
 
     const postForIndexing = {
       tempId: metadataId,
-      communityInfo: {
-        _id: communityId,
-        name: selectedCommunity?.name,
-        image: selectedCommunity.logoImageUrl
-      },
+      communityInfo: selectedCommunity?._id
+        ? {
+            _id: selectedCommunity?._id,
+            name: selectedCommunity?.name,
+            image: selectedCommunity.logoImageUrl
+          }
+        : null,
       createdAt: new Date().toISOString(),
       hasCollectedByMe: false,
       hidden: false,
@@ -522,9 +521,7 @@ const CreatePostPopup = () => {
         onClick={handleSubmit}
         label="POST"
         loading={loading}
-        isDisabled={
-          !selectedCommunity?._id || title.length === 0 || isUploading
-        }
+        isDisabled={title.length === 0 || isUploading}
         hideTopBar={showCollectSettings}
         closePopup={closePopUp}
       >

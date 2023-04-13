@@ -128,7 +128,8 @@ const Attachment: FC<Props> = ({
             <div
               className={clsx(
                 'absolute top-[10px] z-20 bg-p-bg py-0.5 px-2 rounded-full',
-                isNew ? 'left-[10px]' : 'right-[10px]'
+                // isNew ? 'left-[10px]' : 'right-[10px]',
+                'left-[10px]'
               )}
             >
               {currentMedia + 1}/{attachments.length}

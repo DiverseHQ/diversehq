@@ -5,7 +5,7 @@ import ReactTimeAgo from 'react-time-ago'
 
 import { PublicationMainFocus } from '../../graphql/generated'
 import ReactEmbedo from './embed/ReactEmbedo'
-import { getURLsFromText } from '../../utils/utils'
+import { getURLsFromText, stringToLength } from '../../utils/utils'
 import { BsCollection } from 'react-icons/bs'
 import Link from 'next/link'
 import Attachment from './Attachment'
@@ -14,9 +14,12 @@ import formatHandle from '../User/lib/formatHandle'
 import Markup from '../Lexical/Markup'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { useDevice } from '../Common/DeviceWrapper'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import getAvatar from '../User/lib/getAvatar'
 
 const IndexingPostCard = ({ postInfo }) => {
   const { isMobile } = useDevice()
+  const { data } = useLensUserContext()
 
   let content = postInfo?.metadata?.content
 
@@ -42,21 +45,41 @@ const IndexingPostCard = ({ postInfo }) => {
             {!isMobile && (
               <>
                 <div className="flex flex-row w-full items-center">
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
-                    <ImageWithPulsingLoader
-                      src={postInfo?.communityInfo?.image}
-                      className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
-                    />
-                  </Link>
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`}>
-                    <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                      {postInfo?.communityInfo?.name}
-                    </div>
-                  </Link>
+                  {postInfo?.communityInfo ? (
+                    <>
+                      <Link
+                        href={`/c/${postInfo?.communityInfo?.name}`}
+                        passHref
+                      >
+                        <ImageWithPulsingLoader
+                          src={postInfo?.communityInfo?.image}
+                          className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                        />
+                      </Link>
+                      <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                        <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
+                          {postInfo?.communityInfo?.name}
+                        </div>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <ImageWithPulsingLoader
+                        // @ts-ignore
+                        src={getAvatar(data?.defaultProfile)}
+                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                      />
+                      <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
+                        {stringToLength(data?.defaultProfile?.name, 20)}
+                      </div>
+                    </>
+                  )}
 
                   <Link href={`/u/${formatHandle(postInfo?.profile?.handle)}`}>
                     <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
-                      <p className="pl-1.5 font-normal"> posted by</p>
+                      {postInfo?.communityInfo && (
+                        <p className="pl-1.5 font-normal"> posted by</p>
+                      )}
                       <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
                         u/{formatHandle(postInfo?.profile?.handle)}
                       </div>
@@ -80,25 +103,41 @@ const IndexingPostCard = ({ postInfo }) => {
             {isMobile && (
               <>
                 <div className="flex flex-row w-full items-center">
-                  <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
+                  {postInfo?.communityInfo ? (
+                    <Link href={`/c/${postInfo?.communityInfo?.name}`} passHref>
+                      <ImageWithPulsingLoader
+                        src={postInfo?.communityInfo?.image}
+                        className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
+                      />
+                    </Link>
+                  ) : (
                     <ImageWithPulsingLoader
-                      src={postInfo?.communityInfo?.image}
+                      // @ts-ignore
+                      src={getAvatar(data?.defaultProfile)}
                       className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover"
                     />
-                  </Link>
+                  )}
                   <div className="flex flex-col justify-center items-start text-p-text">
-                    <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                    {postInfo?.communityInfo ? (
+                      <Link href={`/c/${postInfo?.communityInfo?.name}`}>
+                        <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
+                          {postInfo?.communityInfo?.name}
+                        </div>
+                      </Link>
+                    ) : (
                       <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
-                        {postInfo?.communityInfo?.name}
+                        {stringToLength(data?.defaultProfile?.name, 20)}
                       </div>
-                    </Link>
+                    )}
                     <div className="flex flex-row items-center justify-start">
                       <Link
                         href={`/u/${formatHandle(postInfo?.profile?.handle)}`}
                         passHref
                       >
                         <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
-                          <p className="pl-1.5 font-normal"> posted by</p>
+                          {postInfo?.communityInfo && (
+                            <p className="pl-1.5 font-normal"> posted by</p>
+                          )}
                           <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
                             u/{formatHandle(postInfo?.profile?.handle)}
                           </div>
