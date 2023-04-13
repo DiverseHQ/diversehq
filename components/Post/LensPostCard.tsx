@@ -822,6 +822,7 @@ const LensPostCard = ({ post }: Props) => {
                 >
                   <Attachment
                     publication={postInfo}
+                    attachments={postInfo?.metadata?.media}
                     className={clsx(
                       router.pathname.startsWith('/p')
                         ? 'max-h-screen'

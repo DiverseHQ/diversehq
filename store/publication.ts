@@ -1,6 +1,14 @@
 import { create } from 'zustand'
 import { postWithCommunityInfoType } from '../types/post'
 
+export interface AttachmentType {
+  id?: string
+  type: string
+  altTag?: string
+  item?: string
+  previewItem?: string
+}
+
 /* eslint-disable */
 
 // publications is a map of publicationId to publication
@@ -13,6 +21,26 @@ interface PublicationState {
   addPublications: (
     publications: Map<string, postWithCommunityInfoType>
   ) => void
+  attachments: AttachmentType[]
+  setAttachments: (attachments: AttachmentType[]) => void
+  addAttachments: (attachments: AttachmentType[]) => void
+  updateAttachments: (attachments: AttachmentType[]) => void
+  removeAttachments: (ids: string[]) => void
+  audioPublication: {
+    title: string
+    author: string
+    cover: string
+    coverMimeType: string
+  }
+  setAudioPublication: (audioPublication: {
+    title: string
+    author: string
+    cover: string
+    coverMimeType: string
+  }) => void
+  isUploading: boolean
+  resetAttachments: () => void
+  setIsUploading: (isUploading: boolean) => void
   reset: () => void
 }
 
@@ -35,5 +63,51 @@ export const usePublicationStore = create<PublicationState>((set) => ({
       return { publications: newPublications }
     })
   },
+  attachments: [],
+  setAttachments: (attachments) => set(() => ({ attachments })),
+  addAttachments: (attachments) => {
+    set((state) => {
+      const newAttachments = [...state.attachments, ...attachments]
+      return { attachments: newAttachments }
+    })
+  },
+  updateAttachments: (attachments) => {
+    set((state) => {
+      const newAttachments = state.attachments.map((attachment) => {
+        const newAttachment = attachments.find(
+          (newAttachment) => newAttachment.id === attachment.id
+        )
+        return newAttachment || attachment
+      })
+      return { attachments: newAttachments }
+    })
+  },
+  removeAttachments: (ids) => {
+    set((state) => {
+      const newAttachments = state.attachments.filter(
+        (attachment) => !ids.includes(attachment.id)
+      )
+      return { attachments: newAttachments }
+    })
+  },
+  audioPublication: {
+    title: '',
+    author: '',
+    cover: '',
+    coverMimeType: ''
+  },
+  setAudioPublication: (audioPublication) => set(() => ({ audioPublication })),
+  isUploading: false,
+  resetAttachments: () =>
+    set(() => ({
+      attachments: [],
+      audioPublication: {
+        title: '',
+        author: '',
+        cover: '',
+        coverMimeType: ''
+      }
+    })),
+  setIsUploading: (isUploading) => set(() => ({ isUploading })),
   reset: () => set(() => ({ publications: new Map() }))
 }))

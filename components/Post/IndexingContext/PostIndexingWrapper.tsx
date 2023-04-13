@@ -8,6 +8,7 @@ import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-inde
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { postIdFromIndexedResult } from '../../../utils/utils'
 import { putAddLensPublication } from '../../../api/lensPublication'
+import { usePublicationStore } from '../../../store/publication'
 
 /* eslint-disable */
 
@@ -27,6 +28,9 @@ const PostIndexingWrapper = ({ children }) => {
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { data: lensProfile } = useLensUserContext()
   const router = useRouter()
+  const resetAttachments = usePublicationStore(
+    (state) => state.resetAttachments
+  )
 
   const onSuccessIndex = async (result, post) => {
     try {
@@ -53,6 +57,7 @@ const PostIndexingWrapper = ({ children }) => {
   }
 
   const addPost = async (tx: { txHash: string } | { txId: string }, post) => {
+    resetAttachments()
     router.push('/')
     // show for ui
     setPosts([post, ...posts])

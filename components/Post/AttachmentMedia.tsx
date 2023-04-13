@@ -17,13 +17,18 @@ interface Props {
   url: string
   publication: Publication
   className?: string
+  coverUrl?: string
+  isNew?: boolean
+  hideDelete?: boolean
 }
 
-const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
-  const getCoverUrl = imageProxy(
-    publication?.metadata?.cover?.original.url || publication?.metadata?.image
-  )
-
+const AttachmentMedia: FC<Props> = ({
+  type,
+  url,
+  coverUrl,
+  publication,
+  className
+}) => {
   return (
     <>
       {type === 'image/svg+xml' ? (
@@ -38,7 +43,7 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
             controls
             muted
             autoPlay={false}
-            poster={getCoverUrl || null}
+            poster={coverUrl || null}
           />
         ) : (
           <div
@@ -55,7 +60,6 @@ const AttachmentMedia: FC<Props> = ({ type, url, publication, className }) => {
         <AudioPlayer
           src={url}
           className={`${className}`}
-          coverImage={getCoverUrl || null}
           publication={publication}
         />
       ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (

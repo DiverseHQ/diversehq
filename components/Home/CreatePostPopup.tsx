@@ -5,24 +5,24 @@ import { useNotify } from '../Common/NotifyContext'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 // import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
-import { AiOutlineCamera, AiOutlineClose, AiOutlineDown } from 'react-icons/ai'
+import { AiOutlineDown } from 'react-icons/ai'
 import { BsCollection } from 'react-icons/bs'
 import {
-  deleteFirebaseStorageFile,
   // uploadFileToFirebaseAndGetUrl,
-  uploadFileToIpfsInfuraAndGetPath,
   uploadToIpfsInfuraAndGetPath
   // uploadFileToIpfs
 } from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
 // import ToggleSwitch from '../Post/ToggleSwitch'
-import { CircularProgress, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import {
+  MetadataAttributeInput,
   PublicationContentWarning,
   PublicationMainFocus,
+  PublicationMetadataDisplayTypes,
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
@@ -34,7 +34,12 @@ import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
-import { appId, supportedMimeTypes } from '../../utils/config'
+import {
+  SUPPORTED_AUDIO_TYPE,
+  SUPPORTED_IMAGE_TYPE,
+  SUPPORTED_VIDEO_TYPE,
+  appId
+} from '../../utils/config'
 import { IoIosArrowBack } from 'react-icons/io'
 import PublicationEditor from '../Lexical/PublicationEditor'
 import Giphy from '../Post/Giphy'
@@ -45,18 +50,21 @@ import getAvatar from '../User/lib/getAvatar'
 import { submitPostForReview } from '../../api/reviewLensCommunityPost'
 import { useDevice } from '../Common/DeviceWrapper'
 import { useCommunityStore } from '../../store/community'
+import { uuid } from 'uuidv4'
+import { AttachmentType, usePublicationStore } from '../../store/publication'
+import useUploadAttachments from '../Post/Create/useUploadAttachments'
+import Attachment from '../Post/Attachment'
+import AttachmentRow from '../Post/Create/AttachmentRow'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
   const [title, setTitle] = useState('')
-  const [file, setFile] = useState(null)
   const [content, setContent] = useState('')
   const { user, joinedLensCommunities, LensCommunity } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [loadingJoinedCommunities, setLoadingJoinedCommunities] =
     useState(false)
-  const [imageValue, setImageValue] = useState(null)
   const [showCommunityOptions, setShowCommunityOptions] = useState(false)
   const [communityOptionsCoord, setCommunityOptionsCoord] = useState({
     left: '0px',
@@ -69,13 +77,12 @@ const CreatePostPopup = () => {
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
-  const [imageUpload, setImageUpload] = useState(false)
   const { notifyError, notifyInfo, notifySuccess } = useNotify()
   // const router = useRouter()
   const { hideModal } = usePopUpModal()
   const { isMobile } = useDevice()
   const [flair, setFlair] = useState(null)
-  const [firebaseUrl, setFirebaseUrl] = useState(null)
+  const { handleUploadAttachments } = useUploadAttachments()
 
   const { mutateAsync: createPostViaDispatcher } =
     useCreatePostViaDispatcherMutation()
@@ -94,12 +101,53 @@ const CreatePostPopup = () => {
   )
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [flairDrawerOpen, setFlairDrawerOpen] = useState(false)
-  const [gifAttachment, setGifAttachment] = useState(null)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
 
-  useEffect(() => {
-    setImageValue(gifAttachment ? gifAttachment?.images?.original?.url : null)
-  }, [gifAttachment])
+  const attachments = usePublicationStore((state) => state.attachments)
+  const addAttachments = usePublicationStore((state) => state.addAttachments)
+  const audioPublication = usePublicationStore(
+    (state) => state.audioPublication
+  )
+  const isUploading = usePublicationStore((state) => state.isUploading)
+
+  const isAudioPublication = SUPPORTED_AUDIO_TYPE.includes(attachments[0]?.type)
+
+  const getMainContentFocus = () => {
+    if (attachments.length > 0) {
+      if (isAudioPublication) {
+        return PublicationMainFocus.Audio
+      } else if (SUPPORTED_IMAGE_TYPE.includes(attachments[0]?.type)) {
+        return PublicationMainFocus.Image
+      } else if (SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)) {
+        return PublicationMainFocus.Video
+      } else {
+        return PublicationMainFocus.TextOnly
+      }
+    } else {
+      return PublicationMainFocus.TextOnly
+    }
+  }
+
+  const getAnimationUrl = () => {
+    if (
+      attachments.length > 0 &&
+      (isAudioPublication ||
+        SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type))
+    ) {
+      return attachments[0]?.item
+    }
+    return null
+  }
+
+  const getAttachmentImage = () => {
+    return isAudioPublication ? audioPublication.cover : attachments[0]?.item
+  }
+
+  const getAttachmentImageMimeType = () => {
+    return isAudioPublication
+      ? audioPublication.coverMimeType
+      : attachments[0]?.type
+  }
 
   const storeMostPostedCommunities = () => {
     window.localStorage.setItem(
@@ -126,8 +174,6 @@ const CreatePostPopup = () => {
       setLoading(false)
       return
     }
-    // if (isLensPost) {
-    // console.log('collectSettings', collectSettings)
     if (
       collectSettings?.feeCollectModule &&
       Number(collectSettings?.feeCollectModule?.amount?.value) < 0.001
@@ -138,81 +184,40 @@ const CreatePostPopup = () => {
     }
     // }
     storeMostPostedCommunities()
-    if (gifAttachment) {
-      handleCreateLensPost(
-        title,
-        selectedCommunity?._id,
-        'image/gif',
-        imageValue
-      )
-      return
-    }
-    if (file) {
-      if (!supportedMimeTypes.includes(file.type)) {
-        notifyError('File type not supported')
-        setLoading(false)
-        return
-      }
-      // file size should be less than 8mb
-      if (file.size > 8000000) {
-        notifyError('File size should be less than 8mb')
-        setLoading(false)
-        return
-      }
-
-      // if (isLensPost) {
-      // eslint-disable-next-line
-
-      // const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
-      // const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
-      // const ipfsPath = `ipfs://${ipfsHash}`
-      if (!firebaseUrl) {
-        return
-      }
-      handleCreateLensPost(
-        title,
-        selectedCommunity?._id,
-        file.type,
-        firebaseUrl
-      )
-      return
-      // }
-
-      // const uploadedFile = await uploadFileToFirebaseAndGetUrl(file, address)
-      // handleCreatePost(
-      //   title,
-      //   file.type,
-      //   uploadedFile.uploadedToUrl,
-      //   uploadedFile.path
-      // )
-    } else {
-      // if (isLensPost) {
-      console.log('lenspost with media')
-      handleCreateLensPost(title, selectedCommunity?._id, 'text', null)
-      return
-      // }
-      // handleCreatePost(title, 'text')
-    }
+    await handleCreateLensPost()
   }
 
-  const handleCreateLensPost = async (
-    title: string,
-    communityId: string,
-    mimeType: string,
-    url: string
-  ) => {
-    let mainContentFocus = null
+  const handleCreateLensPost = async () => {
     let contentWarning = null
-    //todo handle other file types and link content
-    if (mimeType.startsWith('image')) {
-      mainContentFocus = PublicationMainFocus.Image
-    } else if (mimeType.startsWith('video')) {
-      mainContentFocus = PublicationMainFocus.Video
-    } else if (mimeType.startsWith('audio')) {
-      mainContentFocus = PublicationMainFocus.Audio
-    } else {
-      mainContentFocus = PublicationMainFocus.TextOnly
+    const communityId = selectedCommunity?._id
+
+    // textNftImage url if collectmodule
+
+    const attributes: MetadataAttributeInput[] = [
+      {
+        traitType: 'type',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: getMainContentFocus()?.toLowerCase()
+      }
+    ]
+
+    if (isAudioPublication) {
+      attributes.push({
+        traitType: 'author',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: audioPublication.author
+      })
     }
+
+    const attachmentsInput: AttachmentType[] = attachments.map(
+      (attachment) => ({
+        type: attachment.type,
+        altTag: attachment.altTag,
+        item: attachment.item!
+      })
+    )
+
+    //todo handle other file types and link content
 
     if (flair === 'SENSITIVE') {
       contentWarning = PublicationContentWarning.Sensitive
@@ -228,7 +233,7 @@ const CreatePostPopup = () => {
     const metadataId = uuidv4()
     const metadata = {
       version: '2.0.0',
-      mainContentFocus: mainContentFocus,
+      mainContentFocus: getMainContentFocus(),
       metadata_id: metadataId,
       contentWarning: contentWarning,
       description: 'Created with DiverseHQ',
@@ -249,21 +254,15 @@ const CreatePostPopup = () => {
             : ``
         }`,
       external_url: 'https://diversehq.xyz',
-      image: mimeType.startsWith('image') ? url : null,
-      imageMimeType: mimeType.startsWith('image') ? mimeType : null,
+      image: attachmentsInput.length > 0 ? getAttachmentImage() : null,
+      imageMimeType:
+        attachmentsInput.length > 0
+          ? getAttachmentImageMimeType()
+          : 'image/svg+xml',
       name: title,
-      media:
-        mimeType === 'text'
-          ? null
-          : [
-              {
-                item: url,
-                type: mimeType
-              }
-            ],
-      animation_url:
-        mimeType !== 'text' && !mimeType.startsWith('image') ? url : null,
-      attributes: [],
+      media: attachmentsInput,
+      animation_url: getAnimationUrl(),
+      attributes,
       tags: [communityId],
       appId: appId
     }
@@ -310,7 +309,12 @@ const CreatePostPopup = () => {
       isGated: false,
       metadata: {
         ...metadata,
-        media: [{ original: { url: url, mimeType: mimeType } }]
+        media: attachments.map((attachment) => ({
+          original: {
+            url: attachment.item,
+            mimeType: attachment.type
+          }
+        }))
       },
       profile: {
         _id: lensProfile?.defaultProfile?.id,
@@ -381,33 +385,15 @@ const CreatePostPopup = () => {
     }
   }, [error])
 
-  // const handleCreatePost = async (title, mimeType, url, path) => {
-  //   const postData = {
-  //     communityId,
-  //     title,
-  //     content
-  //   }
-  //   //todo handle audio file types
-  //   const type = mimeType.split('/')[0]
-  //   if (mimeType !== 'text') {
-  //     postData[type === 'image' ? 'postImageUrl' : 'postVideoUrl'] = url
-  //     postData.filePath = path
-  //   }
-
-  //   try {
-  //     const resp = await postCreatePost(postData)
-  //     const respData = await resp.json()
-  //     if (resp.status !== 200) {
-  //       notifyError(respData.msg)
-  //       return
-  //     }
-  //     closeModal()
-  //     router.push(`/p/${respData._id}`)
-  //     notifySuccess('Post created successfully')
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+  const setGifAttachment = (gif) => {
+    const attachment = {
+      id: uuid(),
+      item: gif.images.original.url,
+      type: 'image/gif',
+      altTag: gif.title
+    }
+    addAttachments([attachment])
+  }
 
   const handleSelect = (community) => {
     setShowCommunityOptions(false)
@@ -434,9 +420,6 @@ const CreatePostPopup = () => {
         isLensCommunity: true
       })
     }
-
-    console.log('myLensCommunity', myLensCommunity)
-    console.log('joinedLensCommunities', joinedLensCommunities)
     setJoinedCommunities([
       ...mostPostedCommunities,
       ...joinedLensCommunities
@@ -512,64 +495,6 @@ const CreatePostPopup = () => {
       </div>
     )
   }
-  const onImageChange = (event) => {
-    const filePicked = event.target.files[0]
-    if (!filePicked) return
-    setFile(filePicked)
-    setImageValue(URL.createObjectURL(filePicked))
-  }
-  const removeImage = async () => {
-    if (loading) return
-    setFile(null)
-    setImageValue(null)
-    setGifAttachment(null)
-    if (firebaseUrl) {
-      await deleteFirebaseStorageFile(firebaseUrl)
-      setFirebaseUrl(null)
-    }
-  }
-
-  const showAddedFile = () => {
-    // check if the file is image or video and show it
-    if (!file && !gifAttachment) return null
-    let type = null
-    if (file) type = file.type.split('/')[0]
-    if (gifAttachment) type = 'image'
-    return (
-      <div className="flex items-center justify-center">
-        <div className="relative w-fit">
-          {type === 'image' && (
-            <img
-              src={imageValue}
-              className="max-h-80 rounded-2xl object-cover"
-              alt="Your amazing post"
-            />
-          )}
-
-          {type === 'video' && (
-            <video
-              src={imageValue}
-              className="max-h-80 rounded-2xl object-cover"
-              controls
-              muted
-            ></video>
-          )}
-
-          {imageUpload ? (
-            <CircularProgress
-              size="30px"
-              className="primary absolute z-10 top-2 right-2"
-            />
-          ) : (
-            <AiOutlineClose
-              onClick={removeImage}
-              className="text-s-text w-7 h-7 bg-p-bg rounded-full p-1 absolute z-10 top-2 right-2"
-            />
-          )}
-        </div>
-      </div>
-    )
-  }
 
   const showJoinedCommunities = (e) => {
     if (loading) return
@@ -584,61 +509,10 @@ const CreatePostPopup = () => {
     })
   }
 
-  const upLoadFile = async () => {
-    try {
-      setImageUpload(true)
-      if (file) {
-        if (!supportedMimeTypes.includes(file.type)) {
-          notifyError('File type not supported')
-          setImageUpload(false)
-          return
-        }
-        // file size should be less than 50mb
-        if (file.size > 50000000) {
-          notifyError('File size should be less than 50mb')
-          setImageUpload(false)
-          return
-        }
-
-        // if (isLensPost) {
-        // file should be less than 2mb
-        // const fileObj = await uploadFileToFirebaseAndGetUrl(file, address)
-        const ipfsHash = await uploadFileToIpfsInfuraAndGetPath(file)
-        const ipfsPath = `ipfs://${ipfsHash}`
-        // setFirebaseUrl(fileObj.uploadedToUrl)
-        setFirebaseUrl(ipfsPath)
-        setImageUpload(false)
-      }
-    } catch (e) {
-      console.log(e)
-      setImageUpload(false)
-    }
-  }
-
   const closePopUp = async () => {
     if (loading) return
-    try {
-      if (firebaseUrl && !imageUpload && !result) {
-        // todo delete the file from ipfs infura
-        // await deleteFirebaseStorageFile(firebaseUrl)
-        // console.log('File Deleted and the Popup has been closed')
-        hideModal()
-        return
-      } else if (!loading && !imageUpload && !result) {
-        console.log('Popup has been closed, No files detected')
-        hideModal()
-      }
-    } catch (e) {
-      console.log(e)
-    }
+    hideModal()
   }
-
-  useEffect(() => {
-    if (!file) return
-    if (file && !firebaseUrl) upLoadFile()
-  }, [file])
-
-  // console.log('gifAttachment', gifAttachment)
 
   const PopUpModal = () => {
     return (
@@ -649,7 +523,7 @@ const CreatePostPopup = () => {
         label="POST"
         loading={loading}
         isDisabled={
-          !selectedCommunity?._id || title.length === 0 || imageUpload
+          !selectedCommunity?._id || title.length === 0 || isUploading
         }
         hideTopBar={showCollectSettings}
         closePopup={closePopUp}
@@ -765,12 +639,11 @@ const CreatePostPopup = () => {
               onPaste={(files) => {
                 const file = files[0]
                 if (!file) return
-                setFile(file)
-                setImageValue(URL.createObjectURL(file))
+                handleUploadAttachments([file])
               }}
             />
 
-            <div className="text-base leading-relaxed m-4">
+            {/* <div className="text-base leading-relaxed m-4">
               {file || gifAttachment ? (
                 showAddedFile()
               ) : (
@@ -783,8 +656,14 @@ const CreatePostPopup = () => {
                   </div>
                 </label>
               )}
+            </div> */}
+            <div className="px-5">
+              <Attachment attachments={attachments} isNew />
             </div>
-            <div className="ml-6 flex gap-2 items-center">
+            <div className="ml-6 mt-2 flex gap-2 items-center">
+              <AttachmentRow />
+
+              <Giphy setGifAttachment={(gif) => setGifAttachment(gif)} />
               {!selectedCommunity?.isLensCommunity && (
                 <Tooltip
                   placement="bottom"
@@ -809,16 +688,7 @@ const CreatePostPopup = () => {
                   </button>
                 </Tooltip>
               )}
-              <Giphy setGifAttachment={setGifAttachment} />
             </div>
-            <input
-              type="file"
-              id="upload-file"
-              accept="image/*,video/*"
-              hidden
-              onChange={onImageChange}
-              disabled={loading}
-            />
           </div>
         )}
         {showCollectSettings && !isMobile ? (

@@ -10,6 +10,7 @@ import { create } from 'ipfs-http-client'
 import { PublicationMetadataV2Input } from '../graphql/generated'
 import { BigNumber, utils } from 'ethers'
 import CryptoJS from 'crypto-js'
+import { AttachmentType } from '../store/publication'
 
 export const uploadFileToIpfs = async (file: File): Promise<string> => {
   // eslint-disable-next-line
@@ -103,6 +104,28 @@ export const uploadToIpfsInfuraAndGetPath = async (data: any) => {
 export const uploadFileToIpfsInfuraAndGetPath = async (file: File) => {
   const result = await client.add(file)
   return result.path
+}
+
+export const uploadFilesToIpfsAndGetAttachments = async (
+  data: any
+): Promise<AttachmentType[]> => {
+  try {
+    const files = Array.from(data)
+    const attachments = await Promise.all(
+      files.map(async (file: File) => {
+        const result = await client.add(file)
+        return {
+          item: `ipfs://${result.path}`,
+          type: file.type || 'image/jpeg',
+          altTag: ''
+        }
+      })
+    )
+    return attachments
+  } catch (error) {
+    console.log(error)
+    return []
+  }
 }
 
 export const hasWhiteSpace = (s: string): boolean => {

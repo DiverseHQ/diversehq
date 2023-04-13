@@ -173,7 +173,7 @@ const IndexingPostCard = ({ postInfo }) => {
                 </div>
                 {postInfo?.metadata?.media?.length > 0 && (
                   <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                    <Attachment publication={postInfo} />
+                    <Attachment attachments={postInfo?.metadata?.media} />
                   </div>
                 )}
                 {postInfo?.metadata?.mainContentFocus !==
