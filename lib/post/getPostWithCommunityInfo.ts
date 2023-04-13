@@ -40,7 +40,6 @@ export default async function getPostWithCommunityInfo(
       post.communityInfo = communityInfo
       return post
     } else {
-      post.communityInfo = getCommunityInfoFromAppId(post?.appId)
       return post
     }
   } catch (error) {

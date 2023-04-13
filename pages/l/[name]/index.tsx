@@ -74,7 +74,7 @@ const index = ({ _community, name }: Props) => {
 
   return (
     <>
-      <LensCommunitySeo community={community} />
+      <LensCommunitySeo community={_community || community} />
       {community && !loading && (
         <div>
           {isMobile && <LensCommunityMobileTopNav community={community} />}
@@ -106,6 +106,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { name } = params
 
   const isClient = Boolean(req.cookies.isClient)
+  // const isClient = false
 
   if (isClient) {
     return {
@@ -130,6 +131,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
       }
     }
+
+    console.log('_community', {
+      ...lensCommunity,
+      Profile: communityLensProfile.profile
+    })
     return {
       props: {
         _community: {

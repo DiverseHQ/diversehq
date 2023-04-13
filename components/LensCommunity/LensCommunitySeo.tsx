@@ -8,10 +8,10 @@ import getAvatar from '../User/lib/getAvatar'
 const LensCommunitySeo = ({ community }: { community: LensCommunity }) => {
   return (
     <NextSeo
-      title={formatHandle(community?.Profile?.handle)}
+      title={`l/${formatHandle(community?.Profile?.handle)}`}
       description={community?.Profile?.bio}
       openGraph={{
-        title: formatHandle(community?.Profile?.handle),
+        title: `l/${formatHandle(community?.Profile?.handle)}`,
         description: community?.Profile?.bio,
         url: `${appLink}/l/${formatHandle(community?.Profile?.handle)}`,
         images: [
