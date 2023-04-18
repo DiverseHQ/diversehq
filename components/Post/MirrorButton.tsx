@@ -58,16 +58,20 @@ const MirrorButton: FC<Props> = ({ postInfo }) => {
           }
         })
 
-        console.log(
-          'createMirrorViaDispatcher',
-          createMirrorViaDispatcher.__typename
-        )
-        if (createMirrorViaDispatcher.__typename === 'RelayerResult') {
-          setIsSuccessful(true)
-        } else if (
-          !createMirrorViaDispatcher.__typename ||
-          createMirrorViaDispatcher.__typename === 'RelayError'
+        console.log('createMirrorViaDispatcher', createMirrorViaDispatcher)
+        // @ts-ignore
+        if (
+          // @ts-ignore
+
+          createMirrorViaDispatcher?.txId ||
+          // @ts-ignore
+
+          createMirrorViaDispatcher?.txHash
         ) {
+          setIsSuccessful(true)
+          // @ts-ignore
+        } else if (createMirrorViaDispatcher?.reason) {
+          // @ts-ignore
           notifyError(createMirrorViaDispatcher.reason)
         }
         setLoading(false)
