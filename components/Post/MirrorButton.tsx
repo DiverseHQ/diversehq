@@ -3,8 +3,8 @@ import React, { FC, useEffect, useState } from 'react'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import {
   Publication,
-  useCreateMirrorTypedDataMutation
-  // useCreateMirrorViaDispatcherMutation
+  useCreateMirrorTypedDataMutation,
+  useCreateMirrorViaDispatcherMutation
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
@@ -21,8 +21,8 @@ const MirrorButton: FC<Props> = ({ postInfo }) => {
   const { notifyError, notifySuccess } = useNotify()
   const { result, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
-  // const { mutateAsync: mirrorPostViaDispatcher } =
-  //   useCreateMirrorViaDispatcherMutation()
+  const { mutateAsync: mirrorPostViaDispatcher } =
+    useCreateMirrorViaDispatcherMutation()
   const [mirrorCount, setMirrorCount] = useState(
     postInfo?.stats?.totalAmountOfMirrors
       ? postInfo?.stats?.totalAmountOfMirrors
@@ -44,57 +44,57 @@ const MirrorButton: FC<Props> = ({ postInfo }) => {
         setLoading(false)
         return
       }
-      // if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
-      //   console.log('using dispatcher')
-      //   console.log('postInfo.id', postInfo.id)
+      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+        console.log('using dispatcher')
+        console.log('postInfo.id', postInfo.id)
 
-      //   const { createMirrorViaDispatcher } = await mirrorPostViaDispatcher({
-      //     request: {
-      //       profileId: lensProfile?.defaultProfile?.id,
-      //       publicationId: postInfo.id,
-      //       referenceModule: {
-      //         followerOnlyReferenceModule: false
-      //       }
-      //     }
-      //   })
-
-      //   console.log(
-      //     'createMirrorViaDispatcher',
-      //     createMirrorViaDispatcher.__typename
-      //   )
-      //   if (createMirrorViaDispatcher.__typename === 'RelayerResult') {
-      //     setIsSuccessful(true)
-      //   } else if (
-      //     !createMirrorViaDispatcher.__typename ||
-      //     createMirrorViaDispatcher.__typename === 'RelayError'
-      //   ) {
-      //     notifyError(createMirrorViaDispatcher.reason)
-      //   }
-      //   setLoading(false)
-      //   return
-      // } else {
-      const postTypedResult = await mirrorPost({
-        request: {
-          profileId: lensProfile?.defaultProfile?.id,
-          publicationId: postInfo.id,
-          referenceModule: {
-            followerOnlyReferenceModule: false
+        const { createMirrorViaDispatcher } = await mirrorPostViaDispatcher({
+          request: {
+            profileId: lensProfile?.defaultProfile?.id,
+            publicationId: postInfo.id,
+            referenceModule: {
+              followerOnlyReferenceModule: false
+            }
           }
+        })
+
+        console.log(
+          'createMirrorViaDispatcher',
+          createMirrorViaDispatcher.__typename
+        )
+        if (createMirrorViaDispatcher.__typename === 'RelayerResult') {
+          setIsSuccessful(true)
+        } else if (
+          !createMirrorViaDispatcher.__typename ||
+          createMirrorViaDispatcher.__typename === 'RelayError'
+        ) {
+          notifyError(createMirrorViaDispatcher.reason)
         }
-      })
-      if (!postTypedResult) {
-        notifyError('Something went wrong')
         setLoading(false)
         return
-      }
-      await signTypedDataAndBroadcast(
-        postTypedResult.createMirrorTypedData.typedData,
-        {
-          id: postTypedResult.createMirrorTypedData.id,
-          type: 'Mirror'
+      } else {
+        const postTypedResult = await mirrorPost({
+          request: {
+            profileId: lensProfile?.defaultProfile?.id,
+            publicationId: postInfo.id,
+            referenceModule: {
+              followerOnlyReferenceModule: false
+            }
+          }
+        })
+        if (!postTypedResult) {
+          notifyError('Something went wrong')
+          setLoading(false)
+          return
         }
-      )
-      // }
+        await signTypedDataAndBroadcast(
+          postTypedResult.createMirrorTypedData.typedData,
+          {
+            id: postTypedResult.createMirrorTypedData.id,
+            type: 'Mirror'
+          }
+        )
+      }
     } catch (err) {
       console.log(err)
       notifyError('Something went wrong')

@@ -28,7 +28,7 @@
   }
 }
 
-@layer uitilities {
+@layer utilities {
   @keyframes enteranimation {
     0% {
       transform: translateY(-80%);
