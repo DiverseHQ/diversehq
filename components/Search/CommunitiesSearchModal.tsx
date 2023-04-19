@@ -70,7 +70,7 @@ const CommunitiesSearchModal = ({
 
   return (
     <>
-      {communities.length > 0 && (
+      {communities.length + lensCommunities.length > 0 && (
         <div>
           <div className="m-2 p-2 text-base font-bold">Communities</div>
           {lensCommunities.map((community) => (
