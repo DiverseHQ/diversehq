@@ -46,7 +46,7 @@ const MobileBottomNav = () => {
   }, [pathname])
 
   return (
-    <div className="fixed bottom-0 w-full flex flex-row justify-evenly items-center bg-s-bg border-t-[0.5px] border-s-border">
+    <div className="fixed z-50 bottom-0 w-full flex flex-row justify-evenly items-center bg-s-bg border-t-[0.5px] border-s-border">
       <div
         className="p-4 active:bg-[#6668FF] rounded-full active:bg-opacity-20 cursor-pointer"
         onClick={() => {
