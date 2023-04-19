@@ -34,7 +34,6 @@ import { IoIosMoon, IoMdSettings } from 'react-icons/io'
 import { HiSun } from 'react-icons/hi'
 import formatHandle from '../User/lib/formatHandle'
 import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
-import { specialProfileIds } from '../../utils/profileIds'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 import Link from 'next/link'
 import { BsFillPersonFill } from 'react-icons/bs'
@@ -229,21 +228,20 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                 <MdCreateNewFolder className="w-7 h-7 object-contain" />
                 <span className="text-p-text text-xl">Create Community</span>
               </button>{' '}
-              {specialProfileIds.includes(myLensProfile?.defaultProfile?.id) &&
-                !LensCommunity && (
-                  <button
-                    className="flex flex-row items-center   py-4 gap-4"
-                    onClick={() => {
-                      createLensCommunity()
-                      setIsOpenSidebar(false)
-                    }}
-                  >
-                    <MdCreateNewFolder className="w-7 h-7 object-contain" />
-                    <span className="text-p-text text-xl">
-                      Create Lens Community
-                    </span>
-                  </button>
-                )}
+              {!LensCommunity && (
+                <button
+                  className="flex flex-row items-center   py-4 gap-4"
+                  onClick={() => {
+                    createLensCommunity()
+                    setIsOpenSidebar(false)
+                  }}
+                >
+                  <MdCreateNewFolder className="w-7 h-7 object-contain" />
+                  <span className="text-p-text text-xl">
+                    Create Lens Community
+                  </span>
+                </button>
+              )}
               <button
                 className="flex flex-row items-center   py-4 gap-4"
                 onClick={() => {

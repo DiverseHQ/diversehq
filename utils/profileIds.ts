@@ -1,13 +1,13 @@
-export const specialProfileIds = [
-  '0x0161ba',
-  '0x01abf2',
-  '0xd478',
-  // '0x5ec3', // testnet deven
-  '0x0150b2',
-  '0x011990', // youmemeworld
-  '0x012b8f', // letjoellive
-  '0xfd79' // videogame
-]
+// export const specialProfileIds = [
+//   '0x0161ba',
+//   '0x01abf2',
+//   '0xd478',
+//   // '0x5ec3', // testnet deven
+//   '0x0150b2',
+//   '0x011990', // youmemeworld
+//   '0x012b8f', // letjoellive
+//   '0xfd79' // videogame
+// ]
 
 export const whitelistedAddresses = [
   '0xc2b96df49da778bfca0cc6c4416e40e2d17f72ff',

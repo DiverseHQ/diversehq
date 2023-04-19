@@ -16,7 +16,7 @@ import { HiSun } from 'react-icons/hi'
 import formatHandle from '../User/lib/formatHandle'
 import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
 import { useTheme } from '../Common/ThemeProvider'
-import { specialProfileIds } from '../../utils/profileIds'
+// import { specialProfileIds } from '../../utils/profileIds'
 
 const ClickOption = () => {
   const router = useRouter()
@@ -95,9 +95,7 @@ const ClickOption = () => {
         {
           label: 'Create Lens Community',
           onClick: createLensCommunity,
-          hidden:
-            !!LensCommunity ||
-            !specialProfileIds.includes(lensProfile?.defaultProfile?.id),
+          hidden: !!LensCommunity,
           icon: () => (
             <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
           )

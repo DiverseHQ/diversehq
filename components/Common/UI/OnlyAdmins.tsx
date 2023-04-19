@@ -1,13 +1,13 @@
 import React from 'react'
-import { useLensUserContext } from '../../../lib/LensUserContext'
+// import { useLensUserContext } from '../../../lib/LensUserContext'
 import LensLoginButton from '../LensLoginButton'
-import { specialProfileIds } from '../../../utils/profileIds'
+// import { specialProfileIds } from '../../../utils/profileIds'
 
-const OnlyAdmins = ({ children }) => {
-  const { data: lensProfile } = useLensUserContext()
-  if (specialProfileIds.includes(lensProfile?.defaultProfile?.id)) {
-    return <>{children}</>
-  }
+const OnlyAdmins = () => {
+  // const { data: lensProfile } = useLensUserContext()
+  // if (specialProfileIds.includes(lensProfile?.defaultProfile?.id)) {
+  //   return <>{children}</>
+  // }
 
   return (
     <div className="flex flex-col space-y-10 justify-center items-center w-full h-[100vh] bg-p-bg text-p-text">
