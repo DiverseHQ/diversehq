@@ -420,7 +420,7 @@ const CreatePostPopup = () => {
       })
     }
     setJoinedCommunities([
-      ...mostPostedCommunities,
+      // ...mostPostedCommunities,
       ...joinedLensCommunities
         .map((community) => ({
           _id: community._id,
@@ -429,18 +429,19 @@ const CreatePostPopup = () => {
           logoImageUrl: getAvatar(community),
           isLensCommunity: true
         }))
-        .filter(
-          (community) =>
-            !mostPostedCommunities.some((c) => c?._id === community?._id)
-        )
+        // .filter(
+        //   (community) =>
+        //     !mostPostedCommunities.some((c) => c?._id === community?._id)
+        // )
         .filter(
           (community) => !myLensCommunity.some((c) => c?._id === community?._id)
         ),
       // removing the communities in the mostPostedCommunities from the joinedCommunities using communityId
-      ...response.filter(
-        (community) =>
-          !mostPostedCommunities.some((c) => c?._id === community?._id)
-      )
+      ...response
+      // .filter(
+      //   (community) =>
+      //     !mostPostedCommunities.some((c) => c?._id === community?._id)
+      // )
     ])
     setLoadingJoinedCommunities(false)
   }
