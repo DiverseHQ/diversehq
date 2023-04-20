@@ -317,7 +317,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                   <Attachment
                     attachments={comment?.metadata?.media}
                     publication={comment}
-                    className={'max-h-[450px]'}
+                    className={'max-h-[400px]'}
                   />
                 </div>
               )}
