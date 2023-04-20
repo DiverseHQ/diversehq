@@ -313,10 +313,13 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                 //   type={comment?.metadata?.media[0]?.type}
                 //   publication={comment}
                 // />
-                <Attachment
-                  attachments={comment?.metadata?.media}
-                  publication={comment}
-                />
+                <div className="p-3">
+                  <Attachment
+                    attachments={comment?.metadata?.media}
+                    publication={comment}
+                    className={'max-h-[450px]'}
+                  />
+                </div>
               )}
               {/* last row */}
               <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
