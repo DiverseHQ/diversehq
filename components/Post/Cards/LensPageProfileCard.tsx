@@ -10,7 +10,7 @@ import MessageButton from '../../Messages/MessageButton'
 import formatHandle from '../../User/lib/formatHandle'
 import getAvatar from '../../User/lib/getAvatar'
 import getCoverBanner from '../../User/lib/getCoverBanner'
-import ProfileLinksRow from '../../User/ProfileLinksRow'
+// import ProfileLinksRow from '../../User/ProfileLinksRow'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
@@ -130,11 +130,11 @@ const LensPageProfileCard = ({
         <p className="text-p-text text-sm leading-5 -mt-4 pb-2">
           <Markup>{stringToLength(profile?.bio, 200)}</Markup>
         </p>
-        {!isLensCommunity && (
+        {/* {!isLensCommunity && (
           <div className="pb-2">
             <ProfileLinksRow profile={profile} />
           </div>
-        )}
+        )} */}
         {!isLensCommunity ? (
           <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
             <span>
