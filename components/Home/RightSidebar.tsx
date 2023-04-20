@@ -81,7 +81,8 @@ const RightSidebar = () => {
   // sort alllenscommunities by followers
   const sortedLensCommunities = allLensCommunities
     ?.sort((a, b) => b.stats.totalFollowers - a.stats.totalFollowers)
-    .slice(0, 6)
+    ?.filter((c) => !c.isFollowedByMe)
+    .slice(0, 3)
 
   return (
     <div
