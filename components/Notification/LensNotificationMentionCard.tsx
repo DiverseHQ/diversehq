@@ -58,7 +58,12 @@ const LensNotificationMentionCard = ({ notification, isRead }: Props) => {
       )}
       Icon={() => <GoMention />}
       isRead={isRead}
-      cardLink={`/p/${notification?.mentionPublication?.id}`}
+      cardLink={
+        notification?.notificationId?.startsWith('mention-comment-')
+          ? // @ts-ignore
+            `/p/${notification?.mentionPublication?.mainPost?.id}`
+          : `/p/${notification?.mentionPublication?.id}`
+      }
     />
   )
 }

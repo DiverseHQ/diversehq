@@ -26,7 +26,8 @@ const LensRepliedComments = ({
       },
       reactionRequest: {
         profileId: lensProfile?.defaultProfile?.id ?? null
-      }
+      },
+      profileId: lensProfile?.defaultProfile?.id ?? null
     },
     {
       enabled: !!commentId && !disableFetch
