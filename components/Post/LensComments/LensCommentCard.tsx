@@ -305,7 +305,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                 </Markup>
               </div>
               {/* attachemnt */}
-              {comment?.metadata?.media && (
+              {comment?.metadata?.media?.length > 0 && (
                 // <AttachmentMedia
                 //   // @ts-ignore
                 //   url={comment?.metadata?.media[0]?.original?.url}
