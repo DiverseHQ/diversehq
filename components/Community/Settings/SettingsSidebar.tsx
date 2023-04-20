@@ -9,7 +9,7 @@ import { CommunityType } from '../../../types/community'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import Sidebar from '../../Settings/Sidebar'
 import useIsCreator from '../hook/useIsCreator'
-import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
+// import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 const SettingsSidebar = ({ community }: { community: CommunityType }) => {
   const router = useRouter()
@@ -74,15 +74,15 @@ const SettingsSidebar = ({ community }: { community: CommunityType }) => {
                   icon: (
                     <BsFileRuled className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
                   )
-                },
-                {
-                  title: 'Verification',
-                  link: `/c/${name}/settings/verification`,
-                  icon: (
-                    <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
-                  ),
-                  disabled: true
                 }
+                // {
+                //   title: 'Verification',
+                //   link: `/c/${name}/settings/verification`,
+                //   icon: (
+                //     <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
+                //   ),
+                //   disabled: true
+                // }
               ]
             : [
                 {

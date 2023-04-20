@@ -10,7 +10,7 @@ import MobileTopNavbarWithTitle from '../../Common/MobileTopNavbarWithTitle'
 import MobileSidebar from '../../Settings/MobileSidebar'
 import LensCommunitySettingsPage from './LensCommunitySettingsPage'
 import { useDevice } from '../../Common/DeviceWrapper'
-import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
+// import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 const LensCommunitySettingsIndexPage = ({
   community
@@ -60,15 +60,15 @@ const LensCommunitySettingsIndexPage = ({
               icon: (
                 <BsFileRuled className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
               )
-            },
-            {
-              title: 'Verification',
-              link: `/l/${name}/settings/verification`,
-              icon: (
-                <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
-              ),
-              disabled: true
             }
+            // {
+            //   title: 'Verification',
+            //   link: `/l/${name}/settings/verification`,
+            //   icon: (
+            //     <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
+            //   ),
+            //   disabled: true
+            // }
           ]}
         />
       ) : (

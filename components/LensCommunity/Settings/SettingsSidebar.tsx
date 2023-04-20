@@ -11,7 +11,7 @@ import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import Sidebar from '../../Settings/Sidebar'
 import formatHandle from '../../User/lib/formatHandle'
 import getAvatar from '../../User/lib/getAvatar'
-import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
+// import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 const SettingsSidebar = ({ community }: { community: LensCommunity }) => {
   const router = useRouter()
@@ -74,15 +74,15 @@ const SettingsSidebar = ({ community }: { community: LensCommunity }) => {
             icon: (
               <BsFileRuled className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             )
-          },
-          {
-            title: 'Verification',
-            link: `/l/${name}/settings/verification`,
-            icon: (
-              <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
-            ),
-            disabled: true
           }
+          // {
+          //   title: 'Verification',
+          //   link: `/l/${name}/settings/verification`,
+          //   icon: (
+          //     <VerifiedBadge className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]" />
+          //   ),
+          //   disabled: true
+          // }
         ]}
       />
     </>
