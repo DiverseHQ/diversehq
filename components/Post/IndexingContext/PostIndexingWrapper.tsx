@@ -67,7 +67,6 @@ const PostIndexingWrapper = ({ children }) => {
     // indexing
     try {
       const indexResult = await pollUntilIndexed(tx)
-      console.log('indexResult', indexResult)
       console.log('index success')
       await onSuccessIndex(indexResult, post)
     } catch (err) {

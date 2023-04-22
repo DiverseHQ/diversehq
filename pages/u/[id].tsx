@@ -20,7 +20,7 @@ const profile = ({
   const [lensProfile, setLensProfile] = useState<Profile | null>(_lensProfile)
   const profiles = useProfileStore((state) => state.profiles)
   const addProfile = useProfileStore((state) => state.addProfile)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const fetchAndSetLensProfile = async () => {
     try {
