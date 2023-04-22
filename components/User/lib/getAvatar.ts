@@ -4,10 +4,13 @@ import getIPFSLink from './getIPFSLink'
 import getStampFyiURL from './getStampFyiURL'
 import imageProxy from './imageProxy'
 
-const getAvatar = (profile: Profile): string => {
+const getAvatar = (profile: Profile, imageProxyTr?: string): string => {
   if (profile?.picture?.__typename === 'NftImage') {
     return profile?.picture?.uri
-      ? imageProxy(getIPFSLink(profile?.picture?.uri), 'w-250,h-250,q-50')
+      ? imageProxy(
+          getIPFSLink(profile?.picture?.uri),
+          imageProxyTr ? imageProxyTr : 'w-250,h-250,q-50'
+        )
       : getStampFyiURL(profile?.ownedBy ?? ZERO_ADDRESS)
   }
   if (profile?.picture?.__typename === 'MediaSet') {

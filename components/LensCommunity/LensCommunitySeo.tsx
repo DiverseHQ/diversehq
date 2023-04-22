@@ -17,7 +17,7 @@ const LensCommunitySeo = ({ community }: { community: LensCommunity }) => {
         url: `${appLink}/l/${formatHandle(community?.Profile?.handle)}`,
         images: [
           {
-            url: getAvatar(community?.Profile),
+            url: getAvatar(community?.Profile, 'w-1200,h-630,q-80'),
             alt: formatHandle(community?.Profile?.handle)
           }
         ]
