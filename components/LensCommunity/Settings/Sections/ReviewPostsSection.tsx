@@ -39,13 +39,14 @@ const ReviewPostsSection = ({ community }: { community: LensCommunity }) => {
             return post
           })
         )
-
         // fetching the author profile data
         const { profiles } = await getProfiles({
-          handles: resData.map(
-            (post) =>
-              getAllMentionsHandlFromContent(post.contentData?.content)[0]
-          )
+          handles: _rawPosts
+            .map(
+              (post) =>
+                getAllMentionsHandlFromContent(post.contentData?.content)[0]
+            )
+            .filter((handle) => !!handle)
         })
         _rawPosts.forEach((post) => {
           //@ts-ignore
