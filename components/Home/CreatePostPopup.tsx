@@ -314,7 +314,7 @@ const CreatePostPopup = () => {
       isGated: false,
       metadata: {
         ...metadata,
-        media: attachments.map((attachment) => ({
+        media: attachmentsInput.map((attachment) => ({
           original: {
             url: attachment.item,
             mimeType: attachment.type

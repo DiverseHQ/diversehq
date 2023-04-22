@@ -62,6 +62,8 @@ const PostIndexingWrapper = ({ children }) => {
     // show for ui
     setPosts([post, ...posts])
 
+    // return
+
     // indexing
     try {
       const indexResult = await pollUntilIndexed(tx)

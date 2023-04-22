@@ -55,7 +55,7 @@ const AudioPlayer: FC<Props> = ({
   const title =
     publication?.metadata?.attributes?.find(
       (attr) => attr.traitType === 'title'
-    )?.value || publication.metadata?.name
+    )?.value || publication?.metadata?.name
 
   const author = publication?.metadata?.attributes?.find(
     (attr) => attr.traitType === 'author'

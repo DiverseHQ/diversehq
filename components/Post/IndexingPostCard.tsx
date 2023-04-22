@@ -16,8 +16,50 @@ import { AiOutlineRetweet } from 'react-icons/ai'
 import { useDevice } from '../Common/DeviceWrapper'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import getAvatar from '../User/lib/getAvatar'
+import { PublicationMetadataWithoutMedia } from '../../types/post'
 
-const IndexingPostCard = ({ postInfo }) => {
+export interface singleMedia {
+  original: {
+    url: string
+    mimeType: string
+  }
+}
+// extend to PublicationMetadata except for media
+export interface extendedMetadata extends PublicationMetadataWithoutMedia {
+  media: singleMedia[]
+}
+
+export type IndexingPostInfo = {
+  tempId?: string
+  communityInfo?: {
+    _id?: string
+    name?: string
+    image?: string
+  }
+  createdAt?: string
+  hasCollectedByMe?: boolean
+  hidden?: boolean
+  isGated?: boolean
+  metadata?: extendedMetadata
+  profile: {
+    _id: string
+    handle: string
+    ownedBy: string
+  }
+  reaction: 'UPVOTE'
+  stats: {
+    totalUpvotes: number
+    totalAmountOfCollects: number
+    totalAmountOfComments: number
+    totalDownvotes: number
+  }
+}
+
+interface Props {
+  postInfo: IndexingPostInfo
+}
+
+const IndexingPostCard = ({ postInfo }: Props) => {
   const { isMobile } = useDevice()
   const { data } = useLensUserContext()
 
@@ -212,7 +254,11 @@ const IndexingPostCard = ({ postInfo }) => {
                 </div>
                 {postInfo?.metadata?.media?.length > 0 && (
                   <div className="sm:pl-5  sm:pr-6 sm:pb-1">
-                    <Attachment attachments={postInfo?.metadata?.media} />
+                    <Attachment
+                      // @ts-ignore
+                      publication={postInfo}
+                      attachments={postInfo?.metadata?.media}
+                    />
                   </div>
                 )}
                 {postInfo?.metadata?.mainContentFocus !==
