@@ -57,9 +57,9 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               className="w-20 h-20 animate-bounce"
             />
             <div className="flex flex-row items-center justify-center space-x-2">
-              <div className="w-3 h-3 bg-p-text rounded-full"></div>
-              <div className="w-3 h-3 bg-p-text rounded-full"></div>
-              <div className="w-3 h-3 bg-p-text rounded-full"></div>
+              <div className="w-3 h-3 bg-s-bg rounded-full"></div>
+              <div className="w-3 h-3 bg-s-bg rounded-full"></div>
+              <div className="w-3 h-3 bg-s-bg rounded-full"></div>
             </div>
           </div>
         </div>
