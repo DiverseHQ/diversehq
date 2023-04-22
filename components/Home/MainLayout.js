@@ -20,7 +20,6 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   const router = useRouter()
   const [mounted, setMounted] = React.useState(false)
   const { setIsMobile } = useDevice()
-  React.useEffect(() => setMounted(true), [])
   // React.useEffect(() => {
   //   if (typeof window === 'undefined') return
   //   if (!mobile) {
@@ -29,6 +28,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   // }, [isMobile])
 
   React.useEffect(() => {
+    setMounted(true)
     setIsMobile(isMobileView)
   }, [isMobileView])
 
@@ -43,6 +43,27 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
           content={`${theme === 'dark' ? '#1a1a1b' : '#ffffff'}`}
         />
       </Head>
+
+      {!mounted && (
+        // full screen with logo at center
+        <div
+          style={{ zIndex: 70 }}
+          className="fixed w-full flex items-center justify-center h-screen bg-p-bg"
+        >
+          <div className="flex flex-col items-center justify-center space-y-4">
+            <img
+              src="/LogoV3TrimmedWithBG.png"
+              alt="logo"
+              className="w-20 h-20 animate-bounce"
+            />
+            <div className="flex flex-row items-center justify-center space-x-2">
+              <div className="w-3 h-3 bg-p-text rounded-full"></div>
+              <div className="w-3 h-3 bg-p-text rounded-full"></div>
+              <div className="w-3 h-3 bg-p-text rounded-full"></div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {mobile && (
         <div className="text-p-text bg-s-bg min-h-screen noSelect ">
