@@ -44,7 +44,7 @@ const Preview: FC<Props> = ({ profile, message, conversationKey }) => {
         />
         <div className="flex flex-col justify-center">
           <div className="flex flex-row items-center space-x-2">
-            {profile?.name && <span className="text-md">{profile?.name}</span>}
+            {profile?.name && <span>{profile?.name}</span>}
             <span className={`${profile?.name ? 'text-sm text-s-text' : ''}`}>
               {profile?.handle && `u/${formatHandle(profile?.handle)}`}
             </span>

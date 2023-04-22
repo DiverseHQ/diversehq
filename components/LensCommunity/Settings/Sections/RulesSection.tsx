@@ -82,7 +82,7 @@ const RulesSection = ({ community }: { community: LensCommunity }) => {
                 </div>
               </Tooltip>
             </div>
-            <div className="text-md text-s-text px-4">{rule.description}</div>
+            <div className=" text-s-text px-4">{rule.description}</div>
           </div>
         ))}
       </div>

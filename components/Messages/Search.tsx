@@ -83,9 +83,7 @@ const Search = ({
                 />
                 <div className="flex flex-col justify-center">
                   <div className="flex flex-row space-x-2 items-center">
-                    <span className="text-md">
-                      {stringToLength(profile?.name, 15)}{' '}
-                    </span>
+                    <span>{stringToLength(profile?.name, 15)} </span>
                     <span className="text-sm text-s-text">
                       {profile?.handle && `u/${formatHandle(profile?.handle)}`}
                     </span>
