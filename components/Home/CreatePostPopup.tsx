@@ -73,7 +73,7 @@ const CreatePostPopup = () => {
   const { data: lensProfile } = useLensUserContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
   const [collectSettings, setCollectSettings] = useState<any>({
-    freeCollectModule: { followerOnly: false }
+    freeCollectModule: { followerOnly: true }
   })
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
