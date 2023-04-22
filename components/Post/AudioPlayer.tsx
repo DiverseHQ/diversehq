@@ -52,6 +52,15 @@ const AudioPlayer: FC<Props> = ({
     })
   }
 
+  const title =
+    publication?.metadata?.attributes?.find(
+      (attr) => attr.traitType === 'title'
+    )?.value || publication.metadata?.name
+
+  const author = publication?.metadata?.attributes?.find(
+    (attr) => attr.traitType === 'author'
+  )?.value
+
   return (
     <div className={clsx('flex items-center', className)}>
       <div
@@ -105,11 +114,13 @@ const AudioPlayer: FC<Props> = ({
                   ) : (
                     <>
                       <h5 className="truncate text-lg text-white">
-                        {publication?.metadata.name}
+                        {String(title)}
                       </h5>
-                      <h6 className="truncate text-white/70">
-                        {publication?.metadata?.attributes[1]?.value}
-                      </h6>
+                      {author && (
+                        <h6 className="truncate text-white/70">
+                          {String(author)}
+                        </h6>
+                      )}
                     </>
                   )}
                 </div>

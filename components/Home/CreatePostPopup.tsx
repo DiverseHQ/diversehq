@@ -201,6 +201,12 @@ const CreatePostPopup = () => {
         displayType: PublicationMetadataDisplayTypes.String,
         value: audioPublication.author
       })
+
+      attributes.push({
+        traitType: 'title',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: audioPublication?.title || title
+      })
     }
 
     const attachmentsInput: AttachmentType[] = attachments.map(
