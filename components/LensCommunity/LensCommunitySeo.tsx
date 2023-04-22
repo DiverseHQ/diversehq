@@ -6,6 +6,7 @@ import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 
 const LensCommunitySeo = ({ community }: { community: LensCommunity }) => {
+  if (!community?.Profile) return null
   return (
     <NextSeo
       title={`l/${formatHandle(community?.Profile?.handle)}`}
