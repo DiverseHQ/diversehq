@@ -53,6 +53,25 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
     setConversationKey(conversationKey)
   }
 
+  const PreviewLoader = () => (
+    <div className="hover:bg-s-hover p-3 flex flex-row justify-between items-center">
+      <div className="flex flex-row items-center space-x-2">
+        <div className="w-12 h-12 rounded-full bg-s-border animate-pulse" />
+        <div className="flex flex-col justify-center">
+          <div className="flex flex-row items-center space-x-2">
+            <div className="w-20 h-4 bg-s-border rounded-md animate-pulse" />
+            <div className="w-10 h-3 bg-s-border rounded-md animate-pulse" />
+          </div>
+
+          <div className="w-40 h-3 mt-1 bg-s-border rounded-lg animate-pulse" />
+        </div>
+      </div>
+      <div className="text-s-text text-xs shrink-0">
+        <div className="w-10 h-2 bg-s-border rounded-full animate-pulse" />
+      </div>
+    </div>
+  )
+
   return (
     <div className={`flex flex-col  h-full ${className}`}>
       {/* todo search profile and message */}
@@ -61,7 +80,7 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
         onProfileSelected={onProfileSelected}
       />
       {/* profiles and preview message */}
-      {showAuthenticating && (
+      {/* {showAuthenticating && (
         <div className="flex w-full h-full justify-center item-center">
           Authenticating...
         </div>
@@ -70,12 +89,29 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
         <div className="flex w-full h-full justify-center item-center">
           Loading...
         </div>
+      )} */}
+      {showAuthenticating && !showLoading && (
+        <div className="centered-row w-full pt-4">
+          <div className="spinner border-p-text w-4 h-4" />
+          <div className="ml-2 text-s-text">{'Authenticating...'}</div>
+        </div>
       )}
+      {showLoading && !showAuthenticating && (
+        <>
+          <PreviewLoader />
+          <PreviewLoader />
+          <PreviewLoader />
+          <PreviewLoader />
+          <PreviewLoader />
+        </>
+      )}
+
       {profilesError && (
         <div className="flex w-full h-full justify-center item-center">
           Error loading messages
         </div>
       )}
+
       {!showAuthenticating && !showLoading && !profilesError && (
         <div className="flex flex-col h-full pb-20 sm:h-[450px] overflow-y-auto">
           {selectedTab === 'Following' && (
