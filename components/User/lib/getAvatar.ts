@@ -14,7 +14,7 @@ const getAvatar = (profile: Profile): string => {
     return profile?.picture?.original?.url
       ? imageProxy(
           getIPFSLink(profile?.picture?.original?.url),
-          'w-200,h-200,q-50'
+          'w-150,h-150,q-30'
         )
       : getStampFyiURL(profile?.ownedBy ?? ZERO_ADDRESS)
   }
@@ -25,7 +25,7 @@ const getAvatar = (profile: Profile): string => {
       imageProxy(
         // @ts-ignore
         getIPFSLink(profile?.picture?.original?.url),
-        'w-250,h-250,q-50'
+        'w-150,h-150,q-30'
       )
     : // @ts-ignore
     profile?.picture?.uri

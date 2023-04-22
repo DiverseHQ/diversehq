@@ -67,7 +67,8 @@ export const recommendedCommunitiesIds = [
 ]
 
 export const DISCORD_INVITE_LINK = 'https://discord.gg/x7jByQKpYF'
-export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/kopveel8c'
+// export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/kopveel8c' // devenrathodrd account
+export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/xgrqxy3nw/' // devilopurity
 
 export const XMTP_PREFIX = 'lens.dev/dm'
 export const XMTP_ENV = isMainnet ? 'production' : 'dev'
