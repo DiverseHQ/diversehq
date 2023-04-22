@@ -7,6 +7,7 @@ import AllConversations from './AllConversations'
 import MessageHeader from './MessageHeader'
 import { useMessageStore } from '../../store/message'
 import useXmtpClient from './hooks/useXmtpClient'
+import clsx from 'clsx'
 // import { UserType } from '../../types/user'
 
 interface Props {
@@ -46,15 +47,16 @@ const MainMsgModal = ({ isMobile = false }: Props) => {
   }, [isOpen])
   return (
     <div
-      className={`fixed ${
+      style={{ zIndex: 60 }}
+      className={clsx(
+        'fixed  duration-500 transition-all',
         isOpen
           ? 'bottom-0'
-          : `${isMobile ? 'bottom-[-120vh]' : 'bottom-[-500px]'}`
-      } ${
+          : `${isMobile ? 'bottom-[-120vh]' : 'bottom-[-500px]'}`,
         isMobile
           ? 'w-full h-full left-0 right-0'
           : 'w-[450px] h-[550px] rounded-t-2xl shadow-2xl border-[1px] border-s-border  right-4'
-      } duration-500 transition-all z-40 `}
+      )}
       // onMouseEnter={handleMouseEnter}
       // onMouseLeave={handleMouseLeave}
     >

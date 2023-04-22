@@ -51,7 +51,7 @@ const Composer: FC<Props> = ({
     inputRef.current.style.height = inputRef.current.scrollHeight + 'px'
   }, [message])
   return (
-    <div className="w-full px-2 py-2 bg-s-bg absolute bottom-0">
+    <div className="w-full px-2 py-2 bg-s-bg absolute z-50 bottom-0">
       <div className="flex flex-row border border-s-border  justify-between px-4  h-fit w-full rounded-xl">
         <textarea
           ref={inputRef}
