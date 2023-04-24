@@ -48,7 +48,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
         // full screen with logo at center
         <div
           style={{ zIndex: 70 }}
-          className="fixed w-full flex items-center justify-center h-screen bg-p-bg"
+          className="fixed w-full flex items-center justify-center h-screen bg-[#1a1a1b]"
         >
           <div className="flex flex-col items-center justify-center space-y-4">
             <img
@@ -57,9 +57,9 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
               className="w-20 h-20 animate-bounce"
             />
             <div className="flex flex-row items-center justify-center space-x-2">
-              <div className="w-3 h-3 bg-s-bg rounded-full"></div>
-              <div className="w-3 h-3 bg-s-bg rounded-full"></div>
-              <div className="w-3 h-3 bg-s-bg rounded-full"></div>
+              <div className="w-3 h-3 bg-[#9197ae] rounded-full"></div>
+              <div className="w-3 h-3 bg-[#9197ae] rounded-full"></div>
+              <div className="w-3 h-3 bg-[#9197ae] rounded-full"></div>
             </div>
           </div>
         </div>
