@@ -7,6 +7,7 @@ import {
 } from 'react-icons/ai'
 import { MediaSet, Publication } from '../../graphql/generated'
 import {
+  LensInfuraEndpoint,
   SUPPORTED_AUDIO_TYPE,
   SUPPORTED_IMAGE_TYPE,
   SUPPORTED_VIDEO_TYPE
@@ -143,7 +144,7 @@ const Attachment: FC<Props> = ({
                       Open Image in new tab
                     </button>
                   ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
-                    isNew ||
+                    (isNew && !url.startsWith(LensInfuraEndpoint)) ||
                     url.startsWith('https://firebasestorage.googleapis.com') ? (
                       <VideoWithAutoPause
                         src={isNew ? url : imageProxy(url)}

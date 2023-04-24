@@ -62,7 +62,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req, params } = context
   const { id } = params
 
-  const isClient = Boolean(req.cookies.isClient)
+  const isClient = Boolean(req?.cookies?.isClient)
 
   if (isClient) {
     return {
