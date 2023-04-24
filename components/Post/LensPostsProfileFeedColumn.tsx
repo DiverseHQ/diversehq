@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useProfileFeedQuery } from '../../graphql/generated'
+import { FeedEventItemType, useProfileFeedQuery } from '../../graphql/generated'
 import LensPostCard from './LensPostCard'
 import { LENS_POST_LIMIT } from '../../utils/config'
 import MobileLoader from '../Common/UI/MobileLoader'
@@ -33,7 +33,8 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       request: {
         cursor: exploreQueryRequestParams.cursor,
         profileId: profileId,
-        limit: LENS_POST_LIMIT
+        limit: LENS_POST_LIMIT,
+        feedEventItemTypes: [FeedEventItemType.Comment]
       },
       reactionRequest: {
         profileId: profileId
@@ -50,7 +51,12 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     if (profileFeed?.feed?.pageInfo?.next) {
       nextCursor = profileFeed?.feed.pageInfo.next
     }
-    const newPosts = profileFeed?.feed.items.map((item) => item.root)
+    const newPosts = profileFeed?.feed.items.map((item) => {
+      if (item.root.__typename === 'Comment') {
+        return item.root.mainPost
+      }
+      return item.root
+    })
     // if (newPosts.length < LENS_POST_LIMIT) {
     //   hasMore = false
     // }
