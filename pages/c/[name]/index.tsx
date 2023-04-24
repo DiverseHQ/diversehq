@@ -69,7 +69,7 @@ const CommunityPage: FC<Props> = ({ _community, name }) => {
   return (
     <div className="relative">
       {isMobile && <CommunityPageMobileTopNav community={community} />}
-      {community && <CommunityPageSeo community={community} />}
+      <CommunityPageSeo community={_community || community} />
       {community && !loading && (
         <>
           <CommunityInfoCard _community={community} />
