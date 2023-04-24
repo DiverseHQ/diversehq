@@ -140,7 +140,16 @@ const CreatePostPopup = () => {
   }
 
   const getAttachmentImage = () => {
-    return isAudioPublication ? audioPublication.cover : attachments[0]?.item
+    if (isAudioPublication) {
+      return audioPublication.cover
+    }
+    // loop over attachments and return first attachmen with type image
+    for (let i = 0; i < attachments.length; i++) {
+      if (SUPPORTED_IMAGE_TYPE.includes(attachments[i]?.type)) {
+        return attachments[i]?.item
+      }
+    }
+    return null
   }
 
   const getAttachmentImageMimeType = () => {

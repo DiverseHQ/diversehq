@@ -11,24 +11,16 @@ import { useLensUserContext } from '../../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../../lib/useSignTypedDataAndBroadcast'
 // import { LensCommunity } from '../../../../types/community'
 import { ReviewPostType } from '../../../../types/reviewPost'
-import {
-  lensCommunityPostsResolveActions,
-  SUPPORTED_AUDIO_TYPE,
-  SUPPORTED_IMAGE_TYPE,
-  SUPPORTED_VIDEO_TYPE
-} from '../../../../utils/config'
+import { lensCommunityPostsResolveActions } from '../../../../utils/config'
 import { postIdFromIndexedResult } from '../../../../utils/utils'
 import { useNotify } from '../../../Common/NotifyContext'
-import ImageWithFullScreenZoom from '../../../Common/UI/ImageWithFullScreenZoom'
 import ImageWithPulsingLoader from '../../../Common/UI/ImageWithPulsingLoader'
-import LivePeerVideoPlayback from '../../../Common/UI/LivePeerVideoPlayback'
-import VideoWithAutoPause from '../../../Common/UI/VideoWithAutoPause'
 import Markup from '../../../Lexical/Markup'
 // import AudioPlayer from '../../../Post/AudioPlayer'
 import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
-import imageProxy from '../../../User/lib/imageProxy'
 import { putAddLensPublication } from '../../../../api/lensPublication'
+import Attachment from '../../../Post/Attachment'
 
 interface Props {
   fetchAndSetUnResolvedReviewPosts: () => Promise<void>
@@ -85,7 +77,7 @@ const ReviewLensCommunityPostCard = ({
       await putAddLensPublication(post.lensCommunityId, publicationId)
       if (res.status === 200) {
         await fetchAndSetUnResolvedReviewPosts()
-        notifySuccess('Post has been accepted')
+        notifySuccess('Post has been Published')
       } else {
         const { msg } = await res.json()
         notifyError(msg)
@@ -191,11 +183,6 @@ const ReviewLensCommunityPostCard = ({
     .slice(2)
     .join('\n')
 
-  // todo allow multiple media
-  const type = post?.contentData?.media?.[0]?.type
-  const url = post?.contentData?.media?.[0]?.item
-  const coverUrl = imageProxy(post?.contentData?.image)
-
   return (
     <div className="p-2 sm:p-4 border-b border-s-border">
       {/* author profile and name row */}
@@ -234,47 +221,8 @@ const ReviewLensCommunityPostCard = ({
         <Markup>{contentAfterRemovingName}</Markup>{' '}
       </div>
       {/* image or video or audio it any media */}
-      {post?.contentData?.media?.length > 0 && (
-        <>
-          {type === 'image/svg+xml' ? (
-            <button onClick={() => window.open(url, '_blank')}>
-              Open Image in new tab
-            </button>
-          ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
-            url.startsWith('https://firebasestorage.googleapis.com') ? (
-              <VideoWithAutoPause
-                src={imageProxy(url)}
-                className={`image-unselectable object-contain sm:rounded-lg w-full `}
-                controls
-                muted
-                autoPlay={false}
-                poster={coverUrl}
-              />
-            ) : (
-              <div
-                className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden  flex items-center`}
-              >
-                <LivePeerVideoPlayback
-                  posterUrl={coverUrl}
-                  // title={stringToLength(publication?.metadata?.content, 30)}
-                  url={url}
-                />
-              </div>
-            )
-          ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
-            // todo add audio player according to data desing
-            // <AudioPlayer src={url} coverImage={coverUrl} />
-            <></>
-          ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
-            <ImageWithFullScreenZoom
-              src={imageProxy(url)}
-              className={`image-unselectable object-cover sm:rounded-lg w-full `}
-            />
-          ) : (
-            <></>
-          )}
-        </>
-      )}
+
+      <Attachment attachments={post?.contentData?.media} isNew hideDelete />
 
       {/* post actions */}
       <div className="flex flex-row items-center space-x-4 py-2">
