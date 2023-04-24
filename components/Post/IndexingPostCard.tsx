@@ -73,6 +73,14 @@ const IndexingPostCard = ({ postInfo }: Props) => {
     if (regex.test(content)) {
       content = content.replace(regex, '')
     }
+
+    // if the content ends with #<communityName>, remove it
+    // communityName = postInfo?.communityInfo?.name
+
+    if (content?.endsWith(`#${postInfo?.communityInfo?.name}`)) {
+      content = content.slice(0, -(postInfo?.communityInfo?.name.length + 1))
+    }
+
     if (content?.startsWith(postInfo?.metadata?.name)) {
       content = content.slice(postInfo?.metadata?.name.length)
     }

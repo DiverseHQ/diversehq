@@ -259,7 +259,7 @@ const CreatePostPopup = () => {
         content.trim() +
         `${
           !selectedCommunity?.isLensCommunity && selectedCommunity?.name
-            ? `\n\n Posted on c/${selectedCommunity?.name}`
+            ? `\n\n #${selectedCommunity?.name}`
             : ``
         }`,
       external_url: 'https://diversehq.xyz',
