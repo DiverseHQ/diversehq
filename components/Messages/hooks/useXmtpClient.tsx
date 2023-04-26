@@ -34,7 +34,7 @@ const useXmtpClient = (cacheOnly = false) => {
   const { data: lensProfile } = useLensUserContext()
   const client = useMessageStore((state) => state.client)
   const setClient = useMessageStore((state) => state.setClient)
-  const [awaitingXmtpAuth, setAwaitingXmtpAuth] = useState<boolean>()
+  const [awaitingXmtpAuth, setAwaitingXmtpAuth] = useState<boolean>(false)
   const { data: signer, isLoading } = useSigner()
   const initXmtpClient = async () => {
     if (signer && !client && lensProfile?.defaultProfile) {

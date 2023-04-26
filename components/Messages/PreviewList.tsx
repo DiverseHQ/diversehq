@@ -40,6 +40,7 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
       ? -1
       : 1
   })
+
   const showAuthenticating = currentProfile && authenticating
   const showLoading =
     loading && (messages.size === 0 || profilesToShow.size === 0)
