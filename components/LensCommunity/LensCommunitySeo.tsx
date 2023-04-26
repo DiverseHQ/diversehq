@@ -4,16 +4,17 @@ import { LensCommunity } from '../../types/community'
 import { appLink } from '../../utils/config'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
+import { stringToLength } from '../../utils/utils'
 
 const LensCommunitySeo = ({ community }: { community: LensCommunity }) => {
   if (!community?.Profile) return null
   return (
     <NextSeo
       title={`l/${formatHandle(community?.Profile?.handle)}`}
-      description={community?.Profile?.bio}
+      description={stringToLength(community?.Profile?.bio, 90)}
       openGraph={{
         title: `l/${formatHandle(community?.Profile?.handle)}`,
-        description: community?.Profile?.bio,
+        description: stringToLength(community?.Profile?.bio, 90),
         url: `${appLink}/l/${formatHandle(community?.Profile?.handle)}`,
         images: [
           {

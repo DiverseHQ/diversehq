@@ -19,7 +19,7 @@ const LensPostSeo = ({ post }: { post: Publication }) => {
         url: `${appLink}/p/${post?.id}`,
         title: `${stringToLength(
           post?.metadata?.content,
-          100
+          90
         )} \n by u/${formatHandle(post?.profile?.handle)}`,
         images:
           post?.metadata?.mainContentFocus === 'IMAGE'
