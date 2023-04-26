@@ -9,7 +9,7 @@ const getAvatar = (profile: Profile, imageProxyTr?: string): string => {
     return profile?.picture?.uri
       ? imageProxy(
           getIPFSLink(profile?.picture?.uri),
-          imageProxyTr ? imageProxyTr : 'w-250,h-250,q-50'
+          imageProxyTr ?? 'w-250,h-250,q-50'
         )
       : getStampFyiURL(profile?.ownedBy ?? ZERO_ADDRESS)
   }
@@ -17,7 +17,7 @@ const getAvatar = (profile: Profile, imageProxyTr?: string): string => {
     return profile?.picture?.original?.url
       ? imageProxy(
           getIPFSLink(profile?.picture?.original?.url),
-          'w-150,h-150,q-30'
+          imageProxyTr ?? 'w-150,h-150,q-30'
         )
       : getStampFyiURL(profile?.ownedBy ?? ZERO_ADDRESS)
   }
@@ -28,12 +28,16 @@ const getAvatar = (profile: Profile, imageProxyTr?: string): string => {
       imageProxy(
         // @ts-ignore
         getIPFSLink(profile?.picture?.original?.url),
-        'w-150,h-150,q-30'
+        imageProxyTr ?? 'w-150,h-150,q-30'
       )
     : // @ts-ignore
     profile?.picture?.uri
     ? // @ts-ignore
-      imageProxy(getIPFSLink(profile?.picture?.uri), 'w-250,h-250,q-50')
+      imageProxy(
+        // @ts-ignore
+        getIPFSLink(profile?.picture?.uri),
+        imageProxyTr ?? 'w-250,h-250,q-50'
+      )
     : getStampFyiURL(profile?.ownedBy ?? ZERO_ADDRESS)
 }
 
