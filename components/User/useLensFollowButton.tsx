@@ -12,7 +12,6 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useNotify } from '../Common/NotifyContext'
 import formatHandle from './lib/formatHandle'
-import { memo } from 'react'
 
 interface followSteps {
   UnFollow: string
