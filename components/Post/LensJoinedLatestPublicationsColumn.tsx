@@ -48,7 +48,8 @@ const LensJoinedLatestPublicationsColumn = ({ communityIds }) => {
         profileId: myLensProfile?.defaultProfile?.id
           ? myLensProfile?.defaultProfile?.id
           : null
-      }
+      },
+      profileId: myLensProfile?.defaultProfile?.id
     },
     {
       enabled:

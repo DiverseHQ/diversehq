@@ -52,10 +52,9 @@ const LensAllLatestPublicationsColumn = ({
         sources: ['diversehq']
       },
       reactionRequest: {
-        profileId: myLensProfile?.defaultProfile?.id
-          ? myLensProfile?.defaultProfile?.id
-          : null
-      }
+        profileId: myLensProfile?.defaultProfile?.id ?? null
+      },
+      profileId: myLensProfile?.defaultProfile?.id
     },
     {
       enabled: router.pathname === pathnameToShow && !routeLoading

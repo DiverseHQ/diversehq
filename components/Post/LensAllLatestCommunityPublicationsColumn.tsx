@@ -72,7 +72,8 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }: Props) => {
       },
       reactionRequest: {
         profileId: myLensProfile?.defaultProfile?.id
-      }
+      },
+      profileId: myLensProfile?.defaultProfile?.id
     },
     {
       enabled: !!communityInfo._id

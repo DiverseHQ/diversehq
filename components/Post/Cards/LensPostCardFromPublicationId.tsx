@@ -5,6 +5,7 @@ import { postWithCommunityInfoType } from '../../../types/post'
 import { appId } from '../../../utils/config'
 import { getCommunityInfoFromAppId } from '../../../utils/helper'
 import LensPostCard from '../LensPostCard'
+import { useLensUserContext } from '../../../lib/LensUserContext'
 
 const LensPostCardFromPublicationId = ({
   publicationId
@@ -12,12 +13,19 @@ const LensPostCardFromPublicationId = ({
   publicationId: string
 }) => {
   const [post, setPost] = React.useState<postWithCommunityInfoType>(null)
+  const { data } = useLensUserContext()
 
   const getPost = useCallback(async () => {
     if (!publicationId || post) return
     try {
       const { publication } = await getSinglePublicationInfo({
-        publicationId: publicationId
+        request: {
+          publicationId: publicationId
+        },
+        profileId: data?.defaultProfile?.id ?? null,
+        reactionRequest: {
+          profileId: data?.defaultProfile?.id ?? null
+        }
       })
 
       if (publication?.__typename === 'Post') {

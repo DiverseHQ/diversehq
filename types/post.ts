@@ -1,4 +1,5 @@
 import {
+  Mirror,
   Post,
   Profile,
   PublicationContentWarning,
@@ -13,6 +14,7 @@ export interface postWithCommunityInfoType extends Post {
   communityInfo?: CommunityType
   isLensCommunityPost?: boolean
   mirroredBy?: Profile
+  originalMirrorPublication?: Mirror
 }
 
 export type Url = string

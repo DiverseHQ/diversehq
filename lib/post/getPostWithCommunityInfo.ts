@@ -1,11 +1,11 @@
 import { getCommunityInfoUsingId } from '../../api/community'
-import { PublicationQueryRequest } from '../../graphql/generated'
+import { PublicationQueryVariables } from '../../graphql/generated'
 import { postWithCommunityInfoType } from '../../types/post'
 import { getCommunityInfoFromAppId } from '../../utils/helper'
 import getSinglePublicationInfo from './get-single-publication-info'
 
 export default async function getPostWithCommunityInfo(
-  request: PublicationQueryRequest
+  request: PublicationQueryVariables
 ): Promise<postWithCommunityInfoType> {
   try {
     const response = await getSinglePublicationInfo(request)
@@ -20,7 +20,12 @@ export default async function getPostWithCommunityInfo(
       // @ts-ignore
       post = response.publication.mirrorOf
       // @ts-ignore
+      post.originalMirrorPublication = response.publication
+      // @ts-ignore
       post.mirroredBy = response.publication.profile
+
+      // @ts-ignore
+      post.originalMirrorPublication = response.publication
     } else if (response?.publication?.__typename === 'Comment') {
       // @ts-ignore
       post = response.publication

@@ -11,6 +11,7 @@ import { useProfileStore } from '../../store/profile'
 import MobileLoader from '../../components/Common/UI/MobileLoader'
 import PostNotFound from '../../components/Post/pages/PostNotFound'
 import { useDevice } from '../../components/Common/DeviceWrapper'
+import { useLensUserContext } from '../../lib/LensUserContext'
 // types are post, lens, notFound
 // post is a offchain post
 // lens is a onchain lens post
@@ -29,11 +30,18 @@ const Page = ({
   const addPublication = usePublicationStore((state) => state.addPublication)
   const addProfile = useProfileStore((state) => state.addProfile)
   const [loading, setLoading] = useState(true)
+  const { data } = useLensUserContext()
 
   const fetchAndSetPublication = async () => {
     try {
       const publicationRes = await getPostWithCommunityInfo({
-        publicationId: postId
+        request: {
+          publicationId: postId
+        },
+        profileId: data?.defaultProfile?.id ?? null,
+        reactionRequest: {
+          profileId: data?.defaultProfile?.id ?? null
+        }
       })
       setPost(publicationRes)
       addPublication(publicationRes.id, publicationRes)
@@ -53,7 +61,7 @@ const Page = ({
     } else {
       fetchAndSetPublication()
     }
-  }, [publications, postId])
+  }, [postId])
 
   return (
     <>
@@ -86,7 +94,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const _post = await getPostWithCommunityInfo({
-    publicationId: id
+    request: {
+      publicationId: id
+    },
+    profileId: null,
+    reactionRequest: {
+      profileId: null
+    }
   })
   return {
     props: {

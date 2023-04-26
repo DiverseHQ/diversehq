@@ -54,7 +54,8 @@ const LensAllTopPublicationsColumn = () => {
         profileId: myLensProfile?.defaultProfile?.id
           ? myLensProfile?.defaultProfile?.id
           : null
-      }
+      },
+      profileId: myLensProfile?.defaultProfile?.id
     },
     {
       enabled:

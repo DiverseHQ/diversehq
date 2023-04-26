@@ -102,7 +102,7 @@ const LensCollectButton = ({
             {collectModule.__typename === 'FreeCollectModuleSettings' && (
               <>
                 {isCollected || hasCollectedByMe ? (
-                  <BsCollectionFill className="w-4 h-4 text-[#687684]" />
+                  <BsCollectionFill className="w-4 h-4 text-p-btn" />
                 ) : (
                   <BsCollection className="w-4 h-4 text-[#687684]" />
                 )}

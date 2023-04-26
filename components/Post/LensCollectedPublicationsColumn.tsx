@@ -36,7 +36,8 @@ const LensCollectedPublicationsColumn = ({
       },
       reactionRequest: {
         profileId: myLensProfile?.defaultProfile?.id
-      }
+      },
+      profileId: myLensProfile?.defaultProfile?.id
     },
     {
       enabled: !!walletAddress
@@ -83,6 +84,7 @@ const LensCollectedPublicationsColumn = ({
           let mirrorPost = newPosts[i]
           newPosts[i] = mirrorPost?.mirrorOf
           newPosts[i].mirroredBy = mirrorPost.profile
+          newPosts[i].originalMirrorPublication = mirrorPost
         }
         newPosts[i].communityInfo = communityInfoForPosts[i]
         if (communityInfoForPosts[i]?.handle) {

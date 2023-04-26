@@ -309,6 +309,12 @@ const LensPostCard = ({ post }: Props) => {
     }
   }
 
+  if (postInfo?.hidden) {
+    return <div>Post is hidden</div>
+  } else if (postInfo?.originalMirrorPublication?.hidden) {
+    return <div>Mirror is hidden</div>
+  }
+
   return (
     <>
       {postInfo && (
