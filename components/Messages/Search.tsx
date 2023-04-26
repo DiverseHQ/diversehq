@@ -11,6 +11,7 @@ import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import getAvatar from '../User/lib/getAvatar'
 import formatHandle from '../User/lib/formatHandle'
+import { memo } from 'react'
 
 interface Props {
   placeholder?: string
@@ -27,17 +28,25 @@ const Search = ({
   onProfileSelected
 }: Props) => {
   const [searchText, setSearchText] = useState('')
-  const searchProfileQuery = useSearchProfilesQuery({
-    request: {
-      query: searchText,
-      type: SearchRequestTypes.Profile,
-      limit: 10
+  const searchProfileQuery = useSearchProfilesQuery(
+    {
+      request: {
+        query: searchText,
+        type: SearchRequestTypes.Profile,
+        limit: 20
+      }
+    },
+    {
+      enabled: searchText.length > 0
     }
-  })
+  )
+
+  console.log('Search.tsx searchProfileQuery', searchProfileQuery.data)
   const handleSearch = (evt: ChangeEvent<HTMLInputElement>) => {
     const keyword = evt.target.value
     setSearchText(keyword)
   }
+
   return (
     <div className={`w-full ${className}`}>
       <div className="w-full flex flex-row items-center bg-s-hover space-x-2 px-4">
@@ -98,4 +107,4 @@ const Search = ({
   )
 }
 
-export default Search
+export default memo(Search)

@@ -22,6 +22,8 @@ import CreatePostPopup from './CreatePostPopup'
 import { Tooltip } from '@mui/material'
 import formatHandle from '../User/lib/formatHandle'
 import { BsChevronDown } from 'react-icons/bs'
+import { memo } from 'react'
+
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
@@ -335,4 +337,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default memo(Navbar)

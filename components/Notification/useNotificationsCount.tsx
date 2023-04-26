@@ -20,7 +20,8 @@ const useNotificationsCount = (): {
     {
       request: {
         profileId: lensProfile?.defaultProfile?.id,
-        limit: 30
+        limit: 30,
+        highSignalFilter: user?.preferences?.highSignalNotifications ?? true
       }
     },
     {

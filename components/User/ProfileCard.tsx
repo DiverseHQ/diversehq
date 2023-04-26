@@ -59,6 +59,7 @@ const ProfileCard = ({
       enabled: !!myLensProfile?.defaultProfile?.id
     }
   )
+
   const { FollowButton, isFollowedByMe } = useLensFollowButton(
     {
       profileId: lensProfile?.id

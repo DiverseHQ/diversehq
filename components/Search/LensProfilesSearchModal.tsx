@@ -9,7 +9,7 @@ import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
-
+import { memo } from 'react'
 /* eslint-disable */
 
 interface Props {
@@ -28,19 +28,29 @@ const LensProfilesSearchModal = ({
   onProfileSelect
 }: Props) => {
   const [lensProfiles, setLensProfiles] = useState<Profile[]>([])
-  const searchProfileQuery = useSearchProfilesQuery({
-    request: {
-      query: searchTerm,
-      type: SearchRequestTypes.Profile,
-      limit: LENS_SEARCH_PROFILE_LIMIT
+  const searchProfileQuery = useSearchProfilesQuery(
+    {
+      request: {
+        query: searchTerm,
+        type: SearchRequestTypes.Profile,
+        limit: LENS_SEARCH_PROFILE_LIMIT
+      }
+    },
+    {
+      enabled: searchTerm.length > 0
     }
-  })
+  )
+
   useEffect(() => {
     searchProfileQuery.refetch()
   }, [searchTerm])
 
   const handleOutsideClick = (e) => {
-    if (inputRef.current && !inputRef.current.contains(e.target)) {
+    if (
+      inputRef.current &&
+      !inputRef.current.contains(e.target) &&
+      lensProfiles.length > 0
+    ) {
       setLensProfiles([])
     }
   }
@@ -50,7 +60,7 @@ const LensProfilesSearchModal = ({
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [inputRef])
+  }, [])
 
   useEffect(() => {
     if (
@@ -98,4 +108,4 @@ const LensProfilesSearchModal = ({
   )
 }
 
-export default LensProfilesSearchModal
+export default memo(LensProfilesSearchModal)

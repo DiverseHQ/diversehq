@@ -51,7 +51,7 @@ export interface IsFollowedLensCommunityType {
 
 interface ContextType {
   address: string
-  refreshUserInfo: () => void
+  refreshUserInfo: () => Promise<void>
   fetchAndSetLensCommunity: () => void
   user: UserType
   loading: boolean

@@ -1,8 +1,9 @@
 import React from 'react'
 import NotificationSeo from '../../components/Notification/NotificationSeo'
-import LensNotificationColumn from '../../components/Notification/LensNotificationColumn'
 import NotificationFilter from '../../components/Notification/NotificationNav/NotificationFilter'
-const index = () => {
+import LensNotificationMentionsColumn from '../../components/Notification/Feeds/LensNotificationMentionsColumn'
+
+const mentions = () => {
   return (
     <>
       <NotificationSeo />
@@ -10,11 +11,11 @@ const index = () => {
         <div className="w-full md:w-[650px]">
           {/* notifications */}
           <NotificationFilter />
-          <LensNotificationColumn />
+          <LensNotificationMentionsColumn />
         </div>
       </div>
     </>
   )
 }
 
-export default index
+export default mentions

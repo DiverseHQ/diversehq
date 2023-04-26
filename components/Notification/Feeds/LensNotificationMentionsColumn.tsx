@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import { Notification, useNotificationsQuery } from '../../graphql/generated'
-import { useLensUserContext } from '../../lib/LensUserContext'
-import { LENS_NOTIFICATION_LIMIT } from '../../utils/config'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import LensNotificationCard from './LensNotificationCard'
-import LensLoginButton from '../Common/LensLoginButton'
-import { useProfile } from '../Common/WalletContext'
-import MobileLoader from '../Common/UI/MobileLoader'
-import { getAllNotificationBetweenTimes } from '../../api/user'
-import NotificationCard from './NotificationCard'
-import getProfiles from '../../lib/profile/get-profiles'
-import { NotificationSchema } from '../../types/notification'
-import useNotificationsCount from './useNotificationsCount'
-import { useDevice } from '../Common/DeviceWrapper'
+import {
+  Notification,
+  NotificationTypes,
+  useNotificationsQuery
+} from '../../../graphql/generated'
+import { useLensUserContext } from '../../../lib/LensUserContext'
+import { LENS_NOTIFICATION_LIMIT } from '../../../utils/config'
+import { useDevice } from '../../Common/DeviceWrapper'
+import LensLoginButton from '../../Common/LensLoginButton'
+import { useProfile } from '../../Common/WalletContext'
+import React, { useEffect, useState } from 'react'
+import MobileLoader from '../../Common/UI/MobileLoader'
+import LensNotificationCard from '../LensNotificationCard'
 
-const LensNotificationColumn = () => {
-  const { user, refreshUserInfo } = useProfile()
+const LensNotificationMentionsColumn = () => {
+  const { user } = useProfile()
 
   const [params, setParams] = useState<{
-    notifications: Notification[] | NotificationSchema[]
+    notifications: Notification[]
     hasMore: boolean
     cursor: string | null
     nextCursor: string | null
@@ -32,8 +31,6 @@ const LensNotificationColumn = () => {
   })
 
   const { isMobile } = useDevice()
-  const { updateLastFetchedNotificationTime, updateNotificationCount } =
-    useNotificationsCount()
 
   const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   const { data } = useNotificationsQuery(
@@ -42,6 +39,10 @@ const LensNotificationColumn = () => {
         profileId: lensProfile?.defaultProfile?.id,
         cursor: params.cursor,
         limit: LENS_NOTIFICATION_LIMIT,
+        notificationTypes: [
+          NotificationTypes.MentionComment,
+          NotificationTypes.MentionPost
+        ],
         highSignalFilter: params.highSignalFilter
       },
       reactionRequest: {
@@ -49,13 +50,21 @@ const LensNotificationColumn = () => {
       }
     },
     {
-      enabled:
-        !!lensProfile?.defaultProfile?.id &&
-        isSignedIn &&
-        hasProfile &&
-        Boolean(user)
+      enabled: !!lensProfile?.defaultProfile?.id && isSignedIn && hasProfile
     }
   )
+
+  useEffect(() => {
+    setParams({
+      ...params,
+      notifications: [],
+      hasMore: true,
+      cursor: null,
+      nextCursor: null,
+      highSignalFilter: user?.preferences?.highSignalNotifications ?? true
+    })
+  }, [user?.preferences?.highSignalNotifications])
+
   const getMoreNotifications = async () => {
     if (params.nextCursor) {
       setParams({
@@ -72,61 +81,24 @@ const LensNotificationColumn = () => {
   }, [data?.notifications?.pageInfo?.next])
 
   const handleNotifications = async () => {
-    let newListOfNotifications
-    if (data.notifications.items.length > 0) {
-      const newNotifications = data.notifications.items
-      // add offchain notifications to newNotifications and sort it on createdAt
-      let from = newNotifications[newNotifications.length - 1].createdAt
-      let to = newNotifications[0].createdAt
-      if (params.notifications.length === 0) {
-        to = new Date().toISOString()
-      }
-      try {
-        const res = await getAllNotificationBetweenTimes(from, to)
-        if (res.status === 200) {
-          const offChainNotifications: NotificationSchema[] = await res.json()
-
-          if (offChainNotifications.length > 0) {
-            const { profiles } = await getProfiles({
-              ownedBy: offChainNotifications.map((n) => n.sender.walletAddress)
-            })
-
-            const defaultProfiles = profiles.items.filter((p) => p.isDefault)
-            for (let i = 0; i < offChainNotifications.length; i++) {
-              // @ts-ignore
-              offChainNotifications[i].senderLensProfile = defaultProfiles.find(
-                (p) =>
-                  p.ownedBy.toLowerCase() ===
-                  offChainNotifications[i].sender.walletAddress.toLowerCase()
-              )
-            }
-
-            // @ts-ignore
-            newNotifications.push(...offChainNotifications)
-
-            // sort on createdAt
-            newNotifications.sort((a, b) => {
-              // @ts-ignore
-              return new Date(b.createdAt) - new Date(a.createdAt)
-            })
-          }
-        }
-      } catch (error) {
-        console.log(error)
-      }
-
-      // @ts-ignore
-      newListOfNotifications = [...params.notifications, ...newNotifications]
-    }
-
     setParams({
       ...params,
-      notifications: newListOfNotifications,
+      // @ts-ignore
+      notifications:
+        data.notifications.items.length > 0
+          ? [...params.notifications, ...data.notifications.items]
+          : params.notifications,
       hasMore:
         Number(data?.notifications?.items?.length) !== 0 &&
         data.notifications.items.length === LENS_NOTIFICATION_LIMIT,
       nextCursor: data?.notifications?.pageInfo?.next ?? params.nextCursor
     })
+    // if (data.notifications.items.length > 0) {
+    //   const newNotifications = data.notifications.items
+
+    //   // @ts-ignore
+    //   setNotifications([...notifications, ...newNotifications])
+    // }
     // if (data.notifications.items.length === 0) {
     //   setHasMore(false)
     //   return
@@ -139,28 +111,6 @@ const LensNotificationColumn = () => {
     // }
   }
 
-  useEffect(() => {
-    setParams({
-      ...params,
-      notifications: [],
-      hasMore: true,
-      cursor: null,
-      nextCursor: null,
-      highSignalFilter: user?.preferences?.highSignalNotifications ?? true
-    })
-  }, [user?.preferences?.highSignalNotifications])
-
-  const cleanUp = async () => {
-    updateNotificationCount()
-    await updateLastFetchedNotificationTime()
-    await refreshUserInfo()
-  }
-
-  useEffect(() => {
-    return () => {
-      cleanUp()
-    }
-  }, [])
   return (
     <>
       {lensProfile &&
@@ -253,11 +203,6 @@ const LensNotificationColumn = () => {
               endMessage={<></>}
             >
               {params.notifications.map((notification, index) => {
-                if (notification?._id) {
-                  return (
-                    <NotificationCard key={index} notification={notification} />
-                  )
-                }
                 return (
                   <LensNotificationCard
                     key={index}
@@ -286,4 +231,4 @@ const LensNotificationColumn = () => {
   )
 }
 
-export default LensNotificationColumn
+export default LensNotificationMentionsColumn

@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import React from 'react'
-import { BiCommentAdd } from 'react-icons/bi'
 import { NewCommentNotification } from '../../graphql/generated'
 import { stringToLength } from '../../utils/utils'
 import Markup from '../Lexical/Markup'
 import formatHandle from '../User/lib/formatHandle'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
+import { FaRegCommentDots } from 'react-icons/fa'
 
 interface Props {
   notification: NewCommentNotification
@@ -49,7 +49,7 @@ const LensNotificationCommentedPostCard = ({ notification, isRead }: Props) => {
           </Markup>
         </div>
       )}
-      Icon={() => <BiCommentAdd />}
+      Icon={() => <FaRegCommentDots />}
       isRead={isRead}
       cardLink={`/p/${notification?.comment?.mainPost?.id}`}
     />

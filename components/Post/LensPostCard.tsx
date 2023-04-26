@@ -308,7 +308,6 @@ const LensPostCard = ({ post }: Props) => {
       content = content.slice(postInfo?.metadata?.name.length)
     }
   }
-
   return (
     <>
       {postInfo && (

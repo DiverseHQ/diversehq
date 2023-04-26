@@ -168,6 +168,8 @@ const NewMentionsPlugin: FC = () => {
     }
   )
 
+  console.log('mentionsPlugin searchProfileQuery', data)
+
   const getUserPicture = (user: Profile | undefined) => {
     const picture = user?.picture
     if (picture && picture.hasOwnProperty('original')) {

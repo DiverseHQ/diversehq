@@ -11,6 +11,12 @@ enum userRole {
   NORMAL_USER = 2
 }
 
+export type userPreferences = {
+  theme: 'light' | 'dark'
+  language: string
+  highSignalNotifications: boolean
+}
+
 export type UserType = {
   _id?: string
   walletAddress: string
@@ -27,5 +33,6 @@ export type UserType = {
   createdAt?: string
   updatedAt?: string
   lastFetchedNotificationsTime?: string
+  preferences?: userPreferences
   [key: string]: any
 }

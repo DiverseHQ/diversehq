@@ -42,6 +42,7 @@ const LensPageProfileCard = ({
   )
 
   useEffect(() => {
+    console.log('data', data)
     if (!data?.profile) return
     // @ts-ignore
     setProfile(data.profile)

@@ -12,6 +12,7 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useNotify } from '../Common/NotifyContext'
 import formatHandle from './lib/formatHandle'
+import { memo } from 'react'
 
 interface followSteps {
   UnFollow: string
@@ -54,7 +55,11 @@ const useLensFollowButton = (
       request: request
     },
     {
-      enabled: isSignedIn && hasProfile
+      enabled:
+        isSignedIn &&
+        hasProfile &&
+        Boolean(request.profileId) &&
+        Boolean(request.handle)
     }
   )
 

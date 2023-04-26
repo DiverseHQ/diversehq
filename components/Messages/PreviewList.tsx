@@ -32,6 +32,7 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
     profilesError,
     requestedCount
   } = useMessagePreviews()
+
   const sortedProfiles = Array.from(profilesToShow).sort(([keyA], [keyB]) => {
     const messageA = messages.get(keyA)
     const messageB = messages.get(keyB)

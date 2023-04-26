@@ -91,3 +91,14 @@ export const getAllNotificationBetweenTimes = async (from, to) => {
     }
   )
 }
+
+export const toggleHighSignalNotifsPreference = async () => {
+  return await fetch(
+    `
+  ${apiEndpoint}/user/toggle-high-signal-notification-preference`,
+    {
+      method: 'PUT',
+      headers: await getHeaders()
+    }
+  )
+}

@@ -14,6 +14,7 @@ const SearchModal = () => {
       inputRef.current.focus()
     }
   }, [router])
+
   return (
     <div className="relative flex flex-row items-center sm:border-[1px] sm:border-s-border dark:border-0 p-1 pl-2 rounded-xl bg-s-bg dark:bg-[#272729] w-full sm:w-[300px] gap-2 md:gap-4">
       <div className="text-p-text rounded-lg py-1">

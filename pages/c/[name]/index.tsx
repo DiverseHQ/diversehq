@@ -67,24 +67,28 @@ const CommunityPage: FC<Props> = ({ _community, name }) => {
   }, [name])
 
   return (
-    <div className="relative">
-      {isMobile && <CommunityPageMobileTopNav community={community} />}
+    <>
       <CommunityPageSeo community={_community || community} />
-      {community && !loading && (
-        <>
-          <CommunityInfoCard _community={community} />
-          <div className="w-full flex justify-center">
-            <div className="w-full md:w-[650px]">
-              <NavFilterCommunity />
-              <LensPostsCommunityPublicationsColumn communityInfo={community} />
+      <div className="relative">
+        {isMobile && <CommunityPageMobileTopNav community={community} />}
+        {community && !loading && (
+          <>
+            <CommunityInfoCard _community={community} />
+            <div className="w-full flex justify-center">
+              <div className="w-full md:w-[650px]">
+                <NavFilterCommunity />
+                <LensPostsCommunityPublicationsColumn
+                  communityInfo={community}
+                />
+              </div>
+              <CommunityPageRightSidebar communityInfo={community} />
             </div>
-            <CommunityPageRightSidebar communityInfo={community} />
-          </div>
-        </>
-      )}
-      {!community && !loading && <CommunityNotFound />}
-      {loading && !community && <MobileLoader />}
-    </div>
+          </>
+        )}
+        {!community && !loading && <CommunityNotFound />}
+        {loading && !community && <MobileLoader />}
+      </div>
+    </>
   )
 }
 
@@ -93,7 +97,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { name } = params
 
   const isClient = Boolean(req?.cookies?.isClient)
-
+  // const isClient = false
   if (isClient) {
     return {
       props: {
