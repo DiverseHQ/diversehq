@@ -29,13 +29,18 @@ const LensNotificationCommentedPostCard = ({ notification, isRead }: Props) => {
             {notification?.notificationId?.startsWith('commented-post') &&
               ' commented on your '}
             {notification?.notificationId?.startsWith('commented-comment') &&
-              ' replied your comment on this '}
+              ' replied to your '}
           </span>
+
           <span
             className="hover:underline font-bold"
             onClick={(e) => e.stopPropagation()}
           >
-            <Link href={`/p/${notification?.comment?.mainPost?.id}`}>Post</Link>
+            <Link href={`/p/${notification?.comment?.mainPost?.id}`}>
+              {notification?.notificationId?.startsWith('commented-post')
+                ? 'Post'
+                : 'Comment'}
+            </Link>
           </span>
         </div>
       )}
