@@ -18,7 +18,7 @@ export default function useLensUser() {
   const lensProfileQuery = useDefaultProfileQuery(
     {
       request: {
-        ethereumAddress: address || ''
+        ethereumAddress: address
       }
     },
     {

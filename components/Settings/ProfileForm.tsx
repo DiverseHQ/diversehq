@@ -1,4 +1,4 @@
-import { CircularProgress, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineCamera } from 'react-icons/ai'
@@ -444,7 +444,7 @@ const ProfileForm = () => {
         disabled={saving}
         className="self-start text-xl font-bold tracking-wide  m-5 px-4 py-2 bg-p-btn text-p-btn-text rounded-lg flex flex-row items-center space-x-2"
       >
-        {saving && <CircularProgress className="h-5 w-5" size="18px" />}
+        {saving && <div className="h-5 w-5 spinner border-p-btn-text" />}
         {!saving && <IoPencilSharp className="h-5 w-5" />}
         <div>Save</div>
       </button>

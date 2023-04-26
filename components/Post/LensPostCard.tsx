@@ -308,6 +308,7 @@ const LensPostCard = ({ post }: Props) => {
       content = content.slice(postInfo?.metadata?.name.length)
     }
   }
+
   return (
     <>
       {postInfo && (
@@ -325,7 +326,7 @@ const LensPostCard = ({ post }: Props) => {
           {/* top row */}
           {postInfo?.mirroredBy && (
             <div
-              className="flex flex-row w-full space-x-1 items-center ml-4 md:ml-1 mb-1 text-xs text-s-text"
+              className="flex flex-row w-full space-x-1 items-center pl-4 md:pl-1 mb-1 text-xs text-s-text"
               onClick={(e) => {
                 e.stopPropagation()
               }}
@@ -366,9 +367,8 @@ const LensPostCard = ({ post }: Props) => {
                           postInfo?.isLensCommunityPost ||
                           !postInfo?.communityInfo
                             ? getAvatar(postInfo?.profile)
-                            : postInfo?.communityInfo?.logoImageUrl
-                            ? postInfo?.communityInfo?.logoImageUrl
-                            : '/gradient.jpg'
+                            : postInfo?.communityInfo?.logoImageUrl ??
+                              '/gradient.jpg'
                         }
                         className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover cursor-pointer"
                       />

@@ -1,4 +1,3 @@
-import { CircularProgress } from '@mui/material'
 import React, { useState, useCallback } from 'react'
 import { AiOutlineCamera } from 'react-icons/ai'
 import { IoPencilSharp } from 'react-icons/io5'
@@ -116,7 +115,7 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
             <label htmlFor="logoImage">
               {' '}
               <img
-                className="rounded-full h-24 w-24 sm:h-24 sm:w-24"
+                className="rounded-full h-24 w-24 sm:h-24 sm:w-24 object-cover"
                 src={logoImage}
                 alt="PFP"
               />
@@ -167,7 +166,7 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
         disabled={loading}
         className="self-start text-xl font-bold tracking-wide  m-5 px-4 py-2 bg-p-btn text-p-btn-text rounded-lg flex flex-row items-center space-x-2"
       >
-        {loading && <CircularProgress className="h-5 w-5" size="18px" />}
+        {loading && <div className="h-5 w-5 spinner border-p-btn-text" />}
         {!loading && <IoPencilSharp className="h-5 w-5" />}
         <div>Save</div>
       </button>
