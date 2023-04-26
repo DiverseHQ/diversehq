@@ -57,8 +57,7 @@ const useLensFollowButton = (
       enabled:
         isSignedIn &&
         hasProfile &&
-        Boolean(request.profileId) &&
-        Boolean(request.handle)
+        (Boolean(request.profileId) || Boolean(request.handle))
     }
   )
 
