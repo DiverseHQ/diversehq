@@ -8,10 +8,12 @@ import { FaRegCommentDots } from 'react-icons/fa'
 import { useProfile } from '../../Common/WalletContext'
 import { Switch } from '@mui/material'
 import { toggleHighSignalNotifsPreference } from '../../../api/user'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 const NotificationFilter = () => {
   const { pathname } = useRouter()
   const { user, refreshUserInfo } = useProfile()
+  const { isMobile } = useDevice()
 
   if (!user) return null
 
@@ -19,13 +21,16 @@ const NotificationFilter = () => {
     <FilterRow
       EndButton={
         <div className="start-row">
-          <div>High Signal</div>
+          <div className="text-xs font-normal sm:text-base ">
+            {isMobile ? 'High Signal' : 'High Signal'}
+          </div>
           <Switch
             checked={user?.preferences?.highSignalNotifications}
             onChange={async () => {
               await toggleHighSignalNotifsPreference()
               await refreshUserInfo()
             }}
+            size="small"
             sx={{
               '& .MuiSwitch-track': {
                 backgroundColor: 'grey',
