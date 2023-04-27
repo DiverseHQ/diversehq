@@ -375,7 +375,9 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                       ? 'bg-p-btn-hover text-p-btn-hover-text'
                       : ''
                   } active:bg-p-btn-hover sm:hover:bg-s-hover px-2 py-0.5 rounded-md`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
                     if (!isSignedIn || !hasProfile) {
                       notifyInfo(
                         'Lens login required, so they can know who you are'
@@ -403,11 +405,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                   <LensCreateComment
                     postId={comment.id}
                     addComment={addComment}
-                    canCommnet={
-                      comment?.canComment?.result === false
-                        ? comment?.canComment?.result
-                        : true
-                    }
+                    canCommnet={comment?.canComment?.result ?? true}
                   />
                 )}
 
