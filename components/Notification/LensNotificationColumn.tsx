@@ -91,10 +91,9 @@ const LensNotificationColumn = () => {
               ownedBy: offChainNotifications.map((n) => n.sender.walletAddress)
             })
 
-            const defaultProfiles = profiles.items.filter((p) => p.isDefault)
             for (let i = 0; i < offChainNotifications.length; i++) {
               // @ts-ignore
-              offChainNotifications[i].senderLensProfile = defaultProfiles.find(
+              offChainNotifications[i].senderLensProfile = profiles.items.find(
                 (p) =>
                   p.ownedBy.toLowerCase() ===
                   offChainNotifications[i].sender.walletAddress.toLowerCase()

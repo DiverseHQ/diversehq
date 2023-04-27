@@ -222,7 +222,12 @@ const ReviewLensCommunityPostCard = ({
       </div>
       {/* image or video or audio it any media */}
 
-      <Attachment attachments={post?.contentData?.media} isNew hideDelete />
+      <Attachment
+        publication={post?.contentData}
+        attachments={post?.contentData?.media}
+        isNew
+        hideDelete
+      />
 
       {/* post actions */}
       <div className="flex flex-row items-center space-x-4 py-2">

@@ -169,6 +169,7 @@ const Attachment: FC<Props> = ({
                     <AudioPlayer
                       src={url}
                       isNew={isNew}
+                      hideDelete={hideDelete}
                       className={`${className}`}
                       publication={publication}
                     />

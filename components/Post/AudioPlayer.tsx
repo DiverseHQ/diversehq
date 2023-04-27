@@ -15,13 +15,15 @@ interface Props {
   publication: Publication
   isNew?: boolean
   className?: string
+  hideDelete?: boolean
 }
 
 const AudioPlayer: FC<Props> = ({
   src,
   publication,
   className,
-  isNew = false
+  isNew = false,
+  hideDelete = false
 }) => {
   const [playing, setPlaying] = useState(false)
   const playerRef = useRef<APITypes>(null)
@@ -53,13 +55,25 @@ const AudioPlayer: FC<Props> = ({
   }
 
   const title =
-    publication?.metadata?.attributes?.find(
-      (attr) => attr.traitType === 'title'
-    )?.value || publication?.metadata?.name
+    hideDelete && isNew
+      ? // @ts-ignore
+        publication?.attributes?.find((attr) => attr.traitType === 'title')
+          ?.value ||
+        // @ts-ignore
+        publication?.name
+      : publication?.metadata?.attributes?.find(
+          (attr) => attr.traitType === 'title'
+        )?.value || publication?.metadata?.name
 
-  const author = publication?.metadata?.attributes?.find(
-    (attr) => attr.traitType === 'author'
-  )?.value
+  const author =
+    hideDelete && isNew // @ts-ignore
+      ? publication?.attributes?.find((attr) => attr.traitType === 'author')
+          ?.value ||
+        // @ts-ignore
+        publication?.name
+      : publication?.metadata?.attributes?.find(
+          (attr) => attr.traitType === 'author'
+        )?.value
 
   return (
     <div className={clsx('flex items-center', className)}>
@@ -67,20 +81,28 @@ const AudioPlayer: FC<Props> = ({
         className={`bg-p-btn overflow-hidden mx-4 rounded-lg sm:rounded-xl `}
       >
         <div className="flex flex-nowrap space-x-2">
-          <CoverImage
-            isNew={isNew}
-            cover={
-              isNew ? audioPublication.cover : getThumbnailUrl(publication)
-            }
-            setCover={(url, mimeType) =>
-              setAudioPublication({
-                ...audioPublication,
-                cover: url,
-                coverMimeType: mimeType
-              })
-            }
-            imageRef={imageRef}
-          />
+          {isNew && hideDelete ? (
+            <CoverImage
+              isNew={false}
+              // @ts-ignore
+              cover={publication?.image}
+            />
+          ) : (
+            <CoverImage
+              isNew={isNew}
+              cover={
+                isNew ? audioPublication.cover : getThumbnailUrl(publication)
+              }
+              setCover={(url, mimeType) =>
+                setAudioPublication({
+                  ...audioPublication,
+                  cover: url,
+                  coverMimeType: mimeType
+                })
+              }
+              imageRef={imageRef}
+            />
+          )}
           <div className="flex w-full flex-col justify-between truncate py-1 md:px-3">
             <div className="mt-3 flex justify-between md:mt-7">
               <div className="flex w-full items-center space-x-2.5 truncate">
@@ -92,7 +114,7 @@ const AudioPlayer: FC<Props> = ({
                   )}
                 </button>
                 <div className="w-full truncate pr-3">
-                  {isNew ? (
+                  {isNew && !hideDelete ? (
                     <div className="flex flex-col w-full">
                       <input
                         className="border-none text-lg text-white placeholder-white bg-transparent outline-none"
