@@ -49,7 +49,7 @@ const LensPostPage = ({ id, post }: Props) => {
 
   return (
     <>
-      <div className="w-full flex flex-row space-x-12 justify-center pb-[50px]">
+      <div className="w-full flex flex-row space-x-12 justify-center pb-[200px]">
         <div className={`w-full md:w-[650px]`}>
           {!post &&
             (isMobile ? (
