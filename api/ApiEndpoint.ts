@@ -16,5 +16,4 @@ switch (mode) {
   default:
     apiEndpoint = 'https://diverse-hq-api-diversehq.vercel.app/apiv1'
 }
-console.log('apiEndpoint', apiEndpoint)
 export default apiEndpoint
