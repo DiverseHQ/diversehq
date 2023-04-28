@@ -170,12 +170,12 @@ export const WalletProvider = ({ children }) => {
     }, [user, lensProfile?.defaultProfile?.id])
 
   useEffect(() => {
-    if (user) {
+    if (user && lensProfile?.defaultProfile?.id) {
       getAllLensCommunitiesAndSetJoinedLensCommunities()
     } else {
       setLensCommunity(null)
     }
-  }, [user?._id])
+  }, [user?._id, lensProfile])
 
   const refreshUserInfo = async () => {
     try {
