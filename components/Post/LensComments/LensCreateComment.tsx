@@ -29,13 +29,15 @@ const LensCreateComment = ({
   postId,
   addComment,
   postInfo,
-  canCommnet
+  canCommnet,
+  isMainPost = false
 }: {
   postId: string
   // eslint-disable-next-line no-unused-vars
   addComment: (tx: string | null, comment: any) => void
   postInfo?: any
   canCommnet?: boolean
+  isMainPost?: boolean
 }) => {
   const [focused, setFocused] = useState(false)
   const content = useCommentStore((state) => state.content)
@@ -300,8 +302,9 @@ const LensCreateComment = ({
   }, [error, daError])
 
   useEffect(() => {
-    if (postInfo) return
-    setFocused(!!currentReplyComment)
+    // if (postInfo) return
+    if (isMainPost) return
+    setFocused(Boolean(currentReplyComment))
     // @ts-ignore
     if (currentReplyComment) commentRef?.current?.focus()
   }, [currentReplyComment])
@@ -312,6 +315,7 @@ const LensCreateComment = ({
       // inside click
       return
     }
+    console.log('clicked outside')
     setFocused(false)
     // outside click
     // setCurrentReplyComment(null)
@@ -427,7 +431,7 @@ const LensCreateComment = ({
               focused ? 'pb-2' : 'pb-3'
             )}
           >
-            {!postInfo && currentReplyComment && focused && (
+            {!postInfo && focused && (
               <ReplyMobileInfo
                 // @ts-ignore
                 fromAvatarUrl={getAvatar(lensProfile?.defaultProfile)}

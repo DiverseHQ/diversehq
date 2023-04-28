@@ -16,6 +16,7 @@ import LensCreateComment from './LensCreateComment'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import { useDevice } from '../../Common/DeviceWrapper'
 import { postWithCommunityInfoType } from '../../../types/post'
+import { useCommentStore } from '../../../store/comment'
 // import { isNullableType } from 'graphql'
 // import index from '../../../pages/explore'
 
@@ -49,6 +50,9 @@ const CombinedCommentSection = ({
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isMobile } = useDevice()
+  const setCurrentReplyComment = useCommentStore(
+    (state) => state.setCurrentReplyComment
+  )
 
   const { data } = useCommentFeedQuery(
     {
@@ -141,7 +145,9 @@ const CombinedCommentSection = ({
     // setComments([comment, ...comments])
   }
 
-  useEffect(() => {}, [postInfo])
+  useEffect(() => {
+    setCurrentReplyComment(null)
+  }, [postInfo?.id])
 
   const getMorePosts = async () => {
     if (params.nextCursor) {
@@ -172,6 +178,7 @@ const CombinedCommentSection = ({
           postId={postId}
           addComment={addComment}
           postInfo={postInfo}
+          isMainPost={true}
           canCommnet={postInfo?.canComment?.result}
           // setComments={setComments}
         />
