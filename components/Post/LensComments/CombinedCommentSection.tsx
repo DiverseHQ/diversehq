@@ -19,6 +19,8 @@ import { postWithCommunityInfoType } from '../../../types/post'
 // import { isNullableType } from 'graphql'
 // import index from '../../../pages/explore'
 
+/* eslint-disable */
+
 const CombinedCommentSection = ({
   postId,
   postInfo
@@ -80,6 +82,7 @@ const CombinedCommentSection = ({
         !data?.publications?.items
           ? false
           : params.hasMore,
+      // @ts-ignore
       comments: data?.publications?.items
         ? [...params.comments, ...data?.publications?.items]
         : params.comments
