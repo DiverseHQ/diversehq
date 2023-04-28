@@ -35,6 +35,8 @@ const LensCreateComment = ({
   canCommnet?: boolean
 }) => {
   const [focused, setFocused] = useState(false)
+  const content = useCommentStore((state) => state.content)
+  const setContent = useCommentStore((state) => state.setContent)
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
   const currentReplyComment = useCommentStore(
@@ -102,6 +104,7 @@ const LensCreateComment = ({
     }
     setLoading(false)
     if (commentRef?.current) {
+      setContent('')
       // @ts-ignore
       commentRef.current.value = ''
       // @ts-ignore
@@ -124,10 +127,8 @@ const LensCreateComment = ({
 
     if (gifAttachment) {
       mainContentFocus = PublicationMainFocus.Image
-      console.log('gifAttachment while posting', gifAttachment)
     } else {
       mainContentFocus = PublicationMainFocus.TextOnly
-      console.log('textOnly')
     }
 
     try {
@@ -236,6 +237,13 @@ const LensCreateComment = ({
   }
 
   useEffect(() => {
+    if (commentRef?.current) {
+      const { value } = commentRef.current
+      // @ts-ignore
+      commentRef.current.selectionStart = value.length
+      // @ts-ignore
+      commentRef.current.selectionEnd = value.length
+    }
     document.addEventListener('click', handleClickOutside)
     return () => {
       document.removeEventListener('click', handleClickOutside)
@@ -282,6 +290,8 @@ const LensCreateComment = ({
                 rows={1}
                 style={{ resize: 'none' }}
                 onInput={(e) => {
+                  // @ts-ignore
+                  setContent(e.target.value)
                   // @ts-ignore
                   e.target.style.height = 'auto'
                   // @ts-ignore
@@ -381,13 +391,17 @@ const LensCreateComment = ({
               <div className="flex-1 relative">
                 <textarea
                   ref={commentRef}
+                  value={content}
                   className={clsx(
                     'flex px-2 flex-row items-center w-full no-scrollbar outline-none text-base sm:text-[18px] py-2 border-p-border border-[1px] rounded-xl bg-s-bg font-medium',
                     loading ? 'text-s-text' : 'text-p-text',
                     focused ? 'mx-0' : 'mx-2'
                   )}
                   placeholder="What do you think?"
+                  defaultValue={content}
                   onInput={(e) => {
+                    //@ts-ignore
+                    setContent(e.target.value)
                     // @ts-ignore
                     e.target.style.height = 'auto'
                     // @ts-ignore
