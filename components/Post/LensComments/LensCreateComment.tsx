@@ -194,8 +194,6 @@ const LensCreateComment = ({
               })
             ).createDataAvailabilityCommentViaDispatcher
 
-            console.log('createComment', createComment)
-
             if (
               createComment.__typename === 'RelayError' ||
               !createComment.id

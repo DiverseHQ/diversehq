@@ -16,6 +16,8 @@ import LensCreateComment from './LensCreateComment'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import { useDevice } from '../../Common/DeviceWrapper'
 import { postWithCommunityInfoType } from '../../../types/post'
+// import { isNullableType } from 'graphql'
+// import index from '../../../pages/explore'
 
 const CombinedCommentSection = ({
   postId,
@@ -24,11 +26,24 @@ const CombinedCommentSection = ({
   postId: string
   postInfo: postWithCommunityInfoType
 }) => {
-  const [comments, setComments] = useState([])
-  const [uniqueComments, setUniqueComments] = useState([])
-  const [hasMore, setHasMore] = useState(true)
-  const [cursor, setCursor] = useState(null)
-  const [nextCursor, setNextCursor] = useState(null)
+  const [params, setParams] = useState({
+    comments: [],
+    hasMore: true,
+    cursor: null,
+    nextCursor: null,
+    postId
+  })
+
+  useEffect(() => {
+    setParams({
+      comments: [],
+      hasMore: true,
+      cursor: null,
+      nextCursor: null,
+      postId
+    })
+  }, [postId])
+
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isMobile } = useDevice()
@@ -36,8 +51,8 @@ const CombinedCommentSection = ({
   const { data } = useCommentFeedQuery(
     {
       request: {
-        cursor: cursor,
-        commentsOf: postId,
+        cursor: params.cursor,
+        commentsOf: params.postId,
         limit: LENS_COMMENT_LIMIT,
         commentsOfOrdering: CommentOrderingTypes.Ranking,
         commentsRankingFilter: CommentRankingFilter.Relevant
@@ -48,24 +63,27 @@ const CombinedCommentSection = ({
       profileId: lensProfile?.defaultProfile?.id
     },
     {
-      enabled: !!postId
+      enabled: !!params.postId
     }
   )
 
   useEffect(() => {
-    if (!data?.publications?.items) return
     handleCommentsPublications()
   }, [data?.publications?.pageInfo?.next])
 
   const handleCommentsPublications = async () => {
-    if (data?.publications?.pageInfo?.next) {
-      setNextCursor(data?.publications?.pageInfo?.next)
-    }
-    if (data?.publications?.items.length < LENS_COMMENT_LIMIT) {
-      setHasMore(false)
-    }
-    const newComments = data?.publications?.items
-    setComments([...comments, ...newComments])
+    setParams({
+      ...params,
+      nextCursor: data?.publications?.pageInfo?.next ?? params.nextCursor,
+      hasMore:
+        data?.publications?.items?.length < LENS_COMMENT_LIMIT ||
+        !data?.publications?.items
+          ? false
+          : params.hasMore,
+      comments: data?.publications?.items
+        ? [...params.comments, ...data?.publications?.items]
+        : params.comments
+    })
   }
 
   const addComment = async (tx, comment) => {
@@ -78,13 +96,19 @@ const CombinedCommentSection = ({
         }
       })
 
-      setComments([comment, ...comments])
+      setParams({
+        ...params,
+        comments: [comment, ...params.comments]
+      })
       return
     }
 
-    const prevComments = comments
+    const prevComments = params.comments
     const newCommentsFirstPhase = [comment, ...prevComments]
-    setComments(newCommentsFirstPhase)
+    setParams({
+      ...params,
+      comments: newCommentsFirstPhase
+    })
     const indexResult = await pollUntilIndexed(tx)
 
     const commentId = commentIdFromIndexedResult(
@@ -103,7 +127,10 @@ const CombinedCommentSection = ({
       c.tempId === comment.tempId ? { ...c, id: commentId } : c
     )
     // add id to that comment
-    setComments(newCommentsSecondPhase)
+    setParams({
+      ...params,
+      comments: newCommentsSecondPhase
+    })
     // add comment id to comment
     // remove previous comment
     // setComments(comments.filter((c) => c.tempId !== comment.tempId))
@@ -111,22 +138,22 @@ const CombinedCommentSection = ({
     // setComments([comment, ...comments])
   }
 
-  useEffect(() => {
-    if (!comments || comments.length === 0) return
-    setUniqueComments(
-      comments.filter(
-        (comment, index, self) =>
-          index === self.findIndex((t) => t.id === comment.id)
-      )
-    )
-  }, [comments])
+  useEffect(() => {}, [postInfo])
 
   const getMorePosts = async () => {
-    if (nextCursor) {
-      setCursor(nextCursor)
+    if (params.nextCursor) {
+      setParams({
+        ...params,
+        cursor: params.nextCursor
+      })
       return
     }
   }
+
+  const uniqueComments = params.comments.filter(
+    (comment, index, self) =>
+      index === self.findIndex((t) => t.id === comment.id)
+  )
 
   return (
     <div
@@ -149,9 +176,9 @@ const CombinedCommentSection = ({
 
       {/* comments section */}
       <InfiniteScroll
-        dataLength={comments.length}
+        dataLength={uniqueComments.length}
         next={getMorePosts}
-        hasMore={hasMore}
+        hasMore={params.hasMore}
         loader={<MobileLoader />}
         endMessage={<></>}
       >
