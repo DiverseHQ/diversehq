@@ -4,7 +4,9 @@ import {
   PublicationMainFocus,
   ReactionTypes,
   useCreateCommentTypedDataMutation,
-  useCreateCommentViaDispatcherMutation
+  useCreateCommentViaDispatcherMutation,
+  useCreateDataAvailabilityCommentTypedDataMutation,
+  useCreateDataAvailabilityCommentViaDispatcherMutation
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
@@ -22,6 +24,7 @@ import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../../User/lib/formatHandle'
 import clsx from 'clsx'
 import { useDevice } from '../../Common/DeviceWrapper'
+import useDASignTypedDataAndBroadcast from '../../../lib/useDASignTypedDataAndBroadcast'
 const LensCreateComment = ({
   postId,
   addComment,
@@ -30,7 +33,7 @@ const LensCreateComment = ({
 }: {
   postId: string
   // eslint-disable-next-line no-unused-vars
-  addComment: (tx: string, comment: any) => void
+  addComment: (tx: string | null, comment: any) => void
   postInfo?: any
   canCommnet?: boolean
 }) => {
@@ -39,6 +42,12 @@ const LensCreateComment = ({
   const setContent = useCommentStore((state) => state.setContent)
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
+  const {
+    error: daError,
+    result: daResult,
+    type: daType,
+    signDATypedDataAndBroadcast
+  } = useDASignTypedDataAndBroadcast()
   const currentReplyComment = useCommentStore(
     (state) => state.currentReplyComment
   )
@@ -50,6 +59,11 @@ const LensCreateComment = ({
     useCreateCommentTypedDataMutation()
   const { mutateAsync: createCommentViaDispatcher } =
     useCreateCommentViaDispatcherMutation()
+  const { mutateAsync: createDACommentViaDispatcher } =
+    useCreateDataAvailabilityCommentViaDispatcherMutation()
+  const { mutateAsync: createDACommentTypedData } =
+    useCreateDataAvailabilityCommentTypedDataMutation()
+
   const [tempId, setTempId] = useState('')
 
   const { notifyError } = useNotify()
@@ -64,9 +78,11 @@ const LensCreateComment = ({
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
   const { isMobile } = useDevice()
 
-  const onSuccessCreateComment = async (tx, tempId) => {
+  const onSuccessCreateComment = async (tx, tempId, isDA) => {
     const comment = {
+      id: isDA ? tempId : null,
       tempId: tempId,
+      isDataAvailability: Boolean(isDA),
       profile: {
         picture: {
           original: {
@@ -112,7 +128,11 @@ const LensCreateComment = ({
       // @ts-ignore
       commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
     }
-    addComment(tx, comment)
+    if (isDA) {
+      addComment(null, comment)
+    } else {
+      addComment(tx, comment)
+    }
     setCurrentReplyComment(null)
     setGifAttachment(null)
   }
@@ -160,6 +180,59 @@ const LensCreateComment = ({
             ]
           : null
       })
+
+      if (postInfo?.isDataAvailability) {
+        try {
+          if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+            const createComment = (
+              await createDACommentViaDispatcher({
+                request: {
+                  commentOn: postId,
+                  contentURI: `ipfs://${ipfsHash}`,
+                  from: lensProfile?.defaultProfile?.id
+                }
+              })
+            ).createDataAvailabilityCommentViaDispatcher
+
+            console.log('createComment', createComment)
+
+            if (
+              createComment.__typename === 'RelayError' ||
+              !createComment.id
+            ) {
+              setLoading(false)
+              notifyError(
+                createComment.__typename === 'RelayError'
+                  ? createComment.reason
+                  : 'Something went wrong'
+              )
+            } else {
+              onSuccessCreateComment(null, createComment.id, true)
+            }
+          } else {
+            const typedData = (
+              await createDACommentTypedData({
+                request: {
+                  commentOn: postId,
+                  contentURI: `ipfs://${ipfsHash}`,
+                  from: lensProfile?.defaultProfile?.id
+                }
+              })
+            ).createDataAvailabilityCommentTypedData
+
+            signDATypedDataAndBroadcast(typedData.typedData, {
+              id: typedData.id,
+              type: 'createDAComment'
+            })
+          }
+        } catch (error) {
+          setLoading(false)
+          console.log('error')
+          notifyError('Something Went Wrong')
+        }
+        return
+      }
+
       const createCommentRequest = {
         profileId: lensProfile?.defaultProfile?.id,
         publicationId: postId,
@@ -183,7 +256,11 @@ const LensCreateComment = ({
             notifyError(dispatcherResult.reason)
             return
           } else {
-            onSuccessCreateComment({ txId: dispatcherResult.txId }, metadata_id)
+            onSuccessCreateComment(
+              { txId: dispatcherResult.txId },
+              metadata_id,
+              false
+            )
           }
         } else {
           const commentTypedResult = (
@@ -207,16 +284,22 @@ const LensCreateComment = ({
 
   useEffect(() => {
     if (result && type === 'createComment') {
-      onSuccessCreateComment({ txId: result.txId }, tempId)
+      onSuccessCreateComment({ txId: result.txId }, tempId, false)
     }
   }, [result, type])
 
   useEffect(() => {
-    if (error) {
-      setLoading(false)
-      notifyError(error)
+    if (daResult && daType === 'createDAComment') {
+      onSuccessCreateComment(null, daResult.id, false)
     }
-  }, [error])
+  }, [daResult, daType])
+
+  useEffect(() => {
+    if (error || daError) {
+      setLoading(false)
+      notifyError(error || daError)
+    }
+  }, [error, daError])
 
   useEffect(() => {
     if (postInfo) return

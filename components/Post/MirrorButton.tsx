@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {
+  useCreateDataAvailabilityMirrorTypedDataMutation,
+  useCreateDataAvailabilityMirrorViaDispatcherMutation,
   useCreateMirrorTypedDataMutation,
   useCreateMirrorViaDispatcherMutation,
   useHidePublicationMutation
@@ -13,6 +15,7 @@ import OptionsWrapper from '../Common/OptionsWrapper'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { Tooltip } from '@mui/material'
 import { AiOutlineRetweet } from 'react-icons/ai'
+import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 
 interface Props {
   postInfo: postWithCommunityInfoType
@@ -24,13 +27,17 @@ const MirrorButton = ({ postInfo }: Props) => {
   const { notifyError, notifySuccess } = useNotify()
   const { result, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
+  const {
+    result: daResult,
+    type: daType,
+    signDATypedDataAndBroadcast
+  } = useDASignTypedDataAndBroadcast()
   const { mutateAsync: mirrorPostViaDispatcher } =
     useCreateMirrorViaDispatcherMutation()
   const [mirrorCount, setMirrorCount] = useState(
-    postInfo?.stats?.totalAmountOfMirrors
-      ? postInfo?.stats?.totalAmountOfMirrors
-      : 0
+    postInfo?.stats?.totalAmountOfMirrors ?? 0
   )
+
   const [isSuccessful, setIsSuccessful] = useState(false)
   const [mirrored, setMirrored] = useState(
     // @ts-ignore
@@ -39,6 +46,10 @@ const MirrorButton = ({ postInfo }: Props) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const { mutateAsync: deletePublication } = useHidePublicationMutation()
+  const { mutateAsync: createMirrorDAViaDispatcher } =
+    useCreateDataAvailabilityMirrorViaDispatcherMutation()
+  const { mutateAsync: createDAMirrorTypedData } =
+    useCreateDataAvailabilityMirrorTypedDataMutation()
   const router = useRouter()
 
   useEffect(() => {
@@ -46,14 +57,69 @@ const MirrorButton = ({ postInfo }: Props) => {
       // @ts-ignore
       postInfo?.mirrors?.length > 0
     )
+
+    setMirrorCount(postInfo?.stats?.totalAmountOfMirrors ?? 0)
   }, [
     // @ts-ignore
-    postInfo?.mirrors?.length
+    postInfo
   ])
   const [loading, setLoading] = useState(false)
 
   const handleMirrorPost = async () => {
     setLoading(true)
+
+    if (postInfo?.isDataAvailability) {
+      try {
+        if (!isSignedIn) {
+          notifyError('Please sign in to mirror a post')
+          setLoading(false)
+          return
+        }
+        setIsDrawerOpen(false)
+        setShowOptionsModal(false)
+        if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+          const createMirror = (
+            await createMirrorDAViaDispatcher({
+              request: {
+                from: lensProfile?.defaultProfile?.id,
+                mirror: postInfo.id
+              }
+            })
+          ).createDataAvailabilityMirrorViaDispatcher
+
+          if (createMirror.__typename === 'RelayError' || !createMirror.id) {
+            notifyError(
+              createMirror.__typename === 'RelayError'
+                ? createMirror.reason
+                : 'Something went wrong'
+            )
+          } else {
+            setIsSuccessful(true)
+          }
+        } else {
+          const typedData = (
+            await createDAMirrorTypedData({
+              request: {
+                from: lensProfile?.defaultProfile?.id,
+                mirror: postInfo.id
+              }
+            })
+          ).createDataAvailabilityMirrorTypedData
+
+          signDATypedDataAndBroadcast(typedData.typedData, {
+            id: typedData.id,
+            type: 'DAMirror'
+          })
+        }
+      } catch (error) {
+        notifyError('Something went wrong')
+        setLoading(false)
+      } finally {
+        setLoading(false)
+      }
+      return
+    }
+
     try {
       if (!isSignedIn) {
         notifyError('Please sign in to mirror a post')
@@ -133,6 +199,14 @@ const MirrorButton = ({ postInfo }: Props) => {
       setLoading(false)
     }
   }, [result])
+
+  useEffect(() => {
+    if (daResult && daType === 'DAMirror') {
+      setIsSuccessful(true)
+      setLoading(false)
+    }
+  }, [daResult, daType])
+
   const handleUndoMirror = async () => {
     // @ts-ignore
     let mirrorId = postInfo?.originalMirrorPublication?.id
@@ -157,89 +231,110 @@ const MirrorButton = ({ postInfo }: Props) => {
     <>
       {mirrored ? (
         <>
-          {/* @ts-ignore */}
-          {postInfo?.mirroredBy && postInfo?.originalMirrorPublication?.id ? (
+          {postInfo?.isDataAvailability ? (
             <span onClick={(e) => e.stopPropagation()}>
-              <OptionsWrapper
-                OptionPopUpModal={() => (
-                  <MoreOptionsModal
-                    className="z-50"
-                    list={[
-                      {
-                        label: 'Undo Mirror',
-                        onClick: handleUndoMirror
-                      }
-                    ]}
+              <Tooltip title="Mirrored" arrow>
+                <div
+                  className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684]`}
+                >
+                  <AiOutlineRetweet
+                    className={`text-p-btn rounded-md w-4 h-4 `}
                   />
-                )}
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
-                showOptionsModal={showOptionsModal}
-                setShowOptionsModal={setShowOptionsModal}
-                position="top-right"
-              >
-                <Tooltip title="Undo Mirror" arrow>
-                  <div
-                    className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
-                      mirrored ? 'font-bold' : ''
-                    }`}
-                  >
-                    {loading ? (
-                      <div className="spinner ml-2 w-3 h-3" />
-                    ) : (
-                      <AiOutlineRetweet
-                        className={`text-p-btn rounded-md w-4 h-4 `}
-                      />
-                    )}
 
-                    <p className="ml-2 font-medium text-[#687684]">
-                      {mirrorCount}
-                    </p>
-                  </div>
-                </Tooltip>
-              </OptionsWrapper>
+                  <p className="ml-2 font-medium text-[#687684]">
+                    {mirrorCount}
+                  </p>
+                </div>
+              </Tooltip>
             </span>
           ) : (
-            <span onClick={(e) => e.stopPropagation()}>
-              <OptionsWrapper
-                OptionPopUpModal={() => (
-                  <MoreOptionsModal
-                    className="z-50"
-                    list={[
-                      {
-                        label: 'Mirror Again',
-                        onClick: handleMirrorPost
-                      }
-                    ]}
-                  />
-                )}
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
-                showOptionsModal={showOptionsModal}
-                setShowOptionsModal={setShowOptionsModal}
-                position="top-right"
-              >
-                <Tooltip title="Mirror" arrow>
-                  <div
-                    className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
-                      mirrored ? 'font-bold' : ''
-                    }`}
-                  >
-                    {loading ? (
-                      <div className="spinner ml-2 w-3 h-3" />
-                    ) : (
-                      <AiOutlineRetweet
-                        className={`text-p-btn rounded-md w-4 h-4 `}
+            <>
+              {/* @ts-ignore */}
+              {postInfo?.mirroredBy &&
+              postInfo?.originalMirrorPublication?.id ? (
+                <span onClick={(e) => e.stopPropagation()}>
+                  <OptionsWrapper
+                    OptionPopUpModal={() => (
+                      <MoreOptionsModal
+                        className="z-50"
+                        list={[
+                          {
+                            label: 'Undo Mirror',
+                            onClick: handleUndoMirror
+                          }
+                        ]}
                       />
                     )}
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                    showOptionsModal={showOptionsModal}
+                    setShowOptionsModal={setShowOptionsModal}
+                    position="top-right"
+                  >
+                    <Tooltip title="Undo Mirror" arrow>
+                      <div
+                        className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
+                          mirrored ? 'font-bold' : ''
+                        }`}
+                      >
+                        {loading ? (
+                          <div className="spinner ml-2 w-3 h-3" />
+                        ) : (
+                          <AiOutlineRetweet
+                            className={`text-p-btn rounded-md w-4 h-4 `}
+                          />
+                        )}
 
-                    <p className="ml-2 font-medium text-[#687684]">
-                      {mirrorCount}
-                    </p>
-                  </div>
-                </Tooltip>
-              </OptionsWrapper>
-            </span>
+                        <p className="ml-2 font-medium text-[#687684]">
+                          {mirrorCount}
+                        </p>
+                      </div>
+                    </Tooltip>
+                  </OptionsWrapper>
+                </span>
+              ) : (
+                <span onClick={(e) => e.stopPropagation()}>
+                  <OptionsWrapper
+                    OptionPopUpModal={() => (
+                      <MoreOptionsModal
+                        className="z-50"
+                        list={[
+                          {
+                            label: 'Mirror Again',
+                            onClick: handleMirrorPost
+                          }
+                        ]}
+                      />
+                    )}
+                    isDrawerOpen={isDrawerOpen}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                    showOptionsModal={showOptionsModal}
+                    setShowOptionsModal={setShowOptionsModal}
+                    position="top-right"
+                  >
+                    <Tooltip title="Mirror" arrow>
+                      <div
+                        className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
+                          mirrored ? 'font-bold' : ''
+                        }`}
+                      >
+                        {loading ? (
+                          <div className="spinner ml-2 w-3 h-3" />
+                        ) : (
+                          <AiOutlineRetweet
+                            className={`text-p-btn rounded-md w-4 h-4 `}
+                          />
+                        )}
+
+                        <p className="ml-2 font-medium text-[#687684]">
+                          {mirrorCount}
+                        </p>
+                      </div>
+                    </Tooltip>
+                  </OptionsWrapper>
+                </span>
+              )}
+            </>
           )}
         </>
       ) : (

@@ -163,6 +163,7 @@ fragment PostFields on Post {
   profile {
     ...ProfileFields
   }
+  isDataAvailability
   stats {
     ...PublicationStatsFields
   }
@@ -206,6 +207,7 @@ fragment MirrorBaseFields on Mirror {
   profile {
     ...ProfileFields
   }
+  isDataAvailability
   stats {
     ...PublicationStatsFields
     ...StatsFields
@@ -226,7 +228,6 @@ fragment MirrorBaseFields on Mirror {
   hasCollectedByMe
   isGated
 }
-
 fragment MirrorFields on Mirror {
   id
   profile {
@@ -234,6 +235,7 @@ fragment MirrorFields on Mirror {
   }
   reaction(request: $reactionRequest)
   isGated
+  isDataAvailability
   canComment(profileId: $profileId) {
     result
   }
@@ -278,6 +280,7 @@ fragment CommentBaseFields on Comment {
   metadata {
     ...MetadataOutputFields
   }
+  isDataAvailability
   createdAt
   collectModule {
     ...CollectModuleFields

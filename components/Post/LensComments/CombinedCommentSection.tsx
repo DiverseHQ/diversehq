@@ -69,6 +69,19 @@ const CombinedCommentSection = ({
   }
 
   const addComment = async (tx, comment) => {
+    if (!tx && comment?.id) {
+      await addReaction({
+        request: {
+          profileId: lensProfile?.defaultProfile?.id,
+          publicationId: comment.id,
+          reaction: ReactionTypes.Upvote
+        }
+      })
+
+      setComments([comment, ...comments])
+      return
+    }
+
     const prevComments = comments
     const newCommentsFirstPhase = [comment, ...prevComments]
     setComments(newCommentsFirstPhase)

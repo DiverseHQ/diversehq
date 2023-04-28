@@ -169,8 +169,20 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
 
   const addComment = async (tx, comment) => {
     setCurrentReplyComment(null)
+    if (!tx && comment?.id) {
+      await addReaction({
+        request: {
+          profileId: lensProfile.defaultProfile.id,
+          publicationId: comment.id,
+          reaction: ReactionTypes.Upvote
+        }
+      })
+      setComments([comment, ...comments])
+      return
+    }
     const prevComments = comments
     const newCommentsFirstPhase = [comment, ...prevComments]
+
     try {
       setComments(newCommentsFirstPhase)
       const indexResult = await pollUntilIndexed(tx)
@@ -405,6 +417,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                   <LensCreateComment
                     postId={comment.id}
                     addComment={addComment}
+                    postInfo={comment}
                     canCommnet={comment?.canComment?.result ?? true}
                   />
                 )}

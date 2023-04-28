@@ -41,16 +41,136 @@ query notifications(
 }
 
 fragment CommentWithCommentedPublicationFields on Comment {
-  ...CommentFields
+  __typename
+  id
+  profile {
+    ...ProfileFields
+  }
+
+  metadata {
+    ...MetadataOutputFields
+  }
+  createdAt
+  mainPost {
+    ... on Post {
+      id
+      profile {
+        ...ProfileFields
+      }
+      stats {
+        ...PublicationStatsFields
+      }
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
+    }
+    ... on Mirror {
+      id
+      profile {
+        ...ProfileFields
+      }
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
+      mirrorOf {
+        ... on Post {
+          id
+          profile {
+            ...ProfileFields
+          }
+          stats {
+            ...PublicationStatsFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+        }
+        ... on Comment {
+          ...CommentMirrorOfFields
+        }
+      }
+    }
+  }
+  metadata {
+    ...MetadataFields
+  }
   commentOn {
     ... on Post {
-      ...PostFields
+      id
+      profile {
+        ...ProfileFields
+      }
+      stats {
+        ...PublicationStatsFields
+      }
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
     }
     ... on Mirror {
       ...MirrorFields
     }
     ... on Comment {
-      ...CommentFields
+      __typename
+      id
+      profile {
+        ...ProfileFields
+      }
+
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
+      mainPost {
+        ... on Post {
+          id
+          profile {
+            ...ProfileFields
+          }
+          stats {
+            ...PublicationStatsFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+        }
+        ... on Mirror {
+          id
+          profile {
+            ...ProfileFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+          mirrorOf {
+            ... on Post {
+              id
+              profile {
+                ...ProfileFields
+              }
+              stats {
+                ...PublicationStatsFields
+              }
+              metadata {
+                ...MetadataOutputFields
+              }
+              createdAt
+            }
+            ... on Comment {
+              ...CommentMirrorOfFields
+            }
+          }
+        }
+      }
+      metadata {
+        ...MetadataFields
+      }
     }
   }
 }
@@ -73,7 +193,17 @@ fragment NewCollectNotificationFields on NewCollectNotification {
   collectedPublication {
     __typename
     ... on Post {
-      ...PostFields
+      id
+      profile {
+        ...ProfileFields
+      }
+      stats {
+        ...PublicationStatsFields
+      }
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
     }
 
     ... on Mirror {
@@ -81,7 +211,62 @@ fragment NewCollectNotificationFields on NewCollectNotification {
     }
 
     ... on Comment {
-      ...CommentFields
+      __typename
+      id
+      profile {
+        ...ProfileFields
+      }
+
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
+      mainPost {
+        ... on Post {
+          id
+          profile {
+            ...ProfileFields
+          }
+          stats {
+            ...PublicationStatsFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+        }
+        ... on Mirror {
+          id
+          profile {
+            ...ProfileFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+          mirrorOf {
+            ... on Post {
+              id
+              profile {
+                ...ProfileFields
+              }
+              stats {
+                ...PublicationStatsFields
+              }
+              metadata {
+                ...MetadataOutputFields
+              }
+              createdAt
+            }
+            ... on Comment {
+              ...CommentMirrorOfFields
+            }
+          }
+        }
+      }
+      metadata {
+        ...MetadataFields
+      }
     }
   }
 }
@@ -94,10 +279,75 @@ fragment NewMirrorNotificationFields on NewMirrorNotification {
   }
   publication {
     ... on Post {
-      ...PostFields
+      id
+      profile {
+        ...ProfileFields
+      }
+      stats {
+        ...PublicationStatsFields
+      }
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
     }
     ... on Comment {
-      ...CommentFields
+      __typename
+      id
+      profile {
+        ...ProfileFields
+      }
+
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
+      mainPost {
+        ... on Post {
+          id
+          profile {
+            ...ProfileFields
+          }
+          stats {
+            ...PublicationStatsFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+        }
+        ... on Mirror {
+          id
+          profile {
+            ...ProfileFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+          mirrorOf {
+            ... on Post {
+              id
+              profile {
+                ...ProfileFields
+              }
+              stats {
+                ...PublicationStatsFields
+              }
+              metadata {
+                ...MetadataOutputFields
+              }
+              createdAt
+            }
+            ... on Comment {
+              ...CommentMirrorOfFields
+            }
+          }
+        }
+      }
+      metadata {
+        ...MetadataFields
+      }
     }
   }
 }
@@ -117,10 +367,75 @@ fragment NewMentionNotificationFields on NewMentionNotification {
   __typename
   mentionPublication {
     ... on Post {
-      ...PostFields
+      id
+      profile {
+        ...ProfileFields
+      }
+      stats {
+        ...PublicationStatsFields
+      }
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
     }
     ... on Comment {
-      ...CommentFields
+      __typename
+      id
+      profile {
+        ...ProfileFields
+      }
+
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
+      mainPost {
+        ... on Post {
+          id
+          profile {
+            ...ProfileFields
+          }
+          stats {
+            ...PublicationStatsFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+        }
+        ... on Mirror {
+          id
+          profile {
+            ...ProfileFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+          mirrorOf {
+            ... on Post {
+              id
+              profile {
+                ...ProfileFields
+              }
+              stats {
+                ...PublicationStatsFields
+              }
+              metadata {
+                ...MetadataOutputFields
+              }
+              createdAt
+            }
+            ... on Comment {
+              ...CommentMirrorOfFields
+            }
+          }
+        }
+      }
+      metadata {
+        ...MetadataFields
+      }
     }
   }
   createdAt
@@ -135,7 +450,17 @@ fragment NewReactionNotificationFields on NewReactionNotification {
   reaction
   publication {
     ... on Post {
-      ...PostFields
+      id
+      profile {
+        ...ProfileFields
+      }
+      stats {
+        ...PublicationStatsFields
+      }
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
     }
 
     ... on Mirror {
@@ -143,7 +468,62 @@ fragment NewReactionNotificationFields on NewReactionNotification {
     }
 
     ... on Comment {
-      ...CommentFields
+      __typename
+      id
+      profile {
+        ...ProfileFields
+      }
+
+      metadata {
+        ...MetadataOutputFields
+      }
+      createdAt
+      mainPost {
+        ... on Post {
+          id
+          profile {
+            ...ProfileFields
+          }
+          stats {
+            ...PublicationStatsFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+        }
+        ... on Mirror {
+          id
+          profile {
+            ...ProfileFields
+          }
+          metadata {
+            ...MetadataOutputFields
+          }
+          createdAt
+          mirrorOf {
+            ... on Post {
+              id
+              profile {
+                ...ProfileFields
+              }
+              stats {
+                ...PublicationStatsFields
+              }
+              metadata {
+                ...MetadataOutputFields
+              }
+              createdAt
+            }
+            ... on Comment {
+              ...CommentMirrorOfFields
+            }
+          }
+        }
+      }
+      metadata {
+        ...MetadataFields
+      }
     }
   }
 }

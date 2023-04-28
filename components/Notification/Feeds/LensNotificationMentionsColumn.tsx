@@ -54,6 +54,8 @@ const LensNotificationMentionsColumn = () => {
     }
   )
 
+  console.log('data?.notifications?.items', data?.notifications?.items)
+
   useEffect(() => {
     setParams({
       ...params,

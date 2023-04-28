@@ -1,0 +1,14 @@
+mutation CreateDataAvailabilityMirrorViaDispatcher(
+  $request: CreateDataAvailabilityMirrorRequest!
+) {
+  createDataAvailabilityMirrorViaDispatcher(request: $request) {
+    ... on CreateDataAvailabilityPublicationResult {
+      id
+      proofs
+      dataAvailabilityId
+    }
+    ... on RelayError {
+      reason
+    }
+  }
+}

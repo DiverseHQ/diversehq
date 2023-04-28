@@ -75,11 +75,18 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
         >
           Collect Setting
         </h1>
-        <div className="flex flex-row items-center justify-between">
-          <p>Only Followers can Collect</p>
+        <div className="start-row">
           <Switch
-            checked={followerOnly}
-            onChange={() => setFollowerOnly(!followerOnly)}
+            checked={!!collectSettings}
+            onChange={() => {
+              if (collectSettings) {
+                setCollectSettings(null)
+              } else {
+                setCollectSettings({
+                  freeCollectModule: { followerOnly: false }
+                })
+              }
+            }}
             sx={{
               '& .MuiSwitch-track': {
                 backgroundColor: 'grey',
@@ -87,52 +94,73 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               }
             }}
           />
+          <p>This post can be collected</p>
         </div>
-        <div className="flex flex-row items-center justify-between">
-          <p>Monetize</p>
-          <Switch
-            checked={monetize}
-            onChange={() => setMonetize(!monetize)}
-            sx={{
-              '& .MuiSwitch-track': {
-                backgroundColor: 'grey',
-                color: 'grey'
-              }
-            }}
-          />
-        </div>
-        {monetize && (
-          <div className=" flex flex-row  flex-row lg:gap-y-4 space-x-10 lg:space-x-32">
-            <div className="flex flex-row items-center ">
-              <div>Currency</div>
-              <MUIThemeProvider theme={MUITheme}>
-                <Select
-                  onChange={(e) => {
-                    setCurrency(e.target.value)
-                  }}
-                  className={` text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
-                  value={currency}
-                >
-                  {data?.enabledModuleCurrencies.map((currency) => (
-                    <MenuItem key={currency.address} value={currency.address}>
-                      {currency.symbol}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </MUIThemeProvider>
-            </div>
-            <div className="flex flex-row items-center">
-              <div>Price (min 0.001)</div>
-              <input
-                type="number"
-                value={price}
-                min={0.001}
-                onChange={(e) => setPrice(Number(e.target.value))}
-                className={`border  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md ${
-                  !isMobile ? 'w-20' : 'w-16'
-                } `}
+        {collectSettings && (
+          <div className="pl-4">
+            <div className="start-row">
+              <Switch
+                checked={followerOnly}
+                onChange={() => setFollowerOnly(!followerOnly)}
+                sx={{
+                  '& .MuiSwitch-track': {
+                    backgroundColor: 'grey',
+                    color: 'grey'
+                  }
+                }}
               />
+              <p>Only Followers can Collect</p>
             </div>
+            <div className="start-row">
+              <Switch
+                checked={monetize}
+                onChange={() => setMonetize(!monetize)}
+                sx={{
+                  '& .MuiSwitch-track': {
+                    backgroundColor: 'grey',
+                    color: 'grey'
+                  }
+                }}
+              />
+              <p>Monetize</p>
+            </div>
+            {monetize && (
+              <div className="flex flex-row  flex-row lg:gap-y-4 space-x-10 lg:space-x-32 pl-6">
+                <div className="flex flex-row items-center ">
+                  <div>Currency</div>
+                  <MUIThemeProvider theme={MUITheme}>
+                    <Select
+                      onChange={(e) => {
+                        setCurrency(e.target.value)
+                      }}
+                      className={` text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
+                      value={currency}
+                    >
+                      {data?.enabledModuleCurrencies.map((currency) => (
+                        <MenuItem
+                          key={currency.address}
+                          value={currency.address}
+                        >
+                          {currency.symbol}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </MUIThemeProvider>
+                </div>
+                <div className="flex flex-row items-center">
+                  <div>Price (min 0.001)</div>
+                  <input
+                    type="number"
+                    value={price}
+                    min={0.001}
+                    onChange={(e) => setPrice(Number(e.target.value))}
+                    className={`border  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md ${
+                      !isMobile ? 'w-20' : 'w-16'
+                    } `}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

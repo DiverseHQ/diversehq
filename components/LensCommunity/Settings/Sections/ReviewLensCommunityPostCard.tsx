@@ -3,16 +3,18 @@ import React, { useEffect } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import { putResolveLensCommunityPost } from '../../../../api/reviewLensCommunityPost'
 import {
-  useCreatePostTypedDataMutation,
-  useCreatePostViaDispatcherMutation
+  useCreateDataAvailabilityPostTypedDataMutation,
+  useCreateDataAvailabilityPostViaDispatcherMutation
+  // useCreatePostTypedDataMutation,
+  // useCreatePostViaDispatcherMutation
 } from '../../../../graphql/generated'
-import { pollUntilIndexed } from '../../../../lib/indexer/has-transaction-been-indexed'
+// import { pollUntilIndexed } from '../../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../../lib/LensUserContext'
-import useSignTypedDataAndBroadcast from '../../../../lib/useSignTypedDataAndBroadcast'
+// import useSignTypedDataAndBroadcast from '../../../../lib/useSignTypedDataAndBroadcast'
 // import { LensCommunity } from '../../../../types/community'
 import { ReviewPostType } from '../../../../types/reviewPost'
 import { lensCommunityPostsResolveActions } from '../../../../utils/config'
-import { postIdFromIndexedResult } from '../../../../utils/utils'
+// import { postIdFromIndexedResult } from '../../../../utils/utils'
 import { useNotify } from '../../../Common/NotifyContext'
 import ImageWithPulsingLoader from '../../../Common/UI/ImageWithPulsingLoader'
 import Markup from '../../../Lexical/Markup'
@@ -21,6 +23,7 @@ import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
 import { putAddLensPublication } from '../../../../api/lensPublication'
 import Attachment from '../../../Post/Attachment'
+import useDASignTypedDataAndBroadcast from '../../../../lib/useDASignTypedDataAndBroadcast'
 
 interface Props {
   fetchAndSetUnResolvedReviewPosts: () => Promise<void>
@@ -37,17 +40,27 @@ const ReviewLensCommunityPostCard = ({
     'posting...' | 'indexing...' | 'confirming...' | null
   >(null)
 
-  const { mutateAsync: createPostViaDispatcher } =
-    useCreatePostViaDispatcherMutation()
-  const { mutateAsync: createPostViaSignedTx } =
-    useCreatePostTypedDataMutation()
+  // const { mutateAsync: createPostViaDispatcher } =
+  //   useCreatePostViaDispatcherMutation()
+  // const { mutateAsync: createPostViaSignedTx } =
+  //   useCreatePostTypedDataMutation()
+  const { mutateAsync: createDAPostViaDispatcher } =
+    useCreateDataAvailabilityPostViaDispatcherMutation()
+  const { mutateAsync: createDAPostTypedData } =
+    useCreateDataAvailabilityPostTypedDataMutation()
   const {
-    error,
-    result,
-    isSignedTx,
-    type: signType,
-    signTypedDataAndBroadcast
-  } = useSignTypedDataAndBroadcast(true)
+    error: daError,
+    result: daResult,
+    type: daType,
+    signDATypedDataAndBroadcast
+  } = useDASignTypedDataAndBroadcast()
+  // const {
+  //   error,
+  //   result,
+  //   isSignedTx,
+  //   type: signType,
+  //   signTypedDataAndBroadcast
+  // } = useSignTypedDataAndBroadcast(true)
 
   const onRejectClick = async () => {
     try {
@@ -92,58 +105,95 @@ const ReviewLensCommunityPostCard = ({
 
   const onAcceptClick = async () => {
     try {
-      const createPostRequest = {
-        profileId: lensProfile?.defaultProfile?.id,
-        contentURI: post?.contentUri,
-        collectModule: {
-          freeCollectModule: {
-            followerOnly: true
-          }
-        },
-        referenceModule: {
-          followerOnlyReferenceModule: false
-        }
-      }
-
-      // dispatch or broadcast
-
       try {
         setLoadingStatus('posting...')
+        // create post with data availability
+
         if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
-          //gasless using dispatcher
           const dispatcherResult = (
-            await createPostViaDispatcher({
-              request: createPostRequest
+            await createDAPostViaDispatcher({
+              request: {
+                contentURI: post?.contentUri,
+                from: lensProfile?.defaultProfile?.id
+              }
             })
-          ).createPostViaDispatcher
+          ).createDataAvailabilityPostViaDispatcher
 
-          if (dispatcherResult.__typename === 'RelayError') {
+          if (
+            dispatcherResult.__typename === 'RelayError' ||
+            !dispatcherResult.id
+          ) {
             setLoadingStatus(null)
-            notifyError(dispatcherResult.reason)
+            // @ts-ignore
+            notifyError(dispatcherResult?.reason || 'Something went wrong')
             return
+          } else {
+            await acceptedPost(dispatcherResult.id)
           }
-
-          setLoadingStatus('indexing...')
-          const indexedResult = await pollUntilIndexed({
-            txId: dispatcherResult.txId
-          })
-          const publicationId = postIdFromIndexedResult(
-            lensProfile?.defaultProfile?.id,
-            indexedResult
-          )
-          await acceptedPost(publicationId)
         } else {
-          //gasless using signed broadcast
-          const postTypedResult = (
-            await createPostViaSignedTx({
-              request: createPostRequest
+          const typedData = (
+            await createDAPostTypedData({
+              request: {
+                contentURI: post?.contentUri,
+                from: lensProfile?.defaultProfile?.id
+              }
             })
-          ).createPostTypedData
-          signTypedDataAndBroadcast(postTypedResult.typedData, {
-            id: postTypedResult.id,
-            type: 'createPost'
+          ).createDataAvailabilityPostTypedData
+
+          signDATypedDataAndBroadcast(typedData.typedData, {
+            id: typedData.id,
+            type: 'createDAPost'
           })
         }
+
+        // const createPostRequest = {
+        //   profileId: lensProfile?.defaultProfile?.id,
+        //   contentURI: post?.contentUri,
+        //   collectModule: {
+        //     freeCollectModule: {
+        //       followerOnly: true
+        //     }
+        //   },
+        //   referenceModule: {
+        //     followerOnlyReferenceModule: false
+        //   }
+        // }
+        // dispatch or broadcast
+        //
+        //   setLoadingStatus('posting...')
+        //   if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+        //     //gasless using dispatcher
+        //     const dispatcherResult = (
+        //       await createPostViaDispatcher({
+        //         request: createPostRequest
+        //       })
+        //     ).createPostViaDispatcher
+        //     if (dispatcherResult.__typename === 'RelayError') {
+        //       setLoadingStatus(null)
+        //       notifyError(dispatcherResult.reason)
+        //       return
+        //     }
+        //     setLoadingStatus('indexing...')
+        //     const indexedResult = await pollUntilIndexed({
+        //       txId: dispatcherResult.txId
+        //     })
+        //     const publicationId = postIdFromIndexedResult(
+        //       lensProfile?.defaultProfile?.id,
+        //       indexedResult
+        //     )
+        //     await acceptedPost(publicationId)
+        //   } else {
+        //     //gasless using signed broadcast
+        //     const postTypedResult = (
+        //       await createPostViaSignedTx({
+        //         request: createPostRequest
+        //       })
+        //     ).createPostTypedData
+        //     signTypedDataAndBroadcast(postTypedResult.typedData, {
+        //       id: postTypedResult.id,
+        //       type: 'createPost'
+        //     })
+        //   }
       } catch (e) {
         setLoadingStatus(null)
         console.log('error', e)
@@ -155,28 +205,41 @@ const ReviewLensCommunityPostCard = ({
     }
   }
 
-  useEffect(() => {
-    if (result && signType === 'createPost') {
-      const publicationId = postIdFromIndexedResult(
-        lensProfile?.defaultProfile?.id,
-        result
-      )
-      acceptedPost(publicationId)
-    }
-  }, [result, signType])
+  // useEffect(() => {
+  //   if (result && signType === 'createPost') {
+  //     const publicationId = postIdFromIndexedResult(
+  //       lensProfile?.defaultProfile?.id,
+  //       result
+  //     )
+  //     acceptedPost(publicationId)
+  //   }
+  // }, [result, signType])
+
+  // useEffect(() => {
+  //   if (isSignedTx && signType === 'createPost') {
+  //     setLoadingStatus('indexing...')
+  //   }
+  // }, [isSignedTx, signType])
+
+  // useEffect(() => {
+  //   if (error) {
+  //     setLoadingStatus(null)
+  //     notifyError(error)
+  //   }
+  // }, [error])
 
   useEffect(() => {
-    if (isSignedTx && signType === 'createPost') {
-      setLoadingStatus('indexing...')
+    if (daResult && daType === 'createDAPost') {
+      acceptedPost(daResult.id)
     }
-  }, [isSignedTx, signType])
+  }, [daResult, daType])
 
   useEffect(() => {
-    if (error) {
+    if (daError) {
       setLoadingStatus(null)
-      notifyError(error)
+      notifyError(daError)
     }
-  }, [error])
+  }, [daError])
 
   const contentAfterRemovingName = post?.contentData?.content
     ?.split('\n')

@@ -23,6 +23,10 @@ import {
   PublicationContentWarning,
   PublicationMainFocus,
   PublicationMetadataDisplayTypes,
+  ReactionTypes,
+  useAddReactionMutation,
+  useCreateDataAvailabilityPostTypedDataMutation,
+  useCreateDataAvailabilityPostViaDispatcherMutation,
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
@@ -55,9 +59,12 @@ import { AttachmentType, usePublicationStore } from '../../store/publication'
 import useUploadAttachments from '../Post/Create/useUploadAttachments'
 import Attachment from '../Post/Attachment'
 import AttachmentRow from '../Post/Create/AttachmentRow'
+import { useRouter } from 'next/router'
+import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
+  const router = useRouter()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const { user, joinedLensCommunities, LensCommunity } = useProfile()
@@ -72,9 +79,7 @@ const CreatePostPopup = () => {
   })
   const { data: lensProfile } = useLensUserContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
-  const [collectSettings, setCollectSettings] = useState<any>({
-    freeCollectModule: { followerOnly: true }
-  })
+  const [collectSettings, setCollectSettings] = useState<any>(null)
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
   const { notifyError, notifyInfo, notifySuccess } = useNotify()
@@ -90,6 +95,18 @@ const CreatePostPopup = () => {
     useCreatePostTypedDataMutation()
   const { error, result, type, signTypedDataAndBroadcast } =
     useSignTypedDataAndBroadcast(false)
+  const { mutateAsync: createPostDAViaDispatcher } =
+    useCreateDataAvailabilityPostViaDispatcherMutation()
+  const { mutateAsync: createDAPostTypedData } =
+    useCreateDataAvailabilityPostTypedDataMutation()
+  const { mutateAsync: addReaction } = useAddReactionMutation()
+  const {
+    loading: daLoading,
+    type: daType,
+    result: daResult,
+    error: daError,
+    signDATypedDataAndBroadcast
+  } = useDASignTypedDataAndBroadcast()
 
   const mostPostedCommunities =
     JSON.parse(window.localStorage.getItem('mostPostedCommunities')) || []
@@ -299,15 +316,6 @@ const CreatePostPopup = () => {
       return
     }
 
-    const createPostRequest = {
-      profileId: lensProfile?.defaultProfile?.id,
-      contentURI: `ipfs://${ipfsHash}`,
-      collectModule: collectSettings,
-      referenceModule: {
-        followerOnlyReferenceModule: false
-      }
-    }
-
     const postForIndexing = {
       tempId: metadataId,
       communityInfo: selectedCommunity?._id
@@ -341,6 +349,68 @@ const CreatePostPopup = () => {
         totalAmountOfCollects: 0,
         totalAmountOfComments: 0,
         totalDownvotes: 0
+      }
+    }
+
+    if (!collectSettings) {
+      // post as da
+      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+        const dispatcherResult = (
+          await createPostDAViaDispatcher({
+            request: {
+              contentURI: `ipfs://${ipfsHash}`,
+              from: lensProfile?.defaultProfile?.id
+            }
+          })
+        ).createDataAvailabilityPostViaDispatcher
+
+        setLoading(false)
+        if (
+          dispatcherResult.__typename === 'RelayError' ||
+          !dispatcherResult.id
+        ) {
+          notifyError(
+            dispatcherResult.__typename === 'RelayError'
+              ? dispatcherResult?.reason
+              : 'Something went wrong'
+          )
+        } else {
+          await addReaction({
+            request: {
+              profileId: lensProfile?.defaultProfile?.id,
+              publicationId: dispatcherResult.id,
+              reaction: ReactionTypes.Upvote
+            }
+          })
+          // // addPost({ txId: dispatcherResult. }, postForIndexing)
+          console.log(dispatcherResult)
+          router.push(`/p/${dispatcherResult.id}`)
+          hideModal()
+        }
+      } else {
+        const typedData = (
+          await createDAPostTypedData({
+            request: {
+              contentURI: `ipfs://${ipfsHash}`,
+              from: lensProfile?.defaultProfile?.id
+            }
+          })
+        ).createDataAvailabilityPostTypedData
+
+        signDATypedDataAndBroadcast(typedData.typedData, {
+          id: typedData.id,
+          type: 'createDAPost'
+        })
+      }
+      return
+    }
+
+    const createPostRequest = {
+      profileId: lensProfile?.defaultProfile?.id,
+      contentURI: `ipfs://${ipfsHash}`,
+      collectModule: collectSettings,
+      referenceModule: {
+        followerOnlyReferenceModule: false
       }
     }
 
@@ -393,11 +463,30 @@ const CreatePostPopup = () => {
   }, [result, type])
 
   useEffect(() => {
-    if (error) {
-      setLoading(false)
-      notifyError(error)
+    const foo = async () => {
+      if (daResult && daType === 'createDAPost') {
+        await addReaction({
+          request: {
+            profileId: lensProfile?.defaultProfile?.id,
+            publicationId: daResult.id,
+            reaction: ReactionTypes.Upvote
+          }
+        })
+        setLoading(false)
+        router.push(`/p/${daResult.id}`)
+        hideModal()
+      }
     }
-  }, [error])
+
+    foo()
+  }, [daResult, daType])
+
+  useEffect(() => {
+    if (error || daError) {
+      setLoading(false)
+      notifyError(error || daError)
+    }
+  }, [error, daError])
 
   const setGifAttachment = (gif) => {
     const attachment = {
@@ -536,7 +625,7 @@ const CreatePostPopup = () => {
         title="Create Post"
         onClick={handleSubmit}
         label="POST"
-        loading={loading}
+        loading={loading || daLoading}
         isDisabled={title.length === 0 || isUploading}
         hideTopBar={showCollectSettings}
         closePopup={closePopUp}
@@ -687,6 +776,9 @@ const CreatePostPopup = () => {
                 >
                   <button
                     onClick={() => {
+                      setCollectSettings({
+                        freeCollectModule: { followerOnly: false }
+                      })
                       if (!isMobile) {
                         setShowCollectSettings(!showCollectSettings)
                         return
