@@ -25,7 +25,7 @@ const profile = ({
   const fetchAndSetLensProfile = async () => {
     try {
       const lensProfileRes = await getLensProfileInfo({
-        handle: handle
+        handle: `${handle}`
       })
       // @ts-ignore
       setLensProfile(lensProfileRes.profile)
@@ -40,6 +40,7 @@ const profile = ({
 
   React.useEffect(() => {
     if (!handle || _lensProfile) return
+    console.log('handle', handle)
     if (profiles.get(handle) && profiles) {
       setLensProfile(profiles.get(handle))
       setLoading(false)
@@ -69,19 +70,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         _lensProfile: null,
-        handle: `${id}${HANDLE_SUFFIX}`
+        handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
       }
     }
   }
 
   const lensProfileRes = await getLensProfileInfo({
-    handle: `${id}${HANDLE_SUFFIX}`
+    handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
   })
 
   return {
     props: {
       _lensProfile: lensProfileRes.profile,
-      handle: `${id}${HANDLE_SUFFIX}`
+      handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
     }
   }
 }

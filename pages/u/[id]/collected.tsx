@@ -2,7 +2,7 @@ import React from 'react'
 import ProfileNotFound from '../../../components/User/Page/ProfileNotFound'
 import ProfilePage from '../../../components/User/Page/ProfilePage'
 import ProfilePageNextSeo from '../../../components/User/ProfilePageNextSeo'
-import { apiMode } from '../../../utils/config'
+import { HANDLE_SUFFIX, apiMode } from '../../../utils/config'
 import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import { Profile } from '../../../graphql/generated'
 import { useProfileStore } from '../../../store/profile'
@@ -68,19 +68,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         _lensProfile: null,
-        handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
+        handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
       }
     }
   }
 
   const lensProfileRes = await getLensProfileInfo({
-    handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
+    handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
   })
 
   return {
     props: {
       _lensProfile: lensProfileRes.profile,
-      handle: `${id}${apiMode === 'dev' ? '.test' : '.lens'}`
+      handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
     }
   }
 }
