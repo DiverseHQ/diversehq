@@ -53,6 +53,9 @@ const CombinedCommentSection = ({
   const setCurrentReplyComment = useCommentStore(
     (state) => state.setCurrentReplyComment
   )
+  const currentReplyComment = useCommentStore(
+    (state) => state.currentReplyComment
+  )
 
   const { data } = useCommentFeedQuery(
     {
@@ -173,7 +176,7 @@ const CombinedCommentSection = ({
       }`}
     >
       {/* create commentd */}
-      {postInfo && (
+      {postInfo && !currentReplyComment && (
         <LensCreateComment
           postId={postId}
           addComment={addComment}
