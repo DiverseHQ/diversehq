@@ -38,7 +38,6 @@ const LensAllTopCommunityPublicationsColumn = ({ communityInfo }: Props) => {
     {
       request: {
         metadata: {
-          locale: 'en-US',
           tags: {
             all: [communityInfo._id]
           }

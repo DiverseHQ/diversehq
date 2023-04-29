@@ -69,7 +69,6 @@ const LensPostJoinedCommunitiesPublicationsNew = ({
         getExplorePublications({
           request: {
             metadata: {
-              locale: 'en-US',
               tags: {
                 oneOf: grounpOfBunchOfCommunityIds[i]
               }

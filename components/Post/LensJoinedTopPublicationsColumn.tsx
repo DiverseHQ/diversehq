@@ -35,7 +35,6 @@ const LensJoinedTopPublicationsColumn = ({ communityIds }) => {
     {
       request: {
         metadata: {
-          locale: 'en-US',
           tags: {
             oneOf: communityIds
           }
