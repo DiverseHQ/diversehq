@@ -18,6 +18,25 @@ query bulkIsFollowedByMe($request: ProfileQueryRequest!) {
         }
         __typename
       }
+      coverPicture {
+        ... on NftImage {
+          contractAddress
+          tokenId
+          uri
+          verified
+        }
+        ... on MediaSet {
+          original {
+            ...MediaFields
+          }
+          small {
+            ...MediaFields
+          }
+          medium {
+            ...MediaFields
+          }
+        }
+      }
       stats {
         totalFollowers
       }

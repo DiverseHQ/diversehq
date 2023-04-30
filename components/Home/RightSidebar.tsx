@@ -6,7 +6,7 @@ import {
 } from '../../api/community'
 // import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
-import { HiOutlineSparkles } from 'react-icons/hi'
+// import { HiOutlineSparkles } from 'react-icons/hi'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 import useHideSidebar from './hook/useHideSidebar'
 import CopyrightAndLinks from '../Common/UI/CopyrightAndLinks'
@@ -15,6 +15,8 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import getAvatar from '../User/lib/getAvatar'
 import formatHandle from '../User/lib/formatHandle'
 import { useAccount } from 'wagmi'
+import CommunityScroll from '../Common/UI/CommunityScroll'
+import getCoverBanner from '../User/lib/getCoverBanner'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
@@ -82,13 +84,15 @@ const RightSidebar = () => {
   const sortedLensCommunities = allLensCommunities
     ?.sort((a, b) => b.stats.totalFollowers - a.stats.totalFollowers)
     ?.filter((c) => !c.isFollowedByMe && c.verified)
-    .slice(0, 3)
+    .slice(0, 6)
+
+  console.log('sortedLensCommunities', sortedLensCommunities)
 
   return (
     <div
       className={`relative ${
         hide ? 'hidden' : 'lg:flex flex-col'
-      } w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-4 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
+      } w-[150px] sm:w-[350px] py-4 pr-4 md:pr-6 lg:pr-10 xl:pr-12 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar`}
     >
       {user && (createdCommunities?.length > 0 || LensCommunity) && (
         <CommunitiesDiv
@@ -113,7 +117,7 @@ const RightSidebar = () => {
       )}
 
       {/* show in card form */}
-      {topCommunities?.length > 0 && (
+      {/* {topCommunities?.length > 0 && (
         <CommunitiesDiv
           showFirstCommunities={
             sortedLensCommunities.length > 0
@@ -121,8 +125,7 @@ const RightSidebar = () => {
                   name: formatHandle(c.handle),
                   // @ts-ignore
                   logoImageUrl: getAvatar(c),
-                  isLensCommunity: true,
-                  verified: c?.verified
+                  isLensCommunity: true
                 }))
               : []
           }
@@ -130,7 +133,24 @@ const RightSidebar = () => {
           communitiesList={topCommunities}
           Icon={() => <HiOutlineSparkles className="w-[20px] h-[20px]" />}
         />
-      )}
+      )} */}
+      <CommunityScroll
+        communities={
+          sortedLensCommunities.length > 0
+            ? [
+                ...sortedLensCommunities.map((c) => ({
+                  name: formatHandle(c.handle),
+                  // @ts-ignore
+                  logoImageUrl: getAvatar(c),
+                  // @ts-ignore
+                  bannerImageUrl: getCoverBanner(c),
+                  isLensCommunity: true
+                })),
+                ...topCommunities
+              ]
+            : topCommunities
+        }
+      />
       <CopyrightAndLinks />
     </div>
   )
