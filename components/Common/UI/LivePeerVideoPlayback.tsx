@@ -14,11 +14,16 @@ const LivePeerVideoPlayback = ({
     <Player
       src={url}
       poster={posterUrl}
+      objectFit="contain"
       autoPlay={false}
+      controls={{ defaultVolume: 1 }}
       muted
       loop={false}
       showLoadingSpinner={true}
-      autoUrlUpload={{ fallback: true, ipfsGateway: 'https://w3s.link' }}
+      autoUrlUpload={{
+        fallback: true,
+        ipfsGateway: 'https://gateway.ipfscdn.io/ipfs/'
+      }}
     />
   )
 }
