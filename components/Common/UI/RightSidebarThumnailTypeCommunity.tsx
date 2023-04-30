@@ -36,12 +36,10 @@ const RightSidebarThumnailTypeCommunity = ({
                 src={community?.logoImageUrl}
                 className="h-[40px] w-[40px] rounded-full object-cover"
               />
-              <div className="flex flex-col">
-                <h3 className="text-lg font-semibold truncate">
-                  {community?.isLensCommunity
-                    ? `l/${community?.name}`
-                    : community?.name}
-                </h3>
+              <div className="font-semibold truncate">
+                {community?.isLensCommunity
+                  ? `l/${community?.name}`
+                  : community?.name}
               </div>
             </div>
             <BiChevronRight className="text-2xl font-bold" />
