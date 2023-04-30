@@ -42,7 +42,7 @@ const RightSidebar = () => {
 
   const fetchTopCommunities = async () => {
     try {
-      const communities = await getAllCommunities(12, 0, 'top', true)
+      const communities = await getAllCommunities(15, 0, 'top', true)
 
       if (communities?.communities?.length > 0) {
         setTopCommunities(communities.communities)
@@ -54,7 +54,7 @@ const RightSidebar = () => {
 
   const fetchTopNotJoinedCommunities = async () => {
     try {
-      const communities = await getNotJoinedCommunities(12, 0, 'top', true)
+      const communities = await getNotJoinedCommunities(15, 0, 'top', true)
       if (communities?.communities?.length > 0) {
         setTopCommunities(communities.communities)
       }
@@ -85,8 +85,6 @@ const RightSidebar = () => {
     ?.sort((a, b) => b.stats.totalFollowers - a.stats.totalFollowers)
     ?.filter((c) => !c.isFollowedByMe && c.verified)
     .slice(0, 6)
-
-  console.log('sortedLensCommunities', sortedLensCommunities)
 
   return (
     <div

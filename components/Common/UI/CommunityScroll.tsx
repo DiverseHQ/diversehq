@@ -15,7 +15,7 @@ const CommunityScroll = ({
   const [currentIndex, setCurrentIndex] = React.useState(3)
 
   const handleNext = () => {
-    if (currentIndex + 3 < communities.length) {
+    if (currentIndex + 3 < communities.length + 3) {
       setCurrentIndex(currentIndex + 3)
     }
   }
