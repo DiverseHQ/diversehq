@@ -6,7 +6,7 @@ import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
 import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config'
-import { getCommunityInfoFromAppId } from '../../utils/helper'
+// import { getCommunityInfoFromAppId } from '../../utils/helper'
 import MobileLoader from '../Common/UI/MobileLoader'
 import LensPostCard from './LensPostCard'
 import { useDevice } from '../Common/DeviceWrapper'
@@ -77,9 +77,10 @@ const LensCollectedPublicationsColumn = ({
       communityIds
     )
     for (let i = 0; i < newPosts.length; i++) {
-      if (!communityInfoForPosts[i]?._id) {
-        newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
-      } else {
+      // if (!communityInfoForPosts[i]?._id) {
+      //   newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
+      // } else {
+      if (communityInfoForPosts[i]?._id) {
         if (newPosts[i]?.__typename === 'Mirror') {
           let mirrorPost = newPosts[i]
           newPosts[i] = mirrorPost?.mirrorOf

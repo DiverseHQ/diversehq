@@ -1,7 +1,7 @@
 import { getCommunityInfoUsingId } from '../../api/community'
 import { PublicationQueryVariables } from '../../graphql/generated'
 import { postWithCommunityInfoType } from '../../types/post'
-import { getCommunityInfoFromAppId } from '../../utils/helper'
+// import { getCommunityInfoFromAppId } from '../../utils/helper'
 import getSinglePublicationInfo from './get-single-publication-info'
 
 export default async function getPostWithCommunityInfo(
@@ -33,7 +33,7 @@ export default async function getPostWithCommunityInfo(
 
     const communityId = post?.metadata?.tags?.[0]
     if (!communityId) {
-      post.communityInfo = getCommunityInfoFromAppId(post?.appId)
+      // post.communityInfo = getCommunityInfoFromAppId(post?.appId)
       return post
     }
     const communityInfo = await getCommunityInfoUsingId(communityId)

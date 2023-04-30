@@ -10,7 +10,7 @@ import {
 import { useLensUserContext } from '../../lib/LensUserContext'
 import getExplorePublications from '../../lib/post/explore-publications'
 import { LENS_INFINITE_SCROLL_THRESHOLD } from '../../utils/config'
-import { getCommunityInfoFromAppId } from '../../utils/helper'
+// import { getCommunityInfoFromAppId } from '../../utils/helper'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import MobileLoader from '../Common/UI/MobileLoader'
 import LensPostCard from './LensPostCard'
@@ -106,12 +106,13 @@ const LensPostJoinedCommunitiesPublicationsNew = ({
       )
 
       for (let j = 0; j < _newPosts.length; j++) {
-        if (!communityInfoForPosts[j]?._id) {
-          // @ts-ignore
-          _newPosts[j].communityInfo = getCommunityInfoFromAppId(
-            _newPosts[j].appId
-          )
-        } else {
+        if (communityInfoForPosts[j]?._id) {
+          // if (!communityInfoForPosts[j]?._id) {
+          //   // @ts-ignore
+          //   _newPosts[j].communityInfo = getCommunityInfoFromAppId(
+          //     _newPosts[j].appId
+          //   )
+          // } else {
           // @ts-ignore
           _newPosts[j].communityInfo = communityInfoForPosts[j]
           if (communityInfoForPosts[j]?.handle) {
@@ -125,7 +126,7 @@ const LensPostJoinedCommunitiesPublicationsNew = ({
       nextCursors[i] = data[i]?.explorePublications?.pageInfo?.next
     }
 
-    console.log('startedWithPosts', startedWithPosts)
+    // console.log('startedWithPosts', startedWithPosts)
 
     // for (let i = 0; i < grounpOfBunchOfCommunityIds.length; i++) {
     //   console.log('i', i)

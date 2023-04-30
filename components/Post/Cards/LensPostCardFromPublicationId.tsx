@@ -2,8 +2,8 @@ import React, { useEffect, memo, useCallback } from 'react'
 import { postGetCommunityInfoUsingListOfIds } from '../../../api/community'
 import getSinglePublicationInfo from '../../../lib/post/get-single-publication-info'
 import { postWithCommunityInfoType } from '../../../types/post'
-import { appId } from '../../../utils/config'
-import { getCommunityInfoFromAppId } from '../../../utils/helper'
+// import { appId } from '../../../utils/config'
+// import { getCommunityInfoFromAppId } from '../../../utils/helper'
 import LensPostCard from '../LensPostCard'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 
@@ -36,16 +36,17 @@ const LensPostCardFromPublicationId = ({
 
         const communityInfoForPost = communityInfoForPosts[0]
 
-        if (
-          !communityInfoForPost ||
-          !communityInfoForPost._id ||
-          publication.appId !== appId
-        ) {
-          // @ts-ignore
-          publication.communityInfo = getCommunityInfoFromAppId(
-            publication.appId
-          )
-        } else {
+        if (communityInfoForPost) {
+          // if (
+          //   !communityInfoForPost ||
+          //   !communityInfoForPost._id ||
+          //   publication.appId !== appId
+          // ) {
+          //   // @ts-ignore
+          //   publication.communityInfo = getCommunityInfoFromAppId(
+          //     publication.appId
+          //   )
+          // } else {
           // @ts-ignore
           publication.communityInfo = communityInfoForPost
           if (communityInfoForPost?.handle) {

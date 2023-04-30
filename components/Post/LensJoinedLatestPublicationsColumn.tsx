@@ -15,7 +15,7 @@ import {
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import LensPostCard from './LensPostCard'
 import MobileLoader from '../Common/UI/MobileLoader'
-import { getCommunityInfoFromAppId } from '../../utils/helper'
+// import { getCommunityInfoFromAppId } from '../../utils/helper'
 import { useDevice } from '../Common/DeviceWrapper'
 const LensJoinedLatestPublicationsColumn = ({ communityIds }) => {
   const router = useRouter()
@@ -81,10 +81,11 @@ const LensJoinedLatestPublicationsColumn = ({ communityIds }) => {
       communityIds
     )
     for (let i = 0; i < newPosts.length; i++) {
-      if (!communityInfoForPosts[i]?._id) {
+      if (communityInfoForPosts[i]?._id) {
+        // if (!communityInfoForPosts[i]?._id) {
         // @ts-ignore
-        newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
-      } else {
+        // newPosts[i].communityInfo = getCommunityInfoFromAppId(newPosts[i].appId)
+        // } else {
         // @ts-ignore
         newPosts[i].communityInfo = communityInfoForPosts[i]
         if (communityInfoForPosts[i]?.handle) {
