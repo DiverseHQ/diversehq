@@ -36,7 +36,11 @@ const RightSideCommunityComponent = ({ community }) => {
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              router.push(`/c/${community?.name}/settings`)
+              router.push(
+                community?.isLensCommunity
+                  ? `/l/${community?.name}/settings`
+                  : `/c/${community?.name}/settings`
+              )
             }}
             className="px-3 py-3 rounded-full"
           >
