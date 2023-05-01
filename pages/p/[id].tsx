@@ -66,7 +66,7 @@ const Page = ({
   return (
     <>
       {/* {type === 'post' && <OffChainPostSeo post={post} />} */}
-      {post && <LensPostSeo post={post} />}
+      <LensPostSeo post={_post || post} />
       {/* {type === 'notFound' && <PostNotFoundSeo />} */}
       {isMobile && <PostPageMobileTopNav />}
       {post && !loading && <LensPostPage id={postId} post={post} />}
