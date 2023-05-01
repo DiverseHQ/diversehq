@@ -259,7 +259,7 @@ const LensPostCard = ({ post }: Props) => {
   const sharePost = () => {
     if (navigator.share) {
       navigator.share({
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/p/${postInfo.id}`
+        url: `${appLink}/p/${postInfo.id}`
       })
     } else {
       notifyInfo('Sharing is not supported on your device')

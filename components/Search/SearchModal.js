@@ -17,6 +17,16 @@ const SearchModal = () => {
     }
   }, [router])
 
+  useEffect(() => {
+    console.log('router.query', router.query?.q)
+    if (router?.query?.q) {
+      setSearchTerm(router.query.q)
+    } else {
+      setSearchTerm('')
+      inputRef.current.value = ''
+    }
+  }, [router?.query?.q])
+
   return (
     <div className="relative flex flex-row items-center sm:border-[1px] sm:border-s-border dark:border-0 p-1 pl-2 rounded-xl bg-s-bg dark:bg-[#272729] w-full sm:w-[300px] gap-2 md:gap-4">
       <div className="text-p-text rounded-lg py-1">
@@ -27,10 +37,24 @@ const SearchModal = () => {
         type="text"
         placeholder="Search..."
         ref={inputRef}
+        defaultValue={router.query?.q || ''}
         onChange={() => setSearchTerm(inputRef.current.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            if (searchTerm === '') {
+              return
+            }
+            if (router.query?.type) {
+              router.push(`/search?type=${router.query.type}&q=${searchTerm}`)
+              return
+            } else {
+              router.push(`/search?q=${searchTerm}&type=publication`)
+            }
+          }
+        }}
       />
 
-      {!isMobile && router.pathname === '/search' ? (
+      {router.pathname === '/search' || searchTerm.length === 0 ? (
         <></>
       ) : (
         <div className="bg-s-bg rounded-lg absolute w-full top-[50px] text-p-text shadow-nav">

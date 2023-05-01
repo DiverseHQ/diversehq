@@ -1,60 +1,65 @@
 // import { NextSeo } from 'next-seo'
-import { useEffect, useState } from 'react'
-import { getAllCommunities, getNotJoinedCommunities } from '../../api/community'
-import { useProfile } from '../../components/Common/WalletContext'
-import RightSideCommunityComponent from '../../components/Home/RightSideCommunityComponent'
+// import { useEffect, useState } from 'react'
+// import { getAllCommunities, getNotJoinedCommunities } from '../../api/community'
+// import { useProfile } from '../../components/Common/WalletContext'
+// import RightSideCommunityComponent from '../../components/Home/RightSideCommunityComponent'
 import SearchModal from '../../components/Search/SearchModal'
 import { appLink } from '../../utils/config'
 import { useDevice } from '../../components/Common/DeviceWrapper'
 import MetaTags from '../../components/Common/Seo/MetaTags'
 import Sidebar from '../../components/Settings/Sidebar'
 import { BsFillPersonFill, BsPencilSquare } from 'react-icons/bs'
-import { GrGroup } from 'react-icons/gr'
+// import { GrGroup } from 'react-icons/gr'
 import { useRouter } from 'next/router'
 import { BiGroup } from 'react-icons/bi'
+import ProfileSearchColumn from '../../components/Search/SearchColumns/ProfileSearchColumn'
+import PublicationSearchColumn from '../../components/Search/SearchColumns/PublicationSearchColumn'
+import CommunitySearchColumn from '../../components/Search/SearchColumns/CommunitySearchColumn'
+import FilterRow from '../../components/Common/UI/FilterRow'
+import FilterButton from '../../components/Common/UI/FilterButton'
 
 const index = () => {
   const { isMobile } = useDevice()
-  const { user } = useProfile()
+  // const { user } = useProfile()
   const router = useRouter()
-  const [recentCommunities, setRecentCommunities] = useState([])
+  // const [recentCommunities, setRecentCommunities] = useState([])
 
-  const [topCommunities, setTopCommunities] = useState([])
-  const fetchTopCommunities = async () => {
-    try {
-      const communities = await getAllCommunities(6, 0, 'top')
-      if (communities.communities.length > 0) {
-        setTopCommunities(communities.communities)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const [topCommunities, setTopCommunities] = useState([])
+  // const fetchTopCommunities = async () => {
+  //   try {
+  //     const communities = await getAllCommunities(6, 0, 'top')
+  //     if (communities.communities.length > 0) {
+  //       setTopCommunities(communities.communities)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
-  const fetchTopNotJoinedCommunities = async () => {
-    try {
-      const communities = await getNotJoinedCommunities(6, 0, 'top')
-      if (communities.communities.length > 0) {
-        setTopCommunities(communities.communities)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const fetchTopNotJoinedCommunities = async () => {
+  //   try {
+  //     const communities = await getNotJoinedCommunities(6, 0, 'top')
+  //     if (communities.communities.length > 0) {
+  //       setTopCommunities(communities.communities)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
-  useEffect(() => {
-    if (!user) {
-      setRecentCommunities([])
-      fetchTopCommunities()
-      return
-    } else {
-      fetchTopNotJoinedCommunities()
-      const recentCommunities = JSON.parse(
-        window.localStorage.getItem('recentCommunities')
-      )
-      setRecentCommunities(recentCommunities)
-    }
-  }, [user])
+  // useEffect(() => {
+  //   if (!user) {
+  //     setRecentCommunities([])
+  //     fetchTopCommunities()
+  //     return
+  //   } else {
+  //     fetchTopNotJoinedCommunities()
+  //     const recentCommunities = JSON.parse(
+  //       window.localStorage.getItem('recentCommunities')
+  //     )
+  //     setRecentCommunities(recentCommunities)
+  //   }
+  // }, [user])
 
   return (
     <>
@@ -77,6 +82,30 @@ const index = () => {
             </span>
           </div>
         </div>
+      )}
+
+      {isMobile && (
+        <FilterRow>
+          <FilterButton
+            title="Publication"
+            Icon={<BsPencilSquare />}
+            link={`/search?q=${router?.query?.q}&type=publication`}
+            active={router?.query?.type === 'publication'}
+          />
+          <FilterButton
+            title="Community"
+            Icon={<BiGroup className="text-p-text" />}
+            link={`/search?q=${router?.query?.q}&type=community`}
+            active={router?.query?.type === 'community'}
+          />
+
+          <FilterButton
+            title="Profile"
+            Icon={<BsFillPersonFill />}
+            link={`/search?q=${router?.query?.q}&type=profile`}
+            active={router?.query?.type === 'profile'}
+          />
+        </FilterRow>
       )}
       <div className="sm:mx-20 sm:my-12 flex flex-row space-x-20">
         {!isMobile && (
@@ -107,8 +136,15 @@ const index = () => {
         )}
 
         <div className="w-full sm:w-[650px] bg-s-bg text-p-text sm:rounded-xl sm:border-[1px] sm:border-s-border sm:p-4 relative">
-          router.query..type = {router.query?.type}
-          router.query.q = {router.query?.q}
+          {router.query?.type === 'profile' && (
+            <ProfileSearchColumn q={String(router.query?.q)} />
+          )}
+          {router.query?.type === 'publication' && (
+            <PublicationSearchColumn q={String(router.query?.q)} />
+          )}
+          {router.query?.type === 'community' && (
+            <CommunitySearchColumn q={String(router.query?.q)} />
+          )}
         </div>
 
         {/* <NextSeo

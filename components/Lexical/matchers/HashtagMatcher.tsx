@@ -1,21 +1,22 @@
 import { Matcher } from 'interweave'
 // import Link from 'next/link'
 import { createElement } from 'react'
-import { isMainnet } from '../../../utils/config'
+import { appLink, isMainnet } from '../../../utils/config'
+import Link from 'next/link'
 
 export const Hashtag = ({ ...props }: any) => {
   // todo make own hastag page
   return (
-    <span className="inline-flex text-blue-400 items-center space-x-1">
-      <a
-        href={`${
-          isMainnet ? 'https://lenster.xyz' : 'https://testnet.lenster.xyz'
-        }/search?q=${props.display.slice(1)}&type=pubs&src=a_click`}
-        target="_blank"
-        rel="noreferrer"
-      >
+    <span
+      onClick={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+      }}
+      className="inline-flex text-blue-400 items-center space-x-1"
+    >
+      <Link href={`/search?q=${props.display.slice(1)}&type=publication`}>
         {props.display}
-      </a>
+      </Link>
     </span>
   )
 }

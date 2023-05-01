@@ -7,9 +7,10 @@ export const NOTIFICATION_LIMIT: number = 15
 export const COMMUNITY_LIMIT: number = 5
 export const MAX_CONTENT_LINES: number = 4
 export const MAX_CONTENT_LINES_FOR_POST: number = 6
-export const LENS_SEARCH_PROFILE_LIMIT: number = 6
+export const LENS_SEARCH_PROFILE_LIMIT: number = 4
 export const LensInfuraEndpoint: string = 'https://lens.infura-ipfs.io/ipfs/'
 export const LENS_INFINITE_SCROLL_THRESHOLD: number = 0.5
+export const SEARCH_ITEMS_LIMIT: number = 30
 
 export const apiMode: string = process.env.NEXT_PUBLIC_LENS_API_MODE
 export const isMainnet: boolean = apiMode === 'mainnet'

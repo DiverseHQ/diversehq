@@ -38,15 +38,17 @@ const CommunitiesSearchModal = ({
       setLensCommunities([])
       return
     }
-    const res = await searchCommunityFromName(searchTerm, 6)
+    const res = await searchCommunityFromName(searchTerm, 3)
     setCommunities(res)
 
     // get top 5 matching communities from allLensCommunities
     const matchingCommunities = allLensCommunities
       .filter((community) => {
-        return community.handle.toLowerCase().includes(searchTerm.toLowerCase())
+        return formatHandle(community.handle)
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
       })
-      .slice(0, 5)
+      .slice(0, 3)
     setLensCommunities(matchingCommunities)
   }
 
