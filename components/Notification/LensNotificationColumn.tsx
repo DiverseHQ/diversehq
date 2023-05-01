@@ -11,7 +11,6 @@ import { getAllNotificationBetweenTimes } from '../../api/user'
 import NotificationCard from './NotificationCard'
 import getProfiles from '../../lib/profile/get-profiles'
 import { NotificationSchema } from '../../types/notification'
-import useNotificationsCount from './useNotificationsCount'
 import { useDevice } from '../Common/DeviceWrapper'
 
 const LensNotificationColumn = () => {
@@ -32,7 +31,6 @@ const LensNotificationColumn = () => {
   })
 
   const { isMobile } = useDevice()
-  const { updateNotificationCount } = useNotificationsCount()
 
   const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   const { data } = useNotificationsQuery(
@@ -145,16 +143,6 @@ const LensNotificationColumn = () => {
     })
   }, [user?.preferences?.highSignalNotifications])
 
-  const cleanUp = async () => {
-    console.log('cleanup notification column called')
-    await updateNotificationCount(true)
-  }
-
-  useEffect(() => {
-    return () => {
-      cleanUp()
-    }
-  }, [])
   return (
     <>
       {lensProfile &&

@@ -2,7 +2,17 @@ import React from 'react'
 import NotificationSeo from '../../components/Notification/NotificationSeo'
 import LensNotificationColumn from '../../components/Notification/LensNotificationColumn'
 import NotificationFilter from '../../components/Notification/NotificationNav/NotificationFilter'
+import useNotificationsCount from '../../components/Notification/useNotificationsCount'
 const index = () => {
+  const { updateNotificationCount } = useNotificationsCount()
+
+  // on unmout update last fetched time
+  React.useEffect(() => {
+    return () => {
+      updateNotificationCount(true)
+    }
+  }, [])
+
   return (
     <>
       <NotificationSeo />
