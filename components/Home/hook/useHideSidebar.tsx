@@ -7,7 +7,8 @@ const Pathnames_To_Hide_Sidebar = [
   '/explore',
   '/u',
   '/l',
-  '/notification'
+  '/notification',
+  '/search'
 ]
 
 const useHideSidebar = () => {

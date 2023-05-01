@@ -4,11 +4,13 @@ import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
 import formatHandle from '../User/lib/formatHandle'
 import CommunitiesSearchModal from './CommunitiesSearchModal'
 import LensProfilesSearchModal from './LensProfilesSearchModal'
+import { useDevice } from '../Common/DeviceWrapper'
 
 const SearchModal = () => {
   const inputRef = useRef()
   const [searchTerm, setSearchTerm] = useState('')
   const router = useRouter()
+  const { isMobile } = useDevice()
   useEffect(() => {
     if (router.pathname === '/search') {
       inputRef.current.focus()
@@ -27,20 +29,24 @@ const SearchModal = () => {
         ref={inputRef}
         onChange={() => setSearchTerm(inputRef.current.value)}
       />
-      <div className="bg-s-bg rounded-lg absolute w-full top-[50px] text-p-text shadow-nav">
-        <CommunitiesSearchModal
-          searchTerm={searchTerm}
-          inputRef={inputRef}
-          setSearchTerm={setSearchTerm}
-          onCommunitySelect={(community) => {
-            if (community?.handle) {
-              router.push(`/l/${formatHandle(community.handle)}`)
-              return
-            }
-            router.push(`/c/${community.name}`)
-          }}
-        />
-        {/* <LensCommunitiesSearchModal
+
+      {!isMobile && router.pathname === '/search' ? (
+        <></>
+      ) : (
+        <div className="bg-s-bg rounded-lg absolute w-full top-[50px] text-p-text shadow-nav">
+          <CommunitiesSearchModal
+            searchTerm={searchTerm}
+            inputRef={inputRef}
+            setSearchTerm={setSearchTerm}
+            onCommunitySelect={(community) => {
+              if (community?.handle) {
+                router.push(`/l/${formatHandle(community.handle)}`)
+                return
+              }
+              router.push(`/c/${community.name}`)
+            }}
+          />
+          {/* <LensCommunitiesSearchModal
           inputRef={inputRef}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -48,15 +54,16 @@ const SearchModal = () => {
             router.push(`/l/${formatHandle(community.handle)}`)
           }}
         /> */}
-        <LensProfilesSearchModal
-          searchTerm={searchTerm}
-          inputRef={inputRef}
-          setSearchTerm={setSearchTerm}
-          onProfileSelect={(profile) => {
-            router.push(`/u/${formatHandle(profile?.handle)}`)
-          }}
-        />
-      </div>
+          <LensProfilesSearchModal
+            searchTerm={searchTerm}
+            inputRef={inputRef}
+            setSearchTerm={setSearchTerm}
+            onProfileSelect={(profile) => {
+              router.push(`/u/${formatHandle(profile?.handle)}`)
+            }}
+          />
+        </div>
+      )}
       {searchTerm !== '' && (
         <div
           className="text-p-text rounded-full py-1 px-1 mr-2 hover:bg-s-bg cursor-pointer"

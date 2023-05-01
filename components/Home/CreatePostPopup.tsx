@@ -278,11 +278,13 @@ const CreatePostPopup = () => {
         `
         ${
           !selectedCommunity?.isLensCommunity &&
+          selectedCommunity?.name &&
           (user?.preferences?.appendLink ?? true)
             ? `\n ${appLink}/c/${selectedCommunity?.name}`
             : ``
         }${
           !selectedCommunity?.isLensCommunity &&
+          selectedCommunity?.name &&
           (user?.preferences?.appendHashtags ?? true)
             ? `\n #${selectedCommunity?.name}`
             : ``

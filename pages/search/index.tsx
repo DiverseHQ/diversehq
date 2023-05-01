@@ -7,10 +7,16 @@ import SearchModal from '../../components/Search/SearchModal'
 import { appLink } from '../../utils/config'
 import { useDevice } from '../../components/Common/DeviceWrapper'
 import MetaTags from '../../components/Common/Seo/MetaTags'
+import Sidebar from '../../components/Settings/Sidebar'
+import { BsFillPersonFill, BsPencilSquare } from 'react-icons/bs'
+import { GrGroup } from 'react-icons/gr'
+import { useRouter } from 'next/router'
+import { BiGroup } from 'react-icons/bi'
 
 const index = () => {
   const { isMobile } = useDevice()
   const { user } = useProfile()
+  const router = useRouter()
   const [recentCommunities, setRecentCommunities] = useState([])
 
   const [topCommunities, setTopCommunities] = useState([])
@@ -57,14 +63,62 @@ const index = () => {
         description="Search and connect with communities that reflect your interests and values on DiverseHQ!"
         url={`${appLink}/search`}
       />
-      {/* <NextSeo
+      {isMobile && (
+        <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] bg-s-bg">
+          <div className="h-[32px] flex flex-row items-center gap-3 text-[18px] w-full">
+            <span className="font-bold text-[20px] w-full">
+              {/* <input
+                type="text"
+                defaultValue={router.query?.q}
+                placeholder="Search"
+                className="w-full"
+              /> */}
+              <SearchModal />
+            </span>
+          </div>
+        </div>
+      )}
+      <div className="sm:mx-20 sm:my-12 flex flex-row space-x-20">
+        {!isMobile && (
+          <div className="w-[300px] text-p-text text-xl">
+            <Sidebar
+              items={[
+                {
+                  title: 'Publication',
+                  icon: <BsPencilSquare />,
+                  link: `/search?q=${router?.query?.q}&type=publication`,
+                  isActive: router?.query?.type === 'publication'
+                },
+                {
+                  title: 'Community',
+                  icon: <BiGroup className="text-p-text" />,
+                  link: `/search?q=${router?.query?.q}&type=community`,
+                  isActive: router?.query?.type === 'community'
+                },
+                {
+                  title: 'Profile',
+                  icon: <BsFillPersonFill />,
+                  link: `/search?q=${router?.query?.q}&type=profile`,
+                  isActive: router?.query?.type === 'profile'
+                }
+              ]}
+            />
+          </div>
+        )}
+
+        <div className="w-full sm:w-[650px] bg-s-bg text-p-text sm:rounded-xl sm:border-[1px] sm:border-s-border sm:p-4 relative">
+          router.query..type = {router.query?.type}
+          router.query.q = {router.query?.q}
+        </div>
+
+        {/* <NextSeo
         title="DiverseHQ / Search"
         description="Search and connect with communities that reflect your interests and values on DiverseHQ!"
         openGraph={{
           url: `${appLink}/search`
         }}
       /> */}
-      <div className="w-full flex justify-center">
+        {/* <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
           {isMobile && (
             <div className="flex flex-row justify-between px-3 py-1 items-center shadow-sm sticky top-0 w-full z-30 min-h-[50px] bg-s-bg">
@@ -108,7 +162,7 @@ const index = () => {
               </div>
             )}
           </div>
-        </div>
+              </div> */}
       </div>
     </>
   )

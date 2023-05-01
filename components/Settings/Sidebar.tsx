@@ -8,6 +8,7 @@ interface item {
   title: string
   link: string
   icon: React.ReactNode
+  isActive?: boolean
   isHidden?: boolean
   disabled?: boolean
 }
@@ -33,7 +34,7 @@ const Sidebar = ({ items }: { items: item[] }) => {
                 onClick={() => notifyInfo('Coming soon')}
               >
                 {item.icon}
-                <span className="text-[16px] font-medium">{item.title}</span>
+                <span className="text-lg font-medium">{item.title}</span>
               </div>
             </Tooltip>
           )
@@ -43,11 +44,11 @@ const Sidebar = ({ items }: { items: item[] }) => {
           <Link href={item.link} key={item.title}>
             <div
               className={`flex cursor-pointer flex-row items-center ${
-                asPath === item.link ? 'bg-s-hover' : ''
+                asPath === item.link || item.isActive ? 'bg-s-hover' : ''
               }  hover:bg-s-hover px-4 py-3 rounded-[15px] gap-1 md:gap-2`}
             >
               {item.icon}
-              <span className="text-[16px] font-medium">{item.title}</span>
+              <span className="text-lg font-medium">{item.title}</span>
             </div>
           </Link>
         )
