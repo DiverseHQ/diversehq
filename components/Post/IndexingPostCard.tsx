@@ -17,6 +17,7 @@ import { useDevice } from '../Common/DeviceWrapper'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import getAvatar from '../User/lib/getAvatar'
 import { PublicationMetadataWithoutMedia } from '../../types/post'
+import { getContent } from './getContent'
 
 export interface singleMedia {
   original: {
@@ -63,28 +64,8 @@ const IndexingPostCard = ({ postInfo }: Props) => {
   const { isMobile } = useDevice()
   const { data } = useLensUserContext()
 
-  let content = postInfo?.metadata?.content
-
-  if (content) {
-    if (content.startsWith('Posted on')) {
-      content = content.split('\n').slice(1).join('\n')
-    }
-    const regex = /Posted on c\/\w+/
-    if (regex.test(content)) {
-      content = content.replace(regex, '')
-    }
-
-    // if the content ends with #<communityName>, remove it
-    // communityName = postInfo?.communityInfo?.name
-
-    if (content?.endsWith(`#${postInfo?.communityInfo?.name}`)) {
-      content = content.slice(0, -(postInfo?.communityInfo?.name.length + 1))
-    }
-
-    if (content?.startsWith(postInfo?.metadata?.name)) {
-      content = content.slice(postInfo?.metadata?.name.length)
-    }
-  }
+  // @ts-ignore
+  const content = getContent(postInfo)
 
   return (
     <>

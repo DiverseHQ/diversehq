@@ -7,15 +7,18 @@ import { stringToLength } from '../../../utils/utils'
 import imageProxy from '../../User/lib/imageProxy'
 import formatHandle from '../../User/lib/formatHandle'
 import MetaTags from '../../Common/Seo/MetaTags'
+import { getContent } from '../getContent'
 
 const LensPostSeo = ({ post }: { post: Publication }) => {
+  // @ts-ignore
+  const content = getContent(post)
   return (
     <MetaTags
       title={
-        stringToLength(post?.metadata?.content, 90) +
+        stringToLength(post?.metadata?.name, 90) +
         `\n by u/${formatHandle(post?.profile?.handle)}`
       }
-      description={stringToLength(post?.metadata?.content, 90)}
+      description={stringToLength(content, 90)}
       url={`${appLink}/p/${post?.id}`}
       image={
         post?.metadata?.mainContentFocus === 'IMAGE'

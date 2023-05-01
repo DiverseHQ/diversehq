@@ -50,6 +50,7 @@ import { deleteLensPublication } from '../../api/lensPublication'
 import { useDevice } from '../Common/DeviceWrapper'
 import useJoinCommunityButton from '../Community/hook/useJoinCommunityButton'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
+import { getContent } from './getContent'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -281,33 +282,7 @@ const LensPostCard = ({ post }: Props) => {
     })
   }
 
-  let content = postInfo?.metadata?.content || ''
-
-  if (content) {
-    if (postInfo?.isLensCommunityPost) {
-      content = content.split('\n').slice(2).join('\n')
-    }
-    if (content.startsWith('Posted on')) {
-      content = content.split('\n').slice(1).join('\n')
-    }
-    const regex = /Posted on c\/\w+/
-
-    if (regex.test(content)) {
-      content = content.replace(regex, '')
-    }
-    // if the content ends with #<communityName>, remove it
-    // communityName = postInfo?.communityInfo?.name
-
-    if (content?.endsWith(`#${postInfo?.communityInfo?.name}`)) {
-      content = content.slice(0, -(postInfo?.communityInfo?.name.length + 1))
-    }
-    if (
-      content?.startsWith(postInfo?.metadata?.name) &&
-      showNameForThisAppIds.includes(postInfo?.appId)
-    ) {
-      content = content.slice(postInfo?.metadata?.name.length)
-    }
-  }
+  let content = getContent(postInfo)
 
   if (postInfo?.originalMirrorPublication?.hidden) {
     return <div>Mirror is hidden</div>
