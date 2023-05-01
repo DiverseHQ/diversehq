@@ -15,6 +15,8 @@ export const apiMode: string = process.env.NEXT_PUBLIC_LENS_API_MODE
 export const isMainnet: boolean = apiMode === 'mainnet'
 export const HANDLE_SUFFIX: string = isMainnet ? '.lens' : '.test'
 
+export const DEFAULT_OG_IMAGE = 'https://diversehq.xyz/LogoV3TrimmedWithBG.png'
+
 export const userRoles = {
   ADMIN_USER: 0,
   WHITELISTED_USER: 1,

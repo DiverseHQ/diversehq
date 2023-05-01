@@ -1,11 +1,22 @@
-import { NextSeo } from 'next-seo'
+// import { NextSeo } from 'next-seo'
 import React from 'react'
 import getAvatar from './lib/getAvatar'
+import MetaTags from '../Common/Seo/MetaTags'
+import formatHandle from './lib/formatHandle'
 
 const ProfilePageNextSeo = ({ lensProfile }) => {
   return (
     <>
-      {lensProfile && (
+      <MetaTags
+        title={`${
+          lensProfile.name ? lensProfile?.name + ' | ' : ''
+        } u/${formatHandle(lensProfile?.handle)}`}
+        description={lensProfile.bio}
+        image={getAvatar(lensProfile)}
+        url={`https://diversehq.com/u/${formatHandle(lensProfile?.handle)}`}
+      />
+
+      {/* {lensProfile && (
         <NextSeo
           title={`${lensProfile.name} ${lensProfile?.handle}`}
           description={lensProfile.bio}
@@ -30,7 +41,7 @@ const ProfilePageNextSeo = ({ lensProfile }) => {
             description: 'This user has not created a profile yet.'
           }}
         />
-      )}
+      )} */}
     </>
   )
 }

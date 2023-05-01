@@ -1,4 +1,3 @@
-// import { NextSeo } from 'next-seo'
 import React, { useState } from 'react'
 import { useProfile } from '../../components/Common/WalletContext'
 import ExploreTopCommunitiesPage from '../../components/Explore/ExploreTopCommunitiesPage'

@@ -1,4 +1,4 @@
-import { NextSeo } from 'next-seo'
+// import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
 import { getAllCommunities, getNotJoinedCommunities } from '../../api/community'
 import { useProfile } from '../../components/Common/WalletContext'
@@ -6,6 +6,7 @@ import RightSideCommunityComponent from '../../components/Home/RightSideCommunit
 import SearchModal from '../../components/Search/SearchModal'
 import { appLink } from '../../utils/config'
 import { useDevice } from '../../components/Common/DeviceWrapper'
+import MetaTags from '../../components/Common/Seo/MetaTags'
 
 const index = () => {
   const { isMobile } = useDevice()
@@ -51,13 +52,18 @@ const index = () => {
 
   return (
     <>
-      <NextSeo
+      <MetaTags
+        title="DiverseHQ / Search"
+        description="Search and connect with communities that reflect your interests and values on DiverseHQ!"
+        url={`${appLink}/search`}
+      />
+      {/* <NextSeo
         title="DiverseHQ / Search"
         description="Search and connect with communities that reflect your interests and values on DiverseHQ!"
         openGraph={{
           url: `${appLink}/search`
         }}
-      />
+      /> */}
       <div className="w-full flex justify-center">
         <div className="w-full md:w-[650px]">
           {isMobile && (
