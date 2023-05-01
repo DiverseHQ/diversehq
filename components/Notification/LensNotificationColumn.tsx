@@ -146,7 +146,8 @@ const LensNotificationColumn = () => {
   }, [user?.preferences?.highSignalNotifications])
 
   const cleanUp = async () => {
-    await updateNotificationCount()
+    console.log('cleanup notification column called')
+    await updateNotificationCount(true)
   }
 
   useEffect(() => {
