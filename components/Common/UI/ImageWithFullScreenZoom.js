@@ -6,7 +6,7 @@ import ImageWithPulsingLoader from './ImageWithPulsingLoader'
 const ImageWithFullScreenZoom = ({ ...props }) => {
   return (
     <Zoom classDialog="custom-zoom cursor-pointer">
-      <ImageWithPulsingLoader {...props} className={`${props.className}`} />
+      <ImageWithPulsingLoader {...props} />
     </Zoom>
   )
 }
