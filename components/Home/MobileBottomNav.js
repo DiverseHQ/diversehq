@@ -25,7 +25,7 @@ const MobileBottomNav = () => {
   // }
 
   const routeToNotifications = async () => {
-    await updateNotificationCount()
+    await updateNotificationCount(false)
     router.push('/notification')
   }
 

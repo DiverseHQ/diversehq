@@ -62,8 +62,7 @@ const Navbar = () => {
     useNotificationsCount()
 
   const routeToNotifications = async () => {
-    updateNotificationCount()
-    updateNotificationCount()
+    await updateNotificationCount(false)
     router.push('/notification')
   }
 

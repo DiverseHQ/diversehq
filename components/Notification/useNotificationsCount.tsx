@@ -9,12 +9,15 @@ import { useProfile } from '../Common/WalletContext'
 
 const useNotificationsCount = (): {
   notificationsCount: number
-  updateNotificationCount: () => void
+  updateNotificationCount: (
+    // eslint-disable-next-line no-unused-vars
+    alsoUpdateLastFetchedTime?: Boolean
+  ) => Promise<void>
   updateLastFetchedNotificationTime: () => Promise<void>
 } => {
   const [notificationsCount, setNotificationsCount] = useState(0)
   const [lensNotificationsCount, setLensNotificationsCount] = useState(0)
-  const { user } = useProfile()
+  const { user, refreshUserInfo } = useProfile()
   const { data: lensProfile } = useLensUserContext()
   const { data } = useNotificationsCreatedAtQuery(
     {
@@ -41,7 +44,7 @@ const useNotificationsCount = (): {
         ).length
       )
     }
-  }, [data?.notifications])
+  }, [data?.notifications, user?.lastFetchedNotificationsTime])
 
   const fetchAndSetNotificationCount = async () => {
     const { count } = await getUnReadNotificationsCount()
@@ -49,9 +52,15 @@ const useNotificationsCount = (): {
     setNotificationsCount(count)
   }
 
-  const updateNotificationCount = () => {
+  const updateNotificationCount = async (
+    alsoUpdateLastFetchedTime?: Boolean
+  ) => {
     setNotificationsCount(0)
     setLensNotificationsCount(0)
+    if (alsoUpdateLastFetchedTime) {
+      await updateLastFetchedNotificationTime()
+      await refreshUserInfo()
+    }
   }
 
   const updateLastFetchedNotificationTime = async () => {
@@ -63,13 +72,13 @@ const useNotificationsCount = (): {
   }
 
   useEffect(() => {
-    if (user) {
+    if (user?.lastFetchedNotificationsTime) {
       fetchAndSetNotificationCount()
     } else {
       setNotificationsCount(0)
       setLensNotificationsCount(0)
     }
-  }, [user])
+  }, [user?.lastFetchedNotificationsTime])
   return {
     notificationsCount: notificationsCount + lensNotificationsCount,
     updateNotificationCount,

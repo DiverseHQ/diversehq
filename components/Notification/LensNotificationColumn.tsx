@@ -15,7 +15,7 @@ import useNotificationsCount from './useNotificationsCount'
 import { useDevice } from '../Common/DeviceWrapper'
 
 const LensNotificationColumn = () => {
-  const { user, refreshUserInfo } = useProfile()
+  const { user } = useProfile()
 
   const [params, setParams] = useState<{
     notifications: Notification[] | NotificationSchema[]
@@ -32,8 +32,7 @@ const LensNotificationColumn = () => {
   })
 
   const { isMobile } = useDevice()
-  const { updateLastFetchedNotificationTime, updateNotificationCount } =
-    useNotificationsCount()
+  const { updateNotificationCount } = useNotificationsCount()
 
   const { data: lensProfile, isSignedIn, hasProfile } = useLensUserContext()
   const { data } = useNotificationsQuery(
@@ -147,9 +146,7 @@ const LensNotificationColumn = () => {
   }, [user?.preferences?.highSignalNotifications])
 
   const cleanUp = async () => {
-    updateNotificationCount()
-    await updateLastFetchedNotificationTime()
-    await refreshUserInfo()
+    await updateNotificationCount()
   }
 
   useEffect(() => {
