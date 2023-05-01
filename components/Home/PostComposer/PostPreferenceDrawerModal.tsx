@@ -19,6 +19,9 @@ const PostPreferenceDrawerModal = () => {
   }
   return (
     <div>
+      <div className="mx-4 text-s-text text-xs">
+        Only applicable to normal (c/..) Communities.
+      </div>
       <div className="start-row mx-4 py-2 gap-x-2">
         <Switch
           checked={user?.preferences?.appendLink ?? true}
@@ -33,7 +36,7 @@ const PostPreferenceDrawerModal = () => {
             }
           }}
         />
-        <div>Auto add community link at the end</div>
+        <div>Add community link at the end</div>
       </div>
       <div className="start-row mx-4 py-2 gap-x-2">
         <Switch
@@ -49,7 +52,7 @@ const PostPreferenceDrawerModal = () => {
             }
           }}
         />
-        <div>Auto add community hashtag at the end</div>
+        <div>Add community hashtag at the end</div>
       </div>
     </div>
   )
