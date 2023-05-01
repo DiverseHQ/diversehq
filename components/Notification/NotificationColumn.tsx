@@ -11,8 +11,7 @@ import { useDevice } from '../Common/DeviceWrapper'
 const NotificationColumn = () => {
   const [notifications, setNotifications] = useState([])
   const [hasMore, setHasMore] = useState(true)
-  const { updateNotificationCount, updateLastFetchedNotificationTime } =
-    useNotificationCount()
+  const { updateNotificationCount } = useNotificationCount()
   const { user } = useProfile()
   const { isMobile } = useDevice()
 
@@ -34,9 +33,7 @@ const NotificationColumn = () => {
 
   useEffect(() => {
     if (user) {
-      updateNotificationCount()
-      updateLastFetchedNotificationTime()
-      getMoreNotifications()
+      updateNotificationCount(false)
     }
   }, [user])
 

@@ -285,7 +285,7 @@ const CreatePostPopup = () => {
         attachmentsInput.length > 0
           ? getAttachmentImageMimeType()
           : 'image/svg+xml',
-      name: title,
+      name: isAudioPublication ? audioPublication.title : title,
       media: attachmentsInput,
       animation_url: getAnimationUrl(),
       attributes,
