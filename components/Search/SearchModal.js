@@ -4,13 +4,11 @@ import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
 import formatHandle from '../User/lib/formatHandle'
 import CommunitiesSearchModal from './CommunitiesSearchModal'
 import LensProfilesSearchModal from './LensProfilesSearchModal'
-import { useDevice } from '../Common/DeviceWrapper'
 
 const SearchModal = () => {
   const inputRef = useRef()
   const [searchTerm, setSearchTerm] = useState('')
   const router = useRouter()
-  const { isMobile } = useDevice()
   useEffect(() => {
     if (router.pathname === '/search') {
       inputRef.current.focus()
@@ -18,7 +16,6 @@ const SearchModal = () => {
   }, [router])
 
   useEffect(() => {
-    console.log('router.query', router.query?.q)
     if (router?.query?.q) {
       setSearchTerm(router.query.q)
     } else {

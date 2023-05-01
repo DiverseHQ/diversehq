@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Publication,
   SearchRequestTypes,
-  useSearchProfilesQuery,
   useSearchPublicationsQuery
 } from '../../../graphql/generated'
 import { SEARCH_ITEMS_LIMIT } from '../../../utils/config'

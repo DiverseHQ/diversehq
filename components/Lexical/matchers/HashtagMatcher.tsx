@@ -1,7 +1,6 @@
 import { Matcher } from 'interweave'
 // import Link from 'next/link'
 import { createElement } from 'react'
-import { appLink, isMainnet } from '../../../utils/config'
 import Link from 'next/link'
 
 export const Hashtag = ({ ...props }: any) => {

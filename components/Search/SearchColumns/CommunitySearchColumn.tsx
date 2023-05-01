@@ -5,8 +5,6 @@ import {
 } from '../../Common/WalletContext'
 import { searchCommunityFromName } from '../../../api/community'
 import formatHandle from '../../User/lib/formatHandle'
-import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
-import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 import getAvatar from '../../User/lib/getAvatar'
 import RightSidebarThumnailTypeCommunity from '../../Common/UI/RightSidebarThumnailTypeCommunity'
 import getCoverBanner from '../../User/lib/getCoverBanner'
@@ -51,6 +49,7 @@ const CommunitySearchColumn = ({ q }: { q: string }) => {
         <div className="flex flex-col gap-y-4">
           {lensCommunities.map((community) => (
             <RightSidebarThumnailTypeCommunity
+              key={community.handle}
               community={{
                 // @ts-ignore
                 bannerImageUrl: getCoverBanner(community),
@@ -83,6 +82,7 @@ const CommunitySearchColumn = ({ q }: { q: string }) => {
                 isLensCommunity: false,
                 name: community.name
               }}
+              key={community._id}
             />
             // <div
             //   className="m-2 flex flex-row p-1 hover:bg-s-hover underline-offset-4  items-center rounded-full cursor-pointer"
