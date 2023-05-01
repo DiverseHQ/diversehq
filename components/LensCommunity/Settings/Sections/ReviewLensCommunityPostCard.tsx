@@ -24,6 +24,7 @@ import getAvatar from '../../../User/lib/getAvatar'
 import { putAddLensPublication } from '../../../../api/lensPublication'
 import Attachment from '../../../Post/Attachment'
 import useDASignTypedDataAndBroadcast from '../../../../lib/useDASignTypedDataAndBroadcast'
+import { getContent } from '../../../Post/getContent'
 
 interface Props {
   fetchAndSetUnResolvedReviewPosts: () => Promise<void>
@@ -241,10 +242,18 @@ const ReviewLensCommunityPostCard = ({
     }
   }, [daError])
 
-  const contentAfterRemovingName = post?.contentData?.content
-    ?.split('\n')
-    .slice(2)
-    .join('\n')
+  let postForContent = {
+    metadata: {
+      content: post?.contentData?.content,
+      name: post?.contentData?.name
+    },
+    isLensCommunityPost: true
+  }
+
+  // @ts-ignore
+  const contentAfterRemovingName = getContent(postForContent)
+
+  console.log('post', post)
 
   return (
     <div className="p-2 sm:p-4 border-b border-s-border">
@@ -280,7 +289,7 @@ const ReviewLensCommunityPostCard = ({
         {post?.contentData?.name}
       </div>
       {/* post content */}
-      <div className="text-sm">
+      <div className="text mb-3">
         <Markup>{contentAfterRemovingName}</Markup>{' '}
       </div>
       {/* image or video or audio it any media */}

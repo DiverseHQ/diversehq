@@ -1,4 +1,3 @@
-import { CircularProgress } from '@mui/material'
 import React, { FC, useEffect, useState } from 'react'
 import { CiMail } from 'react-icons/ci'
 import { Profile } from '../../graphql/generated'
@@ -61,7 +60,7 @@ const MessageButton: FC<Props> = ({ userLensProfile, className }) => {
             }}
           >
             {!loading && <CiMail className="w-5 h-5" />}
-            {loading && <CircularProgress size="18px" color="primary" />}
+            {loading && <div className="h-5 w-5 border-p-text spinner" />}
           </div>
         )}
     </>

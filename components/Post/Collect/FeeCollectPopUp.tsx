@@ -1,4 +1,3 @@
-import { CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { BsCollection } from 'react-icons/bs'
 import { RiUserFollowLine } from 'react-icons/ri'
@@ -133,7 +132,7 @@ const FeeCollectPopUp = ({
                 >
                   {followLoading ? (
                     <div className="flex flex-row justify-center items-center space-x-2">
-                      <CircularProgress size="18px" color="primary" />
+                      <div className="h-4 w-4 border-p-text spinner" />
                       <p>Follow</p>
                     </div>
                   ) : author.isFollowing ? (
@@ -149,7 +148,7 @@ const FeeCollectPopUp = ({
 
             {allowanceLoading && (
               <div className="text-p-text flex flex-row space-x-1">
-                <CircularProgress size="18px" color="primary" />
+                <div className="h-4 w-4 border-p-text spinner" />
                 <p>Loading Allowance</p>
               </div>
             )}
@@ -241,7 +240,7 @@ const FeeCollectPopUp = ({
             >
               {loading ? (
                 <div className="flex flex-row justify-center items-center space-x-2">
-                  <CircularProgress size="18px" color="primary" />
+                  <div className="h-4 w-4 border-p-text spinner" />
                   <p>Collecting</p>
                 </div>
               ) : (
@@ -271,7 +270,7 @@ const FeeCollectPopUp = ({
                   >
                     {followLoading ? (
                       <div className="flex flex-row justify-center items-center space-x-2 text-p-btn-text">
-                        <CircularProgress size="18px" color="primary" />
+                        <div className="h-4 w-4 border-p-text spinner" />
                         <p>Following..</p>
                       </div>
                     ) : author.isFollowing ? (
@@ -288,7 +287,7 @@ const FeeCollectPopUp = ({
             )}
             {allowanceLoading && (
               <div className="text-p-text flex flex-row Items-center">
-                <CircularProgress size="18px" color="primary" />
+                <div className="h-4 w-4 border-p-text spinner" />
                 <p className="text-p-text ">Allowance loading</p>
               </div>
             )}
@@ -356,7 +355,7 @@ const FeeCollectPopUp = ({
                   <div className='className="flex flex-row justify-center items-center space-x-2"'>
                     {loading ? (
                       <div className="flex flex-row justify-center text-p-btn-text items-center space-x-2">
-                        <CircularProgress size="18px" color="primary" />
+                        <div className="h-4 w-4 border-p-text spinner" />
                         <div>Collecting...</div>
                       </div>
                     ) : (

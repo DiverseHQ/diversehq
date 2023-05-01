@@ -1,4 +1,3 @@
-import { CircularProgress } from '@mui/material'
 import React, { useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useSendTransaction, useWaitForTransaction } from 'wagmi'
@@ -81,7 +80,7 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
         </div>
       ) : (
         <div className="flex flex-row items-center space-x-1">
-          <CircularProgress size="18px" color="primary" />
+          <div className="h-4 w-4 border-p-btn-text spinner" />
           <p>Allowing..</p>
         </div>
       )}

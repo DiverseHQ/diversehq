@@ -1,4 +1,4 @@
-import { CircularProgress, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 import React from 'react'
 import { HiOutlineDocumentAdd } from 'react-icons/hi'
 import { CommunityType, Rule } from '../../../../types/community'
@@ -106,7 +106,7 @@ const RulesSection = ({ community }: { community: CommunityType }) => {
           isDisabled ? 'bg-p-btn-disabled' : 'bg-p-btn'
         } text-p-btn-text rounded-lg flex flex-row items-center space-x-1.5`}
       >
-        {loading && <CircularProgress className="h-4 w-4" size="16px" />}
+        {loading && <div className="h-4 w-4 spinner border-p-btn-text" />}
         {!loading && <HiOutlineDocumentAdd className="h-4 w-4" />}
         <div>Add</div>
       </button>

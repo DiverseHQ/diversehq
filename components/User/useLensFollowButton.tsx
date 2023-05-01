@@ -1,4 +1,3 @@
-import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri'
 import { SlUserFollowing } from 'react-icons/sl'
@@ -162,7 +161,7 @@ const useLensFollowButton = (
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
-                <CircularProgress size="18px" color="primary" />
+                <div className="h-4 w-4 border-p-text spinner" />
                 <p>{FOLLOW_STATUS[label].UnFollow}</p>
               </div>
             ) : (
@@ -188,7 +187,7 @@ const useLensFollowButton = (
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
-                <CircularProgress size="18px" color="primary" />
+                <div className="h-4 w-4 border-p-btn-text spinner" />
                 <p>{FOLLOW_STATUS[label].Follow}</p>
               </div>
             ) : data?.profile?.isFollowing ? (

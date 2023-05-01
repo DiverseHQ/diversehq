@@ -3,7 +3,6 @@ import { CollectModule, Profile, Publication } from '../../../graphql/generated'
 import useCollectPublication from './useCollectPublication'
 import useLensFollowButton from '../../User/useLensFollowButton'
 import { useNotify } from '../../Common/NotifyContext'
-import { CircularProgress } from '@mui/material'
 import { RiUserFollowLine } from 'react-icons/ri'
 import { BsCollection } from 'react-icons/bs'
 import formatHandle from '../../User/lib/formatHandle'
@@ -88,7 +87,7 @@ const FreeCollectPopUp = ({
                       >
                         {followLoading ? (
                           <div className="flex flex-row justify-center items-center space-x-2">
-                            <CircularProgress size="18px" color="primary" />
+                            <div className="h-4 w-4 border-p-text spinner" />
                             <p>Follow</p>
                           </div>
                         ) : author.isFollowing ? (
@@ -127,7 +126,7 @@ const FreeCollectPopUp = ({
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2">
-                <CircularProgress size="16px" color="primary" />
+                <div className="h-4 w-4 border-p-btn-text spinner" />
                 <div>Collect</div>
               </div>
             ) : (
@@ -157,7 +156,7 @@ const FreeCollectPopUp = ({
                     >
                       {followLoading ? (
                         <div className="flex flex-row self-start space-x-2 text-p-btn-text">
-                          <CircularProgress size="18px" color="primary" />
+                          <div className="h-4 w-4 border-p-text spinner" />
                           <p>Follow</p>
                         </div>
                       ) : (
@@ -186,7 +185,7 @@ const FreeCollectPopUp = ({
           >
             {loading ? (
               <div className="flex flex-row justify-center items-center space-x-2 text-p-btn-text">
-                <CircularProgress size="18px" color="primary" />
+                <div className="h-4 w-4 border-p-text spinner" />
                 <div>Collecting</div>
               </div>
             ) : (

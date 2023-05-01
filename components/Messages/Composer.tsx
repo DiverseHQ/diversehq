@@ -1,6 +1,5 @@
 import React from 'react'
 import type { FC } from 'react'
-import { CircularProgress } from '@mui/material'
 import { IoMdSend } from 'react-icons/io'
 
 interface Props {
@@ -66,7 +65,7 @@ const Composer: FC<Props> = ({
         />
         <button disabled={!canSendMessage} onClick={handleSend} className="">
           {sending ? (
-            <CircularProgress size="18px" color="primary" />
+            <div className="h-4 w-4 border-p-btn spinner" />
           ) : (
             <IoMdSend className="text-p-btn w-6 h-6" />
           )}

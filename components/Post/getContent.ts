@@ -6,8 +6,12 @@ export const getContent = (post: postWithCommunityInfoType): string => {
 
   if (content) {
     if (post?.isLensCommunityPost) {
-      content = content.split('\n').slice(2).join('\n')
+      content = content.split('\n').slice(1).join('\n')
+      if (content.startsWith(post?.metadata?.name)) {
+        content = content.slice(post?.metadata?.name.length)
+      }
     }
+
     if (content.startsWith('Posted on')) {
       content = content.split('\n').slice(1).join('\n')
     }
@@ -19,7 +23,10 @@ export const getContent = (post: postWithCommunityInfoType): string => {
     // if the content ends with #<communityName>, remove it
     // communityName = post?.communityInfo?.name
 
-    if (content?.endsWith(`#${post?.communityInfo?.name}`)) {
+    if (
+      post?.communityInfo?.name &&
+      content?.endsWith(`#${post?.communityInfo?.name}`)
+    ) {
       content = content.slice(0, -(post?.communityInfo?.name.length + 1))
     }
     if (
