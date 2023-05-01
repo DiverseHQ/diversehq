@@ -9,9 +9,9 @@ const ProfilePageNextSeo = ({ lensProfile }) => {
     <>
       <MetaTags
         title={`${
-          lensProfile.name ? lensProfile?.name + ' | ' : ''
+          lensProfile?.name ? lensProfile?.name + ' | ' : ''
         } u/${formatHandle(lensProfile?.handle)}`}
-        description={lensProfile.bio}
+        description={lensProfile?.bio}
         image={getAvatar(lensProfile)}
         url={`https://diversehq.com/u/${formatHandle(lensProfile?.handle)}`}
       />
