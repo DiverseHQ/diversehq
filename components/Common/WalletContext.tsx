@@ -21,7 +21,7 @@ import {
 } from '../../utils/token'
 import { getUserInfo } from '../../api/user'
 import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
-import { userRoles } from '../../utils/config'
+// import { userRoles } from '../../utils/config'
 import { useNotify } from './NotifyContext'
 import { useQueryClient } from '@tanstack/react-query'
 import { useLensUserContext } from '../../lib/LensUserContext'
@@ -65,7 +65,7 @@ export const WalletContext = createContext<ContextType>(null)
 export const WalletProvider = ({ children }) => {
   const [user, setUser] = useState<UserType>(null)
   // const { data: signer } = useSigner()
-  const { notifyInfo } = useNotify()
+  const { notifyError } = useNotify()
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
   const [LensCommunity, setLensCommunity] = useState(null)
@@ -182,16 +182,27 @@ export const WalletProvider = ({ children }) => {
       setLoading(true)
       if (!address) return
       const userInfo = await getUserInfo(address)
-      if (userInfo && userInfo.role <= userRoles.NORMAL_USER) {
+      // console.log('userInfo', userInfo)
+      if (userInfo) {
         setUser(userInfo)
       } else {
-        notifyInfo('You are not whitelisted. DiverseHQ is in closed beta.')
+        notifyError('Something went wrong. Please try again later.')
         setUser(null)
         if (getLocalToken()) {
           removeLocalToken()
         }
         removeAccessTokenFromStorage()
       }
+      // if (userInfo && userInfo.role <= userRoles.NORMAL_USER) {
+      //   setUser(userInfo)
+      // } else {
+      //   notifyInfo('You are not whitelisted. DiverseHQ is in closed beta.')
+      //   setUser(null)
+      //   if (getLocalToken()) {
+      //     removeLocalToken()
+      //   }
+      //   removeAccessTokenFromStorage()
+      // }
     } catch (error) {
       console.log(error)
     } finally {

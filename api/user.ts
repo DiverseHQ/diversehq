@@ -102,3 +102,17 @@ export const toggleHighSignalNotifsPreference = async () => {
     }
   )
 }
+
+export const toggleAppendHastagPreference = async () => {
+  return await fetch(`${apiEndpoint}/user/toggle-append-hashtags-preference`, {
+    method: 'PUT',
+    headers: await getHeaders()
+  })
+}
+
+export const toggleAppendLinkPreference = async () => {
+  return await fetch(`${apiEndpoint}/user/toggle-append-link-preference`, {
+    method: 'PUT',
+    headers: await getHeaders()
+  })
+}

@@ -15,6 +15,8 @@ export type userPreferences = {
   theme: 'light' | 'dark'
   language: string
   highSignalNotifications: boolean
+  appendHashtags: boolean
+  appendLink: boolean
 }
 
 export type UserType = {

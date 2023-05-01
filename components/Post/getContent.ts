@@ -1,8 +1,8 @@
 import { postWithCommunityInfoType } from '../../types/post'
-import { showNameForThisAppIds } from '../../utils/config'
+import { appLink, showNameForThisAppIds } from '../../utils/config'
 
 export const getContent = (post: postWithCommunityInfoType): string => {
-  let content = post?.metadata?.content || ''
+  let content: string = post?.metadata?.content || ''
 
   if (content) {
     if (post?.isLensCommunityPost) {
@@ -22,13 +22,20 @@ export const getContent = (post: postWithCommunityInfoType): string => {
     }
     // if the content ends with #<communityName>, remove it
     // communityName = post?.communityInfo?.name
-
-    if (
-      post?.communityInfo?.name &&
-      content?.endsWith(`#${post?.communityInfo?.name}`)
-    ) {
+    if (content?.endsWith(`#${post?.communityInfo?.name}`)) {
       content = content.slice(0, -(post?.communityInfo?.name.length + 1))
     }
+
+    content = content.trim()
+
+    // removing community link if it is the last line
+    if (content?.endsWith(`${appLink}/c/${post?.communityInfo?.name}`)) {
+      content = content.slice(
+        0,
+        -(`${appLink}/c/${post?.communityInfo?.name}`.length + 1)
+      )
+    }
+
     if (
       content?.startsWith(post?.metadata?.name) &&
       showNameForThisAppIds.includes(post?.appId)

@@ -42,8 +42,8 @@ const LensPostPage = ({ id, post }: Props) => {
   useEffect(() => {
     if (!data?.publication) return
     // @ts-ignore
-    setPostInfo({ ...postInfo, ...data.publication })
-  }, [data])
+    setPostInfo({ ...postInfo, ...post, ...data.publication })
+  }, [data, post])
 
   const router = useRouter()
 

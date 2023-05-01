@@ -42,7 +42,7 @@ const Modal = ({
         <div
           className={`w-full h-full absolute ${
             type !== modalType.customposition &&
-            'bg-black/40 backdrop-opacity-40  backdrop-blur-sm'
+            'dark:bg-white/10 bg-black/40 backdrop-opacity-60  backdrop-blur-sm'
           } z-0`}
           onClick={onBackBtnClick}
         ></div>
@@ -88,7 +88,7 @@ const CustomPopUpModalProvider = ({ children }) => {
       <>
         {modals.map((modal, i) => (
           <Modal
-          key={i}
+            key={i}
             type={modal.type}
             component={modal.component}
             onBackBtnClick={providerVal.hideModal}

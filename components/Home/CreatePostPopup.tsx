@@ -42,7 +42,8 @@ import {
   SUPPORTED_AUDIO_TYPE,
   SUPPORTED_IMAGE_TYPE,
   SUPPORTED_VIDEO_TYPE,
-  appId
+  appId,
+  appLink
 } from '../../utils/config'
 import { IoIosArrowBack } from 'react-icons/io'
 import PublicationEditor from '../Lexical/PublicationEditor'
@@ -61,6 +62,7 @@ import Attachment from '../Post/Attachment'
 import AttachmentRow from '../Post/Create/AttachmentRow'
 import { useRouter } from 'next/router'
 import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
+import PostPreferenceButton from './PostComposer/PostPreferenceButton'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
@@ -126,7 +128,6 @@ const CreatePostPopup = () => {
     (state) => state.audioPublication
   )
   const isUploading = usePublicationStore((state) => state.isUploading)
-
   const isAudioPublication = SUPPORTED_AUDIO_TYPE.includes(attachments[0]?.type)
 
   const getMainContentFocus = () => {
@@ -274,8 +275,15 @@ const CreatePostPopup = () => {
         title +
         '\n' +
         content.trim() +
-        `${
-          !selectedCommunity?.isLensCommunity && selectedCommunity?.name
+        `
+        ${
+          !selectedCommunity?.isLensCommunity &&
+          (user?.preferences?.appendLink ?? true)
+            ? `\n ${appLink}/c/${selectedCommunity?.name}`
+            : ``
+        }${
+          !selectedCommunity?.isLensCommunity &&
+          (user?.preferences?.appendHashtags ?? true)
             ? `\n #${selectedCommunity?.name}`
             : ``
         }`,
@@ -762,7 +770,7 @@ const CreatePostPopup = () => {
             <div className="px-5">
               <Attachment attachments={attachments} isNew />
             </div>
-            <div className="ml-6 mt-2 flex gap-2 items-center">
+            <div className="ml-6 mt-2 flex items-center">
               <AttachmentRow />
 
               <Giphy setGifAttachment={(gif) => setGifAttachment(gif)} />
@@ -795,6 +803,8 @@ const CreatePostPopup = () => {
                   </button>
                 </Tooltip>
               )}
+
+              <PostPreferenceButton disabled={loading} />
             </div>
           </div>
         )}

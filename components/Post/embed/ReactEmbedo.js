@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useRef } from 'react'
 import Embedo from 'embedo'
 import { uuidv4 } from '@firebase/util'
-import LinkPreview from './LinkPreview'
+// import LinkPreview from './LinkPreview'
 // import { ReactTinyLink } from 'react-tiny-link'
 // import LinkPreview from './LinkPreview'
 // import { useState } from 'react'
@@ -71,18 +71,16 @@ const ReactEmbedo = ({ url, ...props }) => {
       })
     }
   }, [url, embedoRef])
+
+  if (!isEmbedable(url)) return null
   return (
     <>
-      {isEmbedable(url) ? (
-        <div
-          className="sm:rounded-lg  overflow-hidden"
-          ref={embedoRef}
-          id={uuidv4()}
-          {...props}
-        ></div>
-      ) : (
-        <LinkPreview url={url} />
-      )}
+      <div
+        className="sm:rounded-lg  overflow-hidden"
+        ref={embedoRef}
+        id={uuidv4()}
+        {...props}
+      ></div>
     </>
   )
 }
