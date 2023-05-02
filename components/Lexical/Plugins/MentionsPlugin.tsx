@@ -261,7 +261,10 @@ const NewMentionsPlugin: FC = () => {
       ) =>
         anchorElementRef.current && results.length
           ? ReactDOM.createPortal(
-              <div className=" border-s-border mt-8 border rounded-xl shadow-sm w-52 sticky text-p-text z-50 bg-s-bg min-w-full">
+              <div
+                className=" border-s-border mt-8 border rounded-xl shadow-sm w-52 sticky text-p-text bg-s-bg min-w-full"
+                style={{ zIndex: 70 }}
+              >
                 <ul className="">
                   {options.map((option, i: number) => (
                     <MentionsTypeaheadMenuItem
