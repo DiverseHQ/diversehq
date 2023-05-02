@@ -54,7 +54,7 @@ const BottomDrawerWrapper = ({
             onClick={() => {
               setIsDrawerOpen(false)
             }}
-            className="bg-p-bg rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl "
+            className="bg-s-bg-hover rounded-full text-center flex font-semibold text-s-text py-1 justify-center items-center text-p-text w-full text-xl "
           >
             Close
           </button>

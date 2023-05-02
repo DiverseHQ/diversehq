@@ -78,7 +78,7 @@ const GifSelector = ({
               placeholder={`Search for GIFs`}
               value={debouncedGifInput}
               onChange={handleSearch}
-              className="w-full bg-s-bg text-p-text border border-gray-300 outline-none rounded-md p-2"
+              className="w-full bg-s-bg text-p-text border border-s-border outline-none rounded-md p-2"
             />
           </div>
           <div className="flex h-[45vh] overflow-y-auto overflow-x-hidden rounded-lg">
@@ -124,14 +124,14 @@ const GifSelector = ({
         </div>
       ) : (
         <>
-          <div onClick={handleClick} className={`bg-p-bg text-p-text  p-3 `}>
+          <div onClick={handleClick} className={`bg-s-bg text-p-text  p-3 `}>
             <div className={`m-2 `}>
               <input
                 type="text"
                 placeholder={`Search for GIFs`}
                 value={debouncedGifInput}
                 onChange={handleSearch}
-                className="w-full border border-gray-300 rounded-md p-2"
+                className="w-full border border-s-border bg-s-bg text-p-text rounded-md p-2"
               />
             </div>
             <div className="flex h-[45vh] overflow-y-auto overflow-x-hidden no-scrollbar   ">
