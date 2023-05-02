@@ -10,7 +10,6 @@ import {
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../../Common/NotifyContext'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
-import { LensInfuraEndpoint } from '../../../utils/config'
 import LensRepliedComments from './LensRepliesComments'
 import LensCreateComment from './LensCreateComment'
 import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
@@ -23,7 +22,6 @@ import {
 } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
 import OptionsWrapper from '../../Common/OptionsWrapper'
-import getStampFyiURL from '../../User/lib/getStampFyiURL'
 import { Tooltip } from '@mui/material'
 import { useCommentStore } from '../../../store/comment'
 import CenteredDot from '../../Common/UI/CenteredDot'
@@ -31,6 +29,7 @@ import formatHandle from '../../User/lib/formatHandle'
 // import AttachmentMedia from '../Attachment'
 import Markup from '../../Lexical/Markup'
 import Attachment from '../Attachment'
+import getAvatar from '../../User/lib/getAvatar'
 
 const LensCommentCard = ({ comment }: { comment: Comment }) => {
   const [comments, setComments] = useState([])
@@ -216,15 +215,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
           <div className="flex flex-row items-center justify-between w-full">
             <div className="flex flex-row items-center gap-2">
               <ImageWithPulsingLoader
-                src={
-                  // @ts-ignore
-                  comment?.profile?.picture?.original?.url?.startsWith('ipfs')
-                    ? `${LensInfuraEndpoint}${
-                        // @ts-ignore
-                        comment?.profile?.picture?.original?.url.split('//')[1]
-                      }`
-                    : getStampFyiURL(comment?.profile?.ownedBy)
-                }
+                src={getAvatar(comment?.profile)}
                 className="w-7 h-7 rounded-full object-cover"
               />
               {comment?.profile?.name && (
