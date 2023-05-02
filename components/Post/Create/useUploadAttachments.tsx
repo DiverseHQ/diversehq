@@ -4,13 +4,22 @@ import { uuid } from 'uuidv4'
 import { useNotify } from '../../Common/NotifyContext'
 import { uploadFilesToIpfsAndGetAttachments } from '../../../utils/utils'
 
-const useUploadAttachments = () => {
+const useUploadAttachments = (isComment?: boolean) => {
   const addAttachments = usePublicationStore((state) => state.addAttachments)
   const updateAttachments = usePublicationStore(
     (state) => state.updateAttachments
   )
   const removeAttachments = usePublicationStore(
     (state) => state.removeAttachments
+  )
+  const addCommentAttachments = usePublicationStore(
+    (state) => state.addCommentAttachments
+  )
+  const updateCommentAttachments = usePublicationStore(
+    (state) => state.updateCommentAttachments
+  )
+  const removeCommentAttachments = usePublicationStore(
+    (state) => state.removeCommentAttachments
   )
   const setIsUploading = usePublicationStore((state) => state.setIsUploading)
   const { notifyInfo } = useNotify()
@@ -56,12 +65,20 @@ const useUploadAttachments = () => {
         return true
       })
 
-      addAttachments(previewAttachments)
+      if (isComment) {
+        addCommentAttachments(previewAttachments)
+      } else {
+        addAttachments(previewAttachments)
+      }
       let attachmentsIPFS: AttachmentType[] = []
       try {
         if (hasLargeAttachment.includes(false)) {
           setIsUploading(false)
-          removeAttachments(attachmentIds)
+          if (isComment) {
+            removeCommentAttachments(attachmentIds)
+          } else {
+            removeAttachments(attachmentIds)
+          }
           return []
         }
 
@@ -76,10 +93,18 @@ const useUploadAttachments = () => {
               item: attachmentsUploaded[index].item
             })
           )
-          updateAttachments(attachmentsIPFS)
+          if (isComment) {
+            updateCommentAttachments(attachmentsIPFS)
+          } else {
+            updateAttachments(attachmentsIPFS)
+          }
         }
       } catch {
-        removeAttachments(attachmentIds)
+        if (isComment) {
+          removeCommentAttachments(attachmentIds)
+        } else {
+          removeAttachments(attachmentIds)
+        }
         notifyInfo('Something went wrong while uploading!')
       }
       setIsUploading(false)

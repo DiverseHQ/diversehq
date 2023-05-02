@@ -22,10 +22,15 @@ interface PublicationState {
     publications: Map<string, postWithCommunityInfoType>
   ) => void
   attachments: AttachmentType[]
+  commnetAttachments: AttachmentType[]
   setAttachments: (attachments: AttachmentType[]) => void
+  setCoomentAttachments: (attachments: AttachmentType[]) => void
   addAttachments: (attachments: AttachmentType[]) => void
+  addCommentAttachments: (attachments: AttachmentType[]) => void
   updateAttachments: (attachments: AttachmentType[]) => void
+  updateCommentAttachments: (attachments: AttachmentType[]) => void
   removeAttachments: (ids: string[]) => void
+  removeCommentAttachments: (ids: string[]) => void
   audioPublication: {
     title: string
     author: string
@@ -40,6 +45,7 @@ interface PublicationState {
   }) => void
   isUploading: boolean
   resetAttachments: () => void
+  resetCommentAttachments: () => void
   setIsUploading: (isUploading: boolean) => void
   reset: () => void
 }
@@ -64,11 +70,20 @@ export const usePublicationStore = create<PublicationState>((set) => ({
     })
   },
   attachments: [],
+  commnetAttachments: [],
   setAttachments: (attachments) => set(() => ({ attachments })),
+  setCoomentAttachments: (attachments) =>
+    set(() => ({ commnetAttachments: attachments })),
   addAttachments: (attachments) => {
     set((state) => {
       const newAttachments = [...state.attachments, ...attachments]
       return { attachments: newAttachments }
+    })
+  },
+  addCommentAttachments: (attachments) => {
+    set((state) => {
+      const newAttachments = [...state.commnetAttachments, ...attachments]
+      return { commnetAttachments: newAttachments }
     })
   },
   updateAttachments: (attachments) => {
@@ -82,12 +97,31 @@ export const usePublicationStore = create<PublicationState>((set) => ({
       return { attachments: newAttachments }
     })
   },
+  updateCommentAttachments: (attachments) => {
+    set((state) => {
+      const newAttachments = state.commnetAttachments.map((attachment) => {
+        const newAttachment = attachments.find(
+          (newAttachment) => newAttachment.id === attachment.id
+        )
+        return newAttachment || attachment
+      })
+      return { commnetAttachments: newAttachments }
+    })
+  },
   removeAttachments: (ids) => {
     set((state) => {
       const newAttachments = state.attachments.filter(
         (attachment) => !ids.includes(attachment.id)
       )
       return { attachments: newAttachments }
+    })
+  },
+  removeCommentAttachments: (ids) => {
+    set((state) => {
+      const newAttachments = state.commnetAttachments.filter(
+        (attachment) => !ids.includes(attachment.id)
+      )
+      return { commnetAttachments: newAttachments }
     })
   },
   audioPublication: {
@@ -107,6 +141,10 @@ export const usePublicationStore = create<PublicationState>((set) => ({
         cover: '',
         coverMimeType: ''
       }
+    })),
+  resetCommentAttachments: () =>
+    set(() => ({
+      commnetAttachments: []
     })),
   setIsUploading: (isUploading) => set(() => ({ isUploading })),
   reset: () => set(() => ({ publications: new Map() }))

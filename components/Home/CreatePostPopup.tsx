@@ -124,6 +124,9 @@ const CreatePostPopup = () => {
   const [showOptionsModal, setShowOptionsModal] = useState(false)
 
   const attachments = usePublicationStore((state) => state.attachments)
+  const resetAttachments = usePublicationStore(
+    (state) => state.resetAttachments
+  )
   const addAttachments = usePublicationStore((state) => state.addAttachments)
   const audioPublication = usePublicationStore(
     (state) => state.audioPublication
@@ -313,6 +316,7 @@ const CreatePostPopup = () => {
         )
         if (res.status === 200) {
           notifySuccess('Post submitted for review')
+          resetAttachments()
           hideModal()
         } else if (res.status === 400) {
           const resJson = await res.json()
@@ -396,6 +400,7 @@ const CreatePostPopup = () => {
           // // addPost({ txId: dispatcherResult. }, postForIndexing)
           console.log(dispatcherResult)
           router.push(`/p/${dispatcherResult.id}`)
+          resetAttachments()
           hideModal()
         }
       } else {
@@ -442,6 +447,7 @@ const CreatePostPopup = () => {
           notifyError(dispatcherResult.reason)
         } else {
           addPost({ txId: dispatcherResult.txId }, postForIndexing)
+          resetAttachments()
           hideModal()
         }
       } else {
@@ -468,6 +474,7 @@ const CreatePostPopup = () => {
   useEffect(() => {
     if (result && type === 'createPost') {
       setLoading(false)
+      resetAttachments()
       hideModal()
       addPost({ txId: result.txId }, postMetadataForIndexing)
     }
@@ -485,6 +492,7 @@ const CreatePostPopup = () => {
         })
         setLoading(false)
         router.push(`/p/${daResult.id}`)
+        resetAttachments()
         hideModal()
       }
     }
@@ -498,6 +506,12 @@ const CreatePostPopup = () => {
       notifyError(error || daError)
     }
   }, [error, daError])
+
+  useEffect(() => {
+    if (user) {
+      getJoinedCommunities()
+    }
+  }, [user])
 
   const setGifAttachment = (gif) => {
     const attachment = {
@@ -843,12 +857,6 @@ const CreatePostPopup = () => {
       </PopUpWrapper>
     )
   }
-
-  useEffect(() => {
-    if (user) {
-      getJoinedCommunities()
-    }
-  }, [user])
 
   return <div className="">{PopUpModal()}</div>
 }

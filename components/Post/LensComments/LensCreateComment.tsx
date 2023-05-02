@@ -19,12 +19,22 @@ import getAvatar from '../../User/lib/getAvatar'
 import { useCommentStore } from '../../../store/comment'
 import ReplyMobileInfo from './ReplyMobileInfo'
 import Giphy from '../Giphy'
-import { AiOutlineClose } from 'react-icons/ai'
+// import { AiOutlineClose } from 'react-icons/ai'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../../User/lib/formatHandle'
 import clsx from 'clsx'
 import { useDevice } from '../../Common/DeviceWrapper'
 import useDASignTypedDataAndBroadcast from '../../../lib/useDASignTypedDataAndBroadcast'
+// import useUploadAttachments from '../Create/useUploadAttachments'
+import { AttachmentType, usePublicationStore } from '../../../store/publication'
+import { uuid } from 'uuidv4'
+import Attachment from '../Attachment'
+import {
+  SUPPORTED_IMAGE_TYPE,
+  SUPPORTED_VIDEO_TYPE
+} from '../../../utils/config'
+import { appId } from '../../../utils/config'
+import AttachmentRow from '../Create/AttachmentRow'
 const LensCreateComment = ({
   postId,
   addComment,
@@ -73,7 +83,55 @@ const LensCreateComment = ({
   const commentRef = useRef()
   const createCommentComposerRef = useRef()
   const [loading, setLoading] = useState(false)
-  const [gifAttachment, setGifAttachment] = useState(null)
+  // const [gifAttachment, setGifAttachment] = useState(null)
+
+  // const { handleUploadAttachments } = useUploadAttachments()
+  const attachments = usePublicationStore((state) => state.commnetAttachments)
+  const resetAttachments = usePublicationStore(
+    (state) => state.resetCommentAttachments
+  )
+  const addAttachments = usePublicationStore(
+    (state) => state.addCommentAttachments
+  )
+  const isUploading = usePublicationStore((state) => state.isUploading)
+
+  const getMainContentFocus = () => {
+    if (attachments.length > 0) {
+      if (SUPPORTED_IMAGE_TYPE.includes(attachments[0]?.type)) {
+        return PublicationMainFocus.Image
+      } else if (SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)) {
+        return PublicationMainFocus.Video
+      } else {
+        return PublicationMainFocus.TextOnly
+      }
+    } else {
+      return PublicationMainFocus.TextOnly
+    }
+  }
+
+  const getAnimationUrl = () => {
+    if (
+      attachments.length > 0 &&
+      SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)
+    ) {
+      return attachments[0]?.item
+    }
+    return null
+  }
+
+  const getAttachmentImage = () => {
+    // loop over attachments and return first attachmen with type image
+    for (let i = 0; i < attachments.length; i++) {
+      if (SUPPORTED_IMAGE_TYPE.includes(attachments[i]?.type)) {
+        return attachments[i]?.item
+      }
+    }
+    return null
+  }
+
+  const getAttachmentImageMimeType = () => {
+    return attachments[0]?.type
+  }
 
   // todo: add appreciate amoount using contract
 
@@ -100,19 +158,13 @@ const LensCreateComment = ({
       metadata: {
         // @ts-ignore
         content: commentRef.current.value,
-        mainContentFocus: gifAttachment
-          ? PublicationMainFocus.Image
-          : PublicationMainFocus.TextOnly,
-        media: gifAttachment
-          ? [
-              {
-                original: {
-                  url: gifAttachment?.images?.original.url,
-                  mimeType: 'image/gif'
-                }
-              }
-            ]
-          : null
+        mainContentFocus: getMainContentFocus(),
+        media: attachments.map((attachment) => ({
+          original: {
+            url: attachment.item,
+            mimeType: attachment.type
+          }
+        }))
       },
       stats: {
         totalUpvotes: 1,
@@ -130,57 +182,53 @@ const LensCreateComment = ({
       // @ts-ignore
       commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
     }
+    setFocused(false)
     if (isDA) {
       addComment(null, comment)
     } else {
       addComment(tx, comment)
     }
     setCurrentReplyComment(null)
-    setGifAttachment(null)
+    resetAttachments()
   }
 
   const createComment = async () => {
     if (!lensProfile?.defaultProfile?.id) return
     // @ts-ignore
     const content = commentRef.current.value
-    if (!gifAttachment && (content.trim() === '' || !content)) return
+    if (!content?.trim()) return
     setLoading(true)
-    let mainContentFocus = null
 
-    if (gifAttachment) {
-      mainContentFocus = PublicationMainFocus.Image
-    } else {
-      mainContentFocus = PublicationMainFocus.TextOnly
-    }
+    const attachmentsInput: AttachmentType[] = attachments.map(
+      (attachment) => ({
+        type: attachment.type,
+        altTag: attachment.altTag,
+        item: attachment.item!
+      })
+    )
 
     try {
       const metadata_id = uuidv4()
       setTempId(tempId)
       const ipfsHash = await uploadToIpfsInfuraAndGetPath({
         version: '2.0.0',
-        mainContentFocus: mainContentFocus,
+        mainContentFocus: getMainContentFocus(),
         metadata_id: metadata_id,
         description: content,
         locale: 'en-US',
         content: content,
         external_url: 'https://diversehq.xyz',
-        image: gifAttachment ? gifAttachment?.images?.original.url : null,
-        imageMimeType: gifAttachment ? 'image/gif' : null,
-        animation_url: gifAttachment
-          ? gifAttachment?.images?.original.url
-          : null,
+        image: attachmentsInput.length > 0 ? getAttachmentImage() : null,
+        imageMimeType:
+          attachmentsInput.length > 0
+            ? getAttachmentImageMimeType()
+            : 'image/svg+xml',
+        animation_url: getAnimationUrl(),
         name: 'Create with DiverseHQ',
         attributes: [],
         tags: [],
-        appId: 'DiverseHQ',
-        media: gifAttachment
-          ? [
-              {
-                item: gifAttachment?.images?.original.url,
-                type: 'image/gif'
-              }
-            ]
-          : null
+        appId: appId,
+        media: attachmentsInput
       })
 
       if (postInfo?.isDataAvailability) {
@@ -382,7 +430,8 @@ const LensCreateComment = ({
                   e.target.style.height = e.target.scrollHeight + 'px'
                 }}
               />
-              {gifAttachment && (
+              <Attachment attachments={attachments} isNew isComment />
+              {/* {gifAttachment && (
                 <div className="flex items-center mt-2">
                   <div className="relative w-fit">
                     <img
@@ -399,12 +448,30 @@ const LensCreateComment = ({
                     />
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
-            <div className="w-full flex flex-row justify-end space-x-2 items-center">
-              {canCommnet && <Giphy setGifAttachment={setGifAttachment} />}
+            <div className="w-full space-x-2 space-between-row px-8">
+              {canCommnet ? (
+                <div className="start-row">
+                  <Giphy
+                    setGifAttachment={(gif) => {
+                      const attachment = {
+                        id: uuid(),
+                        item: gif.images.original.url,
+                        type: 'image/gif',
+                        title: gif.title
+                      }
+                      console.log('attachment', attachment)
+                      addAttachments([attachment])
+                    }}
+                  />
+                  <AttachmentRow isComment hideUploadAudio />
+                </div>
+              ) : (
+                <div />
+              )}
               <button
-                disabled={loading || !canCommnet}
+                disabled={loading || !canCommnet || isUploading}
                 onClick={createComment}
                 className={clsx(
                   'text-p-btn-text font-bold px-3 py-0.5 rounded-full text-sm mr-2',
@@ -448,7 +515,15 @@ const LensCreateComment = ({
                 toHandle={postInfo?.profile?.handle}
               />
             )}
-            {gifAttachment && isMobile && (
+            <div className="pb-2 px-4">
+              <Attachment
+                className="max-h-[300px] rounded-lg"
+                attachments={attachments}
+                isNew
+                isComment
+              />
+            </div>
+            {/* {gifAttachment && isMobile && (
               <div className="flex items-center mx-4 mb-2">
                 <div className="relative w-fit">
                   <img
@@ -463,7 +538,7 @@ const LensCreateComment = ({
                   />
                 </div>
               </div>
-            )}
+            )} */}
             <div className="flex flex-row items-center w-full rounded-xl px-4">
               {!focused && (
                 <ImageWithPulsingLoader
@@ -477,7 +552,7 @@ const LensCreateComment = ({
                   ref={commentRef}
                   // value={content}
                   className={clsx(
-                    'flex px-2 flex-row items-center w-full no-scrollbar outline-none text-base sm:text-[18px] py-2 border-p-border border-[1px] rounded-xl bg-s-bg font-medium',
+                    'flex px-2 flex-row items-center w-full no-scrollbar outline-none text-base sm:text-[18px] py-2 border-p-border border-[1px] rounded-xl bg-s-bg font-medium max-h-[150px]',
                     loading ? 'text-s-text' : 'text-p-text',
                     focused ? 'mx-0' : 'mx-2'
                   )}
@@ -487,9 +562,12 @@ const LensCreateComment = ({
                     //@ts-ignore
                     // setContent(e.target.value)
                     // @ts-ignore
-                    e.target.style.height = 'auto'
-                    // @ts-ignore
-                    e.target.style.height = `${e.target.scrollHeight}px`
+                    if (e.target.scrollHeight < 150) {
+                      // @ts-ignore
+                      e.target.style.height = 'auto'
+                      // @ts-ignore
+                      e.target.style.height = `${e.target.scrollHeight}px`
+                    }
                   }}
                   disabled={loading || !canCommnet}
                   rows={1}
@@ -500,12 +578,27 @@ const LensCreateComment = ({
             {focused && (
               <div className="flex flex-row items-center justify-between w-full px-5 pt-2 pb-1">
                 {canCommnet ? (
-                  <Giphy setGifAttachment={setGifAttachment} />
+                  <div className="start-row">
+                    <Giphy
+                      setGifAttachment={(gif) => {
+                        const attachment = {
+                          id: uuid(),
+                          item: gif.images.original.url,
+                          type: 'image/gif',
+                          title: gif.title
+                        }
+                        addAttachments([attachment])
+                      }}
+                    />
+                    <div onClick={(e) => e.stopPropagation()} className="">
+                      <AttachmentRow isComment hideUploadAudio />
+                    </div>
+                  </div>
                 ) : (
                   <div />
                 )}
                 <button
-                  disabled={loading || !canCommnet}
+                  disabled={loading || !canCommnet || isUploading}
                   onClick={createComment}
                   className={clsx(
                     'text-p-btn-text font-bold px-3 py-0.5 rounded-full text-sm',

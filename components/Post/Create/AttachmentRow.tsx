@@ -15,10 +15,19 @@ import { AiOutlineFileImage } from 'react-icons/ai'
 import { HiOutlineVideoCamera } from 'react-icons/hi'
 import { BsFileEarmarkMusic } from 'react-icons/bs'
 
-const AttachmentRow = () => {
+const AttachmentRow = ({
+  hideUploadAudio = false,
+  isComment = false
+}: {
+  hideUploadAudio?: boolean
+  isComment?: boolean
+}) => {
   const attachments = usePublicationStore((state) => state.attachments)
+  const commnetAttachments = usePublicationStore(
+    (state) => state.commnetAttachments
+  )
   const isUploading = usePublicationStore((state) => state.isUploading)
-  const { handleUploadAttachments } = useUploadAttachments()
+  const { handleUploadAttachments } = useUploadAttachments(isComment)
   const id = useId()
   const { notifyInfo, notifyError } = useNotify()
   const [showOptionsModal, setShowOptionsModal] = React.useState(false)
@@ -68,7 +77,6 @@ const AttachmentRow = () => {
 
   const handleAttachment = async (evt: ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault()
-    console.log('handleAttachment', evt.target.files)
 
     try {
       const { files } = evt.target
@@ -76,7 +84,9 @@ const AttachmentRow = () => {
       if (
         files &&
         (hasVideos(files) ||
-          (isImageType(files) && files.length + attachments.length > 4))
+          (isImageType(files) &&
+            ((!isComment && files.length + attachments.length > 4) ||
+              (isComment && files.length + commnetAttachments.length > 4))))
       ) {
         notifyInfo(`You can only upload 4 images or 1 video.`)
       }
@@ -113,7 +123,11 @@ const AttachmentRow = () => {
               accept={SUPPORTED_IMAGE_TYPE.join(',')}
               className="hidden"
               onChange={handleAttachment}
-              disabled={attachments.length >= 4}
+              disabled={
+                isComment
+                  ? commnetAttachments.length >= 4
+                  : attachments.length >= 4
+              }
             />
           </label>
           <label
@@ -129,25 +143,36 @@ const AttachmentRow = () => {
               accept={SUPPORTED_VIDEO_TYPE.join(',')}
               className="hidden"
               onChange={handleAttachment}
-              disabled={attachments.length >= 4}
+              disabled={
+                isComment
+                  ? commnetAttachments.length >= 4
+                  : attachments.length >= 4
+              }
             />
           </label>
-          <label
-            htmlFor={`audio_${id}`}
-            className="flex shrink-0 w-full space-x-2 items-center px-5 sm:pl-2 sm:pr-5 py-1 text-xl sm:text-lg rounded-md sm:rounded-lg my-1 hover:bg-s-hover hover:cursor-pointer text-p-text"
-          >
-            <BsFileEarmarkMusic className="w-4 h-4" />
-            <span>Upload audio</span>
-            <input
-              id={`audio_${id}`}
-              type="file"
-              multiple
-              accept={SUPPORTED_AUDIO_TYPE.join(',')}
-              className="hidden"
-              onChange={handleAttachment}
-              disabled={attachments.length >= 4}
-            />
-          </label>
+
+          {!hideUploadAudio && (
+            <label
+              htmlFor={`audio_${id}`}
+              className="flex shrink-0 w-full space-x-2 items-center px-5 sm:pl-2 sm:pr-5 py-1 text-xl sm:text-lg rounded-md sm:rounded-lg my-1 hover:bg-s-hover hover:cursor-pointer text-p-text"
+            >
+              <BsFileEarmarkMusic className="w-4 h-4" />
+              <span>Upload audio</span>
+              <input
+                id={`audio_${id}`}
+                type="file"
+                multiple
+                accept={SUPPORTED_AUDIO_TYPE.join(',')}
+                className="hidden"
+                onChange={handleAttachment}
+                disabled={
+                  isComment
+                    ? commnetAttachments.push.length >= 4
+                    : attachments.length >= 4
+                }
+              />
+            </label>
+          )}
         </div>
       )}
       position="top-right"

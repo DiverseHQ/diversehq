@@ -32,6 +32,7 @@ interface Props {
   className?: String
   isNew?: boolean
   hideDelete?: boolean
+  isComment?: boolean
 }
 
 const Attachment: FC<Props> = ({
@@ -39,10 +40,14 @@ const Attachment: FC<Props> = ({
   className,
   attachments = [],
   isNew = false,
-  hideDelete = false
+  hideDelete = false,
+  isComment = false
 }) => {
   const removeAttachments = usePublicationStore(
     (state) => state.removeAttachments
+  )
+  const removeCommentAttachments = usePublicationStore(
+    (state) => state.removeCommentAttachments
   )
   const getCoverUrl = () => {
     return imageProxy(getIPFSLink(publication?.metadata?.cover?.original?.url))
@@ -189,7 +194,11 @@ const Attachment: FC<Props> = ({
                         className="bg-black bg-opacity-70 rounded-full p-1"
                         onClick={() => {
                           // set proper currentMedia
-                          removeAttachments([attachment.id])
+                          if (isComment) {
+                            removeCommentAttachments([attachment.id])
+                          } else {
+                            removeAttachments([attachment.id])
+                          }
                           setCurrentMedia(0)
                         }}
                       >

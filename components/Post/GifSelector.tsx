@@ -78,7 +78,7 @@ const GifSelector = ({
               placeholder={`Search for GIFs`}
               value={debouncedGifInput}
               onChange={handleSearch}
-              className="w-full border border-gray-300 outline-none rounded-md p-2"
+              className="w-full bg-s-bg text-p-text border border-gray-300 outline-none rounded-md p-2"
             />
           </div>
           <div className="flex h-[45vh] overflow-y-auto overflow-x-hidden rounded-lg">
