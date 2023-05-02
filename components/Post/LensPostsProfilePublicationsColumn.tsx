@@ -112,8 +112,6 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
           newPosts[i].mirroredBy = mirrorPost.profile
           // @ts-ignore
           newPosts[i].originalMirrorPublication = mirrorPost
-
-          console.log('newPosts[i]', newPosts[i])
         }
       } else {
         if (newPosts[i]?.__typename === 'Mirror') {
@@ -125,8 +123,6 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
 
           // @ts-ignore
           newPosts[i].originalMirrorPublication = mirrorPost
-
-          console.log('newPosts[i]', newPosts[i])
         }
         // @ts-ignore
         newPosts[i].communityInfo = communityInfoForPosts[i]

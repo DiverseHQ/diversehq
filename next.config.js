@@ -17,6 +17,10 @@ const nextConfig = withPWA({
   images: {
     domains: ['dweb.link', '*.jpeg', 'firebasestorage.googleapis.com']
   },
+  experimental: {
+    scrollRestoration: true,
+    newNextLinkBehavior: true
+  },
   webpack: (config) => {
     // this will override the experiments
     config.experiments = { ...config.experiments, ...{ topLevelAwait: true } }
