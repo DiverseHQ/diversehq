@@ -4,6 +4,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
 import { usePopUpModal } from './CustomPopUpProvider'
 import { useDevice } from './DeviceWrapper'
+import clsx from 'clsx'
 
 /* eslint-disable */
 
@@ -15,6 +16,7 @@ interface Props {
   children?: React.ReactNode
   hideTopBar?: boolean
   isDisabled?: boolean
+  className?: string
   closePopup?: () => void
 }
 
@@ -26,6 +28,7 @@ const PopUpWrapper = ({
   children,
   hideTopBar = false,
   isDisabled,
+  className,
   closePopup
 }: Props) => {
   const { hideModal, showModal } = usePopUpModal()
@@ -49,7 +52,12 @@ const PopUpWrapper = ({
   }, [showModal])
 
   return (
-    <div className="bg-s-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden text-p-text z-40">
+    <div
+      className={clsx(
+        'bg-s-bg sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden text-p-text z-40',
+        className
+      )}
+    >
       {!hideTopBar && (
         <div className="flex flex-row justify-between items-center pb-4 px-4">
           <div className="flex flex-row justify-center items-center">
