@@ -295,9 +295,9 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
           </div>
 
           {/* padded content with line*/}
-          <div className="flex flex-row w-full">
+          <div className="flex flex-row w-full overflow-hidden">
             {/* vertical line */}
-            <div className="w-7 flex flex-row items-center justify-center py-2">
+            <div className="w-7 shrink-0 flex flex-row items-center justify-center py-2">
               <div className="border-l-2 border-[#eee] dark:border-p-border h-full"></div>
             </div>
             <div className="w-full">
