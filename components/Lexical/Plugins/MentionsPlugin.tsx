@@ -23,6 +23,7 @@ import getIPFSLink from '../../User/lib/getIPFSLink'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
 
 import { $createMentionNode } from '../Nodes/MentionsNode'
+import { useDevice } from '../../Common/DeviceWrapper'
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;'
@@ -155,12 +156,14 @@ const NewMentionsPlugin: FC = () => {
   const [queryString, setQueryString] = useState<string | null>(null)
   const [results, setResults] = useState<Array<Record<string, string>>>([])
   const [editor] = useLexicalComposerContext()
+  const { isMobile } = useDevice()
+
   const { data } = useSearchProfilesQuery(
     {
       request: {
         query: queryString ?? null,
         type: SearchRequestTypes.Profile,
-        limit: 5
+        limit: isMobile ? 3 : 5
       }
     },
     {
@@ -261,28 +264,55 @@ const NewMentionsPlugin: FC = () => {
       ) =>
         anchorElementRef.current && results.length
           ? ReactDOM.createPortal(
-              <div
-                className=" border-s-border mt-8 border rounded-xl shadow-sm w-52 sticky text-p-text bg-s-bg min-w-full"
-                style={{ zIndex: 70 }}
-              >
-                <ul className="">
-                  {options.map((option, i: number) => (
-                    <MentionsTypeaheadMenuItem
-                      index={i}
-                      isSelected={selectedIndex === i}
-                      onClick={() => {
-                        setHighlightedIndex(i)
-                        selectOptionAndCleanUp(option)
-                      }}
-                      onMouseEnter={() => {
-                        setHighlightedIndex(i)
-                      }}
-                      key={option.key}
-                      option={option}
-                    />
-                  ))}
-                </ul>
-              </div>,
+              <>
+                {isMobile ? (
+                  <div
+                    className="fixed bottom-0 left-0 w-full shadow-sm text-p-text bg-s-bg"
+                    style={{ zIndex: 70 }}
+                  >
+                    <ul className="">
+                      {options.map((option, i: number) => (
+                        <MentionsTypeaheadMenuItem
+                          index={i}
+                          isSelected={selectedIndex === i}
+                          onClick={() => {
+                            setHighlightedIndex(i)
+                            selectOptionAndCleanUp(option)
+                          }}
+                          onMouseEnter={() => {
+                            setHighlightedIndex(i)
+                          }}
+                          key={option.key}
+                          option={option}
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div
+                    className=" border-s-border mt-8 border rounded-xl shadow-sm w-52 sticky text-p-text bg-s-bg min-w-full"
+                    style={{ zIndex: 70 }}
+                  >
+                    <ul className="">
+                      {options.map((option, i: number) => (
+                        <MentionsTypeaheadMenuItem
+                          index={i}
+                          isSelected={selectedIndex === i}
+                          onClick={() => {
+                            setHighlightedIndex(i)
+                            selectOptionAndCleanUp(option)
+                          }}
+                          onMouseEnter={() => {
+                            setHighlightedIndex(i)
+                          }}
+                          key={option.key}
+                          option={option}
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </>,
               anchorElementRef.current
             )
           : null

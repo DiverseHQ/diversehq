@@ -324,22 +324,14 @@ const LensPostCard = ({ post }: Props) => {
               <>
                 <div className="flex flex-row flex-wrap w-full items-center">
                   <span onClick={(e) => e.stopPropagation()}>
-                    <div
-                      onClick={() => {
-                        if (postInfo?.communityInfo?._id) {
-                          if (postInfo?.isLensCommunityPost) {
-                            router.push(
-                              `/l/${formatHandle(postInfo?.profile?.handle)}`
-                            )
-                          } else {
-                            router.push(`/c/${postInfo?.communityInfo?.name}`)
-                          }
-                        } else {
-                          router.push(
-                            `/u/${formatHandle(postInfo?.profile?.handle)}`
-                          )
-                        }
-                      }}
+                    <Link
+                      href={
+                        postInfo?.communityInfo?._id
+                          ? postInfo?.isLensCommunityPost
+                            ? `/l/${formatHandle(postInfo?.profile?.handle)}`
+                            : `/c/${postInfo?.communityInfo?.name}`
+                          : `/u/${formatHandle(postInfo?.profile?.handle)}`
+                      }
                     >
                       <ImageWithPulsingLoader
                         src={
@@ -351,26 +343,18 @@ const LensPostCard = ({ post }: Props) => {
                         }
                         className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover cursor-pointer"
                       />
-                    </div>
+                    </Link>
                   </span>
 
                   <span onClick={(e) => e.stopPropagation()}>
-                    <div
-                      onClick={() => {
-                        if (postInfo?.communityInfo?._id) {
-                          if (postInfo?.isLensCommunityPost) {
-                            router.push(
-                              `/l/${formatHandle(postInfo?.profile?.handle)}`
-                            )
-                          } else {
-                            router.push(`/c/${postInfo?.communityInfo?.name}`)
-                          }
-                        } else {
-                          router.push(
-                            `/u/${formatHandle(postInfo?.profile?.handle)}`
-                          )
-                        }
-                      }}
+                    <Link
+                      href={
+                        postInfo?.communityInfo?._id
+                          ? postInfo?.isLensCommunityPost
+                            ? `/l/${formatHandle(postInfo?.profile?.handle)}`
+                            : `/c/${postInfo?.communityInfo?.name}`
+                          : `/u/${formatHandle(postInfo?.profile?.handle)}`
+                      }
                     >
                       <div className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
                         {postInfo?.isLensCommunityPost
@@ -382,7 +366,7 @@ const LensPostCard = ({ post }: Props) => {
                             )}`
                           : stringToLength(postInfo?.profile?.name, 18)}
                       </div>
-                    </div>
+                    </Link>
                   </span>
 
                   {postInfo?.communityInfo?.verified && (
@@ -437,22 +421,14 @@ const LensPostCard = ({ post }: Props) => {
               <>
                 <div className="flex flex-row w-full items-center">
                   <span onClick={(e) => e.stopPropagation()}>
-                    <div
-                      onClick={() => {
-                        if (postInfo?.communityInfo?._id) {
-                          if (postInfo?.isLensCommunityPost) {
-                            router.push(
-                              `/l/${formatHandle(postInfo?.profile?.handle)}`
-                            )
-                          } else {
-                            router.push(`/c/${postInfo?.communityInfo?.name}`)
-                          }
-                        } else {
-                          router.push(
-                            `/u/${formatHandle(postInfo?.profile?.handle)}`
-                          )
-                        }
-                      }}
+                    <Link
+                      href={
+                        postInfo?.communityInfo?._id
+                          ? postInfo?.isLensCommunityPost
+                            ? `/l/${formatHandle(postInfo?.profile?.handle)}`
+                            : `/c/${postInfo?.communityInfo?.name}`
+                          : `/u/${formatHandle(postInfo?.profile?.handle)}`
+                      }
                     >
                       <ImageWithPulsingLoader
                         src={
@@ -465,29 +441,21 @@ const LensPostCard = ({ post }: Props) => {
                         }
                         className="rounded-full h-10 w-10 object-cover"
                       />
-                    </div>
+                    </Link>
                   </span>
                   <div className="flex flex-col justify-center items-start text-p-text">
                     <span
                       onClick={(e) => e.stopPropagation()}
                       className="start-row"
                     >
-                      <div
-                        onClick={() => {
-                          if (postInfo?.communityInfo?._id) {
-                            if (postInfo?.isLensCommunityPost) {
-                              router.push(
-                                `/l/${formatHandle(postInfo?.profile?.handle)}`
-                              )
-                            } else {
-                              router.push(`/c/${postInfo?.communityInfo?.name}`)
-                            }
-                          } else {
-                            router.push(
-                              `/u/${formatHandle(postInfo?.profile?.handle)}`
-                            )
-                          }
-                        }}
+                      <Link
+                        href={
+                          postInfo?.communityInfo?._id
+                            ? postInfo?.isLensCommunityPost
+                              ? `/l/${formatHandle(postInfo?.profile?.handle)}`
+                              : `/c/${postInfo?.communityInfo?.name}`
+                            : `/u/${formatHandle(postInfo?.profile?.handle)}`
+                        }
                       >
                         <div className="pl-2 font-bold text-sm sm:text-xl hover:cursor-pointer hover:underline">
                           {postInfo?.isLensCommunityPost
@@ -499,7 +467,7 @@ const LensPostCard = ({ post }: Props) => {
                               )}`
                             : stringToLength(postInfo?.profile?.name, 18)}
                         </div>
-                      </div>
+                      </Link>
                       {postInfo?.communityInfo?.verified && (
                         <VerifiedBadge className="w-3 h-3  ml-1" />
                       )}
