@@ -335,7 +335,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
               <div
                 className={clsx(
                   'border-l-2  h-full',
-                  hoveringVerticalBar ? 'border-s-text' : 'border-p-border'
+                  hoveringVerticalBar ? 'border-s-text' : 'border-s-border'
                 )}
               ></div>
             </button>
