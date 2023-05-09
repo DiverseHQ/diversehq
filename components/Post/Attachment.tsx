@@ -184,7 +184,7 @@ const Attachment: FC<Props> = ({
                   ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
                     <ImageWithFullScreenZoom
                       src={isNew ? url : imageProxy(url)}
-                      className={`image-unselectable object-cover sm:rounded-lg min-h-[200px] w-full ${className}`}
+                      className={`image-unselectable object-cover sm:rounded-lg min-h-[200px] ${className}`}
                       alt={isNew ? url : publication?.metadata?.content}
                     />
                   ) : (
