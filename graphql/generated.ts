@@ -4785,6 +4785,13 @@ export type ProfileQueryVariables = Exact<{
 
 export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: any, name?: string | null, bio?: string | null, isFollowedByMe: boolean, isFollowing: boolean, followNftAddress?: any | null, metadata?: any | null, isDefault: boolean, handle: any, ownedBy: any, attributes?: Array<{ __typename?: 'Attribute', displayType?: string | null, traitType?: string | null, key: string, value: string }> | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null }, small?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null, medium?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null } | { __typename?: 'NftImage', contractAddress: any, tokenId: string, uri: any, verified: boolean } | null, coverPicture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null }, small?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null, medium?: { __typename?: 'Media', url: any, width?: number | null, height?: number | null, mimeType?: any | null } | null } | { __typename?: 'NftImage', contractAddress: any, tokenId: string, uri: any, verified: boolean } | null, dispatcher?: { __typename?: 'Dispatcher', address: any, canUseRelay: boolean } | null, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number, totalPosts: number, totalComments: number, totalMirrors: number, totalPublications: number, totalCollects: number }, followModule?: { __typename?: 'FeeFollowModuleSettings', type: FollowModules, recipient: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename?: 'ProfileFollowModuleSettings', type: FollowModules, contractAddress: any } | { __typename?: 'RevertFollowModuleSettings', type: FollowModules, contractAddress: any } | { __typename?: 'UnknownFollowModuleSettings', type: FollowModules, contractAddress: any, followModuleReturnData: any } | null, onChainIdentity: { __typename?: 'OnChainIdentity', proofOfHumanity: boolean, ens?: { __typename?: 'EnsOnChainIdentity', name?: any | null } | null, sybilDotOrg: { __typename?: 'SybilDotOrgIdentity', verified: boolean, source: { __typename?: 'SybilDotOrgIdentitySource', twitter: { __typename?: 'SybilDotOrgTwitterIdentity', handle?: string | null } } }, worldcoin: { __typename?: 'WorldcoinIdentity', isHuman: boolean } } } | null };
 
+export type ProfilesHandlesQueryVariables = Exact<{
+  request: ProfileQueryRequest;
+}>;
+
+
+export type ProfilesHandlesQuery = { __typename?: 'Query', profiles: { __typename?: 'PaginatedProfileResult', items: Array<{ __typename?: 'Profile', ownedBy: any, handle: any }>, pageInfo: { __typename?: 'PaginatedResultInfo', prev?: any | null, next?: any | null, totalCount?: number | null } } };
+
 export type ProfilesQueryVariables = Exact<{
   request: ProfileQueryRequest;
 }>;
@@ -7066,6 +7073,31 @@ export const useProfileQuery = <
     useQuery<ProfileQuery, TError, TData>(
       ['profile', variables],
       fetchData<ProfileQuery, ProfileQueryVariables>(ProfileDocument, variables),
+      options
+    );
+export const ProfilesHandlesDocument = `
+    query profilesHandles($request: ProfileQueryRequest!) {
+  profiles(request: $request) {
+    items {
+      ownedBy
+      handle
+    }
+    pageInfo {
+      ...CommonPaginatedResultInfoFields
+    }
+  }
+}
+    ${CommonPaginatedResultInfoFieldsFragmentDoc}`;
+export const useProfilesHandlesQuery = <
+      TData = ProfilesHandlesQuery,
+      TError = unknown
+    >(
+      variables: ProfilesHandlesQueryVariables,
+      options?: UseQueryOptions<ProfilesHandlesQuery, TError, TData>
+    ) =>
+    useQuery<ProfilesHandlesQuery, TError, TData>(
+      ['profilesHandles', variables],
+      fetchData<ProfilesHandlesQuery, ProfilesHandlesQueryVariables>(ProfilesHandlesDocument, variables),
       options
     );
 export const ProfilesDocument = `

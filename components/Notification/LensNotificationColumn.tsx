@@ -12,6 +12,7 @@ import NotificationCard from './NotificationCard'
 import getProfiles from '../../lib/profile/get-profiles'
 import { NotificationSchema } from '../../types/notification'
 import { useDevice } from '../Common/DeviceWrapper'
+import getProfilesHandles from '../../lib/profile/get-profiles-handles'
 
 const LensNotificationColumn = () => {
   const { user } = useProfile()
@@ -81,9 +82,11 @@ const LensNotificationColumn = () => {
           const offChainNotifications: NotificationSchema[] = await res.json()
 
           if (offChainNotifications.length > 0) {
-            const { profiles } = await getProfiles({
+            const { profiles } = await getProfilesHandles({
               ownedBy: offChainNotifications.map((n) => n.sender.walletAddress)
             })
+
+            console.log('profiles', profiles)
 
             for (let i = 0; i < offChainNotifications.length; i++) {
               // @ts-ignore

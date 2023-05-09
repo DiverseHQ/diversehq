@@ -152,9 +152,9 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
 
       {/* list of moderators */}
       <div className="font-medium text-sm">
-        Moderators (
-        {data?.profiles?.items?.filter((profile) => profile?.isDefault)
-          ?.length ?? 0}
+        Moderators ({data?.profiles?.items?.length ?? 0}
+        {/* {data?.profiles?.items?.filter((profile) => profile?.isDefault)
+          ?.length ?? 0} */}
         )
       </div>
       <div>
@@ -166,7 +166,8 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
         )}
         {data?.profiles &&
           data?.profiles?.items
-            ?.filter((profile) => profile?.isDefault)
+            // data?.profiles?.items
+            //   ?.filter((profile) => profile?.isDefault)
             .map((profile) => (
               <div
                 className="flex flex-row w-full items-center justify-between space-x-2 py-2 border-b border-s-border"

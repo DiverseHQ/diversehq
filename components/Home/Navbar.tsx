@@ -287,7 +287,7 @@ const Navbar = () => {
             <IoMdNotificationsOutline className="w-[25px] h-[25px] object-contain" />
             {/* a green count dot */}
             {Number(notificationsCount) > 0 && (
-              <div className="top-0 left-3 absolute leading-[4px] p-1 text-[8px] text-p-btn-text bg-red-500 font-bold rounded-full border-[3px] border-p-bg dark:border-s-bg">
+              <div className="top-0 left-3 absolute leading-[4px] p-1 text-[10px] text-white bg-p-btn font-black rounded-full border-[3px] border-p-bg dark:border-s-bg">
                 <span>{notificationsCount}</span>
               </div>
             )}

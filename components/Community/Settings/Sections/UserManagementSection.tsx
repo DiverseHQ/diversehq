@@ -53,7 +53,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
       if (res.status === 200) {
         setBannedUsers([...bannedUsers, bannedUser])
         setSelectedProfile(null)
-        setRuleViolated(community?.rules[0].title ?? null)
+        setRuleViolated(community?.rules[0]?.title ?? null)
         setExtraReason('')
       } else {
         const resJson = await res.json()

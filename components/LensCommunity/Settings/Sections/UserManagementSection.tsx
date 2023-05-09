@@ -53,7 +53,7 @@ const UserManagementSection = ({ community }: { community: LensCommunity }) => {
       if (res.status === 200) {
         setBannedUsers([...bannedUsers, bannedUser])
         setSelectedProfile(null)
-        setRuleViolated(community?.rules[0].title ?? null)
+        setRuleViolated(community?.rules[0]?.title ?? null)
         setExtraReason('')
       } else {
         const resJson = await res.json()
@@ -179,7 +179,7 @@ const UserManagementSection = ({ community }: { community: LensCommunity }) => {
                 className="bg-s-bg text-p-text border border-s-border rounded-xl p-2 w-full text-sm"
                 onClick={() => {
                   setSelectedProfile(null)
-                  setRuleViolated(community?.rules[0].title ?? null)
+                  setRuleViolated(community?.rules[0]?.title ?? null)
                   setExtraReason('')
                 }}
               >
