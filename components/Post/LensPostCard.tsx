@@ -56,11 +56,12 @@ import { getContent } from './getContent'
 
 interface Props {
   post: postWithCommunityInfoType
+  isAlone?: boolean
 }
 
 // post?.isLensCommunityPost makes sure that the post is a post from a lens community
 
-const LensPostCard = ({ post }: Props) => {
+const LensPostCard = ({ post, isAlone = false }: Props) => {
   const { isMobile } = useDevice()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
@@ -293,8 +294,10 @@ const LensPostCard = ({ post }: Props) => {
       {postInfo && (
         <div
           className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg hover:bg-s-bg-hover pt-3 sm:pb-2 border-b-[1px] border-[#eee] dark:border-p-border ${
-            router.pathname.startsWith('/p')
-              ? 'sm:my-3 sm:rounded-2xl sm:border-[1px] sm:border-s-border'
+            router.pathname.startsWith('/p') || isAlone
+              ? `${
+                  isAlone ? 'rounded-2xl border-[1px] border-s-border mb-3' : ''
+                } sm:my-3 sm:rounded-2xl sm:border-[1px] sm:border-s-border`
               : 'cursor-pointer'
           }`}
           onClick={() => {
@@ -768,7 +771,7 @@ const LensPostCard = ({ post }: Props) => {
                   )}
                 </div>
                 <div
-                  className={`sm:pl-5 w-full   sm:pr-6 sm:pb-1 ${
+                  className={`sm:pl-5 w-full sm:pr-4 sm:pb-1 ${
                     isBlur ? 'blur-xl' : ''
                   }`}
                 >
@@ -778,8 +781,8 @@ const LensPostCard = ({ post }: Props) => {
                     className={clsx(
                       router.pathname.startsWith('/p')
                         ? 'max-h-screen'
-                        : 'max-h-[500px]',
-                      'sm:w-[530px]'
+                        : 'max-h-[600px]',
+                      'w-full'
                     )}
                   />
                 </div>

@@ -9,7 +9,6 @@ import { useProfile } from '../Common/WalletContext'
 import MobileLoader from '../Common/UI/MobileLoader'
 import { getAllNotificationBetweenTimes } from '../../api/user'
 import NotificationCard from './NotificationCard'
-import getProfiles from '../../lib/profile/get-profiles'
 import { NotificationSchema } from '../../types/notification'
 import { useDevice } from '../Common/DeviceWrapper'
 import getProfilesHandles from '../../lib/profile/get-profiles-handles'
@@ -118,9 +117,7 @@ const LensNotificationColumn = () => {
     setParams({
       ...params,
       notifications: newListOfNotifications,
-      hasMore:
-        Number(data?.notifications?.items?.length) !== 0 &&
-        data.notifications.items.length === LENS_NOTIFICATION_LIMIT,
+      hasMore: Boolean(data?.notifications?.items?.length),
       nextCursor: data?.notifications?.pageInfo?.next ?? params.nextCursor
     })
     // if (data.notifications.items.length === 0) {

@@ -64,6 +64,8 @@ import { useRouter } from 'next/router'
 import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import PostPreferenceButton from './PostComposer/PostPreferenceButton'
 import clsx from 'clsx'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { $getRoot } from 'lexical'
 // import { useTheme } from '../Common/ThemeProvider'
 
 const CreatePostPopup = () => {
@@ -110,6 +112,8 @@ const CreatePostPopup = () => {
     error: daError,
     signDATypedDataAndBroadcast
   } = useDASignTypedDataAndBroadcast()
+
+  const [editor] = useLexicalComposerContext()
 
   const mostPostedCommunities =
     JSON.parse(window.localStorage.getItem('mostPostedCommunities')) || []
@@ -211,6 +215,15 @@ const CreatePostPopup = () => {
     // }
     storeMostPostedCommunities()
     await handleCreateLensPost()
+  }
+
+  const handleCompletePost = () => {
+    setLoading(false)
+    resetAttachments()
+    editor?.update(() => {
+      $getRoot().clear()
+    })
+    hideModal()
   }
 
   const handleCreateLensPost = async () => {
@@ -316,8 +329,7 @@ const CreatePostPopup = () => {
         )
         if (res.status === 200) {
           notifySuccess('Post submitted for review')
-          resetAttachments()
-          hideModal()
+          handleCompletePost()
         } else if (res.status === 400) {
           const resJson = await res.json()
           notifyError(resJson.msg)
@@ -400,8 +412,7 @@ const CreatePostPopup = () => {
           // // addPost({ txId: dispatcherResult. }, postForIndexing)
           console.log(dispatcherResult)
           router.push(`/p/${dispatcherResult.id}`)
-          resetAttachments()
-          hideModal()
+          handleCompletePost()
         }
       } else {
         const typedData = (
@@ -447,8 +458,7 @@ const CreatePostPopup = () => {
           notifyError(dispatcherResult.reason)
         } else {
           addPost({ txId: dispatcherResult.txId }, postForIndexing)
-          resetAttachments()
-          hideModal()
+          handleCompletePost()
         }
       } else {
         //gasless using signed broadcast
@@ -473,10 +483,8 @@ const CreatePostPopup = () => {
 
   useEffect(() => {
     if (result && type === 'createPost') {
-      setLoading(false)
-      resetAttachments()
-      hideModal()
       addPost({ txId: result.txId }, postMetadataForIndexing)
+      handleCompletePost()
     }
   }, [result, type])
 
@@ -492,8 +500,7 @@ const CreatePostPopup = () => {
         })
         setLoading(false)
         router.push(`/p/${daResult.id}`)
-        resetAttachments()
-        hideModal()
+        handleCompletePost()
       }
     }
 
@@ -640,7 +647,7 @@ const CreatePostPopup = () => {
 
   const closePopUp = async () => {
     if (loading) return
-    hideModal()
+    handleCompletePost()
   }
 
   const PopUpModal = () => {

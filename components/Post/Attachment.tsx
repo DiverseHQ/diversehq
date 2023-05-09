@@ -81,6 +81,9 @@ const Attachment: FC<Props> = ({
     } else return null
   }
 
+  if (SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.original?.mimeType)) {
+    attachments = attachments.slice(0, 1)
+  }
   return (
     <>
       {/* {isMobile ? (

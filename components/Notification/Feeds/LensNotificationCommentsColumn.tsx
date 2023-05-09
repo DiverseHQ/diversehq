@@ -88,27 +88,9 @@ const LensNotificationCommentsColumn = () => {
         data.notifications.items.length > 0
           ? [...params.notifications, ...data.notifications.items]
           : params.notifications,
-      hasMore:
-        Number(data?.notifications?.items?.length) !== 0 &&
-        data.notifications.items.length === LENS_NOTIFICATION_LIMIT,
+      hasMore: Boolean(data?.notifications?.items?.length),
       nextCursor: data?.notifications?.pageInfo?.next ?? params.nextCursor
     })
-    // if (data.notifications.items.length > 0) {
-    //   const newNotifications = data.notifications.items
-
-    //   // @ts-ignore
-    //   setNotifications([...notifications, ...newNotifications])
-    // }
-    // if (data.notifications.items.length === 0) {
-    //   setHasMore(false)
-    //   return
-    // }
-    // if (data?.notifications?.pageInfo?.next) {
-    //   setNextCursor(data?.notifications?.pageInfo?.next)
-    // }
-    // if (data.notifications.items.length < LENS_NOTIFICATION_LIMIT) {
-    //   setHasMore(false)
-    // }
   }
 
   return (

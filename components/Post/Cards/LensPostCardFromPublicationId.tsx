@@ -70,7 +70,7 @@ const LensPostCardFromPublicationId = ({
 
   if (!publicationId) return null
 
-  return <>{post && <LensPostCard post={post} />}</>
+  return <>{post && <LensPostCard post={post} isAlone />}</>
 }
 
 export default memo(LensPostCardFromPublicationId)

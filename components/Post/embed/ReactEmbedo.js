@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useRef } from 'react'
 import Embedo from 'embedo'
 import { uuidv4 } from '@firebase/util'
+import LensPostCardFromPublicationId from '../Cards/LensPostCardFromPublicationId'
 // import LinkPreview from './LinkPreview'
 // import { ReactTinyLink } from 'react-tiny-link'
 // import LinkPreview from './LinkPreview'
@@ -31,6 +32,23 @@ const AllowedEmbedoRegexList = [
   // music youtube
   /^(http|https):\/\/music\.youtube\.com\/watch\?v=.*$/
 ]
+
+const isLensPostLink = (url) => {
+  // lens post  has /p or /posts or /post in it
+  // starting with https://testnet.lenster.xyz, https://diversehq.xyz or https://lenster.xyz
+  // for example https://testnet.lenster.xyz/posts/0x35b0-0x04, https://diversehq.xyz/p/0xf340-0x0277, or https://lenster.xyz/posts/0xbb03-0x0396
+  return (
+    (url &&
+      // eslint-disable-next-line
+      /^(https?:\/\/(testnet\.)?lenster\.xyz\/(p|posts|post)\/[a-zA-Z0-9_-]+)$/i.test(
+        url
+      )) ||
+    // eslint-disable-next-line
+    /^(https?:\/\/(testnet\.)?diversehq\.xyz\/(p|posts|post)\/[a-zA-Z0-9_-]+)$/i.test(
+      url
+    )
+  )
+}
 
 /* eslint-enable */
 
@@ -71,6 +89,14 @@ const ReactEmbedo = ({ url, ...props }) => {
       })
     }
   }, [url, embedoRef])
+
+  console.log('isLensPostLink(url)', isLensPostLink(url))
+
+  if (isLensPostLink(url)) {
+    const postId = url.split('/')[4]
+    console.log('postId', postId)
+    return <LensPostCardFromPublicationId publicationId={postId} />
+  }
 
   if (!isEmbedable(url)) return null
   return (

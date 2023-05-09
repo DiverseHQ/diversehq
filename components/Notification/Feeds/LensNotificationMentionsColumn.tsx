@@ -90,9 +90,7 @@ const LensNotificationMentionsColumn = () => {
         data.notifications.items.length > 0
           ? [...params.notifications, ...data.notifications.items]
           : params.notifications,
-      hasMore:
-        Number(data?.notifications?.items?.length) !== 0 &&
-        data.notifications.items.length === LENS_NOTIFICATION_LIMIT,
+      hasMore: Boolean(data?.notifications?.items?.length),
       nextCursor: data?.notifications?.pageInfo?.next ?? params.nextCursor
     })
     // if (data.notifications.items.length > 0) {
