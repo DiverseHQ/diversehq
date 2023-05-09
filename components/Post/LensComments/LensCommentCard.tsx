@@ -21,6 +21,7 @@ import {
   stringToLength
 } from '../../../utils/utils'
 import { RiMore2Fill } from 'react-icons/ri'
+import { TbArrowsDiagonalMinimize } from 'react-icons/tb'
 import OptionsWrapper from '../../Common/OptionsWrapper'
 import { Tooltip } from '@mui/material'
 import { useCommentStore } from '../../../store/comment'
@@ -30,9 +31,12 @@ import formatHandle from '../../User/lib/formatHandle'
 import Markup from '../../Lexical/Markup'
 import Attachment from '../Attachment'
 import getAvatar from '../../User/lib/getAvatar'
+import clsx from 'clsx'
 
 const LensCommentCard = ({ comment }: { comment: Comment }) => {
   const [comments, setComments] = useState([])
+  const [hideComments, setHideComments] = useState(false)
+  const [hoveringVerticalBar, setHoveringVerticalBar] = useState(false)
   const router = useRouter()
   const { notifyInfo } = useNotify()
   const [reaction, setReaction] = useState(comment?.reaction)
@@ -212,8 +216,21 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
       {comment && (
         <div className="w-full">
           {/* top row */}
-          <div className="flex flex-row items-center justify-between w-full">
+          <div
+            className={clsx(
+              'flex flex-row items-center justify-between w-full',
+              hideComments && 'pb-2'
+            )}
+          >
             <div className="flex flex-row items-center gap-2">
+              {hideComments && (
+                <TbArrowsDiagonalMinimize
+                  onClick={() => {
+                    setHideComments(false)
+                  }}
+                  className="text-s-text cursor-pointer hover:text-p-text"
+                />
+              )}
               <ImageWithPulsingLoader
                 src={getAvatar(comment?.profile)}
                 className="w-7 h-7 rounded-full object-cover"
@@ -295,11 +312,33 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
           </div>
 
           {/* padded content with line*/}
-          <div className="flex flex-row w-full overflow-hidden">
+          <div
+            className={clsx(
+              'flex flex-row w-full overflow-hidden',
+              hideComments && 'hidden'
+            )}
+          >
             {/* vertical line */}
-            <div className="w-7 shrink-0 flex flex-row items-center justify-center py-2">
-              <div className="border-l-2 border-[#eee] dark:border-p-border h-full"></div>
-            </div>
+            <button
+              onClick={() => {
+                setHideComments(true)
+                setHoveringVerticalBar(false)
+              }}
+              onMouseEnter={() => {
+                setHoveringVerticalBar(true)
+              }}
+              onMouseLeave={() => {
+                setHoveringVerticalBar(false)
+              }}
+              className="w-7 shrink-0 flex flex-row items-center justify-center py-2"
+            >
+              <div
+                className={clsx(
+                  'border-l-2  h-full',
+                  hoveringVerticalBar ? 'border-s-text' : 'border-p-border'
+                )}
+              ></div>
+            </button>
             <div className="w-full">
               {/* content */}
               <div className="mt-1">
