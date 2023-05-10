@@ -439,7 +439,9 @@ const LensCreateComment = ({
           'flex flex-row px-3 py-2 hover:bg-s-hover cursor-pointer items-center justify-between',
           className
         )}
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
           // @ts-ignore
           const comment = commentRef.current.value
           // @ts-ignore
@@ -613,7 +615,6 @@ const LensCreateComment = ({
                         type: 'image/gif',
                         title: gif.title
                       }
-                      console.log('attachment', attachment)
                       addAttachments([attachment])
                     }}
                   />
@@ -732,7 +733,6 @@ const LensCreateComment = ({
                       // @ts-ignore
                       e.target.style.height = `${e.target.scrollHeight}px`
                     }
-
                     // @ts-ignore
                     if (hasMentionAtEnd(e.target.value)) {
                       // get the last word in the commeent without the @

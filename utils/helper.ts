@@ -40,6 +40,7 @@ export const getCommunityInfoFromAppId = (appId: string) => {
 }
 
 export const hasMentionAtEnd = (text: string) => {
-  const lastWord = text.split(' ').pop()
+  // geet the last word, text can also contain \n so we need to split by both space and \n
+  const lastWord = text.split(/[\s\n]+/).pop()
   return lastWord && lastWord.startsWith('@')
 }
