@@ -430,7 +430,12 @@ const LensCreateComment = ({
                   e.target.style.height = e.target.scrollHeight + 'px'
                 }}
               />
-              <Attachment attachments={attachments} isNew isComment />
+              <Attachment
+                className="w-full"
+                attachments={attachments}
+                isNew
+                isComment
+              />
               {/* {gifAttachment && (
                 <div className="flex items-center mt-2">
                   <div className="relative w-fit">
@@ -517,7 +522,7 @@ const LensCreateComment = ({
             )}
             <div className="pb-2 px-4">
               <Attachment
-                className="max-h-[300px] rounded-lg"
+                className="max-h-[300px] w-full rounded-lg"
                 attachments={attachments}
                 isNew
                 isComment

@@ -247,6 +247,7 @@ const IndexingPostCard = ({ postInfo }: Props) => {
                       // @ts-ignore
                       publication={postInfo}
                       attachments={postInfo?.metadata?.media}
+                      className="w-full"
                     />
                   </div>
                 )}

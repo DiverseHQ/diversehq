@@ -57,7 +57,7 @@ const LensCollectButton = ({
                         <Attachment
                           publication={publication}
                           attachments={publication?.metadata?.media}
-                          className="max-h-[250px] rounded-xl"
+                          className="max-h-[250px] w-full rounded-xl"
                         />
                       </div>
                     )}
