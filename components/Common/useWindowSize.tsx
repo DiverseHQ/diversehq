@@ -1,6 +1,9 @@
 import { useLayoutEffect, useState } from 'react'
 
-const useWindowSize = () => {
+const useWindowSize = (): {
+  windowHeight: number
+  windowWidth: number
+} => {
   const [windowHeight, setWindowHeight] = useState(
     typeof window !== 'undefined' ? window.innerHeight : 0
   )
@@ -19,6 +22,6 @@ const useWindowSize = () => {
       window.removeEventListener('resize', onResize)
     }
   }, [])
-  return [windowHeight, windowWidth]
+  return { windowHeight, windowWidth }
 }
 export default useWindowSize

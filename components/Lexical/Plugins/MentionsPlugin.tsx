@@ -163,7 +163,7 @@ const NewMentionsPlugin: FC = () => {
       request: {
         query: queryString ?? null,
         type: SearchRequestTypes.Profile,
-        limit: isMobile ? 4 : 5
+        limit: isMobile ? 3 : 5
       }
     },
     {
@@ -267,8 +267,8 @@ const NewMentionsPlugin: FC = () => {
               <>
                 {isMobile ? (
                   <div
-                    className="fixed rounded-b-xl border-b border-s-border top-0 left-0 w-full shadow-sm text-p-text bg-s-bg"
-                    style={{ zIndex: 70 }}
+                    className={`fixed mt-8 mx-2 rounded-xl border border-s-border left-0 right-0 shadow-sm text-p-text bg-s-bg`}
+                    style={{ zIndex: 80 }}
                   >
                     <ul className="">
                       {options.map((option, i: number) => (
