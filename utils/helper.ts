@@ -38,3 +38,8 @@ export const getCommunityInfoFromAppId = (appId: string) => {
     return null
   }
 }
+
+export const hasMentionAtEnd = (text: string) => {
+  const lastWord = text.split(' ').pop()
+  return lastWord && lastWord.startsWith('@')
+}

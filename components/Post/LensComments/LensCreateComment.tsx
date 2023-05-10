@@ -1,12 +1,16 @@
 import { uuidv4 } from '@firebase/util'
 import React, { useEffect, useRef, useState } from 'react'
 import {
+  Profile,
+  ProfileSearchResult,
   PublicationMainFocus,
   ReactionTypes,
+  SearchRequestTypes,
   useCreateCommentTypedDataMutation,
   useCreateCommentViaDispatcherMutation,
   useCreateDataAvailabilityCommentTypedDataMutation,
-  useCreateDataAvailabilityCommentViaDispatcherMutation
+  useCreateDataAvailabilityCommentViaDispatcherMutation,
+  useSearchProfilesQuery
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../../lib/useSignTypedDataAndBroadcast'
@@ -35,6 +39,7 @@ import {
 } from '../../../utils/config'
 import { appId } from '../../../utils/config'
 import AttachmentRow from '../Create/AttachmentRow'
+import { hasMentionAtEnd } from '../../../utils/helper'
 const LensCreateComment = ({
   postId,
   addComment,
@@ -50,6 +55,8 @@ const LensCreateComment = ({
   isMainPost?: boolean
 }) => {
   const [focused, setFocused] = useState(false)
+  const [results, setResults] = useState<Array<Record<string, string>>>([])
+
   // const content = useCommentStore((state) => state.content)
   // const setContent = useCommentStore((state) => state.setContent)
   const { error, result, type, signTypedDataAndBroadcast } =
@@ -94,6 +101,44 @@ const LensCreateComment = ({
     (state) => state.addCommentAttachments
   )
   const isUploading = usePublicationStore((state) => state.isUploading)
+  const { isMobile } = useDevice()
+
+  const [popupStyle, setPopupStyle] = useState<any>({ display: 'none' })
+
+  const [queryString, setQueryString] = useState<string | null>(null)
+
+  const { data } = useSearchProfilesQuery(
+    {
+      request: {
+        query: queryString ?? null,
+        type: SearchRequestTypes.Profile,
+        limit: isMobile ? 3 : 5
+      }
+    },
+    {
+      enabled: !!queryString && queryString.length > 0
+    }
+  )
+
+  useEffect(() => {
+    if (data) {
+      const search = data?.search
+      const profileSearchResult = search as ProfileSearchResult
+      const profiles: Profile[] =
+        search && search.hasOwnProperty('items')
+          ? profileSearchResult?.items
+          : []
+      const profilesResults = profiles.map(
+        (user: Profile) =>
+          ({
+            name: user?.name,
+            handle: user?.handle,
+            picture: getAvatar(user)
+          } as Record<string, string>)
+      )
+      setResults(profilesResults)
+    }
+  }, [data])
 
   const getMainContentFocus = () => {
     if (attachments.length > 0) {
@@ -136,7 +181,6 @@ const LensCreateComment = ({
   // todo: add appreciate amoount using contract
 
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
-  const { isMobile } = useDevice()
 
   const onSuccessCreateComment = async (tx, tempId, isDA) => {
     const comment = {
@@ -382,6 +426,55 @@ const LensCreateComment = ({
     }
   }, [])
 
+  const SingleResultItem = ({
+    result,
+    className
+  }: {
+    result: any
+    className?: string
+  }) => {
+    return (
+      <div
+        className={clsx(
+          'flex flex-row px-3 py-2 hover:bg-s-hover cursor-pointer items-center justify-between',
+          className
+        )}
+        onClick={() => {
+          // @ts-ignore
+          const comment = commentRef.current.value
+          // @ts-ignore
+          const words = comment.split(' ')
+          // @ts-ignore
+          words.pop()
+          // @ts-ignore
+          words.push(`@${result.handle}`)
+          // @ts-ignore
+          commentRef.current.value = words.join(' ')
+          // @ts-ignore
+          commentRef.current.focus()
+          setResults([])
+        }}
+      >
+        <div className="flex flex-row items-center space-x-2">
+          <ImageWithPulsingLoader
+            // @ts-ignore
+            src={result.picture}
+            className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+          />
+          <div>
+            <div className="font-bold text-base truncate">
+              {stringToLength(result.name, 18)}
+            </div>
+
+            <div className="text-sm font-medium text-s-text">
+              <span>u/{formatHandle(result.handle)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!hasProfile || !isSignedIn || !lensProfile?.defaultProfile?.id) {
     return <></>
   }
@@ -421,15 +514,69 @@ const LensCreateComment = ({
                 disabled={loading || !canCommnet}
                 rows={1}
                 style={{ resize: 'none' }}
-                onInput={(e) => {
+                onChange={(event) => {
+                  // Get the cursor position
+                  const cursorPosition = event.target.selectionStart
+                  // Get the position and dimensions of the textarea element
+                  const { left, top } =
+                    // @ts-ignore
+                    commentRef.current.getBoundingClientRect()
+                  // Calculate the left and top positions of the pop-up component relative to the viewport
+                  const leftPosition =
+                    // @ts-ignore
+                    left + commentRef.current.scrollLeft + cursorPosition * 5 // You can adjust the multiplier to suit your needs
+                  const topPosition =
+                    top +
+                    // @ts-ignore
+
+                    commentRef.current.scrollTop +
+                    // @ts-ignore
+
+                    commentRef.current.offsetHeight
+                  // Set the style of the pop-up component to position it at the correct location
+                  setPopupStyle({
+                    left: `${leftPosition}px`,
+                    top: `${topPosition}px`
+                  })
+                }}
+                onInput={async (e) => {
                   // @ts-ignore
                   // setContent(e.target.value)
                   // @ts-ignore
                   e.target.style.height = 'auto'
                   // @ts-ignore
                   e.target.style.height = e.target.scrollHeight + 'px'
+                  // @ts-ignore
+                  if (hasMentionAtEnd(e.target.value)) {
+                    // get the last word in the commeent without the @
+                    // @ts-ignore
+                    const lastWord = e.target.value
+                      .split(' ')
+                      .pop()
+                      .replace('@', '')
+                    // @ts-ignore
+                    setQueryString(lastWord)
+                  } else {
+                    setQueryString('')
+                  }
                 }}
               />
+              {results?.length > 0 && queryString?.length > 0 && (
+                <div
+                  style={{
+                    ...popupStyle,
+                    zIndex: 100,
+                    position: 'fixed'
+                  }}
+                  className="border-s-border border rounded-xl shadow-sm w-52 text-p-text bg-s-bg overflow-hidden"
+                >
+                  {results.map((result, index) => (
+                    <div className="w-fit" key={index}>
+                      <SingleResultItem key={index} result={result} />
+                    </div>
+                  ))}
+                </div>
+              )}
               <Attachment
                 className="w-full"
                 attachments={attachments}
@@ -498,7 +645,7 @@ const LensCreateComment = ({
         >
           <div
             className={clsx(
-              'w-full bg-s-bg fixed z-30 bottom-0 left-0 right-0 flex flex-col items-center pt-3',
+              'w-full bg-s-bg fixed z-30 bottom-0 left-0 right-0 flex flex-col items-start pt-3',
               focused ? 'pb-2' : 'pb-3'
             )}
           >
@@ -544,6 +691,18 @@ const LensCreateComment = ({
                 </div>
               </div>
             )} */}
+            {focused && results?.length > 0 && queryString?.length > 0 && (
+              <div
+                className="bg-s-bg w-full pl-2"
+                style={{
+                  zIndex: 100
+                }}
+              >
+                {results.map((result, index) => (
+                  <SingleResultItem key={index} result={result} />
+                ))}
+              </div>
+            )}
             <div className="flex flex-row items-center w-full rounded-xl px-4">
               {!focused && (
                 <ImageWithPulsingLoader
@@ -572,6 +731,20 @@ const LensCreateComment = ({
                       e.target.style.height = 'auto'
                       // @ts-ignore
                       e.target.style.height = `${e.target.scrollHeight}px`
+                    }
+
+                    // @ts-ignore
+                    if (hasMentionAtEnd(e.target.value)) {
+                      // get the last word in the commeent without the @
+                      // @ts-ignore
+                      const lastWord = e.target.value
+                        .split(' ')
+                        .pop()
+                        .replace('@', '')
+                      // @ts-ignore
+                      setQueryString(lastWord)
+                    } else {
+                      setQueryString('')
                     }
                   }}
                   disabled={loading || !canCommnet}
