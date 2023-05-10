@@ -436,7 +436,7 @@ const LensCreateComment = ({
     return (
       <div
         className={clsx(
-          'flex flex-row px-3 py-2 hover:bg-s-hover cursor-pointer items-center justify-between',
+          'flex flex-row w-full px-3 py-2 hover:bg-s-hover cursor-pointer items-center justify-between',
           className
         )}
         onClick={(e) => {
@@ -573,7 +573,7 @@ const LensCreateComment = ({
                   className="border-s-border border rounded-xl shadow-sm w-52 text-p-text bg-s-bg overflow-hidden"
                 >
                   {results.map((result, index) => (
-                    <div className="w-fit" key={index}>
+                    <div className="" key={index}>
                       <SingleResultItem key={index} result={result} />
                     </div>
                   ))}
