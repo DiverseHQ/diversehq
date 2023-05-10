@@ -162,7 +162,7 @@ const CombinedCommentSection = ({
     }
   }
 
-  const uniqueComments = params.comments.filter(
+  const uniqueComments = params?.comments.filter(
     (comment, index, self) =>
       index === self.findIndex((t) => t.id === comment.id)
   )
@@ -192,15 +192,18 @@ const CombinedCommentSection = ({
         dataLength={uniqueComments.length}
         next={getMorePosts}
         hasMore={params.hasMore}
-        loader={<MobileLoader />}
+        loader={
+          params.hasMore && !uniqueComments?.length ? <></> : <MobileLoader />
+        }
         endMessage={<></>}
       >
+        {params.hasMore && !uniqueComments?.length && <MobileLoader />}
         {uniqueComments.length > 0 && (
           <div className="bg-s-bg px-3 sm:px-5 py-4 border-t border-[#eee] dark:border-p-border">
             {uniqueComments.map((comment) => {
               return (
                 <LensCommentCard
-                  key={comment?.id ? comment?.id : comment.tempId}
+                  key={comment?.id ?? comment.tempId}
                   comment={comment}
                 />
               )
