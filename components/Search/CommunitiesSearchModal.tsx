@@ -10,6 +10,7 @@ import {
 } from '../Common/WalletContext'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 /* eslint-disable */
 
@@ -106,7 +107,7 @@ const CommunitiesSearchModal = ({
               }}
             >
               <ImageWithPulsingLoader
-                src={community.logoImageUrl}
+                src={getIPFSLink(community.logoImageUrl)}
                 className="w-8 h-8 mr-3 rounded-full object-cover"
               />
               <div className="text-sm">{community.name}</div>

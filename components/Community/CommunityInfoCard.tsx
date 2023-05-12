@@ -24,6 +24,7 @@ import { useDevice } from '../Common/DeviceWrapper'
 // import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import useJoinCommunityButton from './hook/useJoinCommunityButton'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
+import getIPFSLink from '../User/lib/getIPFSLink'
 // import CreatePostBar from '../Home/CreatePostBar'
 
 interface Props {
@@ -125,7 +126,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
                     <div className="shrink-0 rounded-xl -translate-y-5  md:-translate-y-10 border-4 border-s-bg overflow-hidden">
                       <ImageWithFullScreenZoom
                         className="bg-s-bg w-[60px] h-[60px] md:w-[120px] md:h-[120px] object-cover"
-                        src={community.logoImageUrl}
+                        src={getIPFSLink(community.logoImageUrl)}
                       />
                     </div>
                     {!isMobile ? (

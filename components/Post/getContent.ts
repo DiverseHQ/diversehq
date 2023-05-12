@@ -42,6 +42,13 @@ export const getContent = (post: postWithCommunityInfoType): string => {
     ) {
       content = content.slice(post?.metadata?.name.length)
     }
+
+    if (
+      content?.startsWith(`**${post?.metadata?.name}**`) &&
+      showNameForThisAppIds.includes(post?.appId)
+    ) {
+      content = content.slice(post?.metadata?.name.length + 4)
+    }
   }
 
   return content

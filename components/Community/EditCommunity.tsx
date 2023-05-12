@@ -1,24 +1,25 @@
 import React, { useState, useCallback } from 'react'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineCamera } from 'react-icons/ai'
-import {
-  uploadFileToFirebaseAndGetUrl
-  // uploadFileToIpfs
-} from '../../utils/utils'
 import { useNotify } from '../Common/NotifyContext'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { putEditCommunity } from '../../api/community'
 import { useProfile } from '../Common/WalletContext'
 import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
+// import { useAccount } from 'wagmi'
 import FormTextInput from '../Common/UI/FormTextInput'
+import uploadToIPFS from '../../utils/uploadToIPFS'
+import getIPFSLink from '../User/lib/getIPFSLink'
+import { CommunityType } from '../../types/community'
 
 const EditCommunity = ({ community, getCommunityInformation }) => {
   const [loading, setLoading] = useState(false)
   const [communityBanner, setCommunityBanner] = useState(
     community?.bannerImageUrl
   )
-  const [logoImage, setLogoImage] = useState(community?.logoImageUrl)
+  const [logoImage, setLogoImage] = useState(
+    getIPFSLink(community?.logoImageUrl)
+  )
   const [communityBannerFile, setCommunityBannerFile] = useState(null)
   const [logoImageFile, setLogoImageFile] = useState(null)
   const [description, setDescription] = useState(community?.description)
@@ -27,7 +28,7 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
   const { hideModal } = usePopUpModal()
   const { refreshUserInfo } = useProfile()
   const router = useRouter()
-  const { address } = useAccount()
+  // const { address } = useAccount()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -38,24 +39,19 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
       return
     }
     try {
-      const communityData = {
+      const communityData: CommunityType = {
         description,
         communityId: community._id
       }
       if (logoImageFile) {
         // const logo = await uploadFileToIpfs(logoImageFile)
-        const logo = await uploadFileToFirebaseAndGetUrl(logoImageFile, address)
-        communityData.logoImageUrl = logo.uploadedToUrl
-        communityData.logoFilePath = logo.path
+        const { url } = await uploadToIPFS(logoImageFile)
+        communityData.logoImageUrl = url
+        // communityData.logoFilePath = logo.path
       }
       if (communityBannerFile) {
-        // const banner = await uploadFileToIpfs(communityBannerFile)
-        const banner = await uploadFileToFirebaseAndGetUrl(
-          communityBannerFile,
-          address
-        )
-        communityData.bannerImageUrl = banner.uploadedToUrl
-        communityData.bannerFilePath = banner.path
+        const { url } = await uploadToIPFS(communityBannerFile)
+        communityData.bannerImageUrl = url
       }
       const res = await putEditCommunity(communityData)
       const resData = await res.json()
@@ -158,8 +154,9 @@ const EditCommunity = ({ community, getCommunityInformation }) => {
             placeholder="Show the world what your community is..."
             value={description}
             onChange={onChangeDescription}
-            required
             maxLength={200}
+            // @ts-ignore
+            required
           />
           <input
             type="file"

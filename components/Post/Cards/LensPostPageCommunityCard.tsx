@@ -7,6 +7,7 @@ import Markup from '../../Lexical/Markup'
 import { getCommunityInfoUsingId } from '../../../api/community'
 import useJoinCommunityButton from '../../Community/hook/useJoinCommunityButton'
 import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
+import getIPFSLink from '../../User/lib/getIPFSLink'
 
 const LensPostPageCommunityCard = ({
   communityInfo: _community
@@ -62,11 +63,7 @@ const LensPostPageCommunityCard = ({
             onClick={(e) => e.stopPropagation()}
           >
             <ImageWithFullScreenZoom
-              src={
-                communityInfo?.logoImageUrl
-                  ? communityInfo?.logoImageUrl
-                  : '/gradient.jpg'
-              }
+              src={getIPFSLink(communityInfo?.logoImageUrl) ?? '/gradient.jpg'}
               className="rounded-2xl w-[70px] h-[70px] object-cover border-s-bg border-4 bg-s-bg"
             />
           </div>

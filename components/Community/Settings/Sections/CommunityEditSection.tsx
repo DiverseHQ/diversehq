@@ -3,25 +3,25 @@ import { AiOutlineCamera } from 'react-icons/ai'
 import { IoPencilSharp } from 'react-icons/io5'
 import { putEditCommunity } from '../../../../api/community'
 import { CommunityType } from '../../../../types/community'
-import { uploadFileToFirebaseAndGetUrl } from '../../../../utils/utils'
 import { useNotify } from '../../../Common/NotifyContext'
 import FormTextInput from '../../../Common/UI/FormTextInput'
-import { useProfile } from '../../../Common/WalletContext'
+import uploadToIPFS from '../../../../utils/uploadToIPFS'
+import getIPFSLink from '../../../User/lib/getIPFSLink'
 
 const CommunityEditSection = ({ community }: { community: CommunityType }) => {
   const [loading, setLoading] = useState(false)
   const [communityBanner, setCommunityBanner] = useState(
     community?.bannerImageUrl
   )
-  const [logoImage, setLogoImage] = useState(community?.logoImageUrl)
+  const [logoImage, setLogoImage] = useState(
+    getIPFSLink(community?.logoImageUrl)
+  )
   const [communityBannerFile, setCommunityBannerFile] = useState(null)
   const [logoImageFile, setLogoImageFile] = useState(null)
   const [description, setDescription] = useState(community?.description)
   const [label, setLabel] = useState(community?.label)
 
   const { notifyError, notifySuccess } = useNotify()
-  const { user } = useProfile()
-  const address = user?.walletAddress
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -38,19 +38,13 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
         communityId: community._id
       }
       if (logoImageFile) {
-        // const logo = await uploadFileToIpfs(logoImageFile)
-        const logo = await uploadFileToFirebaseAndGetUrl(logoImageFile, address)
-        communityData.logoImageUrl = logo.uploadedToUrl
-        communityData.logoFilePath = logo.path
+        const { url } = await uploadToIPFS(logoImageFile)
+        communityData.logoImageUrl = url
       }
       if (communityBannerFile) {
         // const banner = await uploadFileToIpfs(communityBannerFile)
-        const banner = await uploadFileToFirebaseAndGetUrl(
-          communityBannerFile,
-          address
-        )
-        communityData.bannerImageUrl = banner.uploadedToUrl
-        communityData.bannerFilePath = banner.path
+        const { url } = await uploadToIPFS(communityBannerFile)
+        communityData.bannerImageUrl = url
       }
       const res = await putEditCommunity(communityData)
       const resData = await res.json()

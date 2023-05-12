@@ -1,5 +1,6 @@
 import React from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 const CommunitySelectDiv = ({ community, handleSelect }) => {
   return (
@@ -10,7 +11,7 @@ const CommunitySelectDiv = ({ community, handleSelect }) => {
       }}
     >
       <ImageWithPulsingLoader
-        src={community.logoImageUrl}
+        src={getIPFSLink(community.logoImageUrl)}
         alt="community logo"
         className="rounded-full object-cover w-9 h-9"
       />

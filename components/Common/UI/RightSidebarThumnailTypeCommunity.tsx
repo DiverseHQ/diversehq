@@ -2,6 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import ImageWithPulsingLoader from './ImageWithPulsingLoader'
 import { BiChevronRight } from 'react-icons/bi'
+import getIPFSLink from '../../User/lib/getIPFSLink'
 
 export interface RightSidebarCommunity {
   name: string
@@ -33,7 +34,7 @@ const RightSidebarThumnailTypeCommunity = ({
           <div className="space-between-row">
             <div className="flex flex-row items-center gap-2">
               <ImageWithPulsingLoader
-                src={community?.logoImageUrl}
+                src={getIPFSLink(community?.logoImageUrl)}
                 className="h-[40px] w-[40px] rounded-full object-cover"
               />
               <div className="font-semibold truncate">

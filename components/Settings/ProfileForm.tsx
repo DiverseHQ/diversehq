@@ -13,10 +13,7 @@ import {
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import {
-  uploadFileToIpfsInfuraAndGetPath,
-  uploadToIpfsInfuraAndGetPath
-} from '../../utils/utils'
+import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import LensLoginButton from '../Common/LensLoginButton'
 import { useNotify } from '../Common/NotifyContext'
 import FormRichTextInput from '../Common/UI/FormRichTextInput'
@@ -28,6 +25,7 @@ import {
   MetadataVersions,
   ProfileMetadata
 } from './types/profieMetadata'
+import uploadToIPFS from '../../utils/uploadToIPFS'
 
 const ProfileForm = () => {
   const {
@@ -104,13 +102,10 @@ const ProfileForm = () => {
 
   const handleSetProfileBannerFromLensProfile = () => {
     // @ts-ignore
-    console.log('coverbanned', getCoverBanner(lensProfile?.defaultProfile))
-    // @ts-ignore
     setProfileBanner(getCoverBanner(lensProfile?.defaultProfile))
   }
 
   const handleProfileImageChange = (e) => {
-    console.log(e.target.files[0])
     const filePicked = e.target.files[0]
     if (!filePicked) return
     setProfileImageFile(filePicked)
@@ -127,8 +122,8 @@ const ProfileForm = () => {
   const setProfileImageIfChanged = async () => {
     try {
       if (!profileImageFile) return
-      const hash = await uploadFileToIpfsInfuraAndGetPath(profileImageFile)
-      const profileImage = `ipfs://${hash}`
+      const { url } = await uploadToIPFS(profileImageFile)
+      const profileImage = url
 
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
         await createSetProfileImageUriViaDispatcher({
@@ -169,10 +164,8 @@ const ProfileForm = () => {
       ]
       let bannerUrl = null
       if (profileBannerFile) {
-        const hash = await uploadFileToIpfsInfuraAndGetPath(profileBannerFile)
-        bannerUrl = `ipfs://${hash}`
-
-        console.log('bannerUrl', bannerUrl)
+        const url = await uploadToIPFS(profileBannerFile)
+        bannerUrl = url
       }
 
       const isValuesChanged =
@@ -367,6 +360,7 @@ const ProfileForm = () => {
         <input
           type="file"
           id="profileImage"
+          accept="image/*"
           placeholder="Commmunity Name"
           onChange={handleProfileImageChange}
           ref={profileImageInputRef}
@@ -375,6 +369,7 @@ const ProfileForm = () => {
         <input
           type="file"
           id="profileBanner"
+          accept="image/*"
           onChange={handleProfileBannerChange}
           ref={profileBannerInputRef}
           hidden

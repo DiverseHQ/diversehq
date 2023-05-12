@@ -1,3 +1,5 @@
+import apiEndpoint from '../api/ApiEndpoint'
+
 export const POST_LIMIT: number = 10
 export const COMMENT_LIMIT: number = 10
 export const LENS_POST_LIMIT: number = 15
@@ -235,3 +237,7 @@ export const showNameForThisAppIds = [
   'phaver'
 ]
 export const appLink = 'https://diversehq.xyz'
+
+export const STS_TOKEN_URL = `${apiEndpoint}/ever/sts/token`
+export const EVER_REGION = 'us-west-2'
+export const EVER_ENDPOINT = 'https://endpoint.4everland.co'

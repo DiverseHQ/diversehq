@@ -10,10 +10,7 @@ import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useRouter } from 'next/router'
-import {
-  uploadFileToFirebaseAndGetUrl
-  // uploadFileToIpfs
-} from '../../utils/utils'
+import uploadToIPFS from '../../utils/uploadToIPFS'
 
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState('')
@@ -22,7 +19,6 @@ const CreateCommunity = () => {
   const [communityBanner, setCommunityBanner] = useState()
   const [communityDescription, setCommunityDescription] = useState('')
   const [loading, setLoading] = useState(false)
-  const { address } = useProfile()
   const [headerValue, setHeaderValue] = useState(null)
   const [pfpValue, setPfpValue] = useState(null)
   const { notifyError, notifySuccess } = useNotify()
@@ -60,20 +56,18 @@ const CreateCommunity = () => {
     // change space to _ for all file in files
     // const PFP = await uploadFileToIpfs(communityPfp)
     // const Banner = await uploadFileToIpfs(communityBanner)
-    const PFP = await uploadFileToFirebaseAndGetUrl(communityPfp, address)
-    const Banner = await uploadFileToFirebaseAndGetUrl(communityBanner, address)
-    await handleCreateCommunity(PFP, Banner)
+    const { url: pfpUrl } = await uploadToIPFS(communityPfp)
+    const { url: bannerUrl } = await uploadToIPFS(communityBanner)
+    await handleCreateCommunity(pfpUrl, bannerUrl)
   }
 
-  const handleCreateCommunity = async (pfp, banner) => {
+  const handleCreateCommunity = async (pfp: string, banner: string) => {
     const communityData = {
       name: communityName.trim(),
       label: communityLabel.trim(),
       description: communityDescription,
-      bannerImageUrl: banner.uploadedToUrl,
-      logoImageUrl: pfp.uploadedToUrl,
-      bannerFilePath: banner.path,
-      logoFilePath: pfp.path
+      bannerImageUrl: banner,
+      logoImageUrl: pfp
     }
     try {
       await postCreateCommunity(communityData).then(async (res) => {
@@ -209,6 +203,7 @@ const CreateCommunity = () => {
           <FormTextInput
             value={communityName}
             onChange={onChangeCommunityName}
+            // @ts-ignore
             required
             maxLength={26}
             onBlur={() => checkCommunityName()}
@@ -229,6 +224,7 @@ const CreateCommunity = () => {
             placeholder="What your community is about ?"
             value={communityDescription}
             onChange={onChangeCommunityDescription}
+            // @ts-ignore
             required
             maxLength={200}
           />

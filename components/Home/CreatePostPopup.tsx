@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-// import { useRouter } from 'next/router'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
-// import { postCreatePost } from '../../api/post'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import { AiOutlineDown } from 'react-icons/ai'
 import { BsCollection } from 'react-icons/bs'
-import {
-  // uploadFileToFirebaseAndGetUrl,
-  uploadToIpfsInfuraAndGetPath
-  // uploadFileToIpfs
-} from '../../utils/utils'
 import { getJoinedCommunitiesApi } from '../../api/community'
-// import ToggleSwitch from '../Post/ToggleSwitch'
 import { Tooltip } from '@mui/material'
-
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { uuidv4 } from '@firebase/util'
 import {
@@ -32,8 +23,6 @@ import {
 } from '../../graphql/generated'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import FormTextInput from '../Common/UI/FormTextInput'
-// import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-// import { $getRoot } from 'lexical'
 import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
 import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
 import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
@@ -66,7 +55,9 @@ import PostPreferenceButton from './PostComposer/PostPreferenceButton'
 import clsx from 'clsx'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $getRoot } from 'lexical'
-// import { useTheme } from '../Common/ThemeProvider'
+// import uploadToIPFS from '../../utils/uploadToIPFS'
+import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 const CreatePostPopup = () => {
   const router = useRouter()
@@ -88,7 +79,6 @@ const CreatePostPopup = () => {
   const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
   const { addPost } = usePostIndexing()
   const { notifyError, notifyInfo, notifySuccess } = useNotify()
-  // const router = useRouter()
   const { hideModal } = usePopUpModal()
   const { isMobile } = useDevice()
   const [flair, setFlair] = useState(null)
@@ -289,7 +279,7 @@ const CreatePostPopup = () => {
             ? `Post by @${lensProfile.defaultProfile.handle} \n`
             : ``
         }` +
-        title +
+        `**${title}**` +
         '\n' +
         content.trim() +
         `
@@ -319,14 +309,19 @@ const CreatePostPopup = () => {
       tags: selectedCommunity?._id ? [selectedCommunity?._id] : [],
       appId: appId
     }
-    const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
+
+    console.log('content', content)
+
+    // const jsonFile = new File([JSON.stringify(metadata)], 'metadata.json', {
+    //   type: 'application/json'
+    // })
+    // const { url } = await uploadToIPFS(jsonFile)
+    const ifpsHash = await uploadToIpfsInfuraAndGetPath(metadata)
+    const url = `ipfs://${ifpsHash}`
 
     if (selectedCommunity?.isLensCommunity) {
       try {
-        const res = await submitPostForReview(
-          selectedCommunity?._id,
-          `ipfs://${ipfsHash}`
-        )
+        const res = await submitPostForReview(selectedCommunity?._id, url)
         if (res.status === 200) {
           notifySuccess('Post submitted for review')
           handleCompletePost()
@@ -349,7 +344,7 @@ const CreatePostPopup = () => {
         ? {
             _id: selectedCommunity?._id,
             name: selectedCommunity?.name,
-            image: selectedCommunity.logoImageUrl
+            image: getIPFSLink(selectedCommunity.logoImageUrl)
           }
         : null,
       createdAt: new Date().toISOString(),
@@ -385,7 +380,7 @@ const CreatePostPopup = () => {
         const dispatcherResult = (
           await createPostDAViaDispatcher({
             request: {
-              contentURI: `ipfs://${ipfsHash}`,
+              contentURI: url,
               from: lensProfile?.defaultProfile?.id
             }
           })
@@ -418,7 +413,7 @@ const CreatePostPopup = () => {
         const typedData = (
           await createDAPostTypedData({
             request: {
-              contentURI: `ipfs://${ipfsHash}`,
+              contentURI: url,
               from: lensProfile?.defaultProfile?.id
             }
           })
@@ -434,7 +429,7 @@ const CreatePostPopup = () => {
 
     const createPostRequest = {
       profileId: lensProfile?.defaultProfile?.id,
-      contentURI: `ipfs://${ipfsHash}`,
+      contentURI: url,
       collectModule: collectSettings,
       referenceModule: {
         followerOnlyReferenceModule: false

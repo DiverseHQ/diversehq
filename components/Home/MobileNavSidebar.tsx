@@ -37,6 +37,7 @@ import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 import Link from 'next/link'
 import { BsFillPersonFill } from 'react-icons/bs'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -140,6 +141,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                 <div className="flex flex-col">
                   <div className="flex flex-row gap-1">
                     <ImageWithPulsingLoader
+                      // @ts-ignore
                       src={getAvatar(myLensProfile?.defaultProfile)}
                       className="w-[55px] h-[55px] bg-[#333] rounded-full"
                       onClick={() => {
@@ -345,12 +347,14 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                   .map((community) => ({
                     _id: community._id,
                     name: formatHandle(community?.handle),
+                    // @ts-ignore
                     logoImageUrl: getAvatar(community),
                     isLensCommunity: true,
                     verified: community?.verified
                   }))
                   .sort(
                     (a, b) =>
+                      // @ts-ignore
                       b?.stats?.totalFollowers - a?.stats?.totalFollowers
                   ),
                 ...joinedCommunities
@@ -369,11 +373,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                   }}
                 >
                   <ImageWithPulsingLoader
-                    src={
-                      community.logoImageUrl
-                        ? community.logoImageUrl
-                        : '/gradient.jpg'
-                    }
+                    src={community.logoImageUrl ?? '/gradient.jpg'}
                     alt="community logo"
                     className="rounded-full object-cover w-12 h-12"
                   />
@@ -442,7 +442,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                 <ImageWithPulsingLoader
                   src={
                     community.logoImageUrl
-                      ? community.logoImageUrl
+                      ? getIPFSLink(community.logoImageUrl)
                       : '/gradient.jpg'
                   }
                   alt="community logo"

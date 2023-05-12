@@ -11,6 +11,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { stringToLength } from '../../utils/utils'
 import { CgCommunity } from 'react-icons/cg'
 import { GiBreakingChain } from 'react-icons/gi'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 const MobileFilterDrawerButton = () => {
   const { user } = useProfile()
@@ -66,6 +67,7 @@ const MobileFilterDrawerButton = () => {
         setIsDrawerOpen={setIsDrawerOpen}
         showClose={true}
         position="bottom"
+        // @ts-ignore
         className="dark:bg-s-bg"
       >
         <div className="flex flex-col justify-center items-center text-p-text">
@@ -124,7 +126,7 @@ const MobileFilterDrawerButton = () => {
                       }}
                     >
                       <ImageWithPulsingLoader
-                        src={community.logoImageUrl}
+                        src={getIPFSLink(community.logoImageUrl)}
                         alt="community logo"
                         className="rounded-full object-cover w-16 h-16"
                       />

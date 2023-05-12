@@ -5,6 +5,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 import { FiSettings } from 'react-icons/fi'
 import { Tooltip } from '@mui/material'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 const RightSideCommunityComponent = ({ community }) => {
   const router = useRouter()
@@ -21,7 +22,7 @@ const RightSideCommunityComponent = ({ community }) => {
       <div className="space-between-row cursor-pointer text-p-text hover:bg-s-hover rounded-2xl pl-3 py-1">
         <div className="start-row ">
           <ImageWithPulsingLoader
-            src={community?.logoImageUrl}
+            src={getIPFSLink(community?.logoImageUrl)}
             className="w-[40px] h-[40px] object-cover rounded-full"
           />
           <span className="pl-3 pr-1 truncate">

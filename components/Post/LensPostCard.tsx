@@ -20,12 +20,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 // import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
-import {
-  countLinesFromMarkdown,
-  // deleteFirebaseStorageFile,
-  stringToLength
-  // unpinFromIpfsInfura
-} from '../../utils/utils'
+import { countLinesFromMarkdown, stringToLength } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
@@ -51,6 +46,7 @@ import { useDevice } from '../Common/DeviceWrapper'
 import useJoinCommunityButton from '../Community/hook/useJoinCommunityButton'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 import { getContent } from './getContent'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -226,26 +222,6 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
         }
       })
       await deleteLensPublication(post?.id)
-
-      // if (post?.metadata?.media?.length > 0) {
-      //   const medias = post?.metadata?.media
-      //   for (const media of medias) {
-      //     if (media?.original?.url?.startsWith('ipfs://')) {
-      //       try {
-      //         const hash = media?.original?.url?.split('ipfs://')[1]
-      //         await unpinFromIpfsInfura(hash)
-      //       } catch (error) {
-      //         console.log(error)
-      //       }
-      //     } else if (
-      //       media?.original?.url?.startsWith(
-      //         'https://firebasestorage.googleapis.com/v0/b/diversehq-21330.appspot.com'
-      //       )
-      //     ) {
-      //       await deleteFirebaseStorageFile(media?.original?.url)
-      //     }
-      //   }
-      // }
     } catch (error) {
       console.log(error)
       window.location.reload()
@@ -341,8 +317,9 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                           postInfo?.isLensCommunityPost ||
                           !postInfo?.communityInfo
                             ? getAvatar(postInfo?.profile)
-                            : postInfo?.communityInfo?.logoImageUrl ??
-                              '/gradient.jpg'
+                            : getIPFSLink(
+                                postInfo?.communityInfo?.logoImageUrl
+                              ) ?? '/gradient.jpg'
                         }
                         className="rounded-full lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover cursor-pointer"
                       />
@@ -438,9 +415,9 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                           postInfo?.isLensCommunityPost ||
                           !postInfo?.communityInfo
                             ? getAvatar(postInfo?.profile)
-                            : postInfo?.communityInfo?.logoImageUrl
-                            ? postInfo?.communityInfo?.logoImageUrl
-                            : '/gradient.jpg'
+                            : getIPFSLink(
+                                postInfo?.communityInfo?.logoImageUrl
+                              ) ?? '/gradient.jpg'
                         }
                         className="rounded-full h-10 w-10 object-cover"
                       />

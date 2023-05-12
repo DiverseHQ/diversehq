@@ -9,6 +9,7 @@ import { CommunityType } from '../../../types/community'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import Sidebar from '../../Settings/Sidebar'
 import useIsCreator from '../hook/useIsCreator'
+import getIPFSLink from '../../User/lib/getIPFSLink'
 // import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 const SettingsSidebar = ({ community }: { community: CommunityType }) => {
@@ -20,7 +21,7 @@ const SettingsSidebar = ({ community }: { community: CommunityType }) => {
       <div className="w-full flex flex-row items-center my-2 p-2 bg-s-bg rounded-xl border border-s-border">
         <div>
           <ImageWithPulsingLoader
-            src={community?.logoImageUrl}
+            src={getIPFSLink(community?.logoImageUrl)}
             className="w-10 h-10 rounded-xl object-cover"
           />
         </div>

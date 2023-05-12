@@ -11,6 +11,7 @@ import { PublicationMetadataV2Input } from '../graphql/generated'
 import { BigNumber, utils } from 'ethers'
 import CryptoJS from 'crypto-js'
 import { AttachmentType } from '../store/publication'
+import uploadToIPFS from './uploadToIPFS'
 
 export const uploadFileToIpfs = async (file: File): Promise<string> => {
   // eslint-disable-next-line
@@ -113,9 +114,10 @@ export const uploadFilesToIpfsAndGetAttachments = async (
     const files = Array.from(data)
     const attachments = await Promise.all(
       files.map(async (file: File) => {
-        const result = await client.add(file)
+        // const result = await client.add(file)
+        const { url } = await uploadToIPFS(file)
         return {
-          item: `ipfs://${result.path}`,
+          item: url,
           type: file.type || 'image/jpeg',
           altTag: ''
         }

@@ -18,6 +18,7 @@ import getDefaultProfileInfo from '../../../lib/profile/get-default-profile-info
 import useLensFollowButton from '../../User/useLensFollowButton'
 import MessageButton from '../../Messages/MessageButton'
 import { useDevice } from '../../Common/DeviceWrapper'
+import getIPFSLink from '../../User/lib/getIPFSLink'
 
 const PostPage = ({ post }) => {
   const [active, setActive] = useState('top')
@@ -181,10 +182,8 @@ const PostPage = ({ post }) => {
                     <ImageWithFullScreenZoom
                       src={
                         // @ts-ignore
-                        communityInfo?.logoImageUrl
-                          ? // @ts-ignore
-                            communityInfo?.logoImageUrl
-                          : '/gradient.jpg'
+                        getIPFSLink(communityInfo?.logoImageUrl) ??
+                        '/gradient.jpg'
                       }
                       className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
                     />

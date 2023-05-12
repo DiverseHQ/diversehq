@@ -16,6 +16,7 @@ import { stringToLength } from '../../utils/utils'
 import { useDevice } from '../Common/DeviceWrapper'
 import useJoinCommunityButton from './hook/useJoinCommunityButton'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 interface Props {
   _community: CommunityWithCreatorProfile
@@ -95,7 +96,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
             <div className="shrink-0 rounded-[10px]">
               <ImageWithPulsingLoader
                 className="rounded-[10px] bg-s-bg w-[60px] h-[60px] md:w-[80px] md:h-[80px] object-cover"
-                src={community.logoImageUrl}
+                src={getIPFSLink(community.logoImageUrl)}
               />
             </div>
             {/* {!isMobile && ( */}

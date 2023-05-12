@@ -6,7 +6,7 @@ import {
   // useBasicTypeaheadTriggerMatch
 } from '@lexical/react/LexicalTypeaheadMenuPlugin'
 import type { TextNode } from 'lexical'
-import { FC, useRef } from 'react'
+import { FC } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import * as ReactDOM from 'react-dom'
 import {
@@ -252,13 +252,6 @@ const NewMentionsPlugin: FC = () => {
     [editor]
   )
 
-  const myRef = useRef<HTMLDivElement>(null)
-  const rect = myRef?.current?.getBoundingClientRect()
-  const top = rect?.top
-  const bottom = rect?.bottom
-  console.log('top', top)
-  console.log('bottom', bottom)
-
   return (
     <LexicalTypeaheadMenuPlugin<MentionTypeaheadOption>
       onQueryChange={setQueryString}
@@ -271,7 +264,7 @@ const NewMentionsPlugin: FC = () => {
       ) =>
         anchorElementRef.current && results.length
           ? ReactDOM.createPortal(
-              <div ref={myRef}>
+              <div>
                 {isMobile ? (
                   <div
                     className={`fixed mt-8 mx-2 rounded-xl border border-s-border left-0 right-0 shadow-sm text-p-text bg-s-bg`}
