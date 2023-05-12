@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineCamera } from 'react-icons/ai'
 import { IoPencilSharp } from 'react-icons/io5'
 import { MdOutlineClear } from 'react-icons/md'
-import { uuid } from 'uuidv4'
+import { v4 as uuidv4 } from 'uuid'
 import {
   useCreateSetProfileImageUriTypedDataMutation,
   useCreateSetProfileImageUriViaDispatcherMutation,
@@ -26,6 +26,7 @@ import {
   ProfileMetadata
 } from './types/profieMetadata'
 import uploadToIPFS from '../../utils/uploadToIPFS'
+import getIPFSLink from '../User/lib/getIPFSLink'
 
 const ProfileForm = () => {
   const {
@@ -46,6 +47,7 @@ const ProfileForm = () => {
     // @ts-ignore
     getAvatar(lensProfile?.defaultProfile)
   )
+
   const [profileBannerFile, setProfileBannerFile] = useState(null)
   const [profileImageFile, setProfileImageFile] = useState(null)
 
@@ -62,7 +64,7 @@ const ProfileForm = () => {
   const profileImageInputRef = useRef(null)
   const profileBannerInputRef = useRef(null)
 
-  const { notifyError }: any = useNotify()
+  const { notifyError, notifySuccess } = useNotify()
 
   const queryClient = useQueryClient()
 
@@ -164,7 +166,7 @@ const ProfileForm = () => {
       ]
       let bannerUrl = null
       if (profileBannerFile) {
-        const url = await uploadToIPFS(profileBannerFile)
+        const { url } = await uploadToIPFS(profileBannerFile)
         bannerUrl = url
       }
 
@@ -201,14 +203,23 @@ const ProfileForm = () => {
         return
       }
 
+      const prevMetadata = await fetch(
+        getIPFSLink(lensProfile?.defaultProfile?.metadata)
+      ).then((res) => res.json())
+
+      console.log('prevMetadata', prevMetadata)
+
       const metadata: ProfileMetadata = {
+        ...prevMetadata,
         version: MetadataVersions.one,
-        name,
-        bio,
-        attributes,
-        cover_picture: bannerUrl,
-        metadata_id: uuid()
+        name: name ?? lensProfile?.defaultProfile?.name,
+        bio: bio ?? lensProfile?.defaultProfile?.bio,
+        attributes: attributes ?? lensProfile?.defaultProfile?.attributes,
+        cover_picture: bannerUrl ?? prevMetadata?.cover_picture,
+        metadata_id: uuidv4()
       }
+
+      console.log('metadata', metadata)
 
       const hash = await uploadToIpfsInfuraAndGetPath(metadata)
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
@@ -223,6 +234,7 @@ const ProfileForm = () => {
         })
         await refetch()
         setSaving(false)
+        notifySuccess('Profile updated')
       } else {
         const setProfileMetadata = (
           await setProfileMetadataTypedData({
@@ -253,6 +265,7 @@ const ProfileForm = () => {
         })
         await refetch()
         setSaving(false)
+        notifySuccess('Profile updated')
       }
     }
     foo()
@@ -295,7 +308,6 @@ const ProfileForm = () => {
                 <Tooltip title="Clear" TransitionProps={{ timeout: 600 }} arrow>
                   <span
                     onClick={(e) => {
-                      console.log('clicked')
                       e.preventDefault()
                       e.stopPropagation()
                       profileBannerInputRef.current.value = ''
@@ -379,21 +391,12 @@ const ProfileForm = () => {
       <div className="">
         <FormTextInput
           label="Name"
-          placeholder="Your Pseudo Name"
+          placeholder="Your Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           maxLength={32}
           disabled={saving}
         />
-        {/* <FormTextInput
-          label="Bio"
-          placeholder="Say a bit more about you..."
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-          required
-          maxLength={200}
-          disabled={saving}
-        /> */}
         <FormRichTextInput
           label="Bio"
           placeholder="Say a bit more about you..."

@@ -8,7 +8,6 @@ import { BsCollection } from 'react-icons/bs'
 import { getJoinedCommunitiesApi } from '../../api/community'
 import { Tooltip } from '@mui/material'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import { uuidv4 } from '@firebase/util'
 import {
   MetadataAttributeInput,
   PublicationContentWarning,
@@ -44,7 +43,7 @@ import getAvatar from '../User/lib/getAvatar'
 import { submitPostForReview } from '../../api/reviewLensCommunityPost'
 import { useDevice } from '../Common/DeviceWrapper'
 import { useCommunityStore } from '../../store/community'
-import { uuid } from 'uuidv4'
+import { v4 as uuidv4 } from 'uuid'
 import { AttachmentType, usePublicationStore } from '../../store/publication'
 import useUploadAttachments from '../Post/Create/useUploadAttachments'
 import Attachment from '../Post/Attachment'

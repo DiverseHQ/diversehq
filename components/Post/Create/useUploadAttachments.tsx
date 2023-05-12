@@ -1,6 +1,6 @@
 import React from 'react'
 import { AttachmentType, usePublicationStore } from '../../../store/publication'
-import { uuid } from 'uuidv4'
+import { v4 as uuid } from 'uuid'
 import { useNotify } from '../../Common/NotifyContext'
 import { uploadFilesToIpfsAndGetAttachments } from '../../../utils/utils'
 

@@ -1,9 +1,8 @@
 import { S3 } from '@aws-sdk/client-s3'
 // import { Upload } from '@aws-sdk/lib-storage'
 import axios from 'axios'
-// import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuid } from 'uuid'
 import { EVER_ENDPOINT, EVER_REGION, STS_TOKEN_URL } from './config'
-import { uuid } from 'uuidv4'
 
 export type IPFSUploadResult = {
   url: string

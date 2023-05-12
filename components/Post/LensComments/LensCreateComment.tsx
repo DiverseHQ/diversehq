@@ -1,4 +1,3 @@
-import { uuidv4 } from '@firebase/util'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   Profile,
@@ -31,7 +30,7 @@ import { useDevice } from '../../Common/DeviceWrapper'
 import useDASignTypedDataAndBroadcast from '../../../lib/useDASignTypedDataAndBroadcast'
 // import useUploadAttachments from '../Create/useUploadAttachments'
 import { AttachmentType, usePublicationStore } from '../../../store/publication'
-import { uuid } from 'uuidv4'
+import { v4 as uuid } from 'uuid'
 import Attachment from '../Attachment'
 import {
   SUPPORTED_IMAGE_TYPE,
@@ -252,7 +251,7 @@ const LensCreateComment = ({
     )
 
     try {
-      const metadata_id = uuidv4()
+      const metadata_id = uuid()
       setTempId(tempId)
       const ipfsHash = await uploadToIpfsInfuraAndGetPath({
         version: '2.0.0',
