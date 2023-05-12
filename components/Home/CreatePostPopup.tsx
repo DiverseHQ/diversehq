@@ -672,7 +672,7 @@ const CreatePostPopup = () => {
                 {selectedCommunity?._id ? (
                   <div className="flex justify-center items-center p-2">
                     <img
-                      src={selectedCommunity.logoImageUrl}
+                      src={getIPFSLink(selectedCommunity.logoImageUrl)}
                       className="rounded-full w-10 h-10 object-cover"
                     />
                     <h1 className="ml-2">
