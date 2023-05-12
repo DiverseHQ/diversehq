@@ -116,7 +116,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
             <div className="relative z-0 bg-s-bg text-p-text w-[calc(100vw-9px)]">
               <ImageWithFullScreenZoom
                 className={`h-48 sm:h-72 w-full object-cover`}
-                src={community.bannerImageUrl}
+                src={getIPFSLink(community.bannerImageUrl)}
               />
               <div className="md:w-[650px] lg:w-[950px] xl:w-[1000px] mx-auto">
                 <div className="relative flex flex-row items-start justify-between">

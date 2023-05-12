@@ -27,7 +27,7 @@ const RightSidebarThumnailTypeCommunity = ({
     >
       <div className="relative cursor-pointer flex flex-row items-center text-p-btn-text rounded-2xl">
         <ImageWithPulsingLoader
-          src={community?.bannerImageUrl}
+          src={getIPFSLink(community?.bannerImageUrl)}
           className="h-[150px] w-full rounded-xl object-cover"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md rounded-b-xl p-2">

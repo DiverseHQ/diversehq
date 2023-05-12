@@ -11,7 +11,7 @@ import getIPFSLink from '../../../User/lib/getIPFSLink'
 const CommunityEditSection = ({ community }: { community: CommunityType }) => {
   const [loading, setLoading] = useState(false)
   const [communityBanner, setCommunityBanner] = useState(
-    community?.bannerImageUrl
+    getIPFSLink(community?.bannerImageUrl)
   )
   const [logoImage, setLogoImage] = useState(
     getIPFSLink(community?.logoImageUrl)
@@ -145,6 +145,7 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
         type="file"
         id="logoImage"
         placeholder="Commmunity Name"
+        accept="image/*"
         onChange={handleLogoImageChange}
         required
         hidden
@@ -152,6 +153,7 @@ const CommunityEditSection = ({ community }: { community: CommunityType }) => {
       <input
         type="file"
         id="communityBanner"
+        accept="image/*"
         onChange={handleCommunityBannerChange}
         hidden
       />

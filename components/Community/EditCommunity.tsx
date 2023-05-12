@@ -15,7 +15,7 @@ import { CommunityType } from '../../types/community'
 const EditCommunity = ({ community, getCommunityInformation }) => {
   const [loading, setLoading] = useState(false)
   const [communityBanner, setCommunityBanner] = useState(
-    community?.bannerImageUrl
+    getIPFSLink(community?.bannerImageUrl)
   )
   const [logoImage, setLogoImage] = useState(
     getIPFSLink(community?.logoImageUrl)

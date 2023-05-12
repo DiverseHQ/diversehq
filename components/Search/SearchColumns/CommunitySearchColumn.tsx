@@ -78,7 +78,7 @@ const CommunitySearchColumn = ({ q }: { q: string }) => {
           {communities.map((community) => (
             <RightSidebarThumnailTypeCommunity
               community={{
-                bannerImageUrl: community.bannerImageUrl,
+                bannerImageUrl: getIPFSLink(community.bannerImageUrl),
                 logoImageUrl: getIPFSLink(community.logoImageUrl),
                 isLensCommunity: false,
                 name: community.name

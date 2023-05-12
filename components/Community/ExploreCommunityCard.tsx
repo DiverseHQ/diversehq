@@ -88,7 +88,7 @@ const ExploreCommunityCard = ({ _community }: Props) => {
     >
       <ImageWithPulsingLoader
         className={`h-full w-full object-cover rounded-[15px]`}
-        src={community.bannerImageUrl}
+        src={getIPFSLink(community.bannerImageUrl)}
       />
       <div className="absolute bg-[#ccc] bottom-0 w-full bg-black/70 backdrop-blur-md py-2 sm:py-4 px-2 md:px-4">
         <div className="relative flex flex-row items-start justify-between">

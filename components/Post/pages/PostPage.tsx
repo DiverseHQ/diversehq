@@ -171,7 +171,7 @@ const PostPage = ({ post }) => {
                   // @ts-ignore
                   communityInfo.bannerImageUrl
                     ? // @ts-ignore
-                      communityInfo?.bannerImageUrl
+                      getIPFSLink(communityInfo?.bannerImageUrl)
                     : '/gradient.jpg'
                 }
                 className="h-[80px] rounded-t-[15px] w-full object-cover"
