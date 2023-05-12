@@ -65,7 +65,10 @@ const IndexingPostCard = ({ postInfo }: Props) => {
   const { data } = useLensUserContext()
 
   // @ts-ignore
-  const content = getContent(postInfo)
+  const content = getContent({
+    ...postInfo,
+    appId: 'diversehq'
+  })
 
   return (
     <>
