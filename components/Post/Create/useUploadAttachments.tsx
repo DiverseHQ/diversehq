@@ -48,7 +48,7 @@ const useUploadAttachments = (isComment?: boolean) => {
         const isAudio = file.type.includes('audio')
 
         if (isImage && file.size > 15000000) {
-          notifyInfo('Image size should be less than 10MB')
+          notifyInfo('Image size should be less than 15MB')
           return false
         }
 
