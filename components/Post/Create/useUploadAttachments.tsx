@@ -47,13 +47,13 @@ const useUploadAttachments = (isComment?: boolean) => {
         const isVideo = file.type.includes('video')
         const isAudio = file.type.includes('audio')
 
-        if (isImage && file.size > 10000000) {
+        if (isImage && file.size > 15000000) {
           notifyInfo('Image size should be less than 10MB')
           return false
         }
 
-        if (isVideo && file.size > 50000000) {
-          notifyInfo('Video size should be less than 50MB')
+        if (isVideo && file.size > 100000000) {
+          notifyInfo('Video size should be less than 100MB')
           return false
         }
 
