@@ -12,7 +12,6 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 import { BiEdit } from 'react-icons/bi'
 import { HiOutlineTrash } from 'react-icons/hi'
-import EditPostPopup from './EditPostPopup'
 import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 
 import Markup from '../Lexical/Markup'
@@ -158,7 +157,7 @@ const PostCard = ({ _post, setPosts }) => {
 
   const showEditModal = () => {
     showModal({
-      component: <EditPostPopup post={post} setPost={setPost} />,
+      component: <></>,
       type: modalType.fullscreen,
       onAction: () => {},
       extraaInfo: {}
