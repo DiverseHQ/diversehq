@@ -516,7 +516,7 @@ const CreatePostPopup = () => {
 
   const setGifAttachment = (gif) => {
     const attachment = {
-      id: uuid(),
+      id: uuidv4(),
       item: gif.images.original.url,
       type: 'image/gif',
       altTag: gif.title
