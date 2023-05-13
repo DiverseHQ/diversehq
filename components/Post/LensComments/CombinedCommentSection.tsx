@@ -57,7 +57,7 @@ const CombinedCommentSection = ({
     (state) => state.currentReplyComment
   )
 
-  const { data } = useCommentFeedQuery(
+  const { data, isLoading } = useCommentFeedQuery(
     {
       request: {
         cursor: params.cursor,
@@ -77,7 +77,9 @@ const CombinedCommentSection = ({
   )
 
   useEffect(() => {
-    handleCommentsPublications()
+    if (data?.publications?.items) {
+      handleCommentsPublications()
+    }
   }, [data?.publications?.pageInfo?.next])
 
   const handleCommentsPublications = async () => {
@@ -190,7 +192,9 @@ const CombinedCommentSection = ({
         loader={<MobileLoader />}
         endMessage={<></>}
       >
-        {!uniqueComments?.length && params.hasMore && <MobileLoader />}
+        {uniqueComments?.length === 0 && params.hasMore && isLoading && (
+          <MobileLoader />
+        )}
         {uniqueComments.length > 0 && (
           <div className="bg-s-bg px-3 sm:px-5 py-4 border-t border-[#eee] dark:border-p-border">
             {uniqueComments.map((comment) => {
