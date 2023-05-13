@@ -56,7 +56,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
           followerOnly: followerOnly
         }
       })
-    } else {
+    } else if (collectSettings) {
       // free collect module
       setCollectSettings({
         freeCollectModule: {

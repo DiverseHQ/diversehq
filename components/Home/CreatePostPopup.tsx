@@ -803,11 +803,11 @@ const CreatePostPopup = () => {
                 >
                   <button
                     onClick={() => {
-                      if (!collectSettings) {
-                        setCollectSettings({
-                          freeCollectModule: { followerOnly: false }
-                        })
-                      }
+                      // if (!collectSettings) {
+                      //   setCollectSettings({
+                      //     freeCollectModule: { followerOnly: false }
+                      //   })
+                      // }
                       if (!isMobile) {
                         setShowCollectSettings(!showCollectSettings)
                         return
