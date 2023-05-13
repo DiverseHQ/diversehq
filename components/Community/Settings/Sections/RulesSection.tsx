@@ -4,7 +4,7 @@ import { HiOutlineDocumentAdd } from 'react-icons/hi'
 import { CommunityType, Rule } from '../../../../types/community'
 import FormTextInput from '../../../Common/UI/FormTextInput'
 import FormTextArea from '../../../Common/UI/FormTextArea'
-import { setRulesOfCommunity } from '../../../../api/community'
+import { setRulesOfCommunity } from '../../../../apiHelper/community'
 import { useNotify } from '../../../Common/NotifyContext'
 import { RiDeleteBinLine } from 'react-icons/ri'
 

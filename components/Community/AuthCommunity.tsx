@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { isCreatorOrModeratorOfCommunity } from '../../api/community'
+import { isCreatorOrModeratorOfCommunity } from '../../apiHelper/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import { useAuthCommunityStore } from '../../store/community'

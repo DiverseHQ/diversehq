@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { searchCommunityFromName } from '../../api/community'
+import { searchCommunityFromName } from '../../apiHelper/community'
 import { CommunityType } from '../../types/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'

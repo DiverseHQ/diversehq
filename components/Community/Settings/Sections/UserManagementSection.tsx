@@ -6,7 +6,7 @@ import { CgClose } from 'react-icons/cg'
 import {
   addBannedUserToCommunity,
   removeBannedUserFromCommunity
-} from '../../../../api/community'
+} from '../../../../apiHelper/community'
 import { Profile, useProfilesQuery } from '../../../../graphql/generated'
 import { BannedUser, CommunityType } from '../../../../types/community'
 import { useNotify } from '../../../Common/NotifyContext'

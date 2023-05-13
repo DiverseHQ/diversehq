@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { getCommentsFromPostId } from '../../api/comment'
+import { getCommentsFromPostId } from '../../apiHelper/comment'
 import { COMMENT_LIMIT } from '../../utils/config'
 import MobileLoader from '../Common/UI/MobileLoader'
 import CreateComment from '../Post/CreateComment'

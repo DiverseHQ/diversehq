@@ -19,7 +19,7 @@ import { useDisconnect } from 'wagmi'
 import {
   getCreatedCommunitiesApi,
   getJoinedCommunitiesApi
-} from '../../api/community'
+} from '../../apiHelper/community'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import {

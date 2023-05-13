@@ -1,5 +1,5 @@
 import React from 'react'
-import { getCommunityInfo } from '../../../../api/community'
+import { getCommunityInfo } from '../../../../apiHelper/community'
 import AuthCommunity from '../../../../components/Community/AuthCommunity'
 import CommunitySettingsIndexPage from '../../../../components/Community/Settings/CommunitySettingsIndexPage'
 import getDefaultProfileInfo from '../../../../lib/profile/get-default-profile-info'

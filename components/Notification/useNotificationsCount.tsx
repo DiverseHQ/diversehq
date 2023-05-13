@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   getUnReadNotificationsCount,
   putUpdateLensNotificationDate
-} from '../../api/user'
+} from '../../apiHelper/user'
 import { useNotificationsCreatedAtQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useProfile } from '../Common/WalletContext'

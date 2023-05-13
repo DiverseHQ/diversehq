@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React from 'react'
-import { postCreateLensCommunity } from '../../api/lensCommunity'
+import { postCreateLensCommunity } from '../../apiHelper/lensCommunity'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useNotify } from '../Common/NotifyContext'

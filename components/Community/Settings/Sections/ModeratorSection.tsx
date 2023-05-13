@@ -5,7 +5,7 @@ import { CgClose } from 'react-icons/cg'
 import {
   addModeratorsToCommunity,
   removeModeratorFromCommunity
-} from '../../../../api/community'
+} from '../../../../apiHelper/community'
 import { Profile, useProfilesQuery } from '../../../../graphql/generated'
 import { CommunityType } from '../../../../types/community'
 import { useNotify } from '../../../Common/NotifyContext'

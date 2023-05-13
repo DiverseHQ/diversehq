@@ -1,5 +1,5 @@
 import React from 'react'
-import { getUnresolvedPublicationReportsOfCommunity } from '../../../../api/report'
+import { getUnresolvedPublicationReportsOfCommunity } from '../../../../apiHelper/report'
 import { useLensUserContext } from '../../../../lib/LensUserContext'
 import { CommunityType } from '../../../../types/community'
 import { PostReportType } from '../../../../types/report'

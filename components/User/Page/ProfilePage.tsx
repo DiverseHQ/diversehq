@@ -9,7 +9,7 @@ import { UserType } from '../../../types/user'
 import { Profile } from '../../../graphql/generated'
 import ProfilePageMobileTopNav from '../ProfilePageMobileTopNav'
 import ProfilePageRightSidebar from '../ProfilePageRightSidebar'
-import { getUserInfo } from '../../../api/user'
+import { getUserInfo } from '../../../apiHelper/user'
 import { useDevice } from '../../Common/DeviceWrapper'
 
 interface Props {

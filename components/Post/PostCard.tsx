@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
-import { deletePost, putUpvoteOnPost, putDownvoteOnPost } from '../../api/post'
+import {
+  deletePost,
+  putUpvoteOnPost,
+  putDownvoteOnPost
+} from '../../apiHelper/post'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'

@@ -19,7 +19,7 @@ import {
   removeLocalToken
   // setLocalToken
 } from '../../utils/token'
-import { getUserInfo } from '../../api/user'
+import { getUserInfo } from '../../apiHelper/user'
 import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 // import { userRoles } from '../../utils/config'
 import { useNotify } from './NotifyContext'
@@ -34,7 +34,7 @@ import { getBulkIsFollowedByMe } from '../../lib/profile/get-bulk-is-followed-by
 import {
   getAllLensCommunitiesHandle,
   getLensCommunity
-} from '../../api/lensCommunity'
+} from '../../apiHelper/lensCommunity'
 import { ProfileMedia } from '../../graphql/generated'
 import { useProfileStore } from '../../store/profile'
 // import { whitelistedAddresses } from '../../utils/profileIds'

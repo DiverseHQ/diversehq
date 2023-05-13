@@ -5,7 +5,7 @@ import { useNotify } from '../Common/NotifyContext'
 import {
   postCreateCommunity,
   postGetCommunityExistStatus
-} from '../../api/community'
+} from '../../apiHelper/community'
 import PopUpWrapper from '../Common/PopUpWrapper'
 import FormTextInput from '../Common/UI/FormTextInput'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'

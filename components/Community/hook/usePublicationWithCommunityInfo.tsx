@@ -1,5 +1,5 @@
 import React from 'react'
-import { postGetCommunityInfoUsingListOfIds } from '../../../api/community'
+import { postGetCommunityInfoUsingListOfIds } from '../../../apiHelper/community'
 import {
   PublicationsQueryRequest,
   ReactionFieldResolverRequest,

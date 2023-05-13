@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import NavFilterCommunity from '../../../components/Post/NavFilterCommunity'
-import { getCommunityInfo } from '../../../api/community'
+import { getCommunityInfo } from '../../../apiHelper/community'
 import CommunityInfoCard from '../../../components/Community/CommunityInfoCard'
 import CommunityNotFound from '../../../components/Community/Page/CommunityNotFound'
 import CommunityPageSeo from '../../../components/Community/CommunityPageSeo'

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { AiOutlineCamera } from 'react-icons/ai'
 import { IoPencilSharp } from 'react-icons/io5'
-import { putEditCommunity } from '../../../../api/community'
+import { putEditCommunity } from '../../../../apiHelper/community'
 import { CommunityType } from '../../../../types/community'
 import { useNotify } from '../../../Common/NotifyContext'
 import FormTextInput from '../../../Common/UI/FormTextInput'

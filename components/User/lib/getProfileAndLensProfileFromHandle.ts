@@ -1,4 +1,4 @@
-import { getUserInfo } from '../../../api/user'
+import { getUserInfo } from '../../../apiHelper/user'
 import { Profile } from '../../../graphql/generated'
 import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import { UserType } from '../../../types/user'

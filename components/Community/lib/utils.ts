@@ -1,4 +1,4 @@
-import { isCreatorOrModeratorOfCommunity } from '../../../api/community'
+import { isCreatorOrModeratorOfCommunity } from '../../../apiHelper/community'
 
 export const isCreatorOfCommunity = async (name: string): Promise<boolean> => {
   try {

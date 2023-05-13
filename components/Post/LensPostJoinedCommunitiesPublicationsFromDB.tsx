@@ -9,7 +9,7 @@ import {
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import MobileLoader from '../Common/UI/MobileLoader'
 import LensPostCard from './LensPostCard'
-import { getJoinedLensPublication } from '../../api/lensPublication'
+import { getJoinedLensPublication } from '../../apiHelper/lensPublication'
 import { useProfile } from '../Common/WalletContext'
 import usePublicationWithCommunityInfo from '../Community/hook/usePublicationWithCommunityInfo'
 import { usePublicationStore } from '../../store/publication'

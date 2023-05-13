@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { getAllNotifications } from '../../api/user'
+import { getAllNotifications } from '../../apiHelper/user'
 import { NOTIFICATION_LIMIT } from '../../utils/config'
 import LensLoginButton from '../Common/LensLoginButton'
 import MobileLoader from '../Common/UI/MobileLoader'

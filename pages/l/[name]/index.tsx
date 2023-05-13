@@ -1,5 +1,5 @@
 import React from 'react'
-import { getLensCommunity } from '../../../api/lensCommunity'
+import { getLensCommunity } from '../../../apiHelper/lensCommunity'
 import CommunityNotFound from '../../../components/Community/Page/CommunityNotFound'
 import LensCommunityMobileTopNav from '../../../components/LensCommunity/LensCommunityMobileTopNav'
 import LensCommunityPageRightSidebar from '../../../components/LensCommunity/LensCommunityPageRightSidebar'

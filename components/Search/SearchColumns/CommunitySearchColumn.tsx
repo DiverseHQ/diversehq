@@ -3,7 +3,7 @@ import {
   IsFollowedLensCommunityType,
   useProfile
 } from '../../Common/WalletContext'
-import { searchCommunityFromName } from '../../../api/community'
+import { searchCommunityFromName } from '../../../apiHelper/community'
 import formatHandle from '../../User/lib/formatHandle'
 import getAvatar from '../../User/lib/getAvatar'
 import RightSidebarThumnailTypeCommunity from '../../Common/UI/RightSidebarThumnailTypeCommunity'

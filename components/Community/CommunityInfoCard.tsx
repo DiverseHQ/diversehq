@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { isCreatorOrModeratorOfCommunity } from '../../api/community'
+import { isCreatorOrModeratorOfCommunity } from '../../apiHelper/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'

@@ -3,7 +3,10 @@ import { useProfile } from '../../Common/WalletContext'
 import { useNotify } from '../../Common/NotifyContext'
 import { useDevice } from '../../Common/DeviceWrapper'
 import { useRouter } from 'next/router'
-import { putJoinCommunity, putLeaveCommunity } from '../../../api/community'
+import {
+  putJoinCommunity,
+  putLeaveCommunity
+} from '../../../apiHelper/community'
 
 const useJoinCommunityButton = ({
   id,

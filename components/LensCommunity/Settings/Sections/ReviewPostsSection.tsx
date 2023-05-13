@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import React, { useEffect } from 'react'
-import { getAllUnResolvedLensCommunityPostsForReview } from '../../../../api/reviewLensCommunityPost'
+import { getAllUnResolvedLensCommunityPostsForReview } from '../../../../apiHelper/reviewLensCommunityPost'
 import getProfiles from '../../../../lib/profile/get-profiles'
 import { LensCommunity } from '../../../../types/community'
 import { ReviewPostType } from '../../../../types/reviewPost'

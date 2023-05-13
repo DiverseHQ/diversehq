@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import { addBannedUserToCommunity } from '../../../../api/community'
-import { addBannedUserToLensCommunity } from '../../../../api/lensCommunity'
-import { resolvePublicationReport } from '../../../../api/report'
+import { addBannedUserToCommunity } from '../../../../apiHelper/community'
+import { addBannedUserToLensCommunity } from '../../../../apiHelper/lensCommunity'
+import { resolvePublicationReport } from '../../../../apiHelper/report'
 import { Profile } from '../../../../graphql/generated'
 import getLensProfileInfo from '../../../../lib/profile/get-profile-info'
 import { BannedUser, CommunityType } from '../../../../types/community'
@@ -16,7 +16,7 @@ import LensPostCard from '../../../Post/LensPostCard'
 import { getAllMentionsHandlFromContent } from '../../../Post/PostPageMentionsColumn'
 import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
-import { deleteLensPublication } from '../../../../api/lensPublication'
+import { deleteLensPublication } from '../../../../apiHelper/lensPublication'
 
 interface Props {
   report: PostReportType

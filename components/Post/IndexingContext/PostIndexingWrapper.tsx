@@ -7,7 +7,7 @@ import {
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { postIdFromIndexedResult } from '../../../utils/utils'
-import { putAddLensPublication } from '../../../api/lensPublication'
+import { putAddLensPublication } from '../../../apiHelper/lensPublication'
 import { usePublicationStore } from '../../../store/publication'
 
 /* eslint-disable */

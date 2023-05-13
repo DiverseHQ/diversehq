@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { getCommunityInfo } from '../../../../api/community'
+import { getCommunityInfo } from '../../../../apiHelper/community'
 import CommunityInfoCard from '../../../../components/Community/CommunityInfoCard'
 import CommunityPageMobileTopNav from '../../../../components/Community/CommunityPageMobileTopNav'
 import CommunityPageSeo from '../../../../components/Community/CommunityPageSeo'

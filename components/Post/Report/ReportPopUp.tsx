@@ -1,5 +1,5 @@
 import React from 'react'
-import { reportPublicationToCommunityMods } from '../../../api/report'
+import { reportPublicationToCommunityMods } from '../../../apiHelper/report'
 import {
   ReportPublicationRequest,
   useReportPublicationMutation

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { putJoinCommunity, putLeaveCommunity } from '../../api/community'
+import { putJoinCommunity, putLeaveCommunity } from '../../apiHelper/community'
 import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 import { useDevice } from '../Common/DeviceWrapper'

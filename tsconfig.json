@@ -26,7 +26,7 @@
     "components/Lexical/Plugins/ImagesPlugin.js",
     "utils/emitter.js",
     "components/Community/Settings/Sections/ModeratorSection",
-    "api/user.ts",
+    "apiHelper/user.ts",
     "components/Common/UI/FormTextInput.js",
     "components/Common/LensLoginButton.tsx",
     "components/Common/PopUpWrapper.js"

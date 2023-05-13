@@ -5,7 +5,7 @@ import { Switch } from '@mui/material'
 import {
   toggleAppendHastagPreference,
   toggleAppendLinkPreference
-} from '../../../api/user'
+} from '../../../apiHelper/user'
 
 const PostPerferenceSettings = () => {
   const { user, refreshUserInfo } = useProfile()

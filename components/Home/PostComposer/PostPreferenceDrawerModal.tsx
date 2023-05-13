@@ -3,7 +3,7 @@ import { useProfile } from '../../Common/WalletContext'
 import {
   toggleAppendHastagPreference,
   toggleAppendLinkPreference
-} from '../../../api/user'
+} from '../../../apiHelper/user'
 import { Switch } from '@mui/material'
 
 const PostPreferenceDrawerModal = () => {

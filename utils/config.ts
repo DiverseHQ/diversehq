@@ -1,4 +1,4 @@
-import apiEndpoint from '../api/ApiEndpoint'
+import apiEndpoint from '../apiHelper/ApiEndpoint'
 
 export const POST_LIMIT: number = 10
 export const COMMENT_LIMIT: number = 10

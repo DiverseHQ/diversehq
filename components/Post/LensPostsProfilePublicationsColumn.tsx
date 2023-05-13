@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
+import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config'

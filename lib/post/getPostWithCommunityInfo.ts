@@ -1,4 +1,4 @@
-import { getCommunityInfoUsingId } from '../../api/community'
+import { getCommunityInfoUsingId } from '../../apiHelper/community'
 import { PublicationQueryVariables } from '../../graphql/generated'
 import { postWithCommunityInfoType } from '../../types/post'
 // import { getCommunityInfoFromAppId } from '../../utils/helper'

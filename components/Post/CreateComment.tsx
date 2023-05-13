@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
-import { postComment } from '../../api/comment'
+import { postComment } from '../../apiHelper/comment'
 import { FiSend } from 'react-icons/fi'
 import getStampFyiURL from '../User/lib/getStampFyiURL'
 import { useDevice } from '../Common/DeviceWrapper'

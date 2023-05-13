@@ -7,7 +7,7 @@ import {
   putEditComment,
   putUpvoteComment,
   putDownvoteComment
-} from '../../api/comment'
+} from '../../apiHelper/comment'
 import { useProfile } from '../Common/WalletContext'
 import { useNotify } from '../Common/NotifyContext'
 import { ReactionTypes } from '../../graphql/generated'

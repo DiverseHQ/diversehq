@@ -1,5 +1,5 @@
 import React, { useEffect, memo, useCallback } from 'react'
-import { postGetCommunityInfoUsingListOfIds } from '../../../api/community'
+import { postGetCommunityInfoUsingListOfIds } from '../../../apiHelper/community'
 import getSinglePublicationInfo from '../../../lib/post/get-single-publication-info'
 import { postWithCommunityInfoType } from '../../../types/post'
 // import { appId } from '../../../utils/config'

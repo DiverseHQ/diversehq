@@ -7,7 +7,7 @@ import { GoMention } from 'react-icons/go'
 import { FaRegCommentDots } from 'react-icons/fa'
 import { useProfile } from '../../Common/WalletContext'
 import { Switch } from '@mui/material'
-import { toggleHighSignalNotifsPreference } from '../../../api/user'
+import { toggleHighSignalNotifsPreference } from '../../../apiHelper/user'
 
 const NotificationFilter = () => {
   const { pathname } = useRouter()

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import ReactTimeAgo from 'react-time-ago'
-import { putResolveLensCommunityPost } from '../../../../api/reviewLensCommunityPost'
+import { putResolveLensCommunityPost } from '../../../../apiHelper/reviewLensCommunityPost'
 import {
   useCreateDataAvailabilityPostTypedDataMutation,
   useCreateDataAvailabilityPostViaDispatcherMutation
@@ -21,7 +21,7 @@ import Markup from '../../../Lexical/Markup'
 // import AudioPlayer from '../../../Post/AudioPlayer'
 import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
-import { putAddLensPublication } from '../../../../api/lensPublication'
+import { putAddLensPublication } from '../../../../apiHelper/lensPublication'
 import Attachment from '../../../Post/Attachment'
 import useDASignTypedDataAndBroadcast from '../../../../lib/useDASignTypedDataAndBroadcast'
 import { getContent } from '../../../Post/getContent'

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { memo, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
+import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import {
   PublicationSortCriteria,
   PublicationTypes,

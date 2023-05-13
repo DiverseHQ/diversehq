@@ -8,7 +8,7 @@ import {
   useExplorePublicationsQuery
 } from '../../graphql/generated'
 import { LENS_POST_LIMIT } from '../../utils/config'
-import { postGetCommunityInfoUsingListOfIds } from '../../api/community'
+import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import LensPostCard from './LensPostCard'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { useRouter } from 'next/router'

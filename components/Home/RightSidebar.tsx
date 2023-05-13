@@ -3,7 +3,7 @@ import {
   getAllCommunities,
   getCreatedCommunitiesApi,
   getNotJoinedCommunities
-} from '../../api/community'
+} from '../../apiHelper/community'
 // import { useNotify } from '../Common/NotifyContext'
 import { useProfile } from '../Common/WalletContext'
 // import { HiOutlineSparkles } from 'react-icons/hi'

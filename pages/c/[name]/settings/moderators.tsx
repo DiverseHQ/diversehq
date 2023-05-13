@@ -1,5 +1,5 @@
 import React from 'react'
-import { getCommunityInfo } from '../../../../api/community'
+import { getCommunityInfo } from '../../../../apiHelper/community'
 import AuthCreatorOfCommunity from '../../../../components/Community/AuthCreatorOfCommunity'
 import ModeratorsSettingsPage from '../../../../components/Community/Settings/ModeratorsSettingsPage'
 import { CommunityWithCreatorProfile } from '../../../../types/community'
