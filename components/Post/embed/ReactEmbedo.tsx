@@ -90,11 +90,8 @@ const ReactEmbedo = ({ url, ...props }) => {
     }
   }, [url, embedoRef])
 
-  console.log('isLensPostLink(url)', isLensPostLink(url))
-
   if (isLensPostLink(url)) {
     const postId = url.split('/')[4]
-    console.log('postId', postId)
     return <LensPostCardFromPublicationId publicationId={postId} />
   }
 
