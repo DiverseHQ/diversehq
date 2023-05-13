@@ -141,11 +141,6 @@ const CombinedCommentSection = ({
       ...params,
       comments: newCommentsSecondPhase
     })
-    // add comment id to comment
-    // remove previous comment
-    // setComments(comments.filter((c) => c.tempId !== comment.tempId))
-    // add new comment
-    // setComments([comment, ...comments])
   }
 
   useEffect(() => {
@@ -192,12 +187,10 @@ const CombinedCommentSection = ({
         dataLength={uniqueComments.length}
         next={getMorePosts}
         hasMore={params.hasMore}
-        loader={
-          params.hasMore && !uniqueComments?.length ? <></> : <MobileLoader />
-        }
+        loader={<MobileLoader />}
         endMessage={<></>}
       >
-        {params.hasMore && !uniqueComments?.length && <MobileLoader />}
+        {!uniqueComments?.length && <MobileLoader />}
         {uniqueComments.length > 0 && (
           <div className="bg-s-bg px-3 sm:px-5 py-4 border-t border-[#eee] dark:border-p-border">
             {uniqueComments.map((comment) => {
