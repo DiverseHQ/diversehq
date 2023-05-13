@@ -55,6 +55,8 @@ const LensPageProfileCard = ({
     },
     isLensCommunity ? 'join' : 'follow'
   )
+
+  if (!profile) return null
   return (
     <div
       className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3 cursor-pointer"
