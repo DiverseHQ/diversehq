@@ -190,7 +190,7 @@ const CombinedCommentSection = ({
         loader={<MobileLoader />}
         endMessage={<></>}
       >
-        {!uniqueComments?.length && <MobileLoader />}
+        {!uniqueComments?.length && params.hasMore && <MobileLoader />}
         {uniqueComments.length > 0 && (
           <div className="bg-s-bg px-3 sm:px-5 py-4 border-t border-[#eee] dark:border-p-border">
             {uniqueComments.map((comment) => {
