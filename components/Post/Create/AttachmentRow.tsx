@@ -125,8 +125,8 @@ const AttachmentRow = ({
               onChange={handleAttachment}
               disabled={
                 isComment
-                  ? commnetAttachments.length >= 4
-                  : attachments.length >= 4
+                  ? commnetAttachments.length >= 10
+                  : attachments.length >= 10
               }
             />
           </label>
@@ -145,8 +145,8 @@ const AttachmentRow = ({
               onChange={handleAttachment}
               disabled={
                 isComment
-                  ? commnetAttachments.length >= 4
-                  : attachments.length >= 4
+                  ? commnetAttachments.length >= 10
+                  : attachments.length >= 10
               }
             />
           </label>
@@ -167,8 +167,8 @@ const AttachmentRow = ({
                 onChange={handleAttachment}
                 disabled={
                   isComment
-                    ? commnetAttachments.push.length >= 4
-                    : attachments.length >= 4
+                    ? commnetAttachments.push.length >= 10
+                    : attachments.length >= 10
                 }
               />
             </label>
