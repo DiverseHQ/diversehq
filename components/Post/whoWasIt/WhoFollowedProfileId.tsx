@@ -68,7 +68,7 @@ const WhoFollowedProfileId = ({
       }
     >
       <div
-        className="h-full overflow-y-auto"
+        className="h-full sm:h-[700px] overflow-y-auto"
         id="whoReactedPublicattionScrollbar"
       >
         <InfiniteScroll

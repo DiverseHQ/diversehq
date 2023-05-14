@@ -60,7 +60,7 @@ const WhoIsFollowedByProfileId = ({
   return (
     <PopUpWrapper title={`Following (${totalFollowers})`}>
       <div
-        className="h-full overflow-y-auto"
+        className="h-full sm:h-[700px] overflow-y-auto"
         id="whoReactedPublicattionScrollbar"
       >
         <InfiniteScroll
