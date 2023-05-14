@@ -47,6 +47,9 @@ import useJoinCommunityButton from '../Community/hook/useJoinCommunityButton'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 import { getContent } from './getContent'
 import getIPFSLink from '../User/lib/getIPFSLink'
+import WhoReactedPublicationPopup from './whoWasIt/WhoReactedPublicationPopup'
+import WhoCollectedPublicationPopUp from './whoWasIt/WhoCollectedPublicationPopUp'
+import WhoMirroredPublicatitonPopUp from './whoWasIt/WhoMirroredPublicatitonPopUp'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -255,6 +258,27 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
           communityId={postInfo?.metadata?.tags[0]}
         />
       ),
+      type: modalType.normal
+    })
+  }
+
+  const showReactedByPopUp = () => {
+    showModal({
+      component: <WhoReactedPublicationPopup publicationId={postInfo?.id} />,
+      type: modalType.normal
+    })
+  }
+
+  const showCollectedByPopUp = () => {
+    showModal({
+      component: <WhoCollectedPublicationPopUp publicationId={postInfo?.id} />,
+      type: modalType.normal
+    })
+  }
+
+  const showMirroredByPopUp = () => {
+    showModal({
+      component: <WhoMirroredPublicatitonPopUp publicationId={postInfo?.id} />,
       type: modalType.normal
     })
   }
@@ -766,23 +790,40 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
               </div>
 
               {/* bottom row */}
-              {isMobile && router.pathname.startsWith('/p') && (
-                <div className="flex flex-row items-center text-p-text px-3 sm:px-4.5 py-2 sm:justify-start sm:space-x-28 border-t-[1px] border-b-[1px] border-[#eee] dark:border-p-border gap-6">
-                  <div className="flex flex-row gap-1 text-[#687684]">
-                    <span className="font-medium">{voteCount}</span>
+              {router.pathname.startsWith('/p') && (
+                <div className="flex flex-row items-center text-p-text px-3 sm:mx-5 sm:px-2 py-2 sm:justify-start justify-between sm:space-x-12 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-1 dark:border-p-border">
+                  <div
+                    className="flex flex-row gap-1 text-s-text cursor-pointer"
+                    onClick={showReactedByPopUp}
+                  >
+                    <span className="font-semibold text-p-text">
+                      {voteCount}
+                    </span>
                     <span>upvotes</span>
                   </div>
-                  <div className="flex flex-row gap-1 text-[#687684]">
-                    <span className="font-medium">
+                  <div className="flex flex-row gap-1 text-s-text ">
+                    <span className="font-semibold text-p-text">
                       {postInfo?.stats?.totalAmountOfComments}
                     </span>
                     <span>comments</span>
                   </div>
-                  <div className="flex flex-row gap-1 text-[#687684]">
-                    <span className="font-medium">
+                  <div
+                    onClick={showCollectedByPopUp}
+                    className="flex flex-row gap-1 text-s-text cursor-pointer"
+                  >
+                    <span className="font-semibold text-p-text ">
                       {postInfo?.stats?.totalAmountOfCollects}
                     </span>
                     <span>collects</span>
+                  </div>
+                  <div
+                    onClick={showMirroredByPopUp}
+                    className="flex flex-row gap-1 text-s-text cursor-pointer"
+                  >
+                    <span className="font-semibold text-p-text">
+                      {postInfo?.stats?.totalAmountOfMirrors}
+                    </span>
+                    <span>mirrors</span>
                   </div>
                 </div>
               )}
@@ -868,9 +909,11 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                           alt="Comment"
                           className="w-4 h-4 mr-2"
                         />
-                        <span className="text-[#687684]">
-                          {postInfo?.stats?.totalAmountOfComments}
-                        </span>
+                        {!router.pathname.startsWith('/p') && (
+                          <span className="text-[#687684]">
+                            {postInfo?.stats?.totalAmountOfComments}
+                          </span>
+                        )}
                       </div>
                     </Link>
                   </span>

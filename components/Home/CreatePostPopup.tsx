@@ -51,7 +51,6 @@ import AttachmentRow from '../Post/Create/AttachmentRow'
 import { useRouter } from 'next/router'
 import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import PostPreferenceButton from './PostComposer/PostPreferenceButton'
-import clsx from 'clsx'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $getRoot } from 'lexical'
 // import uploadToIPFS from '../../utils/uploadToIPFS'
@@ -655,7 +654,6 @@ const CreatePostPopup = () => {
         isDisabled={title.length === 0 || isUploading}
         hideTopBar={showCollectSettings}
         closePopup={closePopUp}
-        className={clsx(isMobile && 'pb-20')}
       >
         <div className="flex flex-row items-center justify-between px-4 z-50">
           {showCollectSettings ? (

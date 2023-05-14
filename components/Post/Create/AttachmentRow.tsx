@@ -85,10 +85,10 @@ const AttachmentRow = ({
         files &&
         (hasVideos(files) ||
           (isImageType(files) &&
-            ((!isComment && files.length + attachments.length > 4) ||
-              (isComment && files.length + commnetAttachments.length > 4))))
+            ((!isComment && files.length + attachments.length > 10) ||
+              (isComment && files.length + commnetAttachments.length > 10))))
       ) {
-        notifyInfo(`You can only upload 4 images or 1 video.`)
+        notifyInfo(`You can only upload 10 images or 1 video.`)
       }
 
       // Type check

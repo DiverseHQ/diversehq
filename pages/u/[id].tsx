@@ -39,7 +39,7 @@ const profile = ({
   }
 
   React.useEffect(() => {
-    if (!handle || _lensProfile) return
+    if (!handle) return
     console.log('handle', handle)
     if (profiles.get(handle) && profiles) {
       setLensProfile(profiles.get(handle))

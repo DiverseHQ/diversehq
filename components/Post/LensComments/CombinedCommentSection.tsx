@@ -189,7 +189,13 @@ const CombinedCommentSection = ({
         dataLength={uniqueComments.length}
         next={getMorePosts}
         hasMore={params.hasMore}
-        loader={<MobileLoader />}
+        loader={
+          uniqueComments?.length === 0 && params.hasMore && isLoading ? (
+            <></>
+          ) : (
+            <MobileLoader />
+          )
+        }
         endMessage={<></>}
       >
         {uniqueComments?.length === 0 && params.hasMore && isLoading && (

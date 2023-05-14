@@ -240,10 +240,11 @@ const MirrorButton = ({ postInfo }: Props) => {
                   <AiOutlineRetweet
                     className={`text-p-btn rounded-md w-4 h-4 `}
                   />
-
-                  <p className="ml-2 font-medium text-[#687684]">
-                    {mirrorCount}
-                  </p>
+                  {!router.pathname.startsWith('/p') && (
+                    <p className="ml-2 font-medium text-[#687684]">
+                      {mirrorCount}
+                    </p>
+                  )}
                 </div>
               </Tooltip>
             </span>
@@ -285,9 +286,11 @@ const MirrorButton = ({ postInfo }: Props) => {
                           />
                         )}
 
-                        <p className="ml-2 font-medium text-[#687684]">
-                          {mirrorCount}
-                        </p>
+                        {!router.pathname.startsWith('/p') && (
+                          <p className="ml-2 font-medium text-[#687684]">
+                            {mirrorCount}
+                          </p>
+                        )}
                       </div>
                     </Tooltip>
                   </OptionsWrapper>
@@ -325,10 +328,11 @@ const MirrorButton = ({ postInfo }: Props) => {
                             className={`text-p-btn rounded-md w-4 h-4 `}
                           />
                         )}
-
-                        <p className="ml-2 font-medium text-[#687684]">
-                          {mirrorCount}
-                        </p>
+                        {!router.pathname.startsWith('/p') && (
+                          <p className="ml-2 font-medium text-[#687684]">
+                            {mirrorCount}
+                          </p>
+                        )}
                       </div>
                     </Tooltip>
                   </OptionsWrapper>
@@ -360,7 +364,9 @@ const MirrorButton = ({ postInfo }: Props) => {
               </>
             )}
 
-            <p className="ml-2 font-medium text-[#687684]">{mirrorCount}</p>
+            {!router.pathname.startsWith('/p') && (
+              <p className="ml-2 font-medium text-[#687684]">{mirrorCount}</p>
+            )}
           </button>
         </Tooltip>
       )}

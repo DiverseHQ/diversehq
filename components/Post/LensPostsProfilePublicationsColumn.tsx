@@ -19,7 +19,8 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     cursor: null,
     hasMore: true,
     nextCursor: null,
-    posts: []
+    posts: [],
+    profileId: profileId
   })
   const addPublications = usePublicationStore((state) => state.addPublications)
   const addProfiles = useProfileStore((state) => state.addProfiles)
@@ -27,7 +28,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
   const profilePublicationsResult = usePublicationsQuery(
     {
       request: {
-        profileId: profileId,
+        profileId: queryParams.profileId,
         cursor: queryParams.cursor,
         limit: LENS_POST_LIMIT,
         publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror]
@@ -48,7 +49,8 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
       cursor: null,
       hasMore: true,
       nextCursor: null,
-      posts: []
+      posts: [],
+      profileId: profileId
     })
   }, [profileId])
 
@@ -58,7 +60,8 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
       cursor: null,
       hasMore: true,
       nextCursor: null,
-      posts: []
+      posts: [],
+      profileId: profileId
     })
   }, [myLensProfile?.defaultProfile?.id])
 

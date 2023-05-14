@@ -31,7 +31,7 @@ const CreatePostButton = () => {
     <div
       className={`cursor-pointer bg-p-btn p-3 rounded-full fixed  ${
         router.pathname.startsWith('/p/') ? 'z-20' : 'z-40'
-      } bottom-[70px] right-[10px] inline-block`}
+      } bottom-[75px] right-[10px] inline-block`}
       onClick={showCreatePostModal}
     >
       <HiPencil className="text-p-btn-text w-7 h-7" />

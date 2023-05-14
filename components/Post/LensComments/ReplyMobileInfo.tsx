@@ -21,7 +21,7 @@ const ReplyMobileInfo = ({
       <div className="flex flex-row w-full space-x-4 items-center">
         <ImageWithPulsingLoader
           src={fromAvatarUrl}
-          className="w-8 h-8 rounded-full object-cover"
+          className="w-10 h-10 rounded-full object-cover"
         />
         <div className="flex flex-col">
           <Link href={`/u/${toHandle}`} passHref>
@@ -30,11 +30,14 @@ const ReplyMobileInfo = ({
               <span className="hover:underline font-bold">u/{toHandle}</span>
             </div>
           </Link>
-          <div className="text-[14px]">{stringToLength(toContent, 20)}</div>
+          <div className="text-[14px] ">
+            {stringToLength(toContent, 32)}
+            {/* {toContent} */}
+          </div>
         </div>
         <ImageWithPulsingLoader
           src={toAvatarUrl}
-          className="w-8 h-8 rounded-full object-cover"
+          className="w-10 h-10 rounded-full object-cover"
         />
       </div>
     </div>

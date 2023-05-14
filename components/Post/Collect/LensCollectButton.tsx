@@ -11,6 +11,7 @@ import Attachment from '../Attachment'
 import FeeCollectPopUp from './FeeCollectPopUp'
 import FreeCollectPopUp from './FreeCollectPopUp'
 import { useDevice } from '../../Common/DeviceWrapper'
+import { useRouter } from 'next/router'
 type Props = {
   publication: Publication
   totalCollects: number
@@ -29,6 +30,7 @@ const LensCollectButton = ({
   const [collectCount, setCollectCount] = useState(totalCollects)
   const [isCollected, setIsCollected] = useState(hasCollectedByMe)
   const { isMobile } = useDevice()
+  const router = useRouter()
   return (
     <>
       <HoverModalWrapper
@@ -117,9 +119,11 @@ const LensCollectButton = ({
                 )}
               </>
             )}
-            <div className="ml-2 font-medium text-[#687684]">
-              {collectCount}
-            </div>
+            {!router.pathname.startsWith('/p') && (
+              <div className="ml-2 font-medium text-[#687684]">
+                {collectCount}
+              </div>
+            )}
           </div>
         </Tooltip>
       </HoverModalWrapper>

@@ -1,0 +1,14 @@
+query whoCollectedPublication($request: WhoCollectedPublicationRequest!) {
+  whoCollectedPublication(request: $request) {
+    items {
+      address
+      defaultProfile {
+        ...ProfileFields
+      }
+    }
+    pageInfo {
+      next
+      totalCount
+    }
+  }
+}

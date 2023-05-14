@@ -27,6 +27,9 @@ import ProfileLinksRow from './ProfileLinksRow'
 import useLensFollowButton from './useLensFollowButton'
 import { useDevice } from '../Common/DeviceWrapper'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import WhoFollowedProfileId from '../Post/whoWasIt/WhoFollowedProfileId'
+import WhoIsFollowedByProfileId from '../Post/whoWasIt/WhoIsFollowedByProfileId'
 
 interface Props {
   _profile?: UserType
@@ -49,6 +52,7 @@ const ProfileCard = ({
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const router = useRouter()
   const { notifyInfo } = useNotify()
+  const { showModal } = usePopUpModal()
   const { data, refetch } = useProfileQuery(
     {
       request: {
@@ -83,6 +87,31 @@ const ProfileCard = ({
       refetch()
     }
   }, [_profile?._id, _lensProfile?.id])
+
+  const showFollowersPopUp = (isLensCommunity?: boolean) => {
+    showModal({
+      component: (
+        <WhoFollowedProfileId
+          profileId={lensProfile?.id}
+          totalFollowers={lensProfile?.stats?.totalFollowers}
+          isLensCommunity={isLensCommunity}
+        />
+      ),
+      type: modalType.normal
+    })
+  }
+
+  const showFollowingPopUp = () => {
+    showModal({
+      component: (
+        <WhoIsFollowedByProfileId
+          address={lensProfile?.ownedBy}
+          totalFollowers={lensProfile?.stats?.totalFollowing}
+        />
+      ),
+      type: modalType.normal
+    })
+  }
 
   return (
     <div className="relative z-0 bg-s-bg border-b-[1px] border-s-border text-p-text w-full sm:w-[calc(100vw-9px)]">
@@ -298,7 +327,12 @@ const ProfileCard = ({
               <div
                 className={`flex flex-row gap-2 w-full justify-between px-8 pt-2`}
               >
-                <div className="flex flex-col items-center py-1 px-2 sm:px-4 rounded-[10px]">
+                <div
+                  className="flex flex-col items-center py-1 px-2 sm:px-4 rounded-[10px]"
+                  onClick={() => {
+                    showFollowersPopUp(false)
+                  }}
+                >
                   <span className="font-bold">
                     {lensProfile?.stats?.totalFollowers}
                   </span>
@@ -310,7 +344,10 @@ const ProfileCard = ({
                     src={getAvatar(lensProfile)}
                   />
                 </div>
-                <div className="flex flex-col items-center py-1 px-2 sm:px-4 rounded-[10px]">
+                <div
+                  className="flex flex-col items-center py-1 px-2 sm:px-4 rounded-[10px]"
+                  onClick={showFollowingPopUp}
+                >
                   <span className="font-bold">
                     {lensProfile?.stats?.totalFollowing}
                   </span>
@@ -479,7 +516,12 @@ const ProfileCard = ({
                 </div>
                 <div className="flex flex-row flex-wrap gap-x-4 gap-y-2 mt-0.5 items-center text-[16px]">
                   {isLensCommunity && (
-                    <span className="flex flex-row items-center gap-x-1">
+                    <span
+                      className="flex flex-row items-center gap-x-1 cursor-pointer"
+                      onClick={() => {
+                        showFollowersPopUp(true)
+                      }}
+                    >
                       <BsPeopleFill className="w-4 h-4 mr-1" />
                       <span className="font-bold">
                         {lensProfile?.stats?.totalFollowers}
@@ -489,13 +531,21 @@ const ProfileCard = ({
                   {/* onchain lens data */}
                   {lensProfile && !isLensCommunity && (
                     <>
-                      <div className="">
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          showFollowersPopUp(false)
+                        }}
+                      >
                         <span>Followers: </span>
                         <span className="font-semibold">
                           {lensProfile?.stats?.totalFollowers}
                         </span>
                       </div>
-                      <div className="">
+                      <div
+                        className="cursor-pointer"
+                        onClick={showFollowingPopUp}
+                      >
                         <span>Following: </span>
                         <span className="font-semibold">
                           {lensProfile?.stats?.totalFollowing}

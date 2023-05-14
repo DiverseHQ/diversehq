@@ -54,7 +54,7 @@ const PopUpWrapper = ({
   return (
     <div
       className={clsx(
-        'bg-s-bg z-50 sm:rounded-3xl py-4 w-screen h-screen sm:w-[550px] sm:h-full sm:max-h-[calc(100vh-50px)] overflow-y-auto overflow-x-hidden text-p-text',
+        'bg-s-bg z-50 sm:rounded-3xl py-4 w-screen h-screen sm:h-full sm:w-[550px] overflow-hidden text-p-text',
         className
       )}
     >
@@ -97,7 +97,9 @@ const PopUpWrapper = ({
           )}
         </div>
       )}
-      {children}
+      <div className="overflow-y-auto h-[calc(100vh-70px)] sm:h-[700px] ">
+        {children}
+      </div>
     </div>
   )
 }
