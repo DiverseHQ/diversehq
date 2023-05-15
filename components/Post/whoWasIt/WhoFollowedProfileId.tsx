@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import { WHO_WAS_IT_PROFILES_LIMIT } from '../../../utils/config'
 import WhoWasItProfileCard from './WhoWasItProfileCard'
+import { useProfileStore } from '../../../store/profile'
 
 const WhoFollowedProfileId = ({
   profileId,
@@ -26,6 +27,7 @@ const WhoFollowedProfileId = ({
     cursor: null,
     nextCursor: null
   })
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { data } = useFollowersQuery({
     request: {
@@ -47,6 +49,16 @@ const WhoFollowedProfileId = ({
         hasMore: Boolean(data?.followers?.items?.length),
         nextCursor: data?.followers?.pageInfo?.next
       })
+
+      const newProfiles = new Map()
+      // eslint-disable-next-line
+      for (const profile of data?.followers?.items) {
+        newProfiles.set(
+          profile.wallet.defaultProfile.handle,
+          profile.wallet.defaultProfile
+        )
+      }
+      addProfiles(newProfiles)
     }
   }, [data])
 

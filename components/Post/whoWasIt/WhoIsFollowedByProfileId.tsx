@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import { WHO_WAS_IT_PROFILES_LIMIT } from '../../../utils/config'
 import WhoWasItProfileCard from './WhoWasItProfileCard'
+import { useProfileStore } from '../../../store/profile'
 
 const WhoIsFollowedByProfileId = ({
   address,
@@ -24,6 +25,7 @@ const WhoIsFollowedByProfileId = ({
     cursor: null,
     nextCursor: null
   })
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { data } = useFollowingQuery({
     request: {
@@ -45,6 +47,13 @@ const WhoIsFollowedByProfileId = ({
         hasMore: Boolean(data?.following?.items?.length),
         nextCursor: data?.following?.pageInfo?.next
       })
+
+      const newProfiles = new Map()
+      // eslint-disable-next-line
+      for (const profile of data?.following?.items) {
+        newProfiles.set(profile.profile.handle, profile.profile)
+      }
+      addProfiles(newProfiles)
     }
   }, [data])
 

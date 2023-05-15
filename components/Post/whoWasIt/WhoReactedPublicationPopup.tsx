@@ -8,6 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import { WHO_WAS_IT_PROFILES_LIMIT } from '../../../utils/config'
 import WhoWasItProfileCard from './WhoWasItProfileCard'
+import { useProfileStore } from '../../../store/profile'
 
 const WhoReactedPublicationPopup = ({
   publicationId
@@ -25,6 +26,8 @@ const WhoReactedPublicationPopup = ({
     cursor: null,
     nextCursor: null
   })
+
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { data } = useWhoReactedPublicationQuery({
     request: {
@@ -46,6 +49,13 @@ const WhoReactedPublicationPopup = ({
         hasMore: Boolean(data?.whoReactedPublication?.items?.length),
         nextCursor: data?.whoReactedPublication?.pageInfo?.next
       })
+
+      const newProfiles = new Map()
+      // eslint-disable-next-line
+      for (const profile of data?.whoReactedPublication?.items) {
+        newProfiles.set(profile.profile.handle, profile.profile)
+      }
+      addProfiles(newProfiles)
     }
   }, [data])
 

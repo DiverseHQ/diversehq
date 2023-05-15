@@ -5,6 +5,7 @@ import PopUpWrapper from '../../Common/PopUpWrapper'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import WhoWasItProfileCard from './WhoWasItProfileCard'
+import { useProfileStore } from '../../../store/profile'
 
 const WhoMirroredPublicatitonPopUp = ({
   publicationId
@@ -22,6 +23,8 @@ const WhoMirroredPublicatitonPopUp = ({
     cursor: null,
     nextCursor: null
   })
+
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { data } = useMirrorsQuery({
     request: {
@@ -43,6 +46,13 @@ const WhoMirroredPublicatitonPopUp = ({
         hasMore: Boolean(data?.profiles?.items?.length),
         nextCursor: data?.profiles?.pageInfo?.next
       })
+
+      const newProfiles = new Map()
+      // eslint-disable-next-line
+      for (const profile of data?.profiles?.items) {
+        newProfiles.set(profile.handle, profile)
+      }
+      addProfiles(newProfiles)
     }
   }, [data])
 

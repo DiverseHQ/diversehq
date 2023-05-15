@@ -8,6 +8,7 @@ import PopUpWrapper from '../../Common/PopUpWrapper'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import WhoWasItProfileCard from './WhoWasItProfileCard'
+import { useProfileStore } from '../../../store/profile'
 
 const WhoCollectedPublicationPopUp = ({
   publicationId
@@ -25,6 +26,7 @@ const WhoCollectedPublicationPopUp = ({
     cursor: null,
     nextCursor: null
   })
+  const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { data } = useWhoCollectedPublicationQuery({
     request: {
@@ -46,6 +48,13 @@ const WhoCollectedPublicationPopUp = ({
         hasMore: Boolean(data?.whoCollectedPublication?.items?.length),
         nextCursor: data?.whoCollectedPublication?.pageInfo?.next
       })
+
+      const newProfiles = new Map()
+      // eslint-disable-next-line
+      for (const profile of data?.whoCollectedPublication?.items) {
+        newProfiles.set(profile.defaultProfile.handle, profile.defaultProfile)
+      }
+      addProfiles(newProfiles)
     }
   }, [data])
 

@@ -49,9 +49,13 @@ const WhoIsMemeberOfCommunity = ({
       const { members } = await res.json()
 
       setAllMembersAddressList(members)
-      setParams({
-        ...params,
-        currentProfileAddress: members.slice(0, WHO_WAS_IT_PROFILES_LIMIT)
+
+      setParams((params) => {
+        return {
+          ...params,
+          hasMore: true,
+          currentProfileAddress: members.slice(0, WHO_WAS_IT_PROFILES_LIMIT)
+        }
       })
     } catch (error) {
       console.log(error)
@@ -60,7 +64,7 @@ const WhoIsMemeberOfCommunity = ({
 
   React.useEffect(() => {
     getMembersAddressOfCommunity()
-  }, [communityId])
+  }, [])
 
   React.useEffect(() => {
     if (data?.profiles?.items) {
@@ -71,14 +75,12 @@ const WhoIsMemeberOfCommunity = ({
           ? // eslint-disable-next-line
             [...params.profiles, ...data?.profiles?.items]
           : params.profiles,
-        hasMore: Boolean(data?.profiles?.items?.length),
-        nextCursor: data?.profiles?.pageInfo?.next
+        hasMore: Boolean(data?.profiles?.items?.length)
       })
     }
   }, [data])
 
   const getMore = () => {
-    console.log('getMore')
     // find the index of last profile address from currentProfileAddress on list of allMembersAddressList
     const lastProfileAddressIndex = allMembersAddressList.findIndex(
       (address) => address === params.currentProfileAddress.slice(-1)[0]
