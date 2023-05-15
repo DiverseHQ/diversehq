@@ -34,19 +34,16 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
     setIsMobile(isMobileView)
   }, [isMobileView])
 
-  const isMoreThanOneModal = () => {
-    return modalsNumber > 0
-  }
-
   React.useEffect(() => {
     const handleBackButton = () => {
-      if (isMoreThanOneModal()) {
+      if (modalsNumber > 0) {
         hideModal()
-
-        window.history.pushState(null, '', window.location.href)
+        // Prevent default behavior of going back
+        // window.history.pushState(null, '', window.location.href)
+        // window.history.forward()
+        router.replace(router.asPath)
       }
     }
-
     // Add event listener for the back button
     window.addEventListener('popstate', handleBackButton)
 
