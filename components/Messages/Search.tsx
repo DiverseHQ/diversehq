@@ -41,7 +41,6 @@ const Search = ({
     }
   )
 
-  console.log('Search.tsx searchProfileQuery', searchProfileQuery.data)
   const handleSearch = (evt: ChangeEvent<HTMLInputElement>) => {
     const keyword = evt.target.value
     setSearchText(keyword)
