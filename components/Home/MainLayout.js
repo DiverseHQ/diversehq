@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useTheme } from '../Common/ThemeProvider'
 import { useDevice } from '../Common/DeviceWrapper'
+import { usePopUpModal } from '../Common/CustomPopUpProvider'
 // import MainMsgModal from '../Messages/MainMsgModal'
 
 const MainLayout = ({ children, isLoading, isMobileView }) => {
@@ -20,6 +21,7 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
   const router = useRouter()
   const [mounted, setMounted] = React.useState(false)
   const { setIsMobile } = useDevice()
+  const { modalsNumber, hideModal } = usePopUpModal()
   // React.useEffect(() => {
   //   if (typeof window === 'undefined') return
   //   if (!mobile) {
@@ -32,6 +34,27 @@ const MainLayout = ({ children, isLoading, isMobileView }) => {
     setIsMobile(isMobileView)
   }, [isMobileView])
 
+  const isMoreThanOneModal = () => {
+    return modalsNumber > 0
+  }
+
+  React.useEffect(() => {
+    const handleBackButton = () => {
+      if (isMoreThanOneModal()) {
+        hideModal()
+
+        window.history.pushState(null, '', window.location.href)
+      }
+    }
+
+    // Add event listener for the back button
+    window.addEventListener('popstate', handleBackButton)
+
+    // Remove event listener on unmount
+    return () => {
+      window.removeEventListener('popstate', handleBackButton)
+    }
+  }, [modalsNumber])
   const { theme } = useTheme()
   if (!mounted && process.env.NEXT_PUBLIC_NODE_MODE === 'development')
     return null

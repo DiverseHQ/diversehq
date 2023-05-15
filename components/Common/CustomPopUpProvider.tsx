@@ -86,7 +86,7 @@ const CustomPopUpModalProvider = ({ children }) => {
         return [...prev]
       })
     },
-    modalsNumber: modals.length
+    modalsNumber: modals?.length || 0
   }
   return (
     <CustomPopUpModalContext.Provider value={providerVal}>
