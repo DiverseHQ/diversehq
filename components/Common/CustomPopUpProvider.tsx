@@ -17,6 +17,7 @@ interface ContextType {
     extraaInfo
   }: ModalType) => void
   hideModal: () => void
+  modalsNumber: number
 }
 
 export const CustomPopUpModalContext = createContext<ContextType>(null)
@@ -84,7 +85,8 @@ const CustomPopUpModalProvider = ({ children }) => {
         prev.pop()
         return [...prev]
       })
-    }
+    },
+    modalsNumber: modals.length
   }
   return (
     <CustomPopUpModalContext.Provider value={providerVal}>

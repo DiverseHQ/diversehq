@@ -97,7 +97,7 @@ const PopUpWrapper = ({
           )}
         </div>
       )}
-      <div className="sm:h-full sm:max-h-[700px] h-[calc(100vh-70px)] ">
+      <div className="sm:h-full sm:max-h-[calc(100vh-200px)] h-[calc(100vh-70px)] ">
         <div className="overflow-y-auto h-full">{children}</div>
       </div>
     </div>
