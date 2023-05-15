@@ -25,6 +25,8 @@ import { useDevice } from '../Common/DeviceWrapper'
 import useJoinCommunityButton from './hook/useJoinCommunityButton'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
 import getIPFSLink from '../User/lib/getIPFSLink'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import WhoIsMemeberOfCommunity from '../Post/whoWasIt/WhoIsMemeberOfCommunity'
 // import CreatePostBar from '../Home/CreatePostBar'
 
 interface Props {
@@ -45,7 +47,7 @@ const CommunityInfoCard = ({ _community }: Props) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const name = community?.name
   const { isMobile } = useDevice()
-  // const { showModal } = usePopUpModal()
+  const { showModal } = usePopUpModal()
   const { JoinCommunityButton } = useJoinCommunityButton({
     id: community?._id,
     showJoined: true
@@ -87,6 +89,18 @@ const CommunityInfoCard = ({ _community }: Props) => {
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const showMembersList = () => {
+    showModal({
+      component: (
+        <WhoIsMemeberOfCommunity
+          communityId={community?._id}
+          totalMembers={community?.membersCount}
+        />
+      ),
+      type: modalType.normal
+    })
   }
 
   // const showCreatePostPopup = () => {
@@ -145,7 +159,10 @@ const CommunityInfoCard = ({ _community }: Props) => {
                             <VerifiedBadge className="w-4 h-4" />
                           )}
                         </div>
-                        <div className="flex flex-row items-center pt-0.5">
+                        <div
+                          className="flex flex-row items-center pt-0.5 cursor-pointer"
+                          onClick={showMembersList}
+                        >
                           <BsPeopleFill className="w-4 h-4 mr-1" />
                           <span>{community?.membersCount}</span>
                         </div>
@@ -160,7 +177,10 @@ const CommunityInfoCard = ({ _community }: Props) => {
                             <VerifiedBadge className="w-4 h-4" />
                           )}
                         </div>
-                        <div className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px]">
+                        <div
+                          className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px] cursor-pointer"
+                          onClick={showMembersList}
+                        >
                           <BsPeopleFill className="w-4 h-4 mr-1" />
                           <span className="font-bold">
                             {community?.membersCount || 0}

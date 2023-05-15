@@ -307,3 +307,13 @@ export const removeBannedUserFromCommunity = async (
     console.log(error)
   }
 }
+
+export const getCommunityMembers = async (communityId: string) => {
+  try {
+    return await fetch(
+      `${apiEndpoint}/community/get-community-members/${communityId}`
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}
