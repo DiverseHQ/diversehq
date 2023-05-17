@@ -785,7 +785,17 @@ const CreatePostPopup = () => {
               )}
             </div> */}
             <div className="px-5">
-              <Attachment className="w-full" attachments={attachments} isNew />
+              <Attachment
+                className="w-full"
+                publication={{
+                  // @ts-ignore
+                  metadata: {
+                    content: content
+                  }
+                }}
+                attachments={attachments}
+                isNew
+              />
             </div>
             <div className="ml-6 mt-2 flex items-center">
               <AttachmentRow />

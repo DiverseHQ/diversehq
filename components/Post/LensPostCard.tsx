@@ -812,6 +812,7 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                 >
                   <Attachment
                     publication={postInfo}
+                    isAlone={isAlone}
                     attachments={postInfo?.metadata?.media}
                     className={clsx(
                       router.pathname.startsWith('/p')
@@ -824,8 +825,8 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
               </div>
 
               {/* bottom row */}
-              {router.pathname.startsWith('/p') && (
-                <div className="flex flex-row items-center text-p-text px-3 sm:mx-5 sm:px-2 py-2 sm:justify-start justify-between sm:space-x-12 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-1 dark:border-p-border">
+              {router.pathname.startsWith('/p') && !isAlone && (
+                <div className="flex flex-row w-full items-center text-p-text px-3 sm:mx-5 sm:px-2 py-2 justify-between sm:space-x-8 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-1 dark:border-p-border">
                   <div
                     className="flex flex-row gap-1 text-s-text cursor-pointer"
                     onClick={showReactedByPopUp}
@@ -943,7 +944,7 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                           alt="Comment"
                           className="w-4 h-4 mr-2"
                         />
-                        {!router.pathname.startsWith('/p') && (
+                        {(!router.pathname.startsWith('/p') || isAlone) && (
                           <span className="text-[#687684]">
                             {postInfo?.stats?.totalAmountOfComments}
                           </span>
@@ -964,11 +965,12 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                       hasCollectedByMe={postInfo?.hasCollectedByMe}
                       author={postInfo?.profile}
                       collectModule={postInfo?.collectModule}
+                      isAlone={isAlone}
                     />
                   </span>
                 )}
                 <span onClick={(e) => e.stopPropagation()}>
-                  <MirrorButton postInfo={postInfo} />
+                  <MirrorButton postInfo={postInfo} isAlone={isAlone} />
                 </span>
                 {!isMobile && (
                   <span onClick={(e) => e.stopPropagation()}>

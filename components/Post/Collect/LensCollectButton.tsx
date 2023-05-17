@@ -18,6 +18,7 @@ type Props = {
   hasCollectedByMe: boolean
   author: Profile
   collectModule: CollectModule
+  isAlone: Boolean
 }
 
 const LensCollectButton = ({
@@ -25,7 +26,8 @@ const LensCollectButton = ({
   totalCollects,
   hasCollectedByMe,
   author,
-  collectModule
+  collectModule,
+  isAlone
 }: Props) => {
   const [collectCount, setCollectCount] = useState(totalCollects)
   const [isCollected, setIsCollected] = useState(hasCollectedByMe)
@@ -119,7 +121,7 @@ const LensCollectButton = ({
                 )}
               </>
             )}
-            {!router.pathname.startsWith('/p') && (
+            {(!router.pathname.startsWith('/p') || isAlone) && (
               <div className="ml-2 font-medium text-[#687684]">
                 {collectCount}
               </div>

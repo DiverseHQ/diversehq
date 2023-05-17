@@ -19,9 +19,10 @@ import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroad
 
 interface Props {
   postInfo: postWithCommunityInfoType
+  isAlone?: boolean
 }
 
-const MirrorButton = ({ postInfo }: Props) => {
+const MirrorButton = ({ postInfo, isAlone }: Props) => {
   const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
   const { notifyError, notifySuccess } = useNotify()
@@ -240,7 +241,7 @@ const MirrorButton = ({ postInfo }: Props) => {
                   <AiOutlineRetweet
                     className={`text-p-btn rounded-md w-4 h-4 `}
                   />
-                  {!router.pathname.startsWith('/p') && (
+                  {(!router.pathname.startsWith('/p') || isAlone) && (
                     <p className="ml-2 font-medium text-[#687684]">
                       {mirrorCount}
                     </p>
@@ -286,7 +287,7 @@ const MirrorButton = ({ postInfo }: Props) => {
                           />
                         )}
 
-                        {!router.pathname.startsWith('/p') && (
+                        {(!router.pathname.startsWith('/p') || isAlone) && (
                           <p className="ml-2 font-medium text-[#687684]">
                             {mirrorCount}
                           </p>
@@ -328,7 +329,7 @@ const MirrorButton = ({ postInfo }: Props) => {
                             className={`text-p-btn rounded-md w-4 h-4 `}
                           />
                         )}
-                        {!router.pathname.startsWith('/p') && (
+                        {(!router.pathname.startsWith('/p') || isAlone) && (
                           <p className="ml-2 font-medium text-[#687684]">
                             {mirrorCount}
                           </p>
@@ -364,7 +365,7 @@ const MirrorButton = ({ postInfo }: Props) => {
               </>
             )}
 
-            {!router.pathname.startsWith('/p') && (
+            {(!router.pathname.startsWith('/p') || isAlone) && (
               <p className="ml-2 font-medium text-[#687684]">{mirrorCount}</p>
             )}
           </button>

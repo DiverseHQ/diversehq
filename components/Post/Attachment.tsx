@@ -33,6 +33,7 @@ interface Props {
   isNew?: boolean
   hideDelete?: boolean
   isComment?: boolean
+  isAlone?: boolean
 }
 
 const Attachment: FC<Props> = ({
@@ -41,7 +42,8 @@ const Attachment: FC<Props> = ({
   attachments = [],
   isNew = false,
   hideDelete = false,
-  isComment = false
+  isComment = false,
+  isAlone = false
 }) => {
   const removeAttachments = usePublicationStore(
     (state) => state.removeAttachments
@@ -74,7 +76,10 @@ const Attachment: FC<Props> = ({
   // const { isMobile } = useDevice()
 
   if (attachments?.length === 0) {
-    if (getURLsFromText(publication?.metadata?.content)?.length > 0) {
+    if (
+      getURLsFromText(publication?.metadata?.content)?.length > 0 &&
+      !isAlone
+    ) {
       return (
         <ReactEmbedo url={getURLsFromText(publication?.metadata?.content)[0]} />
       )
