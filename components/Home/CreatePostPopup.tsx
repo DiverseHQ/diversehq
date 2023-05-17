@@ -52,15 +52,15 @@ import { useRouter } from 'next/router'
 import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import PostPreferenceButton from './PostComposer/PostPreferenceButton'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $getRoot } from 'lexical'
+import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical'
 // import uploadToIPFS from '../../utils/uploadToIPFS'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
 
-const CreatePostPopup = () => {
+const CreatePostPopup = ({ startingContent }: { startingContent?: string }) => {
   const router = useRouter()
   const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState(startingContent)
   const { user, joinedLensCommunities, LensCommunity } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
@@ -205,6 +205,21 @@ const CreatePostPopup = () => {
     await handleCreateLensPost()
   }
 
+  useEffect(() => {
+    if (!editor) return
+    if (startingContent) {
+      console.log('startingContent', startingContent)
+
+      editor?.update(() => {
+        if ($getRoot().getTextContentSize() !== 0) return
+        const paragraph = $createParagraphNode()
+        const text = $createTextNode(startingContent)
+        paragraph.append(text)
+        $getRoot().append(paragraph)
+      })
+    }
+  }, [])
+
   const handleCompletePost = () => {
     setLoading(false)
     resetAttachments()
@@ -280,8 +295,7 @@ const CreatePostPopup = () => {
         `**${title}**` +
         '\n' +
         content.trim() +
-        `
-        ${
+        `${
           !selectedCommunity?.isLensCommunity &&
           selectedCommunity?.name &&
           (user?.preferences?.appendLink ?? true)

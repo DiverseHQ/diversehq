@@ -36,6 +36,7 @@ export const getContent = (post: postWithCommunityInfoType): string => {
       )
     }
 
+    // removing upper content if same as content name
     if (
       content?.startsWith(post?.metadata?.name) &&
       showNameForThisAppIds.includes(post?.appId)
@@ -48,6 +49,11 @@ export const getContent = (post: postWithCommunityInfoType): string => {
       showNameForThisAppIds.includes(post?.appId)
     ) {
       content = content.slice(post?.metadata?.name.length + 4)
+    }
+
+    // removing ___ Quoting texts
+    if (content?.includes('___\nQuoting')) {
+      content = content.split('___\nQuoting')[0]
     }
   }
 
