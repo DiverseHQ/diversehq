@@ -41,6 +41,7 @@ import { useProfileStore } from '../../store/profile'
 export interface IsFollowedLensCommunityType {
   _id: string
   handle: string
+  createdAt?: string
   isFollowedByMe: boolean
   picture: ProfileMedia
   stats: {
@@ -158,7 +159,9 @@ export const WalletProvider = ({ children }) => {
           ...c,
           _id: _allLensCommunities.find((l) => l.handle === c.handle)?._id,
           verified: _allLensCommunities.find((l) => l.handle === c.handle)
-            .verified
+            .verified,
+          createdAt: _allLensCommunities.find((l) => l.handle === c.handle)
+            .createdAt
         })
       )
       const _joinedLensCommunities: IsFollowedLensCommunityType[] =

@@ -3,6 +3,7 @@ query bulkIsFollowedByMe($request: ProfileQueryRequest!) {
     items {
       isFollowedByMe
       handle
+      bio
       picture {
         ... on NftImage {
           contractAddress

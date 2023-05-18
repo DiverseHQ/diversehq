@@ -9,6 +9,8 @@ import MobileLoader from '../Common/UI/MobileLoader'
 import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
 import { useDevice } from '../Common/DeviceWrapper'
+import { useProfile } from '../Common/WalletContext'
+import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
 
 const ExploreTopUnjoinedCommunitiesPage = ({
   showUnjoined,
@@ -17,6 +19,7 @@ const ExploreTopUnjoinedCommunitiesPage = ({
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const { isMobile } = useDevice()
+  const { allLensCommunities } = useProfile()
 
   useEffect(() => {
     getTopNotJoinedCommunities()
@@ -29,9 +32,42 @@ const ExploreTopUnjoinedCommunitiesPage = ({
       communities.length,
       'top'
     )
-    setCommunities([...communities, ...fetchedCommunities.communities])
+
+    const newCommunities = fetchedCommunities.communities
+
+    // add lens communities to the top
+    let startMembersCount = Number.POSITIVE_INFINITY
+    let endMembersCount = newCommunities[newCommunities.length - 1].membersCount
+
+    if (communities.length !== 0) {
+      startMembersCount = communities[0].membersCount
+    }
+
+    let lensCommunities = []
+
+    for (const c of allLensCommunities) {
+      if (
+        c.stats.totalFollowers < startMembersCount &&
+        c.stats.totalFollowers > endMembersCount &&
+        !c.isFollowedByMe
+      ) {
+        lensCommunities.push({
+          ...c,
+          membersCount: c.stats.totalFollowers
+        })
+      }
+    }
+
+    // mix and sort the communities
+    const mixedCommunities = [...lensCommunities, ...newCommunities]
+    mixedCommunities.sort((a, b) => {
+      return b.membersCount - a.membersCount
+    })
+
+    setCommunities([...communities, ...mixedCommunities])
     if (fetchedCommunities.communities.length < COMMUNITY_LIMIT) {
       setHasMore(false)
+      return
     }
   }
 
@@ -52,6 +88,14 @@ const ExploreTopUnjoinedCommunitiesPage = ({
               endMessage={<></>}
             >
               {communities.map((community) => {
+                if (community?.handle) {
+                  return (
+                    <ExploreLensCommunityCard
+                      key={community?.id}
+                      community={community}
+                    />
+                  )
+                }
                 return (
                   <ExploreCommunityCard
                     key={community._id}

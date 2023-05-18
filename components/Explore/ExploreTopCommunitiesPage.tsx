@@ -9,6 +9,8 @@ import MobileLoader from '../Common/UI/MobileLoader'
 import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
 import { useDevice } from '../Common/DeviceWrapper'
+import { useProfile } from '../Common/WalletContext'
+import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
 
 interface Props {
   showUnjoined: boolean
@@ -22,6 +24,7 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const { isMobile } = useDevice()
+  const { allLensCommunities } = useProfile()
 
   useEffect(() => {
     getTopCommunities()
@@ -35,8 +38,38 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
       'top',
       false
     )
-    console.log(fetchedCommunities)
-    setCommunities([...communities, ...fetchedCommunities.communities])
+
+    const newCommunities = fetchedCommunities.communities
+
+    // add lens communities to the top
+    let startMembersCount = Number.POSITIVE_INFINITY
+    let endMembersCount = newCommunities[newCommunities.length - 1].membersCount
+
+    if (communities.length !== 0) {
+      startMembersCount = communities[0].membersCount
+    }
+
+    let lensCommunities = []
+
+    for (const c of allLensCommunities) {
+      if (
+        c.stats.totalFollowers < startMembersCount &&
+        c.stats.totalFollowers > endMembersCount
+      ) {
+        lensCommunities.push({
+          ...c,
+          membersCount: c.stats.totalFollowers
+        })
+      }
+    }
+
+    // mix and sort the communities
+    const mixedCommunities = [...lensCommunities, ...newCommunities]
+    mixedCommunities.sort((a, b) => {
+      return b.membersCount - a.membersCount
+    })
+
+    setCommunities([...communities, ...mixedCommunities])
     if (fetchedCommunities.communities.length < COMMUNITY_LIMIT) {
       setHasMore(false)
     }
@@ -59,6 +92,14 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
               endMessage={<></>}
             >
               {communities.map((community) => {
+                if (community?.handle) {
+                  return (
+                    <ExploreLensCommunityCard
+                      key={community?.id}
+                      community={community}
+                    />
+                  )
+                }
                 return (
                   <ExploreCommunityCard
                     key={community._id}
