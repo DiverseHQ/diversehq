@@ -9,9 +9,8 @@ import LensUserContextProvider from '../../lib/LensUserContext'
 import LexicalWrapper from './LexicalWrapper'
 import ThemeProvider from './ThemeProvider'
 import PostIndexingWrapper from '../Post/IndexingContext/PostIndexingWrapper'
-import LivepeerProvider from '../Common/LivepeerProvider'
+import LivepeerProvider from './LivepeerProvider'
 import DeviceWrapper from './DeviceWrapper'
-// import OnlyAdmins from '../Common/UI/OnlyAdmins'
 
 const queryClient = new QueryClient()
 
@@ -28,9 +27,7 @@ const MasterWrapper = ({ children }) => {
                     <DeviceWrapper>
                       <PostIndexingWrapper>
                         <CustomPopUpModalProvider>
-                          {/* <OnlyAdmins> */}
                           {children}
-                          {/* </OnlyAdmins> */}
                         </CustomPopUpModalProvider>
                       </PostIndexingWrapper>
                     </DeviceWrapper>
