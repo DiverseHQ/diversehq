@@ -11,37 +11,37 @@ import ThemeProvider from './ThemeProvider'
 import PostIndexingWrapper from '../Post/IndexingContext/PostIndexingWrapper'
 import LivepeerProvider from './LivepeerProvider'
 import DeviceWrapper from './DeviceWrapper'
-// import ErrorBoundary from './ErrorBoundary'
+import ErrorBoundary from './ErrorBoundary'
 
 const queryClient = new QueryClient()
 
 const MasterWrapper = ({ children }) => {
   return (
-    // <ErrorBoundary>
-    <RainbowKitWrapper>
-      <NotifyProvider>
-        <QueryClientProvider client={queryClient}>
-          <LensUserContextProvider>
-            <WalletProvider>
-              <ThemeProvider>
-                <LivepeerProvider>
-                  <LexicalWrapper>
-                    <DeviceWrapper>
-                      <PostIndexingWrapper>
-                        <CustomPopUpModalProvider>
-                          {children}
-                        </CustomPopUpModalProvider>
-                      </PostIndexingWrapper>
-                    </DeviceWrapper>
-                  </LexicalWrapper>
-                </LivepeerProvider>
-              </ThemeProvider>
-            </WalletProvider>
-          </LensUserContextProvider>
-        </QueryClientProvider>
-      </NotifyProvider>
-    </RainbowKitWrapper>
-    // </ErrorBoundary>
+    <ErrorBoundary>
+      <RainbowKitWrapper>
+        <NotifyProvider>
+          <QueryClientProvider client={queryClient}>
+            <LensUserContextProvider>
+              <WalletProvider>
+                <ThemeProvider>
+                  <LivepeerProvider>
+                    <LexicalWrapper>
+                      <DeviceWrapper>
+                        <PostIndexingWrapper>
+                          <CustomPopUpModalProvider>
+                            {children}
+                          </CustomPopUpModalProvider>
+                        </PostIndexingWrapper>
+                      </DeviceWrapper>
+                    </LexicalWrapper>
+                  </LivepeerProvider>
+                </ThemeProvider>
+              </WalletProvider>
+            </LensUserContextProvider>
+          </QueryClientProvider>
+        </NotifyProvider>
+      </RainbowKitWrapper>
+    </ErrorBoundary>
   )
 }
 

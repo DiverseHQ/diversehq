@@ -77,6 +77,13 @@ const Attachment: FC<Props> = ({
     }
   }
 
+  const handlers = useSwipeable({
+    onSwipedLeft: handleNextClick,
+    onSwipedRight: handlePrevClick,
+    preventScrollOnSwipe: true,
+    trackMouse: true
+  })
+
   // const { isMobile } = useDevice()
 
   if (attachments?.length === 0) {
@@ -93,13 +100,6 @@ const Attachment: FC<Props> = ({
   if (SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.original?.mimeType)) {
     attachments = attachments.slice(0, 1)
   }
-
-  const handlers = useSwipeable({
-    onSwipedLeft: handleNextClick,
-    onSwipedRight: handlePrevClick,
-    preventScrollOnSwipe: true,
-    trackMouse: true
-  })
 
   if (isMobile) {
     return (
