@@ -39,7 +39,7 @@ const MetaTags = ({ title, description, image, url }: Props) => {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
 
-        <img src={DEFAULT_OG_IMAGE} alt="Company Logo" />
+        {/* <img src={DEFAULT_OG_IMAGE} alt="Company Logo" /> */}
       </Head>
     )
   }
