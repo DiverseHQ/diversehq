@@ -29,7 +29,6 @@ const MetaTags = ({ title, description, image, url }: Props) => {
         <meta property="og:image:width" content="250" />
         <meta property="og:image:height" content="250" />
 
-        <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:site" content={'DiverseHQ'} />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
