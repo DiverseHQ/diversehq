@@ -34,6 +34,12 @@ const MetaTags = ({ title, description, image, url }: Props) => {
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
         <meta property="twitter:creator" content="useDiverseHQ" />
+
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+
+        <img src={DEFAULT_OG_IMAGE} alt="Company Logo" />
       </Head>
     )
   }
@@ -64,6 +70,12 @@ const MetaTags = ({ title, description, image, url }: Props) => {
       <meta property="twitter:image:width" content="1200" />
       <meta property="twitter:image:height" content="630" />
       <meta property="twitter:creator" content="useDiverseHQ" />
+
+      <link rel="icon" href="/favicon.ico" />
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      <link rel="manifest" href="/manifest.json" />
+
+      <img src={DEFAULT_OG_IMAGE} alt="Company Logo" />
       {/* 
       <link
         rel="search"
