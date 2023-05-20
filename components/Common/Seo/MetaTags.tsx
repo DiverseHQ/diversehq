@@ -73,15 +73,6 @@ const MetaTags = ({ title, description, image, url }: Props) => {
       <link rel="icon" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       <link rel="manifest" href="/manifest.json" />
-
-      <img src={DEFAULT_OG_IMAGE} alt="Company Logo" />
-      {/* 
-      <link
-        rel="search"
-        type="application/opensearchdescription+xml"
-        href="/opensearch.xml"
-        title={APP_NAME}
-      /> */}
     </Head>
   )
 }
