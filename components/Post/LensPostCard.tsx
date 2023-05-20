@@ -20,7 +20,7 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 // import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
-import { countLinesFromMarkdown, stringToLength } from '../../utils/utils'
+import { countLinesFromMarkdown } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
@@ -323,122 +323,6 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
             </div>
           )}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
-            {/* {!isMobile && (
-              <>
-                <div className="flex flex-row flex-wrap w-full items-center">
-                  <span onClick={(e) => e.stopPropagation()}>
-                    <Link
-                      href={
-                        postInfo?.communityInfo?._id
-                          ? postInfo?.isLensCommunityPost
-                            ? `/l/${formatHandle(postInfo?.profile?.handle)}`
-                            : `/c/${postInfo?.communityInfo?.name}`
-                          : `/u/${formatHandle(postInfo?.profile?.handle)}`
-                      }
-                    >
-                      <ImageWithPulsingLoader
-                        src={
-                          postInfo?.isLensCommunityPost ||
-                          !postInfo?.communityInfo
-                            ? getAvatar(postInfo?.profile)
-                            : getIPFSLink(
-                                postInfo?.communityInfo?.logoImageUrl
-                              ) ?? '/gradient.jpg'
-                        }
-                        className={clsx(
-                          'lg:w-[40px] lg:h-[40px] h-[30px] w-[30px] object-cover cursor-pointer',
-                          postInfo?.isLensCommunityPost ||
-                            postInfo?.communityInfo?.logoImageUrl
-                            ? 'rounded-lg'
-                            : 'rounded-full'
-                        )}
-                      />
-                    </Link>
-                  </span>
-
-                  <div className="flex flex-col pl-2.5">
-                    <div className="start-row">
-                      <span onClick={(e) => e.stopPropagation()}>
-                        <Link
-                          href={
-                            postInfo?.communityInfo?._id
-                              ? postInfo?.isLensCommunityPost
-                                ? `/l/${formatHandle(
-                                    postInfo?.profile?.handle
-                                  )}`
-                                : `/c/${postInfo?.communityInfo?.name}`
-                              : `/u/${formatHandle(postInfo?.profile?.handle)}`
-                          }
-                        >
-                          <div className="font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline text-p-text">
-                            {postInfo?.isLensCommunityPost
-                              ? `l/${formatHandle(postInfo?.profile?.handle)}`
-                              : postInfo?.communityInfo?.name
-                              ? `${stringToLength(
-                                  postInfo?.communityInfo?.name,
-                                  18
-                                )}`
-                              : stringToLength(postInfo?.profile?.name, 18)}
-                          </div>
-                        </Link>
-                      </span>
-
-                      {postInfo?.communityInfo?.verified && (
-                        <VerifiedBadge className="w-4 h-4 ml-1" />
-                      )}
-                    </div>
-
-                    <div className="start-row">
-                      <span
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="flex flex-row items-center justify-center text-s-text text-xs sm:text-sm">
-                          <Link
-                            href={
-                              postInfo?.isLensCommunityPost
-                                ? `/u/${formatHandle(
-                                    getAllMentionsHandlFromContent(
-                                      postInfo?.metadata?.content
-                                    )[0]
-                                  )}`
-                                : `/u/${formatHandle(
-                                    postInfo?.profile?.handle
-                                  )}`
-                            }
-                          >
-                            <div className="pl-1.5 font-normal hover:cursor-pointer hover:underline">
-                              {postInfo?.isLensCommunityPost
-                                ? `u/${formatHandle(
-                                    getAllMentionsHandlFromContent(
-                                      postInfo?.metadata?.content
-                                    )[0]
-                                  )}`
-                                : `u/${formatHandle(
-                                    postInfo?.profile?.handle
-                                  )}`}
-                            </div>
-                          </Link>
-                        </div>
-                      </span>
-                      <CenteredDot />
-                      <div>
-                        {postInfo?.createdAt && (
-                          <div className="text-xs sm:text-sm text-s-text ml-1">
-                            <ReactTimeAgo
-                              timeStyle="twitter"
-                              date={new Date(postInfo.createdAt)}
-                              locale="en-US"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )} */}
-
-            {/* {isMobile && ( */}
             <>
               <div className="flex flex-row w-full items-center">
                 <div onClick={(e) => e.stopPropagation()}>
@@ -485,19 +369,15 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                       }
                     >
                       <div
-                        className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline"
+                        className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline truncate"
                         style={{
                           lineHeight: '1rem'
                         }}
                       >
                         {postInfo?.isLensCommunityPost
                           ? `l/${formatHandle(postInfo?.profile?.handle)}`
-                          : postInfo?.communityInfo?.name
-                          ? `${stringToLength(
-                              postInfo?.communityInfo?.name,
-                              18
-                            )}`
-                          : stringToLength(postInfo?.profile?.name, 18)}
+                          : postInfo?.communityInfo?.name ??
+                            postInfo?.profile?.name}
                       </div>
                     </Link>
                     {postInfo?.communityInfo?.verified && (
