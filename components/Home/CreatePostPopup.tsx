@@ -376,11 +376,7 @@ const CreatePostPopup = ({
           }
         }))
       },
-      profile: {
-        _id: lensProfile?.defaultProfile?.id,
-        handle: lensProfile?.defaultProfile?.handle,
-        ownedBy: lensProfile?.defaultProfile?.ownedBy
-      },
+      profile: lensProfile?.defaultProfile,
       reaction: 'UPVOTE',
       stats: {
         totalUpvotes: 1,
