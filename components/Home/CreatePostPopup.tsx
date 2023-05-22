@@ -57,7 +57,11 @@ import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
 
-const CreatePostPopup = ({ startingContent }: { startingContent?: string }) => {
+const CreatePostPopup = ({
+  startingContent = ''
+}: {
+  startingContent?: string
+}) => {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState(startingContent)
@@ -187,7 +191,7 @@ const CreatePostPopup = ({ startingContent }: { startingContent?: string }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
-    if (!title || title.trim() === '') {
+    if (!title || title?.trim() === '') {
       notifyError('Please enter a title')
       setLoading(false)
       return
@@ -294,7 +298,7 @@ const CreatePostPopup = ({ startingContent }: { startingContent?: string }) => {
         }` +
         `**${title}**` +
         '\n' +
-        content.trim() +
+        content?.trim() +
         `${
           !selectedCommunity?.isLensCommunity &&
           selectedCommunity?.name &&
