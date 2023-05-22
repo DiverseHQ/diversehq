@@ -104,115 +104,122 @@ const Attachment: FC<Props> = ({
   if (isMobile) {
     return (
       <>
-        {attachments.length > 1 && (
-          <div className="relative w-full">
-            <div
-              className={clsx(
-                'absolute top-[10px] left-[10px] text-white z-20 bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg py-0.5 px-2 rounded-full'
-              )}
-            >
-              {currentMedia + 1}/{attachments.length}
+        <div className="relative" onClick={(e) => e.stopPropagation()}>
+          {attachments.length > 1 && (
+            <div className="relative w-full">
+              <div
+                className={clsx(
+                  'absolute top-[10px] left-[10px] text-white z-20 bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg py-0.5 px-2 rounded-full'
+                )}
+              >
+                {currentMedia + 1}/{attachments.length}
+              </div>
             </div>
-          </div>
-        )}
-        <div {...handlers} style={{ overflow: 'hidden' }} className="reletive">
+          )}
           <div
-            style={{
-              display: 'flex',
-              transition: 'transform 0.3s ease-out',
-              transform: `translateX(-${currentMedia * 100}%)`
-            }}
+            {...handlers}
+            style={{ overflow: 'hidden' }}
+            className="reletive"
           >
-            {attachments.length > 0 &&
-              attachments.map(
-                (attachment: AttachmentType & MediaSet, index: number) => {
-                  const type = isNew
-                    ? attachment?.type
-                    : attachment?.original?.mimeType
-                  const url = isNew
-                    ? attachment?.previewItem || getIPFSLink(attachment?.item!)
-                    : getIPFSLink(attachment?.original?.url)
+            <div
+              style={{
+                display: 'flex',
+                transition: 'transform 0.3s ease-out',
+                transform: `translateX(-${currentMedia * 100}%)`
+              }}
+            >
+              {attachments.length > 0 &&
+                attachments.map(
+                  (attachment: AttachmentType & MediaSet, index: number) => {
+                    const type = isNew
+                      ? attachment?.type
+                      : attachment?.original?.mimeType
+                    const url = isNew
+                      ? attachment?.previewItem ||
+                        getIPFSLink(attachment?.item!)
+                      : getIPFSLink(attachment?.original?.url)
 
-                  return (
-                    <div
-                      key={index}
-                      style={{
-                        width: '100%',
-                        flexShrink: 0,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                    >
-                      {type === 'image/svg+xml' ? (
-                        <button onClick={() => window.open(url, '_blank')}>
-                          Open Image in new tab
-                        </button>
-                      ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
-                        (isNew && !url.startsWith(LensInfuraEndpoint)) ||
-                        url.startsWith(
-                          'https://firebasestorage.googleapis.com'
-                        ) ? (
-                          <VideoWithAutoPause
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          width: '100%',
+                          flexShrink: 0,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        {type === 'image/svg+xml' ? (
+                          <button onClick={() => window.open(url, '_blank')}>
+                            Open Image in new tab
+                          </button>
+                        ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
+                          (isNew && !url.startsWith(LensInfuraEndpoint)) ||
+                          url.startsWith(
+                            'https://firebasestorage.googleapis.com'
+                          ) ? (
+                            <VideoWithAutoPause
+                              src={isNew ? url : imageProxy(url)}
+                              className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                              controls
+                              muted
+                              autoPlay={false}
+                              poster={getCoverUrl()}
+                            />
+                          ) : (
+                            <div
+                              className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
+                            >
+                              <LivePeerVideoPlayback
+                                posterUrl={getCoverUrl() || null}
+                                title={publication?.metadata?.name}
+                                url={url}
+                              />
+                            </div>
+                          )
+                        ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
+                          <AudioPlayer
+                            src={url}
+                            isNew={isNew}
+                            hideDelete={hideDelete}
+                            className={`${className}`}
+                            publication={publication}
+                          />
+                        ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
+                          <ImageWithFullScreenZoom
                             src={isNew ? url : imageProxy(url)}
-                            className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                            controls
-                            muted
-                            autoPlay={false}
-                            poster={getCoverUrl()}
+                            className={`image-unselectable shrink-0 object-cover sm:rounded-lg min-h-[200px] w-full ${className}`}
+                            alt={isNew ? url : publication?.metadata?.content}
                           />
                         ) : (
-                          <div
-                            className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
-                          >
-                            <LivePeerVideoPlayback
-                              posterUrl={getCoverUrl() || null}
-                              title={publication?.metadata?.name}
-                              url={url}
-                            />
-                          </div>
-                        )
-                      ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
-                        <AudioPlayer
-                          src={url}
-                          isNew={isNew}
-                          hideDelete={hideDelete}
-                          className={`${className}`}
-                          publication={publication}
-                        />
-                      ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
-                        <ImageWithFullScreenZoom
-                          src={isNew ? url : imageProxy(url)}
-                          className={`image-unselectable shrink-0 object-cover sm:rounded-lg min-h-[200px] w-full ${className}`}
-                          alt={isNew ? url : publication?.metadata?.content}
-                        />
-                      ) : (
-                        <></>
-                      )}
+                          <></>
+                        )}
 
-                      {isNew && !hideDelete && (
-                        <div className={clsx('absolute top-4 right-4')}>
-                          <button
-                            className="bg-black bg-opacity-70 rounded-full p-1"
-                            onClick={() => {
-                              // set proper currentMedia
-                              if (isComment) {
-                                removeCommentAttachments([attachment.id])
-                              } else {
-                                removeAttachments([attachment.id])
-                              }
-                              setCurrentMedia(0)
-                            }}
-                          >
-                            <AiOutlineClose className="w-6 h-6" />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )
-                }
-              )}
+                        {isNew && !hideDelete && (
+                          <div className={clsx('absolute top-4 right-4')}>
+                            <button
+                              className="bg-black bg-opacity-70 rounded-full p-1"
+                              onClick={() => {
+                                // set proper currentMedia
+                                if (isComment) {
+                                  removeCommentAttachments([attachment.id])
+                                } else {
+                                  removeAttachments([attachment.id])
+                                }
+                                setCurrentMedia(0)
+                              }}
+                            >
+                              <AiOutlineClose className="w-6 h-6" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  }
+                )}
+            </div>
           </div>
         </div>
       </>
