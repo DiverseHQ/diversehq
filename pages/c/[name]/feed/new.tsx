@@ -47,30 +47,35 @@ export async function getServerSideProps({
 }: {
   params: { name?: string }
 }) {
-  const { name } = params
-  const fetchCommunityInfo = async (name: string) => {
-    try {
-      const res = await getCommunityInfo(name)
-      if (res.status !== 200) {
+  try {
+    const { name } = params
+    const fetchCommunityInfo = async (name: string) => {
+      try {
+        const res = await getCommunityInfo(name)
+        if (res.status !== 200) {
+          return null
+        }
+        const result = await res.json()
+        return result
+      } catch (error) {
+        console.log(error)
         return null
       }
-      const result = await res.json()
-      return result
-    } catch (error) {
-      console.log(error)
-      return null
     }
-  }
-  const community = await fetchCommunityInfo(name)
-  if (!community) return { props: { community: null } }
-  const profile = await getDefaultProfileInfo({
-    ethereumAddress: community?.creator
-  })
-  community.creatorProfile = profile?.defaultProfile
-  return {
-    props: {
-      community
+    const community = await fetchCommunityInfo(name)
+    if (!community) return { props: { community: null } }
+    const profile = await getDefaultProfileInfo({
+      ethereumAddress: community?.creator
+    })
+    community.creatorProfile = profile?.defaultProfile
+    return {
+      props: {
+        community
+      }
     }
+  } catch (error) {
+    console.log(error)
+    return { props: { community: null } }
   }
 }
 

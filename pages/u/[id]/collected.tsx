@@ -59,28 +59,38 @@ const collected = ({
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { req, params } = context
-  const { id } = params
+  try {
+    const { req, params } = context
+    const { id } = params
 
-  const isClient = Boolean(req?.cookies?.isClient)
+    const isClient = Boolean(req?.cookies?.isClient)
 
-  if (isClient) {
+    if (isClient) {
+      return {
+        props: {
+          _lensProfile: null,
+          handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+        }
+      }
+    }
+
+    const lensProfileRes = await getLensProfileInfo({
+      handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+    })
+
     return {
       props: {
-        _lensProfile: null,
+        _lensProfile: lensProfileRes.profile,
         handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
       }
     }
-  }
-
-  const lensProfileRes = await getLensProfileInfo({
-    handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
-  })
-
-  return {
-    props: {
-      _lensProfile: lensProfileRes.profile,
-      handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+  } catch (error) {
+    console.log('error', error)
+    return {
+      props: {
+        _lensProfile: null,
+        handle: null
+      }
     }
   }
 }

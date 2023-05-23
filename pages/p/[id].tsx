@@ -79,33 +79,43 @@ const Page = ({
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { req, params } = context
-  const { id } = params
+  try {
+    const { req, params } = context
+    const { id } = params
 
-  const isClient = Boolean(req?.cookies?.isClient)
+    const isClient = Boolean(req?.cookies?.isClient)
 
-  if (isClient) {
+    if (isClient) {
+      return {
+        props: {
+          _post: null,
+          postId: id
+        }
+      }
+    }
+
+    const _post = await getPostWithCommunityInfo({
+      request: {
+        publicationId: id
+      },
+      profileId: null,
+      reactionRequest: {
+        profileId: null
+      }
+    })
+    return {
+      props: {
+        _post: _post,
+        id: id
+      }
+    }
+  } catch (error) {
+    console.log('error', error)
     return {
       props: {
         _post: null,
-        postId: id
+        postId: null
       }
-    }
-  }
-
-  const _post = await getPostWithCommunityInfo({
-    request: {
-      publicationId: id
-    },
-    profileId: null,
-    reactionRequest: {
-      profileId: null
-    }
-  })
-  return {
-    props: {
-      _post: _post,
-      id: id
     }
   }
 }

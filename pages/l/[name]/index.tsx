@@ -102,28 +102,14 @@ const index = ({ _community, name }: Props) => {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { req, params } = context
-  const { name } = params
+  try {
+    const { req, params } = context
+    const { name } = params
 
-  const isClient = Boolean(req?.cookies?.isClient)
-  // const isClient = false
+    const isClient = Boolean(req?.cookies?.isClient)
+    // const isClient = false
 
-  if (isClient) {
-    return {
-      props: {
-        _community: null,
-        name: name
-      }
-    }
-  }
-
-  const res = await getLensCommunity(`${name}${HANDLE_SUFFIX}`)
-  if (res.status === 200) {
-    const lensCommunity = await res.json()
-    const communityLensProfile = await getLensProfileInfo({
-      handle: `${name}${HANDLE_SUFFIX}`
-    })
-    if (!communityLensProfile?.profile) {
+    if (isClient) {
       return {
         props: {
           _community: null,
@@ -132,24 +118,48 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }
     }
 
-    console.log('_community', {
-      ...lensCommunity,
-      Profile: communityLensProfile.profile
-    })
-    return {
-      props: {
-        _community: {
-          ...lensCommunity,
-          Profile: communityLensProfile.profile
-        },
-        name: name
+    const res = await getLensCommunity(`${name}${HANDLE_SUFFIX}`)
+    if (res.status === 200) {
+      const lensCommunity = await res.json()
+      const communityLensProfile = await getLensProfileInfo({
+        handle: `${name}${HANDLE_SUFFIX}`
+      })
+      if (!communityLensProfile?.profile) {
+        return {
+          props: {
+            _community: null,
+            name: name
+          }
+        }
+      }
+
+      console.log('_community', {
+        ...lensCommunity,
+        Profile: communityLensProfile.profile
+      })
+      return {
+        props: {
+          _community: {
+            ...lensCommunity,
+            Profile: communityLensProfile.profile
+          },
+          name: name
+        }
+      }
+    } else {
+      return {
+        props: {
+          _community: null,
+          name: name
+        }
       }
     }
-  } else {
+  } catch (error) {
+    console.log(error)
     return {
       props: {
         _community: null,
-        name: name
+        name: null
       }
     }
   }

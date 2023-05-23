@@ -93,44 +93,49 @@ const CommunityPage: FC<Props> = ({ _community, name }) => {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { req, params } = context
-  const { name } = params
+  try {
+    const { req, params } = context
+    const { name } = params
 
-  const isClient = Boolean(req?.cookies?.isClient)
-  // const isClient = false
-  if (isClient) {
+    const isClient = Boolean(req?.cookies?.isClient)
+    // const isClient = false
+    if (isClient) {
+      return {
+        props: {
+          _community: null,
+          name: name
+        }
+      }
+    }
+
+    const fetchCommunityInfo = async (name: string) => {
+      try {
+        const res = await getCommunityInfo(name)
+        if (res.status !== 200) {
+          return null
+        }
+        const result = await res.json()
+        return result
+      } catch (error) {
+        console.log(error)
+        return null
+      }
+    }
+    const community = await fetchCommunityInfo(String(name))
+    if (!community) return { props: { _community: null, name: name } }
+    const profile = await getDefaultProfileInfo({
+      ethereumAddress: community?.creator
+    })
+    community.creatorProfile = profile?.defaultProfile
     return {
       props: {
-        _community: null,
+        _community: community,
         name: name
       }
     }
-  }
-
-  const fetchCommunityInfo = async (name: string) => {
-    try {
-      const res = await getCommunityInfo(name)
-      if (res.status !== 200) {
-        return null
-      }
-      const result = await res.json()
-      return result
-    } catch (error) {
-      console.log(error)
-      return null
-    }
-  }
-  const community = await fetchCommunityInfo(String(name))
-  if (!community) return { props: { _community: null, name: name } }
-  const profile = await getDefaultProfileInfo({
-    ethereumAddress: community?.creator
-  })
-  community.creatorProfile = profile?.defaultProfile
-  return {
-    props: {
-      _community: community,
-      name: name
-    }
+  } catch (error) {
+    console.log(error)
+    return { props: { _community: null, name: null } }
   }
 }
 
