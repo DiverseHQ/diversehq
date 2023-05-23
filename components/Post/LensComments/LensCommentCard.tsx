@@ -211,6 +211,8 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
     }
   }
 
+  console.log('comment', comment)
+
   return (
     <>
       {comment && (
@@ -347,22 +349,14 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                 </Markup>
               </div>
               {/* attachemnt */}
-              {comment?.metadata?.media?.length > 0 && (
-                // <AttachmentMedia
-                //   // @ts-ignore
-                //   url={comment?.metadata?.media[0]?.original?.url}
-                //   // @ts-ignore
-                //   type={comment?.metadata?.media[0]?.type}
-                //   publication={comment}
-                // />
-                <div className="p-3">
-                  <Attachment
-                    attachments={comment?.metadata?.media}
-                    publication={comment}
-                    className={'max-h-[400px] w-full'}
-                  />
-                </div>
-              )}
+
+              <div className="p-3">
+                <Attachment
+                  attachments={comment?.metadata?.media}
+                  publication={comment}
+                  className={'max-h-[400px] w-full'}
+                />
+              </div>
               {/* last row */}
               <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
                 {/* upvote and downvote */}

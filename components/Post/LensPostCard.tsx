@@ -293,16 +293,20 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
     <>
       {postInfo && (
         <div
-          className={`sm:px-5 noSelect flex flex-col w-full bg-s-bg hover:bg-s-bg-hover pt-3 sm:pb-2 border-b-[1px] border-[#eee] dark:border-p-border ${
-            router.pathname.startsWith('/p') || isAlone
-              ? `${
-                  isAlone ? 'rounded-2xl border-[1px] border-s-border mb-3' : ''
-                } sm:my-3 sm:rounded-2xl sm:border-[1px] sm:border-s-border`
-              : 'cursor-pointer'
-          }`}
+          className={clsx(
+            'sm:px-5 noSelect flex flex-col w-full pt-3 bg-s-bg hover:bg-s-bg-hover sm:pb-2 border-b-[1px] border-[#eee] dark:border-p-border cursor-pointer',
+            (router.pathname.startsWith('/p') || isAlone) &&
+              `${
+                isAlone
+                  ? 'rounded-2xl border-[1px] border-s-border overflow-hidden mb-1.5'
+                  : 'sm:my-3 mb-3'
+              } sm:rounded-2xl sm:border-[1px] sm:border-s-border`
+          )}
           onClick={() => {
-            if (router.pathname.startsWith('/p')) return
-            router.push(`/p/${postInfo.id}`)
+            if (isAlone || !router.pathname.startsWith('/p')) {
+              router.push(`/p/${postInfo.id}`)
+              return
+            }
           }}
         >
           {/* top row */}
@@ -686,9 +690,13 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                   )}
                 </div>
                 <div
-                  className={`sm:pl-5 w-full sm:pr-4 sm:pb-1 ${
+                  className={`w-full sm:px-2.5 sm:pb-1 ${
                     isBlur ? 'blur-xl' : ''
                   }`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                  }}
                 >
                   <Attachment
                     publication={postInfo}
@@ -705,162 +713,166 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
               </div>
 
               {/* bottom row */}
-              {router.pathname.startsWith('/p') && !isAlone && (
-                <div className="flex flex-row items-center text-p-text px-3 sm:mx-5 sm:px-2 py-2 justify-between sm:justify-start sm:space-x-12 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-1 dark:border-p-border">
-                  <div
-                    className="flex flex-row gap-1 text-s-text cursor-pointer"
-                    onClick={showReactedByPopUp}
-                  >
-                    <span className="font-semibold text-p-text">
-                      {voteCount}
-                    </span>
-                    <span>upvotes</span>
-                  </div>
-                  <div className="flex flex-row gap-1 text-s-text ">
-                    <span className="font-semibold text-p-text">
-                      {postInfo?.stats?.totalAmountOfComments}
-                    </span>
-                    <span>comments</span>
-                  </div>
-                  <div
-                    onClick={showCollectedByPopUp}
-                    className="flex flex-row gap-1 text-s-text cursor-pointer"
-                  >
-                    <span className="font-semibold text-p-text ">
-                      {postInfo?.stats?.totalAmountOfCollects}
-                    </span>
-                    <span>collects</span>
-                  </div>
-                  <div
-                    onClick={showMirroredByPopUp}
-                    className="flex flex-row gap-1 text-s-text cursor-pointer"
-                  >
-                    <span className="font-semibold text-p-text">
-                      {postInfo?.stats?.totalAmountOfMirrors}
-                    </span>
-                    <span>mirrors</span>
-                  </div>
-                </div>
-              )}
-              <div
-                className={clsx(
-                  'text-p-text flex flex-row items-center px-3 sm:px-6 py-1',
-                  isMobile
-                    ? 'pb-1 justify-between'
-                    : clsx(
-                        postInfo?.collectModule?.__typename ===
-                          'FreeCollectModuleSettings' ||
-                          postInfo?.collectModule?.__typename ===
-                            'FeeCollectModuleSettings'
-                          ? 'justify-between'
-                          : 'justify-start space-x-24'
-                      )
-                )}
-              >
-                {isMobile && (
-                  <div className="flex flex-row items-center gap-x-2">
-                    <Tooltip
-                      enterDelay={1000}
-                      leaveDelay={200}
-                      title="Upvote"
-                      arrow
-                    >
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleUpvote()
-                        }}
-                        className="hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md py-1.5"
+              {!isAlone && (
+                <>
+                  {router.pathname.startsWith('/p') && (
+                    <div className="flex flex-row items-center text-p-text px-3 sm:mx-5 sm:px-2 py-2 justify-between sm:justify-start sm:space-x-12 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-1 dark:border-p-border">
+                      <div
+                        className="flex flex-row gap-1 text-s-text cursor-pointer"
+                        onClick={showReactedByPopUp}
                       >
-                        <img
-                          src={
-                            reaction === ReactionTypes.Upvote
-                              ? '/UpvotedFilled.svg'
-                              : '/upvoteGray.svg'
-                          }
-                          className="w-4 h-4"
-                        />
-                      </button>
-                    </Tooltip>
-                    <div className="font-medium text-[#687684]">
-                      {voteCount}
-                    </div>
-                    <Tooltip
-                      enterDelay={1000}
-                      leaveDelay={200}
-                      title="Downvote"
-                      arrow
-                    >
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDownvote()
-                        }}
-                        className="hover:bg-s-hover active:bg-s-hover rounded-md py-1.5 cursor-pointer"
-                      >
-                        <img
-                          src={
-                            reaction === ReactionTypes.Downvote
-                              ? '/DownvotedFilled.svg'
-                              : '/downvoteGray.svg'
-                          }
-                          className="w-4 h-4"
-                        />
-                      </button>
-                    </Tooltip>
-                  </div>
-                )}
-                <Tooltip
-                  enterDelay={1000}
-                  leaveDelay={200}
-                  title="Comment"
-                  arrow
-                >
-                  <span onClick={(e) => e.stopPropagation()}>
-                    <Link href={`/p/${postInfo.id}`} passHref>
-                      <div className="flex flex-row items-center cursor-pointer hover:bg-s-hover active:bg-s-hover rounded-md px-2 py-1.5 font-medium">
-                        <img
-                          src="/comment.svg"
-                          alt="Comment"
-                          className="w-4 h-4 mr-2"
-                        />
-                        {(!router.pathname.startsWith('/p') || isAlone) && (
-                          <span className="text-[#687684]">
-                            {postInfo?.stats?.totalAmountOfComments}
-                          </span>
-                        )}
+                        <span className="font-semibold text-p-text">
+                          {voteCount}
+                        </span>
+                        <span>upvotes</span>
                       </div>
-                    </Link>
-                  </span>
-                </Tooltip>
+                      <div className="flex flex-row gap-1 text-s-text ">
+                        <span className="font-semibold text-p-text">
+                          {postInfo?.stats?.totalAmountOfComments}
+                        </span>
+                        <span>comments</span>
+                      </div>
+                      <div
+                        onClick={showCollectedByPopUp}
+                        className="flex flex-row gap-1 text-s-text cursor-pointer"
+                      >
+                        <span className="font-semibold text-p-text ">
+                          {postInfo?.stats?.totalAmountOfCollects}
+                        </span>
+                        <span>collects</span>
+                      </div>
+                      <div
+                        onClick={showMirroredByPopUp}
+                        className="flex flex-row gap-1 text-s-text cursor-pointer"
+                      >
+                        <span className="font-semibold text-p-text">
+                          {postInfo?.stats?.totalAmountOfMirrors}
+                        </span>
+                        <span>mirrors</span>
+                      </div>
+                    </div>
+                  )}
+                  <div
+                    className={clsx(
+                      'text-p-text flex flex-row items-center px-3 sm:px-6 py-1',
+                      isMobile
+                        ? 'pb-1 justify-between'
+                        : clsx(
+                            postInfo?.collectModule?.__typename ===
+                              'FreeCollectModuleSettings' ||
+                              postInfo?.collectModule?.__typename ===
+                                'FeeCollectModuleSettings'
+                              ? 'justify-between'
+                              : 'justify-start space-x-24'
+                          )
+                    )}
+                  >
+                    {isMobile && (
+                      <div className="flex flex-row items-center gap-x-2">
+                        <Tooltip
+                          enterDelay={1000}
+                          leaveDelay={200}
+                          title="Upvote"
+                          arrow
+                        >
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleUpvote()
+                            }}
+                            className="hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md py-1.5"
+                          >
+                            <img
+                              src={
+                                reaction === ReactionTypes.Upvote
+                                  ? '/UpvotedFilled.svg'
+                                  : '/upvoteGray.svg'
+                              }
+                              className="w-4 h-4"
+                            />
+                          </button>
+                        </Tooltip>
+                        <div className="font-medium text-[#687684]">
+                          {voteCount}
+                        </div>
+                        <Tooltip
+                          enterDelay={1000}
+                          leaveDelay={200}
+                          title="Downvote"
+                          arrow
+                        >
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDownvote()
+                            }}
+                            className="hover:bg-s-hover active:bg-s-hover rounded-md py-1.5 cursor-pointer"
+                          >
+                            <img
+                              src={
+                                reaction === ReactionTypes.Downvote
+                                  ? '/DownvotedFilled.svg'
+                                  : '/downvoteGray.svg'
+                              }
+                              className="w-4 h-4"
+                            />
+                          </button>
+                        </Tooltip>
+                      </div>
+                    )}
+                    <Tooltip
+                      enterDelay={1000}
+                      leaveDelay={200}
+                      title="Comment"
+                      arrow
+                    >
+                      <span onClick={(e) => e.stopPropagation()}>
+                        <Link href={`/p/${postInfo.id}`} passHref>
+                          <div className="flex flex-row items-center cursor-pointer hover:bg-s-hover active:bg-s-hover rounded-md px-2 py-1.5 font-medium">
+                            <img
+                              src="/comment.svg"
+                              alt="Comment"
+                              className="w-4 h-4 mr-2"
+                            />
+                            {(!router.pathname.startsWith('/p') || isAlone) && (
+                              <span className="text-[#687684]">
+                                {postInfo?.stats?.totalAmountOfComments}
+                              </span>
+                            )}
+                          </div>
+                        </Link>
+                      </span>
+                    </Tooltip>
 
-                {(postInfo?.collectModule?.__typename ===
-                  'FreeCollectModuleSettings' ||
-                  postInfo?.collectModule?.__typename ===
-                    'FeeCollectModuleSettings') && (
-                  <span onClick={(e) => e.stopPropagation()}>
-                    <LensCollectButton
-                      publication={post}
-                      totalCollects={postInfo?.stats?.totalAmountOfCollects}
-                      hasCollectedByMe={postInfo?.hasCollectedByMe}
-                      author={postInfo?.profile}
-                      collectModule={postInfo?.collectModule}
-                      isAlone={isAlone}
-                    />
-                  </span>
-                )}
-                <span onClick={(e) => e.stopPropagation()}>
-                  <MirrorButton postInfo={postInfo} isAlone={isAlone} />
-                </span>
-                {!isMobile && (
-                  <span onClick={(e) => e.stopPropagation()}>
-                    <PostShareButton
-                      url={`${appLink}/p/${postInfo?.id}`}
-                      text={postInfo?.metadata?.name}
-                    />
-                  </span>
-                )}
-              </div>
+                    {(postInfo?.collectModule?.__typename ===
+                      'FreeCollectModuleSettings' ||
+                      postInfo?.collectModule?.__typename ===
+                        'FeeCollectModuleSettings') && (
+                      <span onClick={(e) => e.stopPropagation()}>
+                        <LensCollectButton
+                          publication={post}
+                          totalCollects={postInfo?.stats?.totalAmountOfCollects}
+                          hasCollectedByMe={postInfo?.hasCollectedByMe}
+                          author={postInfo?.profile}
+                          collectModule={postInfo?.collectModule}
+                          isAlone={isAlone}
+                        />
+                      </span>
+                    )}
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <MirrorButton postInfo={postInfo} isAlone={isAlone} />
+                    </span>
+                    {!isMobile && (
+                      <span onClick={(e) => e.stopPropagation()}>
+                        <PostShareButton
+                          url={`${appLink}/p/${postInfo?.id}`}
+                          text={postInfo?.metadata?.name}
+                        />
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
