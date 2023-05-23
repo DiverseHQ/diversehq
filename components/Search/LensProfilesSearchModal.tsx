@@ -10,6 +10,8 @@ import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 import { memo } from 'react'
+import { useRouter } from 'next/router'
+import SeeMoreResultsButton from './SeeMoreResultsButton'
 /* eslint-disable */
 
 interface Props {
@@ -27,6 +29,7 @@ const LensProfilesSearchModal = ({
   showLable = true,
   onProfileSelect
 }: Props) => {
+  const router = useRouter()
   const [lensProfiles, setLensProfiles] = useState<Profile[]>([])
   const searchProfileQuery = useSearchProfilesQuery(
     {
@@ -73,6 +76,10 @@ const LensProfilesSearchModal = ({
     // @ts-ignore
   }, [searchProfileQuery?.data?.search?.items])
 
+  const gotToSearchPageToGetMoreResults = () => {
+    router.push(`/search?type=profile&q=${searchTerm}`)
+  }
+
   return (
     <>
       {lensProfiles.length > 0 && (
@@ -102,6 +109,10 @@ const LensProfilesSearchModal = ({
               </div>
             </div>
           ))}
+          {/* more search results button */}
+          <SeeMoreResultsButton
+            goToSearchProfilePage={gotToSearchPageToGetMoreResults}
+          />
         </div>
       )}
     </>

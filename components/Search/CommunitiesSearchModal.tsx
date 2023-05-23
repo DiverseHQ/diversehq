@@ -11,6 +11,8 @@ import {
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 import getIPFSLink from '../User/lib/getIPFSLink'
+import { useRouter } from 'next/router'
+import SeeMoreResultsButton from './SeeMoreResultsButton'
 
 /* eslint-disable */
 
@@ -27,6 +29,7 @@ const CommunitiesSearchModal = ({
   inputRef,
   onCommunitySelect
 }: Props) => {
+  const router = useRouter()
   const [communities, setCommunities] = useState([])
   const [lensCommunities, setLensCommunities] = useState<
     IsFollowedLensCommunityType[]
@@ -71,6 +74,10 @@ const CommunitiesSearchModal = ({
     setCommunitiesOnSearchChange()
   }, [searchTerm])
 
+  const gotToSearchPageToGetMoreResults = () => {
+    router.push(`/search?type=community&q=${searchTerm}`)
+  }
+
   return (
     <>
       {communities.length + lensCommunities.length > 0 && (
@@ -114,6 +121,11 @@ const CommunitiesSearchModal = ({
               {community?.verified && <VerifiedBadge className="ml-1" />}
             </div>
           ))}
+
+          {/* more search results button */}
+          <SeeMoreResultsButton
+            goToSearchProfilePage={gotToSearchPageToGetMoreResults}
+          />
         </div>
       )}
     </>
