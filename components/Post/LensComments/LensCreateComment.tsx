@@ -34,11 +34,13 @@ import { v4 as uuid } from 'uuid'
 import Attachment from '../Attachment'
 import {
   SUPPORTED_IMAGE_TYPE,
-  SUPPORTED_VIDEO_TYPE
+  SUPPORTED_VIDEO_TYPE,
+  supportedMimeTypes
 } from '../../../utils/config'
 import { appId } from '../../../utils/config'
 import AttachmentRow from '../Create/AttachmentRow'
 import { hasMentionAtEnd } from '../../../utils/helper'
+import useUploadAttachments from '../Create/useUploadAttachments'
 const LensCreateComment = ({
   postId,
   addComment,
@@ -105,6 +107,7 @@ const LensCreateComment = ({
   const [popupStyle, setPopupStyle] = useState<any>({ display: 'none' })
 
   const [queryString, setQueryString] = useState<string | null>(null)
+  const { handleUploadAttachments } = useUploadAttachments(true)
 
   const { data } = useSearchProfilesQuery(
     {
@@ -476,6 +479,38 @@ const LensCreateComment = ({
     )
   }
 
+  const isTypeAllowed = (files: any) => {
+    for (const file of files) {
+      if (supportedMimeTypes.includes(file.type)) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  const handlePaste = async (
+    event: React.ClipboardEvent<HTMLTextAreaElement>
+  ) => {
+    const clipboardData = event.clipboardData
+    if (clipboardData) {
+      const items = clipboardData.items
+      const files = []
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i]
+        if (item.kind === 'file') {
+          console.log('File pasted:', item.getAsFile())
+          // Do something with the file
+          files.push(item.getAsFile())
+        }
+      }
+
+      if (files.length > 0 && isTypeAllowed(files)) {
+        await handleUploadAttachments(files)
+      }
+    }
+  }
+
   if (!hasProfile || !isSignedIn || !lensProfile?.defaultProfile?.id) {
     return <></>
   }
@@ -515,6 +550,7 @@ const LensCreateComment = ({
                 disabled={loading || !canCommnet}
                 rows={1}
                 style={{ resize: 'none' }}
+                onPaste={handlePaste}
                 onChange={(event) => {
                   // Get the cursor position
                   const cursorPosition = event.target.selectionStart
@@ -714,6 +750,7 @@ const LensCreateComment = ({
               <div className="flex-1 relative">
                 <textarea
                   ref={commentRef}
+                  onPaste={handlePaste}
                   // value={content}
                   className={clsx(
                     'flex px-2 flex-row items-center w-full no-scrollbar outline-none text-base sm:text-[18px] py-2 border-p-border border-[1px] rounded-xl bg-s-bg font-medium max-h-[150px]',
