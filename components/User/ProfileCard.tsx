@@ -158,149 +158,53 @@ const ProfileCard = ({
                       OptionPopUpModal={() => (
                         <MoreOptionsModal
                           className="z-50"
-                          list={
-                            isMobile
-                              ? myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() ===
-                                lensProfile?.ownedBy?.toLowerCase()
-                                ? [
-                                    {
-                                      label: 'Setting',
-                                      onClick: () => {
-                                        router.push(
-                                          `/l/${formatHandle(
-                                            lensProfile?.handle
-                                          )}/settings`
-                                        )
-                                      },
-                                      icon: () => (
-                                        <FiSettings className="mr-1.5 w-6 h-6" />
-                                      )
-                                    },
-                                    {
-                                      label: 'More Info',
-                                      onClick: () => {
-                                        setIsDrawerOpen(true)
-                                      },
-                                      icon: () => (
-                                        <FiInfo className="mr-1.5 w-6 h-6" />
-                                      )
-                                    },
-                                    {
-                                      label: 'Share',
-                                      onClick: () => {
-                                        if (navigator.share) {
-                                          navigator.share({
-                                            title: `Join l/${formatHandle(
-                                              lensProfile?.handle
-                                            )} on DiverseHQ`,
-                                            text: lensProfile?.bio,
-                                            url: `${appLink}/l/${formatHandle(
-                                              lensProfile?.handle
-                                            )}`
-                                          })
-                                        } else {
-                                          notifyInfo('Share not supported')
-                                        }
-                                      },
-                                      icon: () => (
-                                        <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                      )
-                                    }
-                                  ]
-                                : [
-                                    {
-                                      label: 'More Info',
-                                      onClick: () => {
-                                        setIsDrawerOpen(true)
-                                      },
-                                      icon: () => (
-                                        <FiInfo className="mr-1.5 w-6 h-6" />
-                                      )
-                                    },
-                                    {
-                                      label: 'Share',
-                                      onClick: () => {
-                                        if (navigator.share) {
-                                          navigator.share({
-                                            title: `Join l/${formatHandle(
-                                              lensProfile?.handle
-                                            )} on DiverseHQ`,
-                                            text: lensProfile?.bio,
-                                            url: `${appLink}/l/${formatHandle(
-                                              lensProfile?.handle
-                                            )}`
-                                          })
-                                        } else {
-                                          notifyInfo('Share not supported')
-                                        }
-                                      },
-                                      icon: () => (
-                                        <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                      )
-                                    }
-                                  ]
-                              : myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() ===
-                                lensProfile?.ownedBy?.toLowerCase()
-                              ? [
-                                  {
-                                    label: 'Setting',
-                                    onClick: () => {
-                                      router.push(
-                                        `/l/${formatHandle(
-                                          lensProfile?.handle
-                                        )}/settings`
-                                      )
-                                    },
-                                    icon: () => (
-                                      <FiSettings className="mr-1.5 w-6 h-6" />
-                                    )
-                                  },
-                                  {
-                                    label: 'Share',
-                                    onClick: () => {
-                                      if (navigator.share) {
-                                        navigator.share({
-                                          title: `Join l/${formatHandle(
-                                            lensProfile?.handle
-                                          )} on DiverseHQ`,
-                                          text: lensProfile?.bio,
-                                          url: `${appLink}/l/${formatHandle(
-                                            lensProfile?.handle
-                                          )}`
-                                        })
-                                      } else {
-                                        notifyInfo('Share not supported')
-                                      }
-                                    },
-                                    icon: () => (
-                                      <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                    )
-                                  }
-                                ]
-                              : [
-                                  {
-                                    label: 'Share',
-                                    onClick: () => {
-                                      if (navigator.share) {
-                                        navigator.share({
-                                          title: `Join l/${formatHandle(
-                                            lensProfile?.handle
-                                          )} on DiverseHQ`,
-                                          text: lensProfile?.bio,
-                                          url: `${appLink}/l/${formatHandle(
-                                            lensProfile?.handle
-                                          )}`
-                                        })
-                                      } else {
-                                        notifyInfo('Share not supported')
-                                      }
-                                    },
-                                    icon: () => (
-                                      <IoIosShareAlt className="mr-1.5 w-6 h-6" />
-                                    )
-                                  }
-                                ]
-                          }
+                          list={[
+                            {
+                              label: 'Setting',
+                              onClick: () => {
+                                router.push(
+                                  `/l/${formatHandle(
+                                    lensProfile?.handle
+                                  )}/settings`
+                                )
+                              },
+                              hidden:
+                                myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() !==
+                                lensProfile?.ownedBy?.toLowerCase(),
+                              icon: () => (
+                                <FiSettings className="mr-1.5 w-6 h-6" />
+                              )
+                            },
+                            {
+                              label: 'More Info',
+                              onClick: () => {
+                                setIsDrawerOpen(true)
+                              },
+                              icon: () => <FiInfo className="mr-1.5 w-6 h-6" />
+                            },
+                            {
+                              label: 'Share',
+                              onClick: () => {
+                                if (navigator.share) {
+                                  navigator.share({
+                                    title: `Join l/${formatHandle(
+                                      lensProfile?.handle
+                                    )} on DiverseHQ`,
+                                    text: lensProfile?.bio,
+                                    url: `${appLink}/l/${formatHandle(
+                                      lensProfile?.handle
+                                    )}`
+                                  })
+                                } else {
+                                  notifyInfo('Share not supported')
+                                }
+                              },
+                              hidden: isMobile,
+                              icon: () => (
+                                <IoIosShareAlt className="mr-1.5 w-6 h-6" />
+                              )
+                            }
+                          ]}
                         />
                       )}
                       position="left"
@@ -493,9 +397,9 @@ const ProfileCard = ({
                 </div>
               )}
               <div className="flex flex-col mt-3">
-                <p className="font-bold text-[18px] md:text-2xl tracking-wider truncate">
-                  {lensProfile?.name && <div>{lensProfile.name}</div>}
-                </p>
+                <div className="font-bold text-[18px] md:text-2xl tracking-wider break-words w-full">
+                  {lensProfile?.name && lensProfile.name}
+                </div>
                 <div className="text-[14px] md:text-[16px]">
                   <Link
                     href={

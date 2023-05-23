@@ -373,7 +373,7 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                       }
                     >
                       <div
-                        className="pl-2 font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline truncate"
+                        className="pl-2 max-w-[300px] sm:max-w-lg font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline truncate"
                         style={{
                           lineHeight: '1rem'
                         }}
