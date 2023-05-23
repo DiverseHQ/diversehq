@@ -299,7 +299,7 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
               `${
                 isAlone
                   ? 'rounded-2xl border-[1px] border-s-border overflow-hidden mb-1.5'
-                  : 'sm:my-3 mb-3'
+                  : 'sm:my-3 sm:mb-3'
               } sm:rounded-2xl sm:border-[1px] sm:border-s-border`
           )}
           onClick={() => {

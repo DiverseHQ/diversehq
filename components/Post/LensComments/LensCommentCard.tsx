@@ -343,14 +343,14 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
             </button>
             <div className="w-full">
               {/* content */}
-              <div className="mt-1">
+              <div className="pl-2">
                 <Markup className="break-words">
                   {comment?.metadata?.content}
                 </Markup>
               </div>
               {/* attachemnt */}
 
-              <div className="p-3">
+              <div className="px-3">
                 <Attachment
                   attachments={comment?.metadata?.media}
                   publication={comment}
