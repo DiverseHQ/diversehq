@@ -24,15 +24,16 @@ export async function subscribeUserToPush() {
     if (registration) {
       const exisitingSubscription =
         await registration.pushManager.getSubscription()
-      if (exisitingSubscription) {
-        return
-      }
 
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: process.env.NEXT_PUBLIC_VAPID_KEY
-      })
-      await sendSubscription(subscription)
+      if (exisitingSubscription) {
+        await sendSubscription(exisitingSubscription)
+      } else {
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: process.env.NEXT_PUBLIC_VAPID_KEY
+        })
+        await sendSubscription(subscription)
+      }
     }
     return null
   } catch (error) {
