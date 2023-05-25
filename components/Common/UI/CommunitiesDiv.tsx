@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import RightSideCommunityComponent from '../../Home/RightSideCommunityComponent'
+import RightSideCommunityComponent from '../../Home/RightSidebar/RightSideCommunityComponent'
 
 interface Props {
   text: string

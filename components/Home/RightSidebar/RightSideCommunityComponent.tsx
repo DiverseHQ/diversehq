@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 import { FiSettings } from 'react-icons/fi'
 import { Tooltip } from '@mui/material'
-import getIPFSLink from '../User/lib/getIPFSLink'
+import getIPFSLink from '../../User/lib/getIPFSLink'
 
 const RightSideCommunityComponent = ({ community }) => {
   const router = useRouter()

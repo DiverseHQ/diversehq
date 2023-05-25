@@ -3,20 +3,22 @@ import {
   getAllCommunities,
   getCreatedCommunitiesApi,
   getNotJoinedCommunities
-} from '../../apiHelper/community'
+} from '../../../apiHelper/community'
 // import { useNotify } from '../Common/NotifyContext'
-import { useProfile } from '../Common/WalletContext'
+import { useProfile } from '../../Common/WalletContext'
 // import { HiOutlineSparkles } from 'react-icons/hi'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
-import useHideSidebar from './hook/useHideSidebar'
-import CopyrightAndLinks from '../Common/UI/CopyrightAndLinks'
-import CommunitiesDiv from '../Common/UI/CommunitiesDiv'
-import { useLensUserContext } from '../../lib/LensUserContext'
-import getAvatar from '../User/lib/getAvatar'
-import formatHandle from '../User/lib/formatHandle'
+import useHideSidebar from '../hook/useHideSidebar'
+import CopyrightAndLinks from '../../Common/UI/CopyrightAndLinks'
+import CommunitiesDiv from '../../Common/UI/CommunitiesDiv'
+import { useLensUserContext } from '../../../lib/LensUserContext'
+import getAvatar from '../../User/lib/getAvatar'
+import formatHandle from '../../User/lib/formatHandle'
 import { useAccount } from 'wagmi'
-import CommunityScroll from '../Common/UI/CommunityScroll'
-import getCoverBanner from '../User/lib/getCoverBanner'
+import CommunityScroll from '../../Common/UI/CommunityScroll'
+import getCoverBanner from '../../User/lib/getCoverBanner'
+import TrendingTagsRightSidebarColumn from './TrendingTodayTagsRightSidebarColumn'
+import TrendingThisWeekTagsRightSidebarColumn from './TrendingThisWeekTagsRightSidebarColumn'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
@@ -113,7 +115,6 @@ const RightSidebar = () => {
           Icon={() => <AiOutlineUsergroupAdd className="w-[20px] h-[20px]" />}
         />
       )}
-
       {/* show in card form */}
       {/* {topCommunities?.length > 0 && (
         <CommunitiesDiv
@@ -149,6 +150,8 @@ const RightSidebar = () => {
             : topCommunities
         }
       />
+      <TrendingTagsRightSidebarColumn />
+      <TrendingThisWeekTagsRightSidebarColumn />
       <CopyrightAndLinks />
     </div>
   )
