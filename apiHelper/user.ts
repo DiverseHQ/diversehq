@@ -116,3 +116,11 @@ export const toggleAppendLinkPreference = async () => {
     headers: await getHeaders()
   })
 }
+
+export const sendSubscription = async (subscription) => {
+  return await fetch(`${apiEndpoint}/user/subscribe`, {
+    method: 'POST',
+    headers: await getHeaders(),
+    body: JSON.stringify(subscription)
+  })
+}
