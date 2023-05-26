@@ -7,7 +7,7 @@ export const getHeaders = async () => {
   let token = await getAccessToken()
 
   const encrypted = encrypt(token)
-  // console.log('encrypted', encrypted)
+  console.log('encrypted', encrypted)
   if (token) {
     return {
       'Content-Type': 'application/json',

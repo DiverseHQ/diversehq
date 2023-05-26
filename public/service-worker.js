@@ -5,10 +5,11 @@ self.addEventListener('push', (event) => {
   console.log('notification received', event)
 
   if (event.data) {
+    console.log('event.data', event.data)
     const pushData = event.data.json()
     const title = pushData.title
     const options = {
-      body: pushData.body,
+      body: pushData?.body || title,
       icon: 'https://diversehq.xyz/android-chrome-192x192.png'
     }
 
