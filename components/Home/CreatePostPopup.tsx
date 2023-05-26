@@ -56,6 +56,7 @@ import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical'
 // import uploadToIPFS from '../../utils/uploadToIPFS'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
+import { putAddLensPublication } from '../../apiHelper/lensPublication'
 
 const CreatePostPopup = ({
   startingContent = ''
@@ -387,7 +388,7 @@ const CreatePostPopup = ({
     }
 
     if (!collectSettings) {
-      // post as da
+      // post as data availability post
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
         const dispatcherResult = (
           await createPostDAViaDispatcher({
@@ -416,6 +417,15 @@ const CreatePostPopup = ({
               reaction: ReactionTypes.Upvote
             }
           })
+
+          if (selectedCommunity?._id) {
+            console.log('adding lens publication')
+            await putAddLensPublication(
+              selectedCommunity._id,
+              dispatcherResult.id
+            )
+          }
+
           // // addPost({ txId: dispatcherResult. }, postForIndexing)
           console.log(dispatcherResult)
           router.push(`/p/${dispatcherResult.id}`)
@@ -506,6 +516,10 @@ const CreatePostPopup = ({
           }
         })
         setLoading(false)
+        if (selectedCommunity?._id) {
+          console.log('adding lens publication')
+          await putAddLensPublication(selectedCommunity._id, daResult.id)
+        }
         router.push(`/p/${daResult.id}`)
         handleCompletePost()
       }
