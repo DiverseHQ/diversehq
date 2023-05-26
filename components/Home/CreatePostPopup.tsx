@@ -399,7 +399,6 @@ const CreatePostPopup = ({
           })
         ).createDataAvailabilityPostViaDispatcher
 
-        setLoading(false)
         if (
           dispatcherResult.__typename === 'RelayError' ||
           !dispatcherResult.id
@@ -515,7 +514,6 @@ const CreatePostPopup = ({
             reaction: ReactionTypes.Upvote
           }
         })
-        setLoading(false)
         if (selectedCommunity?._id) {
           console.log('adding lens publication')
           await putAddLensPublication(selectedCommunity._id, daResult.id)
