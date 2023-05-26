@@ -13,10 +13,12 @@ const imageProxy = (url: string, tr: string = '', name?: string): string => {
   if (!url) return ''
   // return url
   if (url?.startsWith('https://firebasestorage.googleapis.com')) {
-    return url.replace(
-      'https://firebasestorage.googleapis.com',
-      `${IMAGE_KIT_ENDPOINT}${tr ? tr : ''}}`
-    )
+    // return url.replace(
+    //   'https://firebasestorage.googleapis.com',
+    //   `${IMAGE_KIT_ENDPOINT}${tr ? tr : ''}}`
+    // )
+    // temperory returning the original url
+    return url
   }
   return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,${
     name ? `n-${name}` : ''

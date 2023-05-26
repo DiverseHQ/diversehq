@@ -7,7 +7,8 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   // importScripts: ['/service-worker.js'],
   register: true,
-  skipWaiting: true
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
   // register: true,
   // runtimeCaching,
   // skipWaiting: true
