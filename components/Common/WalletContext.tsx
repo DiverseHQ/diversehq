@@ -187,8 +187,9 @@ export const WalletProvider = ({ children }) => {
       const userInfo = await getUserInfo(address)
       // console.log('userInfo', userInfo)
       if (userInfo) {
-        await subscribeUserToPush()
         setUser(userInfo)
+        setLoading(false)
+        await subscribeUserToPush()
       } else {
         notifyError('Something went wrong. Please try again later.')
         setUser(null)
