@@ -85,7 +85,7 @@ const LensPageProfileCard = ({
                 src={getAvatar(profile)}
                 className={clsx(
                   isLensCommunity ? 'rounded-xl' : 'rounded-full',
-                  'w-[70px] h-[70px] object-cover  border-s-bg border-4 bg-s-bg'
+                  'w-[70px] h-[70px] object-cover  border-s-bg border-4 bg-s-bg shrink-0'
                 )}
               />
             </div>
