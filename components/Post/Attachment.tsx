@@ -267,7 +267,7 @@ const Attachment: FC<Props> = ({
             )}
             <div
               className={clsx(
-                'absolute top-[10px] z-20 bg-p-bg py-0.5 px-2 rounded-full',
+                'absolute top-[10px] left-[10px] text-white z-20 bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg py-0.5 px-2 rounded-full',
                 // isNew ? 'left-[10px]' : 'right-[10px]',
                 'left-[10px]'
               )}
