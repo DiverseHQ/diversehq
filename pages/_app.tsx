@@ -10,6 +10,7 @@ import { useRef } from 'react'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import { appLink, sortTypes } from '../utils/config'
+import { useCommonStore } from '../store/common'
 TimeAgo.addDefaultLocale(en)
 
 interface MyAppProps {
@@ -52,6 +53,9 @@ function MyApp({ Component, pageProps, isMobileView }: MyAppProps) {
   const router = useRouter()
   const retainedComponents = useRef<{ [path: string]: RetainedComponent }>({})
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
+  const increaseRouteChanged = useCommonStore(
+    (state) => state.increaseNumberOfRoutesChanged
+  )
 
   useEffect(() => {
     document.cookie = 'isClient=true; path=/'
@@ -79,6 +83,7 @@ function MyApp({ Component, pageProps, isMobileView }: MyAppProps) {
     router.events.on('routeChangeStart', handleRouteChangeStart)
     router.events.on('routeChangeComplete', () => {
       setIsLoading(false)
+      increaseRouteChanged()
     })
     router.events.on('routeChangeError', () => {
       setIsLoading(false)

@@ -13,6 +13,7 @@ import PostPageMentionsColumn, {
   getAllMentionsHandlFromContent
 } from '../PostPageMentionsColumn'
 import { useDevice } from '../../Common/DeviceWrapper'
+import { useCommonStore } from '../../../store/common'
 
 interface Props {
   id: string
@@ -39,6 +40,12 @@ const LensPostPage = ({ id, post }: Props) => {
     }
   )
 
+  const numberOfRoutesChanged = useCommonStore(
+    (state) => state.numberOfRoutesChanged
+  )
+
+  console.log('numberOfRoutesChanged', numberOfRoutesChanged)
+
   useEffect(() => {
     if (!data?.publication) return
     // @ts-ignore
@@ -46,6 +53,16 @@ const LensPostPage = ({ id, post }: Props) => {
   }, [data, post])
 
   const router = useRouter()
+
+  const onBackClick = () => {
+    if (!numberOfRoutesChanged) {
+      // If no referrer is available, replace the current URL with the home page URL
+      router.push('/')
+    } else {
+      // Go back to the previous page
+      router.back()
+    }
+  }
 
   return (
     <>
@@ -81,7 +98,7 @@ const LensPostPage = ({ id, post }: Props) => {
               <div className="flex flex-row items-center ml-4 mt-3 justify-end">
                 <div
                   className="flex hover:bg-s-hover text-s-text hover:text-p-text rounded-full px-3 py-1 cursor-pointer items-center gap-2"
-                  onClick={() => router.back()}
+                  onClick={onBackClick}
                 >
                   <span className="text-[18px]">Close</span>
                   <IoMdClose className="w-5 h-5 " />

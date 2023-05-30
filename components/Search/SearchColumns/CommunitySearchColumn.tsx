@@ -41,9 +41,6 @@ const CommunitySearchColumn = ({ q }: { q: string }) => {
     setCommunitiesOnSearchChange()
   }, [q, allLensCommunities])
 
-  console.log('communities', communities)
-  console.log('lensCommunities', lensCommunities)
-
   return (
     <>
       {communities.length + lensCommunities.length > 0 && (

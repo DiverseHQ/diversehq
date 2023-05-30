@@ -211,8 +211,6 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
     }
   }
 
-  console.log('comment', comment)
-
   return (
     <>
       {comment && (
