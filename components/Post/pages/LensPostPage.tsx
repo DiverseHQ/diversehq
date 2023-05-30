@@ -44,8 +44,6 @@ const LensPostPage = ({ id, post }: Props) => {
     (state) => state.numberOfRoutesChanged
   )
 
-  console.log('numberOfRoutesChanged', numberOfRoutesChanged)
-
   useEffect(() => {
     if (!data?.publication) return
     // @ts-ignore
