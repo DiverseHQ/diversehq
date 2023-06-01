@@ -21,7 +21,7 @@ const ProfilePageRightSidebar: FC<Props> = ({ profile, lensProfile }) => {
         </div>
         <div className="text-p-text px-3 py-2 flex flex-col text-[14px]">
           <div className="mb-3">
-            <Markup>{lensProfile.bio}</Markup>
+            <Markup className="break-words">{lensProfile.bio}</Markup>
           </div>
           <div className="flex gap-2 items-center mb-2">
             <img src="/communityCreatedOnDate.svg" alt="cake" />

@@ -44,12 +44,12 @@ const CoverImage = ({
   }
 
   return (
-    <div className="h-32 w-28 md:h-40 md:w-60 md:rounded-none">
+    <div className="w-full pt-3 px-4 sm:px-20 sm:rounded-xl">
       {cover && (
         <ImageWithFullScreenZoom
           src={imageProxy(getIPFSLink(cover))}
           alt="cover"
-          className="image-unselectable object-cover h-32 w-28 md:h-40 md:w-36"
+          className="image-unselectable object-cover w-full rounded-xl"
           ref={imageRef}
         />
       )}

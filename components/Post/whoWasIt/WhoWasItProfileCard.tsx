@@ -18,7 +18,7 @@ const WhoWasItProfileCard = ({ profile }: { profile: Profile }) => {
   })
   return (
     <div
-      className="py-3.5 sm:py-4 px-4 sm:px-6 start-row hover:bg-s-hover cursor-pointer"
+      className="py-3.5 sm:py-4 px-4 sm:px-6 start-row hover:bg-s-hover cursor-pointer w-full"
       onClick={() => {
         router.push(`/u/${formatHandle(profile.handle)}`)
         hideModal()
@@ -30,7 +30,7 @@ const WhoWasItProfileCard = ({ profile }: { profile: Profile }) => {
           className="w-16 h-16 rounded-full object-cover"
         />
       </div>
-      <div className="flex flex-col ml-4 w-full">
+      <div className="ml-4 w-full">
         <div className="space-between-row w-full">
           <div>
             <div className="text-p-text text-base font-bold leading-5">
@@ -51,8 +51,10 @@ const WhoWasItProfileCard = ({ profile }: { profile: Profile }) => {
             </div>
           )}
         </div>
-        <div className="text-s-text text-sm mt-1">
-          <Markup>{stringToLength(profile.bio, 100)}</Markup>
+        <div className="text-s-text text-sm mt-1 w-[250px] sm:w-[400px]">
+          <Markup className="break-words">
+            {stringToLength(profile.bio, 100)}
+          </Markup>
         </div>
       </div>
     </div>
