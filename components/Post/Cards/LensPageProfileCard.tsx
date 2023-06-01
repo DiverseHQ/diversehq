@@ -137,22 +137,23 @@ const LensPageProfileCard = ({
             <ProfileLinksRow profile={profile} />
           </div>
         )} */}
-        {!isLensCommunity ? (
-          <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
-            <span>
-              Followers:{' '}
-              <span className="font-semibold">
-                {profile?.stats?.totalFollowers}
-              </span>
-            </span>
-            <span>
-              Following:{' '}
-              <span className="font-semibold">
-                {profile?.stats?.totalFollowing}
-              </span>
-            </span>
-          </div>
-        ) : (
+        {isLensCommunity && (
+          // ? (
+          //   <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
+          //     <span>
+          //       Followers:{' '}
+          //       <span className="font-semibold">
+          //         {profile?.stats?.totalFollowers}
+          //       </span>
+          //     </span>
+          //     <span>
+          //       Following:{' '}
+          //       <span className="font-semibold">
+          //         {profile?.stats?.totalFollowing}
+          //       </span>
+          //     </span>
+          //   </div>
+          // ) : (
           <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
             <span>
               Members:{' '}
