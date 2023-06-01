@@ -346,7 +346,7 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                           ? getAvatar(postInfo?.profile)
                           : getIPFSLink(
                               postInfo?.communityInfo?.logoImageUrl
-                            ) ?? '/gradient.jpg'
+                            ) ?? '/defaultBanner.png'
                       }
                       className={clsx(
                         'h-10 w-10 object-cover',

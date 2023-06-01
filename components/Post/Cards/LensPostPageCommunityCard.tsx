@@ -51,7 +51,7 @@ const LensPostPageCommunityCard = ({
           src={
             communityInfo?.bannerImageUrl
               ? getIPFSLink(communityInfo?.bannerImageUrl)
-              : '/gradient.jpg'
+              : '/defaultBanner.png'
           }
           className="h-[80px] rounded-t-[15px] w-full object-cover"
         />
@@ -63,7 +63,9 @@ const LensPostPageCommunityCard = ({
             onClick={(e) => e.stopPropagation()}
           >
             <ImageWithFullScreenZoom
-              src={getIPFSLink(communityInfo?.logoImageUrl) ?? '/gradient.jpg'}
+              src={
+                getIPFSLink(communityInfo?.logoImageUrl) ?? '/defaultBanner.png'
+              }
               className="rounded-2xl w-[70px] h-[70px] object-cover border-s-bg border-4 bg-s-bg"
             />
           </div>

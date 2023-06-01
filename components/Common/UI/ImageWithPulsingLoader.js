@@ -16,7 +16,7 @@ const ImageWithPulsingLoader = ({ loaderClassName = '', src, ...props }) => {
       )}
       <img
         {...props}
-        src={!error ? src : '/gradient.jpg'}
+        src={!error ? src : '/defaultBanner.png'}
         onError={() => {
           setLoading(false)
           setError(true)

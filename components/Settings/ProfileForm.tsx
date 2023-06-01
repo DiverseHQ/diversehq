@@ -294,7 +294,7 @@ const ProfileForm = () => {
 
             <img
               className="inset-0 object-cover h-[200px] w-full rounded-xl"
-              src={profileBanner ? profileBanner : '/gradient.jpg'}
+              src={profileBanner ? profileBanner : '/defaultBanner.png'}
               alt="Header"
             />
 

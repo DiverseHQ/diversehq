@@ -172,7 +172,7 @@ const PostPage = ({ post }) => {
                   communityInfo.bannerImageUrl
                     ? // @ts-ignore
                       getIPFSLink(communityInfo?.bannerImageUrl)
-                    : '/gradient.jpg'
+                    : '/defaultBanner.png'
                 }
                 className="h-[80px] rounded-t-[15px] w-full object-cover"
               />
@@ -183,7 +183,7 @@ const PostPage = ({ post }) => {
                       src={
                         // @ts-ignore
                         getIPFSLink(communityInfo?.logoImageUrl) ??
-                        '/gradient.jpg'
+                        '/defaultBanner.png'
                       }
                       className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
                     />
@@ -255,7 +255,7 @@ const PostPage = ({ post }) => {
                         src={
                           profile?.profileImageUrl
                             ? profile?.profileImageUrl
-                            : '/gradient.jpg'
+                            : '/defaultBanner.png'
                         }
                         className="rounded-full w-[50px] h-[50px] xl:w-[60px] xl:h-[60px] object-cover"
                       />
