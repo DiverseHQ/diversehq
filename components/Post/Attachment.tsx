@@ -249,7 +249,7 @@ const Attachment: FC<Props> = ({
                   e.stopPropagation()
                   handlePrevClick()
                 }}
-                className="absolute left-0 top-[50%] z-20 p-1 rounded-full translate-x-[50%] -translate-y-[50%] active:bg-m-btn-bg active:text-m-btn-text sm:hover:bg-m-btn-bg sm:hover:text-m-btn-text bg-m-btn-hover-bg text-m-btn-hover-text transition-all duration-300"
+                className="absolute left-0 top-[50%] z-20 p-1 rounded-full translate-x-[50%] -translate-y-[50%] bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg transition-all duration-300"
               >
                 <AiOutlineArrowLeft className="w-6 h-6" />
               </button>
@@ -260,7 +260,7 @@ const Attachment: FC<Props> = ({
                   e.stopPropagation()
                   handleNextClick()
                 }}
-                className="absolute right-0 top-[50%] z-20 p-1 rounded-full -translate-x-[50%] -translate-y-[50%] active:bg-m-btn-bg active:text-m-btn-text sm:hover:bg-m-btn-bg sm:hover:text-m-btn-text bg-m-btn-hover-bg text-m-btn-hover-text transition-all duration-300"
+                className="absolute right-0 top-[50%] z-20 p-1 rounded-full -translate-x-[50%] -translate-y-[50%] bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg transition-all duration-300"
               >
                 <AiOutlineArrowRight className="w-6 h-6" />
               </button>

@@ -2,8 +2,6 @@ import Link from 'next/link'
 import React, { useState, useEffect } from 'react'
 import { stringToLength } from '../../utils/utils'
 import Markup from '../Lexical/Markup'
-import { countLinesFromMarkdown } from '../../utils/utils'
-import { MAX_CONTENT_LINES } from '../../utils/config'
 import { useRouter } from 'next/router'
 import CommonNotificationCardLayoutUI from './CommonNotificationCardLayoutUI'
 import { BsFilePlus } from 'react-icons/bs'
@@ -12,19 +10,14 @@ const NotificationPostCreated = ({ notification }) => {
   const router = useRouter()
 
   const [showMore, setShowMore] = useState(
-    (countLinesFromMarkdown(notification.post?.content) > MAX_CONTENT_LINES ||
-      notification.post?.content?.length > 400 ||
-      countLinesFromMarkdown(notification.post?.titile) > MAX_CONTENT_LINES ||
+    (notification.post?.content?.length > 400 ||
       notification.post?.title?.length > 400) &&
       router.pathname !== '/p/[id]'
   )
 
   useEffect(() => {
     setShowMore(
-      (countLinesFromMarkdown(notification?.post?.content) >
-        MAX_CONTENT_LINES ||
-        notification?.post?.content?.length > 400 ||
-        countLinesFromMarkdown(notification?.post?.title) > MAX_CONTENT_LINES ||
+      (notification?.post?.content?.length > 400 ||
         notification?.post?.title?.length > 400) &&
         router.pathname !== '/p/[id]'
     )

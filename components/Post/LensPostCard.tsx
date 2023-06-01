@@ -9,18 +9,12 @@ import {
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
 import { useNotify } from '../Common/NotifyContext'
-import {
-  appId,
-  appLink,
-  MAX_CONTENT_LINES_FOR_POST,
-  showNameForThisAppIds
-} from '../../utils/config'
+import { appId, appLink, showNameForThisAppIds } from '../../utils/config'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
 // import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
 import Markup from '../Lexical/Markup'
-import { countLinesFromMarkdown } from '../../utils/utils'
 import { HiOutlineTrash } from 'react-icons/hi'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import PostShareButton from './PostShareButton'
@@ -202,18 +196,12 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
   }
   const router = useRouter()
   const [showMore, setShowMore] = useState(
-    (countLinesFromMarkdown(postInfo?.metadata?.content) >
-      MAX_CONTENT_LINES_FOR_POST ||
-      postInfo?.metadata?.content?.length > 400) &&
-      router.pathname !== '/p/[id]'
+    postInfo?.metadata?.content?.length > 400 && router.pathname !== '/p/[id]'
   )
 
   useEffect(() => {
     setShowMore(
-      (countLinesFromMarkdown(postInfo?.metadata?.content) >
-        MAX_CONTENT_LINES_FOR_POST ||
-        postInfo?.metadata?.content?.length > 400) &&
-        router.pathname !== '/p/[id]'
+      postInfo?.metadata?.content?.length > 400 && router.pathname !== '/p/[id]'
     )
   }, [postInfo])
 
@@ -522,7 +510,7 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
           </div>
 
           <div className="flex flex-row w-full">
-            {!isMobile && (
+            {!isMobile && !isAlone && (
               <div className="flex flex-col items-center w-[40px] pt-2 shrink-0">
                 <Tooltip
                   enterDelay={1000}
