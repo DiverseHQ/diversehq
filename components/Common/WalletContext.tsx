@@ -19,7 +19,7 @@ import {
   removeLocalToken
   // setLocalToken
 } from '../../utils/token'
-import { getUserInfo } from '../../apiHelper/user'
+import { getUserInfo, removeSubscription } from '../../apiHelper/user'
 import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 // import { userRoles } from '../../utils/config'
 import { useNotify } from './NotifyContext'
@@ -103,9 +103,26 @@ export const WalletProvider = ({ children }) => {
   }, [isSignedIn, hasProfile, address, signer])
 
   const handleDisconnected = async () => {
+    if (Notification.permission === 'granted') {
+      const registration = await await navigator.serviceWorker.register(
+        '/service-worker.js',
+        {
+          scope: '/'
+        }
+      )
+      if (registration) {
+        const exisitngSubscription =
+          await registration.pushManager.getSubscription()
+        if (exisitngSubscription) {
+          await removeSubscription(exisitngSubscription)
+        }
+      }
+    }
     setUser(null)
     setLoading(false)
     removeAccessTokenFromStorage()
+    // delete subscription from db
+
     localStorage.removeItem('mostPostedCommunities')
     localStorage.removeItem('recentCommunities')
     await queryClient.invalidateQueries({
@@ -198,16 +215,6 @@ export const WalletProvider = ({ children }) => {
         }
         removeAccessTokenFromStorage()
       }
-      // if (userInfo && userInfo.role <= userRoles.NORMAL_USER) {
-      //   setUser(userInfo)
-      // } else {
-      //   notifyInfo('You are not whitelisted. DiverseHQ is in closed beta.')
-      //   setUser(null)
-      //   if (getLocalToken()) {
-      //     removeLocalToken()
-      //   }
-      //   removeAccessTokenFromStorage()
-      // }
     } catch (error) {
       console.log(error)
     } finally {

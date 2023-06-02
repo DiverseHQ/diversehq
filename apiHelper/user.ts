@@ -124,3 +124,19 @@ export const sendSubscription = async (subscription) => {
     body: JSON.stringify(subscription)
   })
 }
+
+export const removeSubscription = async (subscription) => {
+  return await fetch(`${apiEndpoint}/user/unsubscribe`, {
+    method: 'POST',
+    headers: await getHeaders(),
+    body: JSON.stringify(subscription)
+  })
+}
+
+export const isSubscribed = async (subscription) => {
+  return await fetch(`${apiEndpoint}/user/is-subscribed`, {
+    method: 'POST',
+    headers: await getHeaders(),
+    body: JSON.stringify(subscription)
+  })
+}

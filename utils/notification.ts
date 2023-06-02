@@ -1,6 +1,6 @@
 // notification.js
 
-import { sendSubscription } from '../apiHelper/user'
+import { isSubscribed, sendSubscription } from '../apiHelper/user'
 
 const base64ToUint8Array = (base64) => {
   const padding = '='.repeat((4 - (base64.length % 4)) % 4)
@@ -16,17 +16,20 @@ const base64ToUint8Array = (base64) => {
 }
 
 export async function requestNotificationPermission() {
+  const registration = await navigator.serviceWorker.register(
+    '/service-worker.js',
+    {
+      scope: '/'
+    }
+  )
+
   if (Notification.permission !== 'granted') {
     const permission = await Notification.requestPermission()
     if (permission === 'granted') {
-      const registration = await navigator.serviceWorker.register(
-        '/service-worker.js',
-        {
-          scope: '/'
-        }
-      )
       return registration
     }
+  } else {
+    return registration
   }
   return null
 }
@@ -39,8 +42,11 @@ export async function subscribeUserToPush() {
         await registration.pushManager.getSubscription()
 
       if (exisitingSubscription) {
+        const res = await isSubscribed(exisitingSubscription)
+        const data = await res.json()
+        if (data?.isSubscribe) return
+        await sendSubscription(exisitingSubscription)
         return
-        // await sendSubscription(exisitingSubscription)
       } else {
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
