@@ -50,7 +50,6 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     if (profileFeed?.feed?.pageInfo?.next) {
       nextCursor = profileFeed?.feed.pageInfo.next
     }
-    console.log('newPosts', profileFeed?.feed?.items)
     const newPosts = profileFeed?.feed.items.map((item) => {
       if (item.root.__typename === 'Comment') {
         return {
@@ -126,7 +125,6 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   }, [profileFeed?.feed?.pageInfo?.next])
 
   const getMorePosts = async () => {
-    console.log('getMorePosts')
     if (exploreQueryRequestParams.posts.length === 0) return
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
