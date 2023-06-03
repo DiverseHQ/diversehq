@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
 import {
+  FeedItem,
   ReactionTypes,
   useAddReactionMutation,
   useHidePublicationMutation,
@@ -44,17 +45,19 @@ import getIPFSLink from '../User/lib/getIPFSLink'
 import WhoReactedPublicationPopup from './whoWasIt/WhoReactedPublicationPopup'
 import WhoCollectedPublicationPopUp from './whoWasIt/WhoCollectedPublicationPopUp'
 import WhoMirroredPublicatitonPopUp from './whoWasIt/WhoMirroredPublicatitonPopUp'
+import LensCommentCard from './LensComments/LensCommentCard'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
 interface Props {
   post: postWithCommunityInfoType
   isAlone?: boolean
+  feedItem?: FeedItem
 }
 
 // post?.isLensCommunityPost makes sure that the post is a post from a lens community
 
-const LensPostCard = ({ post, isAlone = false }: Props) => {
+const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
   const { isMobile } = useDevice()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
@@ -298,7 +301,7 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
           }}
         >
           {/* top row */}
-          {postInfo?.mirroredBy && (
+          {postInfo?.mirroredBy ? (
             <div
               className="flex flex-row w-full space-x-1 items-center pl-4 md:pl-1 mb-1 text-xs text-s-text"
               onClick={(e) => {
@@ -313,6 +316,38 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
               </Link>
               <span className="pl-0.5">{'mirrored'}</span>
             </div>
+          ) : (
+            <>
+              {feedItem?.electedMirror && (
+                <div
+                  className="flex flex-row w-full space-x-1 items-center pl-4 md:pl-1 mb-1 text-xs text-s-text"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                  }}
+                >
+                  <AiOutlineRetweet className="w-4 h-4 pr-0.5" />
+                  <Link
+                    href={`/u/${formatHandle(
+                      feedItem?.electedMirror?.profile?.handle
+                    )}`}
+                  >
+                    <div className="hover:underline">
+                      {`u/${formatHandle(
+                        feedItem?.electedMirror?.profile?.handle
+                      )}`}{' '}
+                    </div>
+                  </Link>
+                  {feedItem?.mirrors?.length - 1 > 0 && (
+                    <span className="pl-0.5">{`& ${
+                      feedItem?.mirrors?.length - 1
+                    } other${
+                      feedItem?.mirrors?.length - 1 > 1 ? 's' : ''
+                    } you know`}</span>
+                  )}
+                  <span className="pl-0.5">{'mirrored'}</span>
+                </div>
+              )}
+            </>
           )}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             <>
@@ -860,6 +895,19 @@ const LensPostCard = ({ post, isAlone = false }: Props) => {
                     )}
                   </div>
                 </>
+              )}
+              {feedItem?.comments?.length > 0 && (
+                <div className="sm:pl-0 pl-3">
+                  {feedItem?.comments?.map((comment) => {
+                    return (
+                      <LensCommentCard
+                        key={comment.id}
+                        hideBottomRow
+                        comment={comment}
+                      />
+                    )
+                  })}
+                </div>
               )}
             </div>
           </div>

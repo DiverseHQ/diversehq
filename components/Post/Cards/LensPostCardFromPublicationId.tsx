@@ -27,7 +27,6 @@ const LensPostCardFromPublicationId = ({
           profileId: data?.defaultProfile?.id ?? null
         }
       })
-
       if (publication?.__typename === 'Post') {
         const communityId = publication.metadata.tags[0]
         const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds([
@@ -55,6 +54,12 @@ const LensPostCardFromPublicationId = ({
           }
         }
 
+        // @ts-ignore
+        setPost(publication)
+      } else if (publication?.__typename === 'Comment') {
+        // @ts-ignore
+        setPost(publication?.mainPost)
+      } else if (publication?.__typename === 'Mirror') {
         // @ts-ignore
         setPost(publication)
       }

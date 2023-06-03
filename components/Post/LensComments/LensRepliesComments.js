@@ -13,6 +13,7 @@ const LensRepliedComments = ({
   commentId,
   comments,
   setComments,
+  hideBottomRow = false,
   disableFetch = false
 }) => {
   const [uniqueComments, setUniqueComments] = useState([])
@@ -61,6 +62,7 @@ const LensRepliedComments = ({
             <LensCommentCard
               key={comment?.id ? comment?.id : comment.tempId}
               comment={comment}
+              hideBottomRow={hideBottomRow}
             />
           )
         })}

@@ -28,6 +28,7 @@ export type Scalars = {
   FollowModuleData: any;
   Handle: any;
   HandleClaimIdScalar: any;
+  ImageSizeTransform: any;
   InternalPublicationId: any;
   IpfsCid: any;
   Jwt: any;
@@ -1955,16 +1956,36 @@ export type MediaSet = {
   __typename?: 'MediaSet';
   /**
    * Medium media - will always be null on the public API
-   * @deprecated should not be used will always be null
+   * @deprecated should not be used will always be null - use transform function to get small media
    */
   medium?: Maybe<Media>;
-  /** Original media */
+  /** Original media as found on the publication metadata */
+  onChain: Media;
+  /** Optimized media, snapshotted and served from a CDN */
+  optimized?: Maybe<Media>;
+  /** On-chain or snapshotted media on a CDN */
   original: Media;
   /**
    * Small media - will always be null on the public API
-   * @deprecated should not be used will always be null
+   * @deprecated should not be used will always be null - use transform function to get small media
    */
   small?: Maybe<Media>;
+  transformed?: Maybe<Media>;
+};
+
+
+/** The Media Set */
+export type MediaSetTransformedArgs = {
+  params: MediaTransformParams;
+};
+
+export type MediaTransformParams = {
+  /** Set the transformed image's height. You can use specific size in pixels eg. 100px, a percentage eg. 50% or set as 'auto' to be set automatically. Default value is 'auto'. */
+  height?: InputMaybe<Scalars['ImageSizeTransform']>;
+  /** Set if you want to keep the image's original aspect ratio. True by default. If explicitly set to false, the image will stretch based on the width and height values. */
+  keepAspectRatio?: InputMaybe<Scalars['Boolean']>;
+  /** Set the transformed image's width. You can use specific size in pixels eg. 100px, a percentage eg. 50% or set as 'auto' to be set automatically. Default value is 'auto'. */
+  width?: InputMaybe<Scalars['ImageSizeTransform']>;
 };
 
 export type MentionPublication = Comment | Post;
@@ -2249,6 +2270,7 @@ export type Mutation = {
   /** Delete an NFT Gallery */
   deleteNftGallery?: Maybe<Scalars['Void']>;
   dismissRecommendedProfiles?: Maybe<Scalars['Void']>;
+  dss?: Maybe<Scalars['Void']>;
   gci?: Maybe<Scalars['Void']>;
   gcr?: Maybe<Scalars['Void']>;
   gdi?: Maybe<Scalars['Void']>;
@@ -2471,6 +2493,11 @@ export type MutationDeleteNftGalleryArgs = {
 
 export type MutationDismissRecommendedProfilesArgs = {
   request: DismissRecommendedProfilesRequest;
+};
+
+
+export type MutationDssArgs = {
+  request: PrfRequest;
 };
 
 
@@ -3068,6 +3095,24 @@ export type PostMirrorsArgs = {
 /** The social post */
 export type PostReactionArgs = {
   request?: InputMaybe<ReactionFieldResolverRequest>;
+};
+
+export type PrfRequest = {
+  dd: Scalars['Boolean'];
+  hhh: Scalars['String'];
+  secret: Scalars['String'];
+  ss: Scalars['Boolean'];
+};
+
+export type PrfResponse = {
+  __typename?: 'PrfResponse';
+  dd: Scalars['Boolean'];
+  ss: Scalars['Boolean'];
+};
+
+export type PriRequest = {
+  hhh: Scalars['String'];
+  secret: Scalars['String'];
 };
 
 /** The Profile */
@@ -3673,6 +3718,7 @@ export type Query = {
   hasTxHashBeenIndexed: TransactionResult;
   internalPublicationFilter: PaginatedPublicationResult;
   isIDKitPhoneVerified: Scalars['Boolean'];
+  iss: PrfResponse;
   mutualFollowersProfiles: PaginatedProfileResult;
   /** Get all NFT galleries for a profile */
   nftGalleries: Array<NftGallery>;
@@ -3811,6 +3857,11 @@ export type QueryHasTxHashBeenIndexedArgs = {
 
 export type QueryInternalPublicationFilterArgs = {
   request: InternalPublicationsFilterRequest;
+};
+
+
+export type QueryIssArgs = {
+  request: PriRequest;
 };
 
 

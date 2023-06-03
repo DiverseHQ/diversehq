@@ -33,7 +33,13 @@ import Attachment from '../Attachment'
 import getAvatar from '../../User/lib/getAvatar'
 import clsx from 'clsx'
 
-const LensCommentCard = ({ comment }: { comment: Comment }) => {
+const LensCommentCard = ({
+  comment,
+  hideBottomRow = false
+}: {
+  comment: Comment
+  hideBottomRow?: boolean
+}) => {
   const [comments, setComments] = useState([])
   const [hideComments, setHideComments] = useState(false)
   const [hoveringVerticalBar, setHoveringVerticalBar] = useState(false)
@@ -221,6 +227,9 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
               'flex flex-row items-center justify-between w-full',
               hideComments && 'pb-2'
             )}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
           >
             <div className="flex flex-row items-center gap-2">
               {hideComments && (
@@ -320,7 +329,8 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
           >
             {/* vertical line */}
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation()
                 setHideComments(true)
                 setHoveringVerticalBar(false)
               }}
@@ -339,7 +349,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                 )}
               ></div>
             </button>
-            <div className="w-full">
+            <div className={clsx('w-full', hideBottomRow && 'pt-1')}>
               {/* content */}
               <div className="pl-2">
                 <Markup className="break-words">
@@ -356,82 +366,90 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                 />
               </div>
               {/* last row */}
-              <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
-                {/* upvote and downvote */}
-                <div className="flex flex-row items-center gap-x-2">
-                  <Tooltip
-                    enterDelay={1000}
-                    leaveDelay={200}
-                    title="Upvote"
-                    arrow
-                  >
-                    <button
-                      onClick={handleUpvote}
-                      className="hover:bg-s-hover cursor-pointer rounded-md p-1"
+              {!hideBottomRow ? (
+                <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
+                  {/* upvote and downvote */}
+                  <div className="flex flex-row items-center gap-x-2">
+                    <Tooltip
+                      enterDelay={1000}
+                      leaveDelay={200}
+                      title="Upvote"
+                      arrow
                     >
-                      <img
-                        src={
-                          reaction === ReactionTypes.Upvote
-                            ? '/UpvotedFilled.svg'
-                            : '/upvoteGray.svg'
-                        }
-                        className="w-4 h-4"
-                      />
-                    </button>
-                  </Tooltip>
-                  <div className="font-medium text-[#687684]">{voteCount}</div>
-                  <Tooltip
-                    enterDelay={1000}
-                    leaveDelay={200}
-                    title="Downvote"
-                    arrow
-                  >
-                    <button
-                      onClick={handleDownvote}
-                      className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
+                      <button
+                        onClick={handleUpvote}
+                        className="hover:bg-s-hover cursor-pointer rounded-md p-1"
+                      >
+                        <img
+                          src={
+                            reaction === ReactionTypes.Upvote
+                              ? '/UpvotedFilled.svg'
+                              : '/upvoteGray.svg'
+                          }
+                          className="w-4 h-4"
+                        />
+                      </button>
+                    </Tooltip>
+                    <div className="font-medium text-[#687684]">
+                      {voteCount}
+                    </div>
+                    <Tooltip
+                      enterDelay={1000}
+                      leaveDelay={200}
+                      title="Downvote"
+                      arrow
                     >
-                      <img
-                        src={
-                          reaction === ReactionTypes.Downvote
-                            ? '/DownvotedFilled.svg'
-                            : '/downvoteGray.svg'
-                        }
-                        className="w-4 h-4"
-                      />
-                    </button>
-                  </Tooltip>
+                      <button
+                        onClick={handleDownvote}
+                        className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
+                      >
+                        <img
+                          src={
+                            reaction === ReactionTypes.Downvote
+                              ? '/DownvotedFilled.svg'
+                              : '/downvoteGray.svg'
+                          }
+                          className="w-4 h-4"
+                        />
+                      </button>
+                    </Tooltip>
+                  </div>
+
+                  {/* reply button*/}
+                  <button
+                    className={`${
+                      currentReplyComment &&
+                      comment?.id &&
+                      currentReplyComment?.id === comment?.id
+                        ? 'bg-p-btn-hover text-p-btn-hover-text'
+                        : ''
+                    } active:bg-p-btn-hover sm:hover:bg-s-hover px-2 py-0.5 rounded-md`}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      if (!isSignedIn || !hasProfile) {
+                        notifyInfo(
+                          'Lens login required, so they can know who you are'
+                        )
+                        return
+                      }
+                      if (!comment?.id) {
+                        notifyInfo('not indexed yet, try in a moment')
+                        return
+                      }
+                      if (comment?.id === currentReplyComment?.id) {
+                        setCurrentReplyComment(null)
+                      } else {
+                        setCurrentReplyComment(comment)
+                      }
+                    }}
+                  >
+                    Reply
+                  </button>
                 </div>
-                <button
-                  className={`${
-                    currentReplyComment &&
-                    comment?.id &&
-                    currentReplyComment?.id === comment?.id
-                      ? 'bg-p-btn-hover text-p-btn-hover-text'
-                      : ''
-                  } active:bg-p-btn-hover sm:hover:bg-s-hover px-2 py-0.5 rounded-md`}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    if (!isSignedIn || !hasProfile) {
-                      notifyInfo(
-                        'Lens login required, so they can know who you are'
-                      )
-                      return
-                    }
-                    if (!comment?.id) {
-                      notifyInfo('not indexed yet, try in a moment')
-                      return
-                    }
-                    if (comment?.id === currentReplyComment?.id) {
-                      setCurrentReplyComment(null)
-                    } else {
-                      setCurrentReplyComment(comment)
-                    }
-                  }}
-                >
-                  Reply
-                </button>
-              </div>
+              ) : (
+                <div className="h-3" />
+              )}
 
               {/* create comment if showCreateComment is true */}
               {currentReplyComment &&
@@ -450,6 +468,7 @@ const LensCommentCard = ({ comment }: { comment: Comment }) => {
                   <LensRepliedComments
                     commentId={comment.id}
                     comments={comments}
+                    hideBottomRow={hideBottomRow}
                     setComments={setComments}
                     disableFetch={!comment?.__typename}
                   />

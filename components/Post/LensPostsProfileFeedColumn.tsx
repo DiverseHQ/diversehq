@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { FeedEventItemType, useProfileFeedQuery } from '../../graphql/generated'
+import { useProfileFeedQuery } from '../../graphql/generated'
 import LensPostCard from './LensPostCard'
 import { LENS_POST_LIMIT } from '../../utils/config'
 import MobileLoader from '../Common/UI/MobileLoader'
@@ -33,13 +33,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       request: {
         cursor: exploreQueryRequestParams.cursor,
         profileId: profileId,
-        limit: LENS_POST_LIMIT,
-        feedEventItemTypes: [
-          FeedEventItemType.CollectPost,
-          FeedEventItemType.Post,
-          FeedEventItemType.Mirror,
-          FeedEventItemType.ReactionPost
-        ]
+        limit: LENS_POST_LIMIT
       },
       reactionRequest: {
         profileId: profileId
@@ -56,20 +50,24 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     if (profileFeed?.feed?.pageInfo?.next) {
       nextCursor = profileFeed?.feed.pageInfo.next
     }
+    console.log('newPosts', profileFeed?.feed?.items)
     const newPosts = profileFeed?.feed.items.map((item) => {
       if (item.root.__typename === 'Comment') {
-        return item.root.mainPost
+        return {
+          post: item.root.mainPost,
+          feedItem: item
+        }
       }
-      return item.root
+      return { post: item.root, feedItem: item }
     })
     // if (newPosts.length < LENS_POST_LIMIT) {
     //   hasMore = false
     // }
     const communityIds = newPosts.map((post) => {
       // @ts-ignore
-      if (post?.metadata?.tags?.[0]) {
+      if (post?.post?.metadata?.tags?.[0]) {
         // @ts-ignore
-        return post.metadata.tags[0]
+        return post?.post.metadata.tags[0]
       }
       // if (post?.__typename === '') {
       //   console.log(
@@ -93,10 +91,10 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     for (let i = 0; i < newPosts.length; i++) {
       if (communityInfoForPosts[i]?._id) {
         // @ts-ignore
-        newPosts[i].communityInfo = communityInfoForPosts[i]
+        newPosts[i].post.communityInfo = communityInfoForPosts[i]
         if (communityInfoForPosts[i]?.handle) {
           // @ts-ignore
-          newPosts[i].isLensCommunityPost = true
+          newPosts[i].post.isLensCommunityPost = true
         }
       }
     }
@@ -114,8 +112,8 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     let newPublications = new Map()
 
     for (const newPost of newPosts) {
-      newProfiles.set(newPost.profile.handle, newPost.profile)
-      newPublications.set(newPost.id, newPost)
+      newProfiles.set(newPost.post.profile.handle, newPost.post.profile)
+      newPublications.set(newPost.post.id, newPost.post)
     }
 
     addProfiles(newProfiles)
@@ -195,7 +193,13 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
             return <IndexingPostCard key={index} postInfo={post} />
           })}
         {exploreQueryRequestParams.posts.map((post, index) => {
-          return <LensPostCard key={index} post={post} />
+          return (
+            <LensPostCard
+              key={index}
+              post={post.post}
+              feedItem={post.feedItem}
+            />
+          )
         })}
       </InfiniteScroll>
     </div>

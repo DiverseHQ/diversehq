@@ -46,6 +46,11 @@ const isLensPostLink = (url) => {
     // eslint-disable-next-line
     /^(https?:\/\/(testnet\.)?diversehq\.xyz\/(p|posts|post)\/[a-zA-Z0-9_-]+)$/i.test(
       url
+    ) ||
+    // example https://orb.ac/post/0x35b0-0x04
+    // eslint-disable-next-line
+    /^(https?:\/\/(testnet\.)?orb\.ac\/(p|posts|post)\/[a-zA-Z0-9_-]+)$/i.test(
+      url
     )
   )
 }
@@ -92,7 +97,9 @@ const ReactEmbedo = ({ url, ...props }) => {
 
   if (isLensPostLink(url)) {
     const postId = url.split('/')[4]
+    console.log('postId', postId)
     return <LensPostCardFromPublicationId publicationId={postId} />
+    // return <div>This is the quotepost</div>
   }
 
   if (!isEmbedable(url)) return null
