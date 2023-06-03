@@ -19,12 +19,19 @@ import CommunityScroll from '../../Common/UI/CommunityScroll'
 import getCoverBanner from '../../User/lib/getCoverBanner'
 import TrendingTagsRightSidebarColumn from './TrendingTodayTagsRightSidebarColumn'
 import TrendingThisWeekTagsRightSidebarColumn from './TrendingThisWeekTagsRightSidebarColumn'
+import { BsChevronDown } from 'react-icons/bs'
+import OptionsWrapper from '../../Common/OptionsWrapper'
+import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
   const { user, LensCommunity, allLensCommunities, loading } = useProfile()
   const { data: lensProfile, isLoading } = useLensUserContext()
   const { address } = useAccount()
+
+  const [isTodayTrending, setIsTodayTrending] = useState<boolean>(true)
+  const [showOptionsModal, setShowOptionsModal] = useState<boolean>(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
 
   // const { notifyError } = useNotify()
 
@@ -150,8 +157,52 @@ const RightSidebar = () => {
             : topCommunities
         }
       />
-      <TrendingTagsRightSidebarColumn />
-      <TrendingThisWeekTagsRightSidebarColumn />
+      <div className="text-p-text bg-s-bg rounded-xl mb-4 py-2">
+        <div className="flex flex-row items-center justify-between">
+          <div className="text-2xl px-4">
+            {isTodayTrending ? 'Trending Today' : 'Trending This Week'}
+          </div>
+          <OptionsWrapper
+            OptionPopUpModal={() => (
+              <MoreOptionsModal
+                className="z-50"
+                list={[
+                  {
+                    label: 'Trending Today',
+                    onClick: () => {
+                      setIsTodayTrending(true)
+                      setShowOptionsModal(false)
+                      setIsDrawerOpen(false)
+                    }
+                  },
+                  {
+                    label: 'Trending This Week',
+                    onClick: () => {
+                      setIsTodayTrending(false)
+                      setShowOptionsModal(false)
+                      setIsDrawerOpen(false)
+                    }
+                  }
+                ]}
+              />
+            )}
+            position="bottom"
+            setShowOptionsModal={setShowOptionsModal}
+            showOptionsModal={showOptionsModal}
+            setIsDrawerOpen={setIsDrawerOpen}
+            isDrawerOpen={isDrawerOpen}
+          >
+            <div className="p-2 rounded-full hover:bg-s-hover mr-2">
+              <BsChevronDown className="w-5 h-5 " />
+            </div>
+          </OptionsWrapper>
+        </div>
+        {isTodayTrending ? (
+          <TrendingTagsRightSidebarColumn />
+        ) : (
+          <TrendingThisWeekTagsRightSidebarColumn />
+        )}
+      </div>
       <CopyrightAndLinks />
     </div>
   )

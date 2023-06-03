@@ -20,9 +20,7 @@ const TrendingToadyTagsRightSidebarColumn = () => {
 
   if (!data) return null
   return (
-    <div className="text-p-text bg-s-bg rounded-xl mb-4 py-2">
-      <div className="text-2xl px-4">Trending Today </div>
-
+    <>
       {hashtags.map((hashtag, index) => (
         <Link
           href={`/search?q=${hashtag.hashtag}&type=publication`}
@@ -44,7 +42,7 @@ const TrendingToadyTagsRightSidebarColumn = () => {
           {showMore ? 'Show Less' : 'Show More'}
         </div>
       )}
-    </div>
+    </>
   )
 }
 
