@@ -150,6 +150,7 @@ const Attachment: FC<Props> = ({
                           alignItems: 'center',
                           justifyContent: 'center'
                         }}
+                        className="relative"
                       >
                         {type === 'image/svg+xml' ? (
                           <button onClick={() => window.open(url, '_blank')}>
