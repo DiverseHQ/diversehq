@@ -53,7 +53,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     const newPosts = profileFeed?.feed.items.map((item) => {
       if (item.root.__typename === 'Comment') {
         return {
-          post: item.root.mainPost,
+          post: item.root,
           feedItem: item
         }
       }

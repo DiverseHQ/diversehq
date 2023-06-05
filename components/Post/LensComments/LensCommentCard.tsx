@@ -35,10 +35,12 @@ import clsx from 'clsx'
 
 const LensCommentCard = ({
   comment,
+  level = 0,
   hideBottomRow = false
 }: {
   comment: Comment
   hideBottomRow?: boolean
+  level?: number
 }) => {
   const [comments, setComments] = useState([])
   const [hideComments, setHideComments] = useState(false)
@@ -471,6 +473,7 @@ const LensCommentCard = ({
                     hideBottomRow={hideBottomRow}
                     setComments={setComments}
                     disableFetch={!comment?.__typename}
+                    level={level + 1}
                   />
                 </div>
               )}

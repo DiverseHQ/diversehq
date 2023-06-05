@@ -8,13 +8,24 @@ import {
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import LensCommentCard from './LensCommentCard'
+import Link from 'next/link'
+
+export const MAX_COMMENT_LEVEL = 6
 
 const LensRepliedComments = ({
   commentId,
   comments,
   setComments,
   hideBottomRow = false,
-  disableFetch = false
+  disableFetch = false,
+  level
+}: {
+  commentId: string
+  comments: any[]
+  setComments: any
+  hideBottomRow?: boolean
+  disableFetch?: boolean
+  level?: number
 }) => {
   const [uniqueComments, setUniqueComments] = useState([])
   const { data: lensProfile } = useLensUserContext()
@@ -56,17 +67,23 @@ const LensRepliedComments = ({
   }, [comments])
   return (
     <>
-      {uniqueComments.length > 0 &&
+      {level <= MAX_COMMENT_LEVEL &&
+        uniqueComments.length > 0 &&
         uniqueComments.map((comment) => {
           return (
             <LensCommentCard
               key={comment?.id ? comment?.id : comment.tempId}
               comment={comment}
               hideBottomRow={hideBottomRow}
+              level={level}
             />
           )
         })}
-      {uniqueComments.length === 0 && <></>}
+      {level > MAX_COMMENT_LEVEL && uniqueComments.length > 0 && (
+        <Link href={`/p/${commentId}`} className="text-blue-400 cursor-hover">
+          {`Show ${uniqueComments.length} more replies`}
+        </Link>
+      )}
     </>
   )
 }

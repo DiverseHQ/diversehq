@@ -28,6 +28,7 @@ import MirrorButton from './MirrorButton'
 import CenteredDot from '../Common/UI/CenteredDot'
 import formatHandle from '../User/lib/formatHandle'
 import { IoIosFlag, IoIosShareAlt } from 'react-icons/io'
+import { TiArrowBack } from 'react-icons/ti'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { postWithCommunityInfoType } from '../../types/post'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
@@ -300,6 +301,26 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
             }
           }}
         >
+          {
+            // @ts-ignore
+            postInfo?.__typename === 'Comment' && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+                className="sm:pl-0 pl-3"
+              >
+                <Link
+                  // @ts-ignore
+                  href={`/p/${postInfo?.mainPost?.id}`}
+                  className="bg-s-hover rounded-md px-2 py-0.5 text-xs w-fit mb-1.5 start-row"
+                >
+                  <TiArrowBack className="w-3 h-3 mr-1" />
+                  <span className="">Go to main post</span>
+                </Link>
+              </span>
+            )
+          }
           {/* top row */}
           {postInfo?.mirroredBy ? (
             <div
