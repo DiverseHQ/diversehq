@@ -58,6 +58,8 @@ import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import { putAddLensPublication } from '../../apiHelper/lensPublication'
 
+const MAX_TITLE_LENGTH = 200
+
 const CreatePostPopup = ({
   startingContent = ''
 }: {
@@ -781,7 +783,7 @@ const CreatePostPopup = ({
             <FormTextInput
               label="Title"
               placeholder="gib me title"
-              maxLength={100}
+              maxLength={MAX_TITLE_LENGTH}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               disabled={loading}
