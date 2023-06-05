@@ -40,10 +40,14 @@ const ExploreTopUnjoinedCommunitiesPage = ({
     let endMembersCount = newCommunities[newCommunities.length - 1].membersCount
 
     if (communities.length !== 0) {
-      startMembersCount = communities[0].membersCount
+      startMembersCount = newCommunities[0].membersCount
     }
 
     let lensCommunities = []
+
+    console.log('allLensCommunities', allLensCommunities)
+    console.log('startMembersCount', startMembersCount)
+    console.log('endMembersCount', endMembersCount)
 
     for (const c of allLensCommunities) {
       if (
@@ -63,6 +67,8 @@ const ExploreTopUnjoinedCommunitiesPage = ({
     mixedCommunities.sort((a, b) => {
       return b.membersCount - a.membersCount
     })
+
+    console.log('mixedCommunities', mixedCommunities)
 
     setCommunities([...communities, ...mixedCommunities])
     if (fetchedCommunities.communities.length < COMMUNITY_LIMIT) {

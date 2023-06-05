@@ -46,7 +46,7 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
     let endMembersCount = newCommunities[newCommunities.length - 1].membersCount
 
     if (communities.length !== 0) {
-      startMembersCount = communities[0].membersCount
+      startMembersCount = newCommunities[0].membersCount
     }
 
     let lensCommunities = []

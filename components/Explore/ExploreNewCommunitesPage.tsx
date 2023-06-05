@@ -44,7 +44,7 @@ const ExploreNewCommunitesPage: FC<Props> = ({
     let endDate = new Date(newCommunities[newCommunities.length - 1].createdAt)
 
     if (communities.length !== 0) {
-      initialDate = communities[0].membersCount
+      initialDate = newCommunities[0].createdAt
     }
 
     let lensCommunities = []
