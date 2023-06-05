@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Notification, useNotificationsQuery } from '../../graphql/generated'
+import { useNotificationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_NOTIFICATION_LIMIT } from '../../utils/config'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -17,7 +17,7 @@ const LensNotificationColumn = () => {
   const { user } = useProfile()
 
   const [params, setParams] = useState<{
-    notifications: Notification[] | NotificationSchema[]
+    notifications: any[]
     hasMore: boolean
     cursor: string | null
     nextCursor: string | null
@@ -66,13 +66,13 @@ const LensNotificationColumn = () => {
   }, [data?.notifications?.pageInfo?.next])
 
   const handleNotifications = async () => {
-    let newListOfNotifications
+    let newListOfNotifications = params.notifications
     if (data.notifications.items.length > 0) {
       const newNotifications = data.notifications.items
       // add offchain notifications to newNotifications and sort it on createdAt
       let from = newNotifications[newNotifications.length - 1].createdAt
       let to = newNotifications[0].createdAt
-      if (params.notifications.length === 0) {
+      if (params.notifications?.length === 0) {
         to = new Date().toISOString()
       }
       try {
@@ -84,8 +84,6 @@ const LensNotificationColumn = () => {
             const { profiles } = await getProfilesHandles({
               ownedBy: offChainNotifications.map((n) => n.sender.walletAddress)
             })
-
-            console.log('profiles', profiles)
 
             for (let i = 0; i < offChainNotifications.length; i++) {
               // @ts-ignore
@@ -151,7 +149,7 @@ const LensNotificationColumn = () => {
         lensProfile?.defaultProfile?.id && (
           <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden mb-4">
             <InfiniteScroll
-              dataLength={params.notifications.length}
+              dataLength={params?.notifications?.length || 0}
               next={getMoreNotifications}
               hasMore={params.hasMore}
               loader={

@@ -15,7 +15,6 @@ const NotificationMirroredCard = ({
   isRead: boolean
 }) => {
   if (notification.__typename !== 'NewMirrorNotification') return null
-
   return (
     <CommonNotificationCardLayoutUI
       MainRow={() => (

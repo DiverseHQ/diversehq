@@ -43,6 +43,7 @@ const Page = ({
           profileId: data?.defaultProfile?.id ?? null
         }
       })
+      console.log('publicationRes', publicationRes)
       setPost(publicationRes)
       addPublication(publicationRes.id, publicationRes)
       addProfile(publicationRes.profile.handle, publicationRes.profile)
@@ -69,7 +70,7 @@ const Page = ({
       <LensPostSeo post={_post || post} />
       {/* {type === 'notFound' && <PostNotFoundSeo />} */}
       {isMobile && <PostPageMobileTopNav />}
-      {post && !loading && <LensPostPage id={postId} post={post} />}
+      {post && !loading && <LensPostPage id={post.id} post={post} />}
       {!post && !loading && <PostNotFound />}
       {loading && <MobileLoader />}
       {/* {type === 'post' && <PostPage post={post} />} */}

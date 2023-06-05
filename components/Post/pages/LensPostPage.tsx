@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { usePublicationQuery } from '../../../graphql/generated'
-import { useLensUserContext } from '../../../lib/LensUserContext'
+import React from 'react'
+// import { usePublicationQuery } from '../../../graphql/generated'
+// import { useLensUserContext } from '../../../lib/LensUserContext'
 import MobileLoader from '../../Common/UI/MobileLoader'
 import CombinedCommentSection from '../LensComments/CombinedCommentSection'
 import LensPostCard from '../LensPostCard'
@@ -21,34 +21,34 @@ interface Props {
 }
 
 const LensPostPage = ({ id, post }: Props) => {
-  const [postInfo, setPostInfo] = useState<postWithCommunityInfoType>(post)
+  // const [postInfo, setPostInfo] = useState<postWithCommunityInfoType>(post)
   // const [notFound, setNotFound] = useState(false)
   const { isMobile } = useDevice()
-  const { data: lensProfile } = useLensUserContext()
-  const { data } = usePublicationQuery(
-    {
-      request: {
-        publicationId: id
-      },
-      reactionRequest: {
-        profileId: lensProfile?.defaultProfile?.id
-      },
-      profileId: lensProfile?.defaultProfile?.id
-    },
-    {
-      enabled: !!id && !!lensProfile?.defaultProfile?.id
-    }
-  )
+  // const { data: lensProfile } = useLensUserContext()
+  // const { data } = usePublicationQuery(
+  //   {
+  //     request: {
+  //       publicationId: id
+  //     },
+  //     reactionRequest: {
+  //       profileId: lensProfile?.defaultProfile?.id
+  //     },
+  //     profileId: lensProfile?.defaultProfile?.id
+  //   },
+  //   {
+  //     enabled: !!id && !!lensProfile?.defaultProfile?.id
+  //   }
+  // )
 
   const numberOfRoutesChanged = useCommonStore(
     (state) => state.numberOfRoutesChanged
   )
 
-  useEffect(() => {
-    if (!data?.publication) return
-    // @ts-ignore
-    setPostInfo({ ...postInfo, ...post, ...data.publication })
-  }, [data, post])
+  // useEffect(() => {
+  //   if (!data?.publication) return
+  //   // @ts-ignore
+  //   setPostInfo({ ...postInfo, ...post, ...data.publication })
+  // }, [data, post])
 
   const router = useRouter()
 
@@ -87,8 +87,8 @@ const LensPostPage = ({ id, post }: Props) => {
               </div>
             ))}
           {/* lens post card */}
-          {postInfo && <LensPostCard post={postInfo} />}
-          <CombinedCommentSection postId={id} postInfo={postInfo} />
+          {post && <LensPostCard post={post} />}
+          <CombinedCommentSection postId={id} postInfo={post} />
         </div>
         {router.pathname.startsWith('/p/') && !isMobile && (
           <>
@@ -102,38 +102,36 @@ const LensPostPage = ({ id, post }: Props) => {
                   <IoMdClose className="w-5 h-5 " />
                 </div>
               </div>
-              {postInfo?.communityInfo?._id && (
+              {post?.communityInfo?._id && (
                 <>
                   <div className="px-5 font-medium">Community</div>
-                  {postInfo?.isLensCommunityPost ? (
+                  {post?.isLensCommunityPost ? (
                     <LensPageProfileCard
-                      isLensCommunity={!!postInfo?.isLensCommunityPost}
-                      _profile={postInfo?.profile}
-                      verified={postInfo?.communityInfo?.verified}
+                      isLensCommunity={!!post?.isLensCommunityPost}
+                      _profile={post?.profile}
+                      verified={post?.communityInfo?.verified}
                     />
                   ) : (
                     <LensPostPageCommunityCard
-                      communityInfo={postInfo?.communityInfo}
+                      communityInfo={post?.communityInfo}
                     />
                   )}
                 </>
               )}
               <div className="px-5 mt-6 font-medium">Related Profiles</div>
-              {postInfo?.isLensCommunityPost ? (
+              {post?.isLensCommunityPost ? (
                 <LensPageProfileCard
                   profileHandle={
-                    getAllMentionsHandlFromContent(
-                      postInfo?.metadata?.content
-                    )[0]
+                    getAllMentionsHandlFromContent(post?.metadata?.content)[0]
                   }
                 />
               ) : (
-                <LensPageProfileCard _profile={postInfo?.profile} />
+                <LensPageProfileCard _profile={post?.profile} />
               )}
 
               <PostPageMentionsColumn
-                isLensCommunityPost={postInfo?.isLensCommunityPost}
-                content={postInfo?.metadata?.content}
+                isLensCommunityPost={post?.isLensCommunityPost}
+                content={post?.metadata?.content}
               />
             </div>
           </>

@@ -18,12 +18,12 @@ export default async function getPostWithCommunityInfo(
       post = response.publication
     } else if (response?.publication?.__typename === 'Mirror') {
       // @ts-ignore
+      // post = response.publication.mirrorOf
       post = response.publication.mirrorOf
       // @ts-ignore
-      post.originalMirrorPublication = response.publication
+      // post.originalMirrorPublication = response.publication
       // @ts-ignore
       post.mirroredBy = response.publication.profile
-
       // @ts-ignore
       post.originalMirrorPublication = response.publication
     } else if (response?.publication?.__typename === 'Comment') {
