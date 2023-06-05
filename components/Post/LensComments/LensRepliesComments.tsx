@@ -9,8 +9,7 @@ import {
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import LensCommentCard from './LensCommentCard'
 import Link from 'next/link'
-
-export const MAX_COMMENT_LEVEL = 6
+import { useDevice } from '../../Common/DeviceWrapper'
 
 const LensRepliedComments = ({
   commentId,
@@ -29,6 +28,8 @@ const LensRepliedComments = ({
 }) => {
   const [uniqueComments, setUniqueComments] = useState([])
   const { data: lensProfile } = useLensUserContext()
+  const { isMobile } = useDevice()
+  const MAX_COMMENT_LEVEL = isMobile ? 3 : 6
   const { data } = useCommentFeedQuery(
     {
       request: {
@@ -80,8 +81,13 @@ const LensRepliedComments = ({
           )
         })}
       {level > MAX_COMMENT_LEVEL && uniqueComments.length > 0 && (
-        <Link href={`/p/${commentId}`} className="text-blue-400 cursor-hover">
-          {`Show ${uniqueComments.length} more replies`}
+        <Link
+          href={`/p/${commentId}`}
+          className="text-blue-400 cursor-hover text-sm pl-2"
+        >
+          {`Show ${uniqueComments.length} more repl${
+            uniqueComments.length > 1 ? 'ies' : 'y'
+          }`}
         </Link>
       )}
     </>
