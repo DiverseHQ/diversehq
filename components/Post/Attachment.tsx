@@ -1,5 +1,5 @@
 // import { useRouter } from 'next/router'
-import React, { FC, useState } from 'react'
+import { FC, useRef, useState } from 'react'
 import {
   AiOutlineArrowLeft,
   AiOutlineArrowRight,
@@ -17,15 +17,15 @@ import getIPFSLink from '../User/lib/getIPFSLink'
 import imageProxy from '../User/lib/imageProxy'
 // import AttachmentCarousel from './AttachmentCarousel'
 // import AttachmentMedia from './AttachmentMedia'
-import ReactEmbedo from './embed/ReactEmbedo'
+import clsx from 'clsx'
+import { useSwipeable } from 'react-swipeable'
+import { useUpdateEffect } from 'usehooks-ts'
 import { AttachmentType, usePublicationStore } from '../../store/publication'
-import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+import { useDevice } from '../Common/DeviceWrapper'
+import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import LivePeerVideoPlayback from '../Common/UI/LivePeerVideoPlayback'
 import AudioPlayer from './AudioPlayer'
-import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-import clsx from 'clsx'
-import { useDevice } from '../Common/DeviceWrapper'
-import { useSwipeable } from 'react-swipeable'
+import ReactEmbedo from './embed/ReactEmbedo'
 // import { useDevice } from '../Common/DeviceWrapper'
 
 interface Props {
@@ -56,6 +56,25 @@ const Attachment: FC<Props> = ({
   const getCoverUrl = () => {
     return imageProxy(getIPFSLink(publication?.metadata?.cover?.original?.url))
   }
+
+  const setVideoDurationInSeconds = usePublicationStore(
+    (state) => state.setVideoDurationInSeconds
+  )
+
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const onDataLoaded = () => {
+    if (videoRef.current?.duration && videoRef.current?.duration !== Infinity) {
+      alert(videoRef.current.duration.toFixed(2))
+      setVideoDurationInSeconds(videoRef.current.duration.toFixed(2))
+    }
+  }
+
+  useUpdateEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.onloadeddata = onDataLoaded
+    }
+  }, [videoRef, attachments])
 
   const { isMobile } = useDevice()
 
@@ -161,9 +180,10 @@ const Attachment: FC<Props> = ({
                           url.startsWith(
                             'https://firebasestorage.googleapis.com'
                           ) ? (
-                            <VideoWithAutoPause
+                            <video
                               src={isNew ? url : imageProxy(url)}
                               className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                              ref={videoRef}
                               controls
                               muted
                               autoPlay={false}
@@ -297,11 +317,12 @@ const Attachment: FC<Props> = ({
                   ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
                     (isNew && !url.startsWith(LensInfuraEndpoint)) ||
                     url.startsWith('https://firebasestorage.googleapis.com') ? (
-                      <VideoWithAutoPause
+                      <video
                         src={isNew ? url : imageProxy(url)}
                         className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
                         controls
                         muted
+                        ref={videoRef}
                         autoPlay={false}
                         poster={getCoverUrl()}
                       />

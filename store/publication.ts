@@ -48,6 +48,8 @@ interface PublicationState {
   resetCommentAttachments: () => void
   setIsUploading: (isUploading: boolean) => void
   reset: () => void
+  videoDurationInSeconds: string;
+  setVideoDurationInSeconds: (videoDurationInSeconds: string) => void;
 }
 
 export const usePublicationStore = create<PublicationState>((set) => ({
@@ -147,5 +149,8 @@ export const usePublicationStore = create<PublicationState>((set) => ({
       commnetAttachments: []
     })),
   setIsUploading: (isUploading) => set(() => ({ isUploading })),
-  reset: () => set(() => ({ publications: new Map() }))
+  reset: () => set(() => ({ publications: new Map() })),
+  videoDurationInSeconds: '',
+  setVideoDurationInSeconds: (videoDurationInSeconds) =>
+    set(() => ({ videoDurationInSeconds })),
 }))

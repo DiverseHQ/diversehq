@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { useProfile } from '../Common/WalletContext'
-import { useNotify } from '../Common/NotifyContext'
-import { usePopUpModal } from '../Common/CustomPopUpProvider'
-import PopUpWrapper from '../Common/PopUpWrapper'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { Tooltip } from '@mui/material'
+import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { AiOutlineDown } from 'react-icons/ai'
 import { BsCollection } from 'react-icons/bs'
+import { IoIosArrowBack } from 'react-icons/io'
+import { v4 as uuidv4 } from 'uuid'
 import { getJoinedCommunitiesApi } from '../../apiHelper/community'
-import { Tooltip } from '@mui/material'
-import { useLensUserContext } from '../../lib/LensUserContext'
+import { submitPostForReview } from '../../apiHelper/reviewLensCommunityPost'
 import {
   MetadataAttributeInput,
   PublicationContentWarning,
@@ -20,12 +21,11 @@ import {
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import FormTextInput from '../Common/UI/FormTextInput'
-import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
-import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
-import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
-import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { useCommunityStore } from '../../store/community'
+import { AttachmentType, usePublicationStore } from '../../store/publication'
 import {
   SUPPORTED_AUDIO_TYPE,
   SUPPORTED_IMAGE_TYPE,
@@ -33,30 +33,30 @@ import {
   appId,
   appLink
 } from '../../utils/config'
-import { IoIosArrowBack } from 'react-icons/io'
-import PublicationEditor from '../Lexical/PublicationEditor'
-import Giphy from '../Post/Giphy'
-import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { usePopUpModal } from '../Common/CustomPopUpProvider'
+import { useDevice } from '../Common/DeviceWrapper'
+import { useNotify } from '../Common/NotifyContext'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import PopUpWrapper from '../Common/PopUpWrapper'
+import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
+import FormTextInput from '../Common/UI/FormTextInput'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import { useProfile } from '../Common/WalletContext'
+import PublicationEditor from '../Lexical/PublicationEditor'
+import Attachment from '../Post/Attachment'
+import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
+import AttachmentRow from '../Post/Create/AttachmentRow'
+import useUploadAttachments from '../Post/Create/useUploadAttachments'
+import Giphy from '../Post/Giphy'
+import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
-import { submitPostForReview } from '../../apiHelper/reviewLensCommunityPost'
-import { useDevice } from '../Common/DeviceWrapper'
-import { useCommunityStore } from '../../store/community'
-import { v4 as uuidv4 } from 'uuid'
-import { AttachmentType, usePublicationStore } from '../../store/publication'
-import useUploadAttachments from '../Post/Create/useUploadAttachments'
-import Attachment from '../Post/Attachment'
-import AttachmentRow from '../Post/Create/AttachmentRow'
-import { useRouter } from 'next/router'
-import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import PostPreferenceButton from './PostComposer/PostPreferenceButton'
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical'
 // import uploadToIPFS from '../../utils/uploadToIPFS'
+import { putAddLensPublication } from '../../apiHelper/lensPublication'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
-import { putAddLensPublication } from '../../apiHelper/lensPublication'
 
 const MAX_TITLE_LENGTH = 200
 
@@ -130,8 +130,14 @@ const CreatePostPopup = ({
   const audioPublication = usePublicationStore(
     (state) => state.audioPublication
   )
+
+  const videoDurationInSeconds = usePublicationStore(
+    (state) => state.videoDurationInSeconds
+  )
   const isUploading = usePublicationStore((state) => state.isUploading)
   const isAudioPublication = SUPPORTED_AUDIO_TYPE.includes(attachments[0]?.type)
+
+  const isVideoPublication = SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)
 
   const getMainContentFocus = () => {
     if (attachments.length > 0) {
@@ -139,7 +145,7 @@ const CreatePostPopup = ({
         return PublicationMainFocus.Audio
       } else if (SUPPORTED_IMAGE_TYPE.includes(attachments[0]?.type)) {
         return PublicationMainFocus.Image
-      } else if (SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)) {
+      } else if (isVideoPublication) {
         return PublicationMainFocus.Video
       } else {
         return PublicationMainFocus.TextOnly
@@ -260,6 +266,14 @@ const CreatePostPopup = ({
         traitType: 'title',
         displayType: PublicationMetadataDisplayTypes.String,
         value: audioPublication?.title || title
+      })
+    }
+
+    if (isVideoPublication) {
+      attributes.push({
+        traitType: 'durationInSeconds',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: videoDurationInSeconds
       })
     }
 
