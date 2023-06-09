@@ -234,8 +234,7 @@ export const appId = 'diversehq'
 export const showNameForThisAppIds = [
   'diversehq',
   'lenstube',
-  'lenstube-bytes',
-  'phaver'
+  'lenstube-bytes'
 ]
 export const appLink = 'https://diversehq.xyz'
 
