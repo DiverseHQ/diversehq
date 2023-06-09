@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { Tooltip } from '@mui/material'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { AiOutlineRetweet } from 'react-icons/ai'
+import { TbArrowRampRight, TbTrash } from 'react-icons/tb'
 import {
   useCreateDataAvailabilityMirrorTypedDataMutation,
   useCreateDataAvailabilityMirrorViaDispatcherMutation,
@@ -7,19 +11,15 @@ import {
   useHidePublicationMutation
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import { useNotify } from '../Common/NotifyContext'
-import { useRouter } from 'next/router'
 import { postWithCommunityInfoType } from '../../types/post'
+import { appLink } from '../../utils/config'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import { useNotify } from '../Common/NotifyContext'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import { Tooltip } from '@mui/material'
-import { AiOutlineRetweet } from 'react-icons/ai'
-import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
-import { TbArrowRampRight } from 'react-icons/tb'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import CreatePostPopup from '../Home/CreatePostPopup'
-import { appLink } from '../../utils/config'
 
 interface Props {
   postInfo: postWithCommunityInfoType
@@ -257,142 +257,52 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
   return (
     <>
       {mirrored ? (
-        <>
-          {postInfo?.isDataAvailability ? (
-            <span onClick={(e) => e.stopPropagation()}>
-              <OptionsWrapper
-                OptionPopUpModal={() => (
-                  <MoreOptionsModal
-                    list={[
-                      {
-                        label: 'Cross Post',
-                        onClick: handleCrossPost,
-                        icon: () => <TbArrowRampRight />
-                      }
-                    ]}
-                  />
-                )}
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
-                showOptionsModal={showOptionsModal}
-                setShowOptionsModal={setShowOptionsModal}
-                position="bottom"
+        <span onClick={(e) => e.stopPropagation()}>
+          <OptionsWrapper
+            OptionPopUpModal={() => (
+              <MoreOptionsModal
+                list={[
+                  {
+                    label: 'Cross Post',
+                    onClick: handleCrossPost,
+                    icon: () => <TbArrowRampRight />
+                  },
+                  {
+                    label: 'Undo Mirror',
+                    onClick: handleUndoMirror,
+                    icon: () => <TbTrash />
+                  },
+                  {
+                    label: 'Mirror Again',
+                    onClick: handleMirrorPost,
+                    icon: () => <AiOutlineRetweet />,
+                    hidden: postInfo?.isDataAvailability
+                  }
+                ]}
+              />
+            )}
+            isDrawerOpen={isDrawerOpen}
+            setIsDrawerOpen={setIsDrawerOpen}
+            showOptionsModal={showOptionsModal}
+            setShowOptionsModal={setShowOptionsModal}
+            position="bottom"
+          >
+            <Tooltip title="Mirrored" arrow>
+              <div
+                className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684]`}
               >
-                <Tooltip title="Mirrored" arrow>
-                  <div
-                    className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684]`}
-                  >
-                    <AiOutlineRetweet
-                      className={`text-p-btn rounded-md w-4 h-4 `}
-                    />
-                    {(!router.pathname.startsWith('/p') || isAlone) && (
-                      <p className="ml-2 font-medium text-[#687684]">
-                        {mirrorCount}
-                      </p>
-                    )}
-                  </div>
-                </Tooltip>
-              </OptionsWrapper>
-            </span>
-          ) : (
-            <>
-              {/* @ts-ignore */}
-              {postInfo?.mirroredBy &&
-              postInfo?.originalMirrorPublication?.id ? (
-                <span onClick={(e) => e.stopPropagation()}>
-                  <OptionsWrapper
-                    OptionPopUpModal={() => (
-                      <MoreOptionsModal
-                        className="z-50"
-                        list={[
-                          {
-                            label: 'Undo Mirror',
-                            onClick: handleUndoMirror
-                          }
-                        ]}
-                      />
-                    )}
-                    isDrawerOpen={isDrawerOpen}
-                    setIsDrawerOpen={setIsDrawerOpen}
-                    showOptionsModal={showOptionsModal}
-                    setShowOptionsModal={setShowOptionsModal}
-                    position="top-right"
-                  >
-                    <Tooltip title="Undo Mirror" arrow>
-                      <div
-                        className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
-                          mirrored ? 'font-bold' : ''
-                        }`}
-                      >
-                        {loading ? (
-                          <div className="spinner ml-2 w-3 h-3" />
-                        ) : (
-                          <AiOutlineRetweet
-                            className={`text-p-btn rounded-md w-4 h-4 `}
-                          />
-                        )}
-
-                        {(!router.pathname.startsWith('/p') || isAlone) && (
-                          <p className="ml-2 font-medium text-[#687684]">
-                            {mirrorCount}
-                          </p>
-                        )}
-                      </div>
-                    </Tooltip>
-                  </OptionsWrapper>
-                </span>
-              ) : (
-                <span onClick={(e) => e.stopPropagation()}>
-                  <OptionsWrapper
-                    OptionPopUpModal={() => (
-                      <MoreOptionsModal
-                        className="z-50"
-                        list={[
-                          {
-                            label: 'Mirror Again',
-                            onClick: handleMirrorPost,
-                            icon: () => <AiOutlineRetweet />
-                          },
-                          {
-                            label: 'Cross Post',
-                            onClick: handleCrossPost,
-                            icon: () => <TbArrowRampRight />
-                          }
-                        ]}
-                      />
-                    )}
-                    isDrawerOpen={isDrawerOpen}
-                    setIsDrawerOpen={setIsDrawerOpen}
-                    showOptionsModal={showOptionsModal}
-                    setShowOptionsModal={setShowOptionsModal}
-                    position="top-right"
-                  >
-                    <Tooltip title="Mirror" arrow>
-                      <div
-                        className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
-                          mirrored ? 'font-bold' : ''
-                        }`}
-                      >
-                        {loading ? (
-                          <div className="spinner ml-2 w-3 h-3" />
-                        ) : (
-                          <AiOutlineRetweet
-                            className={`text-p-btn rounded-md w-4 h-4 `}
-                          />
-                        )}
-                        {(!router.pathname.startsWith('/p') || isAlone) && (
-                          <p className="ml-2 font-medium text-[#687684]">
-                            {mirrorCount}
-                          </p>
-                        )}
-                      </div>
-                    </Tooltip>
-                  </OptionsWrapper>
-                </span>
-              )}
-            </>
-          )}
-        </>
+                <AiOutlineRetweet
+                  className={`text-p-btn rounded-md w-4 h-4 `}
+                />
+                {(!router.pathname.startsWith('/p') || isAlone) && (
+                  <p className="ml-2 font-medium text-[#687684]">
+                    {mirrorCount}
+                  </p>
+                )}
+              </div>
+            </Tooltip>
+          </OptionsWrapper>
+        </span>
       ) : (
         <span onClick={(e) => e.stopPropagation()}>
           <OptionsWrapper
