@@ -61,9 +61,11 @@ import getIPFSLink from '../User/lib/getIPFSLink'
 const MAX_TITLE_LENGTH = 200
 
 const CreatePostPopup = ({
-  startingContent = ''
+  startingContent = '',
+  quotedPublicationId
 }: {
   startingContent?: string
+  quotedPublicationId?: string
 }) => {
   const router = useRouter()
   const [title, setTitle] = useState('')
@@ -277,6 +279,14 @@ const CreatePostPopup = ({
       })
     }
 
+    if (quotedPublicationId) {
+      attributes.push({
+        traitType: 'quotedPublicationId',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: quotedPublicationId
+      })
+    }
+
     const attachmentsInput: AttachmentType[] = attachments.map(
       (attachment) => ({
         type: attachment.type,
@@ -342,8 +352,6 @@ const CreatePostPopup = ({
       tags: selectedCommunity?._id ? [selectedCommunity?._id] : [],
       appId: appId
     }
-
-    console.log('content', content)
 
     // const jsonFile = new File([JSON.stringify(metadata)], 'metadata.json', {
     //   type: 'application/json'
@@ -832,7 +840,14 @@ const CreatePostPopup = ({
                 publication={{
                   // @ts-ignore
                   metadata: {
-                    content: content
+                    content: content,
+                    attributes: [
+                      {
+                        traitType: 'quotedPublicationId',
+                        displayType: PublicationMetadataDisplayTypes.String,
+                        value: quotedPublicationId
+                      }
+                    ]
                   }
                 }}
                 attachments={attachments}

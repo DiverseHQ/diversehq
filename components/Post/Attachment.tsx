@@ -20,11 +20,13 @@ import imageProxy from '../User/lib/imageProxy'
 import clsx from 'clsx'
 import { useSwipeable } from 'react-swipeable'
 import { useUpdateEffect } from 'usehooks-ts'
+import { getQuotedPublicationId } from '../../lib/post/getQuotedPublicationId'
 import { AttachmentType, usePublicationStore } from '../../store/publication'
 import { useDevice } from '../Common/DeviceWrapper'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import LivePeerVideoPlayback from '../Common/UI/LivePeerVideoPlayback'
 import AudioPlayer from './AudioPlayer'
+import LensPostCardFromPublicationId from './Cards/LensPostCardFromPublicationId'
 import ReactEmbedo from './embed/ReactEmbedo'
 // import { useDevice } from '../Common/DeviceWrapper'
 
@@ -47,6 +49,8 @@ const Attachment: FC<Props> = ({
   isComment = false,
   isAlone = false
 }) => {
+  // @ts-ignore
+  const quotedPublicationId = getQuotedPublicationId(publication)
   const removeAttachments = usePublicationStore(
     (state) => state.removeAttachments
   )
@@ -106,6 +110,11 @@ const Attachment: FC<Props> = ({
   // const { isMobile } = useDevice()
 
   if (attachments?.length === 0) {
+    if (quotedPublicationId) {
+      return (
+        <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
+      )
+    }
     if (
       getURLsFromText(publication?.metadata?.content)?.length > 0 &&
       !isAlone
@@ -123,7 +132,7 @@ const Attachment: FC<Props> = ({
   if (isMobile) {
     return (
       <>
-        <div className="relative" onClick={(e) => e.stopPropagation()}>
+        <div className="relative " onClick={(e) => e.stopPropagation()}>
           {attachments.length > 1 && (
             <div className="relative w-full">
               <div
@@ -243,6 +252,13 @@ const Attachment: FC<Props> = ({
             </div>
           </div>
         </div>
+        {quotedPublicationId && (
+          <div className="mt-4">
+            <LensPostCardFromPublicationId
+              publicationId={quotedPublicationId}
+            />
+          </div>
+        )}
       </>
     )
   }
@@ -396,6 +412,12 @@ const Attachment: FC<Props> = ({
         /> */}
       </div>
       {/* )} */}
+
+      {quotedPublicationId && (
+        <div className="mt-4">
+          <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
+        </div>
+      )}
     </>
   )
 }

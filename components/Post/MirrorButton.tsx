@@ -254,6 +254,7 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
       component: (
         <CreatePostPopup
           startingContent={`\n___\nQuoting @${postInfo?.profile?.handle} : ${appLink}/p/${postInfo?.id}`}
+          quotedPublicationId={postInfo?.id}
         />
       ),
       type: modalType.normal
