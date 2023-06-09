@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { getAllNotificationBetweenTimes } from '../../apiHelper/user'
 import { useNotificationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import { LENS_NOTIFICATION_LIMIT } from '../../utils/config'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import LensNotificationCard from './LensNotificationCard'
-import LensLoginButton from '../Common/LensLoginButton'
-import { useProfile } from '../Common/WalletContext'
-import MobileLoader from '../Common/UI/MobileLoader'
-import { getAllNotificationBetweenTimes } from '../../apiHelper/user'
-import NotificationCard from './NotificationCard'
-import { NotificationSchema } from '../../types/notification'
-import { useDevice } from '../Common/DeviceWrapper'
 import getProfilesHandles from '../../lib/profile/get-profiles-handles'
+import { NotificationSchema } from '../../types/notification'
+import { LENS_NOTIFICATION_LIMIT } from '../../utils/config'
+import { useDevice } from '../Common/DeviceWrapper'
+import LensLoginButton from '../Common/LensLoginButton'
+import MobileLoader from '../Common/UI/MobileLoader'
+import { useProfile } from '../Common/WalletContext'
+import LensNotificationCard from './LensNotificationCard'
+import NotificationCard from './NotificationCard'
 
 const LensNotificationColumn = () => {
   const { user } = useProfile()
@@ -79,15 +79,28 @@ const LensNotificationColumn = () => {
         const res = await getAllNotificationBetweenTimes(from, to)
         if (res.status === 200) {
           const offChainNotifications: NotificationSchema[] = await res.json()
-
+          console.log('offChainNotification', offChainNotifications)
           if (offChainNotifications.length > 0) {
-            const { profiles } = await getProfilesHandles({
-              ownedBy: offChainNotifications.map((n) => n.sender.walletAddress)
-            })
+            const allProfiles = []
+
+            // loop over offChainNotifications in batches of 40
+            for (let i = 0; i < offChainNotifications.length; i += 40) {
+              const { profiles } = await getProfilesHandles({
+                ownedBy: offChainNotifications
+                  .map((n) => n.sender.walletAddress)
+                  .slice(i, i + 40)
+              })
+
+              allProfiles.push(...profiles.items)
+            }
+
+            // const { profiles } = await getProfilesHandles({
+            //   ownedBy: offChainNotifications.map((n) => n.sender.walletAddress)
+            // })
 
             for (let i = 0; i < offChainNotifications.length; i++) {
               // @ts-ignore
-              offChainNotifications[i].senderLensProfile = profiles.items.find(
+              offChainNotifications[i].senderLensProfile = allProfiles.find(
                 (p) =>
                   p.ownedBy.toLowerCase() ===
                   offChainNotifications[i].sender.walletAddress.toLowerCase()

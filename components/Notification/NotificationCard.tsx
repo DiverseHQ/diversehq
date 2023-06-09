@@ -1,18 +1,18 @@
-import React from 'react'
 import { notificationTypes } from '../../utils/config'
 // import NotificationCommentedPostCard from './NotificationCommentedPostCard'
 // import NotificationCommentUpvote from './NotificationCommentUpvote'
 // import NotificationPostCreated from './NotificationPostCreated'
 // import NotificationPostUpvote from './NotificationPostUpvote'
 import { NotificationSchema } from '../../types/notification'
+import NotificationBannedUserCard from './NotificationBannedUserCard'
+import NotificationBannedUserLensCommunityCard from './NotificationBannedUserLensCommunityCard'
+import NotificationJoinedCommunityPost from './NotificationJoinedCommunityPost'
 import NotificationModeratorAssignedCard from './NotificationModeratorAssignedCard'
 import NotificationModeratorRemoveCard from './NotificationModeratorRemoveCard'
-import NotificationBannedUserCard from './NotificationBannedUserCard'
-import NotificationUnbannedUserCard from './NotificationUnbannedUserCard'
-import NotificationBannedUserLensCommunityCard from './NotificationBannedUserLensCommunityCard'
-import NotificationUnbannedUserLensCommunityCard from './NotificationUnbannedUserLensCommunityCard'
 import NotificationReviewPostCard from './NotificationReviewPostCard'
 import NotificationReviewPostResolve from './NotificationReviewPostResolve'
+import NotificationUnbannedUserCard from './NotificationUnbannedUserCard'
+import NotificationUnbannedUserLensCommunityCard from './NotificationUnbannedUserLensCommunityCard'
 
 const NotificationCard = ({
   notification
@@ -75,6 +75,10 @@ const NotificationCard = ({
       {notification.type ===
         notificationTypes.RESOLVED_POST_FOR_LENS_COMMUNITY && (
         <NotificationReviewPostResolve notification={notification} />
+      )}
+
+      {notification.type === notificationTypes.NEW_JOINED_COMMUNITY_POST && (
+        <NotificationJoinedCommunityPost notification={notification} />
       )}
     </div>
   )

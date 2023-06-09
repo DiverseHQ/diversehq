@@ -53,7 +53,7 @@ export const notificationTypes = {
   UNBAN_USER: 11,
   REVIEW_POST_FOR_LENS_COMMUNITY: 12,
   RESOLVED_POST_FOR_LENS_COMMUNITY: 13,
-  REPORTED_PUBLICATION: 14
+  NEW_JOINED_COMMUNITY_POST: 14
 }
 
 export const sortTypes = {
