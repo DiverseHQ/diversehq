@@ -622,7 +622,12 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
             )}
 
             {/* main content */}
-            <div className="flex flex-col w-full justify-between min-h-[76px]">
+            <div
+              className={clsx(
+                'flex flex-col w-full justify-between ',
+                !isAlone && 'min-h-[76px]'
+              )}
+            >
               <div className="flex flex-col">
                 <div className="mb-2 px-4 sm:pl-2 ">
                   {!router.pathname.startsWith('/p') ? (

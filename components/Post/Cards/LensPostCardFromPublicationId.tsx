@@ -1,11 +1,11 @@
-import React, { useEffect, memo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { postGetCommunityInfoUsingListOfIds } from '../../../apiHelper/community'
 import getSinglePublicationInfo from '../../../lib/post/get-single-publication-info'
 import { postWithCommunityInfoType } from '../../../types/post'
 // import { appId } from '../../../utils/config'
 // import { getCommunityInfoFromAppId } from '../../../utils/helper'
-import LensPostCard from '../LensPostCard'
 import { useLensUserContext } from '../../../lib/LensUserContext'
+import LensPostCard from '../LensPostCard'
 
 const LensPostCardFromPublicationId = ({
   publicationId
@@ -56,10 +56,7 @@ const LensPostCardFromPublicationId = ({
 
         // @ts-ignore
         setPost(publication)
-      } else if (publication?.__typename === 'Comment') {
-        // @ts-ignore
-        setPost(publication?.mainPost)
-      } else if (publication?.__typename === 'Mirror') {
+      } else {
         // @ts-ignore
         setPost(publication)
       }

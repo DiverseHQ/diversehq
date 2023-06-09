@@ -24,9 +24,10 @@ import CreatePostPopup from '../Home/CreatePostPopup'
 interface Props {
   postInfo: postWithCommunityInfoType
   isAlone?: boolean
+  isComment?: boolean
 }
 
-const MirrorButton = ({ postInfo, isAlone }: Props) => {
+const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
   const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
   const { notifyError, notifySuccess } = useNotify()
@@ -234,6 +235,11 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
     }
   }
 
+  // @ts-ignore
+  if (postInfo?.__typename === 'Comment') {
+    console.log('postInfo', postInfo)
+  }
+
   const handleCrossPost = () => {
     setIsDrawerOpen(false)
     setShowOptionsModal(false)
@@ -255,7 +261,7 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
   }
 
   return (
-    <>
+    <div className="z-10">
       {mirrored ? (
         <span onClick={(e) => e.stopPropagation()}>
           <OptionsWrapper
@@ -285,7 +291,7 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
             setIsDrawerOpen={setIsDrawerOpen}
             showOptionsModal={showOptionsModal}
             setShowOptionsModal={setShowOptionsModal}
-            position="bottom"
+            position="top-right"
           >
             <Tooltip title="Mirrored" arrow>
               <div
@@ -294,7 +300,9 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
                 <AiOutlineRetweet
                   className={`text-p-btn rounded-md w-4 h-4 `}
                 />
-                {(!router.pathname.startsWith('/p') || isAlone) && (
+                {(!router.pathname.startsWith('/p') ||
+                  isAlone ||
+                  isComment) && (
                   <p className="ml-2 font-medium text-[#687684]">
                     {mirrorCount}
                   </p>
@@ -326,7 +334,7 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
             setIsDrawerOpen={setIsDrawerOpen}
             showOptionsModal={showOptionsModal}
             setShowOptionsModal={setShowOptionsModal}
-            position="bottom"
+            position="top-right"
           >
             <Tooltip title="Mirror" arrow>
               <div
@@ -348,7 +356,9 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
                   </>
                 )}
 
-                {(!router.pathname.startsWith('/p') || isAlone) && (
+                {(!router.pathname.startsWith('/p') ||
+                  isAlone ||
+                  isComment) && (
                   <p className="ml-2 font-medium text-[#687684]">
                     {mirrorCount}
                   </p>
@@ -358,7 +368,7 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
           </OptionsWrapper>
         </span>
       )}
-    </>
+    </div>
   )
 }
 

@@ -291,10 +291,10 @@ fragment CommentBaseFields on Comment {
   canComment(profileId: $profileId) {
     result
   }
+  mirrors(by: $profileId)
   appId
   hidden
   reaction(request: $reactionRequest)
-  mirrors(by: null)
   hasCollectedByMe
   isGated
 }
