@@ -49,3 +49,13 @@ export const deleteLensPublication = async (publicationdId: string) => {
     console.log(error)
   }
 }
+
+export const getMostPostedLensCommunityIds = async () => {
+  try {
+    return await fetch(`${apiEndpoint}/lensPublication/sorted-community-ids`, {
+      headers: await getHeaders()
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}

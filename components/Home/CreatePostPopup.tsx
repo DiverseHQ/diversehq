@@ -54,7 +54,10 @@ import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 import PostPreferenceButton from './PostComposer/PostPreferenceButton'
 // import uploadToIPFS from '../../utils/uploadToIPFS'
-import { putAddLensPublication } from '../../apiHelper/lensPublication'
+import {
+  getMostPostedLensCommunityIds,
+  putAddLensPublication
+} from '../../apiHelper/lensPublication'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
 
@@ -112,8 +115,6 @@ const CreatePostPopup = ({
 
   const [editor] = useLexicalComposerContext()
 
-  const mostPostedCommunities =
-    JSON.parse(window.localStorage.getItem('mostPostedCommunities')) || []
   const selectedCommunity = useCommunityStore(
     (state) => state.selectedCommunity
   )
@@ -187,18 +188,6 @@ const CreatePostPopup = ({
       : attachments[0]?.type
   }
 
-  const storeMostPostedCommunities = () => {
-    window.localStorage.setItem(
-      'mostPostedCommunities',
-      JSON.stringify([
-        selectedCommunity,
-        ...mostPostedCommunities.filter(
-          (community) => community?._id !== selectedCommunity?._id
-        )
-      ])
-    )
-  }
-
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
@@ -216,7 +205,6 @@ const CreatePostPopup = ({
       return
     }
     // }
-    storeMostPostedCommunities()
     await handleCreateLensPost()
   }
 
@@ -585,12 +573,22 @@ const CreatePostPopup = ({
     }
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
+
+    let mostPostedCommunities = []
+
+    try {
+      const res = await getMostPostedLensCommunityIds()
+
+      if (res.status === 200) {
+        mostPostedCommunities = await res.json()
+      }
+    } catch (err) {
+      console.log(err)
+    }
+
     // setting the joinedCommunitites with mostPostedCommunities from the localStorage at the top
     const myLensCommunity = []
-    if (
-      LensCommunity &&
-      !mostPostedCommunities.some((c) => c?._id === LensCommunity?._id)
-    ) {
+    if (LensCommunity) {
       myLensCommunity.push({
         _id: LensCommunity?._id,
         name: formatHandle(LensCommunity?.Profile?.handle),
@@ -598,8 +596,8 @@ const CreatePostPopup = ({
         isLensCommunity: true
       })
     }
-    setJoinedCommunities([
-      // ...mostPostedCommunities,
+
+    const joinedCommunitiesArray = [
       ...joinedLensCommunities
         .map((community) => ({
           _id: community._id,
@@ -608,20 +606,30 @@ const CreatePostPopup = ({
           logoImageUrl: getAvatar(community),
           isLensCommunity: true
         }))
-        // .filter(
-        //   (community) =>
-        //     !mostPostedCommunities.some((c) => c?._id === community?._id)
-        // )
         .filter(
           (community) => !myLensCommunity.some((c) => c?._id === community?._id)
         ),
       // removing the communities in the mostPostedCommunities from the joinedCommunities using communityId
       ...response
-      // .filter(
-      //   (community) =>
-      //     !mostPostedCommunities.some((c) => c?._id === community?._id)
-      // )
-    ])
+    ]
+
+    let sortedCommunities = []
+
+    for (const communityId of mostPostedCommunities) {
+      if (joinedCommunitiesArray.some((c) => c._id === communityId)) {
+        sortedCommunities.push(
+          joinedCommunitiesArray.find((c) => c._id === communityId)
+        )
+      }
+    }
+
+    for (const community of joinedCommunitiesArray) {
+      if (!sortedCommunities.some((c) => c._id === community._id)) {
+        sortedCommunities.push(community)
+      }
+    }
+
+    setJoinedCommunities(sortedCommunities)
     setLoadingJoinedCommunities(false)
   }
 

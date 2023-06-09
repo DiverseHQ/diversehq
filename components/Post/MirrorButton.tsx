@@ -235,11 +235,6 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
     }
   }
 
-  // @ts-ignore
-  if (postInfo?.__typename === 'Comment') {
-    console.log('postInfo', postInfo)
-  }
-
   const handleCrossPost = () => {
     setIsDrawerOpen(false)
     setShowOptionsModal(false)
