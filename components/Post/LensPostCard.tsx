@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import ReactTimeAgo from 'react-time-ago'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import ReactTimeAgo from 'react-time-ago'
 import {
   FeedItem,
   ReactionTypes,
@@ -9,44 +9,44 @@ import {
   useRemoveReactionMutation
 } from '../../graphql/generated'
 // import { FaRegComment, FaRegCommentDots } from 'react-icons/fa'
-import { useNotify } from '../Common/NotifyContext'
-import { appId, appLink, showNameForThisAppIds } from '../../utils/config'
-import { useLensUserContext } from '../../lib/LensUserContext'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import { useRouter } from 'next/router'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import { appId, appLink, showNameForThisAppIds } from '../../utils/config'
+import { useNotify } from '../Common/NotifyContext'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 // import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
-import Markup from '../Lexical/Markup'
-import { HiOutlineTrash } from 'react-icons/hi'
-import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
-import PostShareButton from './PostShareButton'
-import { RiMore2Fill } from 'react-icons/ri'
-import LensCollectButton from './Collect/LensCollectButton'
-import OptionsWrapper from '../Common/OptionsWrapper'
 import { Tooltip } from '@mui/material'
-import Attachment from './Attachment'
-import MirrorButton from './MirrorButton'
-import CenteredDot from '../Common/UI/CenteredDot'
-import formatHandle from '../User/lib/formatHandle'
-import { IoIosFlag, IoIosShareAlt } from 'react-icons/io'
-import { TiArrowBack } from 'react-icons/ti'
+import clsx from 'clsx'
 import { AiOutlineRetweet } from 'react-icons/ai'
+import { HiOutlineTrash } from 'react-icons/hi'
+import { IoIosFlag, IoIosShareAlt } from 'react-icons/io'
+import { RiMore2Fill } from 'react-icons/ri'
+import { TiArrowBack } from 'react-icons/ti'
+import { deleteLensPublication } from '../../apiHelper/lensPublication'
 import { postWithCommunityInfoType } from '../../types/post'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import ReportPopUp from './Report/ReportPopUp'
-import getAvatar from '../User/lib/getAvatar'
-import { getAllMentionsHandlFromContent } from './PostPageMentionsColumn'
-import useLensFollowButton from '../User/useLensFollowButton'
-import clsx from 'clsx'
-import { deleteLensPublication } from '../../apiHelper/lensPublication'
 import { useDevice } from '../Common/DeviceWrapper'
-import useJoinCommunityButton from '../Community/hook/useJoinCommunityButton'
+import OptionsWrapper from '../Common/OptionsWrapper'
+import CenteredDot from '../Common/UI/CenteredDot'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
-import { getContent } from './getContent'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import useJoinCommunityButton from '../Community/hook/useJoinCommunityButton'
+import Markup from '../Lexical/Markup'
+import formatHandle from '../User/lib/formatHandle'
+import getAvatar from '../User/lib/getAvatar'
 import getIPFSLink from '../User/lib/getIPFSLink'
-import WhoReactedPublicationPopup from './whoWasIt/WhoReactedPublicationPopup'
+import useLensFollowButton from '../User/useLensFollowButton'
+import Attachment from './Attachment'
+import LensCollectButton from './Collect/LensCollectButton'
+import LensCommentCard from './LensComments/LensCommentCard'
+import MirrorButton from './MirrorButton'
+import { getAllMentionsHandlFromContent } from './PostPageMentionsColumn'
+import PostShareButton from './PostShareButton'
+import ReportPopUp from './Report/ReportPopUp'
+import { getContent } from './getContent'
 import WhoCollectedPublicationPopUp from './whoWasIt/WhoCollectedPublicationPopUp'
 import WhoMirroredPublicatitonPopUp from './whoWasIt/WhoMirroredPublicatitonPopUp'
-import LensCommentCard from './LensComments/LensCommentCard'
+import WhoReactedPublicationPopup from './whoWasIt/WhoReactedPublicationPopup'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -339,7 +339,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
             </div>
           ) : (
             <>
-              {feedItem?.electedMirror && (
+              {feedItem?.electedMirror && feedItem?.comments?.length === 0 && (
                 <div
                   className="flex flex-row w-full space-x-1 items-center pl-4 md:pl-1 mb-1 text-xs text-s-text"
                   onClick={(e) => {
@@ -629,7 +629,9 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                     <>
                       <div className="flex flex-row">
                         {postInfo?.metadata?.name &&
-                          showNameForThisAppIds.includes(postInfo?.appId) && (
+                          showNameForThisAppIds.includes(postInfo?.appId) &&
+                          // @ts-ignore
+                          postInfo?.__typename !== 'Comment' && (
                             <Markup
                               className={`whitespace-pre-wrap break-words text-base sm:text-lg font-semibold w-full`}
                             >
@@ -680,6 +682,8 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                     <>
                       <div className="flex flex-row">
                         {postInfo?.metadata?.name &&
+                          // @ts-ignore
+                          postInfo?.__typename !== 'Comment' &&
                           (postInfo?.appId === appId ||
                             (postInfo?.metadata?.name.length > 0 &&
                               content.trim().length === 0)) && (
