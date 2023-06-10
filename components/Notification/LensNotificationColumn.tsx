@@ -79,7 +79,6 @@ const LensNotificationColumn = () => {
         const res = await getAllNotificationBetweenTimes(from, to)
         if (res.status === 200) {
           const offChainNotifications: NotificationSchema[] = await res.json()
-          console.log('offChainNotification', offChainNotifications)
           if (offChainNotifications.length > 0) {
             const allProfiles = []
 
@@ -107,8 +106,20 @@ const LensNotificationColumn = () => {
               )
             }
 
+            // pushing only if it's not existing already
+            for (let i = 0; i < offChainNotifications.length; i++) {
+              const existingNotification = newNotifications.find(
+                // @ts-ignore
+                (n) => n._id === offChainNotifications[i]._id
+              )
+              if (!existingNotification) {
+                // @ts-ignore
+                newNotifications.push(offChainNotifications[i])
+              }
+            }
+
             // @ts-ignore
-            newNotifications.push(...offChainNotifications)
+            // newNotifications.push(...offChainNotifications)
 
             // sort on createdAt
             newNotifications.sort((a, b) => {
