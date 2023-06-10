@@ -123,15 +123,12 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   }, [profileFeed?.feed?.pageInfo?.next])
 
   const getMorePosts = async () => {
-    console.log('getMorePosts')
     if (exploreQueryRequestParams.posts.length === 0) return
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: exploreQueryRequestParams.nextCursor
     })
   }
-
-  console.log('hasMore', !routeLoading && router.pathname === '/')
 
   return (
     <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden">
