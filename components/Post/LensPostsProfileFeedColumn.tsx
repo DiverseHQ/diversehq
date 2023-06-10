@@ -1,19 +1,17 @@
-import React from 'react'
-import { useState } from 'react'
-import { useEffect } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { useProfileFeedQuery } from '../../graphql/generated'
-import LensPostCard from './LensPostCard'
-import { LENS_POST_LIMIT } from '../../utils/config'
-import MobileLoader from '../Common/UI/MobileLoader'
 import { useRouter } from 'next/router'
-import useRouterLoading from '../Common/Hook/useRouterLoading'
+import { useEffect, useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
-import { usePublicationStore } from '../../store/publication'
+import { useProfileFeedQuery } from '../../graphql/generated'
 import { useProfileStore } from '../../store/profile'
+import { usePublicationStore } from '../../store/publication'
+import { LENS_POST_LIMIT } from '../../utils/config'
 import { useDevice } from '../Common/DeviceWrapper'
+import useRouterLoading from '../Common/Hook/useRouterLoading'
+import MobileLoader from '../Common/UI/MobileLoader'
 import { usePostIndexing } from './IndexingContext/PostIndexingWrapper'
 import IndexingPostCard from './IndexingPostCard'
+import LensPostCard from './LensPostCard'
 
 const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   const router = useRouter()
@@ -125,12 +123,15 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   }, [profileFeed?.feed?.pageInfo?.next])
 
   const getMorePosts = async () => {
+    console.log('getMorePosts')
     if (exploreQueryRequestParams.posts.length === 0) return
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       cursor: exploreQueryRequestParams.nextCursor
     })
   }
+
+  console.log('hasMore', !routeLoading && router.pathname === '/')
 
   return (
     <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden">

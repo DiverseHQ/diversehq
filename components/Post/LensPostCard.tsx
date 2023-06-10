@@ -929,12 +929,13 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
               )}
               {feedItem?.comments?.length > 0 && (
                 <div className="sm:pl-0 pl-3">
-                  {feedItem?.comments?.map((comment) => {
+                  {feedItem?.comments?.slice(0, 3).map((comment) => {
                     return (
                       <LensCommentCard
                         key={comment.id}
                         hideBottomRow
                         comment={comment}
+                        level={isMobile ? 3 : 6}
                       />
                     )
                   })}
