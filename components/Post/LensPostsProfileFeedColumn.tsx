@@ -135,11 +135,6 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     })
   }
 
-  const uniquePosts = exploreQueryRequestParams.posts.filter(
-    (post, index, self) =>
-      index === self.findIndex((t) => t.post.id === post.post.id)
-  )
-
   return (
     <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden">
       <InfiniteScroll
@@ -198,7 +193,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
           indexingPost.map((post, index) => {
             return <IndexingPostCard key={index} postInfo={post} />
           })}
-        {uniquePosts.map((post, index) => {
+        {exploreQueryRequestParams.posts.map((post, index) => {
           return (
             <LensPostCard
               key={index}
