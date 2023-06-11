@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import React, { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { scrollToTop } from '../../lib/helpers'
 import { useMessageStore } from '../../store/message'
 import useNotificationsCount from '../Notification/useNotificationsCount'
-import { scrollToTop } from '../../lib/helpers'
 
 const MobileBottomNav = () => {
   const { notificationsCount, updateNotificationCount } =
@@ -104,11 +104,12 @@ const MobileBottomNav = () => {
       </div> */}
       <div
         className="relative"
-        onClick={() => {
+        onClick={async () => {
           if (!router.pathname.startsWith('/notification')) {
-            routeToNotifications()
+            await routeToNotifications()
             return
           }
+          await updateNotificationCount(false)
           scrollToTop()
         }}
       >
