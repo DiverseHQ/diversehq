@@ -82,9 +82,14 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       // }
       return 'null'
     })
-    const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
-      communityIds
-    )
+    let communityInfoForPosts = []
+    try {
+      communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
+        communityIds
+      )
+    } catch (error) {
+      console.log('error lenspostsprofilefeedcolumn', error)
+    }
     for (let i = 0; i < newPosts.length; i++) {
       if (communityInfoForPosts[i]?._id) {
         // @ts-ignore
@@ -120,7 +125,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   useEffect(() => {
     if (!profileFeed?.feed?.items) return
     hanldeProfileFeed()
-  }, [profileFeed?.feed?.pageInfo?.next])
+  }, [profileFeed?.feed?.items])
 
   const getMorePosts = async () => {
     if (exploreQueryRequestParams.posts.length === 0) return
@@ -129,6 +134,11 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       cursor: exploreQueryRequestParams.nextCursor
     })
   }
+
+  const uniquePosts = exploreQueryRequestParams.posts.filter(
+    (post, index, self) =>
+      index === self.findIndex((t) => t.post.id === post.post.id)
+  )
 
   return (
     <div className="sm:rounded-2xl bg-s-bg sm:border-[1px] border-s-border overflow-hidden">
@@ -188,7 +198,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
           indexingPost.map((post, index) => {
             return <IndexingPostCard key={index} postInfo={post} />
           })}
-        {exploreQueryRequestParams.posts.map((post, index) => {
+        {uniquePosts.map((post, index) => {
           return (
             <LensPostCard
               key={index}
