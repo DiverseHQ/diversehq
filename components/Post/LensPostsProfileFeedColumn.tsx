@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import { useProfileFeedQuery } from '../../graphql/generated'
@@ -42,6 +42,14 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       enabled: router.pathname === '/' && !routeLoading && !!profileId
     }
   )
+
+  // useEffect(() => {
+  //   console.log('profileFeed', profileFeed)
+  // }, [profileFeed])
+
+  // useEffect(() => {
+  //   console.log('exploreQueryRequestParams', exploreQueryRequestParams)
+  // }, [exploreQueryRequestParams])
 
   const hanldeProfileFeed = async () => {
     let nextCursor = null
@@ -125,7 +133,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   useEffect(() => {
     if (!profileFeed?.feed?.items) return
     hanldeProfileFeed()
-  }, [profileFeed?.feed?.items])
+  }, [profileFeed?.feed?.pageInfo?.next])
 
   const getMorePosts = async () => {
     if (exploreQueryRequestParams.posts.length === 0) return
@@ -207,4 +215,4 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   )
 }
 
-export default LensPostsProfileFeedColumn
+export default memo(LensPostsProfileFeedColumn)
