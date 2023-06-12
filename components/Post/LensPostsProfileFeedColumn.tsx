@@ -5,7 +5,7 @@ import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import { useProfileFeedQuery } from '../../graphql/generated'
 import { useProfileStore } from '../../store/profile'
 import { usePublicationStore } from '../../store/publication'
-import { LENS_POST_LIMIT } from '../../utils/config'
+// import { LENS_POST_LIMIT } from '../../utils/config'
 import { useDevice } from '../Common/DeviceWrapper'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import MobileLoader from '../Common/UI/MobileLoader'
@@ -31,7 +31,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       request: {
         cursor: exploreQueryRequestParams.cursor,
         profileId: profileId,
-        limit: LENS_POST_LIMIT
+        limit: 50
       },
       reactionRequest: {
         profileId: profileId
