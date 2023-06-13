@@ -1,17 +1,17 @@
 // import { useRouter } from 'next/router'
-import React, { useState } from 'react'
-import LensPostPage from '../../components/Post/pages/LensPostPage'
-import LensPostSeo from '../../components/Post/PostSeos/LensPostSeo'
-import PostPageMobileTopNav from '../../components/Post/PostPageMobileTopNav'
-import { postWithCommunityInfoType } from '../../types/post'
-import getPostWithCommunityInfo from '../../lib/post/getPostWithCommunityInfo'
-import { usePublicationStore } from '../../store/publication'
 import { GetServerSidePropsContext } from 'next'
-import { useProfileStore } from '../../store/profile'
-import MobileLoader from '../../components/Common/UI/MobileLoader'
-import PostNotFound from '../../components/Post/pages/PostNotFound'
+import React, { useState } from 'react'
 import { useDevice } from '../../components/Common/DeviceWrapper'
+import MobileLoader from '../../components/Common/UI/MobileLoader'
+import PostPageMobileTopNav from '../../components/Post/PostPageMobileTopNav'
+import LensPostSeo from '../../components/Post/PostSeos/LensPostSeo'
+import LensPostPage from '../../components/Post/pages/LensPostPage'
+import PostNotFound from '../../components/Post/pages/PostNotFound'
 import { useLensUserContext } from '../../lib/LensUserContext'
+import getPostWithCommunityInfo from '../../lib/post/getPostWithCommunityInfo'
+import { useProfileStore } from '../../store/profile'
+import { usePublicationStore } from '../../store/publication'
+import { postWithCommunityInfoType } from '../../types/post'
 // types are post, lens, notFound
 // post is a offchain post
 // lens is a onchain lens post
@@ -43,7 +43,6 @@ const Page = ({
           profileId: data?.defaultProfile?.id ?? null
         }
       })
-      console.log('publicationRes', publicationRes)
       setPost(publicationRes)
       addPublication(publicationRes.id, publicationRes)
       addProfile(publicationRes.profile.handle, publicationRes.profile)

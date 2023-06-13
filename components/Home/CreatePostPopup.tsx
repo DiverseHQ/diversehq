@@ -421,20 +421,21 @@ const CreatePostPopup = ({
               : 'Something went wrong'
           )
         } else {
-          await addReaction({
-            request: {
-              profileId: lensProfile?.defaultProfile?.id,
-              publicationId: dispatcherResult.id,
-              reaction: ReactionTypes.Upvote
-            }
-          })
+          try {
+            await addReaction({
+              request: {
+                profileId: lensProfile?.defaultProfile?.id,
+                publicationId: dispatcherResult.id,
+                reaction: ReactionTypes.Upvote
+              }
+            })
 
-          if (selectedCommunity?._id) {
-            console.log('adding lens publication')
-            await putAddLensPublication(
-              selectedCommunity._id,
-              dispatcherResult.id
-            )
+            if (selectedCommunity?._id) {
+              console.log('adding lens publication')
+              putAddLensPublication(selectedCommunity._id, dispatcherResult.id)
+            }
+          } catch (error) {
+            console.log(error)
           }
 
           // // addPost({ txId: dispatcherResult. }, postForIndexing)
