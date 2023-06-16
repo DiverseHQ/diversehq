@@ -110,7 +110,7 @@ const Attachment: FC<Props> = ({
   // const { isMobile } = useDevice()
 
   if (attachments?.length === 0) {
-    if (quotedPublicationId) {
+    if (quotedPublicationId && !isAlone) {
       return (
         <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
       )
