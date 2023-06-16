@@ -1,8 +1,8 @@
 import React from 'react'
-import { AttachmentType, usePublicationStore } from '../../../store/publication'
 import { v4 as uuid } from 'uuid'
-import { useNotify } from '../../Common/NotifyContext'
+import { AttachmentType, usePublicationStore } from '../../../store/publication'
 import { uploadFilesToIpfsAndGetAttachments } from '../../../utils/utils'
+import { useNotify } from '../../Common/NotifyContext'
 
 const useUploadAttachments = (isComment?: boolean) => {
   const addAttachments = usePublicationStore((state) => state.addAttachments)
@@ -38,7 +38,8 @@ const useUploadAttachments = (isComment?: boolean) => {
           id: attachmentId,
           type: file.type,
           altTag: '',
-          previewItem: URL.createObjectURL(file)
+          previewItem: URL.createObjectURL(file),
+          file: file
         }
       })
 

@@ -27,6 +27,7 @@ import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import LivePeerVideoPlayback from '../Common/UI/LivePeerVideoPlayback'
 import AudioPlayer from './AudioPlayer'
 import LensPostCardFromPublicationId from './Cards/LensPostCardFromPublicationId'
+import ChooseThumbnail from './ChooseThumbnail'
 import ReactEmbedo from './embed/ReactEmbedo'
 // import { useDevice } from '../Common/DeviceWrapper'
 
@@ -69,7 +70,6 @@ const Attachment: FC<Props> = ({
 
   const onDataLoaded = () => {
     if (videoRef.current?.duration && videoRef.current?.duration !== Infinity) {
-      alert(videoRef.current.duration.toFixed(2))
       setVideoDurationInSeconds(videoRef.current.duration.toFixed(2))
     }
   }
@@ -333,15 +333,19 @@ const Attachment: FC<Props> = ({
                   ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
                     (isNew && !url.startsWith(LensInfuraEndpoint)) ||
                     url.startsWith('https://firebasestorage.googleapis.com') ? (
-                      <video
-                        src={isNew ? url : imageProxy(url)}
-                        className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                        controls
-                        muted
-                        ref={videoRef}
-                        autoPlay={false}
-                        poster={getCoverUrl()}
-                      />
+                      <>
+                        <video
+                          src={isNew ? url : imageProxy(url)}
+                          className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                          controls
+                          muted
+                          ref={videoRef}
+                          autoPlay={false}
+                          poster={getCoverUrl()}
+                        />
+
+                        <ChooseThumbnail />
+                      </>
                     ) : (
                       <div
                         className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}

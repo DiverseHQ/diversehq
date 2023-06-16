@@ -7,6 +7,7 @@ export interface AttachmentType {
   altTag?: string
   item?: string
   previewItem?: string
+  file?: File
 }
 
 /* eslint-disable */
@@ -50,6 +51,16 @@ interface PublicationState {
   reset: () => void
   videoDurationInSeconds: string;
   setVideoDurationInSeconds: (videoDurationInSeconds: string) => void;
+  videoThumbnail: {
+    url?: string;
+    type?: string;
+    uploading?: boolean;
+  };
+  setVideoThumbnail: (videoThumbnail: {
+    url?: string;
+    type?: string;
+    uploading?: boolean;
+  }) => void;
 }
 
 export const usePublicationStore = create<PublicationState>((set) => ({
@@ -88,6 +99,8 @@ export const usePublicationStore = create<PublicationState>((set) => ({
       return { commnetAttachments: newAttachments }
     })
   },
+  videoThumbnail: { url: '', type: '', uploading: false },
+  setVideoThumbnail: (videoThumbnail) => set(() => ({ videoThumbnail })),
   updateAttachments: (attachments) => {
     set((state) => {
       const newAttachments = state.attachments.map((attachment) => {

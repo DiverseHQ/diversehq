@@ -133,6 +133,10 @@ const CreatePostPopup = ({
   const audioPublication = usePublicationStore(
     (state) => state.audioPublication
   )
+  const videoThumbnail = usePublicationStore((state) => state.videoThumbnail)
+  const setVideoThumbnail = usePublicationStore(
+    (state) => state.setVideoThumbnail
+  )
 
   const videoDurationInSeconds = usePublicationStore(
     (state) => state.videoDurationInSeconds
@@ -173,6 +177,9 @@ const CreatePostPopup = ({
     if (isAudioPublication) {
       return audioPublication.cover
     }
+    if (isVideoPublication && videoThumbnail?.url) {
+      return videoThumbnail?.url
+    }
     // loop over attachments and return first attachmen with type image
     for (let i = 0; i < attachments.length; i++) {
       if (SUPPORTED_IMAGE_TYPE.includes(attachments[i]?.type)) {
@@ -185,7 +192,7 @@ const CreatePostPopup = ({
   const getAttachmentImageMimeType = () => {
     return isAudioPublication
       ? audioPublication.coverMimeType
-      : attachments[0]?.type
+      : videoThumbnail?.type ?? attachments[0]?.type
   }
 
   const handleSubmit = async (event) => {
@@ -226,6 +233,11 @@ const CreatePostPopup = ({
   const handleCompletePost = () => {
     setLoading(false)
     resetAttachments()
+    setVideoThumbnail({
+      url: '',
+      type: '',
+      uploading: false
+    })
     editor?.update(() => {
       $getRoot().clear()
     })

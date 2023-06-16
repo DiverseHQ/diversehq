@@ -241,3 +241,5 @@ export const appLink = 'https://diversehq.xyz'
 export const STS_TOKEN_URL = `${apiEndpoint}/ever/sts/token`
 export const EVER_REGION = 'us-west-2'
 export const EVER_ENDPOINT = 'https://endpoint.4everland.co'
+
+export const DEFAULT_BANNER_URL = "https://diversehq.xyz/defaultBanner.png"
