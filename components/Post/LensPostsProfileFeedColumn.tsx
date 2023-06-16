@@ -109,16 +109,18 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       }
     }
     if (
+      exploreQueryRequestParams?.posts.length > 0 &&
       newPosts[0]?.feedItem?.root?.id ===
-      exploreQueryRequestParams?.posts[
-        exploreQueryRequestParams?.posts.length - 1
-      ]?.feedItem?.id
+        exploreQueryRequestParams?.posts[
+          exploreQueryRequestParams?.posts.length - 1
+        ]?.feedItem?.id
     )
-      setExploreQueryRequestParams({
-        ...exploreQueryRequestParams,
-        nextCursor: nextCursor,
-        posts: [...exploreQueryRequestParams.posts, ...newPosts]
-      })
+      return
+    setExploreQueryRequestParams({
+      ...exploreQueryRequestParams,
+      nextCursor: nextCursor,
+      posts: [...exploreQueryRequestParams.posts, ...newPosts]
+    })
 
     // addProfiles & addPublications to store
     // profile to be added is a set of handle as key and profile as value
