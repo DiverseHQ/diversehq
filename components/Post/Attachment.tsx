@@ -189,15 +189,18 @@ const Attachment: FC<Props> = ({
                           url.startsWith(
                             'https://firebasestorage.googleapis.com'
                           ) ? (
-                            <video
-                              src={isNew ? url : imageProxy(url)}
-                              className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                              ref={videoRef}
-                              controls
-                              muted
-                              autoPlay={false}
-                              poster={getCoverUrl()}
-                            />
+                            <>
+                              <video
+                                src={isNew ? url : imageProxy(url)}
+                                className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                                ref={videoRef}
+                                controls
+                                muted
+                                autoPlay={false}
+                                poster={getCoverUrl()}
+                              />
+                              <ChooseThumbnail />
+                            </>
                           ) : (
                             <div
                               className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
