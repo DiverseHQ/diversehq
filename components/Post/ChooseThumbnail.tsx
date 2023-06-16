@@ -184,7 +184,7 @@ const ChooseThumbnail: FC = () => {
               />
               {ipfsUrl && isSelected && isUploaded ? (
                 <div className="absolute inset-0 grid place-items-center rounded-xl bg-gray-100/10">
-                  <BsCheckCircleFill className="h-6 w-6 text-green-500" />
+                  <BsCheckCircleFill className="h-6 w-6 text-p-btn" />
                 </div>
               ) : null}
               {isUploading && isSelected && (
