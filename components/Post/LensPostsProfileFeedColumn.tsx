@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import { memo, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import { useProfileFeedQuery } from '../../graphql/generated'
 import { useProfileStore } from '../../store/profile'
 import { usePublicationStore } from '../../store/publication'
@@ -68,46 +67,46 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     // if (newPosts.length < LENS_POST_LIMIT) {
     //   hasMore = false
     // }
-    const communityIds = newPosts.map((post) => {
-      // @ts-ignore
-      if (post?.post?.metadata?.tags?.[0]) {
-        // @ts-ignore
-        return post?.post.metadata.tags[0]
-      }
-      // if (post?.__typename === '') {
-      //   console.log(
-      //     'postMirrorOf',
-      //     post.mirrorOf?.__typename === 'Post'
-      //       ? post.mirrorOf?.metadata?.tags[0]
-      //       : null
-      //   )
+    // const communityIds = newPosts.map((post) => {
+    //   // @ts-ignore
+    //   if (post?.post?.metadata?.tags?.[0]) {
+    //     // @ts-ignore
+    //     return post?.post.metadata.tags[0]
+    //   }
+    //   // if (post?.__typename === '') {
+    //   //   console.log(
+    //   //     'postMirrorOf',
+    //   //     post.mirrorOf?.__typename === 'Post'
+    //   //       ? post.mirrorOf?.metadata?.tags[0]
+    //   //       : null
+    //   //   )
 
-      //   if (post.mirrorOf.__typename === 'Comment') {
-      //     console.log('postMirrorOf Comment', post.mirrorOf)
-      //   }
-      //   // @ts-ignore
-      //   return post.mirrorOf?.metadata?.tags[0] || 'null'
-      // }
-      return 'null'
-    })
-    let communityInfoForPosts = []
-    try {
-      communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
-        communityIds
-      )
-    } catch (error) {
-      console.log('error lenspostsprofilefeedcolumn', error)
-    }
-    for (let i = 0; i < newPosts.length; i++) {
-      if (communityInfoForPosts[i]?._id) {
-        // @ts-ignore
-        newPosts[i].post.communityInfo = communityInfoForPosts[i]
-        if (communityInfoForPosts[i]?.handle) {
-          // @ts-ignore
-          newPosts[i].post.isLensCommunityPost = true
-        }
-      }
-    }
+    //   //   if (post.mirrorOf.__typename === 'Comment') {
+    //   //     console.log('postMirrorOf Comment', post.mirrorOf)
+    //   //   }
+    //   //   // @ts-ignore
+    //   //   return post.mirrorOf?.metadata?.tags[0] || 'null'
+    //   // }
+    //   return 'null'
+    // })
+    // let communityInfoForPosts = []
+    // try {
+    //   communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
+    //     communityIds
+    //   )
+    // } catch (error) {
+    //   console.log('error lenspostsprofilefeedcolumn', error)
+    // }
+    // for (let i = 0; i < newPosts.length; i++) {
+    //   if (communityInfoForPosts[i]?._id) {
+    //     // @ts-ignore
+    //     newPosts[i].post.communityInfo = communityInfoForPosts[i]
+    //     if (communityInfoForPosts[i]?.handle) {
+    //       // @ts-ignore
+    //       newPosts[i].post.isLensCommunityPost = true
+    //     }
+    //   }
+    // }
     if (
       exploreQueryRequestParams?.posts.length > 0 &&
       newPosts[0]?.feedItem?.root?.id ===
@@ -211,11 +210,13 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
           })}
         {exploreQueryRequestParams.posts.map((post, index) => {
           return (
-            <LensPostCard
-              key={index}
-              post={post.post}
-              feedItem={post.feedItem}
-            />
+            <>
+              <LensPostCard
+                key={index}
+                post={post.post}
+                feedItem={post.feedItem}
+              />
+            </>
           )
         })}
       </InfiniteScroll>

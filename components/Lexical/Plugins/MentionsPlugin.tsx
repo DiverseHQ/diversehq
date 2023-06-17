@@ -6,8 +6,7 @@ import {
   // useBasicTypeaheadTriggerMatch
 } from '@lexical/react/LexicalTypeaheadMenuPlugin'
 import type { TextNode } from 'lexical'
-import { FC } from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import * as ReactDOM from 'react-dom'
 import {
   MediaSet,
@@ -22,8 +21,8 @@ import formatHandle from '../../User/lib/formatHandle'
 import getIPFSLink from '../../User/lib/getIPFSLink'
 import getStampFyiURL from '../../User/lib/getStampFyiURL'
 
-import { $createMentionNode } from '../Nodes/MentionsNode'
 import { useDevice } from '../../Common/DeviceWrapper'
+import { $createMentionNode } from '../Nodes/MentionsNode'
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;'

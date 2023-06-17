@@ -1,17 +1,22 @@
+import { useQuery } from '@tanstack/react-query'
+import Link from 'next/link'
 import React from 'react'
 import {
   HastagGroupType,
   getTrendingTodayHasTags
 } from '../../../apiHelper/hastags'
-import { useQuery } from '@tanstack/react-query'
-import Link from 'next/link'
 
 const TrendingToadyTagsRightSidebarColumn = () => {
   const [showMore, setShowMore] = React.useState(false)
   const { data } = useQuery<HastagGroupType>(
     ['trendingTodayTags'],
     async () => {
-      const data = await getTrendingTodayHasTags()
+      let data = null
+      try {
+        data = await getTrendingTodayHasTags()
+      } catch (error) {
+        console.log('error', error)
+      }
       return data
     }
   )

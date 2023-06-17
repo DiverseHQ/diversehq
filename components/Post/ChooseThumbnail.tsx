@@ -141,12 +141,12 @@ const ChooseThumbnail: FC = () => {
   const isUploading = videoThumbnail.uploading
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 w-full ">
       <b>Choose Thumbnail</b>
-      <div className="mt-1 grid grid-cols-3 gap-3 py-0.5 md:grid-cols-5">
+      <div className="mt-1 py-0.5 flex flex-row gap-3 flex-wrap">
         <label
           htmlFor="chooseThumbnail"
-          className="max-w-32 flex h-24 w-full flex-none cursor-pointer flex-col items-center justify-center rounded-xl border dark:border-gray-700"
+          className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border dark:border-gray-700"
         >
           <input
             id="chooseThumbnail"
