@@ -78,7 +78,6 @@ const ChooseThumbnail: FC = () => {
 
   const generateThumbnails = async (fileToGenerate: File) => {
     try {
-      console.log('generateing thumbnails')
       const thumbnailArray = await generateVideoThumbnails(
         fileToGenerate,
         THUMBNAIL_GENERATE_COUNT
@@ -92,7 +91,6 @@ const ChooseThumbnail: FC = () => {
         })
       }
 
-      console.log('thumbnailList', thumbnailList)
       setThumbnails(thumbnailList)
       setSelectedThumbnailIndex(DEFAULT_THUMBNAIL_INDEX)
     } catch (error) {
@@ -180,7 +178,7 @@ const ChooseThumbnail: FC = () => {
               className="relative"
             >
               <img
-                className="h-24 w-full rounded-xl border object-cover dark:border-gray-700"
+                className="h-24 sm:w-full w-24 rounded-xl border object-cover dark:border-gray-700"
                 src={blobUrl}
                 alt="thumbnail"
                 draggable={false}
