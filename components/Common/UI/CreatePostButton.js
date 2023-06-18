@@ -1,23 +1,23 @@
 import { useRouter } from 'next/router'
 import { HiPencil } from 'react-icons/hi'
-// import { useLensUserContext } from '../../../lib/LensUserContext'
+import { useLensUserContext } from '../../../lib/LensUserContext'
 import CreatePostPopup from '../../Home/CreatePostPopup'
 import { modalType, usePopUpModal } from '../CustomPopUpProvider'
-// import { useNotify } from '../NotifyContext'
-// import { useProfile } from '../WalletContext'
+import { useNotify } from '../NotifyContext'
+import { useProfile } from '../WalletContext'
 
 const CreatePostButton = () => {
   const { showModal } = usePopUpModal()
-  // const { user } = useProfile()
-  // const { isSignedIn, hasProfile } = useLensUserContext()
-  // const { notifyInfo } = useNotify()
+  const { user } = useProfile()
+  const { isSignedIn, hasProfile } = useLensUserContext()
+  const { notifyInfo } = useNotify()
   const router = useRouter()
 
   const showCreatePostModal = () => {
-    // if (!user || !isSignedIn || !hasProfile) {
-    //   notifyInfo('Login to create a post')
-    //   return
-    // }
+    if (!user || !isSignedIn || !hasProfile) {
+      notifyInfo('Login to create a post')
+      return
+    }
     showModal({
       component: <CreatePostPopup />,
       type: modalType.normal,
