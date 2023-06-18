@@ -78,6 +78,7 @@ const ChooseThumbnail: FC = () => {
 
   const generateThumbnails = async (fileToGenerate: File) => {
     try {
+      console.log('generateing thumbnails')
       const thumbnailArray = await generateVideoThumbnails(
         fileToGenerate,
         THUMBNAIL_GENERATE_COUNT
@@ -90,6 +91,8 @@ const ChooseThumbnail: FC = () => {
           mimeType: 'image/jpeg'
         })
       }
+
+      console.log('thumbnailList', thumbnailList)
       setThumbnails(thumbnailList)
       setSelectedThumbnailIndex(DEFAULT_THUMBNAIL_INDEX)
     } catch (error) {
