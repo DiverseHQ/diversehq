@@ -764,7 +764,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
             {!isAlone && (
               <>
                 {router.pathname.startsWith('/p') && (
-                  <div className="flex flex-row items-center text-p-text px-3 sm:mx-5 sm:px-2 pt-2 justify-between sm:justify-start sm:space-x-12 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-1 dark:border-p-border">
+                  <div className="flex flex-row items-center text-p-text px-3 sm:mx-5 sm:px-2 py-2 justify-between sm:justify-start sm:space-x-12 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-2 dark:border-p-border">
                     <div
                       className="flex flex-row gap-1 text-s-text cursor-pointer"
                       onClick={showReactedByPopUp}
