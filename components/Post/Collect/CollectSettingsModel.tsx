@@ -119,7 +119,9 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               setCollectSettings(null)
             } else {
               setCollectSettings({
-                freeCollectModule: { followerOnly: false }
+                simpleCollectModule: {
+                  followerOnly: false
+                }
               })
             }
           }}
