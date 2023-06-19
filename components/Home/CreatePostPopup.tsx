@@ -291,7 +291,8 @@ const CreatePostPopup = ({
       (attachment) => ({
         type: attachment.type,
         altTag: attachment.altTag,
-        item: attachment.item!
+        item: attachment.item!,
+        cover: attachment?.cover ?? null
       })
     )
 

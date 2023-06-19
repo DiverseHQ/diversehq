@@ -6,6 +6,7 @@ export interface AttachmentType {
   type: string
   altTag?: string
   item?: string
+  cover?: string
   previewItem?: string
   file?: File
 }

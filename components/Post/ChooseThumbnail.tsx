@@ -27,8 +27,22 @@ const ChooseThumbnail: FC = () => {
   const setVideoThumbnail = usePublicationStore(
     (state) => state.setVideoThumbnail
   )
+  const updateAttachments = usePublicationStore(
+    (state) => state.updateAttachments
+  )
   const { file } = attachments[0]
   const { notifyError } = useNotify()
+
+  useEffect(() => {
+    if (videoThumbnail?.url && attachments[0]) {
+      updateAttachments([
+        {
+          ...attachments[0],
+          cover: videoThumbnail?.url
+        }
+      ])
+    }
+  }, [videoThumbnail?.url])
 
   const uploadThumbnailToIpfs = async (fileToUpload: File) => {
     setVideoThumbnail({ uploading: true })
@@ -178,7 +192,8 @@ const ChooseThumbnail: FC = () => {
               className="relative"
             >
               <img
-                className="h-24 sm:w-full w-24 rounded-xl border object-cover dark:border-gray-700"
+                className="h-24 sm:w-full w-24..
+                 rounded-xl border object-cover border-s-border"
                 src={blobUrl}
                 alt="thumbnail"
                 draggable={false}
