@@ -254,8 +254,6 @@ const ReviewLensCommunityPostCard = ({
   // @ts-ignore
   const contentAfterRemovingName = getContent(postForContent)
 
-  console.log('post', post)
-
   return (
     <div className="p-2 sm:p-4 border-b border-s-border">
       {/* author profile and name row */}

@@ -1,40 +1,55 @@
-import React, { useEffect, useState } from 'react'
 import { MenuItem, Select, Switch } from '@mui/material'
-import { useLensUserContext } from '../../../lib/LensUserContext'
 import {
   ThemeProvider as MUIThemeProvider,
   createTheme
 } from '@mui/material/styles'
-import { useTheme } from '../../Common/ThemeProvider'
+import { useEffect, useState } from 'react'
 import { useEnabledModulesQuery } from '../../../graphql/generated'
+import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useDevice } from '../../Common/DeviceWrapper'
+import { useTheme } from '../../Common/ThemeProvider'
+
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import dayjs from 'dayjs'
 
 const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   const { isMobile } = useDevice()
-  let _followerOnly = false
-  if (collectSettings) {
-    if (collectSettings.feeCollectModule) {
-      _followerOnly = collectSettings.feeCollectModule.followerOnly
-    } else if (collectSettings.freeCollectModule) {
-      _followerOnly = collectSettings.freeCollectModule.followerOnly
-    }
-  }
-  const [followerOnly, setFollowerOnly] = useState(_followerOnly)
+
+  const [followerOnly, setFollowerOnly] = useState(
+    collectSettings?.simpleCollectModule?.followerOnly ?? false
+  )
   const [monetize, setMonetize] = useState(
-    collectSettings?.feeCollectModule ? true : false
+    collectSettings?.simpleCollectModule?.fee ?? false
   )
   const [price, setPrice] = useState(
-    collectSettings?.feeCollectModule?.amount?.value
-      ? Number(collectSettings?.feeCollectModule?.amount?.value)
+    collectSettings?.simpleCollectModule?.fee?.amount?.value
+      ? Number(collectSettings?.simpleCollectModule?.fee?.amount?.value)
       : 0.01
   )
-  const [currency, setCurrency] = useState<string>(
-    collectSettings?.feeCollectModule?.amount?.currency
+  const [currency, setCurrency] = useState<string | null>(
+    collectSettings?.simpleCollectModule?.fee?.amount?.currency || null
   ) // default to WMATIC
+
+  const [endTimestamp, setTimestamp] = useState<string | null>(
+    collectSettings?.simpleCollectModule?.endTimestamp || null
+  )
+
+  const [referalPercentage, setReferalPercentage] = useState<number>(
+    collectSettings?.simpleCollectModule?.referralFee || 0
+  )
+
+  const [collectLimit, setCollectLimit] = useState<string | null>(
+    collectSettings?.simpleCollectModule?.collectLimit || null
+  )
 
   const { data } = useEnabledModulesQuery()
   const { data: lensProfile } = useLensUserContext()
   const { theme }: any = useTheme()
+
+  useEffect(() => {
+    if (currency) return
+    setCurrency(data?.enabledModuleCurrencies[0]?.address)
+  }, [data])
 
   const MUITheme = createTheme({
     palette: {
@@ -43,127 +58,256 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
   })
 
   useEffect(() => {
-    if (monetize) {
-      // fee collect module
-      setCollectSettings({
-        feeCollectModule: {
+    if (collectSettings) {
+      const setting = {
+        followerOnly: followerOnly
+      }
+
+      if (collectLimit) {
+        setting['collectLimit'] = collectLimit
+      } else {
+        delete setting['collectLimit']
+      }
+
+      if (monetize) {
+        setting['fee'] = {
           amount: {
             currency: currency,
-            value: price.toString()
+            value: String(price)
           },
           recipient: lensProfile?.defaultProfile?.ownedBy,
-          referralFee: 0,
-          followerOnly: followerOnly
+          referralFee: referalPercentage || 0
         }
-      })
-    } else if (collectSettings) {
-      // free collect module
-      setCollectSettings({
-        freeCollectModule: {
-          followerOnly: followerOnly
-        }
-      })
+      } else {
+        delete setting['fee']
+      }
+
+      if (endTimestamp) {
+        setting['endTimestamp'] = endTimestamp
+      } else {
+        delete setting['endTimestamp']
+      }
+
+      setCollectSettings(setting)
     }
-  }, [followerOnly, monetize, price, currency, lensProfile])
+  }, [
+    followerOnly,
+    monetize,
+    price,
+    currency,
+    lensProfile,
+    collectLimit,
+    endTimestamp,
+    referalPercentage
+  ])
   return (
-    <div className="m-4 flex flex-col">
-      <div className="flex flex-col gap-y-4 relative">
-        <h1
-          className={`self-center font-medium text-lg mb-2.5 ${
-            !isMobile ? 'hidden' : ''
-          }`}
-        >
-          Collect Setting
-        </h1>
-        <div className="start-row">
-          <Switch
-            checked={!!collectSettings}
-            onChange={() => {
-              if (collectSettings) {
-                setCollectSettings(null)
-              } else {
-                setCollectSettings({
-                  freeCollectModule: { followerOnly: false }
-                })
-              }
-            }}
-            sx={{
-              '& .MuiSwitch-track': {
-                backgroundColor: 'grey',
-                color: 'grey'
-              }
-            }}
-          />
-          <p>This post can be collected</p>
-        </div>
-        {collectSettings && (
-          <div className="pl-4">
-            <div className="start-row">
-              <Switch
-                checked={followerOnly}
-                onChange={() => setFollowerOnly(!followerOnly)}
-                sx={{
-                  '& .MuiSwitch-track': {
-                    backgroundColor: 'grey',
-                    color: 'grey'
-                  }
-                }}
-              />
-              <p>Only Followers can Collect</p>
-            </div>
-            <div className="start-row">
-              <Switch
-                checked={monetize}
-                onChange={() => setMonetize(!monetize)}
-                sx={{
-                  '& .MuiSwitch-track': {
-                    backgroundColor: 'grey',
-                    color: 'grey'
-                  }
-                }}
-              />
-              <p>Monetize</p>
-            </div>
-            {monetize && (
-              <div className="flex flex-row  flex-row lg:gap-y-4 space-x-10 lg:space-x-32 pl-6">
-                <div className="flex flex-row items-center ">
-                  <div>Currency</div>
-                  <MUIThemeProvider theme={MUITheme}>
-                    <Select
-                      onChange={(e) => {
-                        setCurrency(e.target.value)
-                      }}
-                      className={` text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
-                      value={currency}
-                    >
-                      {data?.enabledModuleCurrencies.map((currency) => (
-                        <MenuItem
-                          key={currency.address}
-                          value={currency.address}
-                        >
-                          {currency.symbol}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </MUIThemeProvider>
-                </div>
-                <div className="flex flex-row items-center">
-                  <div>Price (min 0.001)</div>
+    <div className="m-4 flex flex-col gap-y-2 relative">
+      <h1
+        className={`self-center font-medium text-lg mb-2.5 ${
+          !isMobile ? 'hidden' : ''
+        }`}
+      >
+        Collect Setting
+      </h1>
+
+      {/* toggle for if post is collectible */}
+      <div className="start-row">
+        <Switch
+          checked={!!collectSettings}
+          onChange={() => {
+            if (collectSettings) {
+              setCollectSettings(null)
+            } else {
+              setCollectSettings({
+                freeCollectModule: { followerOnly: false }
+              })
+            }
+          }}
+          sx={{
+            '& .MuiSwitch-track': {
+              backgroundColor: 'grey',
+              color: 'grey'
+            }
+          }}
+        />
+        <p>This post can be collected</p>
+      </div>
+
+      {/* settings you see after toggling collectible */}
+      {collectSettings && (
+        <div className="pl-4 gap-y-2 flex flex-col">
+          {/* only followers can collect toggle */}
+          <div className="start-row">
+            <Switch
+              checked={followerOnly}
+              onChange={() => setFollowerOnly(!followerOnly)}
+              sx={{
+                '& .MuiSwitch-track': {
+                  backgroundColor: 'grey',
+                  color: 'grey'
+                }
+              }}
+            />
+            <p>Only Followers can Collect</p>
+          </div>
+
+          {/* monetize toggle */}
+          <div className="start-row">
+            <Switch
+              checked={monetize}
+              onChange={() => setMonetize(!monetize)}
+              sx={{
+                '& .MuiSwitch-track': {
+                  backgroundColor: 'grey',
+                  color: 'grey'
+                }
+              }}
+            />
+            <p>Monetize your post</p>
+          </div>
+
+          {/* monetize settings */}
+          {monetize && (
+            <div className="flex flex-col gap-y-4 pl-12 mt-2">
+              {/* select currency  */}
+              <div className="flex flex-row items-center">
+                <div>Currency</div>
+                <MUIThemeProvider theme={MUITheme}>
+                  <Select
+                    onChange={(e) => {
+                      setCurrency(e.target.value)
+                    }}
+                    className={` text-p-text border outline-none ml-2 px-1 py-2 h-8  rounded-md`}
+                    value={currency}
+                  >
+                    {data?.enabledModuleCurrencies.map((currency) => (
+                      <MenuItem key={currency.address} value={currency.address}>
+                        {currency.symbol}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </MUIThemeProvider>
+              </div>
+              {/* enter amount */}
+              <div className="flex flex-row items-center">
+                <div className="shrink-0">Price (min 0.001)</div>
+                <input
+                  type="number"
+                  value={price}
+                  min={0.001}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                  className={`border  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md ${
+                    !isMobile ? 'w-20' : 'w-16'
+                  } `}
+                />
+              </div>
+
+              {/* referral fee percentage */}
+              <div className="start-row">
+                <div className="shrink-0">Referral Fee</div>
+                <div className="start-row">
                   <input
                     type="number"
-                    value={price}
-                    min={0.001}
-                    onChange={(e) => setPrice(Number(e.target.value))}
+                    value={referalPercentage}
+                    min={0}
+                    max={100}
+                    onChange={(e) =>
+                      setReferalPercentage(Number(e.target.value))
+                    }
                     className={`border  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md ${
                       !isMobile ? 'w-20' : 'w-16'
                     } `}
                   />
+                  <div className="ml-2">%</div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
+
+          {/* limited time collect toggle row*/}
+          <div className="start-row">
+            <Switch
+              checked={Boolean(endTimestamp)}
+              onChange={() => {
+                if (endTimestamp) {
+                  setTimestamp(null)
+                } else {
+                  // set timestamp to 1 day from now
+                  const tomorrow = new Date()
+                  tomorrow.setDate(tomorrow.getDate() + 1)
+                  setTimestamp(tomorrow.toISOString())
+                }
+              }}
+              sx={{
+                '& .MuiSwitch-track': {
+                  backgroundColor: 'grey',
+                  color: 'grey'
+                }
+              }}
+            />
+            <div>Collectible for limited time</div>
           </div>
-        )}
-      </div>
+
+          {/* limited time collect settings */}
+          {Boolean(endTimestamp) && (
+            // select data and time for collect to end
+            <div className="flex flex-row justify-between  pl-8 mt-2">
+              <div className="flex flex-row items-center pl-2">
+                <MUIThemeProvider theme={MUITheme}>
+                  <DateTimePicker
+                    value={dayjs(endTimestamp)}
+                    onChange={(value) => {
+                      // convert dayjs to iso string
+                      setTimestamp(value.toISOString())
+                    }}
+                    label="Collectable until"
+                  />
+                </MUIThemeProvider>
+              </div>
+            </div>
+          )}
+
+          {/* limit number of allowed collects  toggle */}
+          <div className="start-row">
+            <Switch
+              checked={Boolean(collectLimit)}
+              onChange={() => {
+                if (collectLimit) {
+                  setCollectLimit(null)
+                } else {
+                  setCollectLimit('1')
+                }
+              }}
+              sx={{
+                '& .MuiSwitch-track': {
+                  backgroundColor: 'grey',
+                  color: 'grey'
+                }
+              }}
+            />
+            <div>Limit number of collects</div>
+          </div>
+
+          {/* limit number of collects settings */}
+          {Boolean(collectLimit) && (
+            <div className="flex flex-row justify-between  pl-8 mt-2">
+              <div className="flex flex-row items-center">
+                <div className="shrink-0">Limit</div>
+                <input
+                  type="number"
+                  value={Number(collectLimit)}
+                  min={1}
+                  // @ts-ignore
+                  onChange={(e) => setCollectLimit(String(e.target.value))}
+                  className={`border  bg-s-bg outline-none ml-2 px-2 py-1 rounded-md ${
+                    !isMobile ? 'w-20' : 'w-16'
+                  } `}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
