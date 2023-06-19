@@ -365,9 +365,7 @@ const CreatePostPopup = ({
       try {
         const res = await submitPostForReview(selectedCommunity?._id, url)
         if (res.status === 200) {
-          notifySuccess(
-            'Post submitted for review, you will be tagged in post on approval'
-          )
+          notifySuccess('Post submitted for review, You will be tagged in post')
           handleCompletePost()
         } else if (res.status === 400) {
           const resJson = await res.json()
