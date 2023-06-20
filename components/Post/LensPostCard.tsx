@@ -892,21 +892,10 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                     </span>
                   </Tooltip>
 
-                  {(postInfo?.collectModule?.__typename ===
-                    'FreeCollectModuleSettings' ||
-                    postInfo?.collectModule?.__typename ===
-                      'FeeCollectModuleSettings') && (
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <LensCollectButton
-                        publication={post}
-                        totalCollects={postInfo?.stats?.totalAmountOfCollects}
-                        hasCollectedByMe={postInfo?.hasCollectedByMe}
-                        author={postInfo?.profile}
-                        collectModule={postInfo?.collectModule}
-                        isAlone={isAlone}
-                      />
-                    </span>
-                  )}
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <LensCollectButton publication={postInfo} />
+                  </span>
+
                   <span onClick={(e) => e.stopPropagation()}>
                     <MirrorButton postInfo={postInfo} isAlone={isAlone} />
                   </span>

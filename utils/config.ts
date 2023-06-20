@@ -21,6 +21,10 @@ export const HANDLE_SUFFIX: string = isMainnet ? '.lens' : '.test'
 
 export const DEFAULT_OG_IMAGE = 'https://diversehq.xyz/LogoV3TrimmedWithBG.png'
 
+export const POLYGONSCAN_URL = isMainnet
+  ? 'https://polygonscan.com'
+  : 'https://mumbai.polygonscan.com'
+
 export const userRoles = {
   ADMIN_USER: 0,
   WHITELISTED_USER: 1,
