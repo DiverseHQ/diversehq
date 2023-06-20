@@ -45,7 +45,9 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { useProfile } from '../Common/WalletContext'
 import PublicationEditor from '../Lexical/PublicationEditor'
 import Attachment from '../Post/Attachment'
-import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
+import CollectSettingsModel, {
+  Receipient
+} from '../Post/Collect/CollectSettingsModel'
 import AttachmentRow from '../Post/Create/AttachmentRow'
 import useUploadAttachments from '../Post/Create/useUploadAttachments'
 import Giphy from '../Post/Giphy'
@@ -58,6 +60,7 @@ import {
   getMostPostedLensCommunityIds,
   putAddLensPublication
 } from '../../apiHelper/lensPublication'
+import { isValidEthereumAddress } from '../../utils/helper'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
 
@@ -203,14 +206,6 @@ const CreatePostPopup = ({
       setLoading(false)
       return
     }
-    if (
-      collectSettings?.feeCollectModule &&
-      Number(collectSettings?.feeCollectModule?.amount?.value) < 0.001
-    ) {
-      notifyError(`Price should be atleast 0.001`)
-      setLoading(false)
-      return
-    }
     // }
     await handleCreateLensPost()
   }
@@ -242,6 +237,37 @@ const CreatePostPopup = ({
       $getRoot().clear()
     })
     hideModal()
+  }
+
+  const isEligibleForMultiRecipient = (recipients: Receipient[]): boolean => {
+    if (!recipients || recipients.length <= 1) return false
+
+    // checking if every recipient.recipient is valid eth address
+    const isValidRecipient = recipients.every((recipient) => {
+      return isValidEthereumAddress(recipient.recipient)
+    })
+
+    if (!isValidRecipient) return false
+
+    // checking if every recipient.split is valid number
+    const isValidSplit = recipients.every((recipient) => {
+      return (
+        !isNaN(Number(recipient.split)) &&
+        Number(recipient.split) > 0 &&
+        Number(recipient.split) <= 100
+      )
+    })
+
+    if (!isValidSplit) return false
+
+    // checking if sum of all recipient.split is 100
+    const sumOfSplit = recipients.reduce((acc, recipient) => {
+      return acc + Number(recipient.split)
+    }, 0)
+
+    if (sumOfSplit !== 100) return false
+
+    return true
   }
 
   const handleCreateLensPost = async () => {
@@ -412,6 +438,7 @@ const CreatePostPopup = ({
       }
     }
 
+    // if no collection then make a data availablity post
     if (!collectSettings) {
       // post as data availability post
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
@@ -474,10 +501,61 @@ const CreatePostPopup = ({
       return
     }
 
+    let collectModule = null
+
+    if (
+      isEligibleForMultiRecipient(collectSettings?.recipients) &&
+      collectSettings?.recipients &&
+      collectSettings?.amount
+    ) {
+      // create multi recipient collect
+      collectModule = {
+        multirecipientFeeCollectModule: {
+          amount: collectSettings?.amount,
+          recipients: collectSettings?.recipients,
+          referralFee: collectSettings?.referralFee,
+          followerOnly: collectSettings?.followerOnly,
+          [collectSettings?.collectLimit ? 'collectLimit' : null]:
+            collectSettings?.collectLimit ?? null,
+          [collectSettings?.endTimestamp ? 'endTimestamp' : null]:
+            collectSettings?.endTimestamp ?? null
+        }
+      }
+    } else {
+      // create simple collect module
+      collectModule = {
+        simpleCollectModule: {
+          [collectSettings?.collectLimit ? 'collectLimit' : null]:
+            collectSettings?.collectLimit ?? null,
+          followerOnly: collectSettings?.followerOnly,
+          [collectSettings?.endTimestamp ? 'endTimestamp' : null]:
+            collectSettings?.endTimestamp ?? null,
+          [collectSettings?.amount ? 'fee' : null]: collectSettings?.amount
+            ? {
+                amount: collectSettings?.amount,
+                referralFee: collectSettings?.referralFee,
+                recipient: lensProfile?.defaultProfile?.ownedBy
+              }
+            : null
+        }
+      }
+    }
+
+    // Remove null values from the final object
+    collectModule = Object.fromEntries(
+      Object.entries(collectModule).map(([key, value]) => [
+        key,
+        // eslint-disable-next-line
+        Object.fromEntries(Object.entries(value).filter(([_, v]) => v !== null))
+      ])
+    )
+
+    console.log('collectModule', collectModule)
+
     const createPostRequest = {
       profileId: lensProfile?.defaultProfile?.id,
       contentURI: url,
-      collectModule: collectSettings,
+      collectModule: collectModule,
       referenceModule: {
         followerOnlyReferenceModule: false
       }
@@ -520,7 +598,6 @@ const CreatePostPopup = ({
       notifyError('Error creating post, report to support')
       return
     }
-    // await post(createPostRequest)
   }
 
   useEffect(() => {
