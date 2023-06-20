@@ -88,7 +88,9 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
         delete setting['endTimestamp']
       }
 
-      setCollectSettings(setting)
+      setCollectSettings({
+        simpleCollectModule: setting
+      })
     }
   }, [
     followerOnly,
