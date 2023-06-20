@@ -190,7 +190,7 @@ const CollectInfo = ({
       )}
 
       {/* referral fee */}
-      {referralFee !== 0 && referralFee !== '0' && (
+      {referralFee !== 0 && referralFee !== '0' && !referralFee && (
         <div className="start-row">
           <AiOutlineRetweet className="mr-2 w-5 h-5" />
           <div>{`Mirror & earn ${referralFee}% on collect`}</div>
