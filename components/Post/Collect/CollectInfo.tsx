@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { BiTimeFive } from 'react-icons/bi'
+import { BsCollection } from 'react-icons/bs'
 import { MdGroup } from 'react-icons/md'
 import { useAccount, useBalance } from 'wagmi'
 import {
@@ -13,6 +14,7 @@ import { useLensUserContext } from '../../../lib/LensUserContext'
 import getTokenImage from '../../../lib/getTokenImage'
 import { stringToLength } from '../../../utils/utils'
 import { usePopUpModal } from '../../Common/CustomPopUpProvider'
+import { useDevice } from '../../Common/DeviceWrapper'
 import { useNotify } from '../../Common/NotifyContext'
 import Markup from '../../Lexical/Markup'
 import Attachment from '../Attachment'
@@ -36,6 +38,7 @@ const CollectInfo = ({
   const [isLoading, setIsLoading] = useState(false)
   const { data: lensProfile } = useLensUserContext()
   const { notifySuccess, notifyError } = useNotify()
+  const { isMobile } = useDevice()
 
   const collectModule: any = publication?.collectModule
 
@@ -229,14 +232,28 @@ const CollectInfo = ({
             hasAmount ? (
               !isLimitedCollectAllCollected && !isCollectExpired ? (
                 <button
-                  className="mt-5"
                   onClick={async (e) => {
                     e.stopPropagation()
                     await collectPublication(publication?.id)
                   }}
                   disabled={isLoading || isCollectExpired}
+                  className={`${
+                    isMobile
+                      ? 'bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl text-p-btn-text'
+                      : 'bg-p-btn text-p-btn-text px-2 py-1 text-base font-semibold rounded-md'
+                  }`}
                 >
-                  Collect now
+                  {isLoading ? (
+                    <div className="start-row">
+                      <div className="h-4 w-4 border-p-btn-text spinner" />
+                      <div className="ml-2">Collecting...</div>
+                    </div>
+                  ) : (
+                    <div className="start-row">
+                      <BsCollection className="mr-2 w-5 h-5" />
+                      <div>Collect</div>
+                    </div>
+                  )}
                 </button>
               ) : null
             ) : (

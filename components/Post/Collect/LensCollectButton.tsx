@@ -31,6 +31,7 @@ const LensCollectButton = ({ publication }: Props) => {
         position="bottom"
       >
         <CollectInfo
+          isCollected={isCollected}
           publication={publication}
           setCollectCount={setCollectCount}
           setIsCollected={setIsCollected}
