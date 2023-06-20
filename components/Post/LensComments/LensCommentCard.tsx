@@ -15,10 +15,7 @@ import {
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useCommentStore } from '../../../store/comment'
-import {
-  commentIdFromIndexedResult,
-  stringToLength
-} from '../../../utils/utils'
+import { commentIdFromIndexedResult } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
 import OptionsWrapper from '../../Common/OptionsWrapper'
 import CenteredDot from '../../Common/UI/CenteredDot'
@@ -248,7 +245,7 @@ const LensCommentCard = ({
               src={getAvatar(comment?.profile)}
               className="w-7 h-7 rounded-full object-cover"
             />
-            {comment?.profile?.name && (
+            {/* {comment?.profile?.name && (
               <Link
                 href={`/u/${formatHandle(comment?.profile?.handle)}`}
                 passHref
@@ -257,13 +254,13 @@ const LensCommentCard = ({
                   {stringToLength(comment?.profile?.name, 20)}
                 </div>
               </Link>
-            )}
+            )} */}
             <Link
               href={`/u/${formatHandle(comment?.profile?.handle)}`}
               passHref
             >
-              <div className="hover:underline font-medium text-s-text text-sm cursor-pointer">
-                u/{formatHandle(comment?.profile?.handle)}
+              <div className="hover:underline font-medium text-p-text text-sm cursor-pointer">
+                {formatHandle(comment?.profile?.handle)}
               </div>
             </Link>
             <CenteredDot />
