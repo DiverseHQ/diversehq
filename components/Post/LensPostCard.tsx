@@ -891,15 +891,20 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                       </Link>
                     </span>
                   </Tooltip>
-
-                  <span onClick={(e) => e.stopPropagation()}>
-                    <LensCollectButton publication={postInfo} />
-                  </span>
+                  {postInfo?.collectModule?.__typename !==
+                    'RevertCollectModuleSettings' && (
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <LensCollectButton publication={postInfo} />
+                    </span>
+                  )}
 
                   <span onClick={(e) => e.stopPropagation()}>
                     <MirrorButton postInfo={postInfo} isAlone={isAlone} />
                   </span>
-                  {!isMobile && (
+                  {(!isMobile ||
+                    (isMobile &&
+                      postInfo?.collectModule?.__typename ===
+                        'RevertCollectModuleSettings')) && (
                     <span onClick={(e) => e.stopPropagation()}>
                       <PostShareButton
                         url={`${appLink}/p/${postInfo?.id}`}

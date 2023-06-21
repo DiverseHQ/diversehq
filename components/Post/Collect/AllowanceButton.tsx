@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { useSendTransaction, useWaitForTransaction } from 'wagmi'
 import { useGenerateModuleCurrencyApprovalDataQuery } from '../../../graphql/generated'
@@ -66,11 +66,7 @@ const AllowanceButton = ({ module, allowed, setAllowed }) => {
   return (
     <button
       onClick={handleAllowance}
-      className={`${
-        isMobile
-          ? 'bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl text-p-btn-text'
-          : 'bg-p-btn text-p-btn-text px-2 py-1 text-base font-semibold rounded-md'
-      }`}
+      className={`bg-p-btn text-p-btn-text py-1 px-2 text-xl rounded-full sm:rounded-md font-semibold sm:w-fit w-full centered-row`}
       disabled={waitLoading || transactionLoading}
     >
       {!(waitLoading || transactionLoading || isLoading) ? (

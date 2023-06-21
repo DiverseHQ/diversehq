@@ -156,7 +156,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
     )
   })
   return (
-    <div className="m-4 flex flex-col gap-y-2 relative">
+    <div className="m-4 flex flex-col gap-y-3 relative">
       <h1
         className={`self-center font-medium text-lg mb-2.5 ${
           !isMobile ? 'hidden' : ''
@@ -178,6 +178,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
               })
             }
           }}
+          size={isMobile ? 'small' : 'medium'}
           sx={{
             '& .MuiSwitch-track': {
               backgroundColor: 'grey',
@@ -190,12 +191,13 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
 
       {/* settings you see after toggling collectible */}
       {collectSettings && (
-        <div className="pl-4 gap-y-2 flex flex-col">
+        <div className="pl-4 gap-y-3 flex flex-col">
           {/* only followers can collect toggle */}
           <div className="start-row">
             <Switch
               checked={followerOnly}
               onChange={() => setFollowerOnly(!followerOnly)}
+              size={isMobile ? 'small' : 'medium'}
               sx={{
                 '& .MuiSwitch-track': {
                   backgroundColor: 'grey',
@@ -211,6 +213,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
             <Switch
               checked={monetize}
               onChange={() => setMonetize(!monetize)}
+              size={isMobile ? 'small' : 'medium'}
               sx={{
                 '& .MuiSwitch-track': {
                   backgroundColor: 'grey',
@@ -223,7 +226,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
 
           {/* monetize settings */}
           {monetize && (
-            <div className="flex flex-col gap-y-4 pl-12 mt-2">
+            <div className="flex flex-col gap-y-4 pl-6 sm:pl-12 mt-2">
               {/* select currency  */}
               <div className="flex flex-row items-center">
                 <div>Currency</div>
@@ -285,7 +288,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                 {recipients.map((recipient, index) => (
                   <div
                     key={index}
-                    className="flex flex-row items-center gap-x-2"
+                    className="flex flex-row items-center gap-x-1 sm:gap-x-2"
                   >
                     <input
                       type="text"
@@ -354,7 +357,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                 )}
 
                 {/* add recipient button */}
-                <div className="flex flex-row justify-between items-center px-2">
+                <div className="flex flex-row justify-between items-center">
                   {recipients.length <= 5 && (
                     <button
                       onClick={() =>
@@ -366,18 +369,18 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                           }
                         ])
                       }
-                      className="flex flex-row items-center gap-x-2 rounded-md px-3 py-0.5 bg-s-bg border-s-border border hover:bg-s-hover transition ease-in-out duration-200"
+                      className="flex flex-row text-xs sm:text-base  items-center gap-x-1 sm:gap-x-2 rounded-md px-2 sm:px-3 py-0.5 bg-s-bg border-s-border border hover:bg-s-hover transition ease-in-out duration-200"
                     >
-                      <AiOutlinePlus className="w-4 h-4" />
+                      <AiOutlinePlus className="sm:w-4 sm:h-4 w-2 h-2" />
                       <div>Add Recipient</div>
                     </button>
                   )}
 
                   <button
                     onClick={splitEvenlyAmongRecipients}
-                    className="flex flex-row items-center gap-x-2 rounded-md px-3 py-0.5 bg-s-bg border-s-border border hover:bg-s-hover transition ease-in-out duration-200"
+                    className="flex flex-row text-xs sm:text-base  items-center gap-x-1 sm:gap-x-2 rounded-md px-2 sm:px-3 py-0.5 bg-s-bg border-s-border border hover:bg-s-hover transition ease-in-out duration-200"
                   >
-                    <RxSpaceEvenlyHorizontally className="w-4 h-4" />
+                    <RxSpaceEvenlyHorizontally className="sm:w-4 sm:h-4 w-2 h-2" />
                     <div>Split Evenly</div>
                   </button>
                 </div>
@@ -389,6 +392,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
           <div className="start-row">
             <Switch
               checked={Boolean(endTimestamp)}
+              size={isMobile ? 'small' : 'medium'}
               onChange={() => {
                 if (endTimestamp) {
                   setTimestamp(null)
@@ -406,13 +410,13 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
                 }
               }}
             />
-            <div>Collectible for limited time</div>
+            <div>Collectable for limited time</div>
           </div>
 
           {/* limited time collect settings */}
           {Boolean(endTimestamp) && (
             // select data and time for collect to end
-            <div className="flex flex-row justify-between  pl-8 mt-2">
+            <div className="flex flex-row justify-between  pl-4 sm:pl-12 mt-2">
               <div className="flex flex-row items-center pl-2">
                 <MUIThemeProvider theme={MUITheme}>
                   <DateTimePicker
@@ -432,6 +436,7 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
           <div className="start-row">
             <Switch
               checked={Boolean(collectLimit)}
+              size={isMobile ? 'small' : 'medium'}
               onChange={() => {
                 if (collectLimit) {
                   setCollectLimit(null)
@@ -451,9 +456,9 @@ const CollectSettingsModel = ({ collectSettings, setCollectSettings }) => {
 
           {/* limit number of collects settings */}
           {Boolean(collectLimit) && (
-            <div className="flex flex-row justify-between  pl-8 mt-2">
+            <div className="flex flex-row justify-between  pl-7 sm:pl-14 mt-2">
               <div className="flex flex-row items-center">
-                <div className="shrink-0">Limit</div>
+                <div className="shrink-0">to</div>
                 <input
                   type="number"
                   value={Number(collectLimit)}

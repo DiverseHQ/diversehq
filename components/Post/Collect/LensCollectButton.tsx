@@ -13,6 +13,7 @@ type Props = {
 }
 
 const LensCollectButton = ({ publication }: Props) => {
+  console.log(publication)
   const [collectCount, setCollectCount] = useState(
     publication?.stats?.totalAmountOfCollects ?? 0
   )
@@ -29,6 +30,7 @@ const LensCollectButton = ({ publication }: Props) => {
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         position="bottom"
+        showClose={false}
       >
         <CollectInfo
           isCollected={isCollected}

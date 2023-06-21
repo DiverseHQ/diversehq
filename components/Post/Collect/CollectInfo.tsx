@@ -14,7 +14,6 @@ import { useLensUserContext } from '../../../lib/LensUserContext'
 import getTokenImage from '../../../lib/getTokenImage'
 import { stringToLength } from '../../../utils/utils'
 import { usePopUpModal } from '../../Common/CustomPopUpProvider'
-import { useDevice } from '../../Common/DeviceWrapper'
 import { useNotify } from '../../Common/NotifyContext'
 import Markup from '../../Lexical/Markup'
 import Attachment from '../Attachment'
@@ -35,10 +34,8 @@ const CollectInfo = ({
   const { showModal, hideModal } = usePopUpModal()
   const { address } = useAccount()
   const [allowed, setAllowed] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
   const { data: lensProfile } = useLensUserContext()
   const { notifySuccess, notifyError } = useNotify()
-  const { isMobile } = useDevice()
 
   const collectModule: any = publication?.collectModule
 
@@ -114,15 +111,13 @@ const CollectInfo = ({
   useEffect(() => {
     if (error) {
       notifyError(error)
-      setIsLoading(false)
     }
   }, [error])
 
   useEffect(() => {
-    if (!isLoading && isSuccess) {
+    if (!loading && isSuccess) {
       setIsCollected(true)
       setCollectCount((prev: number) => prev + 1)
-      setIsLoading(false)
       notifySuccess('Post has been collected, check you collection!')
       hideModal()
     }
@@ -140,8 +135,8 @@ const CollectInfo = ({
     : false
 
   return (
-    <div className="px-6 text-p-text">
-      <div className="mb-4 self-start text-xl">
+    <div className="px-6 pb-3 text-p-text flex flex-col gap-y-1">
+      <div className="mb-1 self-start text-xl">
         <Markup>{stringToLength(publication.metadata?.content, 30)}</Markup>
       </div>
       {publication?.metadata?.media.length > 0 && (
@@ -205,7 +200,7 @@ const CollectInfo = ({
       )}
 
       {amount ? (
-        <div className="flex items-center space-x-1.5 py-2">
+        <div className="flex items-center space-x-1.5 py-1 sm:py-2">
           <img
             className="h-6 w-6"
             height={28}
@@ -220,7 +215,7 @@ const CollectInfo = ({
           </span>
         </div>
       ) : (
-        <div className="flex items-center space-x-1.5 py-2">
+        <div className="flex items-center space-x-1.5 py-1 sm:py-2">
           <span className="text-2xl font-bold">Free</span>
         </div>
       )}
@@ -230,7 +225,7 @@ const CollectInfo = ({
         (!isCollected ||
           (!isFreeCollectModule && !isSimpleFreeCollectModule)) ? (
           allowanceLoading || balanceLoading ? (
-            <div className="shimmer mt-5 h-[34px] w-28 rounded-lg" />
+            <div className="animate-pulse mt-5 h-[34px] w-28 rounded-lg" />
           ) : allowed ? (
             hasAmount ? (
               !isLimitedCollectAllCollected && !isCollectExpired ? (
@@ -239,14 +234,10 @@ const CollectInfo = ({
                     e.stopPropagation()
                     await collectPublication(publication?.id)
                   }}
-                  disabled={isLoading || isCollectExpired}
-                  className={`${
-                    isMobile
-                      ? 'bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl text-p-btn-text'
-                      : 'bg-p-btn text-p-btn-text px-2 py-1 text-base font-semibold rounded-md'
-                  }`}
+                  disabled={loading || isCollectExpired}
+                  className={`bg-p-btn text-p-btn-text py-1 px-2 text-xl rounded-full sm:rounded-md font-semibold sm:w-fit w-full centered-row`}
                 >
-                  {isLoading ? (
+                  {loading ? (
                     <div className="start-row">
                       <div className="h-4 w-4 border-p-btn-text spinner" />
                       <div className="ml-2">Collecting...</div>
@@ -263,18 +254,21 @@ const CollectInfo = ({
               <Uniswap module={collectModule} />
             )
           ) : (
-            <span className="mt-5">
-              <AllowanceButton
-                module={
-                  allowanceData
-                    ?.approvedModuleAllowanceAmount[0] as ApprovedAllowanceAmount
-                }
-                allowed={allowed}
-                setAllowed={setAllowed}
-              />
-            </span>
+            <AllowanceButton
+              module={
+                allowanceData
+                  ?.approvedModuleAllowanceAmount[0] as ApprovedAllowanceAmount
+              }
+              allowed={allowed}
+              setAllowed={setAllowed}
+            />
           )
         ) : null}
+        {isCollected && (
+          <div className="text-sm sm:text-base">
+            You have collected this post
+          </div>
+        )}
       </div>
     </div>
   )

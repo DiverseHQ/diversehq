@@ -1000,14 +1000,14 @@ const CreatePostPopup = ({
           <BottomDrawerWrapper
             isDrawerOpen={isDrawerOpen}
             setIsDrawerOpen={setIsDrawerOpen}
-            showClose={false}
+            showClose={true}
             position="bottom"
           >
             <CollectSettingsModel
               collectSettings={collectSettings}
               setCollectSettings={setCollectSettings}
             />
-            <div className="px-4 w-full mb-3 mt-1">
+            {/* <div className="px-4 w-full pb-1 mt-1">
               <button
                 onClick={() => {
                   setIsDrawerOpen(false)
@@ -1016,7 +1016,7 @@ const CreatePostPopup = ({
               >
                 Save
               </button>
-            </div>
+            </div> */}
           </BottomDrawerWrapper>
         )}
       </PopUpWrapper>
