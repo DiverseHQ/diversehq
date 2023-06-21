@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { Profile } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { PublicationMetadataWithoutMedia } from '../../types/post'
-import { useDevice } from '../Common/DeviceWrapper'
 import CenteredDot from '../Common/UI/CenteredDot'
 import Markup from '../Lexical/Markup'
 import formatHandle from '../User/lib/formatHandle'
@@ -53,7 +52,6 @@ interface Props {
 }
 
 const IndexingPostCard = ({ postInfo }: Props) => {
-  const { isMobile } = useDevice()
   const { data } = useLensUserContext()
 
   // @ts-ignore
@@ -147,24 +145,10 @@ const IndexingPostCard = ({ postInfo }: Props) => {
           </div>
 
           <div className="flex flex-row w-full pb-2">
-            {!isMobile && (
-              <div className="flex flex-col items-center ml-1.5 mt-1">
-                <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <img
-                    //  onClick={liked ? handleUnLike : handleLike}
-                    src={'/UpvotedFilled.svg'}
-                    className="w-5 h-5"
-                  />
-                </button>
-                <div className="font-bold leading-5">1</div>
-                <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <img src={'/downvoteGray.svg'} className="w-4 h-4" />
-                </button>
-              </div>
-            )}
+            <div className="sm:w-10 w-0" />
 
             {/* main content */}
-            <div className="flex flex-col w-full justify-between min-h-[76px]">
+            <div className="flex flex-col w-full justify-between">
               <div>
                 <div className="mb-2 px-3 sm:pl-3.5">
                   {postInfo?.metadata?.name && (

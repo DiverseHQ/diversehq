@@ -1,6 +1,6 @@
 import { Tooltip } from '@mui/material'
 import { useRouter } from 'next/router'
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { BsCollection, BsCollectionFill } from 'react-icons/bs'
 import { Publication } from '../../../graphql/generated'
 import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
@@ -13,7 +13,6 @@ type Props = {
 }
 
 const LensCollectButton = ({ publication }: Props) => {
-  console.log(publication)
   const [collectCount, setCollectCount] = useState(
     publication?.stats?.totalAmountOfCollects ?? 0
   )
@@ -24,6 +23,11 @@ const LensCollectButton = ({ publication }: Props) => {
   const { isMobile } = useDevice()
   const router = useRouter()
   const { showModal } = usePopUpModal()
+
+  useEffect(() => {
+    setIsCollected(publication?.hasCollectedByMe ?? false)
+    setCollectCount(publication?.stats?.totalAmountOfCollects ?? 0)
+  }, [publication?.stats?.totalAmountOfCollects, publication?.hasCollectedByMe])
   return (
     <>
       <BottomDrawerWrapper

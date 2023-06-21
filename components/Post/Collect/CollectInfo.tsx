@@ -137,7 +137,7 @@ const CollectInfo = ({
   return (
     <div className="px-6 pb-3 text-p-text flex flex-col gap-y-1">
       <div className="mb-1 self-start text-xl">
-        <Markup>{stringToLength(publication.metadata?.content, 30)}</Markup>
+        <Markup>{stringToLength(publication.metadata?.content, 150)}</Markup>
       </div>
       {publication?.metadata?.media.length > 0 && (
         <div className="w-full mb-1">
@@ -224,8 +224,10 @@ const CollectInfo = ({
         {lensProfile?.defaultProfile &&
         (!isCollected ||
           (!isFreeCollectModule && !isSimpleFreeCollectModule)) ? (
-          allowanceLoading || balanceLoading ? (
-            <div className="animate-pulse mt-5 h-[34px] w-28 rounded-lg" />
+          (allowanceLoading || balanceLoading) &&
+          !isFreeCollectModule &&
+          !isSimpleFreeCollectModule ? (
+            <div className="animate-pulse bg-p-btn mt-5 h-[34px] w-28 rounded-lg" />
           ) : allowed ? (
             hasAmount ? (
               !isLimitedCollectAllCollected && !isCollectExpired ? (
@@ -235,7 +237,7 @@ const CollectInfo = ({
                     await collectPublication(publication?.id)
                   }}
                   disabled={loading || isCollectExpired}
-                  className={`bg-p-btn text-p-btn-text py-1 px-2 text-xl rounded-full sm:rounded-md font-semibold sm:w-fit w-full centered-row`}
+                  className={`bg-p-btn text-p-btn-text py-1 px-4 text-xl rounded-full sm:rounded-md font-semibold sm:w-fit w-full centered-row`}
                 >
                   {loading ? (
                     <div className="start-row">
