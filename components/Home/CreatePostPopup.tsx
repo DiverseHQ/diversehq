@@ -890,7 +890,7 @@ const CreatePostPopup = ({
               setIsDrawerOpen={setFlairDrawerOpen}
             >
               <button className="flex items-center hover:cursor-pointer space-x-1 sm:space-x-2 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full border border-s-border ">
-                <p>{flair ? flair : 'Flair'}</p>
+                <p>{flair ? flair : 'None'}</p>
                 <AiOutlineDown className="w-4 h-4 mx-1" />
               </button>
             </OptionsWrapper>
