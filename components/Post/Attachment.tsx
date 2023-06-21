@@ -112,7 +112,7 @@ const Attachment: FC<Props> = ({
   if (attachments?.length === 0) {
     if (quotedPublicationId && !isAlone) {
       return (
-        <div className='px-4 sm:px-0'>
+        <div className="px-4 sm:px-0">
           <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
         </div>
       )

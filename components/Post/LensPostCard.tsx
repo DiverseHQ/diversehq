@@ -403,10 +403,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                 </Link>
               </div>
               <div className="flex flex-col justify-between items-start text-p-text h-full">
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="start-row"
-                >
+                <div onClick={(e) => e.stopPropagation()} className="start-row">
                   <Link
                     href={
                       postInfo?.communityInfo?._id
@@ -416,10 +413,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                         : `/u/${formatHandle(postInfo?.profile?.handle)}`
                     }
                   >
-                    <div
-                      className="pl-2 max-w-[300px] sm:max-w-lg font-bold text-sm sm:text-base hover:cursor-pointer hover:underline truncate"
-
-                    >
+                    <div className="pl-2 max-w-[300px] sm:max-w-lg font-bold text-sm sm:text-base hover:cursor-pointer hover:underline truncate">
                       {postInfo?.isLensCommunityPost
                         ? `l/${formatHandle(postInfo?.profile?.handle)}`
                         : postInfo?.communityInfo?.name ??
@@ -901,7 +895,6 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                     </span>
                   )}
 
-                  
                   {(!isMobile ||
                     (isMobile &&
                       postInfo?.collectModule?.__typename ===
