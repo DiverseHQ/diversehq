@@ -244,7 +244,7 @@ const Attachment: FC<Props> = ({
                                 setCurrentMedia(0)
                               }}
                             >
-                              <AiOutlineClose className="w-6 h-6" />
+                              <AiOutlineClose className="w-6 h-6 text-white" />
                             </button>
                           </div>
                         )}
@@ -291,7 +291,7 @@ const Attachment: FC<Props> = ({
                 }}
                 className="absolute left-0 top-[50%] z-20 p-1 rounded-full translate-x-[50%] -translate-y-[50%] bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg transition-all duration-300"
               >
-                <AiOutlineArrowLeft className="w-6 h-6" />
+                <AiOutlineArrowLeft className="w-6 h-6 text-white" />
               </button>
             )}
             {currentMedia !== attachments.length - 1 && (
@@ -302,7 +302,7 @@ const Attachment: FC<Props> = ({
                 }}
                 className="absolute right-0 top-[50%] z-20 p-1 rounded-full -translate-x-[50%] -translate-y-[50%] bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg transition-all duration-300"
               >
-                <AiOutlineArrowRight className="w-6 h-6" />
+                <AiOutlineArrowRight className="w-6 h-6 text-white" />
               </button>
             )}
             <div
@@ -392,7 +392,7 @@ const Attachment: FC<Props> = ({
                           setCurrentMedia(0)
                         }}
                       >
-                        <AiOutlineClose className="w-6 h-6" />
+                        <AiOutlineClose className="w-6 h-6 text-white" />
                       </button>
                     </div>
                   )}
