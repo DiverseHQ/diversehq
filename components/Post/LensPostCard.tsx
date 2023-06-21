@@ -405,7 +405,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
               <div className="flex flex-col justify-between items-start text-p-text h-full">
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="start-row pb-1"
+                  className="start-row"
                 >
                   <Link
                     href={
@@ -417,10 +417,8 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                     }
                   >
                     <div
-                      className="pl-2 max-w-[300px] sm:max-w-lg font-bold text-sm sm:text-lg hover:cursor-pointer hover:underline truncate"
-                      style={{
-                        lineHeight: '1rem'
-                      }}
+                      className="pl-2 max-w-[300px] sm:max-w-lg font-bold text-sm sm:text-base hover:cursor-pointer hover:underline truncate"
+
                     >
                       {postInfo?.isLensCommunityPost
                         ? `l/${formatHandle(postInfo?.profile?.handle)}`
@@ -892,6 +890,10 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                       </Link>
                     </span>
                   </Tooltip>
+
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <MirrorButton postInfo={postInfo} isAlone={isAlone} />
+                  </span>
                   {postInfo?.collectModule?.__typename !==
                     'RevertCollectModuleSettings' && (
                     <span onClick={(e) => e.stopPropagation()}>
@@ -899,9 +901,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                     </span>
                   )}
 
-                  <span onClick={(e) => e.stopPropagation()}>
-                    <MirrorButton postInfo={postInfo} isAlone={isAlone} />
-                  </span>
+                  
                   {(!isMobile ||
                     (isMobile &&
                       postInfo?.collectModule?.__typename ===

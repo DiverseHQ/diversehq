@@ -346,7 +346,7 @@ const LensCommentCard = ({
           <div className={clsx('w-full', hideBottomRow && 'pt-1')}>
             {/* content */}
             <div className="pl-2">
-              <Markup className="break-words">
+              <Markup className="break-words text-sm sm:text-base">
                 {comment?.metadata?.content}
               </Markup>
             </div>

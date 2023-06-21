@@ -112,7 +112,9 @@ const Attachment: FC<Props> = ({
   if (attachments?.length === 0) {
     if (quotedPublicationId && !isAlone) {
       return (
-        <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
+        <div className='px-4 sm:px-0'>
+          <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
+        </div>
       )
     }
     if (
@@ -255,8 +257,8 @@ const Attachment: FC<Props> = ({
             </div>
           </div>
         </div>
-        {quotedPublicationId && (
-          <div className="mt-4">
+        {quotedPublicationId && !isAlone && (
+          <div className="sm:mt-4 mt-2 px-4 sm:px-0">
             <LensPostCardFromPublicationId
               publicationId={quotedPublicationId}
             />
@@ -420,8 +422,8 @@ const Attachment: FC<Props> = ({
       </div>
       {/* )} */}
 
-      {quotedPublicationId && (
-        <div className="mt-4">
+      {quotedPublicationId && !isAlone && (
+        <div className="sm:mt-4 mt-2 sm:px-0 px-4">
           <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
         </div>
       )}
