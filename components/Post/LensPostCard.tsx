@@ -621,7 +621,6 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                   <>
                     <div className="flex flex-row">
                       {postInfo?.metadata?.name &&
-                        !feedItem &&
                         showNameForThisAppIds.includes(postInfo?.appId) &&
                         // @ts-ignore
                         postInfo?.__typename !== 'Comment' && (
