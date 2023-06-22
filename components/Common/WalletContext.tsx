@@ -1,9 +1,9 @@
-import React, {
-  useState,
+import {
   createContext,
-  useEffect,
+  useCallback,
   useContext,
-  useCallback
+  useEffect,
+  useState
 } from 'react'
 import {
   useAccount,
@@ -14,21 +14,21 @@ import {
   //  useDisconnect
 } from 'wagmi'
 // import Web3Token from 'web3-token'
+import { getUserInfo, removeSubscription } from '../../apiHelper/user'
+import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 import {
   getLocalToken,
   removeLocalToken
   // setLocalToken
 } from '../../utils/token'
-import { getUserInfo, removeSubscription } from '../../apiHelper/user'
-import { removeAccessTokenFromStorage } from '../../lib/auth/helpers'
 // import { userRoles } from '../../utils/config'
-import { useNotify } from './NotifyContext'
 import { useQueryClient } from '@tanstack/react-query'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { UserType } from '../../types/user'
+import { useNotify } from './NotifyContext'
 
-import { LensCommunity } from '../../types/community'
 import { getBulkIsFollowedByMe } from '../../lib/profile/get-bulk-is-followed-by-me'
+import { LensCommunity } from '../../types/community'
 // import getProfiles from '../../lib/profile/get-profiles'
 // import { Profile } from '../../graphql/generated'
 import {
@@ -104,7 +104,7 @@ export const WalletProvider = ({ children }) => {
 
   const handleDisconnected = async () => {
     if (Notification.permission === 'granted') {
-      const registration = await await navigator.serviceWorker.register(
+      const registration = await navigator.serviceWorker.register(
         '/service-worker.js',
         {
           scope: '/'
