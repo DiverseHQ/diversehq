@@ -283,6 +283,30 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
 
   if (!postInfo) return null
 
+  const getCommentsToShow = () => {
+    let comments = []
+
+    const isProfileAlreadyAdded = (comment) => {
+      return comments.find((c) => c.profile.id === comment.profile.id)
+    }
+
+    for (const comment of feedItem?.comments || []) {
+      if (comments.length >= 3) break
+      if (isProfileAlreadyAdded(comment)) continue
+      comments.push(comment)
+    }
+
+    if (
+      comments.length === 1 &&
+      comments[0].profile.id === postInfo?.profile?.id
+    ) {
+      comments = []
+    }
+    return comments
+  }
+
+  const commentsToShow = getCommentsToShow()
+
   return (
     <>
       <div
@@ -908,9 +932,9 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                 </div>
               </>
             )}
-            {feedItem?.comments?.length > 0 && (
+            {commentsToShow.length > 0 && (
               <div className="sm:pl-0 pl-3">
-                {feedItem?.comments?.slice(0, 3).map((comment) => {
+                {commentsToShow.map((comment) => {
                   return (
                     <LensCommentCard
                       key={comment.id}
