@@ -77,7 +77,7 @@ export const recommendedCommunitiesIds = [
   '63b1ccdb18b63498449c1bb0' // anime
 ]
 
-export const DISCORD_INVITE_LINK = 'https://discord.gg/x7jByQKpYF'
+export const DISCORD_INVITE_LINK = 'https://discord.gg/6sRYC5jD58'
 export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/kopveel8c' // devenrathodrd account
 // export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/xgrqxy3nw/' // devilopurity
 // export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/wo7aelvvz/' // diversehq

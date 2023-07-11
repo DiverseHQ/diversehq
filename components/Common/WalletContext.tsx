@@ -122,9 +122,6 @@ export const WalletProvider = ({ children }) => {
     setLoading(false)
     removeAccessTokenFromStorage()
     // delete subscription from db
-
-    localStorage.removeItem('mostPostedCommunities')
-    localStorage.removeItem('recentCommunities')
     await queryClient.invalidateQueries({
       queryKey: ['lensUser', 'defaultProfile']
     })
