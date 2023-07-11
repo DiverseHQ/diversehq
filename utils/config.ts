@@ -78,6 +78,7 @@ export const recommendedCommunitiesIds = [
 ]
 
 export const DISCORD_INVITE_LINK = 'https://discord.gg/6sRYC5jD58'
+export const TWITTER_LINK = 'https://twitter.com/useDiverseHQ'
 export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/kopveel8c' // devenrathodrd account
 // export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/xgrqxy3nw/' // devilopurity
 // export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/wo7aelvvz/' // diversehq
