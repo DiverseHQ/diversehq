@@ -40,6 +40,10 @@ const LensNotificationColumn = () => {
         cursor: params.cursor,
         limit: LENS_NOTIFICATION_LIMIT,
         highSignalFilter: params.highSignalFilter
+      },
+      profileId: lensProfile?.defaultProfile?.id,
+      reactionRequest: {
+        profileId: lensProfile?.defaultProfile?.id
       }
     },
     {
