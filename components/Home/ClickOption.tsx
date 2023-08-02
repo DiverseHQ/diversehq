@@ -7,8 +7,6 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { AiOutlineDisconnect } from 'react-icons/ai'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { MdCreateNewFolder } from 'react-icons/md'
-import { useNotify } from '../Common/NotifyContext'
-import { userRoles } from '../../utils/config'
 import CreateCommunity from './CreateCommunity'
 import { BsFillPersonFill } from 'react-icons/bs'
 import { IoIosMoon, IoMdSettings } from 'react-icons/io'
@@ -24,7 +22,6 @@ const ClickOption = () => {
   const { disconnect } = useDisconnect()
   const { hideModal, showModal } = usePopUpModal()
   const { theme, toggleTheme } = useTheme()
-  const { notifyInfo } = useNotify()
   const { data: lensProfile } = useLensUserContext()
 
   const routeToUserProfile = () => {
@@ -45,16 +42,6 @@ const ClickOption = () => {
   }
 
   const createCommunity = () => {
-    if (
-      user?.role >= userRoles.WHITELISTED_USER &&
-      user?.communityCreationSpells <= 0
-    ) {
-      notifyInfo(
-        'You have used all your community creation spells OR you are not a whitelisted user'
-      )
-      return
-    }
-
     showModal({
       component: <CreateCommunity />,
       type: modalType.fullscreen,

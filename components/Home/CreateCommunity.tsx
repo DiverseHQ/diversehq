@@ -23,7 +23,7 @@ const CreateCommunity = () => {
   const [pfpValue, setPfpValue] = useState(null)
   const { notifyError, notifySuccess } = useNotify()
   const { hideModal } = usePopUpModal()
-  const { user, refreshUserInfo } = useProfile()
+  const { refreshUserInfo } = useProfile()
   const router = useRouter()
 
   function hasWhiteSpace(s) {
@@ -49,7 +49,7 @@ const CreateCommunity = () => {
       return
     }
     if (hasWhiteSpace(communityName.trim())) {
-      notifyError('Community tag cannot contain spaces')
+      notifyError('Community handle cannot contain spaces')
       setLoading(false)
       return
     }
@@ -174,7 +174,7 @@ const CreateCommunity = () => {
           <div
             className={`flex relative ${
               communityPfp ? '' : 'border'
-            } h-24 w-24 border-s-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10 cursor-pointer`}
+            } -mb-8 h-24 w-24 border-s-border rounded-full bottom-10 ml-3 items-center justify-center bg-p-bg z-10 cursor-pointer`}
           >
             {communityPfp && (
               <label htmlFor="communityPfp">
@@ -193,11 +193,6 @@ const CreateCommunity = () => {
                 </div>
               </label>
             </div>
-          </div>
-
-          <div className="text-s-text text-sm mx-4">
-            <span className="font-bold">{user.communityCreationSpells}</span>{' '}
-            Creation Spells remaining use wisely
           </div>
 
           <FormTextInput
