@@ -700,9 +700,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                       {postInfo?.metadata?.name &&
                         // @ts-ignore
                         postInfo?.__typename !== 'Comment' &&
-                        (postInfo?.appId === appId ||
-                          (postInfo?.metadata?.name.length > 0 &&
-                            content.trim().length === 0)) && (
+                        showNameForThisAppIds.includes(postInfo?.appId) && (
                           <Markup
                             className={`whitespace-pre-wrap break-words font-semibold text-base sm:text-lg w-full`}
                           >

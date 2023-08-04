@@ -350,7 +350,7 @@ const CreatePostPopup = ({
             ? `Post by @${lensProfile.defaultProfile.handle} \n`
             : ``
         }` +
-        `**${title}**` +
+        `${title}` +
         '\n' +
         content?.trim() +
         `${
