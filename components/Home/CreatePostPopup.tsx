@@ -179,18 +179,6 @@ const CreatePostPopup = ({
       : attachments[0]?.type
   }
 
-  const storeMostPostedCommunities = () => {
-    window.localStorage.setItem(
-      'mostPostedCommunities',
-      JSON.stringify([
-        selectedCommunity,
-        ...mostPostedCommunities.filter(
-          (community) => community?._id !== selectedCommunity?._id
-        )
-      ])
-    )
-  }
-
   const handleSubmit = async (event) => {
     event.preventDefault()
     setLoading(true)
@@ -207,8 +195,6 @@ const CreatePostPopup = ({
       setLoading(false)
       return
     }
-    // }
-    storeMostPostedCommunities()
     await handleCreateLensPost()
   }
 

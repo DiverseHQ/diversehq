@@ -24,9 +24,10 @@ import { appLink } from '../../utils/config'
 interface Props {
   postInfo: postWithCommunityInfoType
   isAlone?: boolean
+  isComment?: boolean
 }
 
-const MirrorButton = ({ postInfo, isAlone }: Props) => {
+const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
   const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
   const { notifyError, notifySuccess } = useNotify()
@@ -395,34 +396,13 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
         </>
       ) : (
         <span onClick={(e) => e.stopPropagation()}>
-          <OptionsWrapper
-            OptionPopUpModal={() => (
-              <MoreOptionsModal
-                list={[
-                  {
-                    label: 'Mirror',
-                    onClick: handleMirrorPost,
-                    icon: () => <AiOutlineRetweet />
-                  },
-                  {
-                    label: 'Cross Post',
-                    onClick: handleCrossPost,
-                    icon: () => <TbArrowRampRight />
-                  }
-                ]}
-              />
-            )}
-            isDrawerOpen={isDrawerOpen}
-            setIsDrawerOpen={setIsDrawerOpen}
-            showOptionsModal={showOptionsModal}
-            setShowOptionsModal={setShowOptionsModal}
-            position="bottom"
-          >
+          {isComment ? (
             <Tooltip title="Mirror" arrow>
               <div
                 className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
                   mirrored ? 'font-bold' : ''
                 }`}
+                onClick={handleMirrorPost}
               >
                 {loading ? (
                   <div className="spinner ml-2 w-3 h-3" />
@@ -437,15 +417,66 @@ const MirrorButton = ({ postInfo, isAlone }: Props) => {
                     )}
                   </>
                 )}
-
-                {(!router.pathname.startsWith('/p') || isAlone) && (
+                {isAlone && (
                   <p className="ml-2 font-medium text-[#687684]">
                     {mirrorCount}
                   </p>
                 )}
               </div>
             </Tooltip>
-          </OptionsWrapper>
+          ) : (
+            <OptionsWrapper
+              OptionPopUpModal={() => (
+                <MoreOptionsModal
+                  list={[
+                    {
+                      label: 'Mirror',
+                      onClick: handleMirrorPost,
+                      icon: () => <AiOutlineRetweet />
+                    },
+                    {
+                      label: 'Cross Post',
+                      onClick: handleCrossPost,
+                      icon: () => <TbArrowRampRight />
+                    }
+                  ]}
+                />
+              )}
+              isDrawerOpen={isDrawerOpen}
+              setIsDrawerOpen={setIsDrawerOpen}
+              showOptionsModal={showOptionsModal}
+              setShowOptionsModal={setShowOptionsModal}
+              position="bottom"
+            >
+              <Tooltip title="Mirror" arrow>
+                <div
+                  className={`hover:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center text-[#687684] ${
+                    mirrored ? 'font-bold' : ''
+                  }`}
+                >
+                  {loading ? (
+                    <div className="spinner ml-2 w-3 h-3" />
+                  ) : (
+                    <>
+                      {mirrored ? (
+                        <AiOutlineRetweet
+                          className={`text-p-btn rounded-md w-4 h-4 `}
+                        />
+                      ) : (
+                        <AiOutlineRetweet className={` rounded-md w-4 h-4 `} />
+                      )}
+                    </>
+                  )}
+
+                  {(!router.pathname.startsWith('/p') || isAlone) && (
+                    <p className="ml-2 font-medium text-[#687684]">
+                      {mirrorCount}
+                    </p>
+                  )}
+                </div>
+              </Tooltip>
+            </OptionsWrapper>
+          )}
         </span>
       )}
     </>

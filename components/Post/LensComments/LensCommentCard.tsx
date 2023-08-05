@@ -32,6 +32,7 @@ import Markup from '../../Lexical/Markup'
 import Attachment from '../Attachment'
 import getAvatar from '../../User/lib/getAvatar'
 import clsx from 'clsx'
+import MirrorButton from '../MirrorButton'
 
 const LensCommentCard = ({
   comment,
@@ -416,6 +417,9 @@ const LensCommentCard = ({
                       </button>
                     </Tooltip>
                   </div>
+
+                  {/* @ts-ignore */}
+                  <MirrorButton postInfo={comment} isComment />
 
                   {/* reply button*/}
                   <button
