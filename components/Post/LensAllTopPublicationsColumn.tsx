@@ -1,29 +1,29 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { memo, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import {
   PublicationSortCriteria,
   PublicationTypes,
   useExplorePublicationsQuery
 } from '../../graphql/generated'
-import { LENS_POST_LIMIT, appId } from '../../utils/config'
-import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
-import LensPostCard from './LensPostCard'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import { useRouter } from 'next/router'
+import {
+  LENS_INFINITE_SCROLL_THRESHOLD,
+  LENS_POST_LIMIT,
+  appId
+} from '../../utils/config'
 import { usePostIndexing } from './IndexingContext/PostIndexingWrapper'
 import IndexingPostCard from './IndexingPostCard'
-import { LENS_INFINITE_SCROLL_THRESHOLD } from '../../utils/config'
-import { memo } from 'react'
+import LensPostCard from './LensPostCard'
 // import { useLensUserContext } from '../../lib/LensUserContext'
-import useRouterLoading from '../Common/Hook/useRouterLoading'
-import MobileLoader from '../Common/UI/MobileLoader'
-import useSort from '../Common/Hook/useSort'
-import { usePublicationStore } from '../../store/publication'
 import { useProfileStore } from '../../store/profile'
+import { usePublicationStore } from '../../store/publication'
 import { postWithCommunityInfoType } from '../../types/post'
 import { useDevice } from '../Common/DeviceWrapper'
+import useRouterLoading from '../Common/Hook/useRouterLoading'
+import useSort from '../Common/Hook/useSort'
+import MobileLoader from '../Common/UI/MobileLoader'
 const LensAllTopPublicationsColumn = () => {
   const router = useRouter()
   const { data: myLensProfile } = useLensUserContext()

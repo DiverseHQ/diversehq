@@ -1,6 +1,11 @@
-import React, { memo, useEffect, useState } from 'react'
-import ReactTimeAgo from 'react-time-ago'
+import { Tooltip } from '@mui/material'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { memo, useEffect, useState } from 'react'
+import { HiOutlineTrash } from 'react-icons/hi'
+import { RiMore2Fill } from 'react-icons/ri'
+import { TbArrowsDiagonalMinimize } from 'react-icons/tb'
+import ReactTimeAgo from 'react-time-ago'
 import {
   Comment,
   ReactionTypes,
@@ -8,30 +13,22 @@ import {
   useHidePublicationMutation
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import { useNotify } from '../../Common/NotifyContext'
-import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
-import LensRepliedComments from './LensRepliesComments'
-import LensCreateComment from './LensCreateComment'
-import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
-import { useRouter } from 'next/router'
-import { HiOutlineTrash } from 'react-icons/hi'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
-import {
-  commentIdFromIndexedResult,
-  stringToLength
-} from '../../../utils/utils'
-import { RiMore2Fill } from 'react-icons/ri'
-import { TbArrowsDiagonalMinimize } from 'react-icons/tb'
-import OptionsWrapper from '../../Common/OptionsWrapper'
-import { Tooltip } from '@mui/material'
 import { useCommentStore } from '../../../store/comment'
+import { commentIdFromIndexedResult } from '../../../utils/utils'
+import { useNotify } from '../../Common/NotifyContext'
+import OptionsWrapper from '../../Common/OptionsWrapper'
 import CenteredDot from '../../Common/UI/CenteredDot'
+import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
+import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import formatHandle from '../../User/lib/formatHandle'
+import LensCreateComment from './LensCreateComment'
+import LensRepliedComments from './LensRepliesComments'
 // import AttachmentMedia from '../Attachment'
-import Markup from '../../Lexical/Markup'
-import Attachment from '../Attachment'
-import getAvatar from '../../User/lib/getAvatar'
 import clsx from 'clsx'
+import Markup from '../../Lexical/Markup'
+import getAvatar from '../../User/lib/getAvatar'
+import Attachment from '../Attachment'
 import MirrorButton from '../MirrorButton'
 
 const LensCommentCard = ({
@@ -220,272 +217,262 @@ const LensCommentCard = ({
     }
   }
 
+  if (!comment) return null
+
   return (
     <>
-      {comment && (
-        <div className="w-full">
-          {/* top row */}
-          <div
-            className={clsx(
-              'flex flex-row items-center justify-between w-full',
-              hideComments && 'pb-2'
-            )}
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            <div className="flex flex-row items-center gap-2">
-              {hideComments && (
-                <TbArrowsDiagonalMinimize
-                  onClick={() => {
-                    setHideComments(false)
-                  }}
-                  className="text-s-text cursor-pointer hover:text-p-text"
-                />
-              )}
-              <ImageWithPulsingLoader
-                src={getAvatar(comment?.profile)}
-                className="w-7 h-7 rounded-full object-cover"
+      <div className="w-full">
+        {/* top row */}
+        <div
+          className={clsx(
+            'flex flex-row items-center justify-between w-full',
+            hideComments && 'pb-2'
+          )}
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+        >
+          <div className="flex flex-row items-center gap-2">
+            {hideComments && (
+              <TbArrowsDiagonalMinimize
+                onClick={() => {
+                  setHideComments(false)
+                }}
+                className="text-s-text cursor-pointer hover:text-p-text"
               />
-              {comment?.profile?.name && (
-                <Link
-                  href={`/u/${formatHandle(comment?.profile?.handle)}`}
-                  passHref
-                >
-                  <div className="hover:underline font-bold text-p-text cursor-pointer">
-                    {stringToLength(comment?.profile?.name, 20)}
-                  </div>
-                </Link>
-              )}
+            )}
+            <ImageWithPulsingLoader
+              src={getAvatar(comment?.profile)}
+              className="w-7 h-7 rounded-full object-cover"
+            />
+            {/* {comment?.profile?.name && (
               <Link
                 href={`/u/${formatHandle(comment?.profile?.handle)}`}
                 passHref
               >
-                <div className="hover:underline font-medium text-s-text text-sm cursor-pointer">
-                  u/{formatHandle(comment?.profile?.handle)}
+                <div className="hover:underline font-bold text-p-text cursor-pointer">
+                  {stringToLength(comment?.profile?.name, 20)}
                 </div>
               </Link>
-              <CenteredDot />
-              <ReactTimeAgo
-                timeStyle="twitter"
-                className="text-xs sm:text-sm text-s-text"
-                date={new Date(comment.createdAt)}
-                locale="en-US"
+            )} */}
+            <Link
+              href={`/u/${formatHandle(comment?.profile?.handle)}`}
+              passHref
+            >
+              <div className="hover:underline font-medium text-p-text text-sm cursor-pointer">
+                {formatHandle(comment?.profile?.handle)}
+              </div>
+            </Link>
+            <CenteredDot />
+            <ReactTimeAgo
+              timeStyle="twitter"
+              className="text-xs sm:text-sm text-s-text"
+              date={new Date(comment.createdAt)}
+              locale="en-US"
+            />
+          </div>
+          {!comment.id && (
+            <div className="sm:mr-5 flex flex-row items-center">
+              {/* pulsing dot */}
+              <Tooltip
+                enterDelay={1000}
+                leaveDelay={200}
+                title="Indexing"
+                arrow
+              >
+                <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
+              </Tooltip>
+            </div>
+          )}
+          {isAuthor && comment.id && !comment.hidden && (
+            <div>
+              <OptionsWrapper
+                OptionPopUpModal={() => (
+                  <MoreOptionsModal
+                    list={[
+                      {
+                        label: 'Delete',
+                        onClick: handleDeleteComment,
+                        icon: () => (
+                          <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
+                        )
+                      }
+                    ]}
+                  />
+                )}
+                position="left"
+                showOptionsModal={showOptionsModal}
+                setShowOptionsModal={setShowOptionsModal}
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
+              >
+                <Tooltip enterDelay={1000} leaveDelay={200} title="More" arrow>
+                  <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
+                    <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                </Tooltip>
+              </OptionsWrapper>
+            </div>
+          )}
+        </div>
+
+        {/* padded content with line*/}
+        <div
+          className={clsx('flex flex-row w-full ', hideComments && 'hidden')}
+        >
+          {/* vertical line */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setHideComments(true)
+              setHoveringVerticalBar(false)
+            }}
+            onMouseEnter={() => {
+              setHoveringVerticalBar(true)
+            }}
+            onMouseLeave={() => {
+              setHoveringVerticalBar(false)
+            }}
+            className="w-7 shrink-0 flex flex-row items-center justify-center py-2"
+          >
+            <div
+              className={clsx(
+                'border-l-2  h-full',
+                hoveringVerticalBar ? 'border-s-text' : 'border-s-border'
+              )}
+            ></div>
+          </button>
+
+          <div className={clsx('w-full', hideBottomRow && 'pt-1')}>
+            {/* content */}
+            <div className="pl-2">
+              <Markup className="break-words text-sm sm:text-base">
+                {comment?.metadata?.content}
+              </Markup>
+            </div>
+
+            {/* attachemnt */}
+            <div className="px-3">
+              <Attachment
+                attachments={comment?.metadata?.media}
+                publication={comment}
+                className={'max-h-[400px] w-full'}
               />
             </div>
-            {!comment.id && (
-              <div className="sm:mr-5 flex flex-row items-center">
-                {/* pulsing dot */}
-                <Tooltip
-                  enterDelay={1000}
-                  leaveDelay={200}
-                  title="Indexing"
-                  arrow
-                >
-                  <div className="w-2 h-2 rounded-full bg-p-btn animate-ping" />
-                </Tooltip>
-              </div>
-            )}
-            {isAuthor && comment.id && !comment.hidden && (
-              <div>
-                <OptionsWrapper
-                  OptionPopUpModal={() => (
-                    <MoreOptionsModal
-                      list={[
-                        {
-                          label: 'Delete',
-                          onClick: handleDeleteComment,
-                          icon: () => (
-                            <HiOutlineTrash className="mr-1.5 w-4 h-4 sm:w-6 sm:h-6" />
-                          )
-                        }
-                      ]}
-                    />
-                  )}
-                  position="left"
-                  showOptionsModal={showOptionsModal}
-                  setShowOptionsModal={setShowOptionsModal}
-                  isDrawerOpen={isDrawerOpen}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                >
+
+            {/* last row */}
+            {!hideBottomRow ? (
+              <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
+                {/* upvote and downvote */}
+                <div className="flex flex-row items-center gap-x-2">
                   <Tooltip
                     enterDelay={1000}
                     leaveDelay={200}
-                    title="More"
+                    title="Upvote"
                     arrow
                   >
-                    <div className="hover:bg-s-hover rounded-md p-1 cursor-pointer">
-                      <RiMore2Fill className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </div>
+                    <button
+                      onClick={handleUpvote}
+                      className="hover:bg-s-hover cursor-pointer rounded-md p-1"
+                    >
+                      <img
+                        src={
+                          reaction === ReactionTypes.Upvote
+                            ? '/UpvotedFilled.svg'
+                            : '/upvoteGray.svg'
+                        }
+                        className="w-4 h-4"
+                      />
+                    </button>
                   </Tooltip>
-                </OptionsWrapper>
-              </div>
-            )}
-          </div>
+                  <div className="font-medium text-[#687684]">{voteCount}</div>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Downvote"
+                    arrow
+                  >
+                    <button
+                      onClick={handleDownvote}
+                      className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
+                    >
+                      <img
+                        src={
+                          reaction === ReactionTypes.Downvote
+                            ? '/DownvotedFilled.svg'
+                            : '/downvoteGray.svg'
+                        }
+                        className="w-4 h-4"
+                      />
+                    </button>
+                  </Tooltip>
+                </div>
 
-          {/* padded content with line*/}
-          <div
-            className={clsx(
-              'flex flex-row w-full overflow-hidden',
-              hideComments && 'hidden'
-            )}
-          >
-            {/* vertical line */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                setHideComments(true)
-                setHoveringVerticalBar(false)
-              }}
-              onMouseEnter={() => {
-                setHoveringVerticalBar(true)
-              }}
-              onMouseLeave={() => {
-                setHoveringVerticalBar(false)
-              }}
-              className="w-7 shrink-0 flex flex-row items-center justify-center py-2"
-            >
-              <div
-                className={clsx(
-                  'border-l-2  h-full',
-                  hoveringVerticalBar ? 'border-s-text' : 'border-s-border'
-                )}
-              ></div>
-            </button>
-            <div className={clsx('w-full', hideBottomRow && 'pt-1')}>
-              {/* content */}
-              <div className="pl-2">
-                <Markup className="break-words">
-                  {comment?.metadata?.content}
-                </Markup>
-              </div>
-              {/* attachemnt */}
+                {/* @ts-ignore */}
+                <MirrorButton postInfo={comment} isComment />
 
-              <div className="px-3">
-                <Attachment
-                  attachments={comment?.metadata?.media}
-                  publication={comment}
-                  className={'max-h-[400px] w-full'}
+                {/* reply button*/}
+                <button
+                  className={`${
+                    currentReplyComment &&
+                    comment?.id &&
+                    currentReplyComment?.id === comment?.id
+                      ? 'bg-p-btn-hover text-p-btn-hover-text'
+                      : ''
+                  } active:bg-p-btn-hover sm:hover:bg-s-hover px-2 py-0.5 rounded-md`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if (!isSignedIn || !hasProfile) {
+                      notifyInfo(
+                        'Lens login required, so they can know who you are'
+                      )
+                      return
+                    }
+                    if (!comment?.id) {
+                      notifyInfo('not indexed yet, try in a moment')
+                      return
+                    }
+                    if (comment?.id === currentReplyComment?.id) {
+                      setCurrentReplyComment(null)
+                    } else {
+                      setCurrentReplyComment(comment)
+                    }
+                  }}
+                >
+                  Reply
+                </button>
+              </div>
+            ) : (
+              <div className="h-3" />
+            )}
+
+            {/* create comment if showCreateComment is true */}
+            {currentReplyComment && currentReplyComment?.id === comment?.id && (
+              <LensCreateComment
+                postId={comment.id}
+                addComment={addComment}
+                postInfo={comment}
+                canCommnet={comment?.canComment?.result ?? true}
+              />
+            )}
+
+            {/* replies */}
+            {comment?.id && (
+              <div className="w-full">
+                <LensRepliedComments
+                  commentId={comment.id}
+                  comments={comments}
+                  hideBottomRow={hideBottomRow}
+                  setComments={setComments}
+                  disableFetch={!comment?.__typename}
+                  level={level + 1}
                 />
               </div>
-              {/* last row */}
-              {!hideBottomRow ? (
-                <div className="flex flex-row items-center space-x-6 pb-2 pt-1">
-                  {/* upvote and downvote */}
-                  <div className="flex flex-row items-center gap-x-2">
-                    <Tooltip
-                      enterDelay={1000}
-                      leaveDelay={200}
-                      title="Upvote"
-                      arrow
-                    >
-                      <button
-                        onClick={handleUpvote}
-                        className="hover:bg-s-hover cursor-pointer rounded-md p-1"
-                      >
-                        <img
-                          src={
-                            reaction === ReactionTypes.Upvote
-                              ? '/UpvotedFilled.svg'
-                              : '/upvoteGray.svg'
-                          }
-                          className="w-4 h-4"
-                        />
-                      </button>
-                    </Tooltip>
-                    <div className="font-medium text-[#687684]">
-                      {voteCount}
-                    </div>
-                    <Tooltip
-                      enterDelay={1000}
-                      leaveDelay={200}
-                      title="Downvote"
-                      arrow
-                    >
-                      <button
-                        onClick={handleDownvote}
-                        className="hover:bg-s-hover rounded-md p-1 cursor-pointer"
-                      >
-                        <img
-                          src={
-                            reaction === ReactionTypes.Downvote
-                              ? '/DownvotedFilled.svg'
-                              : '/downvoteGray.svg'
-                          }
-                          className="w-4 h-4"
-                        />
-                      </button>
-                    </Tooltip>
-                  </div>
-
-                  {/* @ts-ignore */}
-                  <MirrorButton postInfo={comment} isComment />
-
-                  {/* reply button*/}
-                  <button
-                    className={`${
-                      currentReplyComment &&
-                      comment?.id &&
-                      currentReplyComment?.id === comment?.id
-                        ? 'bg-p-btn-hover text-p-btn-hover-text'
-                        : ''
-                    } active:bg-p-btn-hover sm:hover:bg-s-hover px-2 py-0.5 rounded-md`}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      if (!isSignedIn || !hasProfile) {
-                        notifyInfo(
-                          'Lens login required, so they can know who you are'
-                        )
-                        return
-                      }
-                      if (!comment?.id) {
-                        notifyInfo('not indexed yet, try in a moment')
-                        return
-                      }
-                      if (comment?.id === currentReplyComment?.id) {
-                        setCurrentReplyComment(null)
-                      } else {
-                        setCurrentReplyComment(comment)
-                      }
-                    }}
-                  >
-                    Reply
-                  </button>
-                </div>
-              ) : (
-                <div className="h-3" />
-              )}
-
-              {/* create comment if showCreateComment is true */}
-              {currentReplyComment &&
-                currentReplyComment?.id === comment?.id && (
-                  <LensCreateComment
-                    postId={comment.id}
-                    addComment={addComment}
-                    postInfo={comment}
-                    canCommnet={comment?.canComment?.result ?? true}
-                  />
-                )}
-
-              {/* replies */}
-              {comment?.id && (
-                <div className="w-full">
-                  <LensRepliedComments
-                    commentId={comment.id}
-                    comments={comments}
-                    hideBottomRow={hideBottomRow}
-                    setComments={setComments}
-                    disableFetch={!comment?.__typename}
-                    level={level + 1}
-                  />
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
-      )}
-      {!comment && <></>}
+      </div>
     </>
   )
 }

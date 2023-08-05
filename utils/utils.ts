@@ -1,5 +1,5 @@
-import { Web3Storage } from 'web3.storage'
-import { storage } from './firebase'
+import CryptoJS from 'crypto-js'
+import { BigNumber, utils } from 'ethers'
 import {
   deleteObject,
   getDownloadURL,
@@ -8,21 +8,20 @@ import {
 } from 'firebase/storage'
 import { create } from 'ipfs-http-client'
 import { PublicationMetadataV2Input } from '../graphql/generated'
-import { BigNumber, utils } from 'ethers'
-import CryptoJS from 'crypto-js'
 import { AttachmentType } from '../store/publication'
+import { storage } from './firebase'
 import uploadToIPFS from './uploadToIPFS'
 
-export const uploadFileToIpfs = async (file: File): Promise<string> => {
-  // eslint-disable-next-line
-  const token: string = String(process.env.NEXT_PUBLIC_WEB_STORAGE)
-  const newFile: File = new File([file], file.name.replace(/\s/g, '_'), {
-    type: file.type
-  })
-  const storage = new Web3Storage({ token })
-  const cid = await storage.put([newFile])
-  return `https://dweb.link/ipfs/${cid}/${newFile.name}`
-}
+// export const uploadFileToIpfs = async (file: File): Promise<string> => {
+//   // eslint-disable-next-line
+//   const token: string = String(process.env.NEXT_PUBLIC_WEB_STORAGE)
+//   const newFile: File = new File([file], file.name.replace(/\s/g, '_'), {
+//     type: file.type
+//   })
+//   const storage = new Web3Storage({ token })
+//   const cid = await storage.put([newFile])
+//   return `https://dweb.link/ipfs/${cid}/${newFile.name}`
+// }
 
 // string to string of give length
 export const stringToLength = (str: string, length: number): string => {

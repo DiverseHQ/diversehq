@@ -1,24 +1,18 @@
-import React from 'react'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 
 import ReactTimeAgo from 'react-time-ago'
 
-import { Profile, PublicationMainFocus } from '../../graphql/generated'
-import ReactEmbedo from './embed/ReactEmbedo'
-import { getURLsFromText } from '../../utils/utils'
-import { BsCollection } from 'react-icons/bs'
-import Link from 'next/link'
-import Attachment from './Attachment'
 import { Tooltip } from '@mui/material'
-import formatHandle from '../User/lib/formatHandle'
-import Markup from '../Lexical/Markup'
-import { AiOutlineRetweet } from 'react-icons/ai'
-import { useDevice } from '../Common/DeviceWrapper'
+import Link from 'next/link'
+import { Profile } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import getAvatar from '../User/lib/getAvatar'
 import { PublicationMetadataWithoutMedia } from '../../types/post'
-import { getContent } from './getContent'
 import CenteredDot from '../Common/UI/CenteredDot'
+import Markup from '../Lexical/Markup'
+import formatHandle from '../User/lib/formatHandle'
+import getAvatar from '../User/lib/getAvatar'
+import Attachment from './Attachment'
+import { getContent } from './getContent'
 
 export interface singleMedia {
   original: {
@@ -58,7 +52,6 @@ interface Props {
 }
 
 const IndexingPostCard = ({ postInfo }: Props) => {
-  const { isMobile } = useDevice()
   const { data } = useLensUserContext()
 
   // @ts-ignore
@@ -70,7 +63,7 @@ const IndexingPostCard = ({ postInfo }: Props) => {
   return (
     <>
       {postInfo && (
-        <div className="relative sm:px-5 flex flex-col w-full bg-s-bg pt-3 pb-2 border-b border-s-border">
+        <div className="relative sm:px-5 flex flex-col w-full bg-s-bg pt-3 border-b border-s-border">
           {/* top row */}
           <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
             <>
@@ -151,25 +144,11 @@ const IndexingPostCard = ({ postInfo }: Props) => {
             </div>
           </div>
 
-          <div className="flex flex-row w-full">
-            {!isMobile && (
-              <div className="flex flex-col items-center ml-1.5 mt-1">
-                <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <img
-                    //  onClick={liked ? handleUnLike : handleLike}
-                    src={'/UpvotedFilled.svg'}
-                    className="w-5 h-5"
-                  />
-                </button>
-                <div className="font-bold leading-5">1</div>
-                <button className="hover:bg-p-btn-hover rounded-md p-1 cursor-pointer">
-                  <img src={'/downvoteGray.svg'} className="w-4 h-4" />
-                </button>
-              </div>
-            )}
+          <div className="flex flex-row w-full pb-2">
+            <div className="sm:w-10 w-0" />
 
             {/* main content */}
-            <div className="flex flex-col w-full justify-between min-h-[76px]">
+            <div className="flex flex-col w-full justify-between">
               <div>
                 <div className="mb-2 px-3 sm:pl-3.5">
                   {postInfo?.metadata?.name && (
@@ -199,23 +178,13 @@ const IndexingPostCard = ({ postInfo }: Props) => {
                     />
                   </div>
                 )}
-                {postInfo?.metadata?.mainContentFocus !==
-                  PublicationMainFocus.Image &&
-                  postInfo?.metadata?.mainContentFocus !==
-                    PublicationMainFocus.Video &&
-                  getURLsFromText(postInfo?.metadata?.content).length > 0 && (
-                    <ReactEmbedo
-                      url={getURLsFromText(postInfo?.metadata?.content)[0]}
-                      className="w-full sm:w-[500px] sm:pl-5 sm:pr-6 sm:pb-1"
-                    />
-                  )}
               </div>
 
               {/* bottom row */}
-              <div
+              {/* <div
                 className={`text-p-text flex flex-row items-center px-3 sm:px-6 py-1 justify-between sm:justify-start sm:space-x-28 ${
                   isMobile
-                    ? 'border-b-[1px] border-[#eee] dark:border-p-border pb-2'
+                    ? 'border-b-[1px] border-[#eee] dark:border-p-border'
                     : ''
                 }`}
               >
@@ -262,7 +231,7 @@ const IndexingPostCard = ({ postInfo }: Props) => {
                     className="hover:cursor-pointer w-4 h-4 sm:w-[18px] sm:h-[18px] "
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

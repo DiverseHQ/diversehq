@@ -1,11 +1,10 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import { HiPencil } from 'react-icons/hi'
+import { useLensUserContext } from '../../../lib/LensUserContext'
 import CreatePostPopup from '../../Home/CreatePostPopup'
 import { modalType, usePopUpModal } from '../CustomPopUpProvider'
-import { HiPencil } from 'react-icons/hi'
-import { useProfile } from '../WalletContext'
-import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useNotify } from '../NotifyContext'
+import { useProfile } from '../WalletContext'
 
 const CreatePostButton = () => {
   const { showModal } = usePopUpModal()

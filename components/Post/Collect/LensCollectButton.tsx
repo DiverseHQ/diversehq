@@ -1,118 +1,87 @@
 import { Tooltip } from '@mui/material'
-import React, { memo } from 'react'
-import { useState } from 'react'
-import { AiFillGift, AiOutlineGift } from 'react-icons/ai'
-import { BsCollection, BsCollectionFill } from 'react-icons/bs'
-import { CollectModule, Profile, Publication } from '../../../graphql/generated'
-import { stringToLength } from '../../../utils/utils'
-import HoverModalWrapper from '../../Common/UI/HoverModalWrapper'
-import formatHandle from '../../User/lib/formatHandle'
-import Attachment from '../Attachment'
-import FeeCollectPopUp from './FeeCollectPopUp'
-import FreeCollectPopUp from './FreeCollectPopUp'
-import { useDevice } from '../../Common/DeviceWrapper'
 import { useRouter } from 'next/router'
+import { memo, useEffect, useState } from 'react'
+import { BsCollection, BsCollectionFill } from 'react-icons/bs'
+import { Publication } from '../../../graphql/generated'
+import BottomDrawerWrapper from '../../Common/BottomDrawerWrapper'
+import { modalType, usePopUpModal } from '../../Common/CustomPopUpProvider'
+import { useDevice } from '../../Common/DeviceWrapper'
+import PopUpWrapper from '../../Common/PopUpWrapper'
+import CollectInfo from './CollectInfo'
 type Props = {
   publication: Publication
-  totalCollects: number
-  hasCollectedByMe: boolean
-  author: Profile
-  collectModule: CollectModule
-  isAlone: Boolean
 }
 
-const LensCollectButton = ({
-  publication,
-  totalCollects,
-  hasCollectedByMe,
-  author,
-  collectModule,
-  isAlone
-}: Props) => {
-  const [collectCount, setCollectCount] = useState(totalCollects)
-  const [isCollected, setIsCollected] = useState(hasCollectedByMe)
+const LensCollectButton = ({ publication }: Props) => {
+  const [collectCount, setCollectCount] = useState(
+    publication?.stats?.totalAmountOfCollects ?? 0
+  )
+  const [isCollected, setIsCollected] = useState(
+    publication?.hasCollectedByMe ?? false
+  )
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { isMobile } = useDevice()
   const router = useRouter()
+  const { showModal } = usePopUpModal()
+
+  useEffect(() => {
+    setIsCollected(publication?.hasCollectedByMe ?? false)
+    setCollectCount(publication?.stats?.totalAmountOfCollects ?? 0)
+  }, [publication?.stats?.totalAmountOfCollects, publication?.hasCollectedByMe])
   return (
     <>
-      <HoverModalWrapper
-        disabled={isCollected || hasCollectedByMe}
-        position="top"
-        HoverModal={({
-          setIsDrawerOpen,
-          setShowOptionsModal,
-          setIsCollecting
-        }) => {
-          return (
-            <div className="w-full">
-              {isMobile && (
-                <div className="flex items-center flex-col justify-center px-4 text-p-text">
-                  <div className="mb-2 self-start ">
-                    <h1 className="font-medium text-lg ">
-                      Post By u/{formatHandle(publication.profile?.handle)}
-                    </h1>
-                    <p className="font-normal text-sm">
-                      {stringToLength(publication.metadata?.name, 20)}
-                    </p>
-                  </div>
-                  <>
-                    {publication?.metadata?.media.length > 0 && (
-                      <div className="w-full mb-1">
-                        <Attachment
-                          publication={publication}
-                          attachments={publication?.metadata?.media}
-                          className="max-h-[250px] w-full rounded-xl"
-                        />
-                      </div>
-                    )}
-                  </>
-                </div>
-              )}
-              {collectModule?.__typename === 'FreeCollectModuleSettings' && (
-                <FreeCollectPopUp
-                  setIsCollected={setIsCollected}
-                  setCollectCount={setCollectCount}
-                  collectModule={collectModule}
-                  publication={publication}
-                  author={author}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                  setShowOptionsModal={setShowOptionsModal}
-                  setIsCollecting={setIsCollecting}
-                />
-              )}
-              {collectModule?.__typename === 'FeeCollectModuleSettings' && (
-                <FeeCollectPopUp
-                  author={author}
-                  collectModule={collectModule}
-                  publication={publication}
-                  setCollectCount={setCollectCount}
-                  setIsCollected={setIsCollected}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                  setShowOptionsModal={setShowOptionsModal}
-                  setIsCollecting={setIsCollecting}
-                />
-              )}
-            </div>
-          )
-        }}
+      <BottomDrawerWrapper
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+        position="bottom"
+        showClose={false}
       >
-        <Tooltip
-          enterDelay={1000}
-          leaveDelay={200}
-          title={isCollected || hasCollectedByMe ? 'Collected' : 'Collect'}
-          arrow
+        <CollectInfo
+          isCollected={isCollected}
+          publication={publication}
+          setCollectCount={setCollectCount}
+          setIsCollected={setIsCollected}
+          collectCount={collectCount}
+        />
+      </BottomDrawerWrapper>
+      <Tooltip
+        enterDelay={1000}
+        leaveDelay={200}
+        title={
+          isCollected || publication?.hasCollectedByMe ? 'Collected' : 'Collect'
+        }
+        arrow
+      >
+        <button
+          className="hover:bg-s-hover active:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center"
+          onClick={() => {
+            if (isMobile) {
+              setIsDrawerOpen(true)
+            } else {
+              showModal({
+                component: (
+                  <PopUpWrapper title="Collect">
+                    <CollectInfo
+                      publication={publication}
+                      setCollectCount={setCollectCount}
+                      setIsCollected={setIsCollected}
+                      collectCount={collectCount}
+                      isCollected={isCollected}
+                    />
+                  </PopUpWrapper>
+                ),
+                type: modalType.normal
+              })
+            }
+          }}
         >
-          <div className="hover:bg-s-hover active:bg-s-hover rounded-md px-2 py-1.5 cursor-pointer flex flex-row items-center">
-            {collectModule.__typename === 'FreeCollectModuleSettings' && (
-              <>
-                {isCollected || hasCollectedByMe ? (
-                  <BsCollectionFill className="w-4 h-4 text-p-btn" />
-                ) : (
-                  <BsCollection className="w-4 h-4 text-[#687684]" />
-                )}
-              </>
-            )}
-            {collectModule.__typename === 'FeeCollectModuleSettings' && (
+          {isCollected || publication?.hasCollectedByMe ? (
+            <BsCollectionFill className="w-4 h-4 text-p-btn" />
+          ) : (
+            <BsCollection className="w-4 h-4 text-[#687684]" />
+          )}
+
+          {/* {collectModule.__typename === 'FeeCollectModuleSettings' && (
               <>
                 {isCollected || hasCollectedByMe ? (
                   <AiFillGift className="w-4 h-4 text-[#687684]" />
@@ -120,15 +89,14 @@ const LensCollectButton = ({
                   <AiOutlineGift className="w-4 h-4 text-[#687684]" />
                 )}
               </>
-            )}
-            {(!router.pathname.startsWith('/p') || isAlone) && (
-              <div className="ml-2 font-medium text-[#687684]">
-                {collectCount}
-              </div>
-            )}
-          </div>
-        </Tooltip>
-      </HoverModalWrapper>
+            )} */}
+          {!router.pathname.startsWith('/p/') && (
+            <div className="ml-2 font-medium text-[#687684]">
+              {collectCount}
+            </div>
+          )}
+        </button>
+      </Tooltip>
     </>
   )
 }

@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react'
-import { memo } from 'react'
-import { useState } from 'react'
+import Link from 'next/link'
+import { memo, useEffect, useState } from 'react'
 import {
   CommentOrderingTypes,
   CommentRankingFilter,
   useCommentFeedQuery
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import LensCommentCard from './LensCommentCard'
-import Link from 'next/link'
 import { useDevice } from '../../Common/DeviceWrapper'
+import LensCommentCard from './LensCommentCard'
 
 const LensRepliedComments = ({
   commentId,
@@ -81,14 +79,16 @@ const LensRepliedComments = ({
           )
         })}
       {level > MAX_COMMENT_LEVEL && uniqueComments.length > 0 && (
-        <Link
-          href={`/p/${commentId}`}
-          className="text-blue-400 cursor-hover text-sm pl-2"
-        >
-          {`Show ${uniqueComments.length} more repl${
-            uniqueComments.length > 1 ? 'ies' : 'y'
-          }`}
-        </Link>
+        <span onClick={(e) => e.stopPropagation()}>
+          <Link
+            href={`/p/${commentId}`}
+            className="text-blue-400 cursor-hover text-sm pl-2"
+          >
+            {`Show ${uniqueComments.length} more repl${
+              uniqueComments.length > 1 ? 'ies' : 'y'
+            }`}
+          </Link>
+        </span>
       )}
     </>
   )

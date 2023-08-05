@@ -1,19 +1,17 @@
-import React from 'react'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { memo, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useProfileFeedQuery } from '../../graphql/generated'
-import LensPostCard from './LensPostCard'
-import { LENS_POST_LIMIT } from '../../utils/config'
-import MobileLoader from '../Common/UI/MobileLoader'
-import { useRouter } from 'next/router'
-import useRouterLoading from '../Common/Hook/useRouterLoading'
-import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
-import { usePublicationStore } from '../../store/publication'
 import { useProfileStore } from '../../store/profile'
+import { usePublicationStore } from '../../store/publication'
+// import { LENS_POST_LIMIT } from '../../utils/config'
+import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import { useDevice } from '../Common/DeviceWrapper'
+import useRouterLoading from '../Common/Hook/useRouterLoading'
+import MobileLoader from '../Common/UI/MobileLoader'
 import { usePostIndexing } from './IndexingContext/PostIndexingWrapper'
 import IndexingPostCard from './IndexingPostCard'
+import LensPostCard from './LensPostCard'
 
 const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   const router = useRouter()
@@ -33,7 +31,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       request: {
         cursor: exploreQueryRequestParams.cursor,
         profileId: profileId,
-        limit: LENS_POST_LIMIT
+        limit: 50
       },
       reactionRequest: {
         profileId: profileId
@@ -44,6 +42,14 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       enabled: router.pathname === '/' && !routeLoading && !!profileId
     }
   )
+
+  // useEffect(() => {
+  //   console.log('profileFeed', profileFeed)
+  // }, [profileFeed])
+
+  // useEffect(() => {
+  //   console.log('exploreQueryRequestParams', exploreQueryRequestParams)
+  // }, [exploreQueryRequestParams])
 
   const hanldeProfileFeed = async () => {
     let nextCursor = null
@@ -84,9 +90,14 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       // }
       return 'null'
     })
-    const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
-      communityIds
-    )
+    let communityInfoForPosts = []
+    try {
+      communityInfoForPosts = await postGetCommunityInfoUsingListOfIds(
+        communityIds
+      )
+    } catch (error) {
+      console.log('error lenspostsprofilefeedcolumn', error)
+    }
     for (let i = 0; i < newPosts.length; i++) {
       if (communityInfoForPosts[i]?._id) {
         // @ts-ignore
@@ -97,6 +108,14 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
         }
       }
     }
+    if (
+      exploreQueryRequestParams?.posts.length > 0 &&
+      newPosts[0]?.feedItem?.root?.id ===
+        exploreQueryRequestParams?.posts[
+          exploreQueryRequestParams?.posts.length - 1
+        ]?.feedItem?.id
+    )
+      return
     setExploreQueryRequestParams({
       ...exploreQueryRequestParams,
       nextCursor: nextCursor,
@@ -192,11 +211,13 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
           })}
         {exploreQueryRequestParams.posts.map((post, index) => {
           return (
-            <LensPostCard
-              key={index}
-              post={post.post}
-              feedItem={post.feedItem}
-            />
+            <>
+              <LensPostCard
+                key={index}
+                post={post.post}
+                feedItem={post.feedItem}
+              />
+            </>
           )
         })}
       </InfiniteScroll>
@@ -204,4 +225,4 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   )
 }
 
-export default LensPostsProfileFeedColumn
+export default memo(LensPostsProfileFeedColumn)

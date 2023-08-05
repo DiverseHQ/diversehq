@@ -1,20 +1,20 @@
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { useLensUserContext } from '../../lib/LensUserContext'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { getJoinedLensPublication } from '../../apiHelper/lensPublication'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import { useProfileStore } from '../../store/profile'
+import { usePublicationStore } from '../../store/publication'
 import {
   LENS_INFINITE_SCROLL_THRESHOLD,
   LENS_POST_LIMIT
 } from '../../utils/config'
+import { useDevice } from '../Common/DeviceWrapper'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import MobileLoader from '../Common/UI/MobileLoader'
-import LensPostCard from './LensPostCard'
-import { getJoinedLensPublication } from '../../apiHelper/lensPublication'
 import { useProfile } from '../Common/WalletContext'
 import usePublicationWithCommunityInfo from '../Community/hook/usePublicationWithCommunityInfo'
-import { usePublicationStore } from '../../store/publication'
-import { useProfileStore } from '../../store/profile'
-import { useDevice } from '../Common/DeviceWrapper'
+import LensPostCard from './LensPostCard'
 
 const LensPostJoinedCommunitiesPublicationsFromDB = () => {
   const router = useRouter()
@@ -36,8 +36,7 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
     reactionRequest: {
       profileId: myLensProfile?.defaultProfile?.id
     },
-    enabled:
-      !!publicationIds.length && !!myLensProfile?.defaultProfile?.id && hasMore
+    enabled: !!publicationIds.length && !!myLensProfile?.defaultProfile?.id
   })
 
   React.useEffect(() => {

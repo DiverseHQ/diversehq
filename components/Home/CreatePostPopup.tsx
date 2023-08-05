@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { useProfile } from '../Common/WalletContext'
-import { useNotify } from '../Common/NotifyContext'
-import { usePopUpModal } from '../Common/CustomPopUpProvider'
-import PopUpWrapper from '../Common/PopUpWrapper'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { Tooltip } from '@mui/material'
+import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { AiOutlineDown } from 'react-icons/ai'
 import { BsCollection } from 'react-icons/bs'
+import { IoIosArrowBack } from 'react-icons/io'
+import { v4 as uuidv4 } from 'uuid'
 import { getJoinedCommunitiesApi } from '../../apiHelper/community'
-import { Tooltip } from '@mui/material'
-import { useLensUserContext } from '../../lib/LensUserContext'
+import { submitPostForReview } from '../../apiHelper/reviewLensCommunityPost'
 import {
   MetadataAttributeInput,
   PublicationContentWarning,
@@ -20,12 +21,11 @@ import {
   useCreatePostTypedDataMutation,
   useCreatePostViaDispatcherMutation
 } from '../../graphql/generated'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
-import FormTextInput from '../Common/UI/FormTextInput'
-import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
-import CollectSettingsModel from '../Post/Collect/CollectSettingsModel'
-import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
-import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { useCommunityStore } from '../../store/community'
+import { AttachmentType, usePublicationStore } from '../../store/publication'
 import {
   SUPPORTED_AUDIO_TYPE,
   SUPPORTED_IMAGE_TYPE,
@@ -33,37 +33,45 @@ import {
   appId,
   appLink
 } from '../../utils/config'
-import { IoIosArrowBack } from 'react-icons/io'
-import PublicationEditor from '../Lexical/PublicationEditor'
-import Giphy from '../Post/Giphy'
-import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { usePopUpModal } from '../Common/CustomPopUpProvider'
+import { useDevice } from '../Common/DeviceWrapper'
+import { useNotify } from '../Common/NotifyContext'
 import OptionsWrapper from '../Common/OptionsWrapper'
+import PopUpWrapper from '../Common/PopUpWrapper'
+import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
+import FormTextInput from '../Common/UI/FormTextInput'
+import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
+import { useProfile } from '../Common/WalletContext'
+import PublicationEditor from '../Lexical/PublicationEditor'
+import Attachment from '../Post/Attachment'
+import CollectSettingsModel, {
+  Receipient
+} from '../Post/Collect/CollectSettingsModel'
+import AttachmentRow from '../Post/Create/AttachmentRow'
+import useUploadAttachments from '../Post/Create/useUploadAttachments'
+import Giphy from '../Post/Giphy'
+import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
 import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
-import { submitPostForReview } from '../../apiHelper/reviewLensCommunityPost'
-import { useDevice } from '../Common/DeviceWrapper'
-import { useCommunityStore } from '../../store/community'
-import { v4 as uuidv4 } from 'uuid'
-import { AttachmentType, usePublicationStore } from '../../store/publication'
-import useUploadAttachments from '../Post/Create/useUploadAttachments'
-import Attachment from '../Post/Attachment'
-import AttachmentRow from '../Post/Create/AttachmentRow'
-import { useRouter } from 'next/router'
-import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import PostPreferenceButton from './PostComposer/PostPreferenceButton'
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical'
 // import uploadToIPFS from '../../utils/uploadToIPFS'
+import {
+  getMostPostedLensCommunityIds,
+  putAddLensPublication
+} from '../../apiHelper/lensPublication'
+import { isValidEthereumAddress } from '../../utils/helper'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
-import { putAddLensPublication } from '../../apiHelper/lensPublication'
 
 const MAX_TITLE_LENGTH = 200
 
 const CreatePostPopup = ({
-  startingContent = ''
+  startingContent = '',
+  quotedPublicationId
 }: {
   startingContent?: string
+  quotedPublicationId?: string
 }) => {
   const router = useRouter()
   const [title, setTitle] = useState('')
@@ -110,8 +118,6 @@ const CreatePostPopup = ({
 
   const [editor] = useLexicalComposerContext()
 
-  const mostPostedCommunities =
-    JSON.parse(window.localStorage.getItem('mostPostedCommunities')) || []
   const selectedCommunity = useCommunityStore(
     (state) => state.selectedCommunity
   )
@@ -130,8 +136,18 @@ const CreatePostPopup = ({
   const audioPublication = usePublicationStore(
     (state) => state.audioPublication
   )
+  const videoThumbnail = usePublicationStore((state) => state.videoThumbnail)
+  const setVideoThumbnail = usePublicationStore(
+    (state) => state.setVideoThumbnail
+  )
+
+  const videoDurationInSeconds = usePublicationStore(
+    (state) => state.videoDurationInSeconds
+  )
   const isUploading = usePublicationStore((state) => state.isUploading)
   const isAudioPublication = SUPPORTED_AUDIO_TYPE.includes(attachments[0]?.type)
+
+  const isVideoPublication = SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)
 
   const getMainContentFocus = () => {
     if (attachments.length > 0) {
@@ -139,7 +155,7 @@ const CreatePostPopup = ({
         return PublicationMainFocus.Audio
       } else if (SUPPORTED_IMAGE_TYPE.includes(attachments[0]?.type)) {
         return PublicationMainFocus.Image
-      } else if (SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)) {
+      } else if (isVideoPublication) {
         return PublicationMainFocus.Video
       } else {
         return PublicationMainFocus.TextOnly
@@ -164,6 +180,9 @@ const CreatePostPopup = ({
     if (isAudioPublication) {
       return audioPublication.cover
     }
+    if (isVideoPublication && videoThumbnail?.url) {
+      return videoThumbnail?.url
+    }
     // loop over attachments and return first attachmen with type image
     for (let i = 0; i < attachments.length; i++) {
       if (SUPPORTED_IMAGE_TYPE.includes(attachments[i]?.type)) {
@@ -176,7 +195,7 @@ const CreatePostPopup = ({
   const getAttachmentImageMimeType = () => {
     return isAudioPublication
       ? audioPublication.coverMimeType
-      : attachments[0]?.type
+      : videoThumbnail?.type ?? attachments[0]?.type
   }
 
   const handleSubmit = async (event) => {
@@ -187,14 +206,7 @@ const CreatePostPopup = ({
       setLoading(false)
       return
     }
-    if (
-      collectSettings?.feeCollectModule &&
-      Number(collectSettings?.feeCollectModule?.amount?.value) < 0.001
-    ) {
-      notifyError(`Price should be atleast 0.001`)
-      setLoading(false)
-      return
-    }
+    // }
     await handleCreateLensPost()
   }
 
@@ -216,10 +228,46 @@ const CreatePostPopup = ({
   const handleCompletePost = () => {
     setLoading(false)
     resetAttachments()
+    setVideoThumbnail({
+      url: '',
+      type: '',
+      uploading: false
+    })
     editor?.update(() => {
       $getRoot().clear()
     })
     hideModal()
+  }
+
+  const isEligibleForMultiRecipient = (recipients: Receipient[]): boolean => {
+    if (!recipients || recipients.length <= 1) return false
+
+    // checking if every recipient.recipient is valid eth address
+    const isValidRecipient = recipients.every((recipient) => {
+      return isValidEthereumAddress(recipient.recipient)
+    })
+
+    if (!isValidRecipient) return false
+
+    // checking if every recipient.split is valid number
+    const isValidSplit = recipients.every((recipient) => {
+      return (
+        !isNaN(Number(recipient.split)) &&
+        Number(recipient.split) > 0 &&
+        Number(recipient.split) <= 100
+      )
+    })
+
+    if (!isValidSplit) return false
+
+    // checking if sum of all recipient.split is 100
+    const sumOfSplit = recipients.reduce((acc, recipient) => {
+      return acc + Number(recipient.split)
+    }, 0)
+
+    if (sumOfSplit !== 100) return false
+
+    return true
   }
 
   const handleCreateLensPost = async () => {
@@ -249,11 +297,28 @@ const CreatePostPopup = ({
       })
     }
 
+    if (isVideoPublication) {
+      attributes.push({
+        traitType: 'durationInSeconds',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: videoDurationInSeconds
+      })
+    }
+
+    if (quotedPublicationId) {
+      attributes.push({
+        traitType: 'quotedPublicationId',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: quotedPublicationId
+      })
+    }
+
     const attachmentsInput: AttachmentType[] = attachments.map(
       (attachment) => ({
         type: attachment.type,
         altTag: attachment.altTag,
-        item: attachment.item!
+        item: attachment.item!,
+        cover: attachment?.cover ?? null
       })
     )
 
@@ -285,7 +350,7 @@ const CreatePostPopup = ({
             ? `Post by @${lensProfile.defaultProfile.handle} \n`
             : ``
         }` +
-        `**${title}**` +
+        `${title}` +
         '\n' +
         content?.trim() +
         `${
@@ -315,8 +380,6 @@ const CreatePostPopup = ({
       appId: appId
     }
 
-    console.log('content', content)
-
     // const jsonFile = new File([JSON.stringify(metadata)], 'metadata.json', {
     //   type: 'application/json'
     // })
@@ -328,7 +391,7 @@ const CreatePostPopup = ({
       try {
         const res = await submitPostForReview(selectedCommunity?._id, url)
         if (res.status === 200) {
-          notifySuccess('Post submitted for review')
+          notifySuccess('Post submitted for review, You will be tagged in post')
           handleCompletePost()
         } else if (res.status === 400) {
           const resJson = await res.json()
@@ -375,6 +438,7 @@ const CreatePostPopup = ({
       }
     }
 
+    // if no collection then make a data availablity post
     if (!collectSettings) {
       // post as data availability post
       if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
@@ -397,20 +461,21 @@ const CreatePostPopup = ({
               : 'Something went wrong'
           )
         } else {
-          await addReaction({
-            request: {
-              profileId: lensProfile?.defaultProfile?.id,
-              publicationId: dispatcherResult.id,
-              reaction: ReactionTypes.Upvote
-            }
-          })
+          try {
+            await addReaction({
+              request: {
+                profileId: lensProfile?.defaultProfile?.id,
+                publicationId: dispatcherResult.id,
+                reaction: ReactionTypes.Upvote
+              }
+            })
 
-          if (selectedCommunity?._id) {
-            console.log('adding lens publication')
-            await putAddLensPublication(
-              selectedCommunity._id,
-              dispatcherResult.id
-            )
+            if (selectedCommunity?._id) {
+              console.log('adding lens publication')
+              putAddLensPublication(selectedCommunity._id, dispatcherResult.id)
+            }
+          } catch (error) {
+            console.log(error)
           }
 
           // // addPost({ txId: dispatcherResult. }, postForIndexing)
@@ -436,10 +501,61 @@ const CreatePostPopup = ({
       return
     }
 
+    let collectModule = null
+
+    if (
+      isEligibleForMultiRecipient(collectSettings?.recipients) &&
+      collectSettings?.recipients &&
+      collectSettings?.amount
+    ) {
+      // create multi recipient collect
+      collectModule = {
+        multirecipientFeeCollectModule: {
+          amount: collectSettings?.amount,
+          recipients: collectSettings?.recipients,
+          referralFee: collectSettings?.referralFee,
+          followerOnly: collectSettings?.followerOnly,
+          [collectSettings?.collectLimit ? 'collectLimit' : null]:
+            collectSettings?.collectLimit ?? null,
+          [collectSettings?.endTimestamp ? 'endTimestamp' : null]:
+            collectSettings?.endTimestamp ?? null
+        }
+      }
+    } else {
+      // create simple collect module
+      collectModule = {
+        simpleCollectModule: {
+          [collectSettings?.collectLimit ? 'collectLimit' : null]:
+            collectSettings?.collectLimit ?? null,
+          followerOnly: collectSettings?.followerOnly,
+          [collectSettings?.endTimestamp ? 'endTimestamp' : null]:
+            collectSettings?.endTimestamp ?? null,
+          [collectSettings?.amount ? 'fee' : null]: collectSettings?.amount
+            ? {
+                amount: collectSettings?.amount,
+                referralFee: collectSettings?.referralFee,
+                recipient: lensProfile?.defaultProfile?.ownedBy
+              }
+            : null
+        }
+      }
+    }
+
+    // Remove null values from the final object
+    collectModule = Object.fromEntries(
+      Object.entries(collectModule).map(([key, value]) => [
+        key,
+        // eslint-disable-next-line
+        Object.fromEntries(Object.entries(value).filter(([_, v]) => v !== null))
+      ])
+    )
+
+    console.log('collectModule', collectModule)
+
     const createPostRequest = {
       profileId: lensProfile?.defaultProfile?.id,
       contentURI: url,
-      collectModule: collectSettings,
+      collectModule: collectModule,
       referenceModule: {
         followerOnlyReferenceModule: false
       }
@@ -482,7 +598,6 @@ const CreatePostPopup = ({
       notifyError('Error creating post, report to support')
       return
     }
-    // await post(createPostRequest)
   }
 
   useEffect(() => {
@@ -549,12 +664,22 @@ const CreatePostPopup = ({
     }
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
+
+    let mostPostedCommunities = []
+
+    try {
+      const res = await getMostPostedLensCommunityIds()
+
+      if (res.status === 200) {
+        mostPostedCommunities = await res.json()
+      }
+    } catch (err) {
+      console.log(err)
+    }
+
     // setting the joinedCommunitites with mostPostedCommunities from the localStorage at the top
     const myLensCommunity = []
-    if (
-      LensCommunity &&
-      !mostPostedCommunities.some((c) => c?._id === LensCommunity?._id)
-    ) {
+    if (LensCommunity) {
       myLensCommunity.push({
         _id: LensCommunity?._id,
         name: formatHandle(LensCommunity?.Profile?.handle),
@@ -562,8 +687,8 @@ const CreatePostPopup = ({
         isLensCommunity: true
       })
     }
-    setJoinedCommunities([
-      // ...mostPostedCommunities,
+
+    const joinedCommunitiesArray = [
       ...joinedLensCommunities
         .map((community) => ({
           _id: community._id,
@@ -572,20 +697,30 @@ const CreatePostPopup = ({
           logoImageUrl: getAvatar(community),
           isLensCommunity: true
         }))
-        // .filter(
-        //   (community) =>
-        //     !mostPostedCommunities.some((c) => c?._id === community?._id)
-        // )
         .filter(
           (community) => !myLensCommunity.some((c) => c?._id === community?._id)
         ),
       // removing the communities in the mostPostedCommunities from the joinedCommunities using communityId
       ...response
-      // .filter(
-      //   (community) =>
-      //     !mostPostedCommunities.some((c) => c?._id === community?._id)
-      // )
-    ])
+    ]
+
+    let sortedCommunities = []
+
+    for (const communityId of mostPostedCommunities) {
+      if (joinedCommunitiesArray.some((c) => c._id === communityId)) {
+        sortedCommunities.push(
+          joinedCommunitiesArray.find((c) => c._id === communityId)
+        )
+      }
+    }
+
+    for (const community of joinedCommunitiesArray) {
+      if (!sortedCommunities.some((c) => c._id === community._id)) {
+        sortedCommunities.push(community)
+      }
+    }
+
+    setJoinedCommunities(sortedCommunities)
     setLoadingJoinedCommunities(false)
   }
 
@@ -755,7 +890,7 @@ const CreatePostPopup = ({
               setIsDrawerOpen={setFlairDrawerOpen}
             >
               <button className="flex items-center hover:cursor-pointer space-x-1 sm:space-x-2 py-1 px-2.5 sm:py-1 sm:px-2.5 rounded-full border border-s-border ">
-                <p>{flair ? flair : 'Flair'}</p>
+                <p>{flair ? flair : 'None'}</p>
                 <AiOutlineDown className="w-4 h-4 mx-1" />
               </button>
             </OptionsWrapper>
@@ -804,7 +939,14 @@ const CreatePostPopup = ({
                 publication={{
                   // @ts-ignore
                   metadata: {
-                    content: content
+                    content: content,
+                    attributes: [
+                      {
+                        traitType: 'quotedPublicationId',
+                        displayType: PublicationMetadataDisplayTypes.String,
+                        value: quotedPublicationId
+                      }
+                    ]
                   }
                 }}
                 attachments={attachments}
@@ -858,14 +1000,14 @@ const CreatePostPopup = ({
           <BottomDrawerWrapper
             isDrawerOpen={isDrawerOpen}
             setIsDrawerOpen={setIsDrawerOpen}
-            showClose={false}
+            showClose={true}
             position="bottom"
           >
             <CollectSettingsModel
               collectSettings={collectSettings}
               setCollectSettings={setCollectSettings}
             />
-            <div className="px-4 w-full mb-3 mt-1">
+            {/* <div className="px-4 w-full pb-1 mt-1">
               <button
                 onClick={() => {
                   setIsDrawerOpen(false)
@@ -874,7 +1016,7 @@ const CreatePostPopup = ({
               >
                 Save
               </button>
-            </div>
+            </div> */}
           </BottomDrawerWrapper>
         )}
       </PopUpWrapper>

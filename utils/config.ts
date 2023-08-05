@@ -21,6 +21,10 @@ export const HANDLE_SUFFIX: string = isMainnet ? '.lens' : '.test'
 
 export const DEFAULT_OG_IMAGE = 'https://diversehq.xyz/LogoV3TrimmedWithBG.png'
 
+export const POLYGONSCAN_URL = isMainnet
+  ? 'https://polygonscan.com'
+  : 'https://mumbai.polygonscan.com'
+
 export const userRoles = {
   ADMIN_USER: 0,
   WHITELISTED_USER: 1,
@@ -53,7 +57,7 @@ export const notificationTypes = {
   UNBAN_USER: 11,
   REVIEW_POST_FOR_LENS_COMMUNITY: 12,
   RESOLVED_POST_FOR_LENS_COMMUNITY: 13,
-  REPORTED_PUBLICATION: 14
+  NEW_JOINED_COMMUNITY_POST: 14
 }
 
 export const sortTypes = {
@@ -73,7 +77,8 @@ export const recommendedCommunitiesIds = [
   '63b1ccdb18b63498449c1bb0' // anime
 ]
 
-export const DISCORD_INVITE_LINK = 'https://discord.gg/x7jByQKpYF'
+export const DISCORD_INVITE_LINK = 'https://discord.gg/6sRYC5jD58'
+export const TWITTER_LINK = 'https://twitter.com/useDiverseHQ'
 export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/kopveel8c' // devenrathodrd account
 // export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/xgrqxy3nw/' // devilopurity
 // export const IMAGE_KIT_ENDPOINT = 'https://ik.imagekit.io/wo7aelvvz/' // diversehq
@@ -234,11 +239,12 @@ export const appId = 'diversehq'
 export const showNameForThisAppIds = [
   'diversehq',
   'lenstube',
-  'lenstube-bytes',
-  'phaver'
+  'lenstube-bytes'
 ]
 export const appLink = 'https://diversehq.xyz'
 
 export const STS_TOKEN_URL = `${apiEndpoint}/ever/sts/token`
 export const EVER_REGION = 'us-west-2'
 export const EVER_ENDPOINT = 'https://endpoint.4everland.co'
+
+export const DEFAULT_BANNER_URL = "https://diversehq.xyz/defaultBanner.png"

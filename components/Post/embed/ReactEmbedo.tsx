@@ -1,6 +1,6 @@
-import React, { memo, useEffect, useRef } from 'react'
-import Embedo from 'embedo'
 import { uuidv4 } from '@firebase/util'
+import Embedo from 'embedo'
+import { memo, useEffect, useRef } from 'react'
 import LensPostCardFromPublicationId from '../Cards/LensPostCardFromPublicationId'
 // import LinkPreview from './LinkPreview'
 // import { ReactTinyLink } from 'react-tiny-link'
@@ -59,7 +59,7 @@ const isLensPostLink = (url) => {
 
 const ReactEmbedo = ({ url, ...props }) => {
   const embedoRef = useRef(null)
-  const isEmbedable = (url) => {
+  const isEmbedable = (url: string) => {
     return AllowedEmbedoRegexList.some((regex) => regex.test(url))
   }
 

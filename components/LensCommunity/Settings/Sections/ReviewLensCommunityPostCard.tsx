@@ -19,12 +19,12 @@ import { useNotify } from '../../../Common/NotifyContext'
 import ImageWithPulsingLoader from '../../../Common/UI/ImageWithPulsingLoader'
 import Markup from '../../../Lexical/Markup'
 // import AudioPlayer from '../../../Post/AudioPlayer'
+import { putAddLensPublication } from '../../../../apiHelper/lensPublication'
+import useDASignTypedDataAndBroadcast from '../../../../lib/useDASignTypedDataAndBroadcast'
+import Attachment from '../../../Post/Attachment'
+import { getContent } from '../../../Post/getContent'
 import formatHandle from '../../../User/lib/formatHandle'
 import getAvatar from '../../../User/lib/getAvatar'
-import { putAddLensPublication } from '../../../../apiHelper/lensPublication'
-import Attachment from '../../../Post/Attachment'
-import useDASignTypedDataAndBroadcast from '../../../../lib/useDASignTypedDataAndBroadcast'
-import { getContent } from '../../../Post/getContent'
 
 interface Props {
   fetchAndSetUnResolvedReviewPosts: () => Promise<void>
@@ -247,13 +247,12 @@ const ReviewLensCommunityPostCard = ({
       content: post?.contentData?.content,
       name: post?.contentData?.name
     },
+    appId: 'diversehq',
     isLensCommunityPost: true
   }
 
   // @ts-ignore
   const contentAfterRemovingName = getContent(postForContent)
-
-  console.log('post', post)
 
   return (
     <div className="p-2 sm:p-4 border-b border-s-border">

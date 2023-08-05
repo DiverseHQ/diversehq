@@ -1,4 +1,3 @@
-import React from 'react'
 import { Drawer } from '@mui/material'
 import { useTheme } from '../Common/ThemeProvider'
 
@@ -47,14 +46,14 @@ const BottomDrawerWrapper = ({
           <rect width="36" height="5" rx="2.5" fill="#B3B4F3" />
         </svg>
       </div>
-      <div className="max-h-[500px]">{children}</div>
+      <div className="max-h-[500px] overflow-auto">{children}</div>
       {showClose && (
-        <div className="px-4 w-full  mb-3 mt-1">
+        <div className="px-4 w-full mb-3 mt-1">
           <button
             onClick={() => {
               setIsDrawerOpen(false)
             }}
-            className="bg-s-bg-hover rounded-full text-center flex font-semibold text-s-text py-1 justify-center items-center text-p-text w-full text-xl "
+            className="bg-s-hover rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center text-p-text w-full text-xl "
           >
             Close
           </button>

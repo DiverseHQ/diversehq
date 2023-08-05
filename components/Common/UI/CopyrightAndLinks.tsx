@@ -1,4 +1,4 @@
-import React from 'react'
+import { DISCORD_INVITE_LINK, TWITTER_LINK } from '../../../utils/config'
 
 const CopyrightAndLinks = () => {
   return (
@@ -9,7 +9,7 @@ const CopyrightAndLinks = () => {
       <span className="cursor-pointer">Privacy</span> */}
         <a
           className="cursor-pointer"
-          href="https://discord.gg/hrxYJcXPMm"
+          href={DISCORD_INVITE_LINK}
           target="_blank"
           rel="noreferrer"
         >
@@ -17,7 +17,7 @@ const CopyrightAndLinks = () => {
         </a>
         <a
           className="cursor-pointer"
-          href="https://twitter.com/useDiverseHQ"
+          href={TWITTER_LINK}
           target="_blank"
           rel="noreferrer"
         >

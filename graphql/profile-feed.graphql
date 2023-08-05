@@ -49,9 +49,7 @@ query ProfileFeed(
       }
     }
     pageInfo {
-      prev
       next
-      totalCount
     }
   }
 }

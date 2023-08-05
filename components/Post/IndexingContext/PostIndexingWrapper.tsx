@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
 import React from 'react'
+import { putAddLensPublication } from '../../../apiHelper/lensPublication'
 import {
   ReactionTypes,
   useAddReactionMutation
 } from '../../../graphql/generated'
-import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import { postIdFromIndexedResult } from '../../../utils/utils'
-import { putAddLensPublication } from '../../../apiHelper/lensPublication'
+import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { usePublicationStore } from '../../../store/publication'
+import { postIdFromIndexedResult } from '../../../utils/utils'
 
 /* eslint-disable */
 

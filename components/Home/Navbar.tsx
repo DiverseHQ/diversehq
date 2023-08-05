@@ -1,28 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react'
-import SearchModal from '../Search/SearchModal'
-import Link from 'next/link'
-import LensLoginButton from '../Common/LensLoginButton'
-import { useRouter } from 'next/router'
-import useNotificationsCount from '../Notification/useNotificationsCount'
-import { IoMdNotificationsOutline } from 'react-icons/io'
-import ClickOption from './ClickOption'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import { useProfile } from '../Common/WalletContext'
-import { useNotify } from '../Common/NotifyContext'
-import { getJoinedCommunitiesApi } from '../../apiHelper/community'
-import { RiArrowDropDownLine } from 'react-icons/ri'
-import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
-import { useLensUserContext } from '../../lib/LensUserContext'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import getAvatar from '../User/lib/getAvatar'
-import { scrollToTop } from '../../lib/helpers'
-import FilterButton from '../Common/UI/FilterButton'
-import { AiOutlinePlus } from 'react-icons/ai'
-import CreatePostPopup from './CreatePostPopup'
 import { Tooltip } from '@mui/material'
-import formatHandle from '../User/lib/formatHandle'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { memo, useEffect, useRef, useState } from 'react'
+import { AiOutlinePlus } from 'react-icons/ai'
 import { BsChevronDown } from 'react-icons/bs'
-import { memo } from 'react'
+import { IoMdNotificationsOutline } from 'react-icons/io'
+import { RiArrowDropDownLine } from 'react-icons/ri'
+import { getJoinedCommunitiesApi } from '../../apiHelper/community'
+import { getMostPostedLensCommunityIds } from '../../apiHelper/lensPublication'
+import { useLensUserContext } from '../../lib/LensUserContext'
+import { scrollToTop } from '../../lib/helpers'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import LensLoginButton from '../Common/LensLoginButton'
+import { useNotify } from '../Common/NotifyContext'
+import FilterButton from '../Common/UI/FilterButton'
+import FilterListWithSearch from '../Common/UI/FilterListWithSearch'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import { useProfile } from '../Common/WalletContext'
+import useNotificationsCount from '../Notification/useNotificationsCount'
+import SearchModal from '../Search/SearchModal'
+import formatHandle from '../User/lib/formatHandle'
+import getAvatar from '../User/lib/getAvatar'
+import ClickOption from './ClickOption'
+import CreatePostPopup from './CreatePostPopup'
 
 const Navbar = () => {
   const router = useRouter()
@@ -109,20 +109,6 @@ const Navbar = () => {
     })
   }
 
-  const storeRecentCommunities = (community) => {
-    const recentCommunities =
-      JSON.parse(window?.localStorage?.getItem('recentCommunities')) || []
-    window.localStorage.setItem(
-      'recentCommunities',
-      JSON.stringify([
-        community,
-        ...recentCommunities.filter(
-          (community) => community?._id !== community?._id
-        )
-      ])
-    )
-  }
-
   const getJoinedCommunities = async () => {
     if (!user?.walletAddress) {
       notifyError('I think you are not logged in')
@@ -131,14 +117,22 @@ const Navbar = () => {
     try {
       setFetchingJoinedCommunities(true)
       const response = await getJoinedCommunitiesApi()
-      const recentCommunities =
-        JSON.parse(window?.localStorage?.getItem('recentCommunities')) || []
+
+      let mostPostedCommunities = []
+
+      try {
+        const res = await getMostPostedLensCommunityIds()
+
+        if (res.status === 200) {
+          mostPostedCommunities = await res.json()
+        }
+      } catch (err) {
+        console.log(err)
+      }
+
       // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
       const myLensCommunity = []
-      if (
-        LensCommunity &&
-        !recentCommunities.some((c) => c?._id === LensCommunity?._id)
-      ) {
+      if (LensCommunity) {
         myLensCommunity.push({
           _id: LensCommunity?._id,
           name: formatHandle(LensCommunity?.Profile?.handle),
@@ -146,30 +140,37 @@ const Navbar = () => {
           isLensCommunity: true
         })
       }
-      setJoinedCommunities([
-        ...recentCommunities,
-        ...joinedLensCommunities
-          .map((community) => ({
-            _id: community._id,
-            name: formatHandle(community?.handle),
-            // @ts-ignore
-            logoImageUrl: getAvatar(community),
-            isLensCommunity: true
-          }))
-          .filter(
-            (community) =>
-              !recentCommunities.some((c) => c?._id === community?._id)
-          )
-          .filter(
-            (community) =>
-              !myLensCommunity.some((c) => c?._id === community?._id)
-          ),
+
+      const joinedCommunitiesArray = [
+        ...joinedLensCommunities.map((community) => ({
+          _id: community._id,
+          name: formatHandle(community?.handle),
+          // @ts-ignore
+          logoImageUrl: getAvatar(community),
+          isLensCommunity: true
+        })),
         // removing the communities in the recentCommunities from the joinedCommunities using communityId
-        ...response.filter(
-          (community) =>
-            !recentCommunities.some((c) => c?._id === community?._id)
-        )
-      ])
+        ...response
+      ]
+
+      let sortedCommunities = []
+
+      for (const communityId of mostPostedCommunities) {
+        if (joinedCommunitiesArray.some((c) => c._id === communityId)) {
+          sortedCommunities.push(
+            joinedCommunitiesArray.find((c) => c._id === communityId)
+          )
+        }
+      }
+
+      for (const community of joinedCommunitiesArray) {
+        if (!sortedCommunities.some((c) => c._id === community._id)) {
+          sortedCommunities.push(community)
+        }
+      }
+
+      setJoinedCommunities(sortedCommunities)
+
       setShowJoinedCommunities(!showJoinedCommunities)
     } catch (error) {
       console.log('error', error)
@@ -224,7 +225,6 @@ const Navbar = () => {
                     filterParam="name"
                     handleSelect={(community) => {
                       setShowJoinedCommunities(false)
-                      storeRecentCommunities(community)
 
                       if (community?.isLensCommunity) {
                         router.push(`/l/${community?.name}`)

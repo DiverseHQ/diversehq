@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react'
 import { useProfile } from '../Common/WalletContext'
 // import { IoIosClose } from 'react-icons/io'
 // import { IoIosHelpCircleOutline } from 'react-icons/io'
@@ -7,37 +7,37 @@ import { useProfile } from '../Common/WalletContext'
 // import { AiOutlineGift } from 'react-icons/ai'
 // import { MdOutlineGroups } from 'react-icons/md'
 // import CreateCommunity from './CreateCommunity'
-import { MdCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
-import CreateCommunity from './CreateCommunity'
-import { useNotify } from '../Common/NotifyContext'
-import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
-import LensLoginButton from '../Common/LensLoginButton'
-import { stringToLength } from '../../utils/utils'
+import Link from 'next/link'
+import {
+  AiOutlineDisconnect,
+  AiOutlineTwitter,
+  AiOutlineUsergroupAdd
+} from 'react-icons/ai'
+import { BsFillPersonFill } from 'react-icons/bs'
 import { FaDiscord, FaRegCopy } from 'react-icons/fa'
-import { DISCORD_INVITE_LINK } from '../../utils/config'
+import { HiSun } from 'react-icons/hi'
+import { IoIosMoon, IoMdSettings } from 'react-icons/io'
+import { MdCreateNewFolder, MdOutlineGroups } from 'react-icons/md'
 import { useDisconnect } from 'wagmi'
 import {
   getCreatedCommunitiesApi,
   getJoinedCommunitiesApi
 } from '../../apiHelper/community'
-import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
-import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
-import {
-  AiOutlineUsergroupAdd,
-  AiOutlineDisconnect,
-  AiOutlineTwitter
-} from 'react-icons/ai'
-import { useTheme } from '../Common/ThemeProvider'
 import { useLensUserContext } from '../../lib/LensUserContext'
-import getAvatar from '../User/lib/getAvatar'
-import { IoIosMoon, IoMdSettings } from 'react-icons/io'
-import { HiSun } from 'react-icons/hi'
-import formatHandle from '../User/lib/formatHandle'
-import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
+import { DISCORD_INVITE_LINK, TWITTER_LINK } from '../../utils/config'
+import { stringToLength } from '../../utils/utils'
+import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
+import LensLoginButton from '../Common/LensLoginButton'
+import { useNotify } from '../Common/NotifyContext'
+import { useTheme } from '../Common/ThemeProvider'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
-import Link from 'next/link'
-import { BsFillPersonFill } from 'react-icons/bs'
+import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
+import formatHandle from '../User/lib/formatHandle'
+import getAvatar from '../User/lib/getAvatar'
 import getIPFSLink from '../User/lib/getIPFSLink'
+import CreateCommunity from './CreateCommunity'
+import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
@@ -318,7 +318,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                 <span className="text-p-text">Discord</span>
               </a>
               <a
-                href={DISCORD_INVITE_LINK}
+                href={TWITTER_LINK}
                 target={'_blank'}
                 rel="noreferrer"
                 className="flex flex-row items-center gap-4 py-1 px-3 rounded-full bg-p-bg"

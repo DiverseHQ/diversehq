@@ -1,5 +1,6 @@
-import React, { memo } from 'react'
 import { Player } from '@livepeer/react'
+import { memo } from 'react'
+import { LensInfuraEndpoint } from '../../../utils/config'
 // import imageProxy from '../../User/lib/imageProxy'
 // import VideoWithAutoPause from './VideoWithAutoPause'
 const LivePeerVideoPlayback = ({
@@ -20,9 +21,11 @@ const LivePeerVideoPlayback = ({
       muted
       loop={false}
       showLoadingSpinner={true}
+      showPipButton
+      showUploadingIndicator
       autoUrlUpload={{
         fallback: true,
-        ipfsGateway: 'https://gateway.ipfscdn.io/ipfs/'
+        ipfsGateway: LensInfuraEndpoint
       }}
     />
   )

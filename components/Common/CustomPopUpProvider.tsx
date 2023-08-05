@@ -1,4 +1,4 @@
-import React, { useContext, useState, createContext } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 interface ModalType {
   visiblity?: boolean

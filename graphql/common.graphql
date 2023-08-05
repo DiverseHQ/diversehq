@@ -291,10 +291,10 @@ fragment CommentBaseFields on Comment {
   canComment(profileId: $profileId) {
     result
   }
+  mirrors(by: $profileId)
   appId
   hidden
   reaction(request: $reactionRequest)
-  mirrors(by: null)
   hasCollectedByMe
   isGated
 }
@@ -406,12 +406,21 @@ fragment FollowModuleFields on FollowModule {
   }
 }
 
+fragment ModuleFeeAmountFields on ModuleFeeAmount {
+  asset {
+    symbol
+    decimals
+    address
+  }
+  value
+}
+
 fragment CollectModuleFields on CollectModule {
   __typename
-  ... on FreeCollectModuleSettings {
+    ... on FreeCollectModuleSettings {
     type
-    followerOnly
     contractAddress
+    followerOnly
   }
   ... on FeeCollectModuleSettings {
     type
@@ -419,60 +428,68 @@ fragment CollectModuleFields on CollectModule {
     contractAddress
     followerOnly
     amount {
-      asset {
-        symbol
-        decimals
-        address
-      }
-      value
+      ...ModuleFeeAmountFields
     }
-    recipient
-    referralFee
   }
   ... on LimitedFeeCollectModuleSettings {
     type
     collectLimit
-    amount {
-      asset {
-        ...Erc20Fields
-      }
-      value
-    }
-    recipient
     referralFee
+    contractAddress
+    followerOnly
+    amount {
+      ...ModuleFeeAmountFields
+    }
   }
   ... on LimitedTimedFeeCollectModuleSettings {
     type
     collectLimit
-    amount {
-      asset {
-        ...Erc20Fields
-      }
-      value
-    }
-    recipient
-    referralFee
     endTimestamp
-  }
-  ... on RevertCollectModuleSettings {
-    type
+    referralFee
+    contractAddress
+    followerOnly
+    amount {
+      ...ModuleFeeAmountFields
+    }
   }
   ... on TimedFeeCollectModuleSettings {
     type
-    amount {
-      asset {
-        ...Erc20Fields
-      }
-      value
-    }
-    recipient
-    referralFee
     endTimestamp
-  }
-  ... on UnknownCollectModuleSettings {
-    type
+    referralFee
     contractAddress
-    collectModuleReturnData
+    followerOnly
+    amount {
+      ...ModuleFeeAmountFields
+    }
+  }
+  ... on MultirecipientFeeCollectModuleSettings {
+    type
+    optionalCollectLimit: collectLimit
+    optionalEndTimestamp: endTimestamp
+    referralFee
+    followerOnly
+    contractAddress
+    amount {
+      ...ModuleFeeAmountFields
+    }
+    recipients {
+      recipient
+      split
+    }
+  }
+  ... on SimpleCollectModuleSettings {
+    type
+    optionalCollectLimit: collectLimit
+    optionalEndTimestamp: endTimestamp
+    contractAddress
+    followerOnly
+    fee {
+      amount {
+        ...ModuleFeeAmountFields
+      }
+      recipient
+      referralFee
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 // import { useRouter } from 'next/router'
-import React, { FC, useState } from 'react'
+import { FC, useRef, useState } from 'react'
 import {
   AiOutlineArrowLeft,
   AiOutlineArrowRight,
@@ -17,15 +17,18 @@ import getIPFSLink from '../User/lib/getIPFSLink'
 import imageProxy from '../User/lib/imageProxy'
 // import AttachmentCarousel from './AttachmentCarousel'
 // import AttachmentMedia from './AttachmentMedia'
-import ReactEmbedo from './embed/ReactEmbedo'
+import clsx from 'clsx'
+import { useSwipeable } from 'react-swipeable'
+import { useUpdateEffect } from 'usehooks-ts'
+import { getQuotedPublicationId } from '../../lib/post/getQuotedPublicationId'
 import { AttachmentType, usePublicationStore } from '../../store/publication'
-import VideoWithAutoPause from '../Common/UI/VideoWithAutoPause'
+import { useDevice } from '../Common/DeviceWrapper'
+import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
 import LivePeerVideoPlayback from '../Common/UI/LivePeerVideoPlayback'
 import AudioPlayer from './AudioPlayer'
-import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
-import clsx from 'clsx'
-import { useDevice } from '../Common/DeviceWrapper'
-import { useSwipeable } from 'react-swipeable'
+import LensPostCardFromPublicationId from './Cards/LensPostCardFromPublicationId'
+import ChooseThumbnail from './ChooseThumbnail'
+import ReactEmbedo from './embed/ReactEmbedo'
 // import { useDevice } from '../Common/DeviceWrapper'
 
 interface Props {
@@ -47,6 +50,8 @@ const Attachment: FC<Props> = ({
   isComment = false,
   isAlone = false
 }) => {
+  // @ts-ignore
+  const quotedPublicationId = getQuotedPublicationId(publication)
   const removeAttachments = usePublicationStore(
     (state) => state.removeAttachments
   )
@@ -56,6 +61,24 @@ const Attachment: FC<Props> = ({
   const getCoverUrl = () => {
     return imageProxy(getIPFSLink(publication?.metadata?.cover?.original?.url))
   }
+
+  const setVideoDurationInSeconds = usePublicationStore(
+    (state) => state.setVideoDurationInSeconds
+  )
+
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const onDataLoaded = () => {
+    if (videoRef.current?.duration && videoRef.current?.duration !== Infinity) {
+      setVideoDurationInSeconds(videoRef.current.duration.toFixed(2))
+    }
+  }
+
+  useUpdateEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.onloadeddata = onDataLoaded
+    }
+  }, [videoRef, attachments])
 
   const { isMobile } = useDevice()
 
@@ -87,6 +110,13 @@ const Attachment: FC<Props> = ({
   // const { isMobile } = useDevice()
 
   if (attachments?.length === 0) {
+    if (quotedPublicationId && !isAlone) {
+      return (
+        <div className="px-4 sm:px-0">
+          <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
+        </div>
+      )
+    }
     if (
       getURLsFromText(publication?.metadata?.content)?.length > 0 &&
       !isAlone
@@ -104,7 +134,7 @@ const Attachment: FC<Props> = ({
   if (isMobile) {
     return (
       <>
-        <div className="relative" onClick={(e) => e.stopPropagation()}>
+        <div className="relative " onClick={(e) => e.stopPropagation()}>
           {attachments.length > 1 && (
             <div className="relative w-full">
               <div
@@ -161,14 +191,18 @@ const Attachment: FC<Props> = ({
                           url.startsWith(
                             'https://firebasestorage.googleapis.com'
                           ) ? (
-                            <VideoWithAutoPause
-                              src={isNew ? url : imageProxy(url)}
-                              className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                              controls
-                              muted
-                              autoPlay={false}
-                              poster={getCoverUrl()}
-                            />
+                            <>
+                              <video
+                                src={isNew ? url : imageProxy(url)}
+                                className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                                ref={videoRef}
+                                controls
+                                muted
+                                autoPlay={false}
+                                poster={getCoverUrl()}
+                              />
+                              <ChooseThumbnail />
+                            </>
                           ) : (
                             <div
                               className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
@@ -191,7 +225,7 @@ const Attachment: FC<Props> = ({
                         ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
                           <ImageWithFullScreenZoom
                             src={isNew ? url : imageProxy(url)}
-                            className={`image-unselectable shrink-0 object-cover sm:rounded-lg min-h-[200px] w-full ${className}`}
+                            className={`image-unselectable shrink-0 object-cover sm:rounded-lg min-h-[200px] w-full`}
                             alt={isNew ? url : publication?.metadata?.content}
                           />
                         ) : (
@@ -212,7 +246,7 @@ const Attachment: FC<Props> = ({
                                 setCurrentMedia(0)
                               }}
                             >
-                              <AiOutlineClose className="w-6 h-6" />
+                              <AiOutlineClose className="w-6 h-6 text-white" />
                             </button>
                           </div>
                         )}
@@ -223,6 +257,13 @@ const Attachment: FC<Props> = ({
             </div>
           </div>
         </div>
+        {quotedPublicationId && !isAlone && (
+          <div className="sm:mt-4 mt-2 px-4 sm:px-0">
+            <LensPostCardFromPublicationId
+              publicationId={quotedPublicationId}
+            />
+          </div>
+        )}
       </>
     )
   }
@@ -252,7 +293,7 @@ const Attachment: FC<Props> = ({
                 }}
                 className="absolute left-0 top-[50%] z-20 p-1 rounded-full translate-x-[50%] -translate-y-[50%] bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg transition-all duration-300"
               >
-                <AiOutlineArrowLeft className="w-6 h-6" />
+                <AiOutlineArrowLeft className="w-6 h-6 text-white" />
               </button>
             )}
             {currentMedia !== attachments.length - 1 && (
@@ -263,7 +304,7 @@ const Attachment: FC<Props> = ({
                 }}
                 className="absolute right-0 top-[50%] z-20 p-1 rounded-full -translate-x-[50%] -translate-y-[50%] bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg transition-all duration-300"
               >
-                <AiOutlineArrowRight className="w-6 h-6" />
+                <AiOutlineArrowRight className="w-6 h-6 text-white" />
               </button>
             )}
             <div
@@ -297,14 +338,19 @@ const Attachment: FC<Props> = ({
                   ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
                     (isNew && !url.startsWith(LensInfuraEndpoint)) ||
                     url.startsWith('https://firebasestorage.googleapis.com') ? (
-                      <VideoWithAutoPause
-                        src={isNew ? url : imageProxy(url)}
-                        className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                        controls
-                        muted
-                        autoPlay={false}
-                        poster={getCoverUrl()}
-                      />
+                      <>
+                        <video
+                          src={isNew ? url : imageProxy(url)}
+                          className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                          controls
+                          muted
+                          ref={videoRef}
+                          autoPlay={false}
+                          poster={getCoverUrl()}
+                        />
+
+                        <ChooseThumbnail />
+                      </>
                     ) : (
                       <div
                         className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
@@ -348,7 +394,7 @@ const Attachment: FC<Props> = ({
                           setCurrentMedia(0)
                         }}
                       >
-                        <AiOutlineClose className="w-6 h-6" />
+                        <AiOutlineClose className="w-6 h-6 text-white" />
                       </button>
                     </div>
                   )}
@@ -375,6 +421,12 @@ const Attachment: FC<Props> = ({
         /> */}
       </div>
       {/* )} */}
+
+      {quotedPublicationId && !isAlone && (
+        <div className="sm:mt-4 mt-2 sm:px-0 px-4">
+          <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
+        </div>
+      )}
     </>
   )
 }
