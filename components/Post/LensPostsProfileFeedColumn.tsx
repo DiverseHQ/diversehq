@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { memo, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useProfileFeedQuery } from '../../graphql/generated'
+import { FeedEventItemType, useProfileFeedQuery } from '../../graphql/generated'
 import { useProfileStore } from '../../store/profile'
 import { usePublicationStore } from '../../store/publication'
 // import { LENS_POST_LIMIT } from '../../utils/config'
@@ -31,7 +31,8 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       request: {
         cursor: exploreQueryRequestParams.cursor,
         profileId: profileId,
-        limit: 50
+        limit: 50,
+        feedEventItemTypes: [FeedEventItemType.Mirror, FeedEventItemType.Post]
       },
       reactionRequest: {
         profileId: profileId
