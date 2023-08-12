@@ -11,6 +11,10 @@ import getIPFSLink from './getIPFSLink'
 const imageProxy = (url: string, tr: string = '', name?: string): string => {
   // for now, returning the original url
   if (!url) return ''
+
+  if (url.startsWith('ipfs://')) {
+    return `${IMAGE_KIT_ENDPOINT}/tr:di-placeholder.webp,${tr ? tr : ''}/${url}`
+  }
   // return url
   if (url?.startsWith('https://firebasestorage.googleapis.com')) {
     // return url.replace(

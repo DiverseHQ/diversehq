@@ -63,7 +63,7 @@ const CreateCommunity = () => {
 
   const handleCreateCommunity = async (pfp: string, banner: string) => {
     const communityData = {
-      name: communityName.trim(),
+      name: communityName.trim().toLowerCase(),
       label: communityLabel.trim(),
       description: communityDescription,
       bannerImageUrl: banner,

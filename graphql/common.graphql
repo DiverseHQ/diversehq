@@ -292,9 +292,9 @@ fragment CommentBaseFields on Comment {
     result
   }
   mirrors(by: $profileId)
+  reaction(request: $reactionRequest)
   appId
   hidden
-  reaction(request: $reactionRequest)
   hasCollectedByMe
   isGated
 }
@@ -417,7 +417,7 @@ fragment ModuleFeeAmountFields on ModuleFeeAmount {
 
 fragment CollectModuleFields on CollectModule {
   __typename
-    ... on FreeCollectModuleSettings {
+  ... on FreeCollectModuleSettings {
     type
     contractAddress
     followerOnly
