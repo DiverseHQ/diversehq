@@ -22,6 +22,7 @@ import TrendingThisWeekTagsRightSidebarColumn from './TrendingThisWeekTagsRightS
 import { BsChevronDown } from 'react-icons/bs'
 import OptionsWrapper from '../../Common/OptionsWrapper'
 import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
+import GetItOnGooglePlay from './GetItOnGooglePlay'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
@@ -101,6 +102,7 @@ const RightSidebar = () => {
         hide ? 'hidden' : 'lg:flex flex-col'
       } w-[150px] sm:w-[300px] py-4 pr-4 overflow-scroll no-scrollbar`}
     >
+      <GetItOnGooglePlay />
       {user && (createdCommunities?.length > 0 || LensCommunity) && (
         <CommunitiesDiv
           showFirstCommunities={
