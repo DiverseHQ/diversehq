@@ -11,7 +11,7 @@ export const MAX_CONTENT_LINES: number = 4
 export const MAX_CONTENT_LINES_FOR_POST: number = 6
 export const LENS_SEARCH_PROFILE_LIMIT: number = 4
 export const WHO_WAS_IT_PROFILES_LIMIT: number = 30
-export const LensInfuraEndpoint: string = 'https://gateway.ipfscdn.io/ipfs/'
+export const LensInfuraEndpoint: string = 'https://4everland.io/ipfs/'
 export const LENS_INFINITE_SCROLL_THRESHOLD: number = 0.5
 export const SEARCH_ITEMS_LIMIT: number = 30
 
@@ -236,15 +236,11 @@ export const infoFromLensAppId = {
 }
 
 export const appId = 'diversehq'
-export const showNameForThisAppIds = [
-  'diversehq',
-  'lenstube',
-  'lenstube-bytes'
-]
+export const showNameForThisAppIds = ['diversehq', 'lenstube', 'lenstube-bytes']
 export const appLink = 'https://diversehq.xyz'
 
 export const STS_TOKEN_URL = `${apiEndpoint}/ever/sts/token`
 export const EVER_REGION = 'us-west-2'
 export const EVER_ENDPOINT = 'https://endpoint.4everland.co'
 
-export const DEFAULT_BANNER_URL = "https://diversehq.xyz/defaultBanner.png"
+export const DEFAULT_BANNER_URL = 'https://diversehq.xyz/defaultBanner.png'

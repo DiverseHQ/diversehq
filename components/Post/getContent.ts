@@ -3,6 +3,7 @@ import { appLink, showNameForThisAppIds } from '../../utils/config'
 
 export const getContent = (post: postWithCommunityInfoType): string => {
   let content: string = post?.metadata?.content || ''
+  console.log('content', content)
 
   if (content) {
     if (post?.isLensCommunityPost) {
@@ -38,7 +39,7 @@ export const getContent = (post: postWithCommunityInfoType): string => {
 
     // removing upper content if same as content name
     if (
-      content?.startsWith(post?.metadata?.name) &&
+      content?.startsWith(post?.metadata?.name?.trim()) &&
       showNameForThisAppIds.includes(post?.appId)
     ) {
       content = content.slice(post?.metadata?.name.length)

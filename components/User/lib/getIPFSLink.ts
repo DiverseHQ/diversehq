@@ -21,8 +21,14 @@ export const isIpfsHashLink = (hash: string): boolean => {
   if (!hash) {
     return false
   }
+
+  if (hash.startsWith('ipfs://')) {
+    return true
+  }
+
   let regex =
     /^((ipfs:\/\/|https:\/\/ipfs\.io\/ipfs\/)?)Qm[1-9A-HJKa-km-z]{44}$/
+
   return regex.test(hash)
 }
 
