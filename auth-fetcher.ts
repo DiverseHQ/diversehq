@@ -3,7 +3,7 @@ import refreshAccessToken from './lib/auth/refreshAccessToken'
 import { apiEndpoint } from './utils/config'
 
 export const STORAGE_KEY = 'LH_STORAGE_KEY'
-
+export const endpoint = apiEndpoint
 /* eslint-disable */
 
 export async function getAccessToken(): Promise<string | null> {
