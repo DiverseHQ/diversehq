@@ -1,12 +1,7 @@
 import { readAccessTokenFromStorage, isTokenExpired } from './lib/auth/helpers'
 import refreshAccessToken from './lib/auth/refreshAccessToken'
-import { apiMode } from './utils/config'
+import { apiEndpoint } from './utils/config'
 
-//polygon mainnet
-// export const endpoint = "https://api.lens.dev/";
-//polygon mumbai
-export const endpoint =
-  apiMode === 'dev' ? 'https://api-mumbai.lens.dev/' : 'https://api.lens.dev/'
 export const STORAGE_KEY = 'LH_STORAGE_KEY'
 
 /* eslint-disable */
@@ -43,7 +38,7 @@ export const fetchData = <TData, TVariables>(
 
     const accessToken = await getAccessToken()
 
-    const res = await fetch(endpoint, {
+    const res = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
