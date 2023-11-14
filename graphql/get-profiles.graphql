@@ -1,10 +1,10 @@
-query profiles($request: ProfileQueryRequest!) {
+query profiles($request: ProfilesRequest!) {
   profiles(request: $request) {
     items {
       ...ProfileFields
     }
     pageInfo {
-      ...CommonPaginatedResultInfoFields
+      next
     }
   }
 }

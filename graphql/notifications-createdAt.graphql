@@ -1,34 +1,7 @@
 query notificationsCreatedAt($request: NotificationRequest!) {
   notifications(request: $request) {
     items {
-      ... on NewFollowerNotification {
-        notificationId
-        createdAt
-      }
-
-      ... on NewMirrorNotification {
-        notificationId
-        createdAt
-      }
-
-      ... on NewCollectNotification {
-        notificationId
-        createdAt
-      }
-
-      ... on NewCommentNotification {
-        notificationId
-        createdAt
-      }
-
-      ... on NewMentionNotification {
-        notificationId
-        createdAt
-      }
-      ... on NewReactionNotification {
-        notificationId
-        createdAt
-      }
+      ...NotificationFields
     }
   }
 }

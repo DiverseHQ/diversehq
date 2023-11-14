@@ -1,13 +1,10 @@
 query Following($request: FollowingRequest!) {
   following(request: $request) {
     items {
-      profile {
-        ...ProfileFields
-      }
+      ...ListProfileFields
     }
     pageInfo {
       next
-      totalCount
     }
   }
 }

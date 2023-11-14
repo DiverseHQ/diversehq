@@ -1,11 +1,13 @@
-query profilesHandles($request: ProfileQueryRequest!) {
+query profilesHandles($request: ProfilesRequest!) {
   profiles(request: $request) {
     items {
-      ownedBy
-      handle
+      handle {
+        ownedBy
+        fullHandle
+      }
     }
     pageInfo {
-      ...CommonPaginatedResultInfoFields
+      next
     }
   }
 }

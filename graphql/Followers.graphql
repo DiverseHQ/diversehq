@@ -1,16 +1,10 @@
 query Followers($request: FollowersRequest!) {
   followers(request: $request) {
     items {
-      wallet {
-        address
-        defaultProfile {
-          ...ProfileFields
-        }
-      }
+      ...ListProfileFields
     }
     pageInfo {
       next
-      totalCount
     }
   }
 }

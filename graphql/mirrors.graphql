@@ -1,11 +1,10 @@
-query Mirrors($request: ProfileQueryRequest!) {
+query Mirrors($request: ProfilesRequest!) {
   profiles(request: $request) {
     items {
       ...ProfileFields
     }
     pageInfo {
       next
-      totalCount
     }
   }
 }
