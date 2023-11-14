@@ -1,5 +1,10 @@
-mutation CreateMirrorViaDispatcher($request: CreateMirrorRequest!) {
-  createMirrorViaDispatcher(request: $request) {
-    ...RelayerResultFields
+mutation MirrorOnchain($request: OnchainMirrorRequest!) {
+  mirrorOnchain(request: $request) {
+    ... on RelaySuccess {
+      txId
+    }
+    ... on LensProfileManagerRelayError {
+      reason
+    }
   }
 }

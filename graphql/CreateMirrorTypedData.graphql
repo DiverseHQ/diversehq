@@ -1,32 +1,34 @@
-mutation CreateMirrorTypedData(
+mutation CreateOnchainMirrorTypedData(
   $options: TypedDataOptions
-  $request: CreateMirrorRequest!
+  $request: OnchainMirrorRequest!
 ) {
-  createMirrorTypedData(options: $options, request: $request) {
+  createOnchainMirrorTypedData(options: $options, request: $request) {
     id
     expiresAt
     typedData {
-      types {
-        MirrorWithSig {
-          name
-          type
-        }
-      }
       domain {
         name
         chainId
         version
         verifyingContract
       }
+      types {
+        Mirror {
+          name
+          type
+        }
+      }
       value {
         nonce
+        metadataURI
         deadline
         profileId
-        profileIdPointed
-        pubIdPointed
-        referenceModule
+        metadataURI
+        pointedProfileId
+        pointedPubId
+        referrerProfileIds
+        referrerPubIds
         referenceModuleData
-        referenceModuleInitData
       }
     }
   }

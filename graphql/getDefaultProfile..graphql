@@ -1,0 +1,5 @@
+query GetDefaultProfile($request: DefaultProfileRequest!) {
+  defaultProfile(request: $request) {
+    id
+  }
+}
