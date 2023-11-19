@@ -1,4 +1,4 @@
-import { HANDLE_SUFFIX } from '../../../utils/config'
+import { HandleInfo } from '../../../graphql/generated'
 
 /**
  *
@@ -6,17 +6,15 @@ import { HANDLE_SUFFIX } from '../../../utils/config'
  * @param keepSuffix - Keep .lens or .test suffix
  * @returns formatted handle without .lens or .test suffix
  */
-const formatHandle = (handle: string | null, keepSuffix = false): string => {
-  if (!handle) {
+const formatHandle = (handleInfo?: HandleInfo, keepSuffix = false): string => {
+  if (!handleInfo) {
     return ''
   }
   if (keepSuffix) {
-    return handle.match(HANDLE_SUFFIX)
-      ? handle.split(HANDLE_SUFFIX)[0] + HANDLE_SUFFIX
-      : handle + HANDLE_SUFFIX
+    return handleInfo.fullHandle
   }
 
-  return handle.replace(HANDLE_SUFFIX, '')
+  return handleInfo.localName
 }
 
 export default formatHandle

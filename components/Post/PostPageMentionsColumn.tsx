@@ -1,5 +1,6 @@
 import React from 'react'
 import LensPageProfileCard from './Cards/LensPageProfileCard'
+import { postWithCommunityInfoType } from '../../types/post'
 
 // return words that are starting with @ and ending with .lens or .test
 export const getAllMentionsHandlFromContent = (content: string): string[] => {
@@ -15,23 +16,22 @@ export const getAllMentionsHandlFromContent = (content: string): string[] => {
 }
 
 const PostPageMentionsColumn = ({
-  content,
-  isLensCommunityPost
+  post
 }: {
-  content: string
-  isLensCommunityPost?: boolean
+  post: postWithCommunityInfoType
 }) => {
-  let handles = getAllMentionsHandlFromContent(content)
-  if (isLensCommunityPost) {
-    handles = handles.slice(1)
-  }
   return (
     <>
-      {handles && handles?.length > 0 && (
+      {post?.profilesMentioned?.length > 0 && (
         <>
           {/* <div className="px-5 mt-6 font-medium">Mentions</div> */}
-          {handles.map((handle) => {
-            return <LensPageProfileCard profileHandle={handle} key={handle} />
+          {post?.profilesMentioned.map((profile) => {
+            return (
+              <LensPageProfileCard
+                _profile={profile?.profile}
+                key={profile?.profile?.id}
+              />
+            )
           })}
         </>
       )}

@@ -2,33 +2,28 @@ import React, { memo, useCallback, useEffect } from 'react'
 import { postGetCommunityInfoUsingListOfIds } from '../../../apiHelper/community'
 import getSinglePublicationInfo from '../../../lib/post/get-single-publication-info'
 import { postWithCommunityInfoType } from '../../../types/post'
-// import { appId } from '../../../utils/config'
-// import { getCommunityInfoFromAppId } from '../../../utils/helper'
-import { useLensUserContext } from '../../../lib/LensUserContext'
 import LensPostCard from '../LensPostCard'
 
 const LensPostCardFromPublicationId = ({
-  publicationId
+  publicationId,
+  publication
 }: {
   publicationId: string
+  publication?: postWithCommunityInfoType
 }) => {
   const [post, setPost] = React.useState<postWithCommunityInfoType>(null)
-  const { data } = useLensUserContext()
 
   const getPost = useCallback(async () => {
     if (!publicationId || post) return
     try {
       const { publication } = await getSinglePublicationInfo({
         request: {
-          publicationId: publicationId
-        },
-        profileId: data?.defaultProfile?.id ?? null,
-        reactionRequest: {
-          profileId: data?.defaultProfile?.id ?? null
+          forId: publicationId
         }
       })
       if (publication?.__typename === 'Post') {
-        const communityId = publication.metadata.tags[0]
+        // @ts-ignore
+        const communityId = publication.metadata?.tags?.[0]
         const communityInfoForPosts = await postGetCommunityInfoUsingListOfIds([
           communityId
         ])
@@ -66,11 +61,15 @@ const LensPostCardFromPublicationId = ({
   }, [publicationId])
 
   useEffect(() => {
+    if (publication) {
+      setPost(publication)
+      return
+    }
     if (!publicationId) return
     getPost()
   }, [publicationId])
 
-  if (!publicationId) return null
+  if (!publicationId && !publication) return null
 
   return <>{post && <LensPostCard post={post} isAlone />}</>
 }

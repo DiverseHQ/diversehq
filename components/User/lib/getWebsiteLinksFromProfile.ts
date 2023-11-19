@@ -18,7 +18,15 @@ export const getWebsiteLinksFromProfile = (
       githubLink: null,
       linkedInLink: null
     }
-  const attributes = profile.attributes
+  const attributes = profile?.metadata?.attributes
+  if (!attributes)
+    return {
+      websiteLink: null,
+      twitterLink: null,
+      instagramLink: null,
+      githubLink: null,
+      linkedInLink: null
+    }
   const websiteLink = attributes.find(
     (attribute) => attribute.key === 'website'
   )

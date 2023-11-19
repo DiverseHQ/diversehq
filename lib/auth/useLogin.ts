@@ -1,8 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAccount, useSigner } from 'wagmi'
-import { useGetAccessTokenMutation } from '../../graphql/generated'
+import {
+  useChallengeQuery,
+  useGetAccessTokenMutation,
+  useGetDefaultProfileQuery
+} from '../../graphql/generated'
 import { useLensUserContext } from '../LensUserContext'
-import generateChallenge from './generateChallenge'
 import { setAccessTokenToStorage } from './helpers'
 
 /**
@@ -17,6 +20,29 @@ export default function useLogin() {
   const queryClient = useQueryClient()
   const { refetch } = useLensUserContext()
 
+  const { data: defaultProfile } = useGetDefaultProfileQuery(
+    {
+      request: {
+        for: address
+      }
+    },
+    {
+      enabled: !!address
+    }
+  )
+
+  const { data: challenge } = useChallengeQuery(
+    {
+      request: {
+        signedBy: address,
+        for: defaultProfile?.defaultProfile?.id
+      }
+    },
+    {
+      enabled: !!address && !!defaultProfile?.defaultProfile?.id
+    }
+  )
+
   const { mutateAsync: getAccessToken } = useGetAccessTokenMutation()
   async function login() {
     if (!address) {
@@ -29,26 +55,24 @@ export default function useLogin() {
     }
 
     // Generate a challenge for the user to sign
-    const { challenge } = await generateChallenge(address)
 
-    if (!challenge) {
+    if (!challenge?.challenge) {
       console.error('Failed to get challenge from Lens')
       return null
     }
 
     // Sign the challenge message
-    const signature = await signer?.signMessage(challenge.text)
+    const signature = await signer?.signMessage(challenge.challenge?.text)
 
     // Now, send the challenge and signature to the Lens API to get an access token
     const { accessToken, refreshToken } = (
       await getAccessToken({
         request: {
-          address,
+          id: challenge.challenge?.id,
           signature
         }
       })
     ).authenticate
-
     // Store the access token in local storage
     setAccessTokenToStorage(accessToken, refreshToken)
 

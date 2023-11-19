@@ -4,7 +4,7 @@ import ProfilePage from '../../components/User/Page/ProfilePage'
 import ProfilePageNextSeo from '../../components/User/ProfilePageNextSeo'
 import { Profile } from '../../graphql/generated'
 import getLensProfileInfo from '../../lib/profile/get-profile-info'
-import { HANDLE_SUFFIX } from '../../utils/config'
+import { HANDLE_PREFIX } from '../../utils/config'
 import { useState } from 'react'
 import { useProfileStore } from '../../store/profile'
 import React from 'react'
@@ -18,6 +18,7 @@ const profile = ({
   handle: string
 }) => {
   const [lensProfile, setLensProfile] = useState<Profile | null>(_lensProfile)
+  console.log('lensProfile', lensProfile)
   const profiles = useProfileStore((state) => state.profiles)
   const addProfile = useProfileStore((state) => state.addProfile)
   const [loading, setLoading] = useState(true)
@@ -25,12 +26,15 @@ const profile = ({
   const fetchAndSetLensProfile = async () => {
     try {
       const lensProfileRes = await getLensProfileInfo({
-        handle: `${handle}`
+        forHandle: handle
       })
       // @ts-ignore
       setLensProfile(lensProfileRes.profile)
-      // @ts-ignore
-      addProfile(lensProfileRes.profile.handle, lensProfileRes.profile)
+      addProfile(
+        lensProfileRes.profile.handle?.fullHandle,
+        // @ts-ignore
+        lensProfileRes.profile
+      )
     } catch (error) {
       console.log('error', error)
     } finally {
@@ -40,14 +44,17 @@ const profile = ({
 
   React.useEffect(() => {
     if (!handle) return
-    console.log('handle', handle)
+    if (lensProfile) return
     if (profiles.get(handle) && profiles) {
+      console.log('profiles.get(handle) && profiles', profiles.get(handle))
       setLensProfile(profiles.get(handle))
       setLoading(false)
     } else {
       fetchAndSetLensProfile()
     }
   }, [profiles, handle])
+
+  console.log('lensProfile at [id]', lensProfile)
 
   return (
     <>
@@ -71,19 +78,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       return {
         props: {
           _lensProfile: null,
-          handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+          handle: id === 'lensprotocol' ? id : `${HANDLE_PREFIX}${id}`
         }
       }
     }
 
     const lensProfileRes = await getLensProfileInfo({
-      handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+      forHandle: id === 'lensprotocol' ? id : `${HANDLE_PREFIX}${id}`
     })
 
     return {
       props: {
         _lensProfile: lensProfileRes.profile,
-        handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+        handle: id === 'lensprotocol' ? id : `${HANDLE_PREFIX}${id}`
       }
     }
   } catch (error) {

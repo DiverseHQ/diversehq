@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
-import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
+import { LimitType, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config'
 // import { getCommunityInfoFromAppId } from '../../utils/helper'
@@ -12,9 +12,9 @@ import LensPostCard from './LensPostCard'
 import { useDevice } from '../Common/DeviceWrapper'
 
 const LensCollectedPublicationsColumn = ({
-  walletAddress
+  profileId
 }: {
-  walletAddress: string
+  profileId: string
 }) => {
   const { data: myLensProfile } = useLensUserContext()
   const { isMobile } = useDevice()
@@ -29,18 +29,15 @@ const LensCollectedPublicationsColumn = ({
   const collectPublicationResult = usePublicationsQuery(
     {
       request: {
-        collectedBy: walletAddress,
         cursor: queryParams.cursor,
-        limit: LENS_POST_LIMIT,
-        publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror]
-      },
-      reactionRequest: {
-        profileId: myLensProfile?.defaultProfile?.id
-      },
-      profileId: myLensProfile?.defaultProfile?.id
+        limit: LimitType.Fifty,
+        where: {
+          actedBy: profileId
+        }
+      }
     },
     {
-      enabled: !!walletAddress
+      enabled: !!profileId
     }
   )
 
@@ -68,8 +65,7 @@ const LensCollectedPublicationsColumn = ({
         return post.metadata.tags[0]
       }
       if (post?.__typename === 'Mirror') {
-        console.log('mirror post id', post.mirrorOf?.metadata?.tags[0])
-        return post.mirrorOf?.metadata?.tags[0]
+        return post.mirrorOn?.metadata?.tags[0]
       }
       return 'null'
     })
@@ -83,8 +79,8 @@ const LensCollectedPublicationsColumn = ({
       if (communityInfoForPosts[i]?._id) {
         if (newPosts[i]?.__typename === 'Mirror') {
           let mirrorPost = newPosts[i]
-          newPosts[i] = mirrorPost?.mirrorOf
-          newPosts[i].mirroredBy = mirrorPost.profile
+          newPosts[i] = mirrorPost?.mirrorOn
+          newPosts[i].mirroredBy = mirrorPost.by
           newPosts[i].originalMirrorPublication = mirrorPost
         }
         newPosts[i].communityInfo = communityInfoForPosts[i]

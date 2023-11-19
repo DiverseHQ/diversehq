@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useAccount } from 'wagmi'
 import { STORAGE_KEY } from '../../auth-fetcher'
 import { useDefaultProfileQuery } from '../../graphql/generated'
-import { parseJwt, removeAccessTokenFromStorage } from './helpers'
+// import { parseJwt, removeAccessTokenFromStorage } from './helpers'
 
 /**
  * DON'T USE THIS DIRECTLY! Use useLensUserContext.
@@ -18,7 +18,7 @@ export default function useLensUser() {
   const lensProfileQuery = useDefaultProfileQuery(
     {
       request: {
-        ethereumAddress: address
+        for: address
       }
     },
     {
@@ -31,13 +31,14 @@ export default function useLensUser() {
   useEffect(() => {
     // Re-run the lensProfileQuery if the address changes.
     if (!address) return
-    if (localStorageQuery?.data?.accessToken) {
-      const data = parseJwt(localStorageQuery.data.accessToken)
-      if (data?.id?.toLowerCase() !== address?.toLowerCase()) {
-        removeAccessTokenFromStorage()
-        localStorageQuery.refetch()
-      }
-    }
+    // if (localStorageQuery?.data?.accessToken) {
+    //   const data = parseJwt(localStorageQuery.data.accessToken)
+    //   console.log('data?.id?.toLowerCase()', data?.id?.toLowerCase())
+    //   if (data?.id?.toLowerCase() !== address?.toLowerCase()) {
+    //     removeAccessTokenFromStorage()
+    //     localStorageQuery.refetch()
+    //   }
+    // }
     if (address) {
       lensProfileQuery.refetch()
     }

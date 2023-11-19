@@ -1,6 +1,6 @@
 import {
   createContext,
-  useCallback,
+  // useCallback,
   useContext,
   useEffect,
   useState
@@ -27,39 +27,39 @@ import { useLensUserContext } from '../../lib/LensUserContext'
 import { UserType } from '../../types/user'
 import { useNotify } from './NotifyContext'
 
-import { getBulkIsFollowedByMe } from '../../lib/profile/get-bulk-is-followed-by-me'
-import { LensCommunity } from '../../types/community'
+// import { getBulkIsFollowedByMe } from '../../lib/profile/get-bulk-is-followed-by-me'
+// import { LensCommunity } from '../../types/community'
 // import getProfiles from '../../lib/profile/get-profiles'
 // import { Profile } from '../../graphql/generated'
-import {
-  getAllLensCommunitiesHandle,
-  getLensCommunity
-} from '../../apiHelper/lensCommunity'
-import { ProfileMedia } from '../../graphql/generated'
+// import {
+//   getAllLensCommunitiesHandle,
+//   getLensCommunity
+// } from '../../apiHelper/lensCommunity'
+// import { ProfileMedia } from '../../graphql/generated'
 import { useProfileStore } from '../../store/profile'
 import { subscribeUserToPush } from '../../utils/notification'
 // import { whitelistedAddresses } from '../../utils/profileIds'
-export interface IsFollowedLensCommunityType {
-  _id: string
-  handle: string
-  createdAt?: string
-  isFollowedByMe: boolean
-  picture: ProfileMedia
-  stats: {
-    totalFollowers: number
-  }
-  verified?: boolean
-}
+// export interface IsFollowedLensCommunityType {
+//   _id: string
+//   handle: string
+//   createdAt?: string
+//   isFollowedByMe: boolean
+//   picture: ProfileMedia
+//   stats: {
+//     totalFollowers: number
+//   }
+//   verified?: boolean
+// }
 
 interface ContextType {
   address: string
   refreshUserInfo: () => Promise<void>
-  fetchAndSetLensCommunity: () => void
+  // fetchAndSetLensCommunity: () => void
   user: UserType
   loading: boolean
-  LensCommunity: LensCommunity
-  joinedLensCommunities: IsFollowedLensCommunityType[]
-  allLensCommunities: IsFollowedLensCommunityType[]
+  // LensCommunity: LensCommunity
+  // joinedLensCommunities: IsFollowedLensCommunityType[]
+  // allLensCommunities: IsFollowedLensCommunityType[]
 }
 
 export const WalletContext = createContext<ContextType>(null)
@@ -70,13 +70,13 @@ export const WalletProvider = ({ children }) => {
   const { notifyError } = useNotify()
   const { address, isDisconnected } = useAccount()
   const [loading, setLoading] = useState(false)
-  const [LensCommunity, setLensCommunity] = useState(null)
-  const [allLensCommunities, setAllLensCommunities] = useState<
-    IsFollowedLensCommunityType[]
-  >([])
-  const [joinedLensCommunities, setJoinedLensCommunties] = useState<
-    IsFollowedLensCommunityType[]
-  >([])
+  // const [LensCommunity, setLensCommunity] = useState(null)
+  // const [allLensCommunities, setAllLensCommunities] = useState<
+  //   IsFollowedLensCommunityType[]
+  // >([])
+  // const [joinedLensCommunities, setJoinedLensCommunties] = useState<
+  //   IsFollowedLensCommunityType[]
+  // >([])
   const { data: signer } = useSigner()
   const addProfile = useProfileStore((state) => state.addProfile)
   // const { disconnect } = useDisconnect()
@@ -92,13 +92,17 @@ export const WalletProvider = ({ children }) => {
     if (isSignedIn && hasProfile && address) {
       // fetchWeb3Token(true)
       // @ts-ignore
-      addProfile(lensProfile?.defaultProfile?.id, lensProfile?.defaultProfile)
+      addProfile(
+        lensProfile?.defaultProfile?.handle?.fullHandle,
+        // @ts-ignore
+        lensProfile?.defaultProfile
+      )
       refreshUserInfo()
-      fetchAndSetLensCommunity()
+      // fetchAndSetLensCommunity()
     } else {
       setUser(null)
       setLoading(false)
-      setLensCommunity(null)
+      // setLensCommunity(null)
     }
   }, [isSignedIn, hasProfile, address, signer])
 
@@ -134,71 +138,72 @@ export const WalletProvider = ({ children }) => {
     }
   }, [isDisconnected])
 
-  const fetchAndSetLensCommunity = useCallback(async () => {
-    const res = await getLensCommunity(lensProfile?.defaultProfile?.handle)
-    // const res = await getLensCommunity('youmemeworld.lens')
-    if (res.status !== 200) return
-    if (res.status === 200) {
-      const resJson = await res.json()
-      setLensCommunity({ ...resJson, Profile: lensProfile?.defaultProfile })
-    }
-  }, [lensProfile?.defaultProfile?.handle])
+  // const fetchAndSetLensCommunity = useCallback(async () => {
+  //   const res = await getLensCommunity(lensProfile?.defaultProfile?.handle)
+  //   // const res = await getLensCommunity('youmemeworld.lens')
+  //   if (res.status !== 200) return
+  //   if (res.status === 200) {
+  //     const resJson = await res.json()
+  //     setLensCommunity({ ...resJson, Profile: lensProfile?.defaultProfile })
+  //   }
+  // }, [lensProfile?.defaultProfile?.handle])
 
-  const getAllLensCommunitiesAndSetJoinedLensCommunities =
-    useCallback(async () => {
-      if (!user || !lensProfile?.defaultProfile?.id) return
-      // todo optimize this, currently fetching all communities and then filtering
-      const _allLensCommunities = await getAllLensCommunitiesHandle()
-      // loop through all communities in group of 50 and check if lens user follows them
-      // const _joinedLensCommunities = []
-      let cursor = null
+  // const getAllLensCommunitiesAndSetJoinedLensCommunities =
+  //   useCallback(async () => {
+  //     if (!user || !lensProfile?.defaultProfile?.id) return
+  //     // todo optimize this, currently fetching all communities and then filtering
+  //     const _allLensCommunities = await getAllLensCommunitiesHandle()
+  //     // loop through all communities in group of 50 and check if lens user follows them
+  //     // const _joinedLensCommunities = []
+  //     let cursor = null
 
-      const promiseList = []
+  //     const promiseList = []
 
-      for (let i = 0; i < _allLensCommunities.length; i += 50) {
-        promiseList.push(
-          getBulkIsFollowedByMe({
-            cursor: cursor,
-            handles: _allLensCommunities.slice(i, i + 50).map((c) => c.handle),
-            limit: 50
-          })
-        )
-      }
+  //     for (let i = 0; i < _allLensCommunities.length; i += 50) {
+  //       promiseList.push(
+  //         getBulkIsFollowedByMe({
+  //           cursor: cursor,
+  //           handles: _allLensCommunities.slice(i, i + 50).map((c) => c.handle),
+  //           limit: 50
+  //         })
+  //       )
+  //     }
 
-      const _allLensCommunitiesInDetail = (await Promise.all(promiseList))
-        .flat(Infinity)
-        .map((a) => a.profiles.items)
-        .flat(Infinity)
-      const allLensCommunitiesInDetail = _allLensCommunitiesInDetail.map(
-        (c) => ({
-          ...c,
-          _id: _allLensCommunities.find((l) => l.handle === c.handle)?._id,
-          verified: _allLensCommunities.find((l) => l.handle === c.handle)
-            .verified,
-          createdAt: _allLensCommunities.find((l) => l.handle === c.handle)
-            .createdAt
-        })
-      )
-      const _joinedLensCommunities: IsFollowedLensCommunityType[] =
-        allLensCommunitiesInDetail.filter((c) => c.isFollowedByMe)
+  //     const _allLensCommunitiesInDetail = (await Promise.all(promiseList))
+  //       .flat(Infinity)
+  //       .map((a) => a.profiles.items)
+  //       .flat(Infinity)
+  //     const allLensCommunitiesInDetail = _allLensCommunitiesInDetail.map(
+  //       (c) => ({
+  //         ...c,
+  //         _id: _allLensCommunities.find((l) => l.handle === c.handle)?._id,
+  //         verified: _allLensCommunities.find((l) => l.handle === c.handle)
+  //           .verified,
+  //         createdAt: _allLensCommunities.find((l) => l.handle === c.handle)
+  //           .createdAt
+  //       })
+  //     )
+  //     const _joinedLensCommunities: IsFollowedLensCommunityType[] =
+  //       allLensCommunitiesInDetail.filter((c) => c.isFollowedByMe)
 
-      setAllLensCommunities(allLensCommunitiesInDetail)
-      setJoinedLensCommunties(_joinedLensCommunities)
-    }, [user, lensProfile?.defaultProfile?.id])
+  //     setAllLensCommunities(allLensCommunitiesInDetail)
+  //     setJoinedLensCommunties(_joinedLensCommunities)
+  //   }, [user, lensProfile?.defaultProfile?.id])
 
-  useEffect(() => {
-    if (user && lensProfile?.defaultProfile?.id) {
-      getAllLensCommunitiesAndSetJoinedLensCommunities()
-    } else {
-      setLensCommunity(null)
-    }
-  }, [user?._id, lensProfile])
+  // useEffect(() => {
+  //   if (user && lensProfile?.defaultProfile?.id) {
+  //     getAllLensCommunitiesAndSetJoinedLensCommunities()
+  //   } else {
+  //     setLensCommunity(null)
+  //   }
+  // }, [user?._id, lensProfile])
 
   const refreshUserInfo = async () => {
     try {
       setLoading(true)
       if (!address) return
       const userInfo = await getUserInfo(address)
+
       // console.log('userInfo', userInfo)
       if (userInfo) {
         setUser(userInfo)
@@ -225,11 +230,11 @@ export const WalletProvider = ({ children }) => {
         address,
         refreshUserInfo,
         user,
-        loading,
-        LensCommunity,
-        fetchAndSetLensCommunity,
-        joinedLensCommunities,
-        allLensCommunities
+        loading
+        // LensCommunity,
+        // fetchAndSetLensCommunity,
+        // joinedLensCommunities,
+        // allLensCommunities
       }}
     >
       {children}

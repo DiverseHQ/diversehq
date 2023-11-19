@@ -4,22 +4,23 @@ import { useEffect, useState } from 'react'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { TbArrowRampRight, TbTrash } from 'react-icons/tb'
 import {
-  useCreateDataAvailabilityMirrorTypedDataMutation,
-  useCreateDataAvailabilityMirrorViaDispatcherMutation,
-  useCreateMirrorTypedDataMutation,
-  useCreateMirrorViaDispatcherMutation,
-  useHidePublicationMutation
+  TriStateValue,
+  useCreateMomokaMirrorTypedDataMutation,
+  useCreateOnchainMirrorTypedDataMutation,
+  useHidePublicationMutation,
+  useMirrorOnMomokaMutation,
+  useMirrorOnchainMutation
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { postWithCommunityInfoType } from '../../types/post'
-import { appLink } from '../../utils/config'
 import { modalType, usePopUpModal } from '../Common/CustomPopUpProvider'
 import { useNotify } from '../Common/NotifyContext'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import CreatePostPopup from '../Home/CreatePostPopup'
+import checkDispatcherPermissions from '../../lib/profile/checkPermission'
 
 interface Props {
   postInfo: postWithCommunityInfoType
@@ -28,7 +29,7 @@ interface Props {
 }
 
 const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
-  const { mutateAsync: mirrorPost } = useCreateMirrorTypedDataMutation()
+  const { mutateAsync: mirrorPost } = useMirrorOnchainMutation()
   const { isSignedIn, data: lensProfile } = useLensUserContext()
   const { notifyError, notifySuccess } = useNotify()
   const { result, signTypedDataAndBroadcast } =
@@ -38,11 +39,9 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
     type: daType,
     signDATypedDataAndBroadcast
   } = useDASignTypedDataAndBroadcast()
-  const { mutateAsync: mirrorPostViaDispatcher } =
-    useCreateMirrorViaDispatcherMutation()
-  const [mirrorCount, setMirrorCount] = useState(
-    postInfo?.stats?.totalAmountOfMirrors ?? 0
-  )
+  const { mutateAsync: mirrorPostTypedData } =
+    useCreateOnchainMirrorTypedDataMutation()
+  const [mirrorCount, setMirrorCount] = useState(postInfo?.stats?.mirrors ?? 0)
 
   const [isSuccessful, setIsSuccessful] = useState(false)
   const [mirrored, setMirrored] = useState(
@@ -53,9 +52,9 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const { mutateAsync: deletePublication } = useHidePublicationMutation()
   const { mutateAsync: createMirrorDAViaDispatcher } =
-    useCreateDataAvailabilityMirrorViaDispatcherMutation()
+    useMirrorOnMomokaMutation()
   const { mutateAsync: createDAMirrorTypedData } =
-    useCreateDataAvailabilityMirrorTypedDataMutation()
+    useCreateMomokaMirrorTypedDataMutation()
   const router = useRouter()
 
   useEffect(() => {
@@ -64,7 +63,7 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
       postInfo?.mirrors?.length > 0
     )
 
-    setMirrorCount(postInfo?.stats?.totalAmountOfMirrors ?? 0)
+    setMirrorCount(postInfo?.stats?.mirrors ?? 0)
   }, [
     // @ts-ignore
     postInfo
@@ -72,11 +71,19 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
   const [loading, setLoading] = useState(false)
   const { showModal } = usePopUpModal()
 
+  const { canUseLensManager } = checkDispatcherPermissions(
+    lensProfile?.defaultProfile
+  )
+
   const handleMirrorPost = async () => {
+    if (postInfo?.operations?.canMirror === TriStateValue.No) {
+      notifyError('You are not allowed to mirror this post')
+      return
+    }
     setLoading(true)
     setIsDrawerOpen(false)
     setShowOptionsModal(false)
-    if (postInfo?.isDataAvailability) {
+    if (postInfo?.momoka?.proof) {
       try {
         if (!isSignedIn) {
           notifyError('Please sign in to mirror a post')
@@ -85,22 +92,17 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
         }
         setIsDrawerOpen(false)
         setShowOptionsModal(false)
-        if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+        if (canUseLensManager) {
           const createMirror = (
             await createMirrorDAViaDispatcher({
               request: {
-                from: lensProfile?.defaultProfile?.id,
-                mirror: postInfo.id
+                mirrorOn: postInfo?.id
               }
             })
-          ).createDataAvailabilityMirrorViaDispatcher
+          ).mirrorOnMomoka
 
-          if (createMirror.__typename === 'RelayError' || !createMirror.id) {
-            notifyError(
-              createMirror.__typename === 'RelayError'
-                ? createMirror.reason
-                : 'Something went wrong'
-            )
+          if (createMirror.__typename === 'LensProfileManagerRelayError') {
+            notifyError(createMirror?.reason)
           } else {
             setIsSuccessful(true)
           }
@@ -108,11 +110,10 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
           const typedData = (
             await createDAMirrorTypedData({
               request: {
-                from: lensProfile?.defaultProfile?.id,
-                mirror: postInfo.id
+                mirrorOn: postInfo?.id
               }
             })
-          ).createDataAvailabilityMirrorTypedData
+          ).createMomokaMirrorTypedData
 
           signDATypedDataAndBroadcast(typedData.typedData, {
             id: typedData.id,
@@ -136,52 +137,35 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
       }
       setIsDrawerOpen(false)
       setShowOptionsModal(false)
-      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
-        const { createMirrorViaDispatcher } = await mirrorPostViaDispatcher({
+      if (canUseLensManager) {
+        const { mirrorOnchain } = await mirrorPost({
           request: {
-            profileId: lensProfile?.defaultProfile?.id,
-            publicationId: postInfo.id,
-            referenceModule: {
-              followerOnlyReferenceModule: false
-            }
+            mirrorOn: postInfo?.id
           }
         })
-        // @ts-ignore
-        if (
-          // @ts-ignore
 
-          createMirrorViaDispatcher?.txId ||
-          // @ts-ignore
-
-          createMirrorViaDispatcher?.txHash
-        ) {
+        if (mirrorOnchain.__typename === 'LensProfileManagerRelayError') {
+          notifyError(mirrorOnchain?.reason)
+        } else {
           setIsSuccessful(true)
-          // @ts-ignore
-        } else if (createMirrorViaDispatcher?.reason) {
-          // @ts-ignore
-          notifyError(createMirrorViaDispatcher.reason)
         }
         setLoading(false)
         return
       } else {
-        const postTypedResult = await mirrorPost({
+        const { createOnchainMirrorTypedData } = await mirrorPostTypedData({
           request: {
-            profileId: lensProfile?.defaultProfile?.id,
-            publicationId: postInfo.id,
-            referenceModule: {
-              followerOnlyReferenceModule: false
-            }
+            mirrorOn: postInfo?.id
           }
         })
-        if (!postTypedResult) {
+        if (!createOnchainMirrorTypedData) {
           notifyError('Something went wrong')
           setLoading(false)
           return
         }
         await signTypedDataAndBroadcast(
-          postTypedResult.createMirrorTypedData.typedData,
+          createOnchainMirrorTypedData.typedData,
           {
-            id: postTypedResult.createMirrorTypedData.id,
+            id: createOnchainMirrorTypedData.id,
             type: 'Mirror'
           }
         )
@@ -221,7 +205,7 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
     try {
       await deletePublication({
         request: {
-          publicationId: mirrorId
+          for: mirrorId
         }
       })
 
@@ -246,12 +230,7 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
     }
 
     showModal({
-      component: (
-        <CreatePostPopup
-          startingContent={`\n___\nQuoting @${postInfo?.profile?.handle} : ${appLink}/p/${postInfo?.id}`}
-          quotedPublicationId={postInfo?.id}
-        />
-      ),
+      component: <CreatePostPopup quotedPublicationId={postInfo?.id} />,
       type: modalType.normal
     })
   }
@@ -278,7 +257,7 @@ const MirrorButton = ({ postInfo, isAlone, isComment = false }: Props) => {
                     label: 'Mirror Again',
                     onClick: handleMirrorPost,
                     icon: () => <AiOutlineRetweet />,
-                    hidden: postInfo?.isDataAvailability
+                    hidden: postInfo?.momoka?.proof
                   }
                 ]}
               />

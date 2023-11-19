@@ -1,6 +1,7 @@
 fragment CommentFields on Comment {
   ...CommentBaseFields
   commentOn {
+    __typename
     ... on Post {
       ...PostFields
     }

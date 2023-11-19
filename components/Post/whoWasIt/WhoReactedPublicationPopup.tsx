@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import PopUpWrapper from '../../Common/PopUpWrapper'
 import {
-  WhoReactedResult,
+  LimitType,
+  Profile,
   useWhoReactedPublicationQuery
 } from '../../../graphql/generated'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
-import { WHO_WAS_IT_PROFILES_LIMIT } from '../../../utils/config'
 import WhoWasItProfileCard from './WhoWasItProfileCard'
 import { useProfileStore } from '../../../store/profile'
+
+interface profiles {
+  profile: Profile
+}
 
 const WhoReactedPublicationPopup = ({
   publicationId
@@ -16,7 +20,7 @@ const WhoReactedPublicationPopup = ({
   publicationId: string
 }) => {
   const [params, setParams] = useState<{
-    profiles: WhoReactedResult[]
+    profiles: profiles[]
     hasMore: boolean
     cursor: string | null
     nextCursor: string | null
@@ -31,9 +35,9 @@ const WhoReactedPublicationPopup = ({
 
   const { data } = useWhoReactedPublicationQuery({
     request: {
-      publicationId: publicationId,
+      for: publicationId,
       cursor: params.cursor,
-      limit: WHO_WAS_IT_PROFILES_LIMIT
+      limit: LimitType.Fifty
     }
   })
 
@@ -53,7 +57,7 @@ const WhoReactedPublicationPopup = ({
       const newProfiles = new Map()
       // eslint-disable-next-line
       for (const profile of data?.whoReactedPublication?.items) {
-        newProfiles.set(profile.profile.handle, profile.profile)
+        newProfiles.set(profile.profile.handle?.fullHandle, profile.profile)
       }
       addProfiles(newProfiles)
     }
@@ -67,6 +71,8 @@ const WhoReactedPublicationPopup = ({
       })
     }
   }
+
+  console.log('params', params)
 
   return (
     <PopUpWrapper title="Upvoted by">

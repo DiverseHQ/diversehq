@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import {
+  LimitType,
   Profile,
-  SearchRequestTypes,
   useSearchProfilesQuery
 } from '../../graphql/generated'
-import { LENS_SEARCH_PROFILE_LIMIT } from '../../utils/config'
 import { stringToLength } from '../../utils/utils'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../User/lib/formatHandle'
@@ -35,14 +34,15 @@ const LensProfilesSearchModal = ({
     {
       request: {
         query: searchTerm,
-        type: SearchRequestTypes.Profile,
-        limit: LENS_SEARCH_PROFILE_LIMIT
+        limit: LimitType.Ten
       }
     },
     {
       enabled: searchTerm.length > 0
     }
   )
+
+  console.log('searchProfile', searchProfileQuery?.data?.searchProfiles)
 
   useEffect(() => {
     searchProfileQuery.refetch()
@@ -66,15 +66,12 @@ const LensProfilesSearchModal = ({
   }, [])
 
   useEffect(() => {
-    if (
-      searchProfileQuery?.data?.search?.__typename === 'ProfileSearchResult' &&
-      searchProfileQuery?.data?.search?.items
-    ) {
+    if (searchProfileQuery?.data?.searchProfiles?.items.length > 0) {
       //@ts-ignore
-      setLensProfiles(searchProfileQuery?.data?.search?.items)
+      setLensProfiles(searchProfileQuery?.data?.searchProfiles?.items)
     }
     // @ts-ignore
-  }, [searchProfileQuery?.data?.search?.items])
+  }, [searchProfileQuery?.data?.searchProfiles?.items])
 
   const gotToSearchPageToGetMoreResults = () => {
     router.push(`/search?type=profile&q=${searchTerm}`)
@@ -102,7 +99,7 @@ const LensProfilesSearchModal = ({
                 className="w-8 h-8 mr-3 rounded-full object-cover"
               />
               <div className="flex flex-col text-sm">
-                <div>{stringToLength(profile.name, 20)}</div>
+                <div>{stringToLength(profile?.metadata?.displayName, 20)}</div>
                 <div className="text-s-text">
                   u/{formatHandle(profile.handle)}
                 </div>

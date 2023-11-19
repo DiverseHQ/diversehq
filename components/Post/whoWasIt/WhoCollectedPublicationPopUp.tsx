@@ -1,9 +1,9 @@
 import React from 'react'
 import {
-  Wallet,
-  useWhoCollectedPublicationQuery
+  LimitType,
+  Profile,
+  useWhoActedOnPublicationQuery
 } from '../../../graphql/generated'
-import { WHO_WAS_IT_PROFILES_LIMIT } from '../../../utils/config'
 import PopUpWrapper from '../../Common/PopUpWrapper'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
@@ -16,7 +16,7 @@ const WhoCollectedPublicationPopUp = ({
   publicationId: string
 }) => {
   const [params, setParams] = React.useState<{
-    profiles: Wallet[]
+    profiles: Profile[]
     hasMore: boolean
     cursor: string | null
     nextCursor: string | null
@@ -28,31 +28,31 @@ const WhoCollectedPublicationPopUp = ({
   })
   const addProfiles = useProfileStore((state) => state.addProfiles)
 
-  const { data } = useWhoCollectedPublicationQuery({
+  const { data } = useWhoActedOnPublicationQuery({
     request: {
-      publicationId: publicationId,
+      on: publicationId,
       cursor: params.cursor,
-      limit: WHO_WAS_IT_PROFILES_LIMIT
+      limit: LimitType.Fifty
     }
   })
 
   React.useEffect(() => {
-    if (data?.whoCollectedPublication?.items) {
+    if (data?.whoActedOnPublication?.items) {
       setParams({
         ...params,
         // @ts-ignore
-        profiles: data?.whoCollectedPublication?.items.length
+        profiles: data?.whoActedOnPublication?.items.length
           ? // eslint-disable-next-line
-            [...params.profiles, ...data?.whoCollectedPublication?.items]
+            [...params.profiles, ...data?.whoActedOnPublication?.items]
           : params.profiles,
-        hasMore: Boolean(data?.whoCollectedPublication?.items?.length),
-        nextCursor: data?.whoCollectedPublication?.pageInfo?.next
+        hasMore: Boolean(data?.whoActedOnPublication?.items?.length),
+        nextCursor: data?.whoActedOnPublication?.pageInfo?.next
       })
 
       const newProfiles = new Map()
       // eslint-disable-next-line
-      for (const profile of data?.whoCollectedPublication?.items) {
-        newProfiles.set(profile.defaultProfile.handle, profile.defaultProfile)
+      for (const profile of data?.whoActedOnPublication?.items) {
+        newProfiles.set(profile.handle?.fullHandle, profile)
       }
       addProfiles(newProfiles)
     }
@@ -81,9 +81,7 @@ const WhoCollectedPublicationPopUp = ({
           scrollableTarget="whoReactedPublicattionScrollbar"
         >
           {params.profiles.map((profile, idx) => {
-            return (
-              <WhoWasItProfileCard profile={profile.defaultProfile} key={idx} />
-            )
+            return <WhoWasItProfileCard profile={profile} key={idx} />
           })}
         </InfiniteScroll>
       </div>

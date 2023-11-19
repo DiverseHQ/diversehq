@@ -14,13 +14,14 @@ const WhoWasItProfileCard = ({ profile }: { profile: Profile }) => {
   const router = useRouter()
 
   const { FollowButton, isFollowedByMe } = useLensFollowButton({
-    handle: profile.handle
+    forHandle: profile?.handle?.fullHandle
   })
+
   return (
     <div
       className="py-3.5 sm:py-4 px-4 sm:px-6 start-row hover:bg-s-hover cursor-pointer w-full"
       onClick={() => {
-        router.push(`/u/${formatHandle(profile.handle)}`)
+        router.push(`/u/${formatHandle(profile?.handle)}`)
         hideModal()
       }}
     >
@@ -34,10 +35,10 @@ const WhoWasItProfileCard = ({ profile }: { profile: Profile }) => {
         <div className="space-between-row w-full">
           <div>
             <div className="text-p-text text-base font-bold leading-5">
-              {profile.name}
+              {profile?.metadata?.displayName}
             </div>
             <div className="text-s-text leading-4 text-sm">
-              u/{formatHandle(profile.handle)}
+              u/{formatHandle(profile?.handle)}
             </div>
           </div>
           {!isFollowedByMe && (
@@ -53,7 +54,7 @@ const WhoWasItProfileCard = ({ profile }: { profile: Profile }) => {
         </div>
         <div className="text-s-text text-sm mt-1 w-[250px] sm:w-[400px]">
           <Markup className="break-words">
-            {stringToLength(profile.bio, 100)}
+            {stringToLength(profile?.metadata?.bio, 100)}
           </Markup>
         </div>
       </div>

@@ -1,5 +1,6 @@
 query Publication($request: PublicationRequest!) {
   publication(request: $request) {
+    __typename
     ... on Post {
       ...PostFields
     }

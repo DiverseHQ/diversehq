@@ -12,7 +12,7 @@ const LensCommunitySeo = ({ community }: { community: LensCommunity }) => {
   return (
     <MetaTags
       title={`l/${formatHandle(community?.Profile?.handle)}`}
-      description={stringToLength(community?.Profile?.bio, 90)}
+      description={stringToLength(community?.Profile?.metadata?.bio, 90)}
       url={`${appLink}/l/${formatHandle(community?.Profile?.handle)}`}
       image={getAvatar(community?.Profile, 'w-1200,h-630,q-80')}
     />

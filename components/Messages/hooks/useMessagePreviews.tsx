@@ -98,7 +98,7 @@ const useMessagePreviews = () => {
           }
           const profiles = result.profiles.items as Profile[]
           for (const profile of profiles) {
-            const peerAddress = profile.ownedBy as string
+            const peerAddress = profile.ownedBy?.address as string
             const key = buildConversationKey(
               peerAddress,
               buildConversationId(lensProfile?.defaultProfile?.id, profile.id)
@@ -250,7 +250,7 @@ const useMessagePreviews = () => {
       (result, [key, profile]) => {
         const message = previewMessages.get(key)
         if (message) {
-          if (profile.isFollowedByMe) {
+          if (profile.operations.isFollowedByMe.value) {
             result[0].set(key, profile)
           } else {
             result[1].set(key, profile)

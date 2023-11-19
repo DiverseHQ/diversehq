@@ -20,7 +20,8 @@ interface MessageTileProps {
 
 const MessageTile: FC<MessageTileProps> = ({ message, currentProfile }) => {
   const address = currentProfile?.ownedBy
-  const isSender = address.toLowerCase() === message.senderAddress.toLowerCase()
+  const isSender =
+    address.address.toLowerCase() === message.senderAddress.toLowerCase()
   return (
     <div
       className={`flex flex-row w-full px-2 py-1  text-p-text ${

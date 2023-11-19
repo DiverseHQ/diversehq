@@ -2,11 +2,11 @@ import React, { FC } from 'react'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import AttachmentSlide from './AttachmentSlide'
 import AttachmentMedia from './AttachmentMedia'
-import { Publication } from '../../graphql/generated'
 import { SUPPORTED_VIDEO_TYPE } from '../../utils/config'
+import { AnyPublication } from '../../graphql/generated'
 
 interface Props {
-  publication: Publication
+  publication: AnyPublication
   medias: any
   className: string
 }

@@ -9,20 +9,17 @@ import type { TextNode } from 'lexical'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import * as ReactDOM from 'react-dom'
 import {
-  MediaSet,
-  NftImage,
+  LimitType,
   Profile,
-  ProfileSearchResult,
-  SearchRequestTypes,
   useSearchProfilesQuery
 } from '../../../graphql/generated'
 import ImageWithPulsingLoader from '../../Common/UI/ImageWithPulsingLoader'
 import formatHandle from '../../User/lib/formatHandle'
 import getIPFSLink from '../../User/lib/getIPFSLink'
-import getStampFyiURL from '../../User/lib/getStampFyiURL'
 
 import { useDevice } from '../../Common/DeviceWrapper'
 import { $createMentionNode } from '../Nodes/MentionsNode'
+import getAvatar from '../../User/lib/getAvatar'
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;'
@@ -144,7 +141,7 @@ const MentionsTypeaheadMenuItem: FC<Props> = ({
         />
         <div className="flex flex-col truncate">
           <div className="text-sm truncate">{option.name}</div>
-          <span className="text-xs">{formatHandle(option.handle)}</span>
+          <span className="text-xs">{option.handle}</span>
         </div>
       </div>
     </li>
@@ -161,8 +158,7 @@ const NewMentionsPlugin: FC = () => {
     {
       request: {
         query: queryString ?? null,
-        type: SearchRequestTypes.Profile,
-        limit: isMobile ? 3 : 5
+        limit: LimitType.Ten
       }
     },
     {
@@ -170,35 +166,20 @@ const NewMentionsPlugin: FC = () => {
     }
   )
 
-  const getUserPicture = (user: Profile | undefined) => {
-    const picture = user?.picture
-    if (picture && picture.hasOwnProperty('original')) {
-      const mediaSet = user.picture as MediaSet
-      return mediaSet.original?.url
-    }
-
-    if (picture && picture.hasOwnProperty('uri')) {
-      const nftImage = user.picture as NftImage
-      return nftImage?.uri
-    }
-
-    return getStampFyiURL(user?.ownedBy)
-  }
-
   useEffect(() => {
     if (data) {
-      const search = data?.search
-      const profileSearchResult = search as ProfileSearchResult
-      const profiles: Profile[] =
+      const search = data?.searchProfiles
+      const profileSearchResult = search
+      const profiles =
         search && search.hasOwnProperty('items')
           ? profileSearchResult?.items
           : []
       const profilesResults = profiles.map(
         (user: Profile) =>
           ({
-            name: user?.name,
-            handle: user?.handle,
-            picture: getUserPicture(user)
+            name: user?.metadata?.displayName,
+            handle: formatHandle(user?.handle),
+            picture: getAvatar(user)
           } as Record<string, string>)
       )
       setResults(profilesResults)

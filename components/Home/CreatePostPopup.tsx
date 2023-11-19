@@ -1,41 +1,27 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { Tooltip } from '@mui/material'
 import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { AiOutlineDown } from 'react-icons/ai'
-import { BsCollection } from 'react-icons/bs'
 import { IoIosArrowBack } from 'react-icons/io'
 import { v4 as uuidv4 } from 'uuid'
 import { getJoinedCommunitiesApi } from '../../apiHelper/community'
-import { submitPostForReview } from '../../apiHelper/reviewLensCommunityPost'
 import {
-  MetadataAttributeInput,
-  PublicationContentWarning,
-  PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
-  ReactionTypes,
+  PublicationContentWarningType,
+  PublicationReactionType,
   useAddReactionMutation,
-  useCreateDataAvailabilityPostTypedDataMutation,
-  useCreateDataAvailabilityPostViaDispatcherMutation,
-  useCreatePostTypedDataMutation,
-  useCreatePostViaDispatcherMutation
+  useCreateMomokaPostTypedDataMutation,
+  useCreateMomokaQuoteTypedDataMutation,
+  usePostOnMomokaMutation,
+  useQuoteOnMomokaMutation
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useDASignTypedDataAndBroadcast from '../../lib/useDASignTypedDataAndBroadcast'
-import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useCommunityStore } from '../../store/community'
-import { AttachmentType, usePublicationStore } from '../../store/publication'
-import {
-  SUPPORTED_AUDIO_TYPE,
-  SUPPORTED_IMAGE_TYPE,
-  SUPPORTED_VIDEO_TYPE,
-  appId,
-  appLink
-} from '../../utils/config'
-import BottomDrawerWrapper from '../Common/BottomDrawerWrapper'
+import { usePublicationStore } from '../../store/publication'
+import { SUPPORTED_AUDIO_TYPE } from '../../utils/config'
 import { usePopUpModal } from '../Common/CustomPopUpProvider'
-import { useDevice } from '../Common/DeviceWrapper'
+// import { useDevice } from '../Common/DeviceWrapper'
 import { useNotify } from '../Common/NotifyContext'
 import OptionsWrapper from '../Common/OptionsWrapper'
 import PopUpWrapper from '../Common/PopUpWrapper'
@@ -45,24 +31,18 @@ import MoreOptionsModal from '../Common/UI/MoreOptionsModal'
 import { useProfile } from '../Common/WalletContext'
 import PublicationEditor from '../Lexical/PublicationEditor'
 import Attachment from '../Post/Attachment'
-import CollectSettingsModel, {
-  Receipient
-} from '../Post/Collect/CollectSettingsModel'
 import AttachmentRow from '../Post/Create/AttachmentRow'
 import useUploadAttachments from '../Post/Create/useUploadAttachments'
 import Giphy from '../Post/Giphy'
-import { usePostIndexing } from '../Post/IndexingContext/PostIndexingWrapper'
-import formatHandle from '../User/lib/formatHandle'
-import getAvatar from '../User/lib/getAvatar'
-import PostPreferenceButton from './PostComposer/PostPreferenceButton'
 // import uploadToIPFS from '../../utils/uploadToIPFS'
 import {
   getMostPostedLensCommunityIds,
   putAddLensPublication
 } from '../../apiHelper/lensPublication'
-import { isValidEthereumAddress } from '../../utils/helper'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
+import usePublicationMetadata from './PostComposer/usePublicationMetadata'
+import checkDispatcherPermissions from '../../lib/profile/checkPermission'
 
 const MAX_TITLE_LENGTH = 200
 
@@ -76,7 +56,7 @@ const CreatePostPopup = ({
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState(startingContent)
-  const { user, joinedLensCommunities, LensCommunity } = useProfile()
+  const { user } = useProfile()
   const [loading, setLoading] = useState(false)
   const [joinedCommunities, setJoinedCommunities] = useState([])
   const [loadingJoinedCommunities, setLoadingJoinedCommunities] =
@@ -88,25 +68,27 @@ const CreatePostPopup = ({
   })
   const { data: lensProfile } = useLensUserContext()
   const [showCollectSettings, setShowCollectSettings] = useState(false)
-  const [collectSettings, setCollectSettings] = useState<any>(null)
-  const [postMetadataForIndexing, setPostMetadataForIndexing] = useState(null)
-  const { addPost } = usePostIndexing()
   const { notifyError, notifyInfo, notifySuccess } = useNotify()
   const { hideModal } = usePopUpModal()
-  const { isMobile } = useDevice()
+  // const { isMobile } = useDevice()
   const [flair, setFlair] = useState(null)
   const { handleUploadAttachments } = useUploadAttachments()
 
-  const { mutateAsync: createPostViaDispatcher } =
-    useCreatePostViaDispatcherMutation()
-  const { mutateAsync: createPostViaSignedTx } =
-    useCreatePostTypedDataMutation()
-  const { error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast(false)
-  const { mutateAsync: createPostDAViaDispatcher } =
-    useCreateDataAvailabilityPostViaDispatcherMutation()
+  const { canUseLensManager } = checkDispatcherPermissions(
+    lensProfile?.defaultProfile
+  )
+
+  // const { mutateAsync: createPostViaDispatcher } = usePostOnchainMutation()
+  // const { mutateAsync: createPostViaSignedTx } =
+  //   useCreateOnchainPostTypedDataMutation()
+  // const { error, result, type, signTypedDataAndBroadcast } =
+  //   useSignTypedDataAndBroadcast(false)
+  const { mutateAsync: createPostDAViaDispatcher } = usePostOnMomokaMutation()
   const { mutateAsync: createDAPostTypedData } =
-    useCreateDataAvailabilityPostTypedDataMutation()
+    useCreateMomokaPostTypedDataMutation()
+  const { mutateAsync: createQuoteOnMomoka } = useQuoteOnMomokaMutation()
+  const { mutateAsync: createQuoteOnMomokaTypedData } =
+    useCreateMomokaQuoteTypedDataMutation()
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const {
     loading: daLoading,
@@ -124,7 +106,7 @@ const CreatePostPopup = ({
   const selectCommunityForPost = useCommunityStore(
     (state) => state.selectCommunityForPost
   )
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  // const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [flairDrawerOpen, setFlairDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
 
@@ -133,69 +115,26 @@ const CreatePostPopup = ({
     (state) => state.resetAttachments
   )
   const addAttachments = usePublicationStore((state) => state.addAttachments)
-  const audioPublication = usePublicationStore(
-    (state) => state.audioPublication
-  )
-  const videoThumbnail = usePublicationStore((state) => state.videoThumbnail)
   const setVideoThumbnail = usePublicationStore(
     (state) => state.setVideoThumbnail
   )
+  const getMetadata = usePublicationMetadata()
 
-  const videoDurationInSeconds = usePublicationStore(
-    (state) => state.videoDurationInSeconds
-  )
+  const isQuote = Boolean(quotedPublicationId)
+
   const isUploading = usePublicationStore((state) => state.isUploading)
-  const isAudioPublication = SUPPORTED_AUDIO_TYPE.includes(attachments[0]?.type)
-
-  const isVideoPublication = SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)
-
-  const getMainContentFocus = () => {
-    if (attachments.length > 0) {
-      if (isAudioPublication) {
-        return PublicationMainFocus.Audio
-      } else if (SUPPORTED_IMAGE_TYPE.includes(attachments[0]?.type)) {
-        return PublicationMainFocus.Image
-      } else if (isVideoPublication) {
-        return PublicationMainFocus.Video
-      } else {
-        return PublicationMainFocus.TextOnly
-      }
-    } else {
-      return PublicationMainFocus.TextOnly
-    }
-  }
+  const isAudioPublication =
+    attachments[0]?.type === 'Audio' ||
+    SUPPORTED_AUDIO_TYPE.includes(attachments[0]?.type)
 
   const getAnimationUrl = () => {
     if (
       attachments.length > 0 &&
-      (isAudioPublication ||
-        SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type))
+      (isAudioPublication || attachments[0]?.type === 'Video')
     ) {
       return attachments[0]?.item
     }
     return null
-  }
-
-  const getAttachmentImage = () => {
-    if (isAudioPublication) {
-      return audioPublication.cover
-    }
-    if (isVideoPublication && videoThumbnail?.url) {
-      return videoThumbnail?.url
-    }
-    // loop over attachments and return first attachmen with type image
-    for (let i = 0; i < attachments.length; i++) {
-      if (SUPPORTED_IMAGE_TYPE.includes(attachments[i]?.type)) {
-        return attachments[i]?.item
-      }
-    }
-    return null
-  }
-
-  const getAttachmentImageMimeType = () => {
-    return isAudioPublication
-      ? audioPublication.coverMimeType
-      : videoThumbnail?.type ?? attachments[0]?.type
   }
 
   const handleSubmit = async (event) => {
@@ -207,7 +146,14 @@ const CreatePostPopup = ({
       return
     }
     // }
-    await handleCreateLensPost()
+    try {
+      await handleCreateLensPost()
+    } catch (e) {
+      console.log('error', e)
+      notifyError('Error creating post, report to support')
+      setLoading(false)
+      return
+    }
   }
 
   useEffect(() => {
@@ -239,146 +185,101 @@ const CreatePostPopup = ({
     hideModal()
   }
 
-  const isEligibleForMultiRecipient = (recipients: Receipient[]): boolean => {
-    if (!recipients || recipients.length <= 1) return false
+  // const isEligibleForMultiRecipient = (recipients: Receipient[]): boolean => {
+  //   if (!recipients || recipients.length <= 1) return false
 
-    // checking if every recipient.recipient is valid eth address
-    const isValidRecipient = recipients.every((recipient) => {
-      return isValidEthereumAddress(recipient.recipient)
-    })
+  //   // checking if every recipient.recipient is valid eth address
+  //   const isValidRecipient = recipients.every((recipient) => {
+  //     return isValidEthereumAddress(recipient.recipient)
+  //   })
 
-    if (!isValidRecipient) return false
+  //   if (!isValidRecipient) return false
 
-    // checking if every recipient.split is valid number
-    const isValidSplit = recipients.every((recipient) => {
-      return (
-        !isNaN(Number(recipient.split)) &&
-        Number(recipient.split) > 0 &&
-        Number(recipient.split) <= 100
-      )
-    })
+  //   // checking if every recipient.split is valid number
+  //   const isValidSplit = recipients.every((recipient) => {
+  //     return (
+  //       !isNaN(Number(recipient.split)) &&
+  //       Number(recipient.split) > 0 &&
+  //       Number(recipient.split) <= 100
+  //     )
+  //   })
 
-    if (!isValidSplit) return false
+  //   if (!isValidSplit) return false
 
-    // checking if sum of all recipient.split is 100
-    const sumOfSplit = recipients.reduce((acc, recipient) => {
-      return acc + Number(recipient.split)
-    }, 0)
+  //   // checking if sum of all recipient.split is 100
+  //   const sumOfSplit = recipients.reduce((acc, recipient) => {
+  //     return acc + Number(recipient.split)
+  //   }, 0)
 
-    if (sumOfSplit !== 100) return false
+  //   if (sumOfSplit !== 100) return false
 
-    return true
-  }
+  //   return true
+  // }
 
   const handleCreateLensPost = async () => {
     let contentWarning = null
 
-    // textNftImage url if collectmodule
-
-    const attributes: MetadataAttributeInput[] = [
-      {
-        traitType: 'type',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: getMainContentFocus()?.toLowerCase()
-      }
-    ]
-
-    if (isAudioPublication) {
-      attributes.push({
-        traitType: 'author',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: audioPublication.author
-      })
-
-      attributes.push({
-        traitType: 'title',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: audioPublication?.title || title
-      })
-    }
-
-    if (isVideoPublication) {
-      attributes.push({
-        traitType: 'durationInSeconds',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: videoDurationInSeconds
-      })
-    }
-
-    if (quotedPublicationId) {
-      attributes.push({
-        traitType: 'quotedPublicationId',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: quotedPublicationId
-      })
-    }
-
-    const attachmentsInput: AttachmentType[] = attachments.map(
-      (attachment) => ({
-        type: attachment.type,
-        altTag: attachment.altTag,
-        item: attachment.item!,
-        cover: attachment?.cover ?? null
-      })
-    )
-
     //todo handle other file types and link content
 
     if (flair === 'SENSITIVE') {
-      contentWarning = PublicationContentWarning.Sensitive
+      contentWarning = PublicationContentWarningType.Sensitive
     } else if (flair === 'NSFW') {
-      contentWarning = PublicationContentWarning.Nsfw
+      contentWarning = PublicationContentWarningType.Nsfw
     } else if (flair === 'SPOILER') {
-      contentWarning = PublicationContentWarning.Spoiler
+      contentWarning = PublicationContentWarningType.Spoiler
     } else {
       contentWarning = null
     }
 
-    //todo map to community id, so that can be identified by community
-    const metadataId = uuidv4()
-    const metadata = {
-      version: '2.0.0',
-      mainContentFocus: getMainContentFocus(),
-      metadata_id: metadataId,
-      contentWarning: contentWarning,
-      description: 'Created with DiverseHQ',
-      locale: 'en-US',
+    let animationUrl = getAnimationUrl()
+    let marketplace = {
+      name: title,
+      description: title + content?.trim(),
+      external_url: 'https://diversehq.xyz'
+    }
+
+    if (animationUrl) {
+      marketplace['animation_url'] = animationUrl
+    }
+
+    const baseMetadata = {
+      tags: selectedCommunity?._id ? [selectedCommunity?._id] : [],
+      title,
       content:
         `${
-          selectedCommunity?.isLensCommunity &&
-          selectedCommunity?._id !== LensCommunity?._id
+          selectedCommunity?.isLensCommunity
             ? `Post by @${lensProfile.defaultProfile.handle} \n`
             : ``
         }` +
         `${title}` +
         '\n' +
-        content?.trim() +
-        `${
-          !selectedCommunity?.isLensCommunity &&
-          selectedCommunity?.name &&
-          (user?.preferences?.appendLink ?? true)
-            ? `\n ${appLink}/c/${selectedCommunity?.name}`
-            : ``
-        }${
-          !selectedCommunity?.isLensCommunity &&
-          selectedCommunity?.name &&
-          (user?.preferences?.appendHashtags ?? true)
-            ? `\n #${selectedCommunity?.name}`
-            : ``
-        }`,
-      external_url: 'https://diversehq.xyz',
-      image: attachmentsInput.length > 0 ? getAttachmentImage() : null,
-      imageMimeType:
-        attachmentsInput.length > 0
-          ? getAttachmentImageMimeType()
-          : 'image/svg+xml',
-      name: isAudioPublication ? audioPublication.title : title,
-      media: attachmentsInput,
-      animation_url: getAnimationUrl(),
-      attributes,
-      tags: selectedCommunity?._id ? [selectedCommunity?._id] : [],
-      appId: appId
+        content?.trim(),
+      // +
+      // `${
+      //   !selectedCommunity?.isLensCommunity &&
+      //   selectedCommunity?.name &&
+      //   (user?.preferences?.appendLink ?? true)
+      //     ? `\n ${appLink}/c/${selectedCommunity?.name}`
+      //     : ``
+      // }${
+      //   !selectedCommunity?.isLensCommunity &&
+      //   selectedCommunity?.name &&
+      //   (user?.preferences?.appendHashtags ?? true)
+      //     ? `\n #${selectedCommunity?.name}`
+      //     : ``
+      // }`,
+      marketplace: marketplace
     }
+
+    if (contentWarning) {
+      baseMetadata['contentWarning'] = contentWarning
+    }
+
+    console.log('baseMetadata', baseMetadata)
+
+    const metadata = getMetadata({ baseMetadata })
+
+    console.log('metadata', metadata)
 
     // const jsonFile = new File([JSON.stringify(metadata)], 'metadata.json', {
     //   type: 'application/json'
@@ -387,240 +288,270 @@ const CreatePostPopup = ({
     const ifpsHash = await uploadToIpfsInfuraAndGetPath(metadata)
     const url = `ipfs://${ifpsHash}`
 
-    if (selectedCommunity?.isLensCommunity) {
-      try {
-        const res = await submitPostForReview(selectedCommunity?._id, url)
-        if (res.status === 200) {
-          notifySuccess('Post submitted for review, You will be tagged in post')
-          handleCompletePost()
-        } else if (res.status === 400) {
-          const resJson = await res.json()
-          notifyError(resJson.msg)
-        }
-        return
-      } catch (error) {
-        notifyError('Error submitting post for review')
-      } finally {
-        setLoading(false)
-      }
-      return
-    }
+    console.log('url', url)
 
-    const postForIndexing = {
-      tempId: metadataId,
-      communityInfo: selectedCommunity?._id
-        ? {
-            _id: selectedCommunity?._id,
-            name: selectedCommunity?.name,
-            image: getIPFSLink(selectedCommunity.logoImageUrl)
-          }
-        : null,
-      createdAt: new Date().toISOString(),
-      hasCollectedByMe: false,
-      hidden: false,
-      isGated: false,
-      metadata: {
-        ...metadata,
-        media: attachmentsInput.map((attachment) => ({
-          original: {
-            url: attachment.item,
-            mimeType: attachment.type
-          }
-        }))
-      },
-      profile: lensProfile?.defaultProfile,
-      reaction: 'UPVOTE',
-      stats: {
-        totalUpvotes: 1,
-        totalAmountOfCollects: 0,
-        totalAmountOfComments: 0,
-        totalDownvotes: 0
-      }
-    }
+    // if (selectedCommunity?.isLensCommunity) {
+    //   try {
+    //     const res = await submitPostForReview(selectedCommunity?._id, url)
+    //     if (res.status === 200) {
+    //       notifySuccess('Post submitted for review, You will be tagged in post')
+    //       handleCompletePost()
+    //     } else if (res.status === 400) {
+    //       const resJson = await res.json()
+    //       notifyError(resJson.msg)
+    //     }
+    //     return
+    //   } catch (error) {
+    //     notifyError('Error submitting post for review')
+    //   } finally {
+    //     setLoading(false)
+    //   }
+    //   return
+    // }
+
+    // const postForIndexing = {
+    //   tempId: metadataId,
+    //   communityInfo: selectedCommunity?._id
+    //     ? {
+    //         _id: selectedCommunity?._id,
+    //         name: selectedCommunity?.name,
+    //         image: getIPFSLink(selectedCommunity.logoImageUrl)
+    //       }
+    //     : null,
+    //   createdAt: new Date().toISOString(),
+    //   hasCollectedByMe: false,
+    //   hidden: false,
+    //   isGated: false,
+    //   metadata: {
+    //     ...metadata,
+    //     media: attachmentsInput.map((attachment) => ({
+    //       original: {
+    //         url: attachment.item,
+    //         mimeType: attachment.type
+    //       }
+    //     }))
+    //   },
+    //   profile: lensProfile?.defaultProfile,
+    //   reaction: 'UPVOTE',
+    //   stats: {
+    //     totalUpvotes: 1,
+    //     totalAmountOfCollects: 0,
+    //     totalAmountOfComments: 0,
+    //     totalDownvotes: 0
+    //   }
+    // }
 
     // if no collection then make a data availablity post
-    if (!collectSettings) {
-      // post as data availability post
-      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
-        const dispatcherResult = (
-          await createPostDAViaDispatcher({
+    // if (!collectSettings) {
+    // const momokaRequest: MomokaPostRequest | MomokaQuoteRequest = {
+    //   ...(isQuote && { quoteOn: quotedPublicationId }),
+    //   contentURI: url
+    // }
+    // post as data availability post
+    if (canUseLensManager) {
+      let dispatcherResult = null
+
+      if (isQuote) {
+        dispatcherResult = (
+          await createQuoteOnMomoka({
             request: {
               contentURI: url,
-              from: lensProfile?.defaultProfile?.id
+              quoteOn: quotedPublicationId
             }
           })
-        ).createDataAvailabilityPostViaDispatcher
-
-        if (
-          dispatcherResult.__typename === 'RelayError' ||
-          !dispatcherResult.id
-        ) {
-          notifyError(
-            dispatcherResult.__typename === 'RelayError'
-              ? dispatcherResult?.reason
-              : 'Something went wrong'
-          )
-        } else {
-          try {
-            await addReaction({
-              request: {
-                profileId: lensProfile?.defaultProfile?.id,
-                publicationId: dispatcherResult.id,
-                reaction: ReactionTypes.Upvote
-              }
-            })
-
-            if (selectedCommunity?._id) {
-              console.log('adding lens publication')
-              putAddLensPublication(selectedCommunity._id, dispatcherResult.id)
-            }
-          } catch (error) {
-            console.log(error)
-          }
-
-          // // addPost({ txId: dispatcherResult. }, postForIndexing)
-          console.log(dispatcherResult)
-          router.push(`/p/${dispatcherResult.id}`)
-          handleCompletePost()
-        }
+        ).quoteOnMomoka
       } else {
-        const typedData = (
-          await createDAPostTypedData({
+        const createPostonMomoka = await createPostDAViaDispatcher({
+          request: {
+            contentURI: url
+          }
+        })
+        console.log('createPostonMomoka', createPostonMomoka)
+        dispatcherResult = createPostonMomoka.postOnMomoka
+      }
+
+      if (
+        dispatcherResult.__typename === 'LensProfileManagerRelayError' ||
+        !dispatcherResult.id
+      ) {
+        notifyError(
+          dispatcherResult.__typename === 'LensProfileManagerRelayError'
+            ? dispatcherResult?.reason
+            : 'Something went wrong'
+        )
+      } else {
+        try {
+          await addReaction({
             request: {
-              contentURI: url,
-              from: lensProfile?.defaultProfile?.id
+              for: dispatcherResult.id,
+              reaction: PublicationReactionType.Upvote
             }
           })
-        ).createDataAvailabilityPostTypedData
 
-        signDATypedDataAndBroadcast(typedData.typedData, {
-          id: typedData.id,
-          type: 'createDAPost'
-        })
-      }
-      return
-    }
-
-    let collectModule = null
-
-    if (
-      isEligibleForMultiRecipient(collectSettings?.recipients) &&
-      collectSettings?.recipients &&
-      collectSettings?.amount
-    ) {
-      // create multi recipient collect
-      collectModule = {
-        multirecipientFeeCollectModule: {
-          amount: collectSettings?.amount,
-          recipients: collectSettings?.recipients,
-          referralFee: collectSettings?.referralFee,
-          followerOnly: collectSettings?.followerOnly,
-          [collectSettings?.collectLimit ? 'collectLimit' : null]:
-            collectSettings?.collectLimit ?? null,
-          [collectSettings?.endTimestamp ? 'endTimestamp' : null]:
-            collectSettings?.endTimestamp ?? null
+          if (selectedCommunity?._id) {
+            console.log('adding lens publication')
+            putAddLensPublication(selectedCommunity._id, dispatcherResult.id)
+          }
+        } catch (error) {
+          console.log(error)
         }
+
+        // // addPost({ txId: dispatcherResult. }, postForIndexing)
+        console.log(dispatcherResult)
+        router.push(`/p/${dispatcherResult.id}`)
+        notifySuccess('Post has been created')
+        handleCompletePost()
       }
     } else {
-      // create simple collect module
-      collectModule = {
-        simpleCollectModule: {
-          [collectSettings?.collectLimit ? 'collectLimit' : null]:
-            collectSettings?.collectLimit ?? null,
-          followerOnly: collectSettings?.followerOnly,
-          [collectSettings?.endTimestamp ? 'endTimestamp' : null]:
-            collectSettings?.endTimestamp ?? null,
-          [collectSettings?.amount ? 'fee' : null]: collectSettings?.amount
-            ? {
-                amount: collectSettings?.amount,
-                referralFee: collectSettings?.referralFee,
-                recipient: lensProfile?.defaultProfile?.ownedBy
-              }
-            : null
-        }
-      }
-    }
+      let typedData = null
 
-    // Remove null values from the final object
-    collectModule = Object.fromEntries(
-      Object.entries(collectModule).map(([key, value]) => [
-        key,
-        // eslint-disable-next-line
-        Object.fromEntries(Object.entries(value).filter(([_, v]) => v !== null))
-      ])
-    )
-
-    console.log('collectModule', collectModule)
-
-    const createPostRequest = {
-      profileId: lensProfile?.defaultProfile?.id,
-      contentURI: url,
-      collectModule: collectModule,
-      referenceModule: {
-        followerOnlyReferenceModule: false
-      }
-    }
-
-    setPostMetadataForIndexing(postForIndexing)
-
-    // dispatch or broadcast
-    try {
-      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
-        //gasless using dispatcher
-        const dispatcherResult = (
-          await createPostViaDispatcher({
-            request: createPostRequest
+      if (isQuote) {
+        typedData = (
+          await createQuoteOnMomokaTypedData({
+            request: {
+              contentURI: url,
+              quoteOn: quotedPublicationId
+            }
           })
-        ).createPostViaDispatcher
-
-        setLoading(false)
-        if (dispatcherResult?.__typename === 'RelayError') {
-          notifyError(dispatcherResult.reason)
-        } else {
-          addPost({ txId: dispatcherResult.txId }, postForIndexing)
-          handleCompletePost()
-        }
+        ).createMomokaQuoteTypedData
       } else {
-        //gasless using signed broadcast
-        const postTypedResult = (
-          await createPostViaSignedTx({
-            request: createPostRequest
+        typedData = (
+          await createDAPostTypedData({
+            request: {
+              contentURI: url
+            }
           })
-        ).createPostTypedData
-        signTypedDataAndBroadcast(postTypedResult.typedData, {
-          id: postTypedResult.id,
-          type: 'createPost'
-        })
+        ).createMomokaPostTypedData
       }
-    } catch (e) {
-      setLoading(false)
-      console.log('error', e)
-      notifyError('Error creating post, report to support')
-      return
+
+      signDATypedDataAndBroadcast(typedData.typedData, {
+        id: typedData.id,
+        type: 'createDAPost'
+      })
     }
+    return
+    // }
+
+    // let collectModule = null
+
+    // if (
+    //   isEligibleForMultiRecipient(collectSettings?.recipients) &&
+    //   collectSettings?.recipients &&
+    //   collectSettings?.amount
+    // ) {
+    //   // create multi recipient collect
+    //   collectModule = {
+    //     multirecipientFeeCollectModule: {
+    //       amount: collectSettings?.amount,
+    //       recipients: collectSettings?.recipients,
+    //       referralFee: collectSettings?.referralFee,
+    //       followerOnly: collectSettings?.followerOnly,
+    //       [collectSettings?.collectLimit ? 'collectLimit' : null]:
+    //         collectSettings?.collectLimit ?? null,
+    //       [collectSettings?.endTimestamp ? 'endTimestamp' : null]:
+    //         collectSettings?.endTimestamp ?? null
+    //     }
+    //   }
+    // } else {
+    //   // create simple collect module
+    //   collectModule = {
+    //     simpleCollectModule: {
+    //       [collectSettings?.collectLimit ? 'collectLimit' : null]:
+    //         collectSettings?.collectLimit ?? null,
+    //       followerOnly: collectSettings?.followerOnly,
+    //       [collectSettings?.endTimestamp ? 'endTimestamp' : null]:
+    //         collectSettings?.endTimestamp ?? null,
+    //       [collectSettings?.amount ? 'fee' : null]: collectSettings?.amount
+    //         ? {
+    //             amount: collectSettings?.amount,
+    //             referralFee: collectSettings?.referralFee,
+    //             recipient: lensProfile?.defaultProfile?.ownedBy
+    //           }
+    //         : null
+    //     }
+    //   }
+    // }
+
+    // // Remove null values from the final object
+    // collectModule = Object.fromEntries(
+    //   Object.entries(collectModule).map(([key, value]) => [
+    //     key,
+    //     // eslint-disable-next-line
+    //     Object.fromEntries(Object.entries(value).filter(([_, v]) => v !== null))
+    //   ])
+    // )
+
+    // console.log('collectModule', collectModule)
+
+    // const createPostRequest = {
+    //   profileId: lensProfile?.defaultProfile?.id,
+    //   contentURI: url,
+    //   collectModule: collectModule,
+    //   referenceModule: {
+    //     followerOnlyReferenceModule: false
+    //   }
+    // }
+
+    // setPostMetadataForIndexing(postForIndexing)
+
+    // // dispatch or broadcast
+    // try {
+    //   if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+    //     //gasless using dispatcher
+    //     const dispatcherResult = (
+    //       await createPostViaDispatcher({
+    //         request: createPostRequest
+    //       })
+    //     ).createPostViaDispatcher
+
+    //     setLoading(false)
+    //     if (dispatcherResult?.__typename === 'RelayError') {
+    //       notifyError(dispatcherResult.reason)
+    //     } else {
+    //       addPost({ txId: dispatcherResult.txId }, postForIndexing)
+    //       handleCompletePost()
+    //     }
+    //   } else {
+    //     //gasless using signed broadcast
+    //     const postTypedResult = (
+    //       await createPostViaSignedTx({
+    //         request: createPostRequest
+    //       })
+    //     ).createPostTypedData
+    //     signTypedDataAndBroadcast(postTypedResult.typedData, {
+    //       id: postTypedResult.id,
+    //       type: 'createPost'
+    //     })
+    //   }
+    // } catch (e) {
+    //   setLoading(false)
+    //   console.log('error', e)
+    //   notifyError('Error creating post, report to support')
+    //   return
+    // }
   }
 
-  useEffect(() => {
-    if (result && type === 'createPost') {
-      addPost({ txId: result.txId }, postMetadataForIndexing)
-      handleCompletePost()
-    }
-  }, [result, type])
+  // useEffect(() => {
+  //   if (result && type === 'createPost') {
+  //     addPost({ txId: result.txId }, postMetadataForIndexing)
+  //     handleCompletePost()
+  //   }
+  // }, [result, type])
 
   useEffect(() => {
     const foo = async () => {
       if (daResult && daType === 'createDAPost') {
         await addReaction({
           request: {
-            profileId: lensProfile?.defaultProfile?.id,
-            publicationId: daResult.id,
-            reaction: ReactionTypes.Upvote
+            for: daResult.id,
+            reaction: PublicationReactionType.Upvote
           }
         })
         if (selectedCommunity?._id) {
           console.log('adding lens publication')
           await putAddLensPublication(selectedCommunity._id, daResult.id)
         }
+        notifySuccess('Post has been created')
         router.push(`/p/${daResult.id}`)
         handleCompletePost()
       }
@@ -630,11 +561,11 @@ const CreatePostPopup = ({
   }, [daResult, daType])
 
   useEffect(() => {
-    if (error || daError) {
+    if (daError) {
       setLoading(false)
-      notifyError(error || daError)
+      notifyError(daError)
     }
-  }, [error, daError])
+  }, [daError])
 
   useEffect(() => {
     if (user) {
@@ -646,9 +577,12 @@ const CreatePostPopup = ({
     const attachment = {
       id: uuidv4(),
       item: gif.images.original.url,
-      type: 'image/gif',
+      previewItem: gif.images.original.url,
+      type: 'Image',
+      mimeType: 'image/gif',
       altTag: gif.title
     }
+    // @ts-ignore
     addAttachments([attachment])
   }
 
@@ -665,6 +599,8 @@ const CreatePostPopup = ({
     setLoadingJoinedCommunities(true)
     const response = await getJoinedCommunitiesApi()
 
+    console.log('response', response)
+
     let mostPostedCommunities = []
 
     try {
@@ -678,47 +614,45 @@ const CreatePostPopup = ({
     }
 
     // setting the joinedCommunitites with mostPostedCommunities from the localStorage at the top
-    const myLensCommunity = []
-    if (LensCommunity) {
-      myLensCommunity.push({
-        _id: LensCommunity?._id,
-        name: formatHandle(LensCommunity?.Profile?.handle),
-        logoImageUrl: getAvatar(LensCommunity?.Profile),
-        isLensCommunity: true
-      })
-    }
+    // const myLensCommunity = []
+    // if (LensCommunity) {
+    //   myLensCommunity.push({
+    //     _id: LensCommunity?._id,
+    //     name: formatHandle(LensCommunity?.Profile?.handle),
+    //     logoImageUrl: getAvatar(LensCommunity?.Profile),
+    //     isLensCommunity: true
+    //   })
+    // }
 
-    const joinedCommunitiesArray = [
-      ...joinedLensCommunities
-        .map((community) => ({
-          _id: community._id,
-          name: formatHandle(community?.handle),
-          // @ts-ignore
-          logoImageUrl: getAvatar(community),
-          isLensCommunity: true
-        }))
-        .filter(
-          (community) => !myLensCommunity.some((c) => c?._id === community?._id)
-        ),
-      // removing the communities in the mostPostedCommunities from the joinedCommunities using communityId
-      ...response
-    ]
+    // const joinedCommunitiesArray = [
+    //   ...joinedLensCommunities
+    //     .map((community) => ({
+    //       _id: community._id,
+    //       name: formatHandle(community?.handle),
+    //       // @ts-ignore
+    //       logoImageUrl: getAvatar(community),
+    //       isLensCommunity: true
+    //     }))
+    //     .filter(
+    //       (community) => !myLensCommunity.some((c) => c?._id === community?._id)
+    //     ),
+    //   // removing the communities in the mostPostedCommunities from the joinedCommunities using communityId
+    //   ...response
+    // ]
 
     let sortedCommunities = []
 
     for (const communityId of mostPostedCommunities) {
-      if (joinedCommunitiesArray.some((c) => c._id === communityId)) {
-        sortedCommunities.push(
-          joinedCommunitiesArray.find((c) => c._id === communityId)
-        )
+      if (response.some((c) => c._id === communityId)) {
+        sortedCommunities.push(response.find((c) => c._id === communityId))
       }
     }
 
-    for (const community of joinedCommunitiesArray) {
-      if (!sortedCommunities.some((c) => c._id === community._id)) {
-        sortedCommunities.push(community)
-      }
-    }
+    // for (const community of joinedCommunitiesArray) {
+    //   if (!sortedCommunities.some((c) => c._id === community._id)) {
+    //     sortedCommunities.push(community)
+    //   }
+    // }
 
     setJoinedCommunities(sortedCommunities)
     setLoadingJoinedCommunities(false)
@@ -859,7 +793,7 @@ const CreatePostPopup = ({
                     {
                       label: 'NSFW',
                       onClick: () => {
-                        setFlair('NSFW')
+                        setFlair(PublicationContentWarningType.Nsfw)
                         setShowOptionsModal(false)
                         setFlairDrawerOpen(false)
                       }
@@ -867,7 +801,7 @@ const CreatePostPopup = ({
                     {
                       label: 'Sensitive',
                       onClick: () => {
-                        setFlair('SENSITIVE')
+                        setFlair(PublicationContentWarningType.Sensitive)
                         setShowOptionsModal(false)
                         setFlairDrawerOpen(false)
                       }
@@ -875,7 +809,7 @@ const CreatePostPopup = ({
                     {
                       label: 'Spoiler',
                       onClick: () => {
-                        setFlair('SPOILER')
+                        setFlair(PublicationContentWarningType.Spoiler)
                         setShowOptionsModal(false)
                         setFlairDrawerOpen(false)
                       }
@@ -938,18 +872,12 @@ const CreatePostPopup = ({
                 className="w-full"
                 publication={{
                   // @ts-ignore
-                  metadata: {
-                    content: content,
-                    attributes: [
-                      {
-                        traitType: 'quotedPublicationId',
-                        displayType: PublicationMetadataDisplayTypes.String,
-                        value: quotedPublicationId
-                      }
-                    ]
-                  }
+                  quoteOn: {
+                    id: quotedPublicationId
+                  },
+                  content: content
                 }}
-                attachments={attachments}
+                newAttachments={attachments}
                 isNew
               />
             </div>
@@ -957,7 +885,7 @@ const CreatePostPopup = ({
               <AttachmentRow />
 
               <Giphy setGifAttachment={(gif) => setGifAttachment(gif)} />
-              {!selectedCommunity?.isLensCommunity && (
+              {/* {!selectedCommunity?.isLensCommunity && (
                 <Tooltip
                   placement="bottom"
                   enterDelay={1000}
@@ -985,40 +913,32 @@ const CreatePostPopup = ({
                     <BsCollection className="w-5 h-5" />
                   </button>
                 </Tooltip>
-              )}
+              )} */}
 
-              <PostPreferenceButton disabled={loading} />
+              {/* <PostPreferenceButton disabled={loading} /> */}
             </div>
           </div>
         )}
-        {showCollectSettings && !isMobile ? (
-          <CollectSettingsModel
-            collectSettings={collectSettings}
-            setCollectSettings={setCollectSettings}
-          />
-        ) : (
-          <BottomDrawerWrapper
-            isDrawerOpen={isDrawerOpen}
-            setIsDrawerOpen={setIsDrawerOpen}
-            showClose={true}
-            position="bottom"
-          >
+        <>
+          {/* {showCollectSettings && !isMobile ? (
             <CollectSettingsModel
               collectSettings={collectSettings}
               setCollectSettings={setCollectSettings}
             />
-            {/* <div className="px-4 w-full pb-1 mt-1">
-              <button
-                onClick={() => {
-                  setIsDrawerOpen(false)
-                }}
-                className="bg-p-btn rounded-full text-center flex font-semibold text-p-text py-1 justify-center items-center w-full text-xl mb-6"
-              >
-                Save
-              </button>
-            </div> */}
-          </BottomDrawerWrapper>
-        )}
+          ) : (
+            <BottomDrawerWrapper
+              isDrawerOpen={isDrawerOpen}
+              setIsDrawerOpen={setIsDrawerOpen}
+              showClose={true}
+              position="bottom"
+            >
+              <CollectSettingsModel
+                collectSettings={collectSettings}
+                setCollectSettings={setCollectSettings}
+              />
+            </BottomDrawerWrapper>
+          )} */}
+        </>
       </PopUpWrapper>
     )
   }

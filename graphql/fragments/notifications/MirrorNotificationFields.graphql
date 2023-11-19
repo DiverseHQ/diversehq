@@ -6,6 +6,8 @@ fragment MirrorNotificationFields on MirrorNotification {
     }
   }
   publication {
+    __typename
+
     ... on Post {
       ...PostFields
     }

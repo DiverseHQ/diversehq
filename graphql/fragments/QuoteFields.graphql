@@ -1,6 +1,8 @@
 fragment QuoteFields on Quote {
   ...QuoteBaseFields
   quoteOn {
+    __typename
+
     ... on Post {
       ...PostFields
     }

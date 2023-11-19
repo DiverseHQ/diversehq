@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {
+  Comment,
+  LimitType,
+  OnchainCommentRequest,
+  Post,
   Profile,
-  ProfileSearchResult,
-  PublicationMainFocus,
-  ReactionTypes,
-  SearchRequestTypes,
-  useCreateCommentTypedDataMutation,
-  useCreateCommentViaDispatcherMutation,
-  useCreateDataAvailabilityCommentTypedDataMutation,
-  useCreateDataAvailabilityCommentViaDispatcherMutation,
+  TriStateValue,
+  useCommentOnMomokaMutation,
+  useCommentOnchainMutation,
+  useCreateMomokaCommentTypedDataMutation,
+  useCreateOnchainCommentTypedDataMutation,
   useSearchProfilesQuery
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
@@ -29,18 +30,15 @@ import clsx from 'clsx'
 import { useDevice } from '../../Common/DeviceWrapper'
 import useDASignTypedDataAndBroadcast from '../../../lib/useDASignTypedDataAndBroadcast'
 // import useUploadAttachments from '../Create/useUploadAttachments'
-import { AttachmentType, usePublicationStore } from '../../../store/publication'
+import { usePublicationStore } from '../../../store/publication'
 import { v4 as uuid } from 'uuid'
 import Attachment from '../Attachment'
-import {
-  SUPPORTED_IMAGE_TYPE,
-  SUPPORTED_VIDEO_TYPE,
-  supportedMimeTypes
-} from '../../../utils/config'
-import { appId } from '../../../utils/config'
+import { supportedMimeTypes } from '../../../utils/config'
 import AttachmentRow from '../Create/AttachmentRow'
 import { hasMentionAtEnd } from '../../../utils/helper'
 import useUploadAttachments from '../Create/useUploadAttachments'
+import checkDispatcherPermissions from '../../../lib/profile/checkPermission'
+import useCommentMetadata from '../../Comment/useCommentMetadata'
 const LensCreateComment = ({
   postId,
   addComment,
@@ -51,7 +49,7 @@ const LensCreateComment = ({
   postId: string
   // eslint-disable-next-line no-unused-vars
   addComment: (tx: string | null, comment: any) => void
-  postInfo?: any
+  postInfo?: Post | Comment
   canCommnet?: boolean
   isMainPost?: boolean
 }) => {
@@ -76,13 +74,13 @@ const LensCreateComment = ({
   )
 
   const { mutateAsync: createCommentWithSign } =
-    useCreateCommentTypedDataMutation()
+    useCreateOnchainCommentTypedDataMutation()
   const { mutateAsync: createCommentViaDispatcher } =
-    useCreateCommentViaDispatcherMutation()
+    useCommentOnchainMutation()
   const { mutateAsync: createDACommentViaDispatcher } =
-    useCreateDataAvailabilityCommentViaDispatcherMutation()
+    useCommentOnMomokaMutation()
   const { mutateAsync: createDACommentTypedData } =
-    useCreateDataAvailabilityCommentTypedDataMutation()
+    useCreateMomokaCommentTypedDataMutation()
 
   const [tempId, setTempId] = useState('')
 
@@ -109,12 +107,13 @@ const LensCreateComment = ({
   const [queryString, setQueryString] = useState<string | null>(null)
   const { handleUploadAttachments } = useUploadAttachments(true)
 
+  const getMetadata = useCommentMetadata()
+
   const { data } = useSearchProfilesQuery(
     {
       request: {
         query: queryString ?? null,
-        type: SearchRequestTypes.Profile,
-        limit: isMobile ? 3 : 5
+        limit: LimitType.Ten
       }
     },
     {
@@ -123,18 +122,12 @@ const LensCreateComment = ({
   )
 
   useEffect(() => {
-    if (data) {
-      const search = data?.search
-      const profileSearchResult = search as ProfileSearchResult
-      const profiles: Profile[] =
-        search && search.hasOwnProperty('items')
-          ? profileSearchResult?.items
-          : []
-      const profilesResults = profiles.map(
+    if (data?.searchProfiles?.items.length > 0) {
+      const profilesResults = data?.searchProfiles?.items?.map(
         (user: Profile) =>
           ({
-            name: user?.name,
-            handle: user?.handle,
+            name: user?.metadata?.displayName,
+            handle: user?.handle?.fullHandle,
             picture: getAvatar(user)
           } as Record<string, string>)
       )
@@ -142,81 +135,110 @@ const LensCreateComment = ({
     }
   }, [data])
 
-  const getMainContentFocus = () => {
-    if (attachments.length > 0) {
-      if (SUPPORTED_IMAGE_TYPE.includes(attachments[0]?.type)) {
-        return PublicationMainFocus.Image
-      } else if (SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)) {
-        return PublicationMainFocus.Video
-      } else {
-        return PublicationMainFocus.TextOnly
-      }
-    } else {
-      return PublicationMainFocus.TextOnly
-    }
-  }
-
   const getAnimationUrl = () => {
-    if (
-      attachments.length > 0 &&
-      SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.type)
-    ) {
+    if (attachments.length > 0 && attachments[0]?.type === 'Video') {
       return attachments[0]?.item
     }
     return null
-  }
-
-  const getAttachmentImage = () => {
-    // loop over attachments and return first attachmen with type image
-    for (let i = 0; i < attachments.length; i++) {
-      if (SUPPORTED_IMAGE_TYPE.includes(attachments[i]?.type)) {
-        return attachments[i]?.item
-      }
-    }
-    return null
-  }
-
-  const getAttachmentImageMimeType = () => {
-    return attachments[0]?.type
   }
 
   // todo: add appreciate amoount using contract
 
   const { hasProfile, isSignedIn, data: lensProfile } = useLensUserContext()
 
+  const { canUseLensManager } = checkDispatcherPermissions(
+    lensProfile?.defaultProfile
+  )
+
   const onSuccessCreateComment = async (tx, tempId, isDA) => {
-    const comment = {
+    const comment: Comment = {
       id: isDA ? tempId : null,
       tempId: tempId,
-      isDataAvailability: Boolean(isDA),
-      profile: {
-        picture: {
-          original: {
-            // @ts-ignore
-            url: lensProfile?.defaultProfile?.picture?.original?.url
-          }
-        },
-        id: lensProfile?.defaultProfile?.id,
-        handle: lensProfile?.defaultProfile?.handle,
-        name: lensProfile?.defaultProfile?.name
+      momoka: {
+        proof: 'proof'
       },
+      isDataAvailability: Boolean(isDA),
+      // @ts-ignore
+      by: lensProfile?.defaultProfile,
       createdAt: new Date().toISOString(),
+      // @ts-ignore
       metadata: {
         // @ts-ignore
-        content: commentRef.current.value,
-        mainContentFocus: getMainContentFocus(),
-        media: attachments.map((attachment) => ({
-          original: {
-            url: attachment.item,
-            mimeType: attachment.type
+        content: String(commentRef?.current?.value),
+        asset: {
+          image: {
+            optimized: {
+              uri:
+                attachments[0]?.type === 'Image'
+                  ? attachments[0]?.previewItem
+                  : null
+            }
+          },
+          // @ts-ignore
+          video: {
+            optimized: {
+              uri:
+                attachments[0]?.type === 'Video'
+                  ? attachments[0]?.previewItem
+                  : null
+            }
+          },
+          audio: {
+            optimized: {
+              uri:
+                attachments[0]?.type === 'Audio'
+                  ? attachments[0]?.previewItem
+                  : null
+            }
           }
-        }))
+        },
+        title: 'Comment with DiverseHQ',
+        // @ts-ignore
+        attachments: attachments.map((attachment) => {
+          if (attachment.type === 'Image') {
+            return {
+              image: {
+                optimized: {
+                  uri: attachment.item
+                }
+              }
+            }
+          }
+          if (attachment.type === 'Video') {
+            return {
+              video: {
+                optimized: {
+                  uri: attachment.item
+                }
+              }
+            }
+          }
+          if (attachment.type === 'Audio') {
+            return {
+              audio: {
+                uri: attachment.item
+              }
+            }
+          }
+        })
       },
+      // @ts-ignore
+      operations: {
+        canComment: TriStateValue.Yes,
+        canMirror: TriStateValue.Yes,
+        hasReacted: true
+      },
+      // @ts-ignore
       stats: {
-        totalUpvotes: 1,
-        totalDownvotes: 0
+        reactions: 1,
+        bookmarks: 0,
+        comments: 0,
+        countOpenActions: 0,
+        id: uuid(),
+        mirrors: 0,
+        quotes: 0
       },
-      reaction: ReactionTypes.Upvote
+      reaction: 'Upvote'
     }
     setLoading(false)
     if (commentRef?.current) {
@@ -245,58 +267,51 @@ const LensCreateComment = ({
     if (!content?.trim()) return
     setLoading(true)
 
-    const attachmentsInput: AttachmentType[] = attachments.map(
-      (attachment) => ({
-        type: attachment.type,
-        altTag: attachment.altTag,
-        item: attachment.item!
-      })
-    )
-
     try {
       const metadata_id = uuid()
       setTempId(tempId)
-      const ipfsHash = await uploadToIpfsInfuraAndGetPath({
-        version: '2.0.0',
-        mainContentFocus: getMainContentFocus(),
-        metadata_id: metadata_id,
-        description: content,
-        locale: 'en-US',
-        content: content,
-        external_url: 'https://diversehq.xyz',
-        image: attachmentsInput.length > 0 ? getAttachmentImage() : null,
-        imageMimeType:
-          attachmentsInput.length > 0
-            ? getAttachmentImageMimeType()
-            : 'image/svg+xml',
-        animation_url: getAnimationUrl(),
-        name: 'Create with DiverseHQ',
-        attributes: [],
-        tags: [],
-        appId: appId,
-        media: attachmentsInput
-      })
 
-      if (postInfo?.isDataAvailability) {
+      let animationUrl = getAnimationUrl()
+      let marketplace = {
+        name: 'Comment with DiverseHQ',
+        description: content?.trim(),
+        external_url: 'https://diversehq.xyz'
+      }
+
+      if (animationUrl) {
+        marketplace['animation_url'] = animationUrl
+      }
+
+      const baseMetadata = {
+        title: 'Comment with DiverseHQ',
+        content: content.trim(),
+        marketplace: marketplace
+      }
+
+      const metadata = getMetadata({ baseMetadata })
+
+      console.log('metadata', metadata)
+      const ipfsHash = await uploadToIpfsInfuraAndGetPath(metadata)
+
+      if (postInfo?.momoka?.proof) {
         try {
-          if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+          if (canUseLensManager) {
             const createComment = (
               await createDACommentViaDispatcher({
                 request: {
                   commentOn: postId,
-                  contentURI: `ipfs://${ipfsHash}`,
-                  from: lensProfile?.defaultProfile?.id
+                  contentURI: `ipfs://${ipfsHash}`
                 }
               })
-            ).createDataAvailabilityCommentViaDispatcher
+            ).commentOnMomoka
 
             if (
-              createComment.__typename === 'RelayError' ||
+              createComment.__typename === 'LensProfileManagerRelayError' ||
               !createComment.id
             ) {
               setLoading(false)
               notifyError(
-                createComment.__typename === 'RelayError'
+                createComment.__typename === 'LensProfileManagerRelayError'
                   ? createComment.reason
                   : 'Something went wrong'
               )
@@ -308,11 +323,10 @@ const LensCreateComment = ({
               await createDACommentTypedData({
                 request: {
                   commentOn: postId,
-                  contentURI: `ipfs://${ipfsHash}`,
-                  from: lensProfile?.defaultProfile?.id
+                  contentURI: `ipfs://${ipfsHash}`
                 }
               })
-            ).createDataAvailabilityCommentTypedData
+            ).createMomokaCommentTypedData
 
             signDATypedDataAndBroadcast(typedData.typedData, {
               id: typedData.id,
@@ -327,25 +341,23 @@ const LensCreateComment = ({
         return
       }
 
-      const createCommentRequest = {
-        profileId: lensProfile?.defaultProfile?.id,
-        publicationId: postId,
+      const createCommentRequest: OnchainCommentRequest = {
         contentURI: `ipfs://${ipfsHash}`,
-        collectModule: { revertCollectModule: true },
         referenceModule: {
           followerOnlyReferenceModule: false
-        }
+        },
+        commentOn: postId
       }
 
       // await comment(createCommentRequest)
       try {
-        if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+        if (canUseLensManager) {
           const dispatcherResult = (
             await createCommentViaDispatcher({
               request: createCommentRequest
             })
-          ).createCommentViaDispatcher
-          if (dispatcherResult.__typename === 'RelayError') {
+          ).commentOnchain
+          if (dispatcherResult.__typename === 'LensProfileManagerRelayError') {
             setLoading(false)
             notifyError(dispatcherResult.reason)
             return
@@ -361,7 +373,7 @@ const LensCreateComment = ({
             await createCommentWithSign({
               request: createCommentRequest
             })
-          ).createCommentTypedData
+          ).createOnchainCommentTypedData
           signTypedDataAndBroadcast(commentTypedResult.typedData, {
             id: commentTypedResult.id,
             type: 'createComment'
@@ -528,13 +540,17 @@ const LensCreateComment = ({
                   src={getAvatar(lensProfile?.defaultProfile)}
                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                 />
-                {lensProfile?.defaultProfile?.name && (
+                {lensProfile?.defaultProfile?.metadata?.displayName && (
                   <div className="font-bold text-base">
-                    {stringToLength(lensProfile?.defaultProfile?.name, 20)}
+                    {stringToLength(
+                      lensProfile?.defaultProfile?.metadata?.displayName,
+                      20
+                    )}
                   </div>
                 )}
                 <div className="text-sm font-medium text-s-text">
                   <span>
+                    {/* @ts-ignore */}
                     u/{formatHandle(lensProfile?.defaultProfile?.handle)}
                   </span>
                 </div>
@@ -616,7 +632,8 @@ const LensCreateComment = ({
               )}
               <Attachment
                 className="w-full"
-                attachments={attachments}
+                // @ts-ignore
+                newAttachments={attachments}
                 isNew
                 isComment
               />
@@ -647,9 +664,12 @@ const LensCreateComment = ({
                       const attachment = {
                         id: uuid(),
                         item: gif.images.original.url,
-                        type: 'image/gif',
+                        previewItem: gif.images.original.url,
+                        type: 'Image',
+                        mimeType: 'image/gif',
                         title: gif.title
                       }
+                      // @ts-ignore
                       addAttachments([attachment])
                     }}
                   />
@@ -698,15 +718,16 @@ const LensCreateComment = ({
               <ReplyMobileInfo
                 // @ts-ignore
                 fromAvatarUrl={getAvatar(lensProfile?.defaultProfile)}
-                toAvatarUrl={getAvatar(postInfo?.profile)}
+                toAvatarUrl={getAvatar(postInfo?.by)}
                 toContent={postInfo?.metadata?.content}
-                toHandle={postInfo?.profile?.handle}
+                toHandle={postInfo?.by?.handle?.fullHandle}
               />
             )}
             <div className="pb-2 px-4">
               <Attachment
                 className="max-h-[300px] w-full rounded-lg"
-                attachments={attachments}
+                // @ts-ignore
+                newAttachments={attachments}
                 isNew
                 isComment
               />
@@ -798,9 +819,12 @@ const LensCreateComment = ({
                         const attachment = {
                           id: uuid(),
                           item: gif.images.original.url,
-                          type: 'image/gif',
+                          previewItem: gif.images.original.url,
+                          mimeType: 'image/gif',
+                          type: 'Image',
                           title: gif.title
                         }
+                        // @ts-ignore
                         addAttachments([attachment])
                       }}
                     />

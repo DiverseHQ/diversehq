@@ -36,6 +36,8 @@ const ProfilePage = ({ _lensProfile }: Props) => {
     fetchAndSetOffChainProfileInfo()
   }, [_lensProfile?.ownedBy])
 
+  console.log('_lensProfile at ProfilePage', _lensProfile)
+
   return (
     <div>
       {isMobile && <ProfilePageMobileTopNav _lensProfile={_lensProfile} />}
@@ -50,9 +52,7 @@ const ProfilePage = ({ _lensProfile }: Props) => {
                 profileId={_lensProfile?.id}
               />
             ) : (
-              <LensCollectedPublicationsColumn
-                walletAddress={_lensProfile?.ownedBy}
-              />
+              <LensCollectedPublicationsColumn profileId={_lensProfile?.id} />
             )}
           </div>
         </div>

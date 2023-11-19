@@ -1,14 +1,13 @@
 import { Matcher } from 'interweave'
 import Link from 'next/link'
 import { createElement } from 'react'
-import formatHandle from '../../User/lib/formatHandle'
 
-import { UrlMatcher } from './UrlMatcher'
+// import { UrlMatcher } from './UrlMatcher'
 
 export const Mention = ({ ...props }: any) => {
   const profile = {
     __typename: 'Profile',
-    handle: props?.display.slice(1),
+    handle: props?.display.slice(6),
     name: null,
     id: null
   }
@@ -19,9 +18,9 @@ export const Mention = ({ ...props }: any) => {
         e.stopPropagation()
       }}
     >
-      <Link href={`/u/${formatHandle(props.display.slice(1))}`}>
+      <Link href={`/u/${profile?.handle}`}>
         <span className="hover:underline text-blue-400 cursor-pointer">
-          {profile?.handle && `u/${formatHandle(props.display.slice(1))}`}
+          {profile?.handle && `u/${profile?.handle}`}
         </span>
       </Link>
     </span>
@@ -38,18 +37,18 @@ export class MentionMatcher extends Matcher {
   }
 
   match(value: string) {
-    const urlMatcher = new UrlMatcher('url')
-    const urlResponse = urlMatcher.match(value)
-    if (urlResponse) {
-      const { host } = urlResponse
-      const tld = host.slice(host.lastIndexOf('.') + 1).toLowerCase()
-      const ALLOWED_MENTIONS = ['lens', 'test']
-      if (!ALLOWED_MENTIONS.includes(tld)) {
-        return null
-      }
-    }
+    // const urlMatcher = new UrlMatcher('url')
+    // const urlResponse = urlMatcher.match(value)
+    // if (urlResponse) {
+    //   const { host } = urlResponse
+    //   const tld = host.slice(host.lastIndexOf('.') + 1).toLowerCase()
+    //   const ALLOWED_MENTIONS = ['lens', 'test']
+    //   if (!ALLOWED_MENTIONS.includes(tld)) {
+    //     return null
+    //   }
+    // }
 
-    return this.doMatch(value, /@[\w.-]+/, (matches) => {
+    return this.doMatch(value, /@lens\/[^.\s]*/, (matches) => {
       return { display: matches[0] }
     })
   }

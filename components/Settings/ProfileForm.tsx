@@ -4,13 +4,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineCamera } from 'react-icons/ai'
 import { IoPencilSharp } from 'react-icons/io5'
 import { MdOutlineClear } from 'react-icons/md'
-import { v4 as uuidv4 } from 'uuid'
-import {
-  useCreateSetProfileImageUriTypedDataMutation,
-  useCreateSetProfileImageUriViaDispatcherMutation,
-  useCreateSetProfileMetadataTypedDataMutation,
-  useCreateSetProfileMetadataViaDispatcherMutation
-} from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { uploadToIpfsInfuraAndGetPath } from '../../utils/utils'
@@ -20,13 +13,19 @@ import FormRichTextInput from '../Common/UI/FormRichTextInput'
 import FormTextInput from '../Common/UI/FormTextInput'
 import getAvatar from '../User/lib/getAvatar'
 import getCoverBanner from '../User/lib/getCoverBanner'
-import {
-  AttributeData,
-  MetadataVersions,
-  ProfileMetadata
-} from './types/profieMetadata'
 import uploadToIPFS from '../../utils/uploadToIPFS'
-import getIPFSLink from '../User/lib/getIPFSLink'
+import {
+  useCreateOnchainSetProfileMetadataTypedDataMutation,
+  useSetProfileMetadataMutation
+} from '../../graphql/generated'
+import checkDispatcherPermissions from '../../lib/profile/checkPermission'
+import {
+  MetadataAttribute,
+  MetadataAttributeType,
+  ProfileOptions,
+  profile as profileMetadata
+} from '@lens-protocol/metadata'
+import trimify from '../Lexical/trimify'
 
 const ProfileForm = () => {
   const {
@@ -35,8 +34,10 @@ const ProfileForm = () => {
     isSignedIn,
     refetch
   } = useLensUserContext()
-  const [name, setName] = useState(lensProfile?.defaultProfile?.name)
-  const [bio, setBio] = useState(lensProfile?.defaultProfile?.bio)
+  const [name, setName] = useState(
+    lensProfile?.defaultProfile?.metadata?.displayName
+  )
+  const [bio, setBio] = useState(lensProfile?.defaultProfile?.metadata?.bio)
   const [website, setWebsite] = useState('')
   const [location, setLocation] = useState('')
   const [twitter, setTwitter] = useState('')
@@ -51,14 +52,10 @@ const ProfileForm = () => {
   const [profileBannerFile, setProfileBannerFile] = useState(null)
   const [profileImageFile, setProfileImageFile] = useState(null)
 
-  const { mutateAsync: createSetProfileImageUriViaDispatcher } =
-    useCreateSetProfileImageUriViaDispatcherMutation()
-  const { mutateAsync: createSetProfileImageUriTypedData } =
-    useCreateSetProfileImageUriTypedDataMutation()
   const { mutateAsync: setProfileMetadatViaDispatcher } =
-    useCreateSetProfileMetadataViaDispatcherMutation()
+    useSetProfileMetadataMutation()
   const { mutateAsync: setProfileMetadataTypedData } =
-    useCreateSetProfileMetadataTypedDataMutation()
+    useCreateOnchainSetProfileMetadataTypedDataMutation()
   const { signTypedDataAndBroadcast, result, type } =
     useSignTypedDataAndBroadcast(false)
   const profileImageInputRef = useRef(null)
@@ -66,16 +63,20 @@ const ProfileForm = () => {
 
   const { notifyError, notifySuccess } = useNotify()
 
+  const { canUseLensManager } = checkDispatcherPermissions(
+    lensProfile?.defaultProfile
+  )
+
   const queryClient = useQueryClient()
 
   useEffect(() => {
     handleSetProfileBannerFromLensProfile()
     // @ts-ignore
     setProfileImage(getAvatar(lensProfile?.defaultProfile))
-    setName(lensProfile?.defaultProfile?.name)
-    setBio(lensProfile?.defaultProfile?.bio)
+    setName(lensProfile?.defaultProfile?.metadata?.displayName)
+    setBio(lensProfile?.defaultProfile?.metadata?.bio)
 
-    const attributes = lensProfile?.defaultProfile?.attributes
+    const attributes = lensProfile?.defaultProfile?.metadata?.attributes
     // get website from attributes list of object with key as website
     const websiteAttribute = attributes?.find(
       (attribute) => attribute.key === 'website'
@@ -90,7 +91,7 @@ const ProfileForm = () => {
 
     // get twitter from attributes list of object with key as twitter
     const twitterAttribute = attributes?.find(
-      (attribute) => attribute.key === 'twitter'
+      (attribute) => attribute.key === 'x'
     )
     setTwitter(twitterAttribute?.value)
 
@@ -121,76 +122,96 @@ const ProfileForm = () => {
     setProfileBanner(URL.createObjectURL(filePicked))
   }
 
-  const setProfileImageIfChanged = async () => {
-    try {
-      if (!profileImageFile) return
-      const { url } = await uploadToIPFS(profileImageFile)
-      const profileImage = url
+  // const setProfileImageIfChanged = async () => {
+  //   try {
+  //     if (!profileImageFile) return
+  //     const { url } = await uploadToIPFS(profileImageFile)
+  //     const profileImage = url
 
-      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
-        await createSetProfileImageUriViaDispatcher({
-          request: {
-            profileId: lensProfile?.defaultProfile?.id,
-            url: profileImage
-          }
-        })
-      } else {
-        const setProfileImageUri = (
-          await createSetProfileImageUriTypedData({
-            request: {
-              profileId: lensProfile?.defaultProfile?.id,
-              url: profileImage
-            }
-          })
-        ).createSetProfileImageURITypedData
-        signTypedDataAndBroadcast(setProfileImageUri.typedData, {
-          id: setProfileImageUri.id,
-          type: 'create_set_profile_image_uri_typed_data'
-        })
-      }
-    } catch (error) {
-      console.log(error)
-      notifyError('Error setting profile image')
-      return
-    }
-  }
+  //     if (canUseLensManager) {
+  //       await createSetProfileImageUriViaDispatcher({
+  //         request: {
+  //           profileId: lensProfile?.defaultProfile?.id,
+  //           url: profileImage
+  //         }
+  //       })
+  //     } else {
+  //       const setProfileImageUri = (
+  //         await createSetProfileImageUriTypedData({
+  //           request: {
+  //             profileId: lensProfile?.defaultProfile?.id,
+  //             url: profileImage
+  //           }
+  //         })
+  //       ).createSetProfileImageURITypedData
+  //       signTypedDataAndBroadcast(setProfileImageUri.typedData, {
+  //         id: setProfileImageUri.id,
+  //         type: 'create_set_profile_image_uri_typed_data'
+  //       })
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //     notifyError('Error setting profile image')
+  //     return
+  //   }
+  // }
+
+  console.log('lensProfile?.defaultProfile', lensProfile?.defaultProfile)
 
   const setProfileMetadata = async () => {
     try {
-      const attributes: AttributeData[] = [
-        { key: 'website', value: website },
-        { key: 'location', value: location },
-        { key: 'twitter', value: twitter },
-        { key: 'instagram', value: instagram },
-        { key: 'app', value: 'diversehq' }
-      ]
+      // const attributes: AttributeData[] = [
+      //   { key: 'website', value: website },
+      //   { key: 'location', value: location },
+      //   { key: 'twitter', value: twitter },
+      //   { key: 'instagram', value: instagram },
+      //   { key: 'app', value: 'diversehq' }
+      // ]
       let bannerUrl = null
       if (profileBannerFile) {
         const { url } = await uploadToIPFS(profileBannerFile)
         bannerUrl = url
       }
 
+      if (!bannerUrl) {
+        bannerUrl =
+          lensProfile?.defaultProfile?.metadata?.coverPicture?.raw?.uri ?? null
+      }
+
+      let profileImage = null
+
+      if (profileImageFile) {
+        const { url } = await uploadToIPFS(profileImageFile)
+        profileImage = url
+      }
+
+      if (!profileImage) {
+        profileImage =
+          // @ts-ignore
+          lensProfile?.defaultProfile?.metadata?.picture?.raw?.uri ?? null
+      }
+
       const isValuesChanged =
-        name !== lensProfile?.defaultProfile?.name ||
-        bio !== lensProfile?.defaultProfile?.bio ||
+        name !== lensProfile?.defaultProfile?.metadata?.displayName ||
+        bio !== lensProfile?.defaultProfile?.metadata?.bio ||
         profileBannerFile ||
         website !==
-          lensProfile?.defaultProfile?.attributes?.find(
+          lensProfile?.defaultProfile?.metadata?.attributes?.find(
             (attribute) => attribute.key === 'website'
           )?.value ||
         location !==
-          lensProfile?.defaultProfile?.attributes?.find(
+          lensProfile?.defaultProfile?.metadata?.attributes?.find(
             (attribute) => attribute.key === 'location'
           )?.value ||
         twitter !==
-          lensProfile?.defaultProfile?.attributes?.find(
+          lensProfile?.defaultProfile?.metadata?.attributes?.find(
             (attribute) => attribute.key === 'twitter'
           )?.value ||
         instagram !==
-          lensProfile?.defaultProfile?.attributes?.find(
+          lensProfile?.defaultProfile?.metadata?.attributes?.find(
             (attribute) => attribute.key === 'instagram'
           )?.value ||
-        lensProfile?.defaultProfile?.attributes?.find(
+        lensProfile?.defaultProfile?.metadata?.attributes?.find(
           (attribute) => attribute.key === 'app'
         )?.value !== 'diversehq'
 
@@ -203,30 +224,66 @@ const ProfileForm = () => {
         return
       }
 
-      const prevMetadata = await fetch(
-        getIPFSLink(lensProfile?.defaultProfile?.metadata)
-      ).then((res) => res.json())
+      console.log('coverPicture', bannerUrl)
+      console.log('profileImage', profileImage)
 
-      console.log('prevMetadata', prevMetadata)
+      const otherAttributes =
+        lensProfile?.defaultProfile?.metadata?.attributes
+          ?.filter(
+            (attr) =>
+              !['location', 'website', 'x', 'timestamp', 'app'].includes(
+                attr.key
+              )
+          )
+          .map(({ key, value, type }) => ({
+            key,
+            value,
+            type: MetadataAttributeType[type] as any
+          })) ?? []
 
-      const metadata: ProfileMetadata = {
-        ...prevMetadata,
-        version: MetadataVersions.one,
-        name: name ?? lensProfile?.defaultProfile?.name,
-        bio: bio ?? lensProfile?.defaultProfile?.bio,
-        attributes: attributes ?? lensProfile?.defaultProfile?.attributes,
-        cover_picture: bannerUrl ?? prevMetadata?.cover_picture,
-        metadata_id: uuidv4()
+      const preparedProfileMetadata: ProfileOptions = {
+        ...(name && { name: name }),
+        ...(bio && { bio: bio }),
+        coverPicture: bannerUrl ? bannerUrl : undefined,
+        picture:
+          // @ts-ignore
+          profileImage ? profileImage : undefined,
+        attributes: [
+          ...(otherAttributes as MetadataAttribute[]),
+          {
+            type: MetadataAttributeType.STRING,
+            key: 'location',
+            value: location
+          },
+          {
+            type: MetadataAttributeType.STRING,
+            key: 'website',
+            value: website
+          },
+          {
+            type: MetadataAttributeType.STRING,
+            key: 'x',
+            value: twitter
+          },
+          {
+            type: MetadataAttributeType.STRING,
+            key: 'timestamp',
+            value: new Date().toISOString()
+          }
+        ]
       }
-
+      preparedProfileMetadata.attributes =
+        preparedProfileMetadata.attributes?.filter((m) => {
+          return m.key !== '' && Boolean(trimify(m.value))
+        })
+      const metadata = profileMetadata(preparedProfileMetadata)
       console.log('metadata', metadata)
 
       const hash = await uploadToIpfsInfuraAndGetPath(metadata)
-      if (lensProfile?.defaultProfile?.dispatcher?.canUseRelay) {
+      if (canUseLensManager) {
         await setProfileMetadatViaDispatcher({
           request: {
-            profileId: lensProfile?.defaultProfile?.id,
-            metadata: `ipfs://${hash}`
+            metadataURI: `ipfs://${hash}`
           }
         })
         await queryClient.invalidateQueries({
@@ -239,11 +296,10 @@ const ProfileForm = () => {
         const setProfileMetadata = (
           await setProfileMetadataTypedData({
             request: {
-              profileId: lensProfile?.defaultProfile?.id,
-              metadata: `ipfs://${hash}`
+              metadataURI: `ipfs://${hash}`
             }
           })
-        ).createSetProfileMetadataTypedData
+        ).createOnchainSetProfileMetadataTypedData
         signTypedDataAndBroadcast(setProfileMetadata.typedData, {
           id: setProfileMetadata.id,
           type: 'set_profle_metadata'
@@ -274,7 +330,6 @@ const ProfileForm = () => {
   const handleOnSaveClick = async () => {
     setSaving(true)
     // Saving profile image
-    await setProfileImageIfChanged()
     await setProfileMetadata()
   }
 
@@ -400,7 +455,7 @@ const ProfileForm = () => {
         <FormRichTextInput
           label="Bio"
           placeholder="Say a bit more about you..."
-          startingValue={lensProfile?.defaultProfile?.bio}
+          startingValue={lensProfile?.defaultProfile?.metadata?.bio}
           setContent={setBio}
         />
 
@@ -428,13 +483,13 @@ const ProfileForm = () => {
           disabled={saving}
         />
 
-        <FormTextInput
+        {/* <FormTextInput
           label="Instagram Handle"
           placeholder="Your instagram handle"
           value={instagram}
           onChange={(e) => setInstagram(e.target.value)}
           disabled={saving}
-        />
+        /> */}
       </div>
 
       <button

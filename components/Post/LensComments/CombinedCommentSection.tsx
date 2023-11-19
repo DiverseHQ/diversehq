@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
-  CommentOrderingTypes,
-  CommentRankingFilter,
-  ReactionTypes,
+  LimitType,
+  PublicationReactionType,
+  TriStateValue,
   useAddReactionMutation,
-  useCommentFeedQuery
+  usePublicationsQuery
 } from '../../../graphql/generated'
 import { pollUntilIndexed } from '../../../lib/indexer/has-transaction-been-indexed'
 import { useLensUserContext } from '../../../lib/LensUserContext'
@@ -57,19 +57,17 @@ const CombinedCommentSection = ({
     (state) => state.currentReplyComment
   )
 
-  const { data, isLoading } = useCommentFeedQuery(
+  const { data, isLoading } = usePublicationsQuery(
     {
       request: {
         cursor: params.cursor,
-        commentsOf: params.postId,
-        limit: LENS_COMMENT_LIMIT,
-        commentsOfOrdering: CommentOrderingTypes.Ranking,
-        commentsRankingFilter: CommentRankingFilter.Relevant
-      },
-      reactionRequest: {
-        profileId: lensProfile?.defaultProfile?.id
-      },
-      profileId: lensProfile?.defaultProfile?.id
+        where: {
+          commentOn: {
+            id: params.postId
+          }
+        },
+        limit: LimitType.Fifty
+      }
     },
     {
       enabled: !!params.postId
@@ -102,9 +100,8 @@ const CombinedCommentSection = ({
     if (!tx && comment?.id) {
       await addReaction({
         request: {
-          profileId: lensProfile?.defaultProfile?.id,
-          publicationId: comment.id,
-          reaction: ReactionTypes.Upvote
+          for: comment.id,
+          reaction: PublicationReactionType.Upvote
         }
       })
 
@@ -130,9 +127,8 @@ const CombinedCommentSection = ({
 
     await addReaction({
       request: {
-        profileId: lensProfile?.defaultProfile?.id,
-        publicationId: commentId,
-        reaction: ReactionTypes.Upvote
+        for: commentId,
+        reaction: PublicationReactionType.Upvote
       }
     })
     const newCommentsSecondPhase = newCommentsFirstPhase.map((c) =>
@@ -179,7 +175,7 @@ const CombinedCommentSection = ({
           addComment={addComment}
           postInfo={postInfo}
           isMainPost={true}
-          canCommnet={postInfo?.canComment?.result}
+          canCommnet={postInfo?.operations?.canComment === TriStateValue.Yes}
           // setComments={setComments}
         />
       )}

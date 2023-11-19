@@ -4,12 +4,9 @@ import { searchCommunityFromName } from '../../apiHelper/community'
 import { CommunityType } from '../../types/community'
 import ImageWithPulsingLoader from '../Common/UI/ImageWithPulsingLoader'
 import VerifiedBadge from '../Common/UI/Icon/VerifiedBadge'
-import {
-  IsFollowedLensCommunityType,
-  useProfile
-} from '../Common/WalletContext'
-import formatHandle from '../User/lib/formatHandle'
-import getAvatar from '../User/lib/getAvatar'
+// import { useProfile } from '../Common/WalletContext'
+// import formatHandle from '../User/lib/formatHandle'
+// import getAvatar from '../User/lib/getAvatar'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import { useRouter } from 'next/router'
 import SeeMoreResultsButton from './SeeMoreResultsButton'
@@ -31,35 +28,35 @@ const CommunitiesSearchModal = ({
 }: Props) => {
   const router = useRouter()
   const [communities, setCommunities] = useState([])
-  const [lensCommunities, setLensCommunities] = useState<
-    IsFollowedLensCommunityType[]
-  >([])
-  const { allLensCommunities } = useProfile()
+  // const [lensCommunities, setLensCommunities] = useState<
+  //   IsFollowedLensCommunityType[]
+  // >([])
+  // const { allLensCommunities } = useProfile()
 
   const setCommunitiesOnSearchChange = async () => {
     if (searchTerm === '') {
       setCommunities([])
-      setLensCommunities([])
+      // setLensCommunities([])
       return
     }
     const res = await searchCommunityFromName(searchTerm, 3)
     setCommunities(res)
 
     // get top 5 matching communities from allLensCommunities
-    const matchingCommunities = allLensCommunities
-      .filter((community) => {
-        return formatHandle(community.handle)
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
-      })
-      .slice(0, 3)
-    setLensCommunities(matchingCommunities)
+    // const matchingCommunities = allLensCommunities
+    //   .filter((community) => {
+    //     return formatHandle(community.handle)
+    //       .toLowerCase()
+    //       .includes(searchTerm.toLowerCase())
+    //   })
+    //   .slice(0, 3)
+    // setLensCommunities(matchingCommunities)
   }
 
   const handleOutsideClick = (e) => {
     if (inputRef.current && !inputRef.current.contains(e.target)) {
       setCommunities([])
-      setLensCommunities([])
+      // setLensCommunities([])
     }
   }
 
@@ -80,10 +77,10 @@ const CommunitiesSearchModal = ({
 
   return (
     <>
-      {communities.length + lensCommunities.length > 0 && (
+      {communities.length > 0 && (
         <div>
           <div className="m-2 p-2 text-base font-bold">Communities</div>
-          {lensCommunities.map((community) => (
+          {/* {lensCommunities.map((community) => (
             <div
               className="m-2 flex flex-row p-1 hover:bg-s-hover underline-offset-4  items-center rounded-full cursor-pointer"
               key={community.handle}
@@ -101,7 +98,7 @@ const CommunitiesSearchModal = ({
               <div className="text-sm">l/{formatHandle(community.handle)}</div>
               {community?.verified && <VerifiedBadge className="ml-1" />}
             </div>
-          ))}
+          ))} */}
 
           {communities.map((community) => (
             <div

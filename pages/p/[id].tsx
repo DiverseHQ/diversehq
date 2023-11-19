@@ -7,7 +7,6 @@ import PostPageMobileTopNav from '../../components/Post/PostPageMobileTopNav'
 import LensPostSeo from '../../components/Post/PostSeos/LensPostSeo'
 import LensPostPage from '../../components/Post/pages/LensPostPage'
 import PostNotFound from '../../components/Post/pages/PostNotFound'
-import { useLensUserContext } from '../../lib/LensUserContext'
 import getPostWithCommunityInfo from '../../lib/post/getPostWithCommunityInfo'
 import { useProfileStore } from '../../store/profile'
 import { usePublicationStore } from '../../store/publication'
@@ -30,22 +29,18 @@ const Page = ({
   const addPublication = usePublicationStore((state) => state.addPublication)
   const addProfile = useProfileStore((state) => state.addProfile)
   const [loading, setLoading] = useState(true)
-  const { data } = useLensUserContext()
 
   const fetchAndSetPublication = async () => {
     try {
       const publicationRes = await getPostWithCommunityInfo({
         request: {
-          publicationId: postId
-        },
-        profileId: data?.defaultProfile?.id ?? null,
-        reactionRequest: {
-          profileId: data?.defaultProfile?.id ?? null
+          forId: postId
         }
       })
+      console.log('publicationRes', publicationRes)
       setPost(publicationRes)
-      addPublication(publicationRes.id, publicationRes)
-      addProfile(publicationRes.profile.handle, publicationRes.profile)
+      addPublication(publicationRes?.id, publicationRes)
+      addProfile(publicationRes.by?.handle?.fullHandle, publicationRes.by)
     } catch (error) {
       console.log('error', error)
     } finally {
@@ -96,11 +91,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     const _post = await getPostWithCommunityInfo({
       request: {
-        publicationId: id
-      },
-      profileId: null,
-      reactionRequest: {
-        profileId: null
+        forId: id
       }
     })
     return {

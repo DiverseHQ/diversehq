@@ -23,11 +23,12 @@ import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 import ClickOption from './ClickOption'
 import CreatePostPopup from './CreatePostPopup'
+import checkDispatcherPermissions from '../../lib/profile/checkPermission'
 
 const Navbar = () => {
   const router = useRouter()
   const { pathname } = router
-  const { user, joinedLensCommunities, LensCommunity } = useProfile()
+  const { user } = useProfile()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const { showModal } = usePopUpModal()
   const { notifyInfo } = useNotify()
@@ -131,24 +132,24 @@ const Navbar = () => {
       }
 
       // setting the joinedCommunitites with recentCommunitties from the localStorage at the top
-      const myLensCommunity = []
-      if (LensCommunity) {
-        myLensCommunity.push({
-          _id: LensCommunity?._id,
-          name: formatHandle(LensCommunity?.Profile?.handle),
-          logoImageUrl: getAvatar(LensCommunity?.Profile),
-          isLensCommunity: true
-        })
-      }
+      // const myLensCommunity = []
+      // if (LensCommunity) {
+      //   myLensCommunity.push({
+      //     _id: LensCommunity?._id,
+      //     name: formatHandle(LensCommunity?.Profile?.handle),
+      //     logoImageUrl: getAvatar(LensCommunity?.Profile),
+      //     isLensCommunity: true
+      //   })
+      // }
 
       const joinedCommunitiesArray = [
-        ...joinedLensCommunities.map((community) => ({
-          _id: community._id,
-          name: formatHandle(community?.handle),
-          // @ts-ignore
-          logoImageUrl: getAvatar(community),
-          isLensCommunity: true
-        })),
+        // ...joinedLensCommunities.map((community) => ({
+        //   _id: community._id,
+        //   name: formatHandle(community?.handle),
+        //   // @ts-ignore
+        //   logoImageUrl: getAvatar(community),
+        //   isLensCommunity: true
+        // })),
         // removing the communities in the recentCommunities from the joinedCommunities using communityId
         ...response
       ]
@@ -179,6 +180,10 @@ const Navbar = () => {
       setFetchingJoinedCommunities(false)
     }
   }
+
+  const { canUseLensManager } = checkDispatcherPermissions(
+    lensProfile?.defaultProfile
+  )
 
   return (
     <div className="flex flex-row flex-1 z-40 justify-between px-4 md:px-6 lg:px-8 xl:px-12 py-1.5 items-center border-b border-s-border gap-2 sticky top-0 bg-s-bg min-h-[62px]">
@@ -294,10 +299,7 @@ const Navbar = () => {
           </button>
         </Tooltip>
 
-        {!isSignedIn ||
-        !hasProfile ||
-        !user ||
-        !lensProfile?.defaultProfile?.dispatcher?.canUseRelay ? (
+        {!isSignedIn || !hasProfile || !user || !canUseLensManager ? (
           <LensLoginButton />
         ) : (
           <div
@@ -310,20 +312,22 @@ const Navbar = () => {
               className="w-[40px] h-[40px] rounded-full cursor-pointer"
             />
             <div className="flex flex-col">
-              {lensProfile?.defaultProfile?.name && (
+              {lensProfile?.defaultProfile?.metadata?.displayName && (
                 <div className="leading-4">
                   {' '}
-                  {lensProfile?.defaultProfile?.name}{' '}
+                  {lensProfile?.defaultProfile?.metadata?.displayName}{' '}
                 </div>
               )}
               <span onClick={(e) => e.stopPropagation()}>
                 <Link
+                  // @ts-ignore
                   href={`/u/${formatHandle(lensProfile.defaultProfile.handle)}`}
                 >
                   <div
                     className={`hover:cursor-pointer className='leading-4' hover:underline text-s-text text-sm p-2 md:p-0`}
                   >
-                    u/{formatHandle(lensProfile.defaultProfile.handle)}
+                    {/* @ts-ignore  */}
+                    {`u/${formatHandle(lensProfile.defaultProfile.handle)}`}
                   </div>
                 </Link>
               </span>

@@ -11,9 +11,7 @@ import LensPageProfileCard from '../Cards/LensPageProfileCard'
 import LensPostPageCommunityCard from '../Cards/LensPostPageCommunityCard'
 import CombinedCommentSection from '../LensComments/CombinedCommentSection'
 import LensPostCard from '../LensPostCard'
-import PostPageMentionsColumn, {
-  getAllMentionsHandlFromContent
-} from '../PostPageMentionsColumn'
+import PostPageMentionsColumn from '../PostPageMentionsColumn'
 
 interface Props {
   id: string
@@ -28,12 +26,8 @@ const LensPostPage = ({ id, post }: Props) => {
   const { data } = usePublicationQuery(
     {
       request: {
-        publicationId: id
-      },
-      reactionRequest: {
-        profileId: lensProfile?.defaultProfile?.id
-      },
-      profileId: lensProfile?.defaultProfile?.id
+        forId: id
+      }
     },
     {
       enabled: !!id && !!lensProfile?.defaultProfile?.id
@@ -108,7 +102,7 @@ const LensPostPage = ({ id, post }: Props) => {
                   {postInfo?.isLensCommunityPost ? (
                     <LensPageProfileCard
                       isLensCommunity={!!postInfo?.isLensCommunityPost}
-                      _profile={postInfo?.profile}
+                      _profile={postInfo?.by}
                       verified={postInfo?.communityInfo?.verified}
                     />
                   ) : (
@@ -119,22 +113,13 @@ const LensPostPage = ({ id, post }: Props) => {
                 </>
               )}
               <div className="px-5 mt-6 font-medium">Related Profiles</div>
-              {postInfo?.isLensCommunityPost ? (
-                <LensPageProfileCard
-                  profileHandle={
-                    getAllMentionsHandlFromContent(
-                      postInfo?.metadata?.content
-                    )[0]
-                  }
-                />
-              ) : (
-                <LensPageProfileCard _profile={postInfo?.profile} />
-              )}
+              {/* {postInfo?.isLensCommunityPost ? (
+                <LensPageProfileCard _profile={postInfo?.by} />
+              ) : ( */}
+              <LensPageProfileCard _profile={postInfo?.by} />
+              {/* )} */}
 
-              <PostPageMentionsColumn
-                isLensCommunityPost={postInfo?.isLensCommunityPost}
-                content={postInfo?.metadata?.content}
-              />
+              <PostPageMentionsColumn post={postInfo} />
             </div>
           </>
         )}

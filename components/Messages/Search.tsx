@@ -3,8 +3,8 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import { IoChevronBackSharp } from 'react-icons/io5'
 import { GrFormClose } from 'react-icons/gr'
 import {
+  LimitType,
   Profile,
-  SearchRequestTypes,
   useSearchProfilesQuery
 } from '../../graphql/generated'
 import { stringToLength } from '../../utils/utils'
@@ -32,8 +32,7 @@ const Search = ({
     {
       request: {
         query: searchText,
-        type: SearchRequestTypes.Profile,
-        limit: 20
+        limit: LimitType.Ten
       }
     },
     {
@@ -71,38 +70,39 @@ const Search = ({
           />
         )}
       </div>
-      {searchProfileQuery?.data?.search?.__typename === 'ProfileSearchResult' &&
-        searchProfileQuery?.data?.search?.items?.length > 0 && (
-          <div className="h-[500px] overflow-y-auto">
-            {/* @ts-ignore */}
-            {searchProfileQuery?.data?.search?.items?.map(
-              (profile: Profile) => (
-                <div
-                  key={profile.id}
-                  className={`cursor-pointer hover:bg-p-btn-hover px-3 py-2 flex flex-row justify-between border-b border-s-border ${modalClassName}`}
-                  onClick={() => onProfileSelected(profile)}
-                >
-                  <div className="flex flex-row items-center space-x-2">
-                    <ImageWithPulsingLoader
-                      src={getAvatar(profile)}
-                      className="w-7 h-7 rounded-full"
-                      alt={profile?.handle}
-                    />
-                    <div className="flex flex-col justify-center">
-                      <div className="flex flex-row space-x-2 items-center">
-                        <span>{stringToLength(profile?.name, 15)} </span>
-                        <span className="text-sm text-s-text">
-                          {profile?.handle &&
-                            `u/${formatHandle(profile?.handle)}`}
-                        </span>
-                      </div>
+      {searchProfileQuery?.data?.searchProfiles?.items?.length > 0 && (
+        <div className="h-[500px] overflow-y-auto">
+          {/* @ts-ignore */}
+          {searchProfileQuery?.data.searchProfiles.items?.map(
+            (profile: Profile) => (
+              <div
+                key={profile.id}
+                className={`cursor-pointer hover:bg-p-btn-hover px-3 py-2 flex flex-row justify-between border-b border-s-border ${modalClassName}`}
+                onClick={() => onProfileSelected(profile)}
+              >
+                <div className="flex flex-row items-center space-x-2">
+                  <ImageWithPulsingLoader
+                    src={getAvatar(profile)}
+                    className="w-7 h-7 rounded-full"
+                    alt={profile?.handle}
+                  />
+                  <div className="flex flex-col justify-center">
+                    <div className="flex flex-row space-x-2 items-center">
+                      <span>
+                        {stringToLength(profile?.metadata?.displayName, 15)}{' '}
+                      </span>
+                      <span className="text-sm text-s-text">
+                        {profile?.handle &&
+                          `u/${formatHandle(profile?.handle)}`}
+                      </span>
                     </div>
                   </div>
                 </div>
-              )
-            )}
-          </div>
-        )}
+              </div>
+            )
+          )}
+        </div>
+      )}
     </div>
   )
 }

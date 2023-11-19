@@ -1,13 +1,12 @@
 import Link from 'next/link'
 import { memo, useEffect, useState } from 'react'
-import {
-  CommentOrderingTypes,
-  CommentRankingFilter,
-  useCommentFeedQuery
-} from '../../../graphql/generated'
-import { useLensUserContext } from '../../../lib/LensUserContext'
 import { useDevice } from '../../Common/DeviceWrapper'
 import LensCommentCard from './LensCommentCard'
+import {
+  CommentRankingFilterType,
+  LimitType,
+  usePublicationsQuery
+} from '../../../graphql/generated'
 
 const LensRepliedComments = ({
   commentId,
@@ -25,20 +24,21 @@ const LensRepliedComments = ({
   level?: number
 }) => {
   const [uniqueComments, setUniqueComments] = useState([])
-  const { data: lensProfile } = useLensUserContext()
   const { isMobile } = useDevice()
   const MAX_COMMENT_LEVEL = isMobile ? 3 : 6
-  const { data } = useCommentFeedQuery(
+  const { data } = usePublicationsQuery(
     {
       request: {
-        commentsOf: commentId,
-        commentsOfOrdering: CommentOrderingTypes.Ranking,
-        commentsRankingFilter: CommentRankingFilter.Relevant
-      },
-      reactionRequest: {
-        profileId: lensProfile?.defaultProfile?.id ?? null
-      },
-      profileId: lensProfile?.defaultProfile?.id ?? null
+        where: {
+          commentOn: {
+            id: commentId,
+            ranking: {
+              filter: CommentRankingFilterType.Relevant
+            }
+          }
+        },
+        limit: LimitType.Ten
+      }
     },
     {
       enabled: !!commentId && !disableFetch

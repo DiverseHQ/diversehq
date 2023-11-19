@@ -1,33 +1,27 @@
 // import { NextSeo } from 'next-seo'
 import React from 'react'
-import { Publication } from '../../../graphql/generated'
 import { appLink } from '../../../utils/config'
 // import { IMAGE_KIT_ENDPOINT, LensInfuraEndpoint } from '../../../utils/config'
 import { stringToLength } from '../../../utils/utils'
-import imageProxy from '../../User/lib/imageProxy'
 import formatHandle from '../../User/lib/formatHandle'
 import MetaTags from '../../Common/Seo/MetaTags'
 import { getContent } from '../getContent'
+import { AnyPublication } from '../../../graphql/generated'
 
-const LensPostSeo = ({ post }: { post: Publication }) => {
+const LensPostSeo = ({ post }: { post: AnyPublication }) => {
   // @ts-ignore
   const content = getContent(post)
   return (
     <MetaTags
       title={
-        stringToLength(post?.metadata?.name, 90) +
-        `\n by u/${formatHandle(post?.profile?.handle)}`
+        // @ts-ignore
+        stringToLength(post?.metadata?.content, 90) +
+        `\n by u/${formatHandle(post?.by?.handle)}`
       }
       description={stringToLength(content, 90)}
       url={`${appLink}/p/${post?.id}`}
-      image={
-        post?.metadata?.mainContentFocus === 'IMAGE'
-          ? imageProxy(
-              post?.metadata?.media[0]?.original.url,
-              'w-1200,h-630,q-50'
-            )
-          : undefined
-      }
+      // @ts-ignore
+      image={post?.metadata?.marketplace?.image?.optimized?.uri}
     />
     // <NextSeo
     //   title={stringToLength(post?.metadata?.content, 60)}

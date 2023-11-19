@@ -12,27 +12,27 @@ import useHideSidebar from '../hook/useHideSidebar'
 import CopyrightAndLinks from '../../Common/UI/CopyrightAndLinks'
 import CommunitiesDiv from '../../Common/UI/CommunitiesDiv'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import getAvatar from '../../User/lib/getAvatar'
-import formatHandle from '../../User/lib/formatHandle'
+// import getAvatar from '../../User/lib/getAvatar'
+// import formatHandle from '../../User/lib/formatHandle'
 import { useAccount } from 'wagmi'
 import CommunityScroll from '../../Common/UI/CommunityScroll'
-import getCoverBanner from '../../User/lib/getCoverBanner'
-import TrendingTagsRightSidebarColumn from './TrendingTodayTagsRightSidebarColumn'
-import TrendingThisWeekTagsRightSidebarColumn from './TrendingThisWeekTagsRightSidebarColumn'
-import { BsChevronDown } from 'react-icons/bs'
-import OptionsWrapper from '../../Common/OptionsWrapper'
-import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
+// import getCoverBanner from '../../User/lib/getCoverBanner'
+// import TrendingTagsRightSidebarColumn from './TrendingTodayTagsRightSidebarColumn'
+// import TrendingThisWeekTagsRightSidebarColumn from './TrendingThisWeekTagsRightSidebarColumn'
+// import { BsChevronDown } from 'react-icons/bs'
+// import OptionsWrapper from '../../Common/OptionsWrapper'
+// import MoreOptionsModal from '../../Common/UI/MoreOptionsModal'
 import GetItOnGooglePlay from './GetItOnGooglePlay'
 
 const RightSidebar = () => {
   const hide = useHideSidebar()
-  const { user, LensCommunity, allLensCommunities, loading } = useProfile()
-  const { data: lensProfile, isLoading } = useLensUserContext()
+  const { user, loading } = useProfile()
+  const { isLoading } = useLensUserContext()
   const { address } = useAccount()
 
-  const [isTodayTrending, setIsTodayTrending] = useState<boolean>(true)
-  const [showOptionsModal, setShowOptionsModal] = useState<boolean>(false)
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  // const [isTodayTrending, setIsTodayTrending] = useState<boolean>(true)
+  // const [showOptionsModal, setShowOptionsModal] = useState<boolean>(false)
+  // const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
 
   // const { notifyError } = useNotify()
 
@@ -91,10 +91,10 @@ const RightSidebar = () => {
   }, [])
 
   // sort alllenscommunities by followers
-  const sortedLensCommunities = allLensCommunities
-    ?.sort((a, b) => b.stats.totalFollowers - a.stats.totalFollowers)
-    ?.filter((c) => !c.isFollowedByMe && c.verified)
-    .slice(0, 6)
+  // const sortedLensCommunities = allLensCommunities
+  //   ?.sort((a, b) => b.stats.totalFollowers - a.stats.totalFollowers)
+  //   ?.filter((c) => !c.isFollowedByMe && c.verified)
+  //   .slice(0, 6)
 
   return (
     <div
@@ -103,20 +103,20 @@ const RightSidebar = () => {
       } w-[150px] sm:w-[300px] py-4 pr-4 overflow-scroll no-scrollbar`}
     >
       <GetItOnGooglePlay />
-      {user && (createdCommunities?.length > 0 || LensCommunity) && (
+      {user && createdCommunities?.length > 0 && (
         <CommunitiesDiv
-          showFirstCommunities={
-            LensCommunity
-              ? [
-                  {
-                    name: formatHandle(lensProfile?.defaultProfile?.handle),
-                    // @ts-ignore
-                    logoImageUrl: getAvatar(lensProfile?.defaultProfile),
-                    isLensCommunity: true
-                  }
-                ]
-              : []
-          }
+          // showFirstCommunities={
+          //   LensCommunity
+          //     ? [
+          //         {
+          //           name: formatHandle(lensProfile?.defaultProfile?.handle),
+          //           // @ts-ignore
+          //           logoImageUrl: getAvatar(lensProfile?.defaultProfile),
+          //           isLensCommunity: true
+          //         }
+          //       ]
+          //     : []
+          // }
           text={`Created ${
             createdCommunities.length > 1 ? 'Communities' : 'Community'
           }`}
@@ -144,22 +144,23 @@ const RightSidebar = () => {
       )} */}
       <CommunityScroll
         communities={
-          sortedLensCommunities.length > 0
-            ? [
-                ...sortedLensCommunities.map((c) => ({
-                  name: formatHandle(c.handle),
-                  // @ts-ignore
-                  logoImageUrl: getAvatar(c),
-                  // @ts-ignore
-                  bannerImageUrl: getCoverBanner(c),
-                  isLensCommunity: true
-                })),
-                ...topCommunities
-              ]
-            : topCommunities
+          topCommunities
+          // sortedLensCommunities.length > 0
+          //   ? [
+          //       ...sortedLensCommunities.map((c) => ({
+          //         name: formatHandle(c.handle),
+          //         // @ts-ignore
+          //         logoImageUrl: getAvatar(c),
+          //         // @ts-ignore
+          //         bannerImageUrl: getCoverBanner(c),
+          //         isLensCommunity: true
+          //       })),
+          //       ...topCommunities
+          //     ]
+          // : topCommunities
         }
       />
-      <div className="text-p-text bg-s-bg rounded-xl mb-4 py-2">
+      {/* <div className="text-p-text bg-s-bg rounded-xl mb-4 py-2">
         <div className="flex flex-row items-center justify-between">
           <div className="text-2xl px-4">
             {isTodayTrending ? 'Trending Today' : 'Trending This Week'}
@@ -204,7 +205,7 @@ const RightSidebar = () => {
         ) : (
           <TrendingThisWeekTagsRightSidebarColumn />
         )}
-      </div>
+      </div> */}
       <CopyrightAndLinks />
     </div>
   )

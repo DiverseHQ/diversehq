@@ -3,11 +3,11 @@ import {
   ProfileDocument,
   ProfileQuery,
   ProfileQueryVariables,
-  SingleProfileQueryRequest
+  ProfileRequest
 } from '../../graphql/generated'
 
 export default async function getLensProfileInfo(
-  _request: SingleProfileQueryRequest
+  _request: ProfileRequest
 ): Promise<ProfileQuery> {
   return await fetchData<ProfileQuery, ProfileQueryVariables>(ProfileDocument, {
     request: _request

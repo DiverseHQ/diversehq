@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react'
 import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri'
 import { SlUserFollowing } from 'react-icons/sl'
 import {
-  SingleProfileQueryRequest,
-  useCreateUnfollowTypedDataMutation,
+  ProfileRequest,
+  useFollowMutation,
   useProfileQuery,
-  useProxyActionMutation
+  useUnfollowMutation
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
 import { useNotify } from '../Common/NotifyContext'
 import formatHandle from './lib/formatHandle'
+import checkDispatcherPermissions from '../../lib/profile/checkPermission'
 
 interface followSteps {
   UnFollow: string
@@ -20,7 +21,7 @@ interface followSteps {
 }
 
 const useLensFollowButton = (
-  request: SingleProfileQueryRequest,
+  request: ProfileRequest,
   label: string = 'follow'
 ) => {
   const FOLLOW_STATUS: {
@@ -39,14 +40,17 @@ const useLensFollowButton = (
       FollowBack: 'Join'
     } as followSteps
   }
-  const { mutateAsync: proxyAction } = useProxyActionMutation()
-  const { mutateAsync: unFollow } = useCreateUnfollowTypedDataMutation()
-  const { isSignedTx, error, result, type, signTypedDataAndBroadcast } =
-    useSignTypedDataAndBroadcast()
+  const { isSignedTx, error, result, type } = useSignTypedDataAndBroadcast()
   const [isFollowedByMe, setIsFollowedByMe] = useState(false)
   const [loading, setLoading] = useState(false)
   const { notifySuccess, notifyError } = useNotify()
-  const { isSignedIn, hasProfile } = useLensUserContext()
+  const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
+  const { mutateAsync: follow } = useFollowMutation()
+  const { mutateAsync: unFollow } = useUnfollowMutation()
+
+  const { canUseLensManager } = checkDispatcherPermissions(
+    lensProfile?.defaultProfile
+  )
 
   const { data } = useProfileQuery(
     {
@@ -56,31 +60,43 @@ const useLensFollowButton = (
       enabled:
         isSignedIn &&
         hasProfile &&
-        (Boolean(request.profileId) || Boolean(request.handle))
+        (Boolean(request.forProfileId) || Boolean(request.forHandle))
     }
   )
 
   useEffect(() => {
     if (!data?.profile) return
-    setIsFollowedByMe(!!data?.profile?.isFollowedByMe)
+    setIsFollowedByMe(!!data?.profile?.operations?.isFollowedByMe?.value)
   }, [data])
 
   const handleFollowProfile = async (profileId) => {
     try {
       setLoading(true)
-      await proxyAction({
-        request: {
-          follow: {
-            freeFollow: {
-              profileId: profileId
-            }
+      if (!canUseLensManager) {
+        setLoading(false)
+        notifyError('You are not using a Lens Manager')
+        return
+      }
+      const followRequest = (
+        await follow({
+          request: {
+            follow: profileId
           }
-        }
-      })
+        })
+      ).follow
+
+      if (followRequest?.__typename === 'LensProfileManagerRelayError') {
+        setLoading(false)
+        notifyError(followRequest?.reason)
+        return
+      }
+
       setIsFollowedByMe(true)
       if (label === 'follow') {
+        // @ts-ignore
         notifySuccess(`Following u/${formatHandle(data?.profile?.handle)}`)
       } else {
+        // @ts-ignore
         notifySuccess(`Joined l/${formatHandle(data?.profile?.handle)}`)
       }
       setLoading(false)
@@ -94,18 +110,33 @@ const useLensFollowButton = (
   const handleUnfollowProfile = async (profileId) => {
     try {
       setLoading(true)
+      if (!canUseLensManager) {
+        notifyError('You are not using a Lens Manager')
+        return
+      }
       const unfollowProfileResult = (
         await unFollow({
           request: {
-            profile: profileId
+            unfollow: profileId
           }
         })
-      ).createUnfollowTypedData
+      ).unfollow
 
-      signTypedDataAndBroadcast(unfollowProfileResult.typedData, {
-        id: unfollowProfileResult.id,
-        type: 'unfollow'
-      })
+      if (
+        unfollowProfileResult?.__typename === 'LensProfileManagerRelayError'
+      ) {
+        setLoading(false)
+        notifyError(unfollowProfileResult?.reason)
+        return
+      }
+
+      // @ts-ignore
+      notifySuccess(`UnFollowed u/${formatHandle(data?.profile?.handle)}`)
+
+      // signTypedDataAndBroadcast(unfollowProfileResult.typedData, {
+      //   id: unfollowProfileResult.id,
+      //   type: 'unfollow'
+      // })
     } catch (e) {
       setLoading(false)
       notifyError('You are not Following this Profile')
@@ -129,8 +160,10 @@ const useLensFollowButton = (
       setLoading(false)
       setIsFollowedByMe(false)
       if (label === 'follow') {
+        // @ts-ignore
         notifySuccess(`UnFollowed u/${formatHandle(data?.profile?.handle)}`)
       } else {
+        // @ts-ignore
         notifySuccess(`Left l/${formatHandle(data?.profile?.handle)}`)
       }
     }
@@ -190,7 +223,7 @@ const useLensFollowButton = (
                 <div className="h-4 w-4 border-p-btn-text spinner" />
                 <p>{FOLLOW_STATUS[label].Follow}</p>
               </div>
-            ) : data?.profile?.isFollowing ? (
+            ) : data?.profile?.operations?.isFollowingMe?.value ? (
               <>{FOLLOW_STATUS[label].FollowBack}</>
             ) : (
               <div className="flex flex-row justify-center items-center space-x-1 ">

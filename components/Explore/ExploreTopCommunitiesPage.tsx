@@ -9,7 +9,7 @@ import MobileLoader from '../Common/UI/MobileLoader'
 import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
 import { useDevice } from '../Common/DeviceWrapper'
-import { useProfile } from '../Common/WalletContext'
+// import { useProfile } from '../Common/WalletContext'
 import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
 
 interface Props {
@@ -24,7 +24,7 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const { isMobile } = useDevice()
-  const { allLensCommunities } = useProfile()
+  // const { allLensCommunities } = useProfile()
 
   useEffect(() => {
     getTopCommunities()
@@ -42,29 +42,29 @@ const ExploreTopCommunitiesPage: FC<Props> = ({
     const newCommunities = fetchedCommunities.communities
 
     // add lens communities to the top
-    let startMembersCount = Number.POSITIVE_INFINITY
-    let endMembersCount = newCommunities[newCommunities.length - 1].membersCount
+    // let startMembersCount = Number.POSITIVE_INFINITY
+    // let endMembersCount = newCommunities[newCommunities.length - 1].membersCount
 
-    if (communities.length !== 0) {
-      startMembersCount = newCommunities[0].membersCount
-    }
+    // if (communities.length !== 0) {
+    //   startMembersCount = newCommunities[0].membersCount
+    // }
 
-    let lensCommunities = []
+    // let lensCommunities = []
 
-    for (const c of allLensCommunities) {
-      if (
-        c.stats.totalFollowers < startMembersCount &&
-        c.stats.totalFollowers > endMembersCount
-      ) {
-        lensCommunities.push({
-          ...c,
-          membersCount: c.stats.totalFollowers
-        })
-      }
-    }
+    // for (const c of allLensCommunities) {
+    //   if (
+    //     c.stats.totalFollowers < startMembersCount &&
+    //     c.stats.totalFollowers > endMembersCount
+    //   ) {
+    //     lensCommunities.push({
+    //       ...c,
+    //       membersCount: c.stats.totalFollowers
+    //     })
+    //   }
+    // }
 
     // mix and sort the communities
-    const mixedCommunities = [...lensCommunities, ...newCommunities]
+    const mixedCommunities = newCommunities
     mixedCommunities.sort((a, b) => {
       return b.membersCount - a.membersCount
     })

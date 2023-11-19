@@ -12,7 +12,7 @@ import {
 import { useDevice } from '../Common/DeviceWrapper'
 import useRouterLoading from '../Common/Hook/useRouterLoading'
 import MobileLoader from '../Common/UI/MobileLoader'
-import { useProfile } from '../Common/WalletContext'
+// import { useProfile } from '../Common/WalletContext'
 import usePublicationWithCommunityInfo from '../Community/hook/usePublicationWithCommunityInfo'
 import LensPostCard from './LensPostCard'
 
@@ -24,17 +24,15 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
   const { isMobile } = useDevice()
   const { loading: routeLoading } = useRouterLoading()
   const [publicationIds, setPublicationIds] = useState<string[]>([])
-  const { joinedLensCommunities } = useProfile()
+  // const { joinedLensCommunities } = useProfile()
   const addPublications = usePublicationStore((state) => state.addPublications)
   const addProfiles = useProfileStore((state) => state.addProfiles)
 
   const { publications: rawPublications } = usePublicationWithCommunityInfo({
     request: {
-      publicationIds: publicationIds
-    },
-    profileId: myLensProfile?.defaultProfile?.id,
-    reactionRequest: {
-      profileId: myLensProfile?.defaultProfile?.id
+      where: {
+        publicationIds: publicationIds
+      }
     },
     enabled: !!publicationIds.length && !!myLensProfile?.defaultProfile?.id
   })
@@ -47,7 +45,7 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
     let newPublications = new Map()
 
     for (const newPost of rawPublications) {
-      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newProfiles.set(newPost.by.handle.fullHandle, newPost.by)
       newPublications.set(newPost.id, newPost)
     }
 
@@ -61,7 +59,8 @@ const LensPostJoinedCommunitiesPublicationsFromDB = () => {
       const newPublicationIds = await getJoinedLensPublication(
         LENS_POST_LIMIT,
         publications.length,
-        joinedLensCommunities.map((c) => c._id)
+        []
+        // joinedLensCommunities.map((c) => c._id)
       ).then((res) => res.json())
       setPublicationIds(newPublicationIds.map((p) => p.publicationId))
 

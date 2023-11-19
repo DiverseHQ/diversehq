@@ -12,13 +12,13 @@ import { BsFillPersonFill } from 'react-icons/bs'
 import { IoIosMoon, IoMdSettings } from 'react-icons/io'
 import { HiSun } from 'react-icons/hi'
 import formatHandle from '../User/lib/formatHandle'
-import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
+// import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
 import { useTheme } from '../Common/ThemeProvider'
 // import { specialProfileIds } from '../../utils/profileIds'
 
 const ClickOption = () => {
   const router = useRouter()
-  const { user, LensCommunity } = useProfile()
+  const { user } = useProfile()
   const { disconnect } = useDisconnect()
   const { hideModal, showModal } = usePopUpModal()
   const { theme, toggleTheme } = useTheme()
@@ -26,6 +26,7 @@ const ClickOption = () => {
 
   const routeToUserProfile = () => {
     if (user && lensProfile?.defaultProfile?.handle) {
+      // @ts-ignore
       router.push(`/u/${formatHandle(lensProfile?.defaultProfile?.handle)}`)
     }
     hideModal()
@@ -50,12 +51,12 @@ const ClickOption = () => {
     })
   }
 
-  const createLensCommunity = () => {
-    showModal({
-      component: <CreateLensCommunityPopUp />,
-      type: modalType.fullscreen
-    })
-  }
+  // const createLensCommunity = () => {
+  //   showModal({
+  //     component: <CreateLensCommunityPopUp />,
+  //     type: modalType.fullscreen
+  //   })
+  // }
 
   return (
     <MoreOptionsModal
@@ -79,14 +80,14 @@ const ClickOption = () => {
             <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
           )
         },
-        {
-          label: 'Create Lens Community',
-          onClick: createLensCommunity,
-          hidden: !!LensCommunity,
-          icon: () => (
-            <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
-          )
-        },
+        // {
+        //   label: 'Create Lens Community',
+        //   onClick: createLensCommunity,
+        //   hidden: !!LensCommunity,
+        //   icon: () => (
+        //     <MdCreateNewFolder className="mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
+        //   )
+        // },
         {
           label: theme === 'light' ? 'Dark Mode' : 'Light Mode',
           onClick: toggleTheme,

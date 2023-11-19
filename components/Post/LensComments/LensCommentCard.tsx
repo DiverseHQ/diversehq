@@ -8,7 +8,8 @@ import { TbArrowsDiagonalMinimize } from 'react-icons/tb'
 import ReactTimeAgo from 'react-time-ago'
 import {
   Comment,
-  ReactionTypes,
+  PublicationReactionType,
+  TriStateValue,
   useAddReactionMutation,
   useHidePublicationMutation
 } from '../../../graphql/generated'
@@ -30,6 +31,7 @@ import Markup from '../../Lexical/Markup'
 import getAvatar from '../../User/lib/getAvatar'
 import Attachment from '../Attachment'
 import MirrorButton from '../MirrorButton'
+import getPublicationData from '../../../lib/post/getPublicationData'
 
 const LensCommentCard = ({
   comment,
@@ -45,25 +47,13 @@ const LensCommentCard = ({
   const [hoveringVerticalBar, setHoveringVerticalBar] = useState(false)
   const router = useRouter()
   const { notifyInfo } = useNotify()
-  const [reaction, setReaction] = useState(comment?.reaction)
-  const [upvoteCount, setUpvoteCount] = useState(
-    comment?.stats?.totalUpvotes ? comment?.stats?.totalUpvotes : 0
-  )
-  const [downvoteCount, setDownvoteCount] = useState(
-    comment?.stats?.totalDownvotes ? comment?.stats?.totalDownvotes : 0
-  )
+  const [reaction, setReaction] = useState(comment?.operations?.hasReacted)
+  const [voteCount, setVoteCount] = useState(comment?.stats?.reactions)
 
-  useEffect(() => {
-    if (!comment?.stats) return
-    setUpvoteCount(comment?.stats?.totalUpvotes)
-    setDownvoteCount(comment?.stats?.totalDownvotes)
-  }, [comment.stats])
-
-  const [voteCount, setVoteCount] = useState(upvoteCount - downvoteCount)
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const [isAuthor, setIsAuthor] = useState(
-    lensProfile?.defaultProfile?.id === comment?.profile?.id
+    lensProfile?.defaultProfile?.id === comment?.by?.id
   )
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -79,19 +69,16 @@ const LensCommentCard = ({
 
   useEffect(() => {
     if (!comment || !lensProfile) return
-    setIsAuthor(lensProfile?.defaultProfile?.id === comment?.profile?.id)
+    setIsAuthor(lensProfile?.defaultProfile?.id === comment?.by?.id)
   }, [comment, lensProfile])
 
   useEffect(() => {
-    setReaction(comment?.reaction)
+    setReaction(comment?.operations?.hasReacted)
+    setVoteCount(comment?.stats?.reactions)
   }, [comment])
 
-  useEffect(() => {
-    setVoteCount(upvoteCount - downvoteCount)
-  }, [upvoteCount, downvoteCount])
-
   const handleUpvote = async () => {
-    if (reaction === ReactionTypes.Upvote) return
+    if (reaction) return
     if (!comment?.id) {
       notifyInfo('not indexed yet, try in a moment')
       return
@@ -102,18 +89,12 @@ const LensCommentCard = ({
         return
       }
 
-      setReaction(ReactionTypes.Upvote)
-      if (reaction === ReactionTypes.Downvote) {
-        setDownvoteCount(downvoteCount - 1)
-        setUpvoteCount(upvoteCount + 1)
-      } else {
-        setUpvoteCount(upvoteCount + 1)
-      }
+      setReaction(true)
+      setVoteCount(voteCount + 1)
       await addReaction({
         request: {
-          profileId: lensProfile.defaultProfile.id,
-          publicationId: comment.id,
-          reaction: ReactionTypes.Upvote
+          for: comment.id,
+          reaction: PublicationReactionType.Upvote
         }
       })
     } catch (error) {
@@ -121,35 +102,35 @@ const LensCommentCard = ({
     }
   }
 
-  const handleDownvote = async () => {
-    if (reaction === ReactionTypes.Downvote) return
-    try {
-      if (!isSignedIn || !hasProfile) {
-        notifyInfo('How about loging in lens, first?')
-        return
-      }
-      if (!comment?.id) {
-        notifyInfo('not indexed yet, try in a moment')
-        return
-      }
-      setReaction(ReactionTypes.Downvote)
-      if (reaction === ReactionTypes.Upvote) {
-        setUpvoteCount(upvoteCount - 1)
-        setDownvoteCount(downvoteCount + 1)
-      } else {
-        setDownvoteCount(downvoteCount + 1)
-      }
-      await addReaction({
-        request: {
-          profileId: lensProfile.defaultProfile.id,
-          publicationId: comment.id,
-          reaction: ReactionTypes.Downvote
-        }
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const handleDownvote = async () => {
+  //   if (reaction === ReactionTypes.Downvote) return
+  //   try {
+  //     if (!isSignedIn || !hasProfile) {
+  //       notifyInfo('How about loging in lens, first?')
+  //       return
+  //     }
+  //     if (!comment?.id) {
+  //       notifyInfo('not indexed yet, try in a moment')
+  //       return
+  //     }
+  //     setReaction(ReactionTypes.Downvote)
+  //     if (reaction === ReactionTypes.Upvote) {
+  //       setUpvoteCount(upvoteCount - 1)
+  //       setDownvoteCount(downvoteCount + 1)
+  //     } else {
+  //       setDownvoteCount(downvoteCount + 1)
+  //     }
+  //     await addReaction({
+  //       request: {
+  //         profileId: lensProfile.defaultProfile.id,
+  //         publicationId: comment.id,
+  //         reaction: ReactionTypes.Downvote
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   const handleDeleteComment = async () => {
     if (!comment?.id) {
@@ -167,7 +148,7 @@ const LensCommentCard = ({
       }
       await deleteComment({
         request: {
-          publicationId: comment.id
+          for: comment.id
         }
       })
       router.reload()
@@ -181,9 +162,8 @@ const LensCommentCard = ({
     if (!tx && comment?.id) {
       await addReaction({
         request: {
-          profileId: lensProfile.defaultProfile.id,
-          publicationId: comment.id,
-          reaction: ReactionTypes.Upvote
+          for: comment.id,
+          reaction: PublicationReactionType.Upvote
         }
       })
       setComments([comment, ...comments])
@@ -201,9 +181,8 @@ const LensCommentCard = ({
       )
       await addReaction({
         request: {
-          profileId: lensProfile.defaultProfile.id,
-          publicationId: commentId,
-          reaction: ReactionTypes.Upvote
+          for: commentId,
+          reaction: PublicationReactionType.Upvote
         }
       })
 
@@ -218,6 +197,11 @@ const LensCommentCard = ({
   }
 
   if (!comment) return null
+
+  const filteredAttachments =
+    getPublicationData(comment?.metadata)?.attachments || []
+
+  const filteredAsset = getPublicationData(comment?.metadata)?.asset
 
   return (
     <>
@@ -242,7 +226,7 @@ const LensCommentCard = ({
               />
             )}
             <ImageWithPulsingLoader
-              src={getAvatar(comment?.profile)}
+              src={getAvatar(comment?.by)}
               className="w-7 h-7 rounded-full object-cover"
             />
             {/* {comment?.profile?.name && (
@@ -255,12 +239,9 @@ const LensCommentCard = ({
                 </div>
               </Link>
             )} */}
-            <Link
-              href={`/u/${formatHandle(comment?.profile?.handle)}`}
-              passHref
-            >
+            <Link href={`/u/${formatHandle(comment?.by?.handle)}`} passHref>
               <div className="hover:underline font-medium text-p-text text-sm cursor-pointer">
-                {formatHandle(comment?.profile?.handle)}
+                {formatHandle(comment?.by?.handle)}
               </div>
             </Link>
             <CenteredDot />
@@ -284,7 +265,7 @@ const LensCommentCard = ({
               </Tooltip>
             </div>
           )}
-          {isAuthor && comment.id && !comment.hidden && (
+          {isAuthor && comment.id && !comment.isHidden && (
             <div>
               <OptionsWrapper
                 OptionPopUpModal={() => (
@@ -354,9 +335,10 @@ const LensCommentCard = ({
             {/* attachemnt */}
             <div className="px-3">
               <Attachment
-                attachments={comment?.metadata?.media}
                 publication={comment}
                 className={'max-h-[400px] w-full'}
+                attachments={filteredAttachments}
+                asset={filteredAsset}
               />
             </div>
 
@@ -377,16 +359,14 @@ const LensCommentCard = ({
                     >
                       <img
                         src={
-                          reaction === ReactionTypes.Upvote
-                            ? '/UpvotedFilled.svg'
-                            : '/upvoteGray.svg'
+                          reaction ? '/UpvotedFilled.svg' : '/upvoteGray.svg'
                         }
                         className="w-4 h-4"
                       />
                     </button>
                   </Tooltip>
                   <div className="font-medium text-[#687684]">{voteCount}</div>
-                  <Tooltip
+                  {/* <Tooltip
                     enterDelay={1000}
                     leaveDelay={200}
                     title="Downvote"
@@ -405,7 +385,7 @@ const LensCommentCard = ({
                         className="w-4 h-4"
                       />
                     </button>
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
 
                 {/* @ts-ignore */}
@@ -453,7 +433,9 @@ const LensCommentCard = ({
                 postId={comment.id}
                 addComment={addComment}
                 postInfo={comment}
-                canCommnet={comment?.canComment?.result ?? true}
+                canCommnet={
+                  comment?.operations?.canComment === TriStateValue.Yes
+                }
               />
             )}
 

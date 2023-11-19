@@ -2,8 +2,9 @@ import React from 'react'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
-  PublicationSortCriteria,
-  PublicationTypes,
+  ExplorePublicationType,
+  ExplorePublicationsOrderByType,
+  LimitType,
   useExplorePublicationsQuery
 } from '../../graphql/generated'
 import LensPostCard from './LensPostCard'
@@ -55,24 +56,18 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }: Props) => {
   const { data } = useExplorePublicationsQuery(
     {
       request: {
-        metadata: {
-          tags: {
-            all: [communityInfo._id]
+        orderBy: ExplorePublicationsOrderByType.Latest,
+        where: {
+          publicationTypes: [ExplorePublicationType.Post],
+          metadata: {
+            tags: {
+              all: [communityInfo._id]
+            }
           }
         },
         cursor: queryParams.cursor,
-        publicationTypes: [PublicationTypes.Post],
-        limit: LENS_POST_LIMIT,
-        sortCriteria: PublicationSortCriteria.Latest,
-        noRandomize: true,
-        excludeProfileIds: communityInfo?.bannedUsers?.map(
-          (user) => user.profileId
-        )
-      },
-      reactionRequest: {
-        profileId: myLensProfile?.defaultProfile?.id
-      },
-      profileId: myLensProfile?.defaultProfile?.id
+        limit: LimitType.Fifty
+      }
     },
     {
       enabled: !!communityInfo._id
@@ -99,7 +94,7 @@ const LensAllLatestCommunityPublicationsColumn = ({ communityInfo }: Props) => {
     let newPublications = new Map()
 
     for (const newPost of newPosts) {
-      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newProfiles.set(newPost.by.handle.fullHandle, newPost.by)
       newPublications.set(newPost.id, {
         ...newPost,
         communityInfo: communityInfo,

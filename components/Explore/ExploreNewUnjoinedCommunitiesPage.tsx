@@ -9,7 +9,6 @@ import MobileLoader from '../Common/UI/MobileLoader'
 import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
 import { useDevice } from '../Common/DeviceWrapper'
-import { useProfile } from '../Common/WalletContext'
 import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
 
 const ExploreNewUnjoinedCommunitiesPage = ({
@@ -19,7 +18,7 @@ const ExploreNewUnjoinedCommunitiesPage = ({
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const { isMobile } = useDevice()
-  const { allLensCommunities } = useProfile()
+  // const { allLensCommunities } = useProfile()
 
   useEffect(() => {
     getNewNotJoinedCommunities()
@@ -34,30 +33,30 @@ const ExploreNewUnjoinedCommunitiesPage = ({
     const newCommunities = fetchedCommunities.communities
 
     // add lens communities to the top
-    let initialDate = new Date()
-    let endDate = new Date(newCommunities[newCommunities.length - 1].createdAt)
+    // let initialDate = new Date()
+    // let endDate = new Date(newCommunities[newCommunities.length - 1].createdAt)
 
-    if (communities.length !== 0) {
-      initialDate = newCommunities[0].createdAt
-    }
+    // if (communities.length !== 0) {
+    //   initialDate = newCommunities[0].createdAt
+    // }
 
-    let lensCommunities = []
+    // let lensCommunities = []
 
-    for (const c of allLensCommunities) {
-      if (
-        new Date(c.createdAt) < initialDate &&
-        new Date(c.createdAt) > endDate &&
-        !c.isFollowedByMe
-      ) {
-        lensCommunities.push({
-          ...c,
-          membersCount: c.stats.totalFollowers
-        })
-      }
-    }
+    // for (const c of allLensCommunities) {
+    //   if (
+    //     new Date(c.createdAt) < initialDate &&
+    //     new Date(c.createdAt) > endDate &&
+    //     !c.isFollowedByMe
+    //   ) {
+    //     lensCommunities.push({
+    //       ...c,
+    //       membersCount: c.stats.totalFollowers
+    //     })
+    //   }
+    // }
 
     // mix and sort the communities
-    const mixedCommunities = [...lensCommunities, ...newCommunities]
+    const mixedCommunities = newCommunities
     mixedCommunities.sort((a, b) => {
       return Date.parse(a.createdAt) - Date.parse(b.createdAt)
     })

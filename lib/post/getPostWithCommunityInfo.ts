@@ -9,34 +9,34 @@ export default async function getPostWithCommunityInfo(
 ): Promise<postWithCommunityInfoType> {
   try {
     const response = await getSinglePublicationInfo(request)
+    console.log('response', response)
     if (!response.publication) {
       throw new Error('No publication found')
     }
     let post: postWithCommunityInfoType = null
-    if (response?.publication?.__typename === 'Post') {
+    if (response?.publication?.__typename === 'Mirror') {
       // @ts-ignore
-      post = response.publication
-    } else if (response?.publication?.__typename === 'Mirror') {
-      // @ts-ignore
-      // post = response.publication.mirrorOf
-      post = response.publication.mirrorOf
+      post = response.publication.mirrorOn
       // @ts-ignore
       // post.originalMirrorPublication = response.publication
       // @ts-ignore
-      post.mirroredBy = response.publication.profile
+      post.mirroredBy = response.publication.by
       // @ts-ignore
       post.originalMirrorPublication = response.publication
-    } else if (response?.publication?.__typename === 'Comment') {
+    } else {
       // @ts-ignore
       post = response.publication
     }
 
     const communityId = post?.metadata?.tags?.[0]
+
+    console.log('communityId', communityId)
     if (!communityId) {
       // post.communityInfo = getCommunityInfoFromAppId(post?.appId)
       return post
     }
     const communityInfo = await getCommunityInfoUsingId(communityId)
+
     if (communityInfo?.handle) {
       post.communityInfo = communityInfo
       post.isLensCommunityPost = true

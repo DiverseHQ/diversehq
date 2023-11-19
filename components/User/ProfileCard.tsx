@@ -56,7 +56,7 @@ const ProfileCard = ({
   const { data, refetch } = useProfileQuery(
     {
       request: {
-        profileId: _lensProfile?.id
+        forProfileId: _lensProfile?.id
       }
     },
     {
@@ -66,7 +66,7 @@ const ProfileCard = ({
 
   const { FollowButton, isFollowedByMe } = useLensFollowButton(
     {
-      profileId: lensProfile?.id
+      forProfileId: lensProfile?.id
     },
     isLensCommunity ? 'join' : 'follow'
   )
@@ -93,7 +93,7 @@ const ProfileCard = ({
       component: (
         <WhoFollowedProfileId
           profileId={lensProfile?.id}
-          totalFollowers={lensProfile?.stats?.totalFollowers}
+          totalFollowers={lensProfile?.stats?.followers}
           isLensCommunity={isLensCommunity}
         />
       ),
@@ -105,8 +105,8 @@ const ProfileCard = ({
     showModal({
       component: (
         <WhoIsFollowedByProfileId
-          address={lensProfile?.ownedBy}
-          totalFollowers={lensProfile?.stats?.totalFollowing}
+          address={lensProfile?.ownedBy?.address}
+          totalFollowers={lensProfile?.stats?.followers}
         />
       ),
       type: modalType.normal
@@ -145,7 +145,7 @@ const ProfileCard = ({
                     <div className="flex flex-row items-center gap-x-1 px-2 sm:px-4 rounded-[10px]">
                       <BsPeopleFill className="w-4 h-4 mr-1" />
                       <span className="font-bold">
-                        {lensProfile?.stats?.totalFollowers}
+                        {lensProfile?.stats?.followers}
                       </span>
                     </div>
                   </div>
@@ -169,8 +169,8 @@ const ProfileCard = ({
                                 )
                               },
                               hidden:
-                                myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() !==
-                                lensProfile?.ownedBy?.toLowerCase(),
+                                myLensProfile?.defaultProfile?.ownedBy?.address.toLowerCase() !==
+                                lensProfile?.ownedBy?.address.toLowerCase(),
                               icon: () => (
                                 <FiSettings className="mr-1.5 w-6 h-6" />
                               )
@@ -190,7 +190,7 @@ const ProfileCard = ({
                                     title: `Join l/${formatHandle(
                                       lensProfile?.handle
                                     )} on DiverseHQ`,
-                                    text: lensProfile?.bio,
+                                    text: lensProfile?.metadata?.bio,
                                     url: `${appLink}/l/${formatHandle(
                                       lensProfile?.handle
                                     )}`
@@ -238,7 +238,7 @@ const ProfileCard = ({
                   }}
                 >
                   <span className="font-bold">
-                    {lensProfile?.stats?.totalFollowers}
+                    {lensProfile?.stats?.followers}
                   </span>
                   <span className="font-light">Followers</span>
                 </div>
@@ -253,7 +253,7 @@ const ProfileCard = ({
                   onClick={showFollowingPopUp}
                 >
                   <span className="font-bold">
-                    {lensProfile?.stats?.totalFollowing}
+                    {lensProfile?.stats?.following}
                   </span>
                   <span className="font-light">Following</span>
                 </div>
@@ -265,8 +265,10 @@ const ProfileCard = ({
             <div className="flex flex-col w-full font-bold text-base sm:text-base gap-y-1.5">
               {!isLensCommunity && (
                 <div className="flex flex-row items-center gap-x-2 flex-wrap">
-                  {lensProfile.name && (
-                    <span className="text-[22px]">{lensProfile.name}</span>
+                  {lensProfile?.metadata?.displayName && (
+                    <span className="text-[22px]">
+                      {lensProfile?.metadata?.displayName}
+                    </span>
                   )}
                   <Link
                     href={`/u/${formatHandle(lensProfile?.handle)}`}
@@ -281,13 +283,15 @@ const ProfileCard = ({
 
               {isLensCommunity && (
                 <div className="font-bold text-[18px] md:text-2xl tracking-wider hover:underline cursor-pointer">
-                  {lensProfile?.name}
+                  {lensProfile?.metadata?.displayName}
                 </div>
               )}
 
-              <div className="font-normal text">
-                <Markup>{lensProfile.bio}</Markup>
-              </div>
+              {lensProfile?.metadata?.bio && (
+                <div className="font-normal text">
+                  <Markup>{lensProfile?.metadata?.bio}</Markup>
+                </div>
+              )}
               <ProfileLinksRow profile={lensProfile} />
               {!isLensCommunity && (
                 <div className="flex flex-row justify-center w-full flex-wrap pt-2 gap-x-2 gap-y-2 items-center text-[14px]">
@@ -296,15 +300,13 @@ const ProfileCard = ({
                     isSignedIn &&
                     myLensProfile &&
                     lensProfile &&
-                    lensProfile.ownedBy?.toLowerCase() !==
-                      myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() && (
+                    lensProfile.id !== myLensProfile?.defaultProfile?.id && (
                       <div className="mx-2">
                         <FollowButton className="px-8 py-2 rounded-full" />
                       </div>
                     )}
                   {myLensProfile &&
-                    myLensProfile?.defaultProfile?.ownedBy.toLowerCase() ===
-                      lensProfile?.ownedBy.toLowerCase() && (
+                    myLensProfile?.defaultProfile.id === lensProfile?.id && (
                       <Link
                         href={
                           isLensCommunity
@@ -349,7 +351,8 @@ const ProfileCard = ({
             >
               <div className="flex flex-col gap-4 mx-4 mb-4">
                 <h3 className="font-bold text-[20px] self-center">
-                  {lensProfile?.name ?? `u/${formatHandle(lensProfile.handle)}`}
+                  {lensProfile?.metadata?.displayName ??
+                    `u/${formatHandle(lensProfile.handle)}`}
                 </h3>
                 <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
                   <MdOutlineGroups />
@@ -359,19 +362,17 @@ const ProfileCard = ({
                 </div>
                 <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
                   <BiRepost />
-                  <span>Posts: {lensProfile?.stats?.totalPosts}</span>
+                  <span>Posts: {lensProfile?.stats?.posts}</span>
                 </div>
                 <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
                   <BsCollection />
                   <span>
-                    Collected Posts: {lensProfile?.stats?.totalCollects}
+                    Collected Posts: {lensProfile?.stats?.countOpenActions}
                   </span>
                 </div>
                 <div className="flex flex-row gap-2 items-center justify-start text-[18px] text-[#aaa]">
                   <AiOutlineRetweet />
-                  <span>
-                    Mirrored Posts: {lensProfile?.stats?.totalMirrors}
-                  </span>
+                  <span>Mirrored Posts: {lensProfile?.stats?.mirrors}</span>
                 </div>
               </div>
             </BottomDrawerWrapper>
@@ -398,7 +399,7 @@ const ProfileCard = ({
               )}
               <div className="flex flex-col mt-3">
                 <div className="font-bold text-[18px] md:text-2xl tracking-wider break-words w-full">
-                  {lensProfile?.name && lensProfile.name}
+                  {lensProfile?.metadata?.displayName}
                 </div>
                 <div className="text-[14px] md:text-[16px]">
                   <Link
@@ -428,7 +429,7 @@ const ProfileCard = ({
                     >
                       <BsPeopleFill className="w-4 h-4 mr-1" />
                       <span className="font-bold">
-                        {lensProfile?.stats?.totalFollowers}
+                        {lensProfile?.stats?.followers}
                       </span>
                     </span>
                   )}
@@ -443,7 +444,7 @@ const ProfileCard = ({
                       >
                         <span>Followers: </span>
                         <span className="font-semibold">
-                          {lensProfile?.stats?.totalFollowers}
+                          {lensProfile?.stats?.followers}
                         </span>
                       </div>
                       <div
@@ -452,7 +453,7 @@ const ProfileCard = ({
                       >
                         <span>Following: </span>
                         <span className="font-semibold">
-                          {lensProfile?.stats?.totalFollowing}
+                          {lensProfile?.stats?.following}
                         </span>
                       </div>
                     </>
@@ -465,15 +466,13 @@ const ProfileCard = ({
                 isSignedIn &&
                 myLensProfile &&
                 lensProfile &&
-                lensProfile.ownedBy?.toLowerCase() !==
-                  myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() && (
+                lensProfile.id !== myLensProfile?.defaultProfile?.id && (
                   <div className="mx-2">
                     <FollowButton />
                   </div>
                 )}
               {myLensProfile &&
-                myLensProfile?.defaultProfile?.ownedBy.toLowerCase() ===
-                  lensProfile?.ownedBy.toLowerCase() && (
+                myLensProfile?.defaultProfile?.id === lensProfile?.id && (
                   <Link
                     href={
                       isLensCommunity
@@ -500,8 +499,8 @@ const ProfileCard = ({
                       className="z-50"
                       list={
                         isMobile
-                          ? myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() ===
-                            lensProfile?.ownedBy?.toLowerCase()
+                          ? myLensProfile?.defaultProfile?.id ===
+                            lensProfile?.id
                             ? [
                                 {
                                   label: 'Setting',
@@ -533,7 +532,7 @@ const ProfileCard = ({
                                         title: `Join l/${formatHandle(
                                           lensProfile?.handle
                                         )} on DiverseHQ`,
-                                        text: lensProfile?.bio,
+                                        text: lensProfile?.metadata?.bio,
                                         url: `${appLink}/l/${formatHandle(
                                           lensProfile?.handle
                                         )}`
@@ -565,7 +564,7 @@ const ProfileCard = ({
                                         title: `Join l/${formatHandle(
                                           lensProfile?.handle
                                         )} on DiverseHQ`,
-                                        text: lensProfile?.bio,
+                                        text: lensProfile?.metadata?.bio,
                                         url: `${appLink}/l/${formatHandle(
                                           lensProfile?.handle
                                         )}`
@@ -579,8 +578,8 @@ const ProfileCard = ({
                                   )
                                 }
                               ]
-                          : myLensProfile?.defaultProfile?.ownedBy?.toLowerCase() ===
-                            lensProfile?.ownedBy?.toLowerCase()
+                          : myLensProfile?.defaultProfile?.id ===
+                            lensProfile?.id
                           ? [
                               {
                                 label: 'Setting',
@@ -603,7 +602,7 @@ const ProfileCard = ({
                                       title: `Join l/${formatHandle(
                                         lensProfile?.handle
                                       )} on DiverseHQ`,
-                                      text: lensProfile?.bio,
+                                      text: lensProfile?.metadata?.bio,
                                       url: `${appLink}/l/${formatHandle(
                                         lensProfile?.handle
                                       )}`
@@ -626,7 +625,7 @@ const ProfileCard = ({
                                       title: `Join l/${formatHandle(
                                         lensProfile?.handle
                                       )} on DiverseHQ`,
-                                      text: lensProfile?.bio,
+                                      text: lensProfile?.metadata?.bio,
                                       url: `${appLink}/l/${formatHandle(
                                         lensProfile?.handle
                                       )}`

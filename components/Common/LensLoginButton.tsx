@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
-import { useCreateSetDispatcherTypedDataMutation } from '../../graphql/generated'
 import useLogin from '../../lib/auth/useLogin'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import useSignTypedDataAndBroadcast from '../../lib/useSignTypedDataAndBroadcast'
@@ -14,6 +13,8 @@ import { useAccount } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { isMainnet } from '../../utils/config'
 import { useDevice } from './DeviceWrapper'
+import { useCreateChangeProfileManagersTypedDataMutation } from '../../graphql/generated'
+import checkDispatcherPermissions from '../../lib/profile/checkPermission'
 
 interface Props {
   connectWalletLabel?: string
@@ -38,7 +39,7 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
 
   const { mutateAsync: login } = useLogin()
   const { mutateAsync: createSetDispatcher } =
-    useCreateSetDispatcherTypedDataMutation()
+    useCreateChangeProfileManagersTypedDataMutation()
   const {
     result,
     type,
@@ -71,27 +72,25 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
   const handleEnableDispatcher = async () => {
     try {
       console.log('handleEnableDispatcher')
-      const createSetDispatcherResult = await createSetDispatcher({
-        request: {
-          profileId: lensProfile?.defaultProfile?.id,
-          enable: true
-        }
-      })
+      const createSetDispatcherResult = (
+        await createSetDispatcher({
+          request: {
+            approveSignless: true
+          }
+        })
+      ).createChangeProfileManagersTypedData
 
       console.log('createSetDispatcherResult', createSetDispatcherResult)
 
-      if (!createSetDispatcherResult?.createSetDispatcherTypedData) {
+      if (!createSetDispatcherResult?.id) {
         notifyError('Something went wrong')
         return
       }
 
-      signTypedDataAndBroadcast(
-        createSetDispatcherResult?.createSetDispatcherTypedData?.typedData,
-        {
-          id: createSetDispatcherResult?.createSetDispatcherTypedData?.id,
-          type: 'createSetDispatcher'
-        }
-      )
+      signTypedDataAndBroadcast(createSetDispatcherResult?.typedData, {
+        id: createSetDispatcherResult?.id,
+        type: 'createSetDispatcher'
+      })
     } catch (e) {
       notifyError('Something went wrong')
       console.log(e)
@@ -126,14 +125,19 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
 
   const showLoading = loading || (isLoading && address)
 
+  const { canUseLensManager } = checkDispatcherPermissions(
+    lensProfile?.defaultProfile
+  )
+
   return (
     <div>
       {/* {user && address && ( */}
       <div className="flex flex-col gap-4 text-p-text items-start">
         {isSignedIn && hasProfile && user && !showLoading && (
           <div className="flex flex-col items-start">
-            {lensProfile?.defaultProfile?.dispatcher?.canUseRelay && (
+            {canUseLensManager && (
               <Link
+                // @ts-ignore
                 href={`/u/${formatHandle(lensProfile.defaultProfile.handle)}`}
               >
                 <div
@@ -144,25 +148,26 @@ const LensLoginButton = ({ connectWalletLabel = 'Connect' }: Props) => {
                   } text-[20px] md:text-[16px] p-2 md:p-0`}
                 >
                   u/
-                  {formatHandle(lensProfile.defaultProfile.handle)}
+                  {
+                    // @ts-ignore
+                    formatHandle(lensProfile.defaultProfile.handle)
+                  }
                 </div>
               </Link>
             )}
-            {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
-              !broadcastLoading && (
-                <button
-                  onClick={handleEnableDispatcher}
-                  className="rounded-full sm:rounded-xl text-s-bg font-semibold bg-[#62F030]  py-1 px-2 sm:px-6"
-                >
-                  <span>Go Signless</span>
-                </button>
-              )}
-            {!lensProfile?.defaultProfile.dispatcher?.canUseRelay &&
-              broadcastLoading && (
-                <div className="rounded-full sm:rounded-xl text-sm text-s-bg font-semibold bg-[#62F030]  py-1 px-2 sm:px-6">
-                  Going...
-                </div>
-              )}
+            {!canUseLensManager && !broadcastLoading && (
+              <button
+                onClick={handleEnableDispatcher}
+                className="rounded-full sm:rounded-xl text-s-bg font-semibold bg-[#62F030]  py-1 px-2 sm:px-6"
+              >
+                <span>Go Signless</span>
+              </button>
+            )}
+            {!canUseLensManager && broadcastLoading && (
+              <div className="rounded-full sm:rounded-xl text-sm text-s-bg font-semibold bg-[#62F030]  py-1 px-2 sm:px-6">
+                Going...
+              </div>
+            )}
           </div>
         )}
         {isSignedIn && !hasProfile && !showLoading && !isMainnet && (

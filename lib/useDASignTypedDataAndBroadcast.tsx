@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSignTypedData } from 'wagmi'
-import { useBroadcastDataAvailabilityMutation } from '../graphql/generated'
+import { useBroadcastOnMomokaMutation } from '../graphql/generated'
 
 const useDASignTypedDataAndBroadcast = (): {
   // eslint-disable-next-line
@@ -19,7 +19,7 @@ const useDASignTypedDataAndBroadcast = (): {
 
   const signTypedDataResult = useSignTypedData(typedData || undefined)
 
-  const { mutateAsync: broadCast } = useBroadcastDataAvailabilityMutation()
+  const { mutateAsync: broadCast } = useBroadcastOnMomokaMutation()
 
   const signDATypedDataAndBroadcast = async (typedData, dataForSig) => {
     setLoading(true)
@@ -68,7 +68,7 @@ const useDASignTypedDataAndBroadcast = (): {
             id: id
           }
         })
-      ).broadcastDataAvailability
+      ).broadcastOnMomoka
 
       console.log(
         'broadcast signature for gasless transaction: success',

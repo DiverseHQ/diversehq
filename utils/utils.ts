@@ -7,7 +7,6 @@ import {
   uploadBytes
 } from 'firebase/storage'
 import { create } from 'ipfs-http-client'
-import { PublicationMetadataV2Input } from '../graphql/generated'
 import { AttachmentType } from '../store/publication'
 import { storage } from './firebase'
 import uploadToIPFS from './uploadToIPFS'
@@ -86,7 +85,7 @@ const client = create({
 
 /* eslint-enable */
 
-export const uploadToIpfsInfura = async (data: PublicationMetadataV2Input) => {
+export const uploadToIpfsInfura = async (data: any) => {
   const result = await client.add(JSON.stringify(data))
   return result
 }

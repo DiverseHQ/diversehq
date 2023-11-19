@@ -1,4 +1,5 @@
 fragment AnyPublicationMetadataFields on PublicationMetadata {
+  __typename
   ... on VideoMetadataV3 {
     ...VideoMetadataV3Fields
   }

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import PopUpWrapper from '../../Common/PopUpWrapper'
-import { Follower, useFollowersQuery } from '../../../graphql/generated'
+import {
+  LimitType,
+  Profile,
+  useFollowersQuery
+} from '../../../graphql/generated'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
-import { WHO_WAS_IT_PROFILES_LIMIT } from '../../../utils/config'
 import WhoWasItProfileCard from './WhoWasItProfileCard'
 import { useProfileStore } from '../../../store/profile'
 
@@ -17,7 +20,7 @@ const WhoFollowedProfileId = ({
   isLensCommunity?: boolean
 }) => {
   const [params, setParams] = useState<{
-    profiles: Follower[]
+    profiles: Profile[]
     hasMore: boolean
     cursor: string | null
     nextCursor: string | null
@@ -31,9 +34,9 @@ const WhoFollowedProfileId = ({
 
   const { data } = useFollowersQuery({
     request: {
-      profileId: profileId,
+      of: profileId,
       cursor: params.cursor,
-      limit: WHO_WAS_IT_PROFILES_LIMIT
+      limit: LimitType.Fifty
     }
   })
 
@@ -53,10 +56,7 @@ const WhoFollowedProfileId = ({
       const newProfiles = new Map()
       // eslint-disable-next-line
       for (const profile of data?.followers?.items) {
-        newProfiles.set(
-          profile.wallet.defaultProfile.handle,
-          profile.wallet.defaultProfile
-        )
+        newProfiles.set(profile.handle.fullHandle, profile)
       }
       addProfiles(newProfiles)
     }
@@ -91,12 +91,7 @@ const WhoFollowedProfileId = ({
           scrollableTarget="whoReactedPublicattionScrollbar"
         >
           {params.profiles.map((profile, idx) => {
-            return (
-              <WhoWasItProfileCard
-                profile={profile.wallet.defaultProfile}
-                key={idx}
-              />
-            )
+            return <WhoWasItProfileCard profile={profile} key={idx} />
           })}
         </InfiniteScroll>
       </div>

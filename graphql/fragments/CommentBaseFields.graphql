@@ -26,6 +26,7 @@ fragment CommentBaseFields on Comment {
     ...OpenActionModulesFields
   }
   root {
+    __typename
     ... on Post {
       ...PostFields
     }

@@ -3,7 +3,8 @@ import { postWithCommunityInfoType } from '../types/post'
 
 export interface AttachmentType {
   id?: string
-  type: string
+  type: 'Video' | 'Image' | 'Audio'
+  mimeType?: string
   altTag?: string
   item?: string
   cover?: string
@@ -50,18 +51,18 @@ interface PublicationState {
   resetCommentAttachments: () => void
   setIsUploading: (isUploading: boolean) => void
   reset: () => void
-  videoDurationInSeconds: string;
-  setVideoDurationInSeconds: (videoDurationInSeconds: string) => void;
+  videoDurationInSeconds: string
+  setVideoDurationInSeconds: (videoDurationInSeconds: string) => void
   videoThumbnail: {
-    url?: string;
-    type?: string;
-    uploading?: boolean;
-  };
+    url?: string
+    type?: string
+    uploading?: boolean
+  }
   setVideoThumbnail: (videoThumbnail: {
-    url?: string;
-    type?: string;
-    uploading?: boolean;
-  }) => void;
+    url?: string
+    type?: string
+    uploading?: boolean
+  }) => void
 }
 
 export const usePublicationStore = create<PublicationState>((set) => ({
@@ -166,5 +167,5 @@ export const usePublicationStore = create<PublicationState>((set) => ({
   reset: () => set(() => ({ publications: new Map() })),
   videoDurationInSeconds: '',
   setVideoDurationInSeconds: (videoDurationInSeconds) =>
-    set(() => ({ videoDurationInSeconds })),
+    set(() => ({ videoDurationInSeconds }))
 }))

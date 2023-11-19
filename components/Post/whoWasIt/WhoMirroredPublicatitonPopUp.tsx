@@ -1,6 +1,5 @@
 import React from 'react'
-import { Profile, useMirrorsQuery } from '../../../graphql/generated'
-import { WHO_WAS_IT_PROFILES_LIMIT } from '../../../utils/config'
+import { LimitType, Profile, useMirrorsQuery } from '../../../graphql/generated'
 import PopUpWrapper from '../../Common/PopUpWrapper'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import MobileLoader from '../../Common/UI/MobileLoader'
@@ -28,9 +27,11 @@ const WhoMirroredPublicatitonPopUp = ({
 
   const { data } = useMirrorsQuery({
     request: {
-      whoMirroredPublicationId: publicationId,
       cursor: params.cursor,
-      limit: WHO_WAS_IT_PROFILES_LIMIT
+      limit: LimitType.Fifty,
+      where: {
+        whoMirroredPublication: publicationId
+      }
     }
   })
 
@@ -50,7 +51,7 @@ const WhoMirroredPublicatitonPopUp = ({
       const newProfiles = new Map()
       // eslint-disable-next-line
       for (const profile of data?.profiles?.items) {
-        newProfiles.set(profile.handle, profile)
+        newProfiles.set(profile?.handle?.fullHandle, profile)
       }
       addProfiles(newProfiles)
     }

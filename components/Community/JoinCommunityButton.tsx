@@ -19,6 +19,8 @@ const JoinCommunityButton = ({ id, showJoined = false }: Props) => {
   const { isMobile } = useDevice()
   const router = useRouter()
 
+  console.log('user.communities', user?.communities)
+
   useEffect(() => {
     if (!user || !id) return
     setJoined(user.communities.includes(id))

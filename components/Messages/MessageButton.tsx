@@ -14,7 +14,7 @@ interface Props {
 
 const MessageButton: FC<Props> = ({ userLensProfile, className }) => {
   const { isSignedIn, hasProfile, data: myLensProfile } = useLensUserContext()
-  const [lensProfile, setLensProfile] = useState(null)
+  const [lensProfile, setLensProfile] = useState<Profile>(userLensProfile)
 
   useEffect(() => {
     setLensProfile(userLensProfile)
@@ -35,7 +35,7 @@ const MessageButton: FC<Props> = ({ userLensProfile, className }) => {
       await initXmtpClient()
     }
     const newMessagesProfile = new Map(messageProfiles)
-    const peerAddress = lensProfile?.ownedBy
+    const peerAddress = lensProfile?.ownedBy?.address
     const key = buildConversationKey(
       peerAddress,
       buildConversationId(myLensProfile?.defaultProfile?.id, lensProfile.id)

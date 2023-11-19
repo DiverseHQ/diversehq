@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import React, { useState, useEffect } from 'react'
-import { Profile, useProfileQuery } from '../../../graphql/generated'
+import React from 'react'
+import { Profile } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
 import { stringToLength } from '../../../utils/utils'
 import ImageWithFullScreenZoom from '../../Common/UI/ImageWithFullScreenZoom'
@@ -16,61 +16,36 @@ import VerifiedBadge from '../../Common/UI/Icon/VerifiedBadge'
 
 interface Props {
   _profile?: Profile
-  profileHandle?: string
   isLensCommunity?: boolean
   verified?: boolean
 }
 
-const LensPageProfileCard = ({
-  _profile,
-  profileHandle,
-  isLensCommunity,
-  verified = false
-}: Props) => {
+const LensPageProfileCard = ({ _profile, verified = false }: Props) => {
   const router = useRouter()
-  const [profile, setProfile] = useState<Profile>(_profile)
-
-  const { data } = useProfileQuery(
-    {
-      request: {
-        handle: profileHandle
-      }
-    },
-    {
-      enabled: !!profileHandle && (!_profile || !profile)
-    }
-  )
-
-  useEffect(() => {
-    if (!data?.profile) return
-    // @ts-ignore
-    setProfile(data.profile)
-  }, [data])
 
   const { isSignedIn, hasProfile } = useLensUserContext()
   const { FollowButton, isFollowedByMe } = useLensFollowButton(
     {
-      profileId: _profile?.id || null,
-      handle: profileHandle || null
+      forProfileId: _profile?.id
     },
-    isLensCommunity ? 'join' : 'follow'
+    'follow'
   )
 
-  if (!profile) return null
+  if (!_profile) return null
   return (
     <div
       className="flex flex-col rounded-[15px] w-[250px] lg:w-[300px] ml-4 mt-3 cursor-pointer"
       onClick={() => {
-        if (isLensCommunity) {
-          router.push(`/l/${formatHandle(profile?.handle)}`)
-        } else {
-          router.push(`/u/${formatHandle(profile?.handle)}`)
-        }
+        // if (isLensCommunity) {
+        //   router.push(`/l/${formatHandle(profile?.handle)}`)
+        // } else {
+        router.push(`/u/${formatHandle(_profile?.handle)}`)
+        // }
       }}
     >
       <span onClick={(e) => e.stopPropagation()}>
         <ImageWithFullScreenZoom
-          src={getCoverBanner(profile)}
+          src={getCoverBanner(_profile)}
           className="h-[80px] rounded-t-[15px] w-full object-cover"
         />
       </span>
@@ -82,9 +57,9 @@ const LensPageProfileCard = ({
               onClick={(e) => e.stopPropagation()}
             >
               <ImageWithFullScreenZoom
-                src={getAvatar(profile)}
+                src={getAvatar(_profile)}
                 className={clsx(
-                  isLensCommunity ? 'rounded-xl' : 'rounded-full',
+                  'rounded-full',
                   'w-[70px] h-[70px] object-cover  border-s-bg border-4 bg-s-bg shrink-0'
                 )}
               />
@@ -94,29 +69,30 @@ const LensPageProfileCard = ({
                 <div
                   className="font-bold break-words leading-4 text-p-text text-lg  hover:underline cursor-pointer truncate"
                   onClick={() => {
-                    if (isLensCommunity) {
-                      router.push(`/l/${formatHandle(profile?.handle)}`)
-                    } else {
-                      router.push(`/u/${formatHandle(profile?.handle)}`)
-                    }
+                    // if (isLensCommunity) {
+                    //   router.push(`/l/${formatHandle(profile?.handle)}`)
+                    // } else {
+                    router.push(`/u/${formatHandle(_profile?.handle)}`)
+                    // }
                   }}
                 >
-                  {stringToLength(profile?.name, 20)}
+                  {stringToLength(_profile?.metadata?.displayName, 20)}
                 </div>
                 <div
                   className="font-medium start-row gap-x-1 text text-s-text  hover:underline cursor-pointer truncate mb-3"
                   onClick={() => {
-                    if (isLensCommunity) {
-                      router.push(`/l/${formatHandle(profile?.handle)}`)
-                    } else {
-                      router.push(`/u/${formatHandle(profile?.handle)}`)
-                    }
+                    // if (isLensCommunity) {
+                    //   router.push(`/l/${formatHandle(profile?.handle)}`)
+                    // } else {
+                    router.push(`/u/${formatHandle(_profile?.handle)}`)
+                    // }
                   }}
                 >
                   <div>
-                    {isLensCommunity
+                    {/* {isLensCommunity
                       ? `l/${formatHandle(profile?.handle)}`
-                      : `u/${formatHandle(profile?.handle)}`}
+                      : `u/${formatHandle(profile?.handle)}`} */}
+                    {`u/${formatHandle(_profile?.handle)}`}
                   </div>
                   {verified && <VerifiedBadge className="w-4 h-4" />}
                 </div>
@@ -124,20 +100,20 @@ const LensPageProfileCard = ({
             </div>
           </div>
           <div className="self-start">
-            {isFollowedByMe && !isLensCommunity && hasProfile && isSignedIn && (
-              <MessageButton userLensProfile={profile} />
+            {isFollowedByMe && hasProfile && isSignedIn && (
+              <MessageButton userLensProfile={_profile} />
             )}
           </div>
         </div>
         <p className="text-p-text text-sm leading-5 -mt-4 pb-2">
-          <Markup>{stringToLength(profile?.bio, 200)}</Markup>
+          <Markup>{stringToLength(_profile?.metadata?.bio, 200)}</Markup>
         </p>
         {/* {!isLensCommunity && (
           <div className="pb-2">
             <ProfileLinksRow profile={profile} />
           </div>
         )} */}
-        {isLensCommunity && (
+        {/* {isLensCommunity && (
           // ? (
           //   <div className="mb-2 text-s-text flex flex-row gap-2 text-sm leading-5">
           //     <span>
@@ -162,8 +138,8 @@ const LensPageProfileCard = ({
               </span>
             </span>
           </div>
-        )}
-        {isLensCommunity}
+        )} */}
+        {/* {isLensCommunity} */}
         <FollowButton />
       </div>
     </div>

@@ -52,7 +52,7 @@ const PostPage = ({ post }) => {
   useEffect(() => {
     fetchCommunityInfo()
     if (post?.profile?.handle) {
-      getUserProfileAndLensProfile(post.profile.handle)
+      getUserProfileAndLensProfile(post.)
     } else {
       getUserProfileAndLensProfile(post.author)
     }
@@ -105,7 +105,7 @@ const PostPage = ({ post }) => {
   }
 
   const { FollowButton } = useLensFollowButton({
-    profileId: lensProfile?.id
+    forProfileId: lensProfile?.id
   })
 
   return (

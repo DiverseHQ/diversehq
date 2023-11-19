@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid'
 import { AttachmentType, usePublicationStore } from '../../../store/publication'
 import { uploadFilesToIpfsAndGetAttachments } from '../../../utils/utils'
 import { useNotify } from '../../Common/NotifyContext'
+import { SUPPORTED_VIDEO_TYPE } from '../../../utils/config'
 
 const useUploadAttachments = (isComment?: boolean) => {
   const addAttachments = usePublicationStore((state) => state.addAttachments)
@@ -34,11 +35,24 @@ const useUploadAttachments = (isComment?: boolean) => {
         const attachmentId = uuid()
         attachmentIds.push(attachmentId)
 
+        const previewItem = URL.createObjectURL(file)
+
+        let type: 'Image' | 'Video' | 'Audio' = 'Image'
+
+        if (SUPPORTED_VIDEO_TYPE.includes(file.type)) {
+          type = 'Video'
+        }
+
+        if (file.type.includes('audio')) {
+          type = 'Audio'
+        }
+
         return {
           id: attachmentId,
-          type: file.type,
+          type,
           altTag: '',
-          previewItem: URL.createObjectURL(file),
+          previewItem,
+          mimeType: file.type,
           file: file
         }
       })

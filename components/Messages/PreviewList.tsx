@@ -48,7 +48,7 @@ const PreviewList: FC<Props> = ({ className, selectedConversationKey }) => {
   const onProfileSelected = (profile: Profile) => {
     const conversationId = buildConversationId(currentProfile?.id, profile.id)
     const conversationKey = buildConversationKey(
-      profile.ownedBy,
+      profile.ownedBy?.address,
       conversationId
     )
     addProfile(conversationKey, profile)

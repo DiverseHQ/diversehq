@@ -3,8 +3,11 @@ import {
   getUnReadNotificationsCount,
   putUpdateLensNotificationDate
 } from '../../apiHelper/user'
-import { useNotificationsCreatedAtQuery } from '../../graphql/generated'
-import { useLensUserContext } from '../../lib/LensUserContext'
+// import {
+//   CustomFiltersType,
+//   useNotificationsCreatedAtQuery
+// } from '../../graphql/generated'
+// import { useLensUserContext } from '../../lib/LensUserContext'
 import { useProfile } from '../Common/WalletContext'
 
 const useNotificationsCount = (): {
@@ -18,33 +21,34 @@ const useNotificationsCount = (): {
   const [notificationsCount, setNotificationsCount] = useState(0)
   const [lensNotificationsCount, setLensNotificationsCount] = useState(0)
   const { user, refreshUserInfo } = useProfile()
-  const { data: lensProfile } = useLensUserContext()
-  const { data } = useNotificationsCreatedAtQuery(
-    {
-      request: {
-        profileId: lensProfile?.defaultProfile?.id,
-        limit: 30,
-        highSignalFilter: user?.preferences?.highSignalNotifications ?? true
-      }
-    },
-    {
-      enabled: !!lensProfile?.defaultProfile?.id && !!user
-    }
-  )
+  // const { data: lensProfile } = useLensUserContext()
+  // const { data } = useNotificationsCreatedAtQuery(
+  //   {
+  //     request: {
+  //       where: {
+  //         highSignalFilter: user?.preferences?.highSignalNotifications ?? true,
+  //         customFilters: [CustomFiltersType.Gardeners]
+  //       }
+  //     }
+  //   },
+  //   {
+  //     enabled: !!lensProfile?.defaultProfile?.id && !!user
+  //   }
+  // )
 
-  useEffect(() => {
-    if (data?.notifications?.items?.length > 0 && user) {
-      setLensNotificationsCount(
-        data?.notifications?.items?.filter(
-          (notification) =>
-            notification.createdAt >
-            (user.lastFetchedNotificationsTime
-              ? user.lastFetchedNotificationsTime
-              : new Date())
-        ).length
-      )
-    }
-  }, [data?.notifications, user?.lastFetchedNotificationsTime])
+  // useEffect(() => {
+  //   if (data?.notifications?.items?.length > 0 && user) {
+  //     setLensNotificationsCount(
+  //       data?.notifications?.items?.filter(
+  //         (notification) =>
+  //           notification.id >
+  //           (user.lastFetchedNotificationsTime
+  //             ? user.lastFetchedNotificationsTime
+  //             : new Date())
+  //       ).length
+  //     )
+  //   }
+  // }, [data?.notifications, user?.lastFetchedNotificationsTime])
 
   const fetchAndSetNotificationCount = async () => {
     const { count } = await getUnReadNotificationsCount()

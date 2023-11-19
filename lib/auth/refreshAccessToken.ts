@@ -1,4 +1,4 @@
-import { endpoint } from '../../auth-fetcher'
+import { lensApiEndpoint } from '../../utils/config'
 import {
   removeAccessTokenFromStorage,
   setAccessTokenToStorage
@@ -8,7 +8,7 @@ export default async function refreshAccessToken(
   _refreshToken: string
 ): Promise<string> {
   if (!_refreshToken) return ''
-  const res = await fetch(endpoint, {
+  const res = await fetch(lensApiEndpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -33,6 +33,7 @@ export default async function refreshAccessToken(
   const json = await res.json()
   if (json.errors) {
     const { message } = json.errors[0] || 'Error..'
+    console.error(message)
     removeAccessTokenFromStorage()
     throw new Error(message)
   }

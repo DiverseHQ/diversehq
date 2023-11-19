@@ -1,9 +1,8 @@
 import { readAccessTokenFromStorage, isTokenExpired } from './lib/auth/helpers'
 import refreshAccessToken from './lib/auth/refreshAccessToken'
-import { apiEndpoint } from './utils/config'
+import { lensApiEndpoint } from './utils/config'
 
 export const STORAGE_KEY = 'LH_STORAGE_KEY'
-export const endpoint = apiEndpoint
 /* eslint-disable */
 
 export async function getAccessToken(): Promise<string | null> {
@@ -38,7 +37,7 @@ export const fetchData = <TData, TVariables>(
 
     const accessToken = await getAccessToken()
 
-    const res = await fetch(apiEndpoint, {
+    const res = await fetch(lensApiEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

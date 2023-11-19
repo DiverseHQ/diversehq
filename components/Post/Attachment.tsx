@@ -5,14 +5,7 @@ import {
   AiOutlineArrowRight,
   AiOutlineClose
 } from 'react-icons/ai'
-import { MediaSet, Publication } from '../../graphql/generated'
-import {
-  LensInfuraEndpoint,
-  SUPPORTED_AUDIO_TYPE,
-  SUPPORTED_IMAGE_TYPE,
-  SUPPORTED_VIDEO_TYPE
-} from '../../utils/config'
-import { getURLsFromText } from '../../utils/utils'
+// import { getURLsFromText } from '../../utils/utils'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import imageProxy from '../User/lib/imageProxy'
 // import AttachmentCarousel from './AttachmentCarousel'
@@ -20,7 +13,6 @@ import imageProxy from '../User/lib/imageProxy'
 import clsx from 'clsx'
 import { useSwipeable } from 'react-swipeable'
 import { useUpdateEffect } from 'usehooks-ts'
-import { getQuotedPublicationId } from '../../lib/post/getQuotedPublicationId'
 import { AttachmentType, usePublicationStore } from '../../store/publication'
 import { useDevice } from '../Common/DeviceWrapper'
 import ImageWithFullScreenZoom from '../Common/UI/ImageWithFullScreenZoom'
@@ -28,30 +20,95 @@ import LivePeerVideoPlayback from '../Common/UI/LivePeerVideoPlayback'
 import AudioPlayer from './AudioPlayer'
 import LensPostCardFromPublicationId from './Cards/LensPostCardFromPublicationId'
 import ChooseThumbnail from './ChooseThumbnail'
-import ReactEmbedo from './embed/ReactEmbedo'
+// import ReactEmbedo from './embed/ReactEmbedo'
+import { AnyPublication } from '../../graphql/generated'
+import getPublicationData, {
+  MetadataAsset
+} from '../../lib/post/getPublicationData'
 // import { useDevice } from '../Common/DeviceWrapper'
 
+interface MetadataAttachment {
+  uri: string
+  type: 'Image' | 'Video' | 'Audio'
+}
+
 interface Props {
-  publication?: Publication
-  attachments?: any
+  publication?: AnyPublication
+  attachments?: MetadataAttachment[]
+  newAttachments?: AttachmentType[]
   className?: String
   isNew?: boolean
   hideDelete?: boolean
   isComment?: boolean
   isAlone?: boolean
+  asset?: MetadataAsset
 }
 
 const Attachment: FC<Props> = ({
   publication,
   className,
   attachments = [],
+  newAttachments = [],
   isNew = false,
   hideDelete = false,
   isComment = false,
-  isAlone = false
+  isAlone = false,
+  asset
 }) => {
+  const content = getPublicationData(
+    publication?.__typename === 'Mirror'
+      ? publication?.mirrorOn?.metadata
+      : publication?.metadata
+  )?.content
+
+  const assetIsImage = asset?.type === 'Image'
+  const assetIsVideo = asset?.type === 'Video'
+  const assetIsAudio = asset?.type === 'Audio'
+
+  const attachmentsHasImage = attachments.some(
+    (attachment) => attachment.type === 'Image'
+  )
+
+  const determineDisplay = ():
+    | 'displayVideoAsset'
+    | 'displayAudioAsset'
+    | 'displayImageAsset'
+    | MetadataAttachment[]
+    | null => {
+    if (isNew) {
+      if (newAttachments[0]?.type === 'Video') {
+        return 'displayVideoAsset'
+      }
+      if (newAttachments[0]?.type === 'Audio') {
+        return 'displayAudioAsset'
+      }
+      if (newAttachments[0]?.type === 'Image') {
+        return 'displayImageAsset'
+      }
+    }
+
+    if (assetIsVideo) {
+      return 'displayVideoAsset'
+    } else if (assetIsAudio) {
+      return 'displayAudioAsset'
+    } else if (attachmentsHasImage) {
+      const imageAttachments = attachments.filter(
+        (attachment) => attachment.type === 'Image'
+      )
+
+      return imageAttachments
+    } else if (assetIsImage) {
+      return 'displayImageAsset'
+    }
+
+    return null
+  }
+
+  const displayDecision = determineDisplay()
+
   // @ts-ignore
-  const quotedPublicationId = getQuotedPublicationId(publication)
+  const quotedPublicationId =
+    publication?.__typename === 'Quote' ? publication?.quoteOn?.id : null
   const removeAttachments = usePublicationStore(
     (state) => state.removeAttachments
   )
@@ -59,7 +116,7 @@ const Attachment: FC<Props> = ({
     (state) => state.removeCommentAttachments
   )
   const getCoverUrl = () => {
-    return imageProxy(getIPFSLink(publication?.metadata?.cover?.original?.url))
+    return imageProxy(getIPFSLink(asset?.cover))
   }
 
   const setVideoDurationInSeconds = usePublicationStore(
@@ -109,33 +166,269 @@ const Attachment: FC<Props> = ({
 
   // const { isMobile } = useDevice()
 
-  if (attachments?.length === 0) {
-    if (quotedPublicationId && !isAlone) {
-      return (
-        <div className="px-4 sm:px-0">
-          <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
-        </div>
-      )
-    }
-    if (
-      getURLsFromText(publication?.metadata?.content)?.length > 0 &&
-      !isAlone
-    ) {
-      return (
-        <ReactEmbedo url={getURLsFromText(publication?.metadata?.content)[0]} />
-      )
-    } else return null
+  // if (attachments?.length === 0) {
+  //   if (quotedPublicationId && !isAlone) {
+  //     return (
+  //       <div className="px-4 sm:px-0">
+  //         <LensPostCardFromPublicationId publicationId={quotedPublicationId} />
+  //       </div>
+  //     )
+  //   }
+  //   if (getURLsFromText(content)?.length > 0 && !isAlone) {
+  //     return <ReactEmbedo url={getURLsFromText(content)[0]} />
+  //   } else return null
+  // }
+
+  if (
+    displayDecision === 'displayVideoAsset' ||
+    displayDecision === 'displayAudioAsset'
+  ) {
+    attachments = attachments.slice(0, 1)
   }
 
-  if (SUPPORTED_VIDEO_TYPE.includes(attachments[0]?.original?.mimeType)) {
-    attachments = attachments.slice(0, 1)
+  if (isNew) {
+    if (isMobile) {
+      return (
+        <>
+          <div className="relative " onClick={(e) => e.stopPropagation()}>
+            {newAttachments.length > 1 && (
+              <div className="relative w-full">
+                <div
+                  className={clsx(
+                    'absolute top-[10px] left-[10px] text-white z-20 bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg py-0.5 px-2 rounded-full'
+                  )}
+                >
+                  {currentMedia + 1}/{newAttachments.length}
+                </div>
+              </div>
+            )}
+            <div
+              {...handlers}
+              style={{ overflow: 'hidden' }}
+              className="reletive"
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  transition: 'transform 0.3s ease-out',
+                  transform: `translateX(-${currentMedia * 100}%)`
+                }}
+              >
+                {newAttachments.length > 0 &&
+                  newAttachments.map(
+                    (attachment: AttachmentType, index: number) => {
+                      const url = attachment.previewItem
+
+                      return (
+                        <div
+                          key={index}
+                          style={{
+                            width: '100%',
+                            flexShrink: 0,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                          className="relative"
+                        >
+                          {attachment?.type === 'Video' ? (
+                            <>
+                              <video
+                                src={url}
+                                className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                                ref={videoRef}
+                                controls
+                                muted
+                                autoPlay={false}
+                                poster={getIPFSLink(attachment?.cover)}
+                              />
+                              <ChooseThumbnail />
+                            </>
+                          ) : attachment.type === 'Audio' ? (
+                            <AudioPlayer
+                              src={url}
+                              isNew
+                              hideDelete={hideDelete}
+                              className={`${className}`}
+                              publication={publication}
+                            />
+                          ) : attachment.type === 'Image' ? (
+                            <ImageWithFullScreenZoom
+                              src={url}
+                              className={`image-unselectable shrink-0 object-cover sm:rounded-lg min-h-[200px] w-full`}
+                              alt={url}
+                            />
+                          ) : (
+                            <></>
+                          )}
+
+                          {isNew && !hideDelete && (
+                            <div className={clsx('absolute top-4 right-4')}>
+                              <button
+                                className="bg-black bg-opacity-70 rounded-full p-1"
+                                onClick={() => {
+                                  // set proper currentMedia
+                                  if (isComment) {
+                                    // @ts-ignore
+                                    removeCommentAttachments([attachment.id])
+                                  } else {
+                                    // @ts-ignore
+                                    removeAttachments([attachment.id])
+                                  }
+                                  setCurrentMedia(0)
+                                }}
+                              >
+                                <AiOutlineClose className="w-6 h-6 text-white" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )
+                    }
+                  )}
+              </div>
+            </div>
+          </div>
+          {quotedPublicationId && !isAlone && (
+            <div className="sm:mt-4 mt-2 px-4 sm:px-0">
+              <LensPostCardFromPublicationId
+                publicationId={quotedPublicationId}
+                // @ts-ignore
+                publication={
+                  publication?.__typename === 'Quote'
+                    ? publication?.quoteOn
+                    : null
+                }
+              />
+            </div>
+          )}
+        </>
+      )
+    }
+
+    return (
+      <>
+        <div className="relative" onClick={(e) => e.stopPropagation()}>
+          {newAttachments.length > 1 && (
+            <>
+              {currentMedia !== 0 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handlePrevClick()
+                  }}
+                  className="absolute left-0 top-[50%] z-20 p-1 rounded-full translate-x-[50%] -translate-y-[50%] bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg transition-all duration-300"
+                >
+                  <AiOutlineArrowLeft className="w-6 h-6 text-white" />
+                </button>
+              )}
+              {currentMedia !== newAttachments.length - 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleNextClick()
+                  }}
+                  className="absolute right-0 top-[50%] z-20 p-1 rounded-full -translate-x-[50%] -translate-y-[50%] bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg transition-all duration-300"
+                >
+                  <AiOutlineArrowRight className="w-6 h-6 text-white" />
+                </button>
+              )}
+              <div
+                className={clsx(
+                  'absolute top-[10px] left-[10px] text-white z-20 bg-black bg-opacity-30 backdrop-filter backdrop-blur-lg py-0.5 px-2 rounded-full',
+                  // isNew ? 'left-[10px]' : 'right-[10px]',
+                  'left-[10px]'
+                )}
+              >
+                {currentMedia + 1}/{newAttachments.length}
+              </div>
+            </>
+          )}
+
+          {newAttachments.length > 0 &&
+            newAttachments.map((attachment: AttachmentType, index: number) => {
+              const url = attachment.previewItem
+              return (
+                <div key={index} className={currentMedia !== index && 'hidden'}>
+                  {attachment?.type === 'Video' ? (
+                    <>
+                      <video
+                        src={url}
+                        className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
+                        controls
+                        muted
+                        ref={videoRef}
+                        autoPlay={false}
+                        poster={getCoverUrl()}
+                      />
+                      <ChooseThumbnail />
+                    </>
+                  ) : attachment?.type === 'Audio' ? (
+                    <AudioPlayer
+                      src={url}
+                      isNew
+                      hideDelete={hideDelete}
+                      className={`${className}`}
+                      publication={publication}
+                    />
+                  ) : attachment?.type === 'Image' ? (
+                    <ImageWithFullScreenZoom
+                      src={url}
+                      className={`image-unselectable object-cover sm:rounded-lg min-h-[200px] ${className}`}
+                      alt={url}
+                    />
+                  ) : (
+                    <></>
+                  )}
+
+                  {isNew && !hideDelete && (
+                    <div className={clsx('absolute top-4 right-4')}>
+                      <button
+                        className="bg-black bg-opacity-70 rounded-full p-1"
+                        onClick={() => {
+                          // set proper currentMedia
+                          if (isComment) {
+                            // @ts-ignore
+                            removeCommentAttachments([attachment.id])
+                          } else {
+                            // @ts-ignore
+                            removeAttachments([attachment.id])
+                          }
+                          setCurrentMedia(0)
+                        }}
+                      >
+                        <AiOutlineClose className="w-6 h-6 text-white" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+        </div>
+
+        {quotedPublicationId && !isAlone && (
+          <div className="sm:mt-4 mt-2 sm:px-0 px-4">
+            <LensPostCardFromPublicationId
+              publicationId={quotedPublicationId}
+              // @ts-ignore
+              publication={
+                publication?.__typename === 'Quote'
+                  ? publication?.quoteOn
+                  : null
+              }
+            />
+          </div>
+        )}
+      </>
+    )
   }
 
   if (isMobile) {
     return (
       <>
         <div className="relative " onClick={(e) => e.stopPropagation()}>
-          {attachments.length > 1 && (
+          {Array.isArray(displayDecision) && displayDecision.length > 1 && (
             <div className="relative w-full">
               <div
                 className={clsx(
@@ -158,102 +451,73 @@ const Attachment: FC<Props> = ({
                 transform: `translateX(-${currentMedia * 100}%)`
               }}
             >
-              {attachments.length > 0 &&
-                attachments.map(
-                  (attachment: AttachmentType & MediaSet, index: number) => {
-                    const type = isNew
-                      ? attachment?.type
-                      : attachment?.original?.mimeType
-                    const url = isNew
-                      ? attachment?.previewItem ||
-                        getIPFSLink(attachment?.item!)
-                      : getIPFSLink(attachment?.original?.url)
+              {Array.isArray(displayDecision) ? (
+                <>
+                  {displayDecision.map((attachment, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        width: '100%',
+                        flexShrink: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                      className="relative"
+                    >
+                      <ImageWithFullScreenZoom
+                        src={String(attachment.uri)}
+                        className={`image-unselectable object-cover sm:rounded-lg min-h-[200px] w-full`}
+                        alt={content}
+                      />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <div
+                    style={{
+                      width: '100%',
+                      flexShrink: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                    className="relative"
+                  >
+                    {displayDecision === 'displayImageAsset' && (
+                      <ImageWithFullScreenZoom
+                        src={asset.uri}
+                        className={`image-unselectable object-cover sm:rounded-lg min-h-[200px] w-full`}
+                        alt={publication?.by}
+                      />
+                    )}
 
-                    return (
+                    {displayDecision === 'displayVideoAsset' && (
                       <div
-                        key={index}
-                        style={{
-                          width: '100%',
-                          flexShrink: 0,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-                        className="relative"
+                        className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden flex items-center`}
                       >
-                        {type === 'image/svg+xml' ? (
-                          <button onClick={() => window.open(url, '_blank')}>
-                            Open Image in new tab
-                          </button>
-                        ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
-                          (isNew && !url.startsWith(LensInfuraEndpoint)) ||
-                          url.startsWith(
-                            'https://firebasestorage.googleapis.com'
-                          ) ? (
-                            <>
-                              <video
-                                src={isNew ? url : imageProxy(url)}
-                                className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                                ref={videoRef}
-                                controls
-                                muted
-                                autoPlay={false}
-                                poster={getCoverUrl()}
-                              />
-                              <ChooseThumbnail />
-                            </>
-                          ) : (
-                            <div
-                              className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
-                            >
-                              <LivePeerVideoPlayback
-                                posterUrl={getCoverUrl() || null}
-                                title={publication?.metadata?.name}
-                                url={url}
-                              />
-                            </div>
-                          )
-                        ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
-                          <AudioPlayer
-                            src={url}
-                            isNew={isNew}
-                            hideDelete={hideDelete}
-                            className={`${className}`}
-                            publication={publication}
-                          />
-                        ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
-                          <ImageWithFullScreenZoom
-                            src={isNew ? url : imageProxy(url)}
-                            className={`image-unselectable shrink-0 object-cover sm:rounded-lg min-h-[200px] w-full`}
-                            alt={isNew ? url : publication?.metadata?.content}
-                          />
-                        ) : (
-                          <></>
-                        )}
-
-                        {isNew && !hideDelete && (
-                          <div className={clsx('absolute top-4 right-4')}>
-                            <button
-                              className="bg-black bg-opacity-70 rounded-full p-1"
-                              onClick={() => {
-                                // set proper currentMedia
-                                if (isComment) {
-                                  removeCommentAttachments([attachment.id])
-                                } else {
-                                  removeAttachments([attachment.id])
-                                }
-                                setCurrentMedia(0)
-                              }}
-                            >
-                              <AiOutlineClose className="w-6 h-6 text-white" />
-                            </button>
-                          </div>
-                        )}
+                        <LivePeerVideoPlayback
+                          posterUrl={getCoverUrl() || null}
+                          url={getIPFSLink(asset.uri)}
+                        />
                       </div>
-                    )
-                  }
-                )}
+                    )}
+
+                    {displayDecision === 'displayAudioAsset' && (
+                      <AudioPlayer
+                        src={getIPFSLink(asset.uri)}
+                        isNew={isNew}
+                        hideDelete={hideDelete}
+                        className={`${className}`}
+                        publication={publication}
+                      />
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -261,6 +525,12 @@ const Attachment: FC<Props> = ({
           <div className="sm:mt-4 mt-2 px-4 sm:px-0">
             <LensPostCardFromPublicationId
               publicationId={quotedPublicationId}
+              // @ts-ignore
+              publication={
+                publication?.__typename === 'Quote'
+                  ? publication?.quoteOn
+                  : null
+              }
             />
           </div>
         )}
@@ -283,7 +553,7 @@ const Attachment: FC<Props> = ({
         </div>
       ) : ( */}
       <div className="relative" onClick={(e) => e.stopPropagation()}>
-        {attachments.length > 1 && (
+        {Array.isArray(displayDecision) && displayDecision.length > 1 && (
           <>
             {currentMedia !== 0 && (
               <button
@@ -319,108 +589,53 @@ const Attachment: FC<Props> = ({
           </>
         )}
 
-        {attachments.length > 0 &&
-          attachments.map(
-            (attachment: AttachmentType & MediaSet, index: number) => {
-              const type = isNew
-                ? attachment?.type
-                : attachment?.original?.mimeType
-              const url = isNew
-                ? attachment?.previewItem || getIPFSLink(attachment?.item!)
-                : getIPFSLink(attachment?.original?.url)
+        {Array.isArray(displayDecision) &&
+          displayDecision.map((attachment, index) => (
+            <div key={index} className={currentMedia !== index && 'hidden'}>
+              <ImageWithFullScreenZoom
+                src={String(attachment.uri)}
+                className={`image-unselectable object-cover sm:rounded-lg min-h-[200px] w-full`}
+                alt={content}
+                key={index}
+              />
+            </div>
+          ))}
 
-              return (
-                <div key={index} className={currentMedia !== index && 'hidden'}>
-                  {type === 'image/svg+xml' ? (
-                    <button onClick={() => window.open(url, '_blank')}>
-                      Open Image in new tab
-                    </button>
-                  ) : SUPPORTED_VIDEO_TYPE.includes(type) ? (
-                    (isNew && !url.startsWith(LensInfuraEndpoint)) ||
-                    url.startsWith('https://firebasestorage.googleapis.com') ? (
-                      <>
-                        <video
-                          src={isNew ? url : imageProxy(url)}
-                          className={`image-unselectable object-contain sm:rounded-lg w-full ${className}`}
-                          controls
-                          muted
-                          ref={videoRef}
-                          autoPlay={false}
-                          poster={getCoverUrl()}
-                        />
+        {displayDecision === 'displayImageAsset' && (
+          <div className={currentMedia !== 0 && 'hidden'}>
+            <ImageWithFullScreenZoom
+              src={asset.uri}
+              className={`image-unselectable object-cover sm:rounded-lg min-h-[200px] w-full`}
+              alt={publication?.by}
+            />
+          </div>
+        )}
 
-                        <ChooseThumbnail />
-                      </>
-                    ) : (
-                      <div
-                        className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden ${className} flex items-center`}
-                      >
-                        <LivePeerVideoPlayback
-                          posterUrl={getCoverUrl() || null}
-                          title={publication?.metadata?.name}
-                          url={url}
-                        />
-                      </div>
-                    )
-                  ) : SUPPORTED_AUDIO_TYPE.includes(type) ? (
-                    <AudioPlayer
-                      src={url}
-                      isNew={isNew}
-                      hideDelete={hideDelete}
-                      className={`${className}`}
-                      publication={publication}
-                    />
-                  ) : SUPPORTED_IMAGE_TYPE.includes(type) ? (
-                    <ImageWithFullScreenZoom
-                      src={isNew ? url : imageProxy(url)}
-                      className={`image-unselectable object-cover sm:rounded-lg min-h-[200px] ${className}`}
-                      alt={isNew ? url : publication?.metadata?.content}
-                    />
-                  ) : (
-                    <></>
-                  )}
+        {displayDecision === 'displayVideoAsset' && (
+          <div className={currentMedia !== 0 && 'hidden'}>
+            <div
+              className={`image-unselectable object-contain sm:rounded-lg w-full overflow-hidden flex items-center`}
+            >
+              <LivePeerVideoPlayback
+                posterUrl={getCoverUrl() || null}
+                url={getIPFSLink(asset.uri)}
+              />
+            </div>
+          </div>
+        )}
 
-                  {isNew && !hideDelete && (
-                    <div className={clsx('absolute top-4 right-4')}>
-                      <button
-                        className="bg-black bg-opacity-70 rounded-full p-1"
-                        onClick={() => {
-                          // set proper currentMedia
-                          if (isComment) {
-                            removeCommentAttachments([attachment.id])
-                          } else {
-                            removeAttachments([attachment.id])
-                          }
-                          setCurrentMedia(0)
-                        }}
-                      >
-                        <AiOutlineClose className="w-6 h-6 text-white" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )
-            }
-          )}
-        {/* <AttachmentMedia
-          type={attachments[currentMedia].original.mimeType}
-          url={
-            SUPPORTED_VIDEO_TYPE.includes(
-              attachments[currentMedia].original.mimeType
-            )
-              ? attachments[currentMedia].original.url
-              : SUPPORTED_IMAGE_TYPE.includes(
-                  attachments[currentMedia].original.mimeType
-                )
-              ? imageProxy(getIPFSLink(attachments[currentMedia].original.url))
-              : getIPFSLink(attachments[currentMedia].original.url)
-          }
-          publication={publication}
-          className={`${attachments.length > 1 ? 'h-[450px]' : className}`}
-          // className={className}
-        /> */}
+        {displayDecision === 'displayAudioAsset' && (
+          <div className={currentMedia !== 0 && 'hidden'}>
+            <AudioPlayer
+              src={getIPFSLink(asset.uri)}
+              isNew={isNew}
+              hideDelete={hideDelete}
+              className={`${className}`}
+              publication={publication}
+            />
+          </div>
+        )}
       </div>
-      {/* )} */}
 
       {quotedPublicationId && !isAlone && (
         <div className="sm:mt-4 mt-2 sm:px-0 px-4">

@@ -2,7 +2,7 @@ import React from 'react'
 import ProfileNotFound from '../../../components/User/Page/ProfileNotFound'
 import ProfilePage from '../../../components/User/Page/ProfilePage'
 import ProfilePageNextSeo from '../../../components/User/ProfilePageNextSeo'
-import { HANDLE_SUFFIX } from '../../../utils/config'
+import { HANDLE_PREFIX } from '../../../utils/config'
 import getLensProfileInfo from '../../../lib/profile/get-profile-info'
 import { Profile } from '../../../graphql/generated'
 import { useProfileStore } from '../../../store/profile'
@@ -26,12 +26,16 @@ const collected = ({
   const fetchAndSetLensProfile = async () => {
     try {
       const lensProfileRes = await getLensProfileInfo({
-        handle: handle
+        forHandle: handle
       })
       // @ts-ignore
       setLensProfile(lensProfileRes.profile)
       // @ts-ignore
-      addProfile(lensProfileRes.profile.handle, lensProfileRes.profile)
+      addProfile(
+        lensProfileRes.profile.handle?.fullHandle,
+        // @ts-ignore
+        lensProfileRes.profile
+      )
     } catch (error) {
       console.log('error', error)
     } finally {
@@ -69,19 +73,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       return {
         props: {
           _lensProfile: null,
-          handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+          handle: id === 'lensprotocol' ? id : `${HANDLE_PREFIX}${id}`
         }
       }
     }
 
     const lensProfileRes = await getLensProfileInfo({
-      handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+      forHandle: id === 'lensprotocol' ? id : `${HANDLE_PREFIX}${id}`
     })
 
     return {
       props: {
         _lensProfile: lensProfileRes.profile,
-        handle: id === 'lensprotocol' ? id : `${id}${HANDLE_SUFFIX}`
+        handle: id === 'lensprotocol' ? id : `${HANDLE_PREFIX}${id}`
       }
     }
   } catch (error) {

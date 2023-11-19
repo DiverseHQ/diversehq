@@ -1,23 +1,18 @@
 import React from 'react'
 import { postGetCommunityInfoUsingListOfIds } from '../../../apiHelper/community'
 import {
-  PublicationsQueryRequest,
-  ReactionFieldResolverRequest,
+  PublicationsRequest,
   usePublicationsQuery
 } from '../../../graphql/generated'
 import { postWithCommunityInfoType } from '../../../types/post'
 
 interface Props {
-  request: PublicationsQueryRequest
-  reactionRequest: ReactionFieldResolverRequest
-  profileId: string
+  request: PublicationsRequest
   enabled?: boolean
 }
 
 const usePublicationWithCommunityInfo = ({
   request,
-  reactionRequest,
-  profileId,
   enabled = true
 }: Props): {
   publications: postWithCommunityInfoType[]
@@ -27,7 +22,7 @@ const usePublicationWithCommunityInfo = ({
     postWithCommunityInfoType[]
   >([])
   const { data, isLoading } = usePublicationsQuery(
-    { request, reactionRequest, profileId },
+    { request },
     {
       enabled: !!request && enabled
     }

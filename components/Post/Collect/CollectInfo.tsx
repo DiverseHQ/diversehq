@@ -6,8 +6,12 @@ import { BsCollection } from 'react-icons/bs'
 import { MdGroup } from 'react-icons/md'
 import { useAccount, useBalance } from 'wagmi'
 import {
-  ApprovedAllowanceAmount,
-  CollectModules,
+  AnyPublication,
+  ApprovedAllowanceAmountResult,
+  LegacyMultirecipientFeeCollectModuleSettings,
+  LegacySimpleCollectModuleSettings,
+  MultirecipientFeeCollectOpenActionSettings,
+  SimpleCollectOpenActionSettings,
   useApprovedModuleAllowanceAmountQuery
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
@@ -22,6 +26,7 @@ import AllowanceButton from './AllowanceButton'
 import Splits from './Splits'
 import Uniswap from './Uniswap'
 import useCollectPublication from './useCollectPublication'
+import getPublicationData from '../../../lib/post/getPublicationData'
 
 const CollectInfo = ({
   publication,
@@ -29,43 +34,46 @@ const CollectInfo = ({
   setIsCollected,
   isCollected,
   collectCount
+}: {
+  publication: AnyPublication
+  // eslint-disable-next-line no-unused-vars
+  setCollectCount: (count: number) => void
+  // eslint-disable-next-line no-unused-vars
+  setIsCollected: (isCollected: boolean) => void
+  isCollected: boolean
+  collectCount: number
 }) => {
-  console.log(publication?.collectModule)
+  if (publication?.__typename === 'Mirror') return null
   const { showModal, hideModal } = usePopUpModal()
   const { address } = useAccount()
   const [allowed, setAllowed] = useState(true)
   const { data: lensProfile } = useLensUserContext()
   const { notifySuccess, notifyError } = useNotify()
 
-  const collectModule: any = publication?.collectModule
+  const collectModule = publication?.openActionModules[0] as
+    | SimpleCollectOpenActionSettings
+    | MultirecipientFeeCollectOpenActionSettings
+    | LegacySimpleCollectModuleSettings
+    | LegacyMultirecipientFeeCollectModuleSettings
 
-  const endTimestamp =
-    collectModule?.endTimestamp ?? collectModule?.optionalEndTimestamp
-  const collectLimit =
-    collectModule?.collectLimit ?? collectModule?.optionalCollectLimit
-  const amount =
-    collectModule?.amount?.value ?? collectModule?.fee?.amount?.value
-  const currency =
-    collectModule?.amount?.asset?.symbol ??
-    collectModule?.fee?.amount?.asset?.symbol
-  const assetAddress =
-    collectModule?.amount?.asset?.address ??
-    collectModule?.fee?.amount?.asset?.address
-  const assetDecimals =
-    collectModule?.amount?.asset?.decimals ??
-    collectModule?.fee?.amount?.asset?.decimals
-  const referralFee =
-    collectModule?.referralFee ?? collectModule?.fee?.referralFee
-  const isMultirecipientFeeCollectModule =
-    collectModule?.type === CollectModules.MultirecipientFeeCollectModule
-  const isFreeCollectModule =
-    collectModule?.type === CollectModules.FreeCollectModule
-  const isSimpleFreeCollectModule =
-    collectModule?.type === CollectModules.SimpleCollectModule && !amount
-
+  const endTimestamp = collectModule?.endsAt
+  const collectLimit = parseInt(collectModule?.collectLimit || '0')
+  const amount = parseFloat(collectModule?.amount?.value || '0')
+  const currency = collectModule?.amount?.asset?.symbol
+  const assetAddress = collectModule?.amount?.asset?.contract.address
+  const assetDecimals = collectModule?.amount?.asset?.decimals
+  const referralFee = collectModule?.referralFee
+  const isLimitedCollectAllCollected = collectLimit
+    ? collectCount >= collectLimit
+    : false
   const isCollectExpired = endTimestamp
     ? new Date(endTimestamp).getTime() / 1000 < new Date().getTime() / 1000
     : false
+  const isFreeCollectModule = !amount
+  const isSimpleFreeCollectModule =
+    collectModule.__typename === 'SimpleCollectOpenActionSettings'
+  const isMultirecipientFeeCollectModule =
+    collectModule.__typename === 'MultirecipientFeeCollectOpenActionSettings'
 
   let remainingTimeString = null
 
@@ -88,22 +96,24 @@ const CollectInfo = ({
   })
 
   const { data: allowanceData, isLoading: allowanceLoading } =
-    useApprovedModuleAllowanceAmountQuery({
-      request: {
-        currencies: assetAddress,
-        followModules: [],
-        collectModules: [collectModule.type],
-        referenceModules: []
+    useApprovedModuleAllowanceAmountQuery(
+      {
+        request: {
+          currencies: assetAddress,
+          followModules: [],
+          openActionModules: [collectModule.type],
+          referenceModules: []
+        }
+      },
+      {
+        onSuccess({ approvedModuleAllowanceAmount }) {
+          const allowedAmount = parseFloat(
+            approvedModuleAllowanceAmount[0]?.allowance.value
+          )
+          setAllowed(allowedAmount > amount)
+        }
       }
-    })
-
-  useEffect(() => {
-    if (allowanceLoading) return
-    if (!allowanceData) return
-    setAllowed(
-      allowanceData?.approvedModuleAllowanceAmount[0].allowance !== '0x00'
     )
-  }, [allowanceData])
 
   const { collectPublication, isSuccess, loading, error } =
     useCollectPublication(collectModule)
@@ -117,33 +127,33 @@ const CollectInfo = ({
   useEffect(() => {
     if (!loading && isSuccess) {
       setIsCollected(true)
-      setCollectCount((prev: number) => prev + 1)
+      setCollectCount(collectCount + 1)
       notifySuccess('Post has been collected, check you collection!')
       hideModal()
     }
   }, [loading, isSuccess])
 
   let hasAmount = false
-  if (balanceData && parseFloat(balanceData?.formatted) < parseFloat(amount)) {
+  if (balanceData && parseFloat(balanceData?.formatted) < amount) {
     hasAmount = false
   } else {
     hasAmount = true
   }
 
-  const isLimitedCollectAllCollected = collectLimit
-    ? collectCount >= parseInt(collectLimit)
-    : false
+  const filteredAttachments = getPublicationData(
+    publication?.metadata
+  )?.attachments
 
   return (
     <div className="px-6 pb-3 text-p-text flex flex-col gap-y-1">
       <div className="mb-1 self-start text-xl">
         <Markup>{stringToLength(publication.metadata?.content, 150)}</Markup>
       </div>
-      {publication?.metadata?.media.length > 0 && (
+      {filteredAttachments.length > 0 && (
         <div className="w-full mb-1">
           <Attachment
             publication={publication}
-            attachments={publication?.metadata?.media}
+            attachments={filteredAttachments}
             className="w-full max-h-[300px] rounded-xl"
           />
         </div>
@@ -163,9 +173,7 @@ const CollectInfo = ({
         <MdGroup className="mr-2 w-5 h-5" />
         <div>
           {`${
-            publication?.collectModule?.optionalCollectLimit
-              ? `${collectCount}/${collectLimit}`
-              : `${collectCount}`
+            collectLimit ? `${collectCount}/${collectLimit}` : `${collectCount}`
           } Collected`}
         </div>
       </div>
@@ -185,15 +193,12 @@ const CollectInfo = ({
       )}
 
       {/* referral fee */}
-      {referralFee !== 0 &&
-        referralFee !== '0' &&
-        referralFee &&
-        referralFee !== 'undefined' && (
-          <div className="start-row">
-            <AiOutlineRetweet className="mr-2 w-5 h-5" />
-            <div>{`Mirror & earn ${referralFee}% on collect`}</div>
-          </div>
-        )}
+      {referralFee && (
+        <div className="start-row">
+          <AiOutlineRetweet className="mr-2 w-5 h-5" />
+          <div>{`Mirror & earn ${referralFee}% on collect`}</div>
+        </div>
+      )}
 
       {isMultirecipientFeeCollectModule && (
         <Splits recipients={collectModule?.recipients} />
@@ -259,7 +264,7 @@ const CollectInfo = ({
             <AllowanceButton
               module={
                 allowanceData
-                  ?.approvedModuleAllowanceAmount[0] as ApprovedAllowanceAmount
+                  ?.approvedModuleAllowanceAmount[0] as ApprovedAllowanceAmountResult
               }
               allowed={allowed}
               setAllowed={setAllowed}

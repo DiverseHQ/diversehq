@@ -3,13 +3,12 @@ import { appLink, showNameForThisAppIds } from '../../utils/config'
 
 export const getContent = (post: postWithCommunityInfoType): string => {
   let content: string = post?.metadata?.content || ''
-  console.log('content', content)
 
   if (content) {
     if (post?.isLensCommunityPost) {
       content = content.split('\n').slice(1).join('\n')
-      if (content.startsWith(post?.metadata?.name)) {
-        content = content.slice(post?.metadata?.name.length)
+      if (content.startsWith(post?.metadata?.marketplace?.name)) {
+        content = content.slice(post?.metadata?.marketplace.name.length)
       }
     }
 
@@ -39,17 +38,17 @@ export const getContent = (post: postWithCommunityInfoType): string => {
 
     // removing upper content if same as content name
     if (
-      content?.startsWith(post?.metadata?.name?.trim()) &&
-      showNameForThisAppIds.includes(post?.appId)
+      content?.startsWith(post?.metadata?.marketplace?.name?.trim()) &&
+      showNameForThisAppIds.includes(post?.metadata.appId)
     ) {
-      content = content.slice(post?.metadata?.name.length)
+      content = content.slice(post?.metadata?.marketplace?.name.length)
     }
 
     if (
-      content?.startsWith(`**${post?.metadata?.name}**`) &&
-      showNameForThisAppIds.includes(post?.appId)
+      content?.startsWith(`**${post?.metadata?.marketplace?.name}**`) &&
+      showNameForThisAppIds.includes(post?.metadata.appId)
     ) {
-      content = content.slice(post?.metadata?.name.length + 4)
+      content = content.slice(post?.metadata?.marketplace?.name.length + 4)
     }
 
     // removing ___ Quoting texts

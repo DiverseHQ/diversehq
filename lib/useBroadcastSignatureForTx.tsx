@@ -1,8 +1,8 @@
-import { useBroadcastMutation } from '../graphql/generated'
+import { useBroadcastOnchainMutation } from '../graphql/generated'
 import { pollUntilIndexed } from './indexer/has-transaction-been-indexed'
 
 const useBroadcastSignatureForTx = (waitForTxIndex = true) => {
-  const { mutateAsync: broadCast } = useBroadcastMutation()
+  const { mutateAsync: broadCast } = useBroadcastOnchainMutation()
   // use broadcast for gasless transactions
   const broadCastSignatureForTx = async (signature, id) => {
     const broadcastResult = (
@@ -12,8 +12,8 @@ const useBroadcastSignatureForTx = (waitForTxIndex = true) => {
           signature
         }
       })
-    ).broadcast
-    if (broadcastResult.reason) {
+    ).broadcastOnchain
+    if (broadcastResult.__typename === 'RelayError') {
       throw new Error(broadcastResult.reason)
     }
     if (!broadcastResult.txId) {

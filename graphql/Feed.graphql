@@ -3,6 +3,7 @@ query Feed($request: FeedRequest!) {
     items {
       id
       root {
+        __typename
         ... on Post {
           ...PostFields
         }

@@ -1,6 +1,7 @@
 query Publications($request: PublicationsRequest!) {
   publications(request: $request) {
     items {
+      __typename
       ... on Post {
         ...PostFields
       }

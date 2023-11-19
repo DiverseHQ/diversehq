@@ -5,40 +5,30 @@ import getStampFyiURL from './getStampFyiURL'
 import imageProxy from './imageProxy'
 
 const getAvatar = (profile: Profile, imageProxyTr?: string): string => {
-  if (profile?.picture?.__typename === 'NftImage') {
-    return profile?.picture?.uri
-      ? imageProxy(
-          getIPFSLink(profile?.picture?.uri),
-          imageProxyTr ?? 'w-250,h-250,q-50'
-        )
-      : getStampFyiURL(profile?.ownedBy ?? ZERO_ADDRESS)
+  // @ts-ignore
+  if (profile?.metadata?.picture?.optimized?.uri) {
+    // @ts-ignore
+    return profile?.metadata?.picture?.optimized?.uri
   }
-  if (profile?.picture?.__typename === 'MediaSet') {
-    return profile?.picture?.original?.url
+  if (!profile?.metadata?.picture) {
+    return getStampFyiURL(profile?.ownedBy?.address ?? ZERO_ADDRESS)
+  }
+  if (profile?.metadata.picture?.__typename === 'NftImage') {
+    return profile?.metadata.picture?.image?.optimized?.uri
       ? imageProxy(
-          getIPFSLink(profile?.picture?.original?.url),
+          getIPFSLink(profile?.metadata.picture?.image?.optimized?.uri),
           imageProxyTr ?? 'w-150,h-150,q-30'
         )
-      : getStampFyiURL(profile?.ownedBy ?? ZERO_ADDRESS)
+      : getStampFyiURL(profile?.ownedBy?.address ?? ZERO_ADDRESS)
   }
-
-  // @ts-ignore
-  return profile?.picture?.original?.url
-    ? // @ts-ignore
-      imageProxy(
-        // @ts-ignore
-        getIPFSLink(profile?.picture?.original?.url),
-        imageProxyTr ?? 'w-150,h-150,q-30'
-      )
-    : // @ts-ignore
-    profile?.picture?.uri
-    ? // @ts-ignore
-      imageProxy(
-        // @ts-ignore
-        getIPFSLink(profile?.picture?.uri),
-        imageProxyTr ?? 'w-250,h-250,q-50'
-      )
-    : getStampFyiURL(profile?.ownedBy ?? ZERO_ADDRESS)
+  if (profile?.metadata.picture?.__typename === 'ImageSet') {
+    return profile?.metadata.picture?.optimized?.uri
+      ? imageProxy(
+          getIPFSLink(profile?.metadata.picture?.optimized?.uri),
+          imageProxyTr ?? 'w-150,h-150,q-30'
+        )
+      : getStampFyiURL(profile?.ownedBy?.address ?? ZERO_ADDRESS)
+  }
 }
 
 export default getAvatar

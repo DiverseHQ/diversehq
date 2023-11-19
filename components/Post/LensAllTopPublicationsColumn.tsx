@@ -3,8 +3,8 @@ import { memo, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
 import {
-  PublicationSortCriteria,
-  PublicationTypes,
+  ExplorePublicationsOrderByType,
+  LimitType,
   useExplorePublicationsQuery
 } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
@@ -43,19 +43,15 @@ const LensAllTopPublicationsColumn = () => {
     {
       request: {
         cursor: exploreQueryRequestParams.cursor,
-        publicationTypes: [PublicationTypes.Post],
-        limit: LENS_POST_LIMIT,
-        sortCriteria: PublicationSortCriteria.TopMirrored,
-        noRandomize: true,
-        timestamp: timestamp,
-        sources: [appId]
-      },
-      reactionRequest: {
-        profileId: myLensProfile?.defaultProfile?.id
-          ? myLensProfile?.defaultProfile?.id
-          : null
-      },
-      profileId: myLensProfile?.defaultProfile?.id
+        limit: LimitType.Fifty,
+        orderBy: ExplorePublicationsOrderByType.TopMirrored,
+        where: {
+          since: timestamp,
+          metadata: {
+            publishedOn: [appId]
+          }
+        }
+      }
     },
     {
       enabled:
@@ -134,7 +130,7 @@ const LensAllTopPublicationsColumn = () => {
     let newPublications = new Map()
 
     for (const newPost of newPosts) {
-      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newProfiles.set(newPost.by?.handle?.fullHandle, newPost.by)
       newPublications.set(newPost.id, newPost)
     }
 

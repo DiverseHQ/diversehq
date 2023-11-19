@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { postGetCommunityInfoUsingListOfIds } from '../../apiHelper/community'
-import { PublicationTypes, usePublicationsQuery } from '../../graphql/generated'
+import { LimitType, usePublicationsQuery } from '../../graphql/generated'
 import { useLensUserContext } from '../../lib/LensUserContext'
 import { LENS_POST_LIMIT } from '../../utils/config'
 import MobileLoader from '../Common/UI/MobileLoader'
@@ -28,15 +28,12 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
   const profilePublicationsResult = usePublicationsQuery(
     {
       request: {
-        profileId: queryParams.profileId,
         cursor: queryParams.cursor,
-        limit: LENS_POST_LIMIT,
-        publicationTypes: [PublicationTypes.Post, PublicationTypes.Mirror]
-      },
-      reactionRequest: {
-        profileId: myLensProfile?.defaultProfile?.id
-      },
-      profileId: myLensProfile?.defaultProfile?.id
+        limit: LimitType.Fifty,
+        where: {
+          from: queryParams.profileId
+        }
+      }
     },
     {
       enabled: !!profileId
@@ -97,7 +94,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
       }
       if (post?.__typename === 'Mirror') {
         // @ts-ignore
-        return post.mirrorOf?.metadata?.tags[0] || 'null'
+        return post.mirrorOn?.metadata?.tags[0] || 'null'
       }
       return 'null'
     })
@@ -106,13 +103,13 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     )
     for (let i = 0; i < newPosts.length; i++) {
       if (!communityInfoForPosts[i]?._id) {
-        if (newPosts[i]?.__typename === 'Mirror') {
+        if (newPosts[i].__typename === 'Mirror') {
           let mirrorPost = newPosts[i]
           // @ts-ignore
-          newPosts[i] = mirrorPost?.mirrorOf
+          newPosts[i] = mirrorPost?.mirrorOn
 
           // @ts-ignore
-          newPosts[i].mirroredBy = mirrorPost.profile
+          newPosts[i].mirroredBy = mirrorPost.by
           // @ts-ignore
           newPosts[i].originalMirrorPublication = mirrorPost
         }
@@ -120,9 +117,9 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
         if (newPosts[i]?.__typename === 'Mirror') {
           let mirrorPost = newPosts[i]
           // @ts-ignore
-          newPosts[i] = mirrorPost?.mirrorOf
+          newPosts[i] = mirrorPost?.mirrorOn
           // @ts-ignore
-          newPosts[i].mirroredBy = mirrorPost.profile
+          newPosts[i].mirroredBy = mirrorPost.by
 
           // @ts-ignore
           newPosts[i].originalMirrorPublication = mirrorPost
@@ -147,7 +144,7 @@ const LensPostsProfilePublicationsColumn = ({ profileId }) => {
     let newPublications = new Map()
 
     for (const newPost of newPosts) {
-      newProfiles.set(newPost.profile.handle, newPost.profile)
+      newProfiles.set(newPost.by?.handle?.fullHandle, newPost.by)
       newPublications.set(newPost.id, newPost)
     }
     addProfiles(newProfiles)

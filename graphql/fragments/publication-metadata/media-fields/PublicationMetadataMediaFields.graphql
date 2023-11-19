@@ -1,4 +1,5 @@
 fragment PublicationMetadataMediaFields on PublicationMetadataMedia {
+  __typename
   ... on PublicationMetadataMediaVideo {
     ...PublicationMetadataMediaVideoFields
   }

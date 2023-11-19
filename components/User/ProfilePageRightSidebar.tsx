@@ -10,6 +10,7 @@ interface Props {
 }
 
 const ProfilePageRightSidebar: FC<Props> = ({ profile, lensProfile }) => {
+  console.log('lensProfile', lensProfile)
   return (
     <div
       className={`relative hidden lg:flex flex-col w-[150px] md:w-[200px] lg:w-[300px] xl:w-[350px] py-8 pr-4 pl-2 md:pl-2 lg:pl-4 xl:pl-6 overflow-scroll no-scrollbar space-y-3`}
@@ -21,7 +22,11 @@ const ProfilePageRightSidebar: FC<Props> = ({ profile, lensProfile }) => {
         </div>
         <div className="text-p-text px-3 py-2 flex flex-col text-[14px]">
           <div className="mb-3">
-            <Markup className="break-words">{lensProfile.bio}</Markup>
+            {lensProfile?.metadata?.bio && (
+              <Markup className="break-words">
+                {lensProfile?.metadata.bio}
+              </Markup>
+            )}
           </div>
           <div className="flex gap-2 items-center mb-2">
             <img src="/communityCreatedOnDate.svg" alt="cake" />
@@ -44,19 +49,27 @@ const ProfilePageRightSidebar: FC<Props> = ({ profile, lensProfile }) => {
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-[16px]">
-                {Number(lensProfile?.stats?.totalPosts)}
+                {Number(lensProfile?.stats?.posts)}
               </span>
               <span className="font-light text-[#7c7c7c]">posts</span>
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-[16px]">
-                {Number(lensProfile?.stats?.totalCollects)}
+                {Number(lensProfile?.stats?.comments)}
               </span>
-              <span className="font-light text-[#7c7c7c]">collects</span>
+              <span className="font-light text-[#7c7c7c]">comments</span>
             </div>
+            {lensProfile?.stats?.reactions && (
+              <div className="flex flex-col">
+                <span className="font-semibold text-[16px]">
+                  {Number(lensProfile?.stats?.reactions)}
+                </span>
+                <span className="font-light text-[#7c7c7c]">Upvotes</span>
+              </div>
+            )}
             <div className="flex flex-col">
               <span className="font-semibold text-[16px]">
-                {Number(lensProfile?.stats?.totalMirrors)}
+                {Number(lensProfile?.stats?.mirrors)}
               </span>
               <span className="font-light text-[#7c7c7c]">mirrors</span>
             </div>

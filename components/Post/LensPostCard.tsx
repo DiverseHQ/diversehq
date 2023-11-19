@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import ReactTimeAgo from 'react-time-ago'
 import {
+  Comment,
   FeedItem,
-  ReactionTypes,
+  PublicationReactionType,
   useAddReactionMutation,
   useHidePublicationMutation,
   useRemoveReactionMutation
@@ -37,7 +38,7 @@ import getAvatar from '../User/lib/getAvatar'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import useLensFollowButton from '../User/useLensFollowButton'
 import Attachment from './Attachment'
-import LensCollectButton from './Collect/LensCollectButton'
+// import LensCollectButton from './Collect/LensCollectButton'
 import LensCommentCard from './LensComments/LensCommentCard'
 import MirrorButton from './MirrorButton'
 import { getAllMentionsHandlFromContent } from './PostPageMentionsColumn'
@@ -47,6 +48,7 @@ import { getContent } from './getContent'
 import WhoCollectedPublicationPopUp from './whoWasIt/WhoCollectedPublicationPopUp'
 import WhoMirroredPublicatitonPopUp from './whoWasIt/WhoMirroredPublicatitonPopUp'
 import WhoReactedPublicationPopup from './whoWasIt/WhoReactedPublicationPopup'
+import getPublicationData from '../../lib/post/getPublicationData'
 
 //sample url https://lens.infura-ipfs.io/ipfs/QmUrfgfcoa7yeHefGCsX9RoxbfpZ1eiASQwp5TnCSsguNA
 
@@ -62,12 +64,10 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
   const { isMobile } = useDevice()
   const { notifyInfo } = useNotify()
   const { showModal } = usePopUpModal()
-  const [reaction, setReaction] = useState(post?.reaction)
-  const [upvoteCount, setUpvoteCount] = useState(post?.stats.totalUpvotes)
-  const [downvoteCount, setDownvoteCount] = useState(post?.stats.totalDownvotes)
-  const [voteCount, setVoteCount] = useState(
-    post?.stats?.totalUpvotes - post?.stats?.totalDownvotes
-  )
+  const [reaction, setReaction] = useState(post?.operations?.hasReacted)
+  // const [upvoteCount, setUpvoteCount] = useState(post?.stats.reactions)
+  // const [downvoteCount, setDownvoteCount] = useState(post?.stats.totalDownvotes)
+  const [voteCount, setVoteCount] = useState(post?.stats?.reactions)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showOptionsModal, setShowOptionsModal] = useState(false)
   const [postInfo, setPostInfo] = useState<postWithCommunityInfoType>(post)
@@ -75,40 +75,37 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
     id: postInfo?.communityInfo?._id,
     showJoined: false
   })
-  useEffect(() => {
-    setVoteCount(upvoteCount - downvoteCount)
-  }, [upvoteCount, downvoteCount])
+  const filteredAttachments =
+    getPublicationData(post?.metadata)?.attachments || []
 
   //update stats if post is updated
   useEffect(() => {
     setPostInfo(post)
-    setReaction(post?.reaction)
-    setUpvoteCount(post?.stats.totalUpvotes)
-    setDownvoteCount(post?.stats.totalDownvotes)
+    setReaction(post?.operations?.hasReacted)
   }, [post])
 
   const { mutateAsync: addReaction } = useAddReactionMutation()
   const { mutateAsync: removeReaction } = useRemoveReactionMutation()
   const { isSignedIn, hasProfile, data: lensProfile } = useLensUserContext()
   const [isAuthor, setIsAuthor] = useState(
-    lensProfile?.defaultProfile?.id === post?.profile?.id
+    lensProfile?.defaultProfile?.id === post?.by?.id
   )
 
   useEffect(() => {
     if (!post || !lensProfile) return
-    setIsAuthor(lensProfile?.defaultProfile?.id === post?.profile?.id)
+    setIsAuthor(lensProfile?.defaultProfile?.id === post?.by?.id)
   }, [post, lensProfile])
 
   const { mutateAsync: removePost } = useHidePublicationMutation()
   const { FollowButton } = useLensFollowButton(
     {
-      profileId: post?.profile?.id
+      forProfileId: post?.by?.id
     },
     'join'
   )
 
   const handleUpvote = async () => {
-    if (reaction === ReactionTypes.Upvote) {
+    if (reaction) {
       try {
         if (!isSignedIn || !hasProfile) {
           notifyInfo('How about loging in lens, first?')
@@ -117,13 +114,12 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
 
         await removeReaction({
           request: {
-            profileId: lensProfile.defaultProfile.id,
-            publicationId: post.id,
-            reaction: ReactionTypes.Upvote
+            for: post.id,
+            reaction: PublicationReactionType.Upvote
           }
         })
         setReaction(null)
-        setUpvoteCount(upvoteCount - 1)
+        setVoteCount(voteCount - 1)
         return
       } catch (error) {
         console.log(error)
@@ -135,18 +131,17 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
         return
       }
 
-      setReaction(ReactionTypes.Upvote)
-      if (reaction === ReactionTypes.Downvote) {
-        setDownvoteCount(downvoteCount - 1)
-        setUpvoteCount(upvoteCount + 1)
-      } else {
-        setUpvoteCount(upvoteCount + 1)
-      }
+      setReaction(true)
+      // if (reaction === ReactionTypes.Downvote) {
+      //   setDownvoteCount(downvoteCount - 1)
+      //   setUpvoteCount(upvoteCount + 1)
+      // } else {
+      setVoteCount(voteCount + 1)
+      // }
       await addReaction({
         request: {
-          profileId: lensProfile.defaultProfile.id,
-          publicationId: post.id,
-          reaction: ReactionTypes.Upvote
+          for: post.id,
+          reaction: PublicationReactionType.Upvote
         }
       })
     } catch (error) {
@@ -154,50 +149,49 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
     }
   }
 
-  const handleDownvote = async () => {
-    if (reaction === ReactionTypes.Downvote) {
-      try {
-        if (!isSignedIn || !hasProfile) {
-          notifyInfo('How about loging in lens, first?')
-          return
-        }
-        await removeReaction({
-          request: {
-            profileId: lensProfile.defaultProfile.id,
-            publicationId: post.id,
-            reaction: ReactionTypes.Downvote
-          }
-        })
-        setReaction(null)
-        setDownvoteCount(downvoteCount - 1)
-        return
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    try {
-      if (!isSignedIn || !hasProfile) {
-        notifyInfo('How about loging in lens, first?')
-        return
-      }
-      setReaction(ReactionTypes.Downvote)
-      if (reaction === ReactionTypes.Upvote) {
-        setUpvoteCount(upvoteCount - 1)
-        setDownvoteCount(downvoteCount + 1)
-      } else {
-        setDownvoteCount(downvoteCount + 1)
-      }
-      await addReaction({
-        request: {
-          profileId: lensProfile.defaultProfile.id,
-          publicationId: post.id,
-          reaction: ReactionTypes.Downvote
-        }
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const handleDownvote = async () => {
+  //   if (reaction) {
+  //     try {
+  //       if (!isSignedIn || !hasProfile) {
+  //         notifyInfo('How about loging in lens, first?')
+  //         return
+  //       }
+  //       await removeReaction({
+  //         request: {
+  //           for: post.id,
+  //           reaction: PublicationReactionType.Upvote
+  //         }
+  //       })
+  //       setReaction(null)
+  //       setVoteCount(voteCount - 2)
+  //       return
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
+  //   try {
+  //     if (!isSignedIn || !hasProfile) {
+  //       notifyInfo('How about loging in lens, first?')
+  //       return
+  //     }
+  //     setReaction(false)
+  //     if (reaction === ReactionTypes.Upvote) {
+  //       setUpvoteCount(upvoteCount - 1)
+  //       setDownvoteCount(downvoteCount + 1)
+  //     } else {
+  //       setDownvoteCount(downvoteCount + 1)
+  //     }
+  //     await addReaction({
+  //       request: {
+  //         profileId: lensProfile.defaultProfile.id,
+  //         publicationId: post.id,
+  //         reaction: ReactionTypes.Downvote
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
   const router = useRouter()
   const [showMore, setShowMore] = useState(
     postInfo?.metadata?.content?.length > 400 && router.pathname !== '/p/[id]'
@@ -213,7 +207,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
     try {
       await removePost({
         request: {
-          publicationId: post?.id
+          for: post?.id
         }
       })
       await deleteLensPublication(post?.id)
@@ -277,7 +271,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
 
   let content = getContent(postInfo)
 
-  if (postInfo?.originalMirrorPublication?.hidden) {
+  if (postInfo?.originalMirrorPublication?.isHidden) {
     return <div>Mirror is hidden</div>
   }
 
@@ -286,8 +280,8 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
   const getCommentsToShow = () => {
     let comments = []
 
-    const isProfileAlreadyAdded = (comment) => {
-      return comments.find((c) => c.profile.id === comment.profile.id)
+    const isProfileAlreadyAdded = (comment: Comment) => {
+      return comments.find((c) => c.by.id === comment.by.id)
     }
 
     for (const comment of feedItem?.comments || []) {
@@ -296,16 +290,15 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
       comments.push(comment)
     }
 
-    if (
-      comments.length === 1 &&
-      comments[0].profile.id === postInfo?.profile?.id
-    ) {
+    if (comments.length === 1 && comments[0].by.id === postInfo?.by?.id) {
       comments = []
     }
     return comments
   }
 
   const commentsToShow = getCommentsToShow()
+
+  const filteredAsset = getPublicationData(postInfo?.metadata)?.asset
 
   return (
     <>
@@ -344,7 +337,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
           </div>
         ) : (
           <>
-            {feedItem?.electedMirror && feedItem?.comments?.length === 0 && (
+            {feedItem?.mirrors.length > 0 && commentsToShow?.length === 0 && (
               <div
                 className="flex flex-row w-full space-x-1 items-center pl-4 md:pl-1 mb-1 text-xs text-s-text"
                 onClick={(e) => {
@@ -353,14 +346,10 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
               >
                 <AiOutlineRetweet className="w-4 h-4 pr-0.5" />
                 <Link
-                  href={`/u/${formatHandle(
-                    feedItem?.electedMirror?.profile?.handle
-                  )}`}
+                  href={`/u/${formatHandle(feedItem?.mirrors[0]?.by?.handle)}`}
                 >
                   <div className="hover:underline">
-                    {`u/${formatHandle(
-                      feedItem?.electedMirror?.profile?.handle
-                    )}`}{' '}
+                    {`u/${formatHandle(feedItem?.mirrors[0]?.by?.handle)}`}{' '}
                   </div>
                 </Link>
                 {feedItem?.mirrors?.length - 1 > 0 && (
@@ -387,7 +376,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
             >
               <Link
                 // @ts-ignore
-                href={`/p/${postInfo?.mainPost?.id}`}
+                href={`/p/${postInfo?.commentOn?.id}`}
                 className="bg-s-hover rounded-md px-2 py-0.5 text-xs w-fit mb-1.5 start-row"
               >
                 <TiArrowBack className="w-3 h-3 mr-1" />
@@ -399,20 +388,20 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
         <div className="px-3 sm:px-0 flex flex-row items-center justify-between mb-1  w-full">
           <>
             <div className="flex flex-row w-full items-center">
-              <div onClick={(e) => e.stopPropagation()}>
+              <div onClick={(e) => e.stopPropagation()} className="sm:pr-0.5">
                 <Link
                   href={
                     postInfo?.communityInfo?._id
                       ? postInfo?.isLensCommunityPost
-                        ? `/l/${formatHandle(postInfo?.profile?.handle)}`
+                        ? `/l/${formatHandle(postInfo?.by?.handle)}`
                         : `/c/${postInfo?.communityInfo?.name}`
-                      : `/u/${formatHandle(postInfo?.profile?.handle)}`
+                      : `/u/${formatHandle(postInfo?.by?.handle)}`
                   }
                 >
                   <ImageWithPulsingLoader
                     src={
                       postInfo?.isLensCommunityPost || !postInfo?.communityInfo
-                        ? getAvatar(postInfo?.profile)
+                        ? getAvatar(postInfo?.by)
                         : getIPFSLink(postInfo?.communityInfo?.logoImageUrl) ??
                           '/defaultBanner.png'
                     }
@@ -432,16 +421,16 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                     href={
                       postInfo?.communityInfo?._id
                         ? postInfo?.isLensCommunityPost
-                          ? `/l/${formatHandle(postInfo?.profile?.handle)}`
+                          ? `/l/${formatHandle(postInfo?.by?.handle)}`
                           : `/c/${postInfo?.communityInfo?.name}`
-                        : `/u/${formatHandle(postInfo?.profile?.handle)}`
+                        : `/u/${formatHandle(postInfo?.by?.handle)}`
                     }
                   >
                     <div className="pl-2 max-w-[300px] sm:max-w-lg font-bold text-sm sm:text-base hover:cursor-pointer hover:underline truncate">
                       {postInfo?.isLensCommunityPost
-                        ? `l/${formatHandle(postInfo?.profile?.handle)}`
+                        ? `l/${formatHandle(postInfo?.by?.handle)}`
                         : postInfo?.communityInfo?.name ??
-                          postInfo?.profile?.name}
+                          postInfo?.by?.metadata?.displayName}
                     </div>
                   </Link>
                   {postInfo?.communityInfo?.verified && (
@@ -458,7 +447,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                         !postInfo?.isLensCommunityPost && (
                           <div className="pr-1.5">
                             <ImageWithPulsingLoader
-                              src={getAvatar(postInfo?.profile)}
+                              src={getAvatar(postInfo?.by)}
                               className="h-4 w-4 rounded-full object-cover"
                             />
                           </div>
@@ -466,23 +455,27 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                       <Link
                         href={
                           postInfo?.isLensCommunityPost
-                            ? `/u/${formatHandle(
-                                getAllMentionsHandlFromContent(
+                            ? // @ts-ignore
+                              `/u/${formatHandle({
+                                // @ts-ignore
+                                fullHandle: getAllMentionsHandlFromContent(
                                   postInfo?.metadata?.content
                                 )[0]
-                              )}`
-                            : `/u/${formatHandle(postInfo?.profile?.handle)}`
+                              })}`
+                            : `/u/${formatHandle(postInfo?.by?.handle)}`
                         }
                         passHref
                       >
                         <div className="font-normal hover:cursor-pointer hover:underline">
                           {postInfo?.isLensCommunityPost
-                            ? `u/${formatHandle(
-                                getAllMentionsHandlFromContent(
+                            ? // @ts-ignore
+                              `/u/${formatHandle({
+                                // @ts-ignore
+                                fullHandle: getAllMentionsHandlFromContent(
                                   postInfo?.metadata?.content
                                 )[0]
-                              )}`
-                            : `u/${formatHandle(postInfo?.profile?.handle)}`}
+                              })}`
+                            : `u/${formatHandle(postInfo?.by?.handle)}`}
                         </div>
                       </Link>
                     </div>
@@ -577,60 +570,59 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
         </div>
 
         <div className="flex flex-row w-full">
-          {!isMobile && !isAlone && (
-            <div className="flex flex-col items-center w-[40px] pt-2 shrink-0">
-              <Tooltip
-                enterDelay={1000}
-                leaveDelay={200}
-                title="Upvote"
-                arrow
-                placement="left"
-              >
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleUpvote()
-                  }}
-                  className="active:bg-s-hover sm:hover:bg-s-hover rounded-md py-1 cursor-pointer"
-                >
-                  <img
-                    //  onClick={liked ? handleUnLike : handleLike}
-                    src={
-                      reaction === ReactionTypes.Upvote
-                        ? '/UpvotedFilled.svg'
-                        : '/upvoteGray.svg'
-                    }
-                    className="w-5 h-5"
-                  />
-                </button>
-              </Tooltip>
-              <div className="font-bold leading-5 text-sm">{voteCount}</div>
-              <Tooltip
-                enterDelay={1000}
-                leaveDelay={200}
-                title="Downvote"
-                arrow
-                placement="left"
-              >
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleDownvote()
-                  }}
-                  className="active:bg-s-hover sm:hover:bg-s-hover rounded-md py-1 cursor-pointer"
-                >
-                  <img
-                    src={
-                      reaction === ReactionTypes.Downvote
-                        ? '/DownvotedFilled.svg'
-                        : '/downvoteGray.svg'
-                    }
-                    className="w-4 h-4"
-                  />
-                </button>
-              </Tooltip>
-            </div>
-          )}
+          <>
+            {!isMobile && !isAlone && (
+              <div className="flex flex-col items-center w-[42px] pt-2 shrink-0" />
+              // <div className="flex flex-col items-center w-[40px] pt-2 shrink-0">
+              //   <Tooltip
+              //     enterDelay={1000}
+              //     leaveDelay={200}
+              //     title="Upvote"
+              //     arrow
+              //     placement="left"
+              //   >
+              //     <button
+              //       onClick={(e) => {
+              //         e.stopPropagation()
+              //         handleUpvote()
+              //       }}
+              //       className="active:bg-s-hover sm:hover:bg-s-hover rounded-md py-1 cursor-pointer"
+              //     >
+              //       <img
+              //         //  onClick={liked ? handleUnLike : handleLike}
+              //         src={reaction ? '/UpvotedFilled.svg' : '/upvoteGray.svg'}
+              //         className="w-5 h-5"
+              //       />
+              //     </button>
+              //   </Tooltip>
+              //   <div className="font-bold leading-5 text-sm">{voteCount}</div>
+              //   {/* <Tooltip
+              //   enterDelay={1000}
+              //   leaveDelay={200}
+              //   title="Downvote"
+              //   arrow
+              //   placement="left"
+              // >
+              //   <button
+              //     onClick={(e) => {
+              //       e.stopPropagation()
+              //       handleDownvote()
+              //     }}
+              //     className="active:bg-s-hover sm:hover:bg-s-hover rounded-md py-1 cursor-pointer"
+              //   >
+              //     <img
+              //       src={
+              //         reaction === ReactionTypes.Downvote
+              //           ? '/DownvotedFilled.svg'
+              //           : '/downvoteGray.svg'
+              //       }
+              //       className="w-4 h-4"
+              //     />
+              //   </button>
+              // </Tooltip> */}
+              // </div>
+            )}
+          </>
 
           {/* main content */}
           <div
@@ -644,8 +636,10 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                 {!router.pathname.startsWith('/p') ? (
                   <>
                     <div className="flex flex-row">
-                      {postInfo?.metadata?.name &&
-                        showNameForThisAppIds.includes(postInfo?.appId) &&
+                      {postInfo?.metadata?.marketplace?.name &&
+                        showNameForThisAppIds.includes(
+                          postInfo?.metadata?.appId
+                        ) &&
                         // @ts-ignore
                         postInfo?.__typename !== 'Comment' && (
                           <Markup
@@ -653,10 +647,10 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                           >
                             {/* remove title text from content */}
 
-                            {postInfo?.metadata?.name}
+                            {postInfo?.metadata?.marketplace?.name}
                           </Markup>
                         )}
-                      {postInfo?.metadata?.contentWarning !== null && (
+                      {postInfo?.metadata?.contentWarning && (
                         <div
                           className={`border ${
                             postInfo?.metadata?.contentWarning === 'NSFW'
@@ -671,7 +665,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                         </div>
                       )}
                     </div>
-                    {(!!content || postInfo?.appId !== appId) && (
+                    {(!!content || postInfo?.metadata?.appId !== appId) && (
                       <div
                         className={`${
                           showMore ? 'h-[100px] sm:h-[150px]' : ''
@@ -697,19 +691,21 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                 ) : (
                   <>
                     <div className="flex flex-row">
-                      {postInfo?.metadata?.name &&
+                      {postInfo?.metadata?.marketplace?.name &&
                         // @ts-ignore
                         postInfo?.__typename !== 'Comment' &&
-                        showNameForThisAppIds.includes(postInfo?.appId) && (
+                        showNameForThisAppIds.includes(
+                          postInfo?.metadata.appId
+                        ) && (
                           <Markup
                             className={`whitespace-pre-wrap break-words font-semibold text-base sm:text-lg w-full`}
                           >
                             {/* remove title text from content */}
 
-                            {postInfo?.metadata?.name}
+                            {postInfo?.metadata?.marketplace?.name}
                           </Markup>
                         )}
-                      {postInfo?.metadata?.contentWarning !== null && (
+                      {postInfo?.metadata?.contentWarning && (
                         <div
                           className={`border ${
                             postInfo?.metadata?.contentWarning === 'NSFW'
@@ -724,7 +720,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                         </div>
                       )}
                     </div>
-                    {(!!content || postInfo?.appId !== appId) && (
+                    {(!!content || postInfo?.metadata.appId !== appId) && (
                       <div
                         className={`${
                           showMore ? 'h-[150px]' : ''
@@ -763,13 +759,14 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                 <Attachment
                   publication={postInfo}
                   isAlone={isAlone}
-                  attachments={postInfo?.metadata?.media}
+                  attachments={filteredAttachments}
                   className={clsx(
                     router.pathname.startsWith('/p')
                       ? 'max-h-screen'
                       : 'max-h-[600px]',
                     'w-full'
                   )}
+                  asset={filteredAsset}
                 />
               </div>
             </div>
@@ -778,7 +775,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
             {!isAlone && (
               <>
                 {router.pathname.startsWith('/p') && (
-                  <div className="flex flex-row items-center text-p-text px-3 sm:mx-5 sm:px-2 py-2 justify-between sm:justify-start sm:space-x-12 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-2 dark:border-p-border">
+                  <div className="flex flex-row text-sm items-center text-p-text px-3 sm:mx-2 sm:px-2 py-2 justify-between sm:justify-start sm:space-x-12 border-t-[1px] border-b-[1px] border-[#eee] sm:mt-2 sm:mb-2 dark:border-p-border">
                     <div
                       className="flex flex-row gap-1 text-s-text cursor-pointer"
                       onClick={showReactedByPopUp}
@@ -790,7 +787,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                     </div>
                     <div className="flex flex-row gap-1 text-s-text ">
                       <span className="font-semibold text-p-text">
-                        {postInfo?.stats?.totalAmountOfComments}
+                        {postInfo?.stats?.comments}
                       </span>
                       <span>comments</span>
                     </div>
@@ -799,7 +796,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                       className="flex flex-row gap-1 text-s-text cursor-pointer"
                     >
                       <span className="font-semibold text-p-text ">
-                        {postInfo?.stats?.totalAmountOfCollects}
+                        {postInfo?.stats?.countOpenActions}
                       </span>
                       <span>collects</span>
                     </div>
@@ -808,56 +805,51 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                       className="flex flex-row gap-1 text-s-text cursor-pointer"
                     >
                       <span className="font-semibold text-p-text">
-                        {postInfo?.stats?.totalAmountOfMirrors}
+                        {postInfo?.stats?.mirrors}
                       </span>
                       <span>mirrors</span>
                     </div>
                   </div>
                 )}
+
                 <div
                   className={clsx(
-                    'text-p-text flex flex-row items-center px-3 sm:px-6 pt-1',
-                    isMobile
-                      ? ' justify-between'
-                      : clsx(
-                          postInfo?.collectModule?.__typename ===
-                            'FreeCollectModuleSettings' ||
-                            postInfo?.collectModule?.__typename ===
-                              'FeeCollectModuleSettings'
-                            ? 'justify-between'
-                            : 'justify-start space-x-24'
-                        )
+                    'text-p-text flex flex-row items-center px-3 sm:px-2 pt-1 justify-between sm:justify-start sm:space-x-12 sm:pb-2'
+                    // isMobile
+                    //   ? ' justify-between'
+                    //   : clsx(
+                    //       postInfo?.collectModule?.__typename ===
+                    //         'FreeCollectModuleSettings' ||
+                    //         postInfo?.collectModule?.__typename ===
+                    //           'FeeCollectModuleSettings'
+                    //         ? 'justify-between'
+                    //         : 'justify-start space-x-24'
+                    //     )
                   )}
                 >
-                  {isMobile && (
-                    <div className="flex flex-row items-center gap-x-2">
-                      <Tooltip
-                        enterDelay={1000}
-                        leaveDelay={200}
-                        title="Upvote"
-                        arrow
-                      >
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleUpvote()
-                          }}
-                          className="active:bg-s-hover sm:hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md py-1.5"
-                        >
-                          <img
-                            src={
-                              reaction === ReactionTypes.Upvote
-                                ? '/UpvotedFilled.svg'
-                                : '/upvoteGray.svg'
-                            }
-                            className="w-4 h-4"
-                          />
-                        </button>
-                      </Tooltip>
+                  <Tooltip
+                    enterDelay={1000}
+                    leaveDelay={200}
+                    title="Upvote"
+                    arrow
+                  >
+                    <div
+                      className="flex flex-row items-center gap-x-2 active:bg-s-hover sm:hover:bg-s-hover active:bg-s-hover cursor-pointer rounded-md py-1 px-1"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleUpvote()
+                      }}
+                    >
+                      <img
+                        src={
+                          reaction ? '/UpvotedFilled.svg' : '/upvoteGray.svg'
+                        }
+                        className="w-4 h-4"
+                      />
                       <div className="font-medium text-[#687684]">
                         {voteCount}
                       </div>
-                      <Tooltip
+                      {/* <Tooltip
                         enterDelay={1000}
                         leaveDelay={200}
                         title="Downvote"
@@ -872,16 +864,17 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                         >
                           <img
                             src={
-                              reaction === ReactionTypes.Downvote
+                              reaction === PublicationReactionType.Downvote
                                 ? '/DownvotedFilled.svg'
                                 : '/downvoteGray.svg'
                             }
                             className="w-4 h-4"
                           />
                         </button>
-                      </Tooltip>
+                      </Tooltip> */}
                     </div>
-                  )}
+                  </Tooltip>
+
                   <Tooltip
                     enterDelay={1000}
                     leaveDelay={200}
@@ -898,7 +891,7 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                           />
                           {(!router.pathname.startsWith('/p') || isAlone) && (
                             <span className="text-[#687684]">
-                              {postInfo?.stats?.totalAmountOfComments}
+                              {postInfo?.stats?.comments}
                             </span>
                           )}
                         </div>
@@ -909,24 +902,24 @@ const LensPostCard = ({ post, isAlone = false, feedItem }: Props) => {
                   <span onClick={(e) => e.stopPropagation()}>
                     <MirrorButton postInfo={postInfo} isAlone={isAlone} />
                   </span>
-                  {postInfo?.collectModule?.__typename !==
+                  {/* {postInfo?.collectModule?.__typename !==
                     'RevertCollectModuleSettings' && (
                     <span onClick={(e) => e.stopPropagation()}>
                       <LensCollectButton publication={postInfo} />
                     </span>
-                  )}
+                  )} */}
 
-                  {(!isMobile ||
+                  {/* {(!isMobile ||
                     (isMobile &&
                       postInfo?.collectModule?.__typename ===
-                        'RevertCollectModuleSettings')) && (
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <PostShareButton
-                        url={`${appLink}/p/${postInfo?.id}`}
-                        text={postInfo?.metadata?.name}
-                      />
-                    </span>
-                  )}
+                        'RevertCollectModuleSettings')) && ( */}
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <PostShareButton
+                      url={`${appLink}/p/${postInfo?.id}`}
+                      text={postInfo?.metadata?.marketplace?.name}
+                    />
+                  </span>
+                  {/* )} */}
                 </div>
               </>
             )}

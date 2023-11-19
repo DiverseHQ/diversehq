@@ -1,6 +1,8 @@
 fragment MentionNotificationFields on MentionNotification {
   id
   publication {
+    __typename
+
     ... on Post {
       ...PostFields
     }

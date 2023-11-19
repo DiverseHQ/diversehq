@@ -9,7 +9,7 @@ import MobileLoader from '../Common/UI/MobileLoader'
 import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
 import { useDevice } from '../Common/DeviceWrapper'
-import { useProfile } from '../Common/WalletContext'
+// import { useProfile } from '../Common/WalletContext'
 import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
 
 const ExploreTopUnjoinedCommunitiesPage = ({
@@ -19,7 +19,7 @@ const ExploreTopUnjoinedCommunitiesPage = ({
   const [communities, setCommunities] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const { isMobile } = useDevice()
-  const { allLensCommunities } = useProfile()
+  // const { allLensCommunities } = useProfile()
 
   useEffect(() => {
     getTopNotJoinedCommunities()
@@ -43,27 +43,26 @@ const ExploreTopUnjoinedCommunitiesPage = ({
       startMembersCount = newCommunities[0].membersCount
     }
 
-    let lensCommunities = []
+    // let lensCommunities = []
 
-    console.log('allLensCommunities', allLensCommunities)
     console.log('startMembersCount', startMembersCount)
     console.log('endMembersCount', endMembersCount)
 
-    for (const c of allLensCommunities) {
-      if (
-        c.stats.totalFollowers < startMembersCount &&
-        c.stats.totalFollowers > endMembersCount &&
-        !c.isFollowedByMe
-      ) {
-        lensCommunities.push({
-          ...c,
-          membersCount: c.stats.totalFollowers
-        })
-      }
-    }
+    // for (const c of allLensCommunities) {
+    //   if (
+    //     c.stats.totalFollowers < startMembersCount &&
+    //     c.stats.totalFollowers > endMembersCount &&
+    //     !c.isFollowedByMe
+    //   ) {
+    //     lensCommunities.push({
+    //       ...c,
+    //       membersCount: c.stats.totalFollowers
+    //     })
+    //   }
+    // }
 
     // mix and sort the communities
-    const mixedCommunities = [...lensCommunities, ...newCommunities]
+    const mixedCommunities = newCommunities
     mixedCommunities.sort((a, b) => {
       return b.membersCount - a.membersCount
     })

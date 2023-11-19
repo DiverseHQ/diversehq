@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { memo, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { FeedEventItemType, useProfileFeedQuery } from '../../graphql/generated'
+import { FeedEventItemType, useFeedQuery } from '../../graphql/generated'
 import { useProfileStore } from '../../store/profile'
 import { usePublicationStore } from '../../store/publication'
 // import { LENS_POST_LIMIT } from '../../utils/config'
@@ -26,18 +26,19 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
   const addProfiles = useProfileStore((state) => state.addProfiles)
   const { posts: indexingPost } = usePostIndexing()
 
-  const { data: profileFeed } = useProfileFeedQuery(
+  const { data: profileFeed } = useFeedQuery(
     {
       request: {
         cursor: exploreQueryRequestParams.cursor,
-        profileId: profileId,
-        limit: 50,
-        feedEventItemTypes: [FeedEventItemType.Mirror, FeedEventItemType.Post]
-      },
-      reactionRequest: {
-        profileId: profileId
-      },
-      profileId: profileId
+        where: {
+          for: profileId,
+          feedEventItemTypes: [
+            FeedEventItemType.Post,
+            FeedEventItemType.Quote,
+            FeedEventItemType.Mirror
+          ]
+        }
+      }
     },
     {
       enabled: router.pathname === '/' && !routeLoading && !!profileId
@@ -66,28 +67,12 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
       }
       return { post: item.root, feedItem: item }
     })
-    // if (newPosts.length < LENS_POST_LIMIT) {
-    //   hasMore = false
-    // }
     const communityIds = newPosts.map((post) => {
       // @ts-ignore
       if (post?.post?.metadata?.tags?.[0]) {
         // @ts-ignore
         return post?.post.metadata.tags[0]
       }
-      // if (post?.__typename === '') {
-      //   console.log(
-      //     'postMirrorOf',
-      //     post.mirrorOf?.__typename === 'Post'
-      //       ? post.mirrorOf?.metadata?.tags[0]
-      //       : null
-      //   )
-
-      //   if (post.mirrorOf.__typename === 'Comment') {
-      //     console.log('postMirrorOf Comment', post.mirrorOf)
-      //   }
-      //   // @ts-ignore
-      //   return post.mirrorOf?.metadata?.tags[0] || 'null'
       // }
       return 'null'
     })
@@ -131,7 +116,7 @@ const LensPostsProfileFeedColumn = ({ profileId }: { profileId: string }) => {
     let newPublications = new Map()
 
     for (const newPost of newPosts) {
-      newProfiles.set(newPost.post.profile.handle, newPost.post.profile)
+      newProfiles.set(newPost.post.by.handle?.fullHandle, newPost.post.by)
       newPublications.set(newPost.post.id, newPost.post)
     }
 
