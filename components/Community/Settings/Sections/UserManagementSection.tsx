@@ -7,7 +7,11 @@ import {
   addBannedUserToCommunity,
   removeBannedUserFromCommunity
 } from '../../../../apiHelper/community'
-import { Profile, useProfilesQuery } from '../../../../graphql/generated'
+import {
+  LimitType,
+  Profile,
+  useProfilesQuery
+} from '../../../../graphql/generated'
 import { BannedUser, CommunityType } from '../../../../types/community'
 import { useNotify } from '../../../Common/NotifyContext'
 import ImageWithPulsingLoader from '../../../Common/UI/ImageWithPulsingLoader'
@@ -32,8 +36,10 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
   const { data, isLoading } = useProfilesQuery(
     {
       request: {
-        profileIds: bannedUsers.map((user) => user.profileId),
-        limit: 50
+        where: {
+          profileIds: bannedUsers.map((user) => user.profileId)
+        },
+        limit: LimitType.Fifty
       }
     },
     {
@@ -45,7 +51,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
     if (!selectedProfile) return
     try {
       const bannedUser: BannedUser = {
-        address: selectedProfile.ownedBy,
+        address: selectedProfile.ownedBy.address,
         profileId: selectedProfile.id,
         reason: `Violated rule : ${ruleViolated} \n Other Reason : ${extraReason}`
       }
@@ -127,8 +133,10 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
                 className="w-6 h-6 rounded-full"
                 src={getAvatar(selectedProfile)}
               />
-              {selectedProfile?.name && (
-                <div className="font-medium">{selectedProfile.name}</div>
+              {selectedProfile?.metadata?.displayName && (
+                <div className="font-medium">
+                  {selectedProfile?.metadata?.displayName}
+                </div>
               )}
               <Link href={`/u/${formatHandle(selectedProfile.handle)}`}>
                 <span className="cursor-pointer hover:underline text-s-text">
@@ -219,10 +227,13 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
                 />
                 <div>
                   <div className="flex flex-row items-center space-x-2">
-                    {profile?.name && (
-                      <div className="text-sm font-medium">{profile.name}</div>
+                    {profile?.metadata?.displayName && (
+                      <div className="text-sm font-medium">
+                        {profile?.metadata?.displayName}
+                      </div>
                     )}
                     <div className="text-sm text-s-text font-medium">
+                      {/* @ts-ignore */}
                       u/{formatHandle(profile.handle)}
                     </div>
                     {/* @ts-ignore */}
@@ -241,7 +252,7 @@ const UserManagementSection = ({ community }: { community: CommunityType }) => {
                 <div
                   className="text-s-text cursor-pointer p-1 hover:bg-s-hover rounded-full"
                   onClick={() => {
-                    handleRemoveBan(profile.ownedBy)
+                    handleRemoveBan(profile.ownedBy.address)
                   }}
                 >
                   <CgClose className="w-5 h-5" />

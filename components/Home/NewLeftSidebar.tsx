@@ -112,6 +112,7 @@ const NewLeftSidebar = () => {
               <CgProfile className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] object-contain" />
             ),
             title: 'Profile',
+            // @ts-ignore
             link: `/u/${formatHandle(lensProfile?.defaultProfile?.handle)}`,
             isHidden: !isSignedIn || !hasProfile
           }

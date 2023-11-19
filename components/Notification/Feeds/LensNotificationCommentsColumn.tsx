@@ -1,11 +1,10 @@
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
   Notification,
-  NotificationTypes,
+  NotificationType,
   useNotificationsQuery
 } from '../../../graphql/generated'
 import { useLensUserContext } from '../../../lib/LensUserContext'
-import { LENS_NOTIFICATION_LIMIT } from '../../../utils/config'
 import { useDevice } from '../../Common/DeviceWrapper'
 import LensLoginButton from '../../Common/LensLoginButton'
 import { useProfile } from '../../Common/WalletContext'
@@ -36,17 +35,10 @@ const LensNotificationCommentsColumn = () => {
   const { data } = useNotificationsQuery(
     {
       request: {
-        profileId: lensProfile?.defaultProfile?.id,
         cursor: params.cursor,
-        limit: LENS_NOTIFICATION_LIMIT,
-        notificationTypes: [
-          NotificationTypes.CommentedComment,
-          NotificationTypes.CommentedPost
-        ],
-        highSignalFilter: params.highSignalFilter
-      },
-      reactionRequest: {
-        profileId: lensProfile?.defaultProfile?.id
+        where: {
+          notificationTypes: [NotificationType.Commented]
+        }
       }
     },
     {
@@ -190,10 +182,11 @@ const LensNotificationCommentsColumn = () => {
                     key={index}
                     notification={notification}
                     isRead={
-                      notification.createdAt <
-                      (user?.lastFetchedNotificationsTime
-                        ? user?.lastFetchedNotificationsTime
-                        : new Date())
+                      true
+                      // notification.__typename  <
+                      // (user?.lastFetchedNotificationsTime
+                      //   ? user?.lastFetchedNotificationsTime
+                      //   : new Date())
                     }
                   />
                 )

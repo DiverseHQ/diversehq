@@ -10,6 +10,7 @@ import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
 import { useDevice } from '../Common/DeviceWrapper'
 import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
+// import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
 
 const ExploreNewUnjoinedCommunitiesPage = ({
   showUnjoined,

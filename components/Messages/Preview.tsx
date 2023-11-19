@@ -44,13 +44,19 @@ const Preview: FC<Props> = ({ profile, message, conversationKey }) => {
         />
         <div className="flex flex-col justify-center">
           <div className="flex flex-row items-center space-x-2">
-            {profile?.name && <span>{profile?.name}</span>}
-            <span className={`${profile?.name ? 'text-sm text-s-text' : ''}`}>
+            {profile?.metadata?.displayName && (
+              <span>{profile?.metadata?.displayName}</span>
+            )}
+            <span
+              className={`${
+                profile?.metadata?.displayName ? 'text-sm text-s-text' : ''
+              }`}
+            >
               {profile?.handle && `u/${formatHandle(profile?.handle)}`}
             </span>
           </div>
           <div className="text-s-text">
-            {address === message.senderAddress && 'You: '}{' '}
+            {address.address === message.senderAddress && 'You: '}{' '}
             {stringToLength(message.content, 30)}
           </div>
         </div>

@@ -1,6 +1,5 @@
 import React from 'react'
 import { getUnresolvedPublicationReportsOfCommunity } from '../../../../apiHelper/report'
-import { useLensUserContext } from '../../../../lib/LensUserContext'
 import { CommunityType } from '../../../../types/community'
 import { PostReportType } from '../../../../types/report'
 import { useNotify } from '../../../Common/NotifyContext'
@@ -14,17 +13,14 @@ const ReportSection = ({
   community: CommunityType
   isLensCommunity?: boolean
 }) => {
-  const { data: lensProfile } = useLensUserContext()
   const [rawReports, setRawReports] = React.useState<PostReportType[]>([])
   const { notifyError } = useNotify()
 
   const { isLoading, publications } = usePublicationWithCommunityInfo({
     request: {
-      publicationIds: rawReports.map((report) => report.publicationId)
-    },
-    profileId: lensProfile?.defaultProfile?.id,
-    reactionRequest: {
-      profileId: lensProfile?.defaultProfile?.id
+      where: {
+        publicationIds: rawReports.map((report) => report.publicationId)
+      }
     }
   })
 

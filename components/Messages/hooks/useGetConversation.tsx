@@ -30,7 +30,7 @@ const useGetConversation = (conversationKey: string, profile?: Profile) => {
     const createNewConversation = async () => {
       const conversationId =
         parseConversationKey(conversationKey)?.conversationId
-      const canMessage = await Client.canMessage(profile.ownedBy, {
+      const canMessage = await Client.canMessage(profile.ownedBy.address, {
         env: XMTP_ENV
       })
       setMissingXmtpAuth(!canMessage)
@@ -39,7 +39,7 @@ const useGetConversation = (conversationKey: string, profile?: Profile) => {
         return
       }
       const conversation = await client.conversations.newConversation(
-        profile.ownedBy,
+        profile.ownedBy.address,
         {
           conversationId: conversationId,
           metadata: {}

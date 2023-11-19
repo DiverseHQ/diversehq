@@ -37,11 +37,11 @@ import formatHandle from '../User/lib/formatHandle'
 import getAvatar from '../User/lib/getAvatar'
 import getIPFSLink from '../User/lib/getIPFSLink'
 import CreateCommunity from './CreateCommunity'
-import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
+// import CreateLensCommunityPopUp from './CreateLensCommunityPopUp'
 
 const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
   const router = useRouter()
-  const { user, address, LensCommunity, joinedLensCommunities } = useProfile()
+  const { user, address } = useProfile()
   const { notifyInfo, notifyError } = useNotify()
   const { showModal } = usePopUpModal()
   const { disconnect } = useDisconnect()
@@ -85,18 +85,19 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     })
   }
 
-  const createLensCommunity = () => {
-    showModal({
-      component: <CreateLensCommunityPopUp />,
-      type: modalType.fullscreen
-    })
-  }
+  // const createLensCommunity = () => {
+  //   showModal({
+  //     component: <CreateLensCommunityPopUp />,
+  //     type: modalType.fullscreen
+  //   })
+  // }
 
   const routeToProfile = () => {
     if (!myLensProfile?.defaultProfile) {
       notifyInfo('You might want to login first')
       return
     }
+    // @ts-ignore
     router.push(`/u/${formatHandle(myLensProfile?.defaultProfile?.handle)}`)
   }
 
@@ -123,9 +124,9 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
     }
   }
 
-  const sortedJoinedLensCommunities = joinedLensCommunities?.sort(
-    (a, b) => b.stats.totalFollowers - a.stats.totalFollowers
-  )
+  // const sortedJoinedLensCommunities = joinedLensCommunities?.sort(
+  //   (a, b) => b.stats.totalFollowers - a.stats.totalFollowers
+  // )
 
   return (
     <>
@@ -150,10 +151,11 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                       }}
                     />
                     <div className="flex flex-col items-start justify-center ml-4">
-                      {myLensProfile?.defaultProfile?.name && (
+                      {myLensProfile?.defaultProfile?.metadata?.displayName && (
                         <div className="font-semibold">
                           {stringToLength(
-                            myLensProfile?.defaultProfile?.name,
+                            myLensProfile?.defaultProfile?.metadata
+                              ?.displayName,
                             20
                           )}
                         </div>
@@ -161,6 +163,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                       <div className="text-s-text">
                         u/
                         {stringToLength(
+                          // @ts-ignore
                           formatHandle(myLensProfile?.defaultProfile?.handle),
                           20
                         )}
@@ -169,19 +172,13 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                       <div className="flex flex-row gap-4 text-p-text">
                         <div className="">
                           <span className="font-bold mr-1">
-                            {
-                              myLensProfile?.defaultProfile?.stats
-                                ?.totalFollowers
-                            }
+                            {myLensProfile?.defaultProfile?.stats?.followers}
                           </span>
                           <span className="font-light">Followers</span>
                         </div>
                         <div className="">
                           <span className="font-bold mr-1">
-                            {
-                              myLensProfile?.defaultProfile?.stats
-                                ?.totalFollowing
-                            }
+                            {myLensProfile?.defaultProfile?.stats?.following}
                           </span>
                           <span className="font-light">Following</span>
                         </div>
@@ -199,6 +196,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
             <div className="flex flex-col px-4">
               <Link
                 href={`/u/${formatHandle(
+                  // @ts-ignore
                   myLensProfile?.defaultProfile?.handle
                 )}`}
                 onClick={() => {
@@ -230,7 +228,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                 <MdCreateNewFolder className="w-7 h-7 object-contain" />
                 <span className="text-p-text text-xl">Create Community</span>
               </button>{' '}
-              {!LensCommunity && (
+              {/* {!LensCommunity && (
                 <button
                   className="flex flex-row items-center   py-4 gap-4"
                   onClick={() => {
@@ -243,7 +241,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                     Create Lens Community
                   </span>
                 </button>
-              )}
+              )} */}
               <button
                 className="flex flex-row items-center   py-4 gap-4"
                 onClick={() => {
@@ -343,20 +341,20 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
           <div className="rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
             {joinedCommunities &&
               [
-                ...sortedJoinedLensCommunities
-                  .map((community) => ({
-                    _id: community._id,
-                    name: formatHandle(community?.handle),
-                    // @ts-ignore
-                    logoImageUrl: getAvatar(community),
-                    isLensCommunity: true,
-                    verified: community?.verified
-                  }))
-                  .sort(
-                    (a, b) =>
-                      // @ts-ignore
-                      b?.stats?.totalFollowers - a?.stats?.totalFollowers
-                  ),
+                // ...sortedJoinedLensCommunities
+                //   .map((community) => ({
+                //     _id: community._id,
+                //     name: formatHandle(community?.handle),
+                //     // @ts-ignore
+                //     logoImageUrl: getAvatar(community),
+                //     isLensCommunity: true,
+                //     verified: community?.verified
+                //   }))
+                //   .sort(
+                //     (a, b) =>
+                //       // @ts-ignore
+                //       b?.stats?.totalFollowers - a?.stats?.totalFollowers
+                //   ),
                 ...joinedCommunities
               ].map((community) => (
                 <div
@@ -403,7 +401,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
         <div className="flex flex-col justify-center items-center ">
           <h1 className="font-bold text-lg mt-5">Created Communities</h1>
           <div className=" rounded-md sm:rounded-xl max-h-[300px] overflow-y-auto overflow-x-hidden self-start no-scrollbar w-screen ">
-            {LensCommunity && (
+            {/* {LensCommunity && (
               <div
                 className="flex flex-row space-x-2 items-center cursor-pointer p-2 m-2 rounded-2xl hover:bg-p-btn-hover mx-4"
                 onClick={() => {
@@ -427,7 +425,7 @@ const MobileNavSidebar = ({ isOpenSidebar, setIsOpenSidebar }) => {
                   <VerifiedBadge className="w-4 h-4" />
                 )}
               </div>
-            )}
+            )} */}
 
             {createdCommunities.map((community) => (
               <div

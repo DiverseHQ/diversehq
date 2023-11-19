@@ -9,8 +9,9 @@ import MobileLoader from '../Common/UI/MobileLoader'
 import ExploreCommunityCard from '../Community/ExploreCommunityCard'
 import ExploreFeedNav from './ExploreFeedNav'
 import { useDevice } from '../Common/DeviceWrapper'
-// import { useProfile } from '../Common/WalletContext'
 import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
+// import { useProfile } from '../Common/WalletContext'
+// import ExploreLensCommunityCard from '../Community/ExploreLensCommunityCard'
 
 const ExploreTopUnjoinedCommunitiesPage = ({
   showUnjoined,

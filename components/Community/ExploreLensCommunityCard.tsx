@@ -16,7 +16,7 @@ const ExploreLensCommunityCard = ({ community }) => {
 
   const { FollowButton } = useLensFollowButton(
     {
-      handle: community.handle
+      forHandle: community.handle
     },
     'join'
   )

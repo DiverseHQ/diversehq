@@ -40,7 +40,7 @@ const LensReportPost = ({
     community?.rules[0]?.title ?? null
   )
   const [profileToBan, setProfileToBan] = React.useState<Profile>(
-    publication?.profile
+    publication?.by
   )
   const handleIgnore = async () => {
     await resolvePublicationReport(
@@ -54,7 +54,7 @@ const LensReportPost = ({
   const handleBanUser = async () => {
     try {
       const bannedUser: BannedUser = {
-        address: profileToBan.ownedBy,
+        address: profileToBan.ownedBy?.address,
         profileId: profileToBan.id,
         reason: `Violated rule : ${ruleViolated} \n Other Reason : ${extraReason}`
       }
@@ -101,7 +101,7 @@ const LensReportPost = ({
     )[0]
     if (!profileHandle) return
     const { profile } = await getLensProfileInfo({
-      handle: profileHandle
+      forHandle: profileHandle
     })
     // @ts-ignore
     setProfileToBan(profile)
@@ -170,8 +170,10 @@ const LensReportPost = ({
                 className="w-6 h-6 rounded-full"
                 src={getAvatar(profileToBan)}
               />
-              {profileToBan?.name && (
-                <div className="font-medium">{profileToBan.name}</div>
+              {profileToBan?.metadata?.displayName && (
+                <div className="font-medium">
+                  {profileToBan?.metadata?.displayName}
+                </div>
               )}
               <Link href={`/u/${formatHandle(profileToBan.handle)}`}>
                 <span className="cursor-pointer hover:underline text-s-text">

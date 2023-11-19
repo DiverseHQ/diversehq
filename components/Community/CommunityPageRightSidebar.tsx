@@ -37,8 +37,9 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
   const { data, isLoading } = useProfilesQuery(
     {
       request: {
-        ownedBy: communityInfo?.moderators,
-        limit: 50
+        where: {
+          ownedBy: communityInfo?.moderators
+        }
       }
     },
     {
@@ -163,36 +164,35 @@ const CommunityPageRightSidebar = ({ communityInfo }: Props) => {
               </div>
             )}
             {data?.profiles &&
-              data?.profiles?.items
-                ?.filter((profile) => profile?.isDefault)
-                .map((profile) => (
-                  <div
-                    className="flex flex-row w-full items-center justify-between py-2 px-3 hover:bg-s-hover"
-                    key={profile?.id}
-                  >
-                    <div className="flex flex-row items-center justify-between gap-2 w-full">
-                      <div className="flex gap-2">
-                        <ImageWithPulsingLoader
-                          className="w-8 h-8 rounded-full bg-p-bg"
-                          // @ts-ignore
-                          src={getAvatar(profile)}
-                        />
-                        <div className="flex flex-col flex-1">
-                          {profile?.name && (
-                            <div className="text-sm font-medium">
-                              {profile.name}
-                            </div>
-                          )}
-                          <div className="text-sm text-s-text font-medium">
-                            u/{formatHandle(profile.handle)}
+              data?.profiles?.items.map((profile) => (
+                <div
+                  className="flex flex-row w-full items-center justify-between py-2 px-3 hover:bg-s-hover"
+                  key={profile?.id}
+                >
+                  <div className="flex flex-row items-center justify-between gap-2 w-full">
+                    <div className="flex gap-2">
+                      <ImageWithPulsingLoader
+                        className="w-8 h-8 rounded-full bg-p-bg"
+                        // @ts-ignore
+                        src={getAvatar(profile)}
+                      />
+                      <div className="flex flex-col flex-1">
+                        {profile?.metadata?.displayName && (
+                          <div className="text-sm font-medium">
+                            {profile?.metadata?.displayName}
                           </div>
+                        )}
+                        <div className="text-sm text-s-text font-medium">
+                          {/* @ts-ignore */}
+                          u/{formatHandle(profile.handle)}
                         </div>
                       </div>
-                      {/* @ts-ignore */}
-                      <MessageButton userLensProfile={profile} />
                     </div>
+                    {/* @ts-ignore */}
+                    <MessageButton userLensProfile={profile} />
                   </div>
-                ))}
+                </div>
+              ))}
           </div>
         </div>
       )}

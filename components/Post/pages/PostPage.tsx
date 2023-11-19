@@ -52,7 +52,7 @@ const PostPage = ({ post }) => {
   useEffect(() => {
     fetchCommunityInfo()
     if (post?.profile?.handle) {
-      getUserProfileAndLensProfile(post.)
+      getUserProfileAndLensProfile(post?.profile?.handle)
     } else {
       getUserProfileAndLensProfile(post.author)
     }
@@ -67,7 +67,7 @@ const PostPage = ({ post }) => {
     if (id?.endsWith('.test')) {
       try {
         const lensProfileRes = await getLensProfileInfo({
-          handle: id
+          forHandle: id
         })
         if (lensProfileRes.profile) {
           setLensProfile(lensProfileRes.profile)
@@ -88,7 +88,7 @@ const PostPage = ({ post }) => {
           const userInfo = await res.json()
           setProfile(userInfo)
           const lensProfileRes = await getDefaultProfileInfo({
-            ethereumAddress: userInfo.walletAddress
+            for: userInfo.walletAddress
           })
 
           if (lensProfileRes.defaultProfile) {

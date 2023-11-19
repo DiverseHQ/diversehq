@@ -6,7 +6,11 @@ import {
   addModeratorsToCommunity,
   removeModeratorFromCommunity
 } from '../../../../apiHelper/community'
-import { Profile, useProfilesQuery } from '../../../../graphql/generated'
+import {
+  LimitType,
+  Profile,
+  useProfilesQuery
+} from '../../../../graphql/generated'
 import { CommunityType } from '../../../../types/community'
 import { useNotify } from '../../../Common/NotifyContext'
 import ImageWithPulsingLoader from '../../../Common/UI/ImageWithPulsingLoader'
@@ -26,8 +30,10 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
   const { data, isLoading } = useProfilesQuery(
     {
       request: {
-        ownedBy: community?.moderators,
-        limit: 50
+        where: {
+          ownedBy: community?.moderators
+        },
+        limit: LimitType.Fifty
       }
     },
     {
@@ -41,7 +47,7 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
       const moderatorsToAdd = selectedProfiles.map((profile) => profile.ownedBy)
       const res = await addModeratorsToCommunity(
         community.name,
-        moderatorsToAdd
+        moderatorsToAdd.map((mod) => mod.address)
       )
       if (res.status === 200) {
         const resJson = await res.json()
@@ -179,10 +185,13 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
                     // @ts-ignore
                     src={getAvatar(profile)}
                   />
-                  {profile?.name && (
-                    <div className="text-sm font-medium">{profile.name}</div>
+                  {profile?.metadata?.displayName && (
+                    <div className="text-sm font-medium">
+                      {profile.metadata?.displayName}
+                    </div>
                   )}
                   <div className="text-sm text-s-text font-medium">
+                    {/* @ts-ignore */}
                     u/{formatHandle(profile.handle)}
                   </div>
                   {/* @ts-ignore */}
@@ -192,7 +201,7 @@ const ModeratorSection = ({ _community }: { _community: CommunityType }) => {
                   <div
                     className="text-s-text cursor-pointer p-1 hover:bg-s-hover rounded-full"
                     onClick={() => {
-                      handleRemoveModerator(profile.ownedBy)
+                      handleRemoveModerator(profile.ownedBy?.address)
                     }}
                   >
                     <CgClose className="w-5 h-5" />
